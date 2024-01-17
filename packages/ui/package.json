@@ -11,8 +11,8 @@
     "lint": "eslint \"**/*.ts\""
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
     "eslint": "^8.56.0",
     "typescript": "^5.3.3"
   }
