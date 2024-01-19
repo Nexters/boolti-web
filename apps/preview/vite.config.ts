@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [
     react({
+      jsxRuntime: 'classic',
       jsxImportSource: '@emotion/react',
       babel: {
         plugins: ['@emotion/babel-plugin'],
