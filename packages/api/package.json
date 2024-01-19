@@ -5,6 +5,8 @@
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "scripts": {
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   "dependencies": {
     "@lukemorales/query-key-factory": "^1.3.2",
     "@tanstack/query-core": "^4.32.6",
