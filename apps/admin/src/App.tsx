@@ -1,4 +1,4 @@
-import { useHelloQuery, QueryClientProvider } from '@boolti/api';
+import { QueryClientProvider } from '@boolti/api';
 
 const App = () => {
   // const { data } = useHelloQuery();
