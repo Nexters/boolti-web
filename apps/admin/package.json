@@ -16,9 +16,9 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@boolti/eslint-config": "*",
+    "@boolti/typescript-config": "*",
     "@emotion/babel-plugin": "^11.11.0",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",

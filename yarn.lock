@@ -285,6 +285,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boolti/eslint-config@npm:*, @boolti/eslint-config@workspace:packages/config-eslint":
+  version: 0.0.0-use.local
+  resolution: "@boolti/eslint-config@workspace:packages/config-eslint"
+  dependencies:
+    "@typescript-eslint/eslint-plugin": "npm:^6.17.0"
+    "@typescript-eslint/parser": "npm:^6.17.0"
+    eslint: "npm:^8.56.0"
+    eslint-config-prettier: "npm:^9.1.0"
+    eslint-plugin-prettier: "npm:^5.1.3"
+    eslint-plugin-react-hooks: "npm:^4.6.0"
+    eslint-plugin-react-refresh: "npm:^0.4.5"
+    prettier: "npm:^3.1.1"
+  languageName: unknown
+  linkType: soft
+
+"@boolti/typescript-config@npm:*, @boolti/typescript-config@workspace:packages/config-typescript":
+  version: 0.0.0-use.local
+  resolution: "@boolti/typescript-config@workspace:packages/config-typescript"
+  languageName: unknown
+  linkType: soft
+
 "@emotion/babel-plugin@npm:^11.11.0":
   version: 11.11.0
   resolution: "@emotion/babel-plugin@npm:11.11.0"
@@ -778,27 +799,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@repo/eslint-config@npm:*, @repo/eslint-config@workspace:packages/config-eslint":
-  version: 0.0.0-use.local
-  resolution: "@repo/eslint-config@workspace:packages/config-eslint"
-  dependencies:
-    "@typescript-eslint/eslint-plugin": "npm:^6.17.0"
-    "@typescript-eslint/parser": "npm:^6.17.0"
-    eslint: "npm:^8.56.0"
-    eslint-config-prettier: "npm:^9.1.0"
-    eslint-plugin-prettier: "npm:^5.1.3"
-    eslint-plugin-react-hooks: "npm:^4.6.0"
-    eslint-plugin-react-refresh: "npm:^0.4.5"
-    prettier: "npm:^3.1.1"
-  languageName: unknown
-  linkType: soft
-
-"@repo/typescript-config@npm:*, @repo/typescript-config@workspace:packages/config-typescript":
-  version: 0.0.0-use.local
-  resolution: "@repo/typescript-config@workspace:packages/config-typescript"
-  languageName: unknown
-  linkType: soft
-
 "@rollup/rollup-android-arm-eabi@npm:4.9.5":
   version: 4.9.5
   resolution: "@rollup/rollup-android-arm-eabi@npm:4.9.5"
@@ -1167,11 +1167,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "admin@workspace:apps/admin"
   dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.3"
     "@emotion/styled": "npm:^11.11.0"
-    "@repo/eslint-config": "npm:*"
-    "@repo/typescript-config": "npm:*"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
     "@vitejs/plugin-react": "npm:^4.2.1"
@@ -1288,7 +1288,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "boolti-web@workspace:."
   dependencies:
-    "@repo/eslint-config": "npm:*"
+    "@boolti/eslint-config": "npm:*"
     "@typescript-eslint/eslint-plugin": "npm:^6.14.0"
     "@typescript-eslint/parser": "npm:^6.14.0"
     eslint: "npm:^8.56.0"
@@ -2858,11 +2858,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "preview@workspace:apps/preview"
   dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.3"
     "@emotion/styled": "npm:^11.11.0"
-    "@repo/eslint-config": "npm:*"
-    "@repo/typescript-config": "npm:*"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
     "@vitejs/plugin-react": "npm:^4.2.1"
@@ -3242,11 +3242,11 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "super-admin@workspace:apps/super-admin"
   dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.3"
     "@emotion/styled": "npm:^11.11.0"
-    "@repo/eslint-config": "npm:*"
-    "@repo/typescript-config": "npm:*"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
     "@vitejs/plugin-react": "npm:^4.2.1"
