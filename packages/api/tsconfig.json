@@ -1,5 +1,8 @@
 {
   "extends": "@boolti/typescript-config/vite.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+  },
   "include": [
     "src"
   ]

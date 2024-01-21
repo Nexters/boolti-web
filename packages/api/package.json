@@ -3,15 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "main": "src/index.tsx",
-  "types": "src/index.tsx",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
   "scripts": {
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
     "@lukemorales/query-key-factory": "^1.3.2",
-    "@tanstack/react-query": "^5.17.15",
-    "@tanstack/react-query-devtools": "^5.17.18",
+    "@tanstack/query-core": "^4.32.6",
+    "@tanstack/react-query": "^4.32.6",
+    "@tanstack/react-query-devtools": "^4.32.6",
     "ky": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

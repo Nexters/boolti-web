@@ -1,12 +1,11 @@
-import { Hello, QueryClientProvider, ReactQueryDevtools } from '@boolti/api';
+import { QueryClientProvider } from '@boolti/api';
 
 const App = () => {
+  // const { data } = useHelloQuery();
+  // console.log(data?.hello)
   return (
     <QueryClientProvider>
-      <h1>
-        {Hello()}
-        <ReactQueryDevtools />
-      </h1>
+      <h1>Hello World</h1>
     </QueryClientProvider>
   );
 };
