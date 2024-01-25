@@ -2,6 +2,7 @@ import { QueryClientProvider } from '@boolti/api';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import ThemeProvider from './styles/ThemeProvider';
 import LoginPage from './pages/Login/LoginPage';
+import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
 
@@ -14,6 +15,11 @@ const router = createBrowserRouter([
     path: '/login',
     element: <LoginPage />,
   },
+  {
+    path: '/signup/complete',
+    element: <SignUpCompletePage />,
+  },
+  { path: '/home', element: <></> },
   {
     path: '*',
     element: <Navigate to="/" replace />,

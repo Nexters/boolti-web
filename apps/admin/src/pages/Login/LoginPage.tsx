@@ -1,8 +1,11 @@
 import Styled from './LoginPage.styles';
 import kakaoIconUrl from '../../assets/svg/kakao.svg';
 import appleIconUrl from '../../assets/svg/apple.svg';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   return (
     <Styled.LoginPage>
       <Styled.LoginContent>
@@ -17,13 +20,21 @@ const LoginPage = () => {
               티켓을 불티나게 팔아보세요!
             </Styled.CardContentTitle>
             <Styled.LoginButtonContainer>
-              <Styled.KakaoLoginButton>
+              <Styled.KakaoLoginButton
+                onClick={() => {
+                  navigate('/signup/complete');
+                }}
+              >
                 <Styled.LoginButtonIcon>
                   <img src={kakaoIconUrl} alt="카카오톡" />
                 </Styled.LoginButtonIcon>
                 카카오톡으로 시작하기
               </Styled.KakaoLoginButton>
-              <Styled.AppleLoginButton>
+              <Styled.AppleLoginButton
+                onClick={() => {
+                  navigate('/signup/complete');
+                }}
+              >
                 <Styled.LoginButtonIcon>
                   <img src={appleIconUrl} alt="Apple" />
                 </Styled.LoginButtonIcon>
