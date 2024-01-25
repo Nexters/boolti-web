@@ -5,24 +5,25 @@ import LoginPage from './pages/Login/LoginPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
+import { PATH } from './constants/routes';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Navigate to="/login" replace />, // Note: 이후 랜딩 페이지로 교체 필요
+    path: PATH.INDEX,
+    element: <Navigate to={PATH.LOGIN} replace />, // Note: 이후 랜딩 페이지로 교체 필요
   },
   {
-    path: '/login',
+    path: PATH.LOGIN,
     element: <LoginPage />,
   },
   {
-    path: '/signup/complete',
+    path: PATH.SIGNUP_COMPLETE,
     element: <SignUpCompletePage />,
   },
-  { path: '/home', element: <></> },
+  { path: PATH.HOME, element: <></> },
   {
     path: '*',
-    element: <Navigate to="/" replace />,
+    element: <Navigate to={PATH.INDEX} replace />,
   },
 ]);
 
