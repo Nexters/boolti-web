@@ -13,16 +13,16 @@ const Container = styled.button`
   transition:
     background-color 0.2s ease-in-out,
     color 0.2s ease-in-out;
-  color: ${(props) => props.theme.palette.grey.g90};
-  ${(props) => props.theme.typo.sh1.styles};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  ${({ theme }) => theme.typo.sh1};
   &:disabled {
     cursor: unset;
   }
   &:hover:not(:disabled) {
-    background-color: ${(props) => props.theme.palette.grey.g20};
+    background-color: ${({ theme }) => theme.palette.grey.g20};
   }
   &:disabled {
-    color: ${(props) => props.theme.palette.grey.g60};
+    color: ${({ theme }) => theme.palette.grey.g60};
   }
 `;
 
