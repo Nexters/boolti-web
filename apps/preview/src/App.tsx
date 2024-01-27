@@ -1,4 +1,4 @@
-import { Button, TextButton, ThemeProvider } from '@boolti/ui';
+import { Badge, Button, TextButton, ThemeProvider } from '@boolti/ui';
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -184,12 +184,21 @@ const App = () => {
             BUTTON
           </Button>
         </div>
-        <TextButton>TEXT BUTTON</TextButton>
-        <TextButton icon={<Icon />}>TEXT BUTTON</TextButton>
-        <TextButton disabled>TEXT BUTTON</TextButton>
-        <TextButton icon={<Icon />} disabled>
-          TEXT BUTTON
-        </TextButton>
+        <div style={{ marginBottom: 20 }}>
+          <TextButton>TEXT BUTTON</TextButton>
+          <TextButton icon={<Icon />}>TEXT BUTTON</TextButton>
+          <TextButton disabled>TEXT BUTTON</TextButton>
+          <TextButton icon={<Icon />} disabled>
+            TEXT BUTTON
+          </TextButton>
+        </div>
+        <div style={{ display: 'flex', width: 600, justifyContent: 'space-between' }}>
+          <Badge colorTheme="purple">티켓 판매 오픈 D-n</Badge>
+          <Badge colorTheme="blue">티켓 판매 중</Badge>
+          <Badge colorTheme="green">티켓 판매 종료</Badge>
+          <Badge colorTheme="red">공연 당일</Badge>
+          <Badge colorTheme="grey">공연 종료</Badge>
+        </div>
       </h1>
     </ThemeProvider>
   );
