@@ -6,6 +6,7 @@ import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
 import { PATH } from './constants/routes';
+import HomePage from './pages/HomePage/HomePage';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
     path: PATH.SIGNUP_COMPLETE,
     element: <SignUpCompletePage />,
   },
-  { path: PATH.HOME, element: <></> },
+  { path: PATH.HOME, element: <HomePage /> },
   {
     path: '*',
     element: <Navigate to={PATH.INDEX} replace />,
