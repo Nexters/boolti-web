@@ -2,6 +2,7 @@
   "extends": "@boolti/typescript-config/vite.json",
   "compilerOptions": {
     "moduleResolution": "node",
+    "jsxImportSource": "@emotion/react"
   },
   "include": [
     "src"

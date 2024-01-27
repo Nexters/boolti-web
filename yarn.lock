@@ -291,6 +291,7 @@ __metadata:
   dependencies:
     "@boolti/eslint-config": "npm:*"
     "@boolti/typescript-config": "npm:*"
+    "@emotion/react": "npm:^11.11.3"
     "@lukemorales/query-key-factory": "npm:^1.3.2"
     "@tanstack/query-core": "npm:^4.32.6"
     "@tanstack/react-query": "npm:^4.32.6"
