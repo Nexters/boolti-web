@@ -4,6 +4,8 @@ import palette from '../../systems/palette';
 import typo from '../../systems/typo';
 import breakpoint from '../../systems/breakpoint';
 
+import Toast from '../Toast';
+
 const theme = {
   palette,
   typo,
@@ -15,7 +17,10 @@ interface ThemeProviderProps {
 }
 
 const ThemeProvider = ({ children }: ThemeProviderProps) => (
-  <BaseThemeProvider theme={theme}>{children}</BaseThemeProvider>
+  <BaseThemeProvider theme={theme}>
+    {children}
+    <Toast />
+  </BaseThemeProvider>
 );
 
 export default ThemeProvider;
