@@ -6,9 +6,13 @@ type Size = 'bold' | 'medium' | 'regular' | 'small' | 'x-small';
 export interface ButtonProps {
   colorTheme: colorTheme;
   size: Size;
+  icon?: React.ReactNode;
 }
 
 const Container = styled.button<ButtonProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 4px;
   border-width: 1px;
   border-style: solid;
@@ -70,6 +74,13 @@ const Container = styled.button<ButtonProps>`
   }}
 `;
 
+const Icon = styled.div`
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+`;
+
 export default {
   Container,
+  Icon,
 };
