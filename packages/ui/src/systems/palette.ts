@@ -14,7 +14,7 @@ const palette = {
     w: '#FFFFFF',
     g00: '#F8F9FA',
     g10: '#F2F3F5',
-    g20: '#D8DBE5',
+    g20: '#EAECEF',
     g30: '#DFE2E6',
     g40: '#CFD4DA',
     g50: '#AFB5BC',
