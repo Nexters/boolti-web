@@ -1,4 +1,4 @@
-import { Button, ThemeProvider } from '@boolti/ui';
+import { Button, TextButton, ThemeProvider } from '@boolti/ui';
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -184,6 +184,12 @@ const App = () => {
             BUTTON
           </Button>
         </div>
+        <TextButton>TEXT BUTTON</TextButton>
+        <TextButton icon={<Icon />}>TEXT BUTTON</TextButton>
+        <TextButton disabled>TEXT BUTTON</TextButton>
+        <TextButton icon={<Icon />} disabled>
+          TEXT BUTTON
+        </TextButton>
       </h1>
     </ThemeProvider>
   );
