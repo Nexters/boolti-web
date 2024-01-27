@@ -3,9 +3,11 @@ import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
 import { PATH } from '../../constants/routes';
 import Styled from './HomePage.styles';
+import { Dialog, useDialogState } from '@boolti/ui';
 
 const HomePage = () => {
   const toast = useToast();
+  const { open, openDialog, closeDialog } = useDialogState();
 
   return (
     <Layout
@@ -53,6 +55,22 @@ const HomePage = () => {
           정보 제공 토스트 띄우기
         </button>
       </div>
+      <button
+        onClick={() => {
+          openDialog();
+        }}
+      >
+        Open Dialog
+      </button>
+      <Dialog
+        title="Dialog Title"
+        open={open}
+        onClose={() => {
+          closeDialog();
+        }}
+      >
+        <p>Dialog Content</p>
+      </Dialog>
     </Layout>
   );
 };

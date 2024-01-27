@@ -1,3 +1,4 @@
 import useToast from './useToast';
+import useDialogState from './useDialogState';
 
-export { useToast };
+export { useToast, useDialogState };
