@@ -1,8 +1,6 @@
-import Styled from './Button.style';
+import Styled, { ButtonProps } from './Button.style';
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
-  /** */
-}
+type Props = React.HTMLAttributes<HTMLButtonElement> & ButtonProps;
 
 function Button({ children, ...rest }: Props) {
   return <Styled.Container {...rest}>{children}</Styled.Container>;

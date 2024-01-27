@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@boolti/ui": "*",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "react": "^18.2.0",
