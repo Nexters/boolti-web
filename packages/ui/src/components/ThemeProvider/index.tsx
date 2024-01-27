@@ -1,7 +1,7 @@
 import { ThemeProvider as BaseThemeProvider } from '@emotion/react';
 
-import palette from './palette';
-import typo from './typo';
+import palette from '../../systems/palette';
+import typo from '../../systems/typo';
 
 const theme = {
   palette,

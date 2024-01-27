@@ -1,7 +1,7 @@
 import '@emotion/react';
 
-import palette from './palette';
-import typo from './typo';
+import palette from './systems/palette';
+import typo from './systems.typo';
 
 declare module '@emotion/react' {
   export interface Theme {
