@@ -2,10 +2,12 @@ import { ThemeProvider as BaseThemeProvider } from '@emotion/react';
 
 import palette from '../../systems/palette';
 import typo from '../../systems/typo';
+import breakpoint from '../../systems/breakpoint';
 
 const theme = {
   palette,
   typo,
+  breakpoint,
 };
 
 interface ThemeProviderProps {
