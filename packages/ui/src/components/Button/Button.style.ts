@@ -6,6 +6,7 @@ type Size = 'bold' | 'medium' | 'regular' | 'small' | 'x-small';
 export interface ButtonProps {
   colorTheme: colorTheme;
   size: Size;
+  disabled?: boolean;
   icon?: React.ReactNode;
 }
 
@@ -16,6 +17,10 @@ const Container = styled.button<ButtonProps>`
   border-radius: 4px;
   border-width: 1px;
   border-style: solid;
+  transition:
+    background-color 0.2s ease-in-out,
+    border-color 0.2s ease-in-out,
+    color 0.2s ease-in-out;
   ${(props) => {
     switch (props.size) {
       case 'bold':
@@ -57,18 +62,53 @@ const Container = styled.button<ButtonProps>`
           color: ${props.theme.palette.grey.g00};
           border-color: ${props.theme.palette.primary.o1};
           background-color: ${props.theme.palette.primary.o1};
+          &:hover, &:active {
+            border-color: ${props.theme.palette.primary.o2};
+            background-color: ${props.theme.palette.primary.o2};
+          }
+          &:disabled {
+            color: ${props.theme.palette.grey.g60};
+            border-color: ${props.theme.palette.grey.g20};
+            background-color: ${props.theme.palette.grey.g20};
+          }
         `;
       case 'netural':
         return `
           color: ${props.theme.palette.grey.g00};
           border-color: ${props.theme.palette.grey.g90};
           background-color: ${props.theme.palette.grey.g90};
+          &:hover {
+            border-color: #707070;
+            background-color: #707070;
+          }
+          &:active {
+            border-color: ${props.theme.palette.grey.g60};
+            background-color: ${props.theme.palette.grey.g60};
+          }
+          &:disabled {
+            color: ${props.theme.palette.grey.g60};
+            border-color: ${props.theme.palette.grey.g20};
+            background-color: ${props.theme.palette.grey.g20};
+          }
         `;
       case 'line':
         return `
           color: ${props.theme.palette.grey.g90};
           border-color: ${props.theme.palette.grey.g90};
           background-color: ${props.theme.palette.grey.g00};
+          &:hover {
+            border-color: #707070;
+            color: #707070;
+          }
+          &:active {
+            color: ${props.theme.palette.grey.g60};
+            border-color: ${props.theme.palette.grey.g60};
+          }
+          &:disabled {
+            color: ${props.theme.palette.grey.g40};
+            border-color: ${props.theme.palette.grey.g20};
+            background-color: ${props.theme.palette.grey.g10};
+          }
         `;
     }
   }}

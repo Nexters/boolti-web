@@ -40,6 +40,9 @@ const App = () => {
           <Button size="x-small" colorTheme="primary">
             BUTTON
           </Button>
+          <Button size="x-small" colorTheme="primary" disabled>
+            BUTTON
+          </Button>
         </div>
         <div
           style={{
@@ -63,6 +66,9 @@ const App = () => {
             BUTTON
           </Button>
           <Button icon={<Icon />} size="x-small" colorTheme="primary">
+            BUTTON
+          </Button>
+          <Button icon={<Icon />} size="x-small" colorTheme="primary" disabled>
             BUTTON
           </Button>
         </div>
@@ -90,6 +96,9 @@ const App = () => {
           <Button icon={<Icon />} size="x-small" colorTheme="netural">
             BUTTON
           </Button>
+          <Button icon={<Icon />} size="x-small" colorTheme="netural" disabled>
+            BUTTON
+          </Button>
         </div>
         <div
           style={{
@@ -113,6 +122,9 @@ const App = () => {
             BUTTON
           </Button>
           <Button size="x-small" colorTheme="netural">
+            BUTTON
+          </Button>
+          <Button size="x-small" colorTheme="netural" disabled>
             BUTTON
           </Button>
         </div>
@@ -140,6 +152,9 @@ const App = () => {
           <Button icon={<Icon />} size="x-small" colorTheme="line">
             BUTTON
           </Button>
+          <Button icon={<Icon />} size="x-small" colorTheme="line" disabled>
+            BUTTON
+          </Button>
         </div>
         <div
           style={{
@@ -163,6 +178,9 @@ const App = () => {
             BUTTON
           </Button>
           <Button size="x-small" colorTheme="line">
+            BUTTON
+          </Button>
+          <Button size="x-small" colorTheme="line" disabled>
             BUTTON
           </Button>
         </div>
