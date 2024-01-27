@@ -62,7 +62,7 @@ const Container = styled.button<ButtonProps>`
           color: ${props.theme.palette.grey.g00};
           border-color: ${props.theme.palette.primary.o1};
           background-color: ${props.theme.palette.primary.o1};
-          &:hover, &:active {
+          &:hover:not(:disabled), &:active:not(:disabled) {
             border-color: ${props.theme.palette.primary.o2};
             background-color: ${props.theme.palette.primary.o2};
           }
@@ -77,11 +77,11 @@ const Container = styled.button<ButtonProps>`
           color: ${props.theme.palette.grey.g00};
           border-color: ${props.theme.palette.grey.g90};
           background-color: ${props.theme.palette.grey.g90};
-          &:hover {
+          &:hover:not(:disabled) {
             border-color: #707070;
             background-color: #707070;
           }
-          &:active {
+          &:active:not(:disabled) {
             border-color: ${props.theme.palette.grey.g60};
             background-color: ${props.theme.palette.grey.g60};
           }
@@ -96,11 +96,11 @@ const Container = styled.button<ButtonProps>`
           color: ${props.theme.palette.grey.g90};
           border-color: ${props.theme.palette.grey.g90};
           background-color: ${props.theme.palette.grey.g00};
-          &:hover {
+          &:hover:not(:disabled) {
             border-color: #707070;
             color: #707070;
           }
-          &:active {
+          &:active:not(:disabled) {
             color: ${props.theme.palette.grey.g60};
             border-color: ${props.theme.palette.grey.g60};
           }
