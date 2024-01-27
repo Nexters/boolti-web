@@ -10,7 +10,25 @@ const palette = {
     success: '#52C41A',
     link: '#1890FF',
   },
+  purple: {
+    main: '#B150FF',
+    sub: '#E6C8FE',
+  },
+  blue: {
+    main: '#2B7BE9',
+    sub: '#C8E7FE',
+  },
+  green: {
+    main: '#52C41A',
+    sub: '#CCF3BA',
+  },
+  red: {
+    main: '#FF5A14',
+    sub: '#FFCFBA',
+  },
   grey: {
+    main: '#87909B',
+    sub: '#EAECEF',
     w: '#FFFFFF',
     g00: '#F8F9FA',
     g10: '#F2F3F5',
