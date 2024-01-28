@@ -1,15 +1,24 @@
-import { Badge, Button, TextButton, ThemeProvider } from '@boolti/ui';
-
-const Icon = () => (
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10C17 13.866 13.866 17 10 17Z"
-      fill="currentColor"
-    />
-  </svg>
-);
+import { Badge, Button, TextButton, ThemeProvider, Icon } from '@boolti/ui';
+import {
+  Apple,
+  ArrowLeft,
+  ArrowRight,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Close,
+  Edit,
+  Github,
+  Instagram,
+  Kakaotalk,
+  Plus,
+  Search,
+  Ticket,
+  UpDown,
+  Users,
+  Wallet,
+} from '@boolti/ui/src/components/Icon';
 
 const App = () => {
   return (
@@ -53,22 +62,27 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon />} size="bold" colorTheme="primary">
+          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="medium" colorTheme="primary">
+          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="regular" colorTheme="primary">
+          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="small" colorTheme="primary">
+          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="primary">
+          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="primary" disabled>
+          <Button
+            icon={<Icon size={24} type="apple" />}
+            size="x-small"
+            colorTheme="primary"
+            disabled
+          >
             BUTTON
           </Button>
         </div>
@@ -81,22 +95,27 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon />} size="bold" colorTheme="netural">
+          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="medium" colorTheme="netural">
+          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="regular" colorTheme="netural">
+          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="small" colorTheme="netural">
+          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="netural">
+          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="netural" disabled>
+          <Button
+            icon={<Icon size={24} type="apple" />}
+            size="x-small"
+            colorTheme="netural"
+            disabled
+          >
             BUTTON
           </Button>
         </div>
@@ -137,22 +156,22 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon />} size="bold" colorTheme="line">
+          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="medium" colorTheme="line">
+          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="regular" colorTheme="line">
+          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="small" colorTheme="line">
+          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="line">
+          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon />} size="x-small" colorTheme="line" disabled>
+          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="line" disabled>
             BUTTON
           </Button>
         </div>
@@ -186,9 +205,9 @@ const App = () => {
         </div>
         <div style={{ marginBottom: 20 }}>
           <TextButton>TEXT BUTTON</TextButton>
-          <TextButton icon={<Icon />}>TEXT BUTTON</TextButton>
+          <TextButton icon={<Icon size={24} type="apple" />}>TEXT BUTTON</TextButton>
           <TextButton disabled>TEXT BUTTON</TextButton>
-          <TextButton icon={<Icon />} disabled>
+          <TextButton icon={<Icon size={24} type="apple" />} disabled>
             TEXT BUTTON
           </TextButton>
         </div>
@@ -198,6 +217,26 @@ const App = () => {
           <Badge colorTheme="green">티켓 판매 종료</Badge>
           <Badge colorTheme="red">공연 당일</Badge>
           <Badge colorTheme="grey">공연 종료</Badge>
+        </div>
+        <div style={{ color: 'blue' }}>
+          <Apple size={20} /> <Apple size={24} />
+          <Github size={20} /> <Github size={24} />
+          <Instagram size={20} /> <Instagram size={24} />
+          <Kakaotalk size={20} /> <Kakaotalk size={24} />
+          <Ticket size={20} /> <Ticket size={24} />
+          <Wallet size={20} /> <Wallet size={24} />
+          <Users size={20} /> <Users size={24} />
+          <Edit size={20} /> <Edit size={24} />
+          <Calendar size={20} /> <Calendar size={24} />
+          <Clock size={20} /> <Clock size={24} />
+          <Search size={20} /> <Search size={24} />
+          <UpDown size={20} /> <UpDown size={24} />
+          <ChevronRight size={20} /> <ChevronRight size={24} />
+          <ChevronLeft size={20} /> <ChevronLeft size={24} />
+          <ArrowLeft size={20} /> <ArrowLeft size={24} />
+          <ArrowRight size={20} /> <ArrowRight size={24} />
+          <Plus size={20} /> <Plus size={24} />
+          <Close size={20} /> <Close size={24} />
         </div>
       </h1>
     </ThemeProvider>
