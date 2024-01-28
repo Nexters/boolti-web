@@ -1,4 +1,4 @@
-import { Badge, Button, TextButton, ThemeProvider } from '@boolti/ui';
+import { Badge, Button, TextButton, BooltiUIProvider } from '@boolti/ui';
 
 const Icon = () => (
   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -13,7 +13,7 @@ const Icon = () => (
 
 const App = () => {
   return (
-    <ThemeProvider>
+    <BooltiUIProvider>
       <h1>
         Preview
         <div
@@ -200,7 +200,7 @@ const App = () => {
           <Badge colorTheme="grey">공연 종료</Badge>
         </div>
       </h1>
-    </ThemeProvider>
+    </BooltiUIProvider>
   );
 };
 
