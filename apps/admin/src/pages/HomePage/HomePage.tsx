@@ -1,13 +1,15 @@
-import { useToast } from '@boolti/ui';
+import { useToast, useDialog } from '@boolti/ui';
 import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
 import { PATH } from '../../constants/routes';
 import Styled from './HomePage.styles';
-import { Dialog, useDialogState } from '@boolti/ui';
 
 const HomePage = () => {
   const toast = useToast();
-  const { open, openDialog, closeDialog } = useDialogState();
+
+  const dialog1 = useDialog();
+  const dialog2 = useDialog();
+  const dialog3 = useDialog();
 
   return (
     <Layout
@@ -57,20 +59,59 @@ const HomePage = () => {
       </div>
       <button
         onClick={() => {
-          openDialog();
+          dialog1.open({
+            title: '다이얼로그 1 ',
+            content: (
+              <button
+                onClick={() => {
+                  dialog3.open({
+                    title: '다이얼로그 안의 다이얼로그',
+                    content: (
+                      <p>
+                        다이얼로그 내용
+                        <br />
+                        다이얼로그 ID : {dialog3.id}
+                      </p>
+                    ),
+                    onClose: () => {
+                      console.log('다이얼로그 안의 다이얼로그 닫힘');
+                    },
+                  });
+                }}
+              >
+                다이얼로그 안의 다이얼로그 열기
+                <br />
+                다이얼로그 ID : {dialog1.id}
+              </button>
+            ),
+            onClose: () => {
+              console.log('다이얼로그 1 닫힘');
+            },
+          });
         }}
       >
-        Open Dialog
+        Open Dialog 1
       </button>
-      <Dialog
-        title="Dialog Title"
-        open={open}
-        onClose={() => {
-          closeDialog();
+
+      <button
+        onClick={() => {
+          dialog2.open({
+            title: '다이얼로그 2',
+            content: (
+              <p>
+                다이얼로그 내용
+                <br />
+                다이얼로그 ID : {dialog2.id}
+              </p>
+            ),
+            onClose: () => {
+              console.log('다이얼로그 2 닫힘');
+            },
+          });
         }}
       >
-        <p>Dialog Content</p>
-      </Dialog>
+        Open Dialog 2
+      </button>
     </Layout>
   );
 };

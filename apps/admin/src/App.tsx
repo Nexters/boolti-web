@@ -1,6 +1,6 @@
 import { QueryClientProvider } from '@boolti/api';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
-import { ThemeProvider } from '@boolti/ui';
+import { BooltiUIProvider } from '@boolti/ui';
 import LoginPage from './pages/Login/LoginPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import 'the-new-css-reset/css/reset.css';
@@ -33,9 +33,9 @@ const App = () => {
   // console.log(data?.hello)
   return (
     <QueryClientProvider>
-      <ThemeProvider>
+      <BooltiUIProvider>
         <RouterProvider router={router} />
-      </ThemeProvider>
+      </BooltiUIProvider>
     </QueryClientProvider>
   );
 };
