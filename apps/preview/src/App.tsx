@@ -62,23 +62,23 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="primary">
+          <Button icon={<Icon size={20} type="apple" />} size="bold" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="primary">
+          <Button icon={<Icon size={20} type="apple" />} size="medium" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="primary">
+          <Button icon={<Icon size={20} type="apple" />} size="regular" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="primary">
+          <Button icon={<Icon size={20} type="apple" />} size="small" colorTheme="primary">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="primary">
+          <Button icon={<Icon size={20} type="apple" />} size="x-small" colorTheme="primary">
             BUTTON
           </Button>
           <Button
-            icon={<Icon size={24} type="apple" />}
+            icon={<Icon size={20} type="apple" />}
             size="x-small"
             colorTheme="primary"
             disabled
@@ -95,23 +95,23 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="netural">
+          <Button icon={<Icon size={20} type="apple" />} size="bold" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="netural">
+          <Button icon={<Icon size={20} type="apple" />} size="medium" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="netural">
+          <Button icon={<Icon size={20} type="apple" />} size="regular" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="netural">
+          <Button icon={<Icon size={20} type="apple" />} size="small" colorTheme="netural">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="netural">
+          <Button icon={<Icon size={20} type="apple" />} size="x-small" colorTheme="netural">
             BUTTON
           </Button>
           <Button
-            icon={<Icon size={24} type="apple" />}
+            icon={<Icon size={20} type="apple" />}
             size="x-small"
             colorTheme="netural"
             disabled
@@ -156,22 +156,22 @@ const App = () => {
             alignItems: 'flex-end',
           }}
         >
-          <Button icon={<Icon size={24} type="apple" />} size="bold" colorTheme="line">
+          <Button icon={<Icon size={20} type="apple" />} size="bold" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="medium" colorTheme="line">
+          <Button icon={<Icon size={20} type="apple" />} size="medium" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="regular" colorTheme="line">
+          <Button icon={<Icon size={20} type="apple" />} size="regular" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="small" colorTheme="line">
+          <Button icon={<Icon size={20} type="apple" />} size="small" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="line">
+          <Button icon={<Icon size={20} type="apple" />} size="x-small" colorTheme="line">
             BUTTON
           </Button>
-          <Button icon={<Icon size={24} type="apple" />} size="x-small" colorTheme="line" disabled>
+          <Button icon={<Icon size={20} type="apple" />} size="x-small" colorTheme="line" disabled>
             BUTTON
           </Button>
         </div>
@@ -205,9 +205,9 @@ const App = () => {
         </div>
         <div style={{ marginBottom: 20 }}>
           <TextButton>TEXT BUTTON</TextButton>
-          <TextButton icon={<Icon size={24} type="apple" />}>TEXT BUTTON</TextButton>
+          <TextButton icon={<Icon size={20} type="apple" />}>TEXT BUTTON</TextButton>
           <TextButton disabled>TEXT BUTTON</TextButton>
-          <TextButton icon={<Icon size={24} type="apple" />} disabled>
+          <TextButton icon={<Icon size={20} type="apple" />} disabled>
             TEXT BUTTON
           </TextButton>
         </div>
