@@ -43,6 +43,9 @@ const palette = {
     g100: '#222529',
     b: '#000000',
   },
+  dim: {
+    dialog: 'rgba(86, 86, 86, 0.25)',
+  },
 } as const;
 
 export default palette;
