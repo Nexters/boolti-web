@@ -1,24 +1,24 @@
 import { Badge, Button, TextButton, ThemeProvider, Icon } from '@boolti/ui';
 import {
-  Apple,
-  ArrowLeft,
-  ArrowRight,
-  Calendar,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Close,
-  Edit,
-  Github,
-  Instagram,
-  Kakaotalk,
-  Plus,
-  Search,
-  Ticket,
-  UpDown,
-  Users,
-  Wallet,
-} from '@boolti/ui/src/components/Icon';
+  AppleIcon,
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CalendarIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  ClockIcon,
+  CloseIcon,
+  EditIcon,
+  GithubIcon,
+  InstagramIcon,
+  KakaotalkIcon,
+  PlusIcon,
+  SearchIcon,
+  TicketIcon,
+  UpDownIcon,
+  UsersIcon,
+  WalletIcon,
+} from '@boolti/ui';
 
 const App = () => {
   return (
@@ -219,24 +219,24 @@ const App = () => {
           <Badge colorTheme="grey">공연 종료</Badge>
         </div>
         <div style={{ color: 'blue' }}>
-          <Apple size={20} /> <Apple size={24} />
-          <Github size={20} /> <Github size={24} />
-          <Instagram size={20} /> <Instagram size={24} />
-          <Kakaotalk size={20} /> <Kakaotalk size={24} />
-          <Ticket size={20} /> <Ticket size={24} />
-          <Wallet size={20} /> <Wallet size={24} />
-          <Users size={20} /> <Users size={24} />
-          <Edit size={20} /> <Edit size={24} />
-          <Calendar size={20} /> <Calendar size={24} />
-          <Clock size={20} /> <Clock size={24} />
-          <Search size={20} /> <Search size={24} />
-          <UpDown size={20} /> <UpDown size={24} />
-          <ChevronRight size={20} /> <ChevronRight size={24} />
-          <ChevronLeft size={20} /> <ChevronLeft size={24} />
-          <ArrowLeft size={20} /> <ArrowLeft size={24} />
-          <ArrowRight size={20} /> <ArrowRight size={24} />
-          <Plus size={20} /> <Plus size={24} />
-          <Close size={20} /> <Close size={24} />
+          <AppleIcon size={20} /> <AppleIcon size={24} />
+          <GithubIcon size={20} /> <GithubIcon size={24} />
+          <InstagramIcon size={20} /> <InstagramIcon size={24} />
+          <KakaotalkIcon size={20} /> <KakaotalkIcon size={24} />
+          <TicketIcon size={20} /> <TicketIcon size={24} />
+          <WalletIcon size={20} /> <WalletIcon size={24} />
+          <UsersIcon size={20} /> <UsersIcon size={24} />
+          <EditIcon size={20} /> <EditIcon size={24} />
+          <CalendarIcon size={20} /> <CalendarIcon size={24} />
+          <ClockIcon size={20} /> <ClockIcon size={24} />
+          <SearchIcon size={20} /> <SearchIcon size={24} />
+          <UpDownIcon size={20} /> <UpDownIcon size={24} />
+          <ChevronRightIcon size={20} /> <ChevronRightIcon size={24} />
+          <ChevronLeftIcon size={20} /> <ChevronLeftIcon size={24} />
+          <ArrowLeftIcon size={20} /> <ArrowLeftIcon size={24} />
+          <ArrowRightIcon size={20} /> <ArrowRightIcon size={24} />
+          <PlusIcon size={20} /> <PlusIcon size={24} />
+          <CloseIcon size={20} /> <Close size={24} />
         </div>
       </h1>
     </ThemeProvider>

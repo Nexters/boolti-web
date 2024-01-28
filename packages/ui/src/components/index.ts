@@ -2,6 +2,49 @@ import ThemeProvider from './ThemeProvider';
 import Button from './Button';
 import TextButton from './TextButton';
 import Badge from './Badge';
-import Icon from './Icon';
+import Icon, {
+  Apple,
+  Github,
+  Instagram,
+  Kakaotalk,
+  Ticket,
+  Wallet,
+  Users,
+  Edit,
+  Calendar,
+  Clock,
+  Search,
+  UpDown,
+  ChevronRight,
+  ChevronLeft,
+  ArrowLeft,
+  ArrowRight,
+  Plus,
+  Close,
+} from './Icon';
 
-export { ThemeProvider, Button, TextButton, Badge, Icon };
+export {
+  ThemeProvider,
+  Button,
+  TextButton,
+  Badge,
+  Icon,
+  Apple as AppleIcon,
+  Github as GithubIcon,
+  Instagram as InstagramIcon,
+  Kakaotalk as KakaotalkIcon,
+  Ticket as TicketIcon,
+  Wallet as WalletIcon,
+  Users as UsersIcon,
+  Edit as EditIcon,
+  Calendar as CalendarIcon,
+  Clock as ClockIcon,
+  Search as SearchIcon,
+  UpDown as UpDownIcon,
+  ChevronRight as ChevronRightIcon,
+  ChevronLeft as ChevronLeftIcon,
+  ArrowLeft as ArrowLeftIcon,
+  ArrowRight as ArrowRightIcon,
+  Plus as PlusIcon,
+  Close as CloseIcon,
+};
