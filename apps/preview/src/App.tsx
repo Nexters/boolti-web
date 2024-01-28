@@ -236,7 +236,7 @@ const App = () => {
           <ArrowLeftIcon size={20} /> <ArrowLeftIcon size={24} />
           <ArrowRightIcon size={20} /> <ArrowRightIcon size={24} />
           <PlusIcon size={20} /> <PlusIcon size={24} />
-          <CloseIcon size={20} /> <Close size={24} />
+          <CloseIcon size={20} /> <CloseIcon size={24} />
         </div>
       </h1>
     </ThemeProvider>
