@@ -1,5 +1,5 @@
 import Portal from '../Portal';
-import CloseIcon from './CloseIcon';
+import { CloseIcon } from '@boolti/icon';
 import Styled from './Dialog.styles';
 
 interface DialogProps {
@@ -19,7 +19,7 @@ const Dialog = ({ open, children, title, onClose }: DialogProps) => {
           <Styled.DialogHeader>
             <Styled.DialogTitle>{title}</Styled.DialogTitle>
             <Styled.DialogCloseButton aria-label="닫기" onClick={onClose}>
-              <CloseIcon />
+              <CloseIcon size={24} />
             </Styled.DialogCloseButton>
           </Styled.DialogHeader>
           <Styled.DialogContent>{children}</Styled.DialogContent>

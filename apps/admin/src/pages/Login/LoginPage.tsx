@@ -1,7 +1,6 @@
-import Styled from './LoginPage.styles';
-import kakaoIconUrl from '../../assets/svg/kakao.svg';
-import appleIconUrl from '../../assets/svg/apple.svg';
 import { useNavigate } from 'react-router-dom';
+import { KakaotalkIcon, AppleIcon } from '@boolti/icon';
+import Styled from './LoginPage.styles';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -26,7 +25,7 @@ const LoginPage = () => {
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <img src={kakaoIconUrl} alt="카카오톡" />
+                  <KakaotalkIcon size={20} />
                 </Styled.LoginButtonIcon>
                 카카오톡으로 시작하기
               </Styled.KakaoLoginButton>
@@ -36,7 +35,7 @@ const LoginPage = () => {
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <img src={appleIconUrl} alt="Apple" />
+                  <AppleIcon size={20} />
                 </Styled.LoginButtonIcon>
                 Apple로 시작하기
               </Styled.AppleLoginButton>
