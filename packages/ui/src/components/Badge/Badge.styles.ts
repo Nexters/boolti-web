@@ -10,7 +10,7 @@ const Container = styled.span<BadgeProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  border-radius: 24px;
+  border-radius: 4px;
   padding: 3px 8px;
   ${({ theme }) => theme.typo.b1};
   ${({ colorTheme, theme }) => {
