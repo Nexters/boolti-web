@@ -1,4 +1,4 @@
-import { useToast, useDialog } from '@boolti/ui';
+import { useToast, useDialog, useConfirm } from '@boolti/ui';
 import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
 import { PATH } from '../../constants/routes';
@@ -10,6 +10,8 @@ const HomePage = () => {
   const dialog1 = useDialog();
   const dialog2 = useDialog();
   const dialog3 = useDialog();
+
+  const confirm = useConfirm();
 
   return (
     <Layout
@@ -111,6 +113,30 @@ const HomePage = () => {
         }}
       >
         Open Dialog 2
+      </button>
+
+      <button
+        onClick={async () => {
+          const result = await confirm(
+            <>
+              지금 로그아웃하면 작성 중인 내용이 사라져요.
+              <br />
+              로그아웃 할까요?
+            </>,
+            {
+              cancel: '취소하기',
+              confirm: '로그아웃',
+            },
+          );
+
+          if (result) {
+            alert('로그아웃');
+          } else {
+            alert('로그아웃 취소');
+          }
+        }}
+      >
+        Open confirm
       </button>
     </Layout>
   );

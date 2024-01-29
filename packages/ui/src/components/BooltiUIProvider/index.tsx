@@ -1,3 +1,4 @@
+import ConfirmProvider from '../ConfirmProvider';
 import DialogProvider from '../DialogProvider';
 import ThemeProvider from '../ThemeProvider';
 
@@ -8,7 +9,9 @@ interface BooltiUIProviderProps {
 const BooltiUIProvider = ({ children }: BooltiUIProviderProps) => {
   return (
     <ThemeProvider>
-      <DialogProvider>{children}</DialogProvider>
+      <DialogProvider>
+        <ConfirmProvider>{children}</ConfirmProvider>
+      </DialogProvider>
     </ThemeProvider>
   );
 };
