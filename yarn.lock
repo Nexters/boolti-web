@@ -347,6 +347,7 @@ __metadata:
   resolution: "@boolti/ui@workspace:packages/ui"
   dependencies:
     "@boolti/eslint-config": "npm:*"
+    "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@emotion/react": "npm:^11.11.3"
     "@emotion/styled": "npm:^11.11.0"
