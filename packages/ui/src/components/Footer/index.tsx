@@ -8,7 +8,7 @@ const Footer = () => {
       <Styled.Content>
         <Styled.TextGroup>
           <Styled.BoldTtext>
-            {'불티' + '\n' + 'Copyright ⓒ Boolit. All Rights Reserved'}
+            {'불티' + '\n' + 'Copyright ⓒ Boolti. All Rights Reserved'}
           </Styled.BoldTtext>
           <Styled.Text>
             {'사업자 등록번호 : 120-88-01280 | 대표 : 김혜선 (더미 텍스트)' +
