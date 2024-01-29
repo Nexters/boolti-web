@@ -1,4 +1,4 @@
-import { Badge, Button, TextButton, ThemeProvider, Icon } from '@boolti/ui';
+import { Badge, Button, TextButton, BooltiUIProvider } from '@boolti/ui';
 import {
   AppleIcon,
   ArrowLeftIcon,
