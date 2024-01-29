@@ -1,6 +1,7 @@
-import ThemeProvider from './ThemeProvider';
+import BooltiUIProvider from './BooltiUIProvider';
 import Button from './Button';
 import TextButton from './TextButton';
 import Badge from './Badge';
+import Dialog from './Dialog';
 
-export { ThemeProvider, Button, TextButton, Badge };
+export { BooltiUIProvider, Button, TextButton, Badge, Dialog };

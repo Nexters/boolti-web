@@ -22,7 +22,7 @@ import {
 
 const App = () => {
   return (
-    <ThemeProvider>
+    <BooltiUIProvider>
       <h1>
         Preview
         <div
@@ -229,7 +229,7 @@ const App = () => {
           <CloseIcon size={20} /> <CloseIcon size={24} />
         </div>
       </h1>
-    </ThemeProvider>
+    </BooltiUIProvider>
   );
 };
 
