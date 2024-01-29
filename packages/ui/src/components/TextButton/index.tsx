@@ -1,4 +1,4 @@
-import Styled from './TextButton.style';
+import Styled from './TextButton.styles';
 
 interface Props extends React.HTMLAttributes<HTMLButtonElement> {
   icon?: React.ReactNode;
