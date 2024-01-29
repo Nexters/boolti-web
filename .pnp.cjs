@@ -38,6 +38,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/config-typescript"\
     },\
     {\
+      "name": "@boolti/icon",\
+      "reference": "workspace:packages/icon"\
+    },\
+    {\
       "name": "@boolti/ui",\
       "reference": "workspace:packages/ui"\
     }\
@@ -47,6 +51,7 @@ const RAW_RUNTIME_STATE =
   "fallbackExclusionList": [\
     ["@boolti/api", ["workspace:packages/api"]],\
     ["@boolti/eslint-config", ["workspace:packages/config-eslint"]],\
+    ["@boolti/icon", ["workspace:packages/icon"]],\
     ["@boolti/typescript-config", ["workspace:packages/config-typescript"]],\
     ["@boolti/ui", ["workspace:packages/ui"]],\
     ["admin", ["workspace:apps/admin"]],\
@@ -462,6 +467,24 @@ const RAW_RUNTIME_STATE =
         "linkType": "SOFT"\
       }]\
     ]],\
+    ["@boolti/icon", [\
+      ["workspace:packages/icon", {\
+        "packageLocation": "./packages/icon/",\
+        "packageDependencies": [\
+          ["@boolti/icon", "workspace:packages/icon"],\
+          ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
+          ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
+          ["@emotion/react", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:11.11.3"],\
+          ["@emotion/styled", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:11.11.0"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
+          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["@boolti/typescript-config", [\
       ["workspace:packages/config-typescript", {\
         "packageLocation": "./packages/config-typescript/",\
@@ -482,6 +505,7 @@ const RAW_RUNTIME_STATE =
           ["@emotion/styled", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:11.11.0"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
+          ["nanoid", "npm:5.0.4"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-hot-toast", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.4.1"],\
@@ -3533,6 +3557,13 @@ const RAW_RUNTIME_STATE =
           ["nanoid", "npm:3.3.7"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:5.0.4", {\
+        "packageLocation": "../../.yarn/berry/cache/nanoid-npm-5.0.4-0c697f9311-10c0.zip/node_modules/nanoid/",\
+        "packageDependencies": [\
+          ["nanoid", "npm:5.0.4"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["natural-compare", [\
@@ -3789,6 +3820,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["preview", "workspace:apps/preview"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
+          ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
           ["@boolti/ui", "workspace:packages/ui"],\
           ["@emotion/babel-plugin", "npm:11.11.0"],\

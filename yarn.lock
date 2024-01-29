@@ -320,6 +320,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@boolti/icon@npm:*, @boolti/icon@workspace:packages/icon":
+  version: 0.0.0-use.local
+  resolution: "@boolti/icon@workspace:packages/icon"
+  dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
+    "@emotion/react": "npm:^11.11.3"
+    "@emotion/styled": "npm:^11.11.0"
+    "@types/react": "npm:^18.2.43"
+    "@types/react-dom": "npm:^18.2.17"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@boolti/typescript-config@npm:*, @boolti/typescript-config@workspace:packages/config-typescript":
   version: 0.0.0-use.local
   resolution: "@boolti/typescript-config@workspace:packages/config-typescript"
@@ -336,6 +352,7 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
+    nanoid: "npm:^5.0.4"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-hot-toast: "npm:^2.4.1"
@@ -2776,6 +2793,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.0.4":
+  version: 5.0.4
+  resolution: "nanoid@npm:5.0.4"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 28c22d3ff96ea9e6abc059813b8483890c1f52de0f185d8347b0ea205c5966530205c374f1f77492bb53dc5d649de5d36d6eade16645055eb9220dc62080c1b1
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -2999,6 +3025,7 @@ __metadata:
   resolution: "preview@workspace:apps/preview"
   dependencies:
     "@boolti/eslint-config": "npm:*"
+    "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@boolti/ui": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"

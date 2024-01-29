@@ -1,5 +1,5 @@
 {
-  "name": "@boolti/ui",
+  "name": "@boolti/icon",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -11,10 +11,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "nanoid": "^5.0.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-hot-toast": "^2.4.1"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@boolti/eslint-config": "*",
