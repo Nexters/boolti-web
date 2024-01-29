@@ -320,6 +320,22 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@boolti/icon@npm:*, @boolti/icon@workspace:packages/icon":
+  version: 0.0.0-use.local
+  resolution: "@boolti/icon@workspace:packages/icon"
+  dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
+    "@emotion/react": "npm:^11.11.3"
+    "@emotion/styled": "npm:^11.11.0"
+    "@types/react": "npm:^18.2.43"
+    "@types/react-dom": "npm:^18.2.17"
+    react: "npm:^18.2.0"
+    react-dom: "npm:^18.2.0"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@boolti/typescript-config@npm:*, @boolti/typescript-config@workspace:packages/config-typescript":
   version: 0.0.0-use.local
   resolution: "@boolti/typescript-config@workspace:packages/config-typescript"
@@ -2999,6 +3015,7 @@ __metadata:
   resolution: "preview@workspace:apps/preview"
   dependencies:
     "@boolti/eslint-config": "npm:*"
+    "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@boolti/ui": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
