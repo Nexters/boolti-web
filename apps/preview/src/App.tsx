@@ -1,4 +1,4 @@
-import { Badge, Button, TextButton, BooltiUIProvider } from '@boolti/ui';
+import { Badge, Button, TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
 import {
   AppleIcon,
   ArrowLeftIcon,
@@ -229,6 +229,7 @@ const App = () => {
           <CloseIcon size={20} /> <CloseIcon size={24} />
         </div>
       </h1>
+      <Footer />
     </BooltiUIProvider>
   );
 };

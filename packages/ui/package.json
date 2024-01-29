@@ -9,6 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
+    "@boolti/icon": "*",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
     "nanoid": "^5.0.4",
