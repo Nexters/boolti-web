@@ -10,24 +10,16 @@ interface ConfirmProps {
 }
 
 const Confirm = ({ children, cancelText, confirmText, onCancel, onConfirm }: ConfirmProps) => {
-  const handleCancel = () => {
-    onCancel?.();
-  };
-
-  const handleConfirm = () => {
-    onConfirm?.();
-  };
-
   return (
     <Portal>
       <Styled.DimmedArea>
         <Styled.Confirm>
           <Styled.ConfirmMessage>{children}</Styled.ConfirmMessage>
           <Styled.ConfirmButtonContainer>
-            <Styled.CancelButton type="button" onClick={handleCancel}>
+            <Styled.CancelButton type="button" onClick={onCancel}>
               {cancelText ?? '취소'}
             </Styled.CancelButton>
-            <Styled.ConfirmButton type="button" onClick={handleConfirm}>
+            <Styled.ConfirmButton type="button" onClick={onConfirm}>
               {confirmText ?? '확인'}
             </Styled.ConfirmButton>
           </Styled.ConfirmButtonContainer>
