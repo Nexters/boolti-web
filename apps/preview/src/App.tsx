@@ -1,3 +1,5 @@
+import './index.css';
+import 'the-new-css-reset/css/reset.css';
 import { Badge, Button, TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
 import {
   AppleIcon,
