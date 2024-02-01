@@ -54,6 +54,7 @@ tsconfig.tsbuildinfo
 
 # env variables
 .env
+secrets.ts
 
 # Etc
 .turbo

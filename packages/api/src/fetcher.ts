@@ -1,7 +1,7 @@
 import ky, { Options, ResponsePromise } from 'ky';
 
 // TODO 환경 변수로 API 베이스 설정
-const API_URL = '';
+const API_URL = 'https://dev.api.boolti.in';
 
 export const instance = ky.create({
   prefixUrl: API_URL,
@@ -27,8 +27,9 @@ export async function resultify<T>(response: ResponsePromise) {
 }
 
 export const fetcher = {
-  get: <T>(pathname: string, options?: Options) => resultify<T>(ky.get(pathname, options)),
-  post: <T>(pathname: string, options?: Options) => resultify<T>(ky.post(pathname, options)),
-  put: <T>(pathname: string, options?: Options) => resultify<T>(ky.put(pathname, options)),
-  delete: <T>(pathname: string, options?: Options) => resultify<T>(ky.delete(pathname, options)),
+  get: <T>(pathname: string, options?: Options) => resultify<T>(instance.get(pathname, options)),
+  post: <T>(pathname: string, options?: Options) => resultify<T>(instance.post(pathname, options)),
+  put: <T>(pathname: string, options?: Options) => resultify<T>(instance.put(pathname, options)),
+  delete: <T>(pathname: string, options?: Options) =>
+    resultify<T>(instance.delete(pathname, options)),
 };

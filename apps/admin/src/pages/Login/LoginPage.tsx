@@ -1,6 +1,28 @@
 import { useNavigate } from 'react-router-dom';
 import { KakaotalkIcon, AppleIcon } from '@boolti/icon';
 import Styled from './LoginPage.styles';
+import { PATH } from '../../constants/routes';
+
+declare global {
+  interface Window {
+    Kakao: {
+      Auth: {
+        authorize: (params: {
+          redirectUri: string;
+          scope?: string;
+          throughTalk?: boolean;
+          prompt?: string;
+          loginHint?: string;
+          serviceTerms?: string;
+          state?: string;
+          nonce?: string;
+        }) => void;
+      };
+    };
+  }
+}
+
+const redirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -21,7 +43,7 @@ const LoginPage = () => {
             <Styled.LoginButtonContainer>
               <Styled.KakaoLoginButton
                 onClick={() => {
-                  navigate('/signup/complete');
+                  window.Kakao.Auth.authorize({ redirectUri });
                 }}
               >
                 <Styled.LoginButtonIcon>
