@@ -21,6 +21,10 @@ const Container = styled.button<ButtonProps>`
     background-color 0.2s ease-in-out,
     border-color 0.2s ease-in-out,
     color 0.2s ease-in-out;
+  cursor: pointer;
+  &:disabled {
+    cursor: unset;
+  }
   ${({ size, theme }) => {
     switch (size) {
       case 'bold':
