@@ -241,6 +241,9 @@ const App = () => {
 
       <br />
       <TextField disabled value="abc" size="big" type="text" buttonProps={{ children: 'BUTTON' }} />
+
+      <br />
+      <TextField placeholder="abc" size="big" type="date" buttonProps={{ children: 'BUTTON' }} />
       <Footer />
     </BooltiUIProvider>
   );

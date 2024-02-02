@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export interface TextFieldProps {
   size: 'small' | 'big';
-  type: 'text' | 'date' | 'button';
+  type: 'text' | 'date';
   disabled?: boolean;
   buttonProps?: React.ComponentProps<'button'>;
 }
@@ -23,8 +23,20 @@ const Container = styled.div<TextFieldProps>`
   }}
 `;
 
-const Input = styled.input`
+const InputContainer = styled.div`
+  position: relative;
   flex: 1;
+
+  & > svg {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+`;
+
+const Input = styled.input`
+  width: 100%;
   border-radius: 4px;
   padding: 12px 13px;
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -40,6 +52,20 @@ const Input = styled.input`
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g40};
   }
+  &[type='date']::before {
+    content: attr(data-placeholder);
+    width: 100%;
+  }
+  &[type='date']::-webkit-inner-spin-button,
+  &[type='date']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: -10px;
+    top: 0;
+    transform: translateX(-10px);
+    padding-left: 600px;
+    height: 100%;
+    opacity: 0;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -49,5 +75,6 @@ const ButtonContainer = styled.div`
 export default {
   Container,
   Input,
+  InputContainer,
   ButtonContainer,
 };
