@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export interface TextFieldProps {
   size: 'small' | 'big';
-  type: 'text' | 'date';
+  type: 'text' | 'date' | 'file';
   disabled?: boolean;
   buttonProps?: React.ComponentProps<'button'>;
 }
@@ -33,6 +33,18 @@ const InputContainer = styled.div`
     top: 50%;
     transform: translateY(-50%);
   }
+`;
+
+const FileInputLabel = styled.label`
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  padding: 12px 13px;
+  color: ${({ theme }) => theme.palette.grey.g90};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  background: ${({ theme }) => theme.palette.grey.w};
+  ${({ theme }) => theme.typo.b3};
 `;
 
 const Input = styled.input`
@@ -66,6 +78,9 @@ const Input = styled.input`
     height: 100%;
     opacity: 0;
   }
+  &[type='file'] {
+    display: none;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -75,6 +90,7 @@ const ButtonContainer = styled.div`
 export default {
   Container,
   Input,
+  FileInputLabel,
   InputContainer,
   ButtonContainer,
 };

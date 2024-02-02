@@ -244,6 +244,9 @@ const App = () => {
 
       <br />
       <TextField placeholder="abc" size="big" type="date" buttonProps={{ children: 'BUTTON' }} />
+
+      <br />
+      <TextField placeholder="abc" size="big" type="file" buttonProps={{ children: 'BUTTON' }} />
       <Footer />
     </BooltiUIProvider>
   );
