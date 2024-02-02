@@ -1,6 +1,6 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
-import { Badge, Button, TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
+import { Badge, Button, TextButton, BooltiUIProvider, Footer, TextField } from '@boolti/ui';
 import {
   AppleIcon,
   ArrowLeftIcon,
@@ -231,6 +231,16 @@ const App = () => {
           <CloseIcon size={20} /> <CloseIcon size={24} />
         </div>
       </h1>
+      <br />
+      <TextField placeholder="aaa" size="small" type="text" />
+      <br />
+      <TextField value="abc" size="big" type="text" />
+
+      <br />
+      <TextField value="abc" size="big" type="text" buttonProps={{ children: 'BUTTON' }} />
+
+      <br />
+      <TextField disabled value="abc" size="big" type="text" buttonProps={{ children: 'BUTTON' }} />
       <Footer />
     </BooltiUIProvider>
   );
