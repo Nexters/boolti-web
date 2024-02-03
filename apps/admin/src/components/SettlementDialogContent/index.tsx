@@ -4,6 +4,7 @@ import { bankItems } from '~/constants/bankItems';
 
 import Styled from './SettlementDialogContent.styles';
 import { useState } from 'react';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const titles = [
   '은행을 선택해 주세요.',
@@ -23,6 +24,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const [accountHolder, setAccountHolder] = useState<string>('');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
+
+  useBodyScrollLock();
+
   return (
     <Styled.Container>
       <Styled.Title>{titles[currentStepIndex]}</Styled.Title>
