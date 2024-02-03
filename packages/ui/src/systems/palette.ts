@@ -31,7 +31,7 @@ const palette = {
     main: '#87909B',
     sub: '#EAECEF',
     w: '#FFFFFF',
-    g00: '#F6F9FF',
+    g00: '#F3F5F9',
     g10: '#E7EAF2',
     g20: '#D8DBE5',
     g30: '#C8CCDC',
