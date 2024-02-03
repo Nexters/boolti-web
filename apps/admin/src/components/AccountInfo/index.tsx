@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AccountInfo = ({ orgName, accountHolder, accountNumber }: Props) => {
-  const { open } = useDialog();
+  const { open, close } = useDialog();
   return (
     <Styled.Container>
       <Styled.Title>정산 계좌 정보</Styled.Title>
@@ -20,7 +20,10 @@ const AccountInfo = ({ orgName, accountHolder, accountNumber }: Props) => {
         {accountHolder && <Styled.AccountText>{accountHolder}</Styled.AccountText>}
         <Button
           onClick={() => {
-            open({ title: '정산 계좌 입력하기', content: <SettlementDialogContent /> });
+            open({
+              title: '정산 계좌 입력하기',
+              content: <SettlementDialogContent onClose={close} />,
+            });
           }}
           type="button"
           colorTheme="netural"

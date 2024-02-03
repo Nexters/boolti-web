@@ -1,4 +1,4 @@
-import { Button, TextField } from '@boolti/ui';
+import { Button, TextField, useToast } from '@boolti/ui';
 
 import { bankItems } from '~/constants/bankItems';
 
@@ -11,7 +11,12 @@ const titles = [
   '입력하신 계좌 정보를 다시 한 번 확인해주세요.',
 ];
 
-const SettlementDialogContent = () => {
+interface Props {
+  onClose?: VoidFunction;
+}
+
+const SettlementDialogContent = ({ onClose }: Props) => {
+  const toast = useToast();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const formValue = useRef<{ orgName?: string; accountNumber?: string; accountHolder?: string }>(
     {},
@@ -68,6 +73,22 @@ const SettlementDialogContent = () => {
           </Styled.InputContainer>
         </>
       )}
+      {currentStepIndex === 2 && (
+        <Styled.ConfirmContainer>
+          <Styled.ConfrimTextContainer>
+            <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
+            <Styled.ConfrimTextValue>{formValue.current.orgName}</Styled.ConfrimTextValue>
+          </Styled.ConfrimTextContainer>
+          <Styled.ConfrimTextContainer>
+            <Styled.ConfirmTextLabel>계좌번호</Styled.ConfirmTextLabel>
+            <Styled.ConfrimTextValue>{formValue.current.accountNumber}</Styled.ConfrimTextValue>
+          </Styled.ConfrimTextContainer>
+          <Styled.ConfrimTextContainer>
+            <Styled.ConfirmTextLabel>계좌주</Styled.ConfirmTextLabel>
+            <Styled.ConfrimTextValue>{formValue.current.accountNumber}</Styled.ConfrimTextValue>
+          </Styled.ConfrimTextContainer>
+        </Styled.ConfirmContainer>
+      )}
       <Styled.ButtonContainer>
         {currentStepIndex !== 0 && (
           <Button
@@ -91,12 +112,21 @@ const SettlementDialogContent = () => {
           }
           onClick={() => {
             if (currentStepIndex === 0 && selectedBank) {
-              formValue.current = { ...formValue.current, orgName: selectedBank };
+              formValue.current.orgName = selectedBank;
+            }
+            if (currentStepIndex === 1) {
+              formValue.current.accountHolder = accountHolder;
+              formValue.current.accountNumber = accountNumber;
+            }
+            if (currentStepIndex === 2) {
+              toast.success('정산 계좌를 저장했습니다.');
+              onClose?.();
+              return;
             }
             setCurrentStepIndex((prev) => prev + 1);
           }}
         >
-          다음으로
+          {currentStepIndex === 2 ? '저장하기' : '다음으로'}
         </Button>
       </Styled.ButtonContainer>
     </Styled.Container>

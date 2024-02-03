@@ -85,6 +85,34 @@ const InputContainer = styled.div`
   margin-bottom: 28px;
 `;
 
+const ConfirmContainer = styled.div`
+  border-radius: 4px;
+  padding: 16px;
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+`;
+
+const ConfrimTextContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  &:not(:last-of-type) {
+    margin-bottom: 8px;
+  }
+`;
+
+const ConfirmTextLabel = styled.span`
+  display: inline-block;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  width: 56px;
+  margin-right: 20px;
+`;
+
+const ConfrimTextValue = styled.span`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
 export default {
   Container,
   ButtonContainer,
@@ -96,4 +124,8 @@ export default {
   BankItemButton,
   InputLabel,
   InputContainer,
+  ConfirmContainer,
+  ConfrimTextContainer,
+  ConfirmTextLabel,
+  ConfrimTextValue,
 };
