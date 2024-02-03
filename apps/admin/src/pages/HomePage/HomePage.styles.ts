@@ -21,7 +21,7 @@ const LogoutLink = styled(Link)`
 
 const Container = styled.main`
   min-height: calc(100vh - 68px - 274px);
-  padding-top: 60px;
+  padding: 60px 20px 0;
 `;
 
 export default {

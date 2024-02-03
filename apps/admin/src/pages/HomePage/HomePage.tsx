@@ -3,6 +3,7 @@ import Layout from '~/components/Layout/Layout';
 import { PATH } from '~/constants/routes';
 import Styled from './HomePage.styles';
 import { Footer } from '@boolti/ui';
+import UserProfile from '~/components/UserProfile';
 
 const HomePage = () => {
   return (
@@ -14,7 +15,13 @@ const HomePage = () => {
         />
       }
     >
-      <Styled.Container></Styled.Container>
+      <Styled.Container>
+        <UserProfile
+          profileImage="https://picsum.photos/200"
+          username="%사용자명%"
+          email="Boolti@boolti.io"
+        />
+      </Styled.Container>
       <Footer />
     </Layout>
   );
