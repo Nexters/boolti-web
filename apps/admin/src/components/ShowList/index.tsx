@@ -13,7 +13,7 @@ const ShowList = ({ shows }: Props) => {
     <Styled.Container>
       <Styled.Header>
         <Styled.HeaderText>등록한 공연</Styled.HeaderText>
-        <Button type="button" colorTheme="primary" size="bold" icon={<PlusIcon size={20} />}>
+        <Button type="button" colorTheme="primary" size="bold" icon={<PlusIcon />}>
           공연 등록하기
         </Button>
       </Styled.Header>
