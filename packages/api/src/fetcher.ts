@@ -1,6 +1,6 @@
 import ky, { Options, ResponsePromise } from 'ky';
-import LOCAL_STORAGE from './constants/localStorage';
 import BooltiHTTPError from './BooltiHTTPError';
+import { LOCAL_STORAGE } from './constants';
 
 // TODO 환경 변수로 API 베이스 설정
 const API_URL = 'https://dev.api.boolti.in';

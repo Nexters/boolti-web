@@ -1,4 +1,4 @@
-const ERROR_CODE = {
+export const ERROR_CODE = {
   UNKNOWN: {
     type: 'UNKNOWN',
     status: 500,
@@ -12,5 +12,3 @@ const ERROR_CODE = {
     status: 400,
   },
 };
-
-export default ERROR_CODE;

@@ -1,5 +1,5 @@
 import { HTTPError, NormalizedOptions } from 'ky';
-import ERROR_CODE from './constants/errorCode';
+import { ERROR_CODE } from './constants';
 
 interface BooltiHTTPErrorOptions {
   errorTraceId: string;

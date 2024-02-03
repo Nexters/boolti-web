@@ -1,4 +1,4 @@
-import { QueryClientProvider } from '@boolti/api';
+import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
 import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
 import { BooltiUIProvider } from '@boolti/ui';
 import LoginPage from './pages/Login/LoginPage';
@@ -10,7 +10,6 @@ import 'the-new-css-reset/css/reset.css';
 import './index.css';
 import { PATH } from './constants/routes';
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
-import LOCAL_STORAGE from '@boolti/api/src/constants/localStorage';
 
 const PublicRoute = () => {
   const isLogin =
