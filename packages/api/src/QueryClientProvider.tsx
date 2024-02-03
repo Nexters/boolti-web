@@ -12,7 +12,9 @@ export function QueryClientProvider({ children }: React.PropsWithChildren) {
             retry: false,
             useErrorBoundary: (error) => {
               // 인증 관련 에러일 때만 ErrorBoundary를 사용한다.
-              return error instanceof BooltiHTTPError && error.status === 401;
+              return (
+                error instanceof BooltiHTTPError && (error.status === 401 || error.status === 403)
+              );
             },
           },
         },
