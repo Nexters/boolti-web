@@ -29,7 +29,7 @@ const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, ..
           type={inputType}
           {...rest}
         />
-        {inputType === 'date' && <CalendarIcon size={20} />}
+        {inputType === 'date' && <CalendarIcon />}
       </Styled.InputContainer>
       {buttonProps && (
         <Styled.ButtonContainer>

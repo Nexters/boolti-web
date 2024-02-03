@@ -19,7 +19,7 @@ const Dialog = ({ open, children, title, onClose }: DialogProps) => {
           <Styled.DialogHeader>
             <Styled.DialogTitle>{title}</Styled.DialogTitle>
             <Styled.DialogCloseButton aria-label="닫기" onClick={onClose}>
-              <CloseIcon size={24} />
+              <CloseIcon />
             </Styled.DialogCloseButton>
           </Styled.DialogHeader>
           <Styled.DialogContent>{children}</Styled.DialogContent>
