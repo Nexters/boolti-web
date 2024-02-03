@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField } from '@boolti/ui';
 import { useDropzone } from 'react-dropzone';
 import { useCallback, useEffect, useState } from 'react';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 const MAX_IMAGE_COUNT = 3;
 
@@ -11,10 +12,25 @@ interface ImageFile extends File {
   preview: string;
 }
 
+interface Inputs {
+  name: string;
+  date: string;
+  startTime: string;
+  runningTime: number;
+  placeName: string;
+  placeStreetAddress: string;
+  placeDetailAddress: string;
+  notice: string;
+  hostName: string;
+  hostPhoneNumber: string;
+}
+
 const ShowAddPage = () => {
   const navigate = useNavigate();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
+
+  const { control, register, handleSubmit } = useForm<Inputs>();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImageFiles((prevImageFiles) => [
@@ -33,6 +49,10 @@ const ShowAddPage = () => {
     maxFiles: MAX_IMAGE_COUNT,
     onDrop,
   });
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => {
+    console.log(data);
+  };
 
   useEffect(() => {
     return () => imageFiles.forEach((file) => URL.revokeObjectURL(file.preview));
@@ -74,7 +94,7 @@ const ShowAddPage = () => {
               <br />
               공연 정보는 티켓 판매 시작 전까지 수정할 수 있어요.
             </Styled.CardDescription>
-            <Styled.ShowAddForm>
+            <Styled.ShowAddForm onSubmit={handleSubmit(onSubmit)}>
               <Styled.ShowAddFormGroup>
                 <Styled.ShowAddFormTitle>기본 정보</Styled.ShowAddFormTitle>
                 <Styled.ShowAddFormRow>
@@ -121,6 +141,7 @@ const ShowAddPage = () => {
                         size="big"
                         placeholder="공연명을 입력해 주세요 (띄어쓰기 포함 최대 40자)"
                         required
+                        {...register('name', { required: true })}
                       />
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
@@ -129,7 +150,23 @@ const ShowAddPage = () => {
                   <Styled.ShowAddFormContent>
                     <Styled.ShowAddFormLabel required>공연일</Styled.ShowAddFormLabel>
                     <Styled.TextField>
-                      <TextField inputType="date" size="big" required />
+                      <Controller
+                        control={control}
+                        rules={{
+                          required: true,
+                        }}
+                        render={({ field: { onChange, onBlur, value } }) => (
+                          <TextField
+                            inputType="date"
+                            size="big"
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            placeholder={value}
+                            required
+                          />
+                        )}
+                        name="date"
+                      />
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
                 </Styled.ShowAddFormRow>
@@ -137,13 +174,24 @@ const ShowAddPage = () => {
                   <Styled.ShowAddFormContent>
                     <Styled.ShowAddFormLabel required>공연 시작 시간</Styled.ShowAddFormLabel>
                     <Styled.TextField>
-                      <TextField inputType="time" size="big" required />
+                      <TextField
+                        inputType="time"
+                        size="big"
+                        required
+                        {...register('startTime', { required: true })}
+                      />
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
                   <Styled.ShowAddFormContent>
                     <Styled.ShowAddFormLabel required>러닝타임</Styled.ShowAddFormLabel>
                     <Styled.TextField>
-                      <TextField inputType="number" size="big" min={0} required />
+                      <TextField
+                        inputType="number"
+                        size="big"
+                        min={0}
+                        required
+                        {...register('runningTime', { required: true })}
+                      />
                       <Styled.TextFieldSuffix>분</Styled.TextFieldSuffix>
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
@@ -157,6 +205,7 @@ const ShowAddPage = () => {
                         size="big"
                         placeholder="공연장명을 입력해 주세요"
                         required
+                        {...register('placeName', { required: true })}
                       />
                     </Styled.TextField>
                     <Styled.TextFieldRow>
@@ -166,6 +215,7 @@ const ShowAddPage = () => {
                           size="big"
                           placeholder="도로명 주소를 입력해 주세요"
                           required
+                          {...register('placeStreetAddress', { required: true })}
                         />
                       </Styled.TextField>
                       <Styled.TextField flex={1}>
@@ -174,6 +224,7 @@ const ShowAddPage = () => {
                           size="big"
                           placeholder="상세 주소를 입력해 주세요"
                           required
+                          {...register('placeDetailAddress', { required: true })}
                         />
                       </Styled.TextField>
                     </Styled.TextFieldRow>
@@ -191,6 +242,7 @@ const ShowAddPage = () => {
                     <Styled.TextArea
                       placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
                       rows={10}
+                      {...register('notice', { required: true })}
                     />
                   </Styled.ShowAddFormContent>
                 </Styled.ShowAddFormRow>
@@ -203,6 +255,7 @@ const ShowAddPage = () => {
                         size="big"
                         placeholder="대표자 이름을 입력해 주세요"
                         required
+                        {...register('hostName', { required: true })}
                       />
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
@@ -216,6 +269,7 @@ const ShowAddPage = () => {
                         size="big"
                         placeholder="대표자 연락처를 입력해 주세요"
                         required
+                        {...register('hostPhoneNumber', { required: true })}
                       />
                     </Styled.TextField>
                   </Styled.ShowAddFormContent>
