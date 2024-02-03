@@ -1,7 +1,24 @@
 import ky, { Options, ResponsePromise } from 'ky';
+import LOCAL_STORAGE from './constants/localStorage';
+import BooltiHTTPError from './BooltiHTTPError';
 
 // TODO 환경 변수로 API 베이스 설정
 const API_URL = 'https://dev.api.boolti.in';
+
+interface PostRefreshTokenResponse {
+  accessToken: string;
+  refreshToken: string;
+}
+
+const postRefreshToken = async () => {
+  const response = await ky.post(`${API_URL}/web/papi/v1/login/refresh`, {
+    json: {
+      refreshToken: window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+    },
+  });
+
+  return await response.json<PostRefreshTokenResponse>();
+};
 
 export const instance = ky.create({
   prefixUrl: API_URL,
@@ -9,20 +26,59 @@ export const instance = ky.create({
     'content-type': 'application/json',
   },
   hooks: {
-    // TODO 인증 관련 헤더 검증 로직 추가
-    beforeRequest: [],
-    // TODO 서버 에러 처리
-    beforeError: [],
+    beforeRequest: [
+      (request) => {
+        const accessToken = window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN);
+
+        if (accessToken) {
+          request.headers.set('Authorization', `Bearer ${accessToken}`);
+        }
+      },
+    ],
+    afterResponse: [
+      async (request, options, response) => {
+        // access token이 만료되었을 때, refresh token으로 새로운 access token을 발급받는다.
+        if (!response.ok && response.status === 401) {
+          try {
+            const { accessToken, refreshToken } = await postRefreshToken();
+
+            window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
+            window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
+
+            request.headers.set('Authorization', `Bearer ${accessToken}`);
+
+            return ky(request);
+          } catch (error) {
+            throw new BooltiHTTPError(response, request, options);
+          }
+        }
+
+        if (!response.ok && response.bodyUsed) {
+          const body = await response.json();
+
+          throw new BooltiHTTPError(response, request, options, {
+            errorTraceId: body.errorTraceId,
+            type: body.type,
+            detail: body.detail,
+          });
+        }
+
+        if (!response.ok) {
+          throw new BooltiHTTPError(response, request, options);
+        }
+      },
+    ],
   },
+  retry: 0,
 });
 
 export async function resultify<T>(response: ResponsePromise) {
   try {
     // TODO 바디가 없는 경우 어떻게 할지 논의 필요
     return await response.json<T>();
-  } catch (e) {
+  } catch (error) {
     console.error('[fetcher.ts] resultify에서 JSON 파싱을 하는 도중 오류 발생');
-    throw e;
+    throw error;
   }
 }
 
