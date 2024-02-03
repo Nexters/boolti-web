@@ -99,7 +99,7 @@ const Container = styled.button<ButtonProps>`
         return `
           color: ${theme.palette.grey.g90};
           border-color: ${theme.palette.grey.g90};
-          background-color: ${theme.palette.grey.g00};
+          background-color: ${theme.palette.grey.w};
           &:hover:not(:disabled) {
             border-color: #707070;
             color: #707070;

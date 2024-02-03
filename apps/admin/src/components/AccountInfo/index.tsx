@@ -1,5 +1,6 @@
-import { Button } from '@boolti/ui';
+import { Button, useDialog } from '@boolti/ui';
 import Styled from './AccountInfo.styles';
+import SettlementDialogContent from '../SettlementDialogContent';
 
 interface Props {
   orgName?: string;
@@ -8,6 +9,7 @@ interface Props {
 }
 
 const AccountInfo = ({ orgName, accountHolder, accountNumber }: Props) => {
+  const { open } = useDialog();
   return (
     <Styled.Container>
       <Styled.Title>정산 계좌 정보</Styled.Title>
@@ -16,7 +18,14 @@ const AccountInfo = ({ orgName, accountHolder, accountNumber }: Props) => {
         {orgName && <Styled.AccountText>{orgName}</Styled.AccountText>}
         {accountNumber && <Styled.AccountText>{accountNumber}</Styled.AccountText>}
         {accountHolder && <Styled.AccountText>{accountHolder}</Styled.AccountText>}
-        <Button type="button" colorTheme="netural" size="regular">
+        <Button
+          onClick={() => {
+            open({ title: '정산 계좌 입력하기', content: <SettlementDialogContent /> });
+          }}
+          type="button"
+          colorTheme="netural"
+          size="regular"
+        >
           {accountNumber ? '변경하기' : '입력하기'}
         </Button>
       </Styled.AccountContainer>
