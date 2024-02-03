@@ -3,10 +3,12 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { BooltiUIProvider } from '@boolti/ui';
 import LoginPage from './pages/Login/LoginPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
+import HomePage from './pages/HomePage/HomePage';
+import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
+import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
 import { PATH } from './constants/routes';
-import HomePage from './pages/HomePage/HomePage';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
   {
     path: PATH.LOGIN,
     element: <LoginPage />,
+  },
+  {
+    path: PATH.OAUTH_KAKAO,
+    element: <OAuthKakaoPage />,
+  },
+  {
+    path: PATH.OAUTH_APPLE,
+    element: <OAuthApplePage />,
   },
   {
     path: PATH.SIGNUP_COMPLETE,
