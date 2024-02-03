@@ -3,6 +3,7 @@ import { useState } from 'react';
 
 import { bankItems } from '~/constants/bankItems';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
+import { validateAccountHolder, validateAccountNumber } from '~/utils/validation';
 
 import Styled from './SettlementDialogContent.styles';
 
@@ -60,9 +61,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               errorMessage={accountNumberError}
               onBlur={(event) => {
                 setAccountNumberError(
-                  event.target.value.length > 14
-                    ? '계좌번호를 확인 후 다시 입력해 주세요.'
-                    : undefined,
+                  validateAccountNumber(event.target.value)
+                    ? undefined
+                    : '계좌번호를 확인 후 다시 입력해 주세요.',
                 );
               }}
               onChange={(event) => {
@@ -83,9 +84,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               errorMessage={accountHolderError}
               onBlur={(event) => {
                 setAccountHolderError(
-                  !/^[ㄱ-ㅎ가-힣]+$/.test(event.target.value)
-                    ? '한글만 입력 가능합니다.'
-                    : undefined,
+                  validateAccountHolder(event.target.value) ? undefined : '한글만 입력 가능합니다.',
                 );
               }}
               onChange={(event) => {
