@@ -1,6 +1,8 @@
-import { UseMutationOptions, useMutation } from '@tanstack/react-query';
-import { fetcher } from '../fetcher';
+import type { UseMutationOptions } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+
 import { LOCAL_STORAGE } from '../constants';
+import { fetcher } from '../fetcher';
 
 const postLogout = () => fetcher.post('web/v1/logout');
 

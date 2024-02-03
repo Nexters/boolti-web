@@ -1,10 +1,10 @@
 import { Button, TextField, useToast } from '@boolti/ui';
+import { useState } from 'react';
 
 import { bankItems } from '~/constants/bankItems';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 import Styled from './SettlementDialogContent.styles';
-import { useState } from 'react';
-import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const titles = [
   '은행을 선택해 주세요.',

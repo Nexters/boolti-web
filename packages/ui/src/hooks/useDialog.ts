@@ -1,5 +1,6 @@
-import { useCallback, useContext, useRef } from 'react';
 import { nanoid } from 'nanoid';
+import { useCallback, useContext, useRef } from 'react';
+
 import dialogContext, { IDialog } from '../contexts/dialogContext';
 
 const useDialog = () => {

@@ -1,7 +1,8 @@
-import { Button } from '@boolti/ui';
-import Styled from './ShowList.styles';
 import { PlusIcon } from '@boolti/icon';
+import { Button } from '@boolti/ui';
+
 import ShowListItem from '../ShowListItem';
+import Styled from './ShowList.styles';
 
 interface Props {
   shows: React.ComponentProps<typeof ShowListItem>[];

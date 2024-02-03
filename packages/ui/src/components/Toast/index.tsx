@@ -1,4 +1,5 @@
 import { ToastBar, Toaster } from 'react-hot-toast';
+
 import Styled from './Toast.styles';
 
 const Toast = () => {

@@ -1,13 +1,15 @@
+import { useLogout } from '@boolti/api';
+import { Footer, TextButton } from '@boolti/ui';
+import { useNavigate } from 'react-router-dom';
+
+import AccountInfo from '~/components/AccountInfo';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
-import Styled from './HomePage.styles';
-import { Footer, TextButton } from '@boolti/ui';
-import UserProfile from '~/components/UserProfile';
-import AccountInfo from '~/components/AccountInfo';
 import ShowList from '~/components/ShowList';
-import { useLogout } from '@boolti/api';
-import { useNavigate } from 'react-router-dom';
+import UserProfile from '~/components/UserProfile';
 import { PATH } from '~/constants/routes';
+
+import Styled from './HomePage.styles';
 
 const HomePage = () => {
   const navigate = useNavigate();

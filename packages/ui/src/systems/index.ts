@@ -1,5 +1,5 @@
-import typo from './typo';
-import palette from './palette';
 import breakpoint from './breakpoint';
+import palette from './palette';
+import typo from './typo';
 
-export { typo, palette, breakpoint };
+export { breakpoint, palette, typo };

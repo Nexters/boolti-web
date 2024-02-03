@@ -1,4 +1,5 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
+
 import { fetcher } from './fetcher';
 import { ShowResponse } from './types/show';
 

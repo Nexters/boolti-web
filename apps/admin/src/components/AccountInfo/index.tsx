@@ -1,6 +1,7 @@
 import { Button, useDialog } from '@boolti/ui';
-import Styled from './AccountInfo.styles';
+
 import SettlementDialogContent from '../SettlementDialogContent';
+import Styled from './AccountInfo.styles';
 
 interface Props {
   orgName?: string;

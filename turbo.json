@@ -9,6 +9,7 @@
       "outputs": ["storybook-static/**"]
     },
     "lint": {},
+    "lint:fix": {},
     "preview": {},
     "dev": {
       "cache": false,
