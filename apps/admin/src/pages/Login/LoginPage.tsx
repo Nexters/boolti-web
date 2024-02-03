@@ -5,7 +5,7 @@ import { PATH } from '../../constants/routes';
 
 declare global {
   interface Window {
-    Kakao: {
+    Kakao?: {
       Auth: {
         authorize: (params: {
           redirectUri: string;
@@ -43,7 +43,7 @@ const LoginPage = () => {
             <Styled.LoginButtonContainer>
               <Styled.KakaoLoginButton
                 onClick={() => {
-                  window.Kakao.Auth.authorize({ redirectUri });
+                  window.Kakao?.Auth.authorize({ redirectUri });
                 }}
               >
                 <Styled.LoginButtonIcon>
