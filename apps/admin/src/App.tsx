@@ -51,11 +51,23 @@ const publicRoutes = [
   },
 ];
 
+const PrivateRoute = () => {
+  const isLogin =
+    window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
+    window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
+
+  if (!isLogin) {
+    return <Navigate to={PATH.LOGIN} replace />;
+  }
+
+  return <Outlet />;
+};
+
 const privateRoutes = [
   {
     element: (
       <AuthErrorBoundary>
-        <Outlet />
+        <PrivateRoute />
       </AuthErrorBoundary>
     ),
     children: [

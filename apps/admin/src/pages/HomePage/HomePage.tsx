@@ -1,19 +1,35 @@
 import Header from '~/components/Header/Header';
 import Layout from '~/components/Layout/Layout';
-import { PATH } from '~/constants/routes';
 import Styled from './HomePage.styles';
-import { Footer } from '@boolti/ui';
+import { Footer, TextButton } from '@boolti/ui';
 import UserProfile from '~/components/UserProfile';
 import AccountInfo from '~/components/AccountInfo';
 import ShowList from '~/components/ShowList';
+import { useLogout } from '@boolti/api';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '~/constants/routes';
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const logout = useLogout();
+
   return (
     <Layout
       header={
         <Header
           left={<Styled.Logo>Boolti Logo</Styled.Logo>}
-          right={<Styled.LogoutLink to={PATH.LOGIN}>로그아웃</Styled.LogoutLink>}
+          right={
+            <TextButton
+              onClick={async () => {
+                await logout.mutateAsync();
+
+                navigate(PATH.LOGIN, { replace: true });
+              }}
+            >
+              로그아웃
+            </TextButton>
+          }
         />
       }
     >

@@ -4,14 +4,14 @@ import { LOCAL_STORAGE } from '../constants';
 
 const postLogout = () => fetcher.post('web/v1/logout');
 
-const useLogout = (options: UseMutationOptions) =>
+const useLogout = (options?: UseMutationOptions) =>
   useMutation(postLogout, {
     ...options,
     onSuccess: (data, variables, context) => {
       window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
       window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
 
-      options.onSuccess?.(data, variables, context);
+      options?.onSuccess?.(data, variables, context);
     },
   });
 
