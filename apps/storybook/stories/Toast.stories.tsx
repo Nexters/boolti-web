@@ -1,6 +1,5 @@
+import { Button, useToast } from '@boolti/ui';
 import type { Meta, StoryObj } from '@storybook/react';
-
-import { useToast, Button } from '@boolti/ui';
 
 interface Props {
   type: 'success' | 'warning' | 'error' | 'info';

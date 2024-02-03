@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { Badge } from '@boolti/ui';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Badge> = {
   title: '컴포넌트/뱃지',
