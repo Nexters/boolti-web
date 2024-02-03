@@ -19,6 +19,6 @@ export const Default: Story = {};
 
 export const Icon: Story = {
   args: {
-    icon: <GithubIcon size={20} />,
+    icon: <GithubIcon />,
   },
 };

@@ -41,7 +41,7 @@ export const Icon: Story = {
     colorTheme: 'primary',
     size: 'bold',
     children: 'BUTTON',
-    icon: <GithubIcon size={20} />,
+    icon: <GithubIcon />,
   },
 };
 

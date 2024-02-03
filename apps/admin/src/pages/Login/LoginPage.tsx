@@ -47,7 +47,7 @@ const LoginPage = () => {
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <KakaotalkIcon size={20} />
+                  <KakaotalkIcon />
                 </Styled.LoginButtonIcon>
                 카카오톡으로 시작하기
               </Styled.KakaoLoginButton>
@@ -57,7 +57,7 @@ const LoginPage = () => {
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <AppleIcon size={20} />
+                  <AppleIcon />
                 </Styled.LoginButtonIcon>
                 Apple로 시작하기
               </Styled.AppleLoginButton>

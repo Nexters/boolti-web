@@ -1,12 +1,6 @@
-export const UpDown = ({ size }: { size: 20 | 24 }) => {
+export const UpDown = () => {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M7.41421 13C6.52331 13 6.07714 14.0771 6.70711 14.7071L11.2929 19.2929C11.6834 19.6834 12.3166 19.6834 12.7071 19.2929L17.2929 14.7071C17.9229 14.0771 17.4767 13 16.5858 13L7.41421 13Z"
         fill="currentColor"

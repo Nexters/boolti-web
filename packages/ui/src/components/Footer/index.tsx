@@ -25,13 +25,13 @@ const Footer = () => {
         </Styled.TextGroup>
         <Styled.IconGroup>
           <Styled.IconLink>
-            <InstagramIcon size={24} />
+            <InstagramIcon />
           </Styled.IconLink>
           <Styled.IconLink>
-            <GithubIcon size={24} />
+            <GithubIcon />
           </Styled.IconLink>
           <Styled.IconLink>
-            <KakaotalkIcon size={24} />
+            <KakaotalkIcon />
           </Styled.IconLink>
         </Styled.IconGroup>
       </Styled.Content>

@@ -1,12 +1,6 @@
-export const Kakaotalk = ({ size }: { size: 20 | 24 }) => {
+export const Kakaotalk = () => {
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         d="M12.0567 2.58826C6.50818 2.58826 2 6.23532 2 10.7059C2 13.5294 3.84951 16 6.50818 17.5294L5.81461 21.4118L10.0916 18.5883C10.6696 18.7059 11.3631 18.7059 11.9411 18.7059C17.4896 18.7059 21.9978 15.0588 21.9978 10.5883C22.1134 6.23532 17.6052 2.58826 12.0567 2.58826Z"
         fill="currentColor"
