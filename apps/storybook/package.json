@@ -1,0 +1,44 @@
+{
+  "name": "stroybook",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": ".storybook/main.ts",
+  "types": ".storybook/main.ts",
+  "scripts": {
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "type-check": "tsc --noEmit",
+    "storybook": "storybook dev -p 6006",
+    "build:storybook": "storybook build"
+  },
+  "dependencies": {
+    "@boolti/icon": "*",
+    "@boolti/ui": "*",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "the-new-css-reset": "^1.11.2"
+  },
+  "devDependencies": {
+    "@boolti/eslint-config": "*",
+    "@boolti/typescript-config": "*",
+    "@emotion/babel-plugin": "^11.11.0",
+    "@storybook/addon-essentials": "^7.6.12",
+    "@storybook/addon-interactions": "^7.6.12",
+    "@storybook/addon-links": "^7.6.12",
+    "@storybook/addon-onboarding": "^1.0.11",
+    "@storybook/blocks": "^7.6.12",
+    "@storybook/react": "^7.6.12",
+    "@storybook/react-vite": "^7.6.12",
+    "@storybook/test": "^7.6.12",
+    "@storybook/theming": "^7.6.12",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "storybook": "^7.6.12",
+    "storybook-dark-mode": "^3.0.3",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}

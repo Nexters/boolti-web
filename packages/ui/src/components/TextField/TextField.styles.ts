@@ -5,6 +5,7 @@ export interface TextFieldProps {
   inputType: 'text' | 'date' | 'file';
   disabled?: boolean;
   buttonProps?: React.ComponentProps<'button'>;
+  fileName?: string;
 }
 
 const Container = styled.div<TextFieldProps>`

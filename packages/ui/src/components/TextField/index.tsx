@@ -11,9 +11,14 @@ const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, ..
   return (
     <Styled.Container disabled={disabled} size={size} inputType={inputType}>
       <Styled.InputContainer>
-        {(inputType === 'file' || inputType === 'date') && (
+        {inputType === 'date' && (
           <Styled.InputLabel htmlFor={uuid.current}>
             {rest.value ? rest.value : placeholder}
+          </Styled.InputLabel>
+        )}
+        {inputType === 'file' && (
+          <Styled.InputLabel htmlFor={uuid.current}>
+            {rest.fileName ? rest.fileName : placeholder}
           </Styled.InputLabel>
         )}
         <Styled.Input

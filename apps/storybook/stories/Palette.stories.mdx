@@ -1,0 +1,16 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+import { palette } from '@boolti/ui'
+
+<Meta title="컬러 팔레트" />
+
+<ColorPalette>
+  {Object.keys(palette).map((category) => {
+    return (
+      <ColorItem
+        title={category}
+        colors={palette[category]}
+      />
+    );
+  })}
+</ColorPalette>

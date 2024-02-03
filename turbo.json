@@ -5,12 +5,16 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:stroybook": {
+      "outputs": ["storybook-static/**"]
+    },
     "lint": {},
     "preview": {},
     "dev": {
       "cache": false,
       "persistent": true
     },
-    "type-check": {}
+    "type-check": {},
+    "storybook": {}
   }
 }
