@@ -26,7 +26,22 @@ const HomePage = () => {
         <Styled.Seperator size={40} />
         <AccountInfo accountHolder="김불티" accountNumber="000000000000" orgName="토스뱅크" />
         <Styled.Seperator size={80} />
-        <ShowList shows={[]} />
+        <ShowList
+          shows={[
+            {
+              thumbnailPath: 'https://picsum.photos/200',
+              title: 'Show Title',
+              date: '2024-01-20',
+              host: '%사용자명%',
+            },
+            {
+              thumbnailPath: 'https://picsum.photos/200',
+              title: 'Show Title2',
+              date: '2024-01-21',
+              host: '%사용자명%',
+            },
+          ]}
+        />
         <Styled.Seperator size={80} />
       </Styled.Container>
       <Footer />
