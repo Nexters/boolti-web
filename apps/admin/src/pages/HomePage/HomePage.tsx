@@ -1,5 +1,5 @@
-import Header from '~/components/Header/Header';
-import Layout from '~/components/Layout/Layout';
+import Header from '~/components/Header';
+import Layout from '~/components/Layout';
 import Styled from './HomePage.styles';
 import { Footer, TextButton } from '@boolti/ui';
 import UserProfile from '~/components/UserProfile';
