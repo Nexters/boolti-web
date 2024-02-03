@@ -2,13 +2,12 @@ import styled from '@emotion/styled';
 
 const Container = styled.footer`
   padding: 60px 20px;
+  width: ${({ theme }) => theme.breakpoint.desktop};
 `;
 
 const Content = styled.div`
   display: flex;
-  margin: 0 auto;
   justify-content: space-between;
-  width: ${({ theme }) => theme.breakpoint.desktop};
 `;
 
 const TextGroup = styled.div`

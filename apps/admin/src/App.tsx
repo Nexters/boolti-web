@@ -39,8 +39,6 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => {
-  // const { data } = useHelloQuery();
-  // console.log(data?.hello)
   return (
     <QueryClientProvider>
       <BooltiUIProvider>
