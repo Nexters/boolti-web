@@ -1,6 +1,6 @@
 import Styled, { ButtonProps } from './Button.styles';
 
-type Props = React.HTMLAttributes<HTMLButtonElement> & ButtonProps;
+type Props = React.ComponentProps<'button'> & ButtonProps;
 
 const Button = ({ children, colorTheme, size, icon, ...rest }: Props) => {
   return (

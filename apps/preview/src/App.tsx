@@ -1,6 +1,14 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
-import { Badge, Button, TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
+import {
+  Badge,
+  Button,
+  TextButton,
+  BooltiUIProvider,
+  Footer,
+  TextField,
+  DatePicker,
+} from '@boolti/ui';
 import {
   AppleIcon,
   ArrowLeftIcon,
@@ -21,8 +29,10 @@ import {
   UsersIcon,
   WalletIcon,
 } from '@boolti/icon';
+import { useState } from 'react';
 
 const App = () => {
+  const [date, setDate] = useState<string>('');
   return (
     <BooltiUIProvider>
       <h1>
@@ -231,6 +241,67 @@ const App = () => {
           <CloseIcon size={20} /> <CloseIcon size={24} />
         </div>
       </h1>
+      <br />
+      <TextField placeholder="aaa" size="small" inputType="text" />
+      <br />
+      <TextField
+        value="abc"
+        onChange={() => {
+          /** noop */
+        }}
+        size="big"
+        inputType="text"
+      />
+
+      <br />
+      <TextField
+        value="abc"
+        onChange={() => {
+          /** noop */
+        }}
+        size="big"
+        inputType="text"
+        buttonProps={{ children: 'BUTTON' }}
+      />
+
+      <br />
+      <TextField
+        disabled
+        value="abc"
+        onChange={() => {
+          /** noop */
+        }}
+        size="big"
+        inputType="text"
+        buttonProps={{ children: 'BUTTON' }}
+      />
+
+      <br />
+      <TextField
+        placeholder="YYYY.MM.DD"
+        size="big"
+        inputType="date"
+        value={date}
+        onChange={(event) => {
+          setDate(event.target.value);
+        }}
+        buttonProps={{ children: 'BUTTON' }}
+      />
+
+      <br />
+      <TextField
+        placeholder="abc"
+        size="big"
+        inputType="file"
+        buttonProps={{ children: 'BUTTON' }}
+      />
+
+      <br />
+      <DatePicker size="small" />
+
+      <br />
+      <DatePicker size="big" />
+
       <Footer />
     </BooltiUIProvider>
   );
