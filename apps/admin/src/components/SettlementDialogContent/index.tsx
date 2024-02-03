@@ -3,7 +3,7 @@ import { Button, TextField, useToast } from '@boolti/ui';
 import { bankItems } from '~/constants/bankItems';
 
 import Styled from './SettlementDialogContent.styles';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const titles = [
   '은행을 선택해 주세요.',
@@ -18,12 +18,11 @@ interface Props {
 const SettlementDialogContent = ({ onClose }: Props) => {
   const toast = useToast();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const formValue = useRef<{ orgName?: string; accountNumber?: string; accountHolder?: string }>(
-    {},
-  );
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [accountHolder, setAccountHolder] = useState<string>('');
+  const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
+  const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
   return (
     <Styled.Container>
       <Styled.Title>{titles[currentStepIndex]}</Styled.Title>
@@ -54,8 +53,19 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               size="small"
               inputType="text"
               value={accountNumber}
+              errorMessage={accountNumberError}
+              onBlur={(event) => {
+                setAccountNumberError(
+                  event.target.value.length > 14
+                    ? '계좌번호를 확인 후 다시 입력해 주세요.'
+                    : undefined,
+                );
+              }}
               onChange={(event) => {
-                setAccountNumber(event.target.value);
+                const value = event.target.value;
+                if (!isNaN(Number(value))) {
+                  setAccountNumber(value);
+                }
               }}
             />
           </Styled.InputContainer>
@@ -66,6 +76,14 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               size="small"
               inputType="text"
               value={accountHolder}
+              errorMessage={accountHolderError}
+              onBlur={(event) => {
+                setAccountHolderError(
+                  !/^[ㄱ-ㅎ가-힣]+$/.test(event.target.value)
+                    ? '한글만 입력 가능합니다.'
+                    : undefined,
+                );
+              }}
               onChange={(event) => {
                 setAccountHolder(event.target.value);
               }}
@@ -77,15 +95,15 @@ const SettlementDialogContent = ({ onClose }: Props) => {
         <Styled.ConfirmContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{formValue.current.orgName}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{selectedBank}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>계좌번호</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{formValue.current.accountNumber}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{accountNumber}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>계좌주</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{formValue.current.accountNumber}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{accountHolder}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
         </Styled.ConfirmContainer>
       )}
@@ -108,15 +126,15 @@ const SettlementDialogContent = ({ onClose }: Props) => {
           size="bold"
           disabled={
             (currentStepIndex === 0 && !selectedBank) ||
-            (currentStepIndex === 1 && (accountNumber === '' || accountHolder === ''))
+            (currentStepIndex === 1 &&
+              (accountNumber === '' ||
+                accountHolder === '' ||
+                !!accountHolderError ||
+                !!accountNumberError))
           }
           onClick={() => {
-            if (currentStepIndex === 0 && selectedBank) {
-              formValue.current.orgName = selectedBank;
-            }
-            if (currentStepIndex === 1) {
-              formValue.current.accountHolder = accountHolder;
-              formValue.current.accountNumber = accountNumber;
+            if (accountHolderError || accountNumberError) {
+              return;
             }
             if (currentStepIndex === 2) {
               toast.success('정산 계좌를 저장했습니다.');
