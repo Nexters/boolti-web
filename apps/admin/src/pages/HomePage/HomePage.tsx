@@ -2,6 +2,7 @@ import Header from '~/components/Header/Header';
 import Layout from '~/components/Layout/Layout';
 import { PATH } from '~/constants/routes';
 import Styled from './HomePage.styles';
+import { Footer } from '@boolti/ui';
 
 const HomePage = () => {
   return (
@@ -13,7 +14,8 @@ const HomePage = () => {
         />
       }
     >
-      <h2>HOME</h2>
+      <Styled.Container></Styled.Container>
+      <Footer />
     </Layout>
   );
 };

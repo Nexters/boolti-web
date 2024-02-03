@@ -10,7 +10,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Header = styled.header`
-  width: ${({ theme }) => theme.breakpoint.desktop};
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
   margin: 0 auto;
   padding: 0 20px;
 `;

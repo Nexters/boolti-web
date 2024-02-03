@@ -19,10 +19,13 @@ const LogoutLink = styled(Link)`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
-const HomePage = styled.div``;
+const Container = styled.main`
+  min-height: calc(100vh - 68px - 274px);
+  padding-top: 60px;
+`;
 
 export default {
   Logo,
   LogoutLink,
-  HomePage,
+  Container,
 };
