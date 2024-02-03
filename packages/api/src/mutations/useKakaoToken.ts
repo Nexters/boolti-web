@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
 import ky from 'ky';
-import { KAKAO_REST_API_KEY } from '../secrets';
 
 interface PostKakaoTokenRequest {
   code: string;
@@ -20,7 +19,7 @@ const postKakaoToken = ({ code }: PostKakaoTokenRequest) => {
   const body = new URLSearchParams();
 
   body.set('grant_type', 'authorization_code');
-  body.set('client_id', KAKAO_REST_API_KEY);
+  body.set('client_id', import.meta.env.VITE_KAKAO_REST_API_KEY ?? '');
   body.set('redirect_uri', `${window.location.origin}/oauth/kakao`);
   body.set('code', code);
 
