@@ -1,7 +1,12 @@
-import { useKakaoLogin, useKakaoToken, useKakaoUserInfo, useSignUp } from '@boolti/api';
+import {
+  LOCAL_STORAGE,
+  useKakaoLogin,
+  useKakaoToken,
+  useKakaoUserInfo,
+  useSignUp,
+} from '@boolti/api';
 import { useEffect, useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import LOCAL_STORAGE from '~/constants/localStorage';
 import { PATH } from '~/constants/routes';
 
 const OAuthKakaoPage = () => {

@@ -41,7 +41,7 @@ const ShowListItem = ({ isEmpty, thumbnailPath, title, date, host }: Props) => {
             </Styled.InfoContainer>
           </Styled.TextContainer>
           <Styled.IconContainer>
-            <ChevronRightIcon size={24} />
+            <ChevronRightIcon />
           </Styled.IconContainer>
         </Styled.Button>
       )}
