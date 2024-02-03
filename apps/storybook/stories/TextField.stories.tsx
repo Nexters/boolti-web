@@ -76,6 +76,15 @@ export const Placeholder: Story = {
   },
 };
 
+export const Error: Story = {
+  args: {
+    size: 'small',
+    value: 'Text 타입 인풋',
+    inputType: 'text',
+    errorMessage: '계좌번호를 확인 후 다시 입력해 주세요.',
+  },
+};
+
 export const Big: Story = {
   args: {
     size: 'big',
