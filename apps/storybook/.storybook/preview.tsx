@@ -8,7 +8,7 @@ import type { Decorator, Preview } from '@storybook/react';
 const preview: Preview = {
   parameters: {
     darkMode: {
-      dark: themes.dark,
+      dark: undefined,
       light: themes.normal,
       stylePreview: true,
       current: 'light'
