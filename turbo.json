@@ -11,6 +11,11 @@
       "cache": false,
       "persistent": true
     },
-    "type-check": {}
+    "type-check": {},
+    "storybook": {},
+    "build:stroybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    }
   }
 }

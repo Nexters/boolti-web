@@ -1,0 +1,7 @@
+{
+  "extends": "@boolti/typescript-config/vite.json",
+  "include": [
+    "stories/**/*",
+    ".storybook/**/*"
+  ]
+}
