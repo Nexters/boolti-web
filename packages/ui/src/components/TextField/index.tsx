@@ -6,22 +6,32 @@ import { useRef } from 'react';
 
 type Props = Omit<React.ComponentProps<'input'>, 'size' | 'type'> & TextFieldProps;
 
-const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, ...rest }: Props) => {
+const TextField = ({
+  disabled,
+  size,
+  inputType,
+  buttonProps,
+  placeholder,
+  id,
+  errorMessage,
+  ...rest
+}: Props) => {
   const uuid = useRef<string>(id ?? nanoid(6));
   return (
     <Styled.Container disabled={disabled} size={size} inputType={inputType}>
       <Styled.InputContainer>
         {inputType === 'date' && (
-          <Styled.InputLabel htmlFor={uuid.current}>
+          <Styled.InputLabel hasError={!!errorMessage} htmlFor={uuid.current}>
             {rest.value ? rest.value : placeholder}
           </Styled.InputLabel>
         )}
         {inputType === 'file' && (
-          <Styled.InputLabel htmlFor={uuid.current}>
+          <Styled.InputLabel hasError={!!errorMessage} htmlFor={uuid.current}>
             {rest.fileName ? rest.fileName : placeholder}
           </Styled.InputLabel>
         )}
         <Styled.Input
+          hasError={!!errorMessage}
           id={uuid.current}
           data-placeholder={placeholder}
           placeholder={placeholder}
@@ -38,6 +48,7 @@ const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, ..
           </Button>
         </Styled.ButtonContainer>
       )}
+      {errorMessage && <Styled.ErrorMessage>{errorMessage}</Styled.ErrorMessage>}
     </Styled.Container>
   );
 };

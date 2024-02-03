@@ -6,9 +6,11 @@ export interface TextFieldProps {
   disabled?: boolean;
   buttonProps?: React.ComponentProps<'button'>;
   fileName?: string;
+  errorMessage?: string;
 }
 
 const Container = styled.div<TextFieldProps>`
+  position: relative;
   display: flex;
   ${({ size }) => {
     switch (size) {
@@ -36,24 +38,26 @@ const InputContainer = styled.div`
   }
 `;
 
-const InputLabel = styled.label`
+const InputLabel = styled.label<{ hasError?: boolean }>`
   display: block;
   width: 100%;
   height: 48px;
   border-radius: 4px;
   padding: 12px 13px;
   color: ${({ theme }) => theme.palette.grey.g90};
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  border: 1px solid
+    ${({ hasError, theme }) => (hasError ? theme.palette.status.error : theme.palette.grey.g90)};
   background: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b3};
 `;
 
-const Input = styled.input`
+const Input = styled.input<{ hasError?: boolean }>`
   width: 100%;
   border-radius: 4px;
   padding: 12px 13px;
   color: ${({ theme }) => theme.palette.grey.g90};
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  border: 1px solid
+    ${({ hasError, theme }) => (hasError ? theme.palette.status.error : theme.palette.grey.g90)};
   background: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b3};
   &:placeholder-shown {
@@ -94,10 +98,18 @@ const ButtonContainer = styled.div`
   margin-left: 8px;
 `;
 
+const ErrorMessage = styled.span`
+  position: absolute;
+  bottom: -4px;
+  transform: translateY(100%);
+  color: ${({ theme }) => theme.palette.status.error};
+`;
+
 export default {
   Container,
   Input,
   InputLabel,
   InputContainer,
   ButtonContainer,
+  ErrorMessage,
 };
