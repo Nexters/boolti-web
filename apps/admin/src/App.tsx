@@ -12,6 +12,7 @@ import LoginPage from './pages/Login/LoginPage';
 import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
+import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
 
 const PublicRoute = () => {
   const isLogin =
@@ -78,6 +79,7 @@ const privateRoutes = [
         element: <SignUpCompletePage />,
       },
       { path: PATH.HOME, element: <HomePage /> },
+      { path: PATH.SHOW_ADD, element: <ShowAddPage /> },
     ],
   },
 ];

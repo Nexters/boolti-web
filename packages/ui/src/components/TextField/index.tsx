@@ -1,4 +1,4 @@
-import { CalendarIcon } from '@boolti/icon';
+import { CalendarIcon, ClockIcon } from '@boolti/icon';
 import { nanoid } from 'nanoid';
 import { useRef } from 'react';
 
@@ -41,6 +41,7 @@ const TextField = ({
           {...rest}
         />
         {inputType === 'date' && <CalendarIcon />}
+        {inputType === 'time' && <ClockIcon />}
       </Styled.InputContainer>
       {buttonProps && (
         <Styled.ButtonContainer>

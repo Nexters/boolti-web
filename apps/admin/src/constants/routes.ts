@@ -5,4 +5,5 @@ export const PATH = {
   OAUTH_APPLE: '/oauth/apple',
   SIGNUP_COMPLETE: '/signup/complete',
   HOME: '/home',
+  SHOW_ADD: '/show/add',
 };
