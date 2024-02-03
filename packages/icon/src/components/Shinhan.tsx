@@ -21,8 +21,8 @@ export const Shinhan = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(13.6945 8.44743) scale(10.3109 10.3109)"
         >
-          <stop stop-color="white" />
-          <stop offset="1" stop-color="#CF9C51" />
+          <stop stopColor="white" />
+          <stop offset="1" stopColor="#CF9C51" />
         </radialGradient>
         <radialGradient
           id="paint1_radial_1332_16003"
@@ -32,12 +32,12 @@ export const Shinhan = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(11.1419 5.30764) scale(23.0965 23.0965)"
         >
-          <stop stop-color="#00C0F3" />
-          <stop offset="0.22" stop-color="#0097D6" />
-          <stop offset="0.28" stop-color="#0086CA" />
-          <stop offset="0.37" stop-color="#0074BD" />
-          <stop offset="0.46" stop-color="#0069B5" />
-          <stop offset="0.57" stop-color="#0066B3" />
+          <stop stopColor="#00C0F3" />
+          <stop offset="0.22" stopColor="#0097D6" />
+          <stop offset="0.28" stopColor="#0086CA" />
+          <stop offset="0.37" stopColor="#0074BD" />
+          <stop offset="0.46" stopColor="#0069B5" />
+          <stop offset="0.57" stopColor="#0066B3" />
         </radialGradient>
       </defs>
     </svg>
