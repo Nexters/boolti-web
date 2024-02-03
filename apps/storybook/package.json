@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build:storybook": "storybook build"
   },
   "dependencies": {
     "@boolti/icon": "*",
@@ -32,10 +32,12 @@
     "@storybook/react": "^7.6.12",
     "@storybook/react-vite": "^7.6.12",
     "@storybook/test": "^7.6.12",
+    "@storybook/theming": "^7.6.12",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
     "storybook": "^7.6.12",
+    "storybook-dark-mode": "^3.0.3",
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   }

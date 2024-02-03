@@ -1,11 +1,18 @@
 import '../styles/index.css';
 import 'the-new-css-reset/css/reset.css';
 
-import ThemeProvider from '@boolti/ui/src/components/ThemeProvider';
+import { themes } from '@storybook/theming';
+import { BooltiUIProvider } from '@boolti/ui';
 import type { Decorator, Preview } from '@storybook/react';
 
 const preview: Preview = {
   parameters: {
+    darkMode: {
+      dark: themes.dark,
+      light: themes.normal,
+      stylePreview: true,
+      current: 'light'
+    },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
@@ -16,11 +23,12 @@ const preview: Preview = {
   },
 };
 
+
 export const decorators: Decorator[] = [
   (Story, context) => (
-    <ThemeProvider>
+    <BooltiUIProvider>
       <Story {...context} />
-    </ThemeProvider>
+    </BooltiUIProvider>
   ),
 ];
 

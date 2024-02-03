@@ -4,5 +4,6 @@ import TextButton from './TextButton';
 import Badge from './Badge';
 import Dialog from './Dialog';
 import Footer from './Footer';
+import Confirm from './Confirm';
 
-export { BooltiUIProvider, Button, TextButton, Badge, Dialog, Footer };
+export { BooltiUIProvider, Button, TextButton, Badge, Dialog, Footer, Confirm };

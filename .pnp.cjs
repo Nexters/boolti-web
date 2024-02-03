@@ -5499,7 +5499,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/postinstall", "npm:7.6.12"],\
           ["@storybook/preview-api", "npm:7.6.12"],\
           ["@storybook/react-dom-shim", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
-          ["@storybook/theming", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@storybook/types", "npm:7.6.12"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
@@ -5677,6 +5677,18 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@storybook/addons", [\
+      ["npm:7.6.12", {\
+        "packageLocation": "../../.yarn/berry/cache/@storybook-addons-npm-7.6.12-e2903f366c-10c0.zip/node_modules/@storybook/addons/",\
+        "packageDependencies": [\
+          ["@storybook/addons", "npm:7.6.12"],\
+          ["@storybook/manager-api", "npm:7.6.12"],\
+          ["@storybook/preview-api", "npm:7.6.12"],\
+          ["@storybook/types", "npm:7.6.12"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@storybook/blocks", [\
       ["npm:7.6.12", {\
         "packageLocation": "../../.yarn/berry/cache/@storybook-blocks-npm-7.6.12-12654fc6b6-10c0.zip/node_modules/@storybook/blocks/",\
@@ -5738,7 +5750,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/global", "npm:5.0.0"],\
           ["@storybook/manager-api", "npm:7.6.12"],\
           ["@storybook/preview-api", "npm:7.6.12"],\
-          ["@storybook/theming", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@storybook/types", "npm:7.6.12"],\
           ["@types/lodash", "npm:4.14.202"],\
           ["@types/react", "npm:18.2.48"],\
@@ -5955,7 +5967,7 @@ const RAW_RUNTIME_STATE =
           ["@storybook/client-logger", "npm:7.6.12"],\
           ["@storybook/csf", "npm:0.1.2"],\
           ["@storybook/global", "npm:5.0.0"],\
-          ["@storybook/theming", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@storybook/types", "npm:7.6.12"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
@@ -6498,27 +6510,6 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12", {\
-        "packageLocation": "./.yarn/__virtual__/@storybook-theming-virtual-3e004527e9/3/.yarn/berry/cache/@storybook-theming-npm-7.6.12-209f780b8e-10c0.zip/node_modules/@storybook/theming/",\
-        "packageDependencies": [\
-          ["@storybook/theming", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
-          ["@emotion/use-insertion-effect-with-fallbacks", "virtual:65b86bea60f234efd7ae016d0439fb1500d76dee54927a156b05948930f0daaad5ee2dd86ed66818ee4ee37e516e8a01bc989bd9e026e8e494b7c0ac097eced6#npm:1.0.1"],\
-          ["@storybook/client-logger", "npm:7.6.12"],\
-          ["@storybook/global", "npm:5.0.0"],\
-          ["@types/react", "npm:18.2.48"],\
-          ["@types/react-dom", "npm:18.2.18"],\
-          ["memoizerific", "npm:1.11.3"],\
-          ["react", "npm:18.2.0"],\
-          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"]\
-        ],\
-        "packagePeers": [\
-          "@types/react-dom",\
-          "@types/react",\
-          "react-dom",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }],\
       ["virtual:aa39eba942ebea47c9f5993d742f9e49eaf7c158aa267f7e90455bfbdc642a849686748afe8a061532ba53c055d3973c02e495d16de91e4543247a7f8e91a9d7#npm:7.6.12", {\
         "packageLocation": "./.yarn/__virtual__/@storybook-theming-virtual-5bb45313b7/3/.yarn/berry/cache/@storybook-theming-npm-7.6.12-209f780b8e-10c0.zip/node_modules/@storybook/theming/",\
         "packageDependencies": [\
@@ -6531,6 +6522,27 @@ const RAW_RUNTIME_STATE =
           ["memoizerific", "npm:1.11.3"],\
           ["react", null],\
           ["react-dom", null]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12", {\
+        "packageLocation": "./.yarn/__virtual__/@storybook-theming-virtual-3ca9e1740a/3/.yarn/berry/cache/@storybook-theming-npm-7.6.12-209f780b8e-10c0.zip/node_modules/@storybook/theming/",\
+        "packageDependencies": [\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
+          ["@emotion/use-insertion-effect-with-fallbacks", "virtual:65b86bea60f234efd7ae016d0439fb1500d76dee54927a156b05948930f0daaad5ee2dd86ed66818ee4ee37e516e8a01bc989bd9e026e8e494b7c0ac097eced6#npm:1.0.1"],\
+          ["@storybook/client-logger", "npm:7.6.12"],\
+          ["@storybook/global", "npm:5.0.0"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["memoizerific", "npm:1.11.3"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"]\
         ],\
         "packagePeers": [\
           "@types/react-dom",\
@@ -14130,6 +14142,40 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["storybook-dark-mode", [\
+      ["npm:3.0.3", {\
+        "packageLocation": "../../.yarn/berry/cache/storybook-dark-mode-npm-3.0.3-a217fce50c-10c0.zip/node_modules/storybook-dark-mode/",\
+        "packageDependencies": [\
+          ["storybook-dark-mode", "npm:3.0.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:3.0.3", {\
+        "packageLocation": "./.yarn/__virtual__/storybook-dark-mode-virtual-0d9422682a/3/.yarn/berry/cache/storybook-dark-mode-npm-3.0.3-a217fce50c-10c0.zip/node_modules/storybook-dark-mode/",\
+        "packageDependencies": [\
+          ["storybook-dark-mode", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:3.0.3"],\
+          ["@storybook/addons", "npm:7.6.12"],\
+          ["@storybook/components", "virtual:0ce0ca31f3cc991233f9ae7044011ae0239e3d1c2bd063bd21970b3699e61ca352ed545f477ccc61f5930ed7e88ac8db29e14074c79dd2ec14f11705f3369892#npm:7.6.12"],\
+          ["@storybook/core-events", "npm:7.6.12"],\
+          ["@storybook/global", "npm:5.0.0"],\
+          ["@storybook/manager-api", "npm:7.6.12"],\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["fast-deep-equal", "npm:3.1.3"],\
+          ["memoizerific", "npm:1.11.3"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["stream-shift", [\
       ["npm:1.0.3", {\
         "packageLocation": "../../.yarn/berry/cache/stream-shift-npm-1.0.3-c1c29210c7-10c0.zip/node_modules/stream-shift/",\
@@ -14260,12 +14306,14 @@ const RAW_RUNTIME_STATE =
           ["@storybook/react", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@storybook/react-vite", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@storybook/test", "npm:7.6.12"],\
+          ["@storybook/theming", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:7.6.12"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["storybook", "npm:7.6.12"],\
+          ["storybook-dark-mode", "virtual:d23cb76f0d9ed4191896ed8fc2e57cf6c8051b4a652440a95f191129bd27532d97943401773d84c8ad7abff4f351f47d37ec4f1565359073134fb184c05ef286#npm:3.0.3"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vite", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.0.11"]\
