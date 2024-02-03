@@ -30,7 +30,7 @@ const BankItemButton = styled.button<{ isSelected?: boolean; isNull?: boolean }>
   align-items: center;
   flex-direction: column;
   border-radius: 4px;
-  border-width: 1.5px;
+  border-width: 1px;
   border-style: solid;
   padding: 8px 20px;
   transition:
