@@ -19,6 +19,10 @@ const LogoutLink = styled(Link)`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
+const Seperator = styled.hr<{ size: number }>`
+  height: ${({ size }) => size}px;
+`;
+
 const Container = styled.main`
   min-height: calc(100vh - 68px - 274px);
   padding: 60px 20px 0;
@@ -28,4 +32,5 @@ export default {
   Logo,
   LogoutLink,
   Container,
+  Seperator,
 };
