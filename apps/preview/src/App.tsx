@@ -1,6 +1,6 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
-import { Badge, Button, TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
+import { TextButton, BooltiUIProvider, Footer } from '@boolti/ui';
 import {
   AppleIcon,
   ArrowLeftIcon,
@@ -27,174 +27,6 @@ const App = () => {
     <BooltiUIProvider>
       <h1>
         Preview
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button size="bold" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button size="medium" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button size="regular" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button size="small" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="primary" disabled>
-            BUTTON
-          </Button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button icon={<AppleIcon size={20} />} size="bold" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="medium" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="regular" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="small" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="primary">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="primary" disabled>
-            BUTTON
-          </Button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button icon={<AppleIcon size={20} />} size="bold" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="medium" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="regular" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="small" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="netural" disabled>
-            BUTTON
-          </Button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button size="bold" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button size="medium" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button size="regular" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button size="small" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="netural">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="netural" disabled>
-            BUTTON
-          </Button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button icon={<AppleIcon size={20} />} size="bold" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="medium" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="regular" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="small" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button icon={<AppleIcon size={20} />} size="x-small" colorTheme="line" disabled>
-            BUTTON
-          </Button>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            width: 1200,
-            justifyContent: 'space-between',
-            marginBottom: 20,
-            alignItems: 'flex-end',
-          }}
-        >
-          <Button size="bold" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button size="medium" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button size="regular" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button size="small" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="line">
-            BUTTON
-          </Button>
-          <Button size="x-small" colorTheme="line" disabled>
-            BUTTON
-          </Button>
-        </div>
         <div style={{ marginBottom: 20 }}>
           <TextButton>TEXT BUTTON</TextButton>
           <TextButton icon={<AppleIcon size={20} />}>TEXT BUTTON</TextButton>
@@ -202,13 +34,6 @@ const App = () => {
           <TextButton icon={<AppleIcon size={20} />} disabled>
             TEXT BUTTON
           </TextButton>
-        </div>
-        <div style={{ display: 'flex', width: 600, justifyContent: 'space-between' }}>
-          <Badge colorTheme="purple">티켓 판매 오픈 D-n</Badge>
-          <Badge colorTheme="blue">티켓 판매 중</Badge>
-          <Badge colorTheme="green">티켓 판매 종료</Badge>
-          <Badge colorTheme="red">공연 당일</Badge>
-          <Badge colorTheme="grey">공연 종료</Badge>
         </div>
         <div style={{ color: 'blue' }}>
           <AppleIcon size={20} /> <AppleIcon size={24} />

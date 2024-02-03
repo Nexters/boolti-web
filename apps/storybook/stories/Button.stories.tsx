@@ -4,7 +4,7 @@ import { GithubIcon } from '@boolti/icon';
 import { Button } from '@boolti/ui';
 
 const meta: Meta<typeof Button> = {
-  title: '버튼',
+  title: '컴포넌트/버튼',
   component: Button,
 };
 

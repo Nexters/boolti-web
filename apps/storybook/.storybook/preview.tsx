@@ -1,3 +1,6 @@
+import '../styles/index.css';
+import 'the-new-css-reset/css/reset.css';
+
 import ThemeProvider from '@boolti/ui/src/components/ThemeProvider';
 import type { Decorator, Preview } from '@storybook/react';
 
