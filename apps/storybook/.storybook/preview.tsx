@@ -11,7 +11,7 @@ const preview: Preview = {
       dark: undefined,
       light: themes.normal,
       stylePreview: true,
-      current: 'light'
+      current: 'light',
     },
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
@@ -22,7 +22,6 @@ const preview: Preview = {
     },
   },
 };
-
 
 export const decorators: Decorator[] = [
   (Story, context) => (

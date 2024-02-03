@@ -75,6 +75,16 @@ const ButtonContainer = styled.div`
   }
 `;
 
+const InputLabel = styled.p`
+  margin-bottom: 8px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const InputContainer = styled.div`
+  margin-bottom: 28px;
+`;
+
 export default {
   Container,
   ButtonContainer,
@@ -84,4 +94,6 @@ export default {
   BankName,
   BankIcon,
   BankItemButton,
+  InputLabel,
+  InputContainer,
 };

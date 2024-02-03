@@ -1,9 +1,9 @@
-import { Button } from '@boolti/ui';
+import { Button, TextField } from '@boolti/ui';
 
 import { bankItems } from '~/constants/bankItems';
 
 import Styled from './SettlementDialogContent.styles';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 const titles = [
   '은행을 선택해 주세요.',
@@ -13,7 +13,12 @@ const titles = [
 
 const SettlementDialogContent = () => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const formValue = useRef<{ orgName?: string; accountNumber?: string; accountHolder?: string }>(
+    {},
+  );
   const [selectedBank, setSelectedBank] = useState<string | null>(null);
+  const [accountNumber, setAccountNumber] = useState<string>('');
+  const [accountHolder, setAccountHolder] = useState<string>('');
   return (
     <Styled.Container>
       <Styled.Title>{titles[currentStepIndex]}</Styled.Title>
@@ -35,9 +40,44 @@ const SettlementDialogContent = () => {
           ))}
         </Styled.BankList>
       )}
+      {currentStepIndex === 1 && (
+        <>
+          <Styled.InputContainer>
+            <Styled.InputLabel>계좌번호</Styled.InputLabel>
+            <TextField
+              placeholder="계좌번호를 입력해 주세요"
+              size="small"
+              inputType="text"
+              value={accountNumber}
+              onChange={(event) => {
+                setAccountNumber(event.target.value);
+              }}
+            />
+          </Styled.InputContainer>
+          <Styled.InputContainer>
+            <Styled.InputLabel>계좌주</Styled.InputLabel>
+            <TextField
+              placeholder="계좌주 이름을 입력해 주세요"
+              size="small"
+              inputType="text"
+              value={accountHolder}
+              onChange={(event) => {
+                setAccountHolder(event.target.value);
+              }}
+            />
+          </Styled.InputContainer>
+        </>
+      )}
       <Styled.ButtonContainer>
         {currentStepIndex !== 0 && (
-          <Button type="button" colorTheme="line" size="bold">
+          <Button
+            type="button"
+            colorTheme="line"
+            size="bold"
+            onClick={() => {
+              setCurrentStepIndex((prev) => prev - 1);
+            }}
+          >
             이전으로
           </Button>
         )}
@@ -45,8 +85,14 @@ const SettlementDialogContent = () => {
           type="button"
           colorTheme="primary"
           size="bold"
-          disabled={!selectedBank}
+          disabled={
+            (currentStepIndex === 0 && !selectedBank) ||
+            (currentStepIndex === 1 && (accountNumber === '' || accountHolder === ''))
+          }
           onClick={() => {
+            if (currentStepIndex === 0 && selectedBank) {
+              formValue.current = { ...formValue.current, orgName: selectedBank };
+            }
             setCurrentStepIndex((prev) => prev + 1);
           }}
         >
