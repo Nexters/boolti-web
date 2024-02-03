@@ -53,14 +53,18 @@ export const instance = ky.create({
           }
         }
 
-        if (!response.ok && response.bodyUsed) {
-          const body = await response.json();
+        try {
+          if (!response.ok && response.bodyUsed) {
+            const body = await response.json();
 
-          throw new BooltiHTTPError(response, request, options, {
-            errorTraceId: body.errorTraceId,
-            type: body.type,
-            detail: body.detail,
-          });
+            throw new BooltiHTTPError(response, request, options, {
+              errorTraceId: body.errorTraceId,
+              type: body.type,
+              detail: body.detail,
+            });
+          }
+        } catch (error) {
+          throw new BooltiHTTPError(response, request, options);
         }
 
         if (!response.ok) {
