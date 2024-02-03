@@ -7770,6 +7770,7 @@ const RAW_RUNTIME_STATE =
           ["admin", "workspace:apps/admin"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
+          ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
           ["@boolti/ui", "workspace:packages/ui"],\
           ["@emotion/babel-plugin", "npm:11.11.0"],\

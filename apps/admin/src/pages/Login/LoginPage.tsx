@@ -1,7 +1,28 @@
-import Styled from './LoginPage.styles';
-import kakaoIconUrl from '../../assets/svg/kakao.svg';
-import appleIconUrl from '../../assets/svg/apple.svg';
 import { useNavigate } from 'react-router-dom';
+import { KakaotalkIcon, AppleIcon } from '@boolti/icon';
+import Styled from './LoginPage.styles';
+import { PATH } from '../../constants/routes';
+
+declare global {
+  interface Window {
+    Kakao?: {
+      Auth: {
+        authorize: (params: {
+          redirectUri: string;
+          scope?: string;
+          throughTalk?: boolean;
+          prompt?: string;
+          loginHint?: string;
+          serviceTerms?: string;
+          state?: string;
+          nonce?: string;
+        }) => void;
+      };
+    };
+  }
+}
+
+const redirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -22,11 +43,11 @@ const LoginPage = () => {
             <Styled.LoginButtonContainer>
               <Styled.KakaoLoginButton
                 onClick={() => {
-                  navigate('/signup/complete');
+                  window.Kakao?.Auth.authorize({ redirectUri });
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <img src={kakaoIconUrl} alt="카카오톡" />
+                  <KakaotalkIcon size={20} />
                 </Styled.LoginButtonIcon>
                 카카오톡으로 시작하기
               </Styled.KakaoLoginButton>
@@ -36,7 +57,7 @@ const LoginPage = () => {
                 }}
               >
                 <Styled.LoginButtonIcon>
-                  <img src={appleIconUrl} alt="Apple" />
+                  <AppleIcon size={20} />
                 </Styled.LoginButtonIcon>
                 Apple로 시작하기
               </Styled.AppleLoginButton>

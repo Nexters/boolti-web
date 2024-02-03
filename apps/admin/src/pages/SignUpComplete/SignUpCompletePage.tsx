@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Styled from './SignUpCompletePage.styles';
+import { PATH } from '../../constants/routes';
 
 const SignUpCompletePage = () => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const SignUpCompletePage = () => {
             </Styled.CardContentDescription>
             <Styled.StartButton
               onClick={() => {
-                navigate('/home');
+                navigate(PATH.HOME, { replace: true });
               }}
             >
               약관 동의하고 시작하기

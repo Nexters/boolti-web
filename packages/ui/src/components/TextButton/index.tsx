@@ -1,6 +1,6 @@
 import Styled from './TextButton.styles';
 
-interface Props extends React.HTMLAttributes<HTMLButtonElement> {
+interface Props extends React.ComponentProps<'button'> {
   icon?: React.ReactNode;
   disabled?: boolean;
 }

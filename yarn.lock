@@ -4828,6 +4828,7 @@ __metadata:
   dependencies:
     "@boolti/api": "npm:*"
     "@boolti/eslint-config": "npm:*"
+    "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@boolti/ui": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
