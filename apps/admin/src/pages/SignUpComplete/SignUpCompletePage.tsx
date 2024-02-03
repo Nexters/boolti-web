@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Styled from './SignUpCompletePage.styles';
-import { PATH } from '../../constants/routes';
+import { PATH } from '~/constants/routes';
 
 const SignUpCompletePage = () => {
   const navigate = useNavigate();

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { KakaotalkIcon, AppleIcon } from '@boolti/icon';
 import Styled from './LoginPage.styles';
-import { PATH } from '../../constants/routes';
+import { PATH } from '~/constants/routes';
 
 declare global {
   interface Window {
