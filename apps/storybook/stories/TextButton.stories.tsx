@@ -6,6 +6,9 @@ import { TextButton } from '@boolti/ui';
 const meta: Meta<typeof TextButton> = {
   title: '컴포넌트/텍스트버튼',
   component: TextButton,
+  args: {
+    children: 'TEXT BUTTON',
+  },
 };
 
 export default meta;
