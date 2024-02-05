@@ -30,7 +30,12 @@ const ShowAddPage = () => {
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
 
-  const { control, register, handleSubmit } = useForm<Inputs>();
+  const {
+    control,
+    register,
+    handleSubmit,
+    formState: { isDirty, isValid },
+  } = useForm<Inputs>();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImageFiles((prevImageFiles) => [
@@ -275,7 +280,12 @@ const ShowAddPage = () => {
                   </Styled.ShowAddFormContent>
                 </Styled.ShowAddFormRow>
               </Styled.ShowAddFormGroup>
-              <Button type="submit" colorTheme="primary" size="bold">
+              <Button
+                type="submit"
+                colorTheme="primary"
+                size="bold"
+                disabled={!isDirty || !isValid || imageFiles.length === 0}
+              >
                 저장하기
               </Button>
             </Styled.ShowAddForm>
