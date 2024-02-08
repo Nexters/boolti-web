@@ -1,6 +1,7 @@
-import { SubmitHandler, useForm } from 'react-hook-form';
-import Styled from './TicketForm.styles';
 import { Button, TextField } from '@boolti/ui';
+import { SubmitHandler, useForm } from 'react-hook-form';
+
+import Styled from './TicketForm.styles';
 
 export interface InvitationTicketFormInputs {
   name: string;

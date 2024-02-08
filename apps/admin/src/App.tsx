@@ -11,8 +11,8 @@ import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
-import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
+import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
 const PublicRoute = () => {
   const isLogin =

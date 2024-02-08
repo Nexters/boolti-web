@@ -7,9 +7,18 @@ import Styled, { TextFieldProps } from './TextField.styles';
 
 type Props = Omit<React.ComponentProps<'input'>, 'size' | 'type'> & TextFieldProps;
 
-const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, errorMessage, ...rest }: Props) => {
+const TextField = ({
+  disabled,
+  size,
+  inputType,
+  buttonProps,
+  placeholder,
+  id,
+  errorMessage,
+  ...rest
+}: Props) => {
   const uuid = useRef<string>(id ?? nanoid(6));
-  
+
   return (
     <Styled.Container disabled={disabled} size={size} inputType={inputType}>
       <Styled.InputContainer>
@@ -45,6 +54,6 @@ const TextField = ({ disabled, size, inputType, buttonProps, placeholder, id, er
       {errorMessage && <Styled.ErrorMessage>{errorMessage}</Styled.ErrorMessage>}
     </Styled.Container>
   );
-}
+};
 
 export default TextField;

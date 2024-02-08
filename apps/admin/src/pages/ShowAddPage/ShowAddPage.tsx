@@ -1,19 +1,21 @@
 import { ArrowLeftIcon, CloseIcon, FileUpIcon, PlusIcon } from '@boolti/icon';
-import Styled from './ShowAddPage.styles';
-import { Navigate, useNavigate } from 'react-router-dom';
 import { Badge, Button, TextField, useDialog } from '@boolti/ui';
-import { useDropzone } from 'react-dropzone';
+import { format } from 'date-fns/format';
+import { sub } from 'date-fns/sub';
 import { useCallback, useEffect, useState } from 'react';
+import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { PATH } from '~/constants/routes';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 import GeneralTicketDialogContent, {
   GeneralTicketFormInputs,
 } from '~/components/TicketForm/GeneralTicketForm';
 import InvitationTicketForm, {
   InvitationTicketFormInputs,
 } from '~/components/TicketForm/InvitationTicketForm';
-import { format } from 'date-fns/format';
-import { sub } from 'date-fns/sub';
+import { PATH } from '~/constants/routes';
+
+import Styled from './ShowAddPage.styles';
 
 const MAX_IMAGE_COUNT = 3;
 
