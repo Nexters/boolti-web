@@ -79,7 +79,8 @@ const privateRoutes = [
         element: <SignUpCompletePage />,
       },
       { path: PATH.HOME, element: <HomePage /> },
-      { path: PATH.SHOW_ADD, element: <ShowAddPage /> },
+      { path: PATH.SHOW_ADD, element: <ShowAddPage step="info" /> },
+      { path: PATH.SHOW_ADD_TICKET, element: <ShowAddPage step="ticket" /> },
     ],
   },
 ];

@@ -6,4 +6,5 @@ export const PATH = {
   SIGNUP_COMPLETE: '/signup/complete',
   HOME: '/home',
   SHOW_ADD: '/show/add',
+  SHOW_ADD_TICKET: '/show/add/ticket',
 };
