@@ -37,11 +37,11 @@ export const DGB = () => {
           y2="15.1094"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.1" stop-color="#007DC5" />
-          <stop offset="0.23" stop-color="#0083CB" />
-          <stop offset="0.4" stop-color="#0095DA" />
-          <stop offset="0.75" stop-color="#00B49D" />
-          <stop offset="1" stop-color="#72BF44" />
+          <stop offset="0.1" stopColor="#007DC5" />
+          <stop offset="0.23" stopColor="#0083CB" />
+          <stop offset="0.4" stopColor="#0095DA" />
+          <stop offset="0.75" stopColor="#00B49D" />
+          <stop offset="1" stopColor="#72BF44" />
         </linearGradient>
       </defs>
     </svg>

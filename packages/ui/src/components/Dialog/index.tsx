@@ -1,5 +1,6 @@
-import Portal from '../Portal';
 import { CloseIcon } from '@boolti/icon';
+
+import Portal from '../Portal';
 import Styled from './Dialog.styles';
 
 interface DialogProps {

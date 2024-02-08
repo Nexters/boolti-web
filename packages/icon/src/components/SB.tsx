@@ -25,9 +25,9 @@ export const SB = () => {
           y2="22.8777"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#92C83E" />
-          <stop offset="0.6" stop-color="#009D54" />
-          <stop offset="1" stop-color="#007360" />
+          <stop stopColor="#92C83E" />
+          <stop offset="0.6" stopColor="#009D54" />
+          <stop offset="1" stopColor="#007360" />
         </linearGradient>
       </defs>
     </svg>

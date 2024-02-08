@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { useMemo } from 'react';
 import { ErrorIcon, toast } from 'react-hot-toast';
+
 import { InfoIcon, SuccessIcon, WarningIcon } from '../components/Toast/icons';
 
 interface ToastOptions {

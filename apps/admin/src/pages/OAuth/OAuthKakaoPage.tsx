@@ -5,8 +5,9 @@ import {
   useKakaoUserInfo,
   useSignUp,
 } from '@boolti/api';
-import { useEffect, useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+
 import { PATH } from '~/constants/routes';
 
 const OAuthKakaoPage = () => {

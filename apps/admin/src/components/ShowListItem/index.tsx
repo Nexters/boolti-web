@@ -1,6 +1,7 @@
-import { Badge } from '@boolti/ui';
-import Styled from './ShowListItem.styles';
 import { ChevronRightIcon } from '@boolti/icon';
+import { Badge } from '@boolti/ui';
+
+import Styled from './ShowListItem.styles';
 
 interface Props {
   isEmpty?: boolean;

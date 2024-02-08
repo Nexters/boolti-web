@@ -1,8 +1,8 @@
 import '@emotion/react';
 
+import breakpoint from './systems/breakpoint';
 import palette from './systems/palette';
 import typo from './systems/typo';
-import breakpoint from './systems/breakpoint';
 
 declare module '@emotion/react' {
   export interface Theme {

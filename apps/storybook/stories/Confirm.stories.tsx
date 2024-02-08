@@ -1,6 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { Confirm } from '@boolti/ui';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Confirm> = {
   title: '컴포넌트/컨펌',

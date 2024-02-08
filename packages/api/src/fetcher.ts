@@ -1,4 +1,6 @@
-import ky, { Options, ResponsePromise } from 'ky';
+import type { Options, ResponsePromise } from 'ky';
+import ky from 'ky';
+
 import BooltiHTTPError from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 

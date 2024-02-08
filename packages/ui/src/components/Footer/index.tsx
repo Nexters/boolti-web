@@ -1,4 +1,4 @@
-import { InstagramIcon, GithubIcon, KakaotalkIcon } from '@boolti/icon';
+import { GithubIcon, InstagramIcon, KakaotalkIcon } from '@boolti/icon';
 
 import Styled from './Footer.styles';
 

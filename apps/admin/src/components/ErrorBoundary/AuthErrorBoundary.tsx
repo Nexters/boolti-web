@@ -1,6 +1,7 @@
 import { BooltiHTTPError, LOCAL_STORAGE } from '@boolti/api';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+
 import { PATH } from '../../constants/routes';
 
 interface AuthErrorBoundaryProps {

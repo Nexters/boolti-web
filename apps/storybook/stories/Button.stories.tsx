@@ -1,7 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
-
 import { GithubIcon } from '@boolti/icon';
 import { Button } from '@boolti/ui';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof Button> = {
   title: '컴포넌트/버튼',

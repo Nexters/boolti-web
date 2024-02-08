@@ -1,8 +1,9 @@
 import { CalendarIcon } from '@boolti/icon';
 import { nanoid } from 'nanoid';
+import { useRef } from 'react';
+
 import Button from '../Button';
 import Styled, { TextFieldProps } from './TextField.styles';
-import { useRef } from 'react';
 
 type Props = Omit<React.ComponentProps<'input'>, 'size' | 'type'> & TextFieldProps;
 

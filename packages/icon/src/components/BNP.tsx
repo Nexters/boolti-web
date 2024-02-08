@@ -73,10 +73,10 @@ export const BNP = () => {
           y2="22.8492"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#049C7D" />
-          <stop offset="0.351536" stop-color="#61BAA8" />
-          <stop offset="0.668127" stop-color="#61BAA8" />
-          <stop offset="1" stop-color="#00A184" />
+          <stop stopColor="#049C7D" />
+          <stop offset="0.351536" stopColor="#61BAA8" />
+          <stop offset="0.668127" stopColor="#61BAA8" />
+          <stop offset="1" stopColor="#00A184" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_1332_16242"
@@ -86,9 +86,9 @@ export const BNP = () => {
           y2="22.1409"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.000554265" stop-color="#6ADBC4" />
-          <stop offset="0.821791" stop-color="#026D58" />
-          <stop offset="1" stop-color="#00A184" />
+          <stop offset="0.000554265" stopColor="#6ADBC4" />
+          <stop offset="0.821791" stopColor="#026D58" />
+          <stop offset="1" stopColor="#00A184" />
         </linearGradient>
       </defs>
     </svg>

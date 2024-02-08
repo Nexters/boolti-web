@@ -1,15 +1,17 @@
-import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
-import { createBrowserRouter, RouterProvider, Navigate, Outlet } from 'react-router-dom';
-import { BooltiUIProvider } from '@boolti/ui';
-import LoginPage from './pages/Login/LoginPage';
-import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
-import HomePage from './pages/HomePage/HomePage';
-import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
-import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
-import { PATH } from './constants/routes';
+
+import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
+import { BooltiUIProvider } from '@boolti/ui';
+import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
+
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
+import { PATH } from './constants/routes';
+import HomePage from './pages/HomePage/HomePage';
+import LoginPage from './pages/Login/LoginPage';
+import OAuthApplePage from './pages/OAuth/OAuthApplePage';
+import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
+import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
 const PublicRoute = () => {
   const isLogin =

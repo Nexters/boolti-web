@@ -1,6 +1,6 @@
 import '@emotion/react';
 
-import { palette, typo, breakpoint } from '@boolti/ui';
+import { breakpoint, palette, typo } from '@boolti/ui';
 
 declare module '@emotion/react' {
   export interface Theme {

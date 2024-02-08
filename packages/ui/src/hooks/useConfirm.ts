@@ -1,4 +1,5 @@
 import { useCallback, useContext } from 'react';
+
 import confirmContext, { ConfirmButtonText } from '../contexts/confirmContext';
 
 const useConfirm = () => {

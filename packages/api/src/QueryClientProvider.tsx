@@ -1,6 +1,7 @@
-import { QueryClientProvider as BaseQueryClientProvider, QueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { QueryClient, QueryClientProvider as BaseQueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useState } from 'react';
+
 import BooltiHTTPError from './BooltiHTTPError';
 
 export function QueryClientProvider({ children }: React.PropsWithChildren) {

@@ -1,4 +1,6 @@
-import { HTTPError, NormalizedOptions } from 'ky';
+import type { NormalizedOptions } from 'ky';
+import { HTTPError } from 'ky';
+
 import { ERROR_CODE } from './constants';
 
 interface BooltiHTTPErrorOptions {
