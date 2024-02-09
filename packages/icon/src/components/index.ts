@@ -17,6 +17,7 @@ import { Deutsche } from './Deutsche';
 import { DGB } from './DGB';
 import { Edit } from './Edit';
 import { EPost } from './EPost';
+import { FileUp } from './FileUp';
 import { Github } from './Github';
 import { Hana } from './Hana';
 import { HSBC } from './HSBC';
@@ -68,6 +69,7 @@ export {
   DGB,
   Edit as EditIcon,
   EPost,
+  FileUp as FileUpIcon,
   Github as GithubIcon,
   Hana,
   HSBC,

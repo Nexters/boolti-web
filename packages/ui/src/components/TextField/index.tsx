@@ -1,6 +1,6 @@
-import { CalendarIcon } from '@boolti/icon';
+import { CalendarIcon, ClockIcon } from '@boolti/icon';
 import { nanoid } from 'nanoid';
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 
 import Button from '../Button';
 import Styled, { TextFieldProps } from './TextField.styles';
@@ -18,6 +18,7 @@ const TextField = ({
   ...rest
 }: Props) => {
   const uuid = useRef<string>(id ?? nanoid(6));
+
   return (
     <Styled.Container disabled={disabled} size={size} inputType={inputType}>
       <Styled.InputContainer>
@@ -41,6 +42,7 @@ const TextField = ({
           {...rest}
         />
         {inputType === 'date' && <CalendarIcon />}
+        {inputType === 'time' && <ClockIcon />}
       </Styled.InputContainer>
       {buttonProps && (
         <Styled.ButtonContainer>

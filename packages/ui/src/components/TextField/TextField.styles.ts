@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 export interface TextFieldProps {
   size: 'small' | 'big';
-  inputType: 'text' | 'date' | 'file';
+  inputType: 'text' | 'date' | 'file' | 'time' | 'number';
   disabled?: boolean;
   buttonProps?: React.ComponentProps<'button'>;
   fileName?: string;
@@ -88,6 +88,17 @@ const Input = styled.input<{ hasError?: boolean }>`
     padding-left: 600px;
     height: 100%;
     opacity: 0;
+  }
+  &[type='time']::-webkit-calendar-picker-indicator {
+    background: transparent;
+    color: transparent;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: auto;
+    height: auto;
   }
   &[type='file'] {
     display: none;

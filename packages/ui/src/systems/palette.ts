@@ -47,6 +47,7 @@ const palette = {
   dim: {
     dialog: 'rgba(86, 86, 86, 0.25)',
   },
+  shadow: 'rgba(136, 141, 157, 0.15)',
 } as const;
 
 export default palette;
