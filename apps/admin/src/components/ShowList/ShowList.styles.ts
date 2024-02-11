@@ -18,9 +18,25 @@ const HeaderText = styled.h2`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
+const TextContainer = styled.div``;
+
+const InfoButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4px;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  & > svg {
+    margin-left: 4px;
+  }
+`;
+
 export default {
   Container,
   List,
   Header,
   HeaderText,
+  TextContainer,
+  InfoButton,
 };

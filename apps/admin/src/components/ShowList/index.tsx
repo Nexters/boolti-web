@@ -1,4 +1,4 @@
-import { PlusIcon } from '@boolti/icon';
+import { ChevronRightIcon, PlusIcon } from '@boolti/icon';
 import { Button } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +19,13 @@ const ShowList = ({ shows }: Props) => {
   return (
     <Styled.Container>
       <Styled.Header>
-        <Styled.HeaderText>등록한 공연</Styled.HeaderText>
+        <Styled.TextContainer>
+          <Styled.HeaderText>등록한 공연</Styled.HeaderText>
+          <Styled.InfoButton>
+            관객 입장은 어떻게 확인하나요?
+            <ChevronRightIcon />
+          </Styled.InfoButton>
+        </Styled.TextContainer>
         <Button
           type="button"
           colorTheme="primary"

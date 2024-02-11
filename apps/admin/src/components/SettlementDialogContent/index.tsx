@@ -9,7 +9,7 @@ import Styled from './SettlementDialogContent.styles';
 
 const titles = [
   '은행을 선택해 주세요.',
-  '계좌번호와 계좌주를 입력해 주세요.',
+  '계좌번호와 예금주를 입력해 주세요.',
   '입력하신 계좌 정보를 다시 한 번 확인해주세요.',
 ];
 
@@ -75,9 +75,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
             />
           </Styled.InputContainer>
           <Styled.InputContainer>
-            <Styled.InputLabel>계좌주</Styled.InputLabel>
+            <Styled.InputLabel>예금주</Styled.InputLabel>
             <TextField
-              placeholder="계좌주 이름을 입력해 주세요"
+              placeholder="예금주 이름을 입력해 주세요"
               size="small"
               inputType="text"
               value={accountHolder}
@@ -105,7 +105,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
             <Styled.ConfrimTextValue>{accountNumber}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
           <Styled.ConfrimTextContainer>
-            <Styled.ConfirmTextLabel>계좌주</Styled.ConfirmTextLabel>
+            <Styled.ConfirmTextLabel>예금주</Styled.ConfirmTextLabel>
             <Styled.ConfrimTextValue>{accountHolder}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
         </Styled.ConfirmContainer>

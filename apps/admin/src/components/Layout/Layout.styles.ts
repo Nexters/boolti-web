@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const Layout = styled.div`
-  background-color: ${({ theme }) => theme.palette.grey.g00};
+  background-color: ${({ theme }) => theme.palette.grey.w};
 `;
 
 const HeaderContainer = styled.div`
