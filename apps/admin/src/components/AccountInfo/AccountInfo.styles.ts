@@ -6,7 +6,7 @@ const Container = styled.div`
   align-items: start;
   justify-content: center;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.palette.grey.g10};
+  background-color: ${({ theme }) => theme.palette.grey.g00};
   padding: 28px 32px;
 `;
 
