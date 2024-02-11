@@ -1,8 +1,9 @@
+import { ImageFile, useUploadShowImage } from '@boolti/api';
 import { ArrowLeftIcon, CloseIcon, FileUpIcon, PlusIcon } from '@boolti/icon';
 import { Badge, Button, TextField, useDialog } from '@boolti/ui';
 import { format } from 'date-fns/format';
 import { sub } from 'date-fns/sub';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -18,10 +19,6 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 
 const MAX_IMAGE_COUNT = 3;
-
-interface ImageFile extends File {
-  preview: string;
-}
 
 interface ShowInfoFormInputs {
   name: string;
@@ -55,11 +52,32 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     [],
   );
 
-  const showInfoForm = useForm<ShowInfoFormInputs>();
-  const showTicketForm = useForm<ShowTicketFormInputs>();
+  const showInfoForm = useForm<ShowInfoFormInputs>({
+    defaultValues: {
+      name: '배달이 쇼',
+      date: '2024-02-24',
+      startTime: '20:00',
+      runningTime: 120,
+      placeName: '우아한형제들',
+      placeStreetAddress: '서울 송파구 위례성대로 2',
+      placeDetailAddress: '장은빌딩 2층',
+      notice: '배달이가 춤을 춥니다!',
+      hostName: '배달이',
+      hostPhoneNumber: '010-1234-5678',
+    },
+  });
+  const showTicketForm = useForm<ShowTicketFormInputs>({
+    defaultValues: {
+      startDate: '2024-02-10',
+      endDate: '2024-02-23',
+      ticketNotice: '티켓은 춤 안 춥니다.',
+    },
+  });
 
   const generalTicketDialog = useDialog();
   const invitationTicketDialog = useDialog();
+
+  const uploadShowImageMutation = useUploadShowImage();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImageFiles((prevImageFiles) => [
@@ -79,13 +97,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     onDrop,
   });
 
-  const onSubmitInfoForm: SubmitHandler<ShowInfoFormInputs> = (data) => {
-    console.log(data);
+  const onSubmitInfoForm: SubmitHandler<ShowInfoFormInputs> = () => {
     navigate(PATH.SHOW_ADD_TICKET);
   };
 
-  const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = (data) => {
-    console.log(data);
+  const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = async () => {
+    console.log(showInfoForm.getValues(), showTicketForm.getValues());
+
+    const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
+
+    console.log(showImageInfo);
   };
 
   const onSubmitGeneralTicketForm: SubmitHandler<GeneralTicketFormInputs> = (data) => {
@@ -97,10 +118,6 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     setInvitationTicketList((prevList) => [...prevList, data]);
     invitationTicketDialog.close();
   };
-
-  useEffect(() => {
-    return () => imageFiles.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [imageFiles]);
 
   return (
     <Styled.ShowAddPage>

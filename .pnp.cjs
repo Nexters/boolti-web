@@ -2803,6 +2803,7 @@ const RAW_RUNTIME_STATE =
           ["@tanstack/react-query-devtools", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:4.36.1"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
+          ["image-resize", "npm:1.3.2"],\
           ["ky", "npm:1.2.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
@@ -11191,6 +11192,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/ignore-npm-5.3.0-fb0f5fa062-10c0.zip/node_modules/ignore/",\
         "packageDependencies": [\
           ["ignore", "npm:5.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["image-resize", [\
+      ["npm:1.3.2", {\
+        "packageLocation": "../../.yarn/berry/cache/image-resize-npm-1.3.2-83d7d76c19-10c0.zip/node_modules/image-resize/",\
+        "packageDependencies": [\
+          ["image-resize", "npm:1.3.2"]\
         ],\
         "linkType": "HARD"\
       }]\
