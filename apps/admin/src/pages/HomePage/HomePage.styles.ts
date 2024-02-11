@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 
 const Logo = styled.div`
   display: inline-flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  background-color: ${({ theme }) => theme.palette.grey.g40};
   width: 174px;
   height: 44px;
 `;

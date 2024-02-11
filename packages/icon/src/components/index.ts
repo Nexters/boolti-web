@@ -4,6 +4,7 @@ import { ArrowRight } from './ArrowRIght';
 import { BNK } from './BNK';
 import { BNP } from './BNP';
 import { BoA } from './BoA';
+import { Boolti } from './Boolti';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
 import { ChevronLeft } from './ChevronLeft';
@@ -56,6 +57,7 @@ export {
   BNK,
   BNP,
   BoA,
+  Boolti as BooltiLogo,
   Calendar as CalendarIcon,
   CB,
   ChevronLeft as ChevronLeftIcon,

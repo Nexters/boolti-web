@@ -1,4 +1,5 @@
 import { useLogout } from '@boolti/api';
+import { BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +21,11 @@ const HomePage = () => {
     <Layout
       header={
         <Header
-          left={<Styled.Logo>Boolti Logo</Styled.Logo>}
+          left={
+            <Styled.Logo>
+              <BooltiLogo />
+            </Styled.Logo>
+          }
           right={
             <TextButton
               onClick={async () => {
