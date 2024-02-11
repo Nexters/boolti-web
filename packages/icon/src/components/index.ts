@@ -46,6 +46,7 @@ import { Shinhan } from './Shinhan';
 import { Ticket } from './Ticket';
 import { Toss } from './Toss';
 import { UpDown } from './UpDown';
+import { UserProfile } from './UserProfile';
 import { Users } from './Users';
 import { Wallet } from './Wallet';
 import { Woori } from './Woori';
@@ -99,6 +100,7 @@ export {
   Ticket as TicketIcon,
   Toss,
   UpDown as UpDownIcon,
+  UserProfile,
   Users as UsersIcon,
   Wallet as WalletIcon,
   Woori,
