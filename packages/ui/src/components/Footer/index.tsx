@@ -11,9 +11,11 @@ const Footer = () => {
             {'불티' + '\n' + 'Copyright ⓒ Boolti. All Rights Reserved'}
           </Styled.BoldTtext>
           <Styled.Text>
-            {'사업자 등록번호 : 120-88-01280 | 대표 : 김혜선 (더미 텍스트)' +
+            {'사업자 등록번호 : 202-43-63442 | 대표 : 김혜선' +
               '\n' +
-              '호스팅 서비스 : 주식회사 비바리퍼블리카 | 통신판매업 신고번호 : 2014-서울강남-03377'}
+              '호스팅 서비스 : 스튜디오 불티 | 제2024-서울00-0000호(더미)' +
+              '\n' +
+              'TEL : 0507-0000-0000(더미) | 이메일 : studio.boolti@gmail.com'}
           </Styled.Text>
           <Styled.LinkTextGroup>
             <Styled.Text>
