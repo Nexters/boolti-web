@@ -4,7 +4,7 @@ import Styled from './ShowInfoPage.styles';
 
 const ShowInfoPage = () => {
   return (
-    <ShowDetailLayout>
+    <ShowDetailLayout showName="불다람쥐 파이어 쇼">
       <Styled.ShowInfoPage>
         {Array.from({ length: 100 }).map(() => (
           <p>안녕</p>

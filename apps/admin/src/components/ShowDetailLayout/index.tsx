@@ -12,10 +12,11 @@ import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 
 interface ShowDetailLayoutProps {
+  showName: string;
   children?: React.ReactNode;
 }
 
-const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
+const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
   const { ref: topObserverRef, inView: topInView } = useInView({
     threshold: 1,
   });
@@ -68,7 +69,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
               }
             />
             <Styled.HeaderContent>
-              <Styled.ShowName size={headerInView ? 'big' : 'small'}>%공연명%</Styled.ShowName>
+              <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
               <Styled.Tab>
                 <Styled.TabItem
                   active={matchInfoTab !== null}
