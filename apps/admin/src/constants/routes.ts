@@ -7,4 +7,15 @@ export const PATH = {
   HOME: '/home',
   SHOW_ADD: '/show/add',
   SHOW_ADD_TICKET: '/show/add/ticket',
+  SHOW_INFO: '/show/:showId/info',
+  SHOW_TICKET: '/show/:showId/ticket',
+  SHOW_RESERVATION: '/show/:showId/reservation',
+  SHOW_ENTRY: '/show/:showId/entry',
+};
+
+export const HREF = {
+  SHOW_INFO: (showId: string | number) => `/show/${showId}/info`,
+  SHOW_TICKET: (showId: string | number) => `/show/${showId}/ticket`,
+  SHOW_RESERVATION: (showId: string | number) => `/show/${showId}/reservation`,
+  SHOW_ENTRY: (showId: string | number) => `/show/${showId}/entry`,
 };
