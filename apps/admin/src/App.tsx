@@ -12,6 +12,7 @@ import LoginPage from './pages/Login/LoginPage';
 import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
+import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
 const PublicRoute = () => {
@@ -81,6 +82,10 @@ const privateRoutes = [
       { path: PATH.HOME, element: <HomePage /> },
       { path: PATH.SHOW_ADD, element: <ShowAddPage step="info" /> },
       { path: PATH.SHOW_ADD_TICKET, element: <ShowAddPage step="ticket" /> },
+      { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
+      { path: PATH.SHOW_TICKET, element: null },
+      { path: PATH.SHOW_RESERVATION, element: null },
+      { path: PATH.SHOW_ENTRY, element: null },
     ],
   },
 ];
