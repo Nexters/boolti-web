@@ -1,5 +1,7 @@
+import { usePutUserSettlementAccountInfo } from '@boolti/api';
 import { Button, TextField, useToast } from '@boolti/ui';
 import { useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { bankItems } from '~/constants/bankItems';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
@@ -17,14 +19,33 @@ interface Props {
   onClose?: VoidFunction;
 }
 
+interface SettlementDialogFormInputs {
+  bankCode: string;
+  accountHolder: string;
+  accountNumber: string;
+}
+
 const SettlementDialogContent = ({ onClose }: Props) => {
   const toast = useToast();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [selectedBank, setSelectedBank] = useState<string | null>(null);
-  const [accountNumber, setAccountNumber] = useState<string>('');
-  const [accountHolder, setAccountHolder] = useState<string>('');
+  const { setValue, register, handleSubmit, watch } = useForm<SettlementDialogFormInputs>();
+  const currentBankCode = watch('bankCode');
+  const currentBankName = bankItems.find(({ code }) => code === currentBankCode)?.name;
+  const currentAccountHolder = watch('accountHolder');
+  const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
+
+  const { mutate } = usePutUserSettlementAccountInfo();
+
+  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = (data) => {
+    mutate(data, {
+      onSuccess: () => {
+        toast.success('정산 계좌를 저장했습니다.');
+        onClose?.();
+      },
+    });
+  };
 
   useBodyScrollLock();
 
@@ -36,10 +57,11 @@ const SettlementDialogContent = ({ onClose }: Props) => {
           {bankItems.map((bankItem) => (
             <Styled.BankItem key={bankItem.name}>
               <Styled.BankItemButton
-                isNull={selectedBank === null}
-                isSelected={selectedBank === bankItem.name}
+                type="button"
+                isUndefined={currentBankCode === undefined}
+                isSelected={currentBankCode === bankItem.code}
                 onClick={() => {
-                  setSelectedBank(bankItem.name);
+                  setValue('bankCode', bankItem.code);
                 }}
               >
                 <Styled.BankIcon>{<bankItem.icon />}</Styled.BankIcon>
@@ -57,21 +79,18 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               placeholder="계좌번호를 입력해 주세요"
               size="small"
               inputType="text"
-              value={accountNumber}
               errorMessage={accountNumberError}
-              onBlur={(event) => {
-                setAccountNumberError(
-                  validateAccountNumber(event.target.value)
-                    ? undefined
-                    : '계좌번호를 확인 후 다시 입력해 주세요.',
-                );
-              }}
-              onChange={(event) => {
-                const value = event.target.value;
-                if (!isNaN(Number(value))) {
-                  setAccountNumber(value);
-                }
-              }}
+              {...register('accountNumber', {
+                required: true,
+                onBlur(event) {
+                  const value = event.target.value;
+                  setAccountNumberError(
+                    validateAccountNumber(value) && !isNaN(Number(value))
+                      ? undefined
+                      : '계좌번호를 확인 후 다시 입력해 주세요.',
+                  );
+                },
+              })}
             />
           </Styled.InputContainer>
           <Styled.InputContainer>
@@ -80,16 +99,17 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               placeholder="예금주 이름을 입력해 주세요"
               size="small"
               inputType="text"
-              value={accountHolder}
               errorMessage={accountHolderError}
-              onBlur={(event) => {
-                setAccountHolderError(
-                  validateAccountHolder(event.target.value) ? undefined : '한글만 입력 가능합니다.',
-                );
-              }}
-              onChange={(event) => {
-                setAccountHolder(event.target.value);
-              }}
+              {...register('accountHolder', {
+                required: true,
+                onBlur(event) {
+                  setAccountHolderError(
+                    validateAccountHolder(event.target.value)
+                      ? undefined
+                      : '한글만 입력 가능합니다.',
+                  );
+                },
+              })}
             />
           </Styled.InputContainer>
         </>
@@ -98,15 +118,15 @@ const SettlementDialogContent = ({ onClose }: Props) => {
         <Styled.ConfirmContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{selectedBank}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{currentBankName}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>계좌번호</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{accountNumber}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{currentAccountNumber}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
           <Styled.ConfrimTextContainer>
             <Styled.ConfirmTextLabel>예금주</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{accountHolder}</Styled.ConfrimTextValue>
+            <Styled.ConfrimTextValue>{currentAccountHolder}</Styled.ConfrimTextValue>
           </Styled.ConfrimTextContainer>
         </Styled.ConfirmContainer>
       )}
@@ -128,20 +148,19 @@ const SettlementDialogContent = ({ onClose }: Props) => {
           colorTheme="primary"
           size="bold"
           disabled={
-            (currentStepIndex === 0 && !selectedBank) ||
+            (currentStepIndex === 0 && !currentBankName) ||
             (currentStepIndex === 1 &&
-              (accountNumber === '' ||
-                accountHolder === '' ||
+              (currentAccountNumber === '' ||
+                currentAccountHolder === '' ||
                 !!accountHolderError ||
                 !!accountNumberError))
           }
-          onClick={() => {
-            if (accountHolderError || accountNumberError) {
+          onClick={(event) => {
+            if (currentStepIndex === 1 && (accountHolderError || accountNumberError)) {
               return;
             }
             if (currentStepIndex === 2) {
-              toast.success('정산 계좌를 저장했습니다.');
-              onClose?.();
+              handleSubmit(onSubmit)(event);
               return;
             }
             setCurrentStepIndex((prev) => prev + 1);

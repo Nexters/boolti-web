@@ -10,7 +10,7 @@ import { CB } from './CB';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
 import { ChinaCB } from './ChinaCB';
-import { City } from './City';
+import { Citi } from './Citi';
 import { Clock } from './Clock';
 import { Close } from './Close';
 import { CU } from './CU';
@@ -64,7 +64,7 @@ export {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   ChinaCB,
-  City,
+  Citi,
   Clock as ClockIcon,
   Close as CloseIcon,
   CU,

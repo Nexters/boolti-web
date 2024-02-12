@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-const Container = styled.div``;
+const Container = styled.form``;
 
 const Title = styled.h2`
   ${({ theme }) => theme.typo.b3};
@@ -14,6 +14,9 @@ const BankList = styled.ul`
   grid-template-columns: 1fr 1fr 1fr;
   gap: 12px;
   overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const BankItem = styled.li`
@@ -21,7 +24,7 @@ const BankItem = styled.li`
   height: 74px;
 `;
 
-const BankItemButton = styled.button<{ isSelected?: boolean; isNull?: boolean }>`
+const BankItemButton = styled.button<{ isSelected?: boolean; isUndefined?: boolean }>`
   cursor: pointer;
   width: 100%;
   height: 100%;
@@ -38,8 +41,8 @@ const BankItemButton = styled.button<{ isSelected?: boolean; isNull?: boolean }>
     opacity 0.2s ease-in-out;
   background-color: ${({ theme }) => theme.palette.grey.g00};
   border-color: ${({ theme }) => theme.palette.grey.g00};
-  ${({ isSelected, isNull, theme }) => {
-    if (isNull) {
+  ${({ isSelected, isUndefined, theme }) => {
+    if (isUndefined) {
       return ``;
     }
     if (isSelected) {

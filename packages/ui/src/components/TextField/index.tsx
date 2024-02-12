@@ -1,22 +1,16 @@
 import { CalendarIcon, ClockIcon } from '@boolti/icon';
 import { nanoid } from 'nanoid';
-import React, { useRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 
 import Button from '../Button';
 import Styled, { TextFieldProps } from './TextField.styles';
 
 type Props = Omit<React.ComponentProps<'input'>, 'size' | 'type'> & TextFieldProps;
 
-const TextField = ({
-  disabled,
-  size,
-  inputType,
-  buttonProps,
-  placeholder,
-  id,
-  errorMessage,
-  ...rest
-}: Props) => {
+const TextField = forwardRef(function TextField(
+  { disabled, size, inputType, buttonProps, placeholder, id, errorMessage, ...rest }: Props,
+  ref?: React.Ref<HTMLInputElement>,
+) {
   const uuid = useRef<string>(id ?? nanoid(6));
 
   return (
@@ -33,6 +27,7 @@ const TextField = ({
           </Styled.InputLabel>
         )}
         <Styled.Input
+          ref={ref}
           hasError={!!errorMessage}
           id={uuid.current}
           data-placeholder={placeholder}
@@ -54,6 +49,6 @@ const TextField = ({
       {errorMessage && <Styled.ErrorMessage>{errorMessage}</Styled.ErrorMessage>}
     </Styled.Container>
   );
-};
+});
 
 export default TextField;
