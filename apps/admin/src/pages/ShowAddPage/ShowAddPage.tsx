@@ -1,4 +1,4 @@
-import { ImageFile, useUploadShowImage } from '@boolti/api';
+import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
 import { ArrowLeftIcon, CloseIcon, FileUpIcon, PlusIcon } from '@boolti/icon';
 import { Badge, Button, TextField, useDialog } from '@boolti/ui';
 import { format } from 'date-fns/format';
@@ -24,7 +24,7 @@ interface ShowInfoFormInputs {
   name: string;
   date: string;
   startTime: string;
-  runningTime: number;
+  runningTime: string;
   placeName: string;
   placeStreetAddress: string;
   placeDetailAddress: string;
@@ -52,32 +52,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     [],
   );
 
-  const showInfoForm = useForm<ShowInfoFormInputs>({
-    defaultValues: {
-      name: '배달이 쇼',
-      date: '2024-02-24',
-      startTime: '20:00',
-      runningTime: 120,
-      placeName: '우아한형제들',
-      placeStreetAddress: '서울 송파구 위례성대로 2',
-      placeDetailAddress: '장은빌딩 2층',
-      notice: '배달이가 춤을 춥니다!',
-      hostName: '배달이',
-      hostPhoneNumber: '010-1234-5678',
-    },
-  });
-  const showTicketForm = useForm<ShowTicketFormInputs>({
-    defaultValues: {
-      startDate: '2024-02-10',
-      endDate: '2024-02-23',
-      ticketNotice: '티켓은 춤 안 춥니다.',
-    },
-  });
+  const showInfoForm = useForm<ShowInfoFormInputs>();
+  const showTicketForm = useForm<ShowTicketFormInputs>();
 
   const generalTicketDialog = useDialog();
   const invitationTicketDialog = useDialog();
 
   const uploadShowImageMutation = useUploadShowImage();
+  const addShowMutation = useAddShow();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImageFiles((prevImageFiles) => [
@@ -102,11 +84,44 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = async () => {
-    console.log(showInfoForm.getValues(), showTicketForm.getValues());
-
+    // 공연 이미지 업로드
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
-    console.log(showImageInfo);
+    // 공연 생성
+    await addShowMutation.mutateAsync({
+      name: showInfoForm.getValues('name'),
+      images: showImageInfo.map((info) => ({
+        sequence: info.sequence,
+        thumbnailPath: info.thumbnailUrl,
+        path: info.imageUrl,
+      })),
+      date: `${showInfoForm.getValues('date')}T${showInfoForm.getValues('startTime')}:00.000Z`,
+      runningTime: Number(showInfoForm.getValues('runningTime')),
+      place: {
+        name: showInfoForm.getValues('placeName'),
+        streetAddress: showInfoForm.getValues('placeStreetAddress'),
+        detailAddress: showInfoForm.getValues('placeDetailAddress'),
+      },
+      notice: showInfoForm.getValues('notice'),
+      host: {
+        name: showInfoForm.getValues('hostName'),
+        phoneNumber: showInfoForm.getValues('hostPhoneNumber'),
+      },
+      salesStartTime: `${showTicketForm.getValues('startDate')}T00:00:00.000Z`,
+      salesEndTime: `${showTicketForm.getValues('endDate')}T23:59:59.000Z`,
+      ticketNotice: `${showTicketForm.getValues('ticketNotice')}`,
+      salesTickets: generalTicketList.map((ticket) => ({
+        ticketName: ticket.name,
+        price: ticket.price,
+        totalForSale: ticket.quantity,
+      })),
+      invitationTickets: invitationTicketList.map((ticket) => ({
+        ticketName: ticket.name,
+        totalForSale: ticket.quantity,
+      })),
+    });
+
+    navigate(PATH.SHOW_ADD_COMPLETE);
   };
 
   const onSubmitGeneralTicketForm: SubmitHandler<GeneralTicketFormInputs> = (data) => {
@@ -126,7 +141,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.BackButton
             type="button"
             onClick={() => {
-              navigate(-1);
+              navigate(PATH.HOME);
             }}
           >
             <ArrowLeftIcon />

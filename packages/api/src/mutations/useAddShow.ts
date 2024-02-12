@@ -21,10 +21,24 @@ interface PostAddShowRequest {
     name: string;
     phoneNumber: string;
   };
+  salesStartTime: string;
+  salesEndTime: string;
+  ticketNotice: string;
+  salesTickets: {
+    ticketName: string;
+    price: number;
+    totalForSale: number;
+  }[];
+  invitationTickets: {
+    ticketName: string;
+    totalForSale: number;
+  }[];
 }
 
+type PostAddShowResponse = number;
+
 const postAddShow = (body: PostAddShowRequest) =>
-  fetcher.post('web/v1/host/shows', {
+  fetcher.post<PostAddShowResponse>('web/v1/host/shows', {
     json: body,
   });
 

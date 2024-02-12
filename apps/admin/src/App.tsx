@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/Login/LoginPage';
 import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
+import ShowAddCompletePage from './pages/ShowAddCompletePage/ShowAddCompletePage';
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
 import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
@@ -86,6 +87,10 @@ const privateRoutes = [
       { path: PATH.SHOW_TICKET, element: null },
       { path: PATH.SHOW_RESERVATION, element: null },
       { path: PATH.SHOW_ENTRY, element: null },
+      {
+        path: PATH.SHOW_ADD_COMPLETE,
+        element: <ShowAddCompletePage />,
+      },
     ],
   },
 ];
