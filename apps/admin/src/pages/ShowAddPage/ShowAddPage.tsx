@@ -1,8 +1,9 @@
+import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
 import { ArrowLeftIcon, CloseIcon, FileUpIcon, PlusIcon } from '@boolti/icon';
 import { Badge, Button, TextField, useDialog } from '@boolti/ui';
 import { format } from 'date-fns/format';
 import { sub } from 'date-fns/sub';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -19,15 +20,11 @@ import Styled from './ShowAddPage.styles';
 
 const MAX_IMAGE_COUNT = 3;
 
-interface ImageFile extends File {
-  preview: string;
-}
-
 interface ShowInfoFormInputs {
   name: string;
   date: string;
   startTime: string;
-  runningTime: number;
+  runningTime: string;
   placeName: string;
   placeStreetAddress: string;
   placeDetailAddress: string;
@@ -61,6 +58,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const generalTicketDialog = useDialog();
   const invitationTicketDialog = useDialog();
 
+  const uploadShowImageMutation = useUploadShowImage();
+  const addShowMutation = useAddShow();
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setImageFiles((prevImageFiles) => [
       ...prevImageFiles,
@@ -79,13 +79,49 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     onDrop,
   });
 
-  const onSubmitInfoForm: SubmitHandler<ShowInfoFormInputs> = (data) => {
-    console.log(data);
+  const onSubmitInfoForm: SubmitHandler<ShowInfoFormInputs> = () => {
     navigate(PATH.SHOW_ADD_TICKET);
   };
 
-  const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = (data) => {
-    console.log(data);
+  const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = async () => {
+    // 공연 이미지 업로드
+    const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
+
+    // 공연 생성
+    await addShowMutation.mutateAsync({
+      name: showInfoForm.getValues('name'),
+      images: showImageInfo.map((info) => ({
+        sequence: info.sequence,
+        thumbnailPath: info.thumbnailUrl,
+        path: info.imageUrl,
+      })),
+      date: `${showInfoForm.getValues('date')}T${showInfoForm.getValues('startTime')}:00.000Z`,
+      runningTime: Number(showInfoForm.getValues('runningTime')),
+      place: {
+        name: showInfoForm.getValues('placeName'),
+        streetAddress: showInfoForm.getValues('placeStreetAddress'),
+        detailAddress: showInfoForm.getValues('placeDetailAddress'),
+      },
+      notice: showInfoForm.getValues('notice'),
+      host: {
+        name: showInfoForm.getValues('hostName'),
+        phoneNumber: showInfoForm.getValues('hostPhoneNumber'),
+      },
+      salesStartTime: `${showTicketForm.getValues('startDate')}T00:00:00.000Z`,
+      salesEndTime: `${showTicketForm.getValues('endDate')}T23:59:59.000Z`,
+      ticketNotice: `${showTicketForm.getValues('ticketNotice')}`,
+      salesTickets: generalTicketList.map((ticket) => ({
+        ticketName: ticket.name,
+        price: ticket.price,
+        totalForSale: ticket.quantity,
+      })),
+      invitationTickets: invitationTicketList.map((ticket) => ({
+        ticketName: ticket.name,
+        totalForSale: ticket.quantity,
+      })),
+    });
+
+    navigate(PATH.SHOW_ADD_COMPLETE);
   };
 
   const onSubmitGeneralTicketForm: SubmitHandler<GeneralTicketFormInputs> = (data) => {
@@ -98,10 +134,6 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     invitationTicketDialog.close();
   };
 
-  useEffect(() => {
-    return () => imageFiles.forEach((file) => URL.revokeObjectURL(file.preview));
-  }, [imageFiles]);
-
   return (
     <Styled.ShowAddPage>
       <Styled.HeaderContainer>
@@ -109,7 +141,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.BackButton
             type="button"
             onClick={() => {
-              navigate(-1);
+              navigate(PATH.HOME);
             }}
           >
             <ArrowLeftIcon />

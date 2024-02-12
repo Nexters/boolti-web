@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE, useLogout } from '@boolti/api';
+import { useLogout } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -57,8 +57,6 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
               right={
                 <TextButton
                   onClick={async () => {
-                    window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
-                    window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
                     await logoutMutation.mutateAsync();
 
                     navigate(PATH.LOGIN);
