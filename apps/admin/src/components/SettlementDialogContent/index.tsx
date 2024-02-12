@@ -1,4 +1,4 @@
-import { usePutUserSettlementAccountInfo } from '@boolti/api';
+import { queryKey, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
 import { Button, TextField, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -27,6 +27,7 @@ interface SettlementDialogFormInputs {
 
 const SettlementDialogContent = ({ onClose }: Props) => {
   const toast = useToast();
+  const queryClient = useQueryClient();
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const { setValue, register, handleSubmit, watch } = useForm<SettlementDialogFormInputs>();
   const currentBankCode = watch('bankCode');
@@ -40,8 +41,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
 
   const onSubmit: SubmitHandler<SettlementDialogFormInputs> = (data) => {
     mutate(data, {
-      onSuccess: () => {
+      onSuccess: async () => {
         toast.success('정산 계좌를 저장했습니다.');
+        await queryClient.invalidateQueries({ queryKey: queryKey.userAccountInfo.queryKey });
         onClose?.();
       },
     });
