@@ -1,7 +1,7 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
 
 import { fetcher } from './fetcher';
-import { ShowResponse } from './types/show';
+import { ShowResponse, ShowSummaryResponse } from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export interface Hello {
@@ -13,6 +13,10 @@ export const showQueryKeys = createQueryKeys('show', {
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowResponse>(`web/v1/host/shows/${showId}`),
   }),
+  list: {
+    queryKey: null,
+    queryFn: () => fetcher.get<ShowSummaryResponse>(`web/v1/host/shows`),
+  },
 });
 
 export const userQueryKeys = createQueryKeys('user', {

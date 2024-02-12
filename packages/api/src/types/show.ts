@@ -26,3 +26,28 @@ export interface ShowResponse {
   host: ShowHost;
   isEnded: boolean;
 }
+
+export type ShowSummaryResponse = Array<{
+  /** 공연 ID */
+  id: number;
+  /** 공연 이름 */
+  title: string;
+  /** 공연 포스터 이미지 경로(썸네일) */
+  thumbnailPath: string;
+  /** 공연 대표 호스트 ID */
+  hostUserId: number;
+  /** 공연 대표 호스트 이름 */
+  hostName: string;
+  /** 공연 판매 시작 날짜, 시간.ISO8601 */
+  salesStartTime: string;
+  /**공연 판매 종료 날짜, 시간.ISO8601 */
+  salesEndTime: string;
+  /** 공연 시작 날짜, 시간.ISO8601 */
+  date: string;
+  /** 러닝 타임.분 */
+  runningTime: number;
+  /** 공연 생성 시간.ISO8601. */
+  createdAt: string;
+  /** 공연 수정 시간.ISO8601 */
+  modifiedAt: string;
+}>;
