@@ -46,6 +46,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
         await queryClient.invalidateQueries({ queryKey: queryKey.userAccountInfo.queryKey });
         onClose?.();
       },
+      onError: () => {
+        toast.error('잠시후에 다시 시도하세요.');
+      },
     });
   };
 
