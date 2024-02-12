@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 
 export interface DatePickerProps {
-  fromInputProps?: Omit<React.ComponentProps<'input'>, 'type'>;
-  toInputProps?: Omit<React.ComponentProps<'input'>, 'type'>;
+  fromInputProps?: Omit<React.ComponentProps<'input'>, 'type' | 'ref'>;
+  toInputProps?: Omit<React.ComponentProps<'input'>, 'type' | 'ref'>;
   size: 'small' | 'big';
 }
 

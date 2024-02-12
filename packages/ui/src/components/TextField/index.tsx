@@ -7,9 +7,9 @@ import Styled, { TextFieldProps } from './TextField.styles';
 
 type Props = Omit<React.ComponentProps<'input'>, 'size' | 'type'> & TextFieldProps;
 
-const TextField = forwardRef(function TextField(
+const TextField = forwardRef<HTMLInputElement, Props>(function TextField(
   { disabled, size, inputType, buttonProps, placeholder, id, errorMessage, ...rest }: Props,
-  ref?: React.Ref<HTMLInputElement>,
+  ref,
 ) {
   const uuid = useRef<string>(id ?? nanoid(6));
 
