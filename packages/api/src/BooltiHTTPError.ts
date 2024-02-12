@@ -31,4 +31,8 @@ class BooltiHTTPError extends HTTPError {
   }
 }
 
+export function isBooltiHTTPError(error: Error): error is BooltiHTTPError {
+  return error.name === 'BooltiHTTPError';
+}
+
 export default BooltiHTTPError;

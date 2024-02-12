@@ -10,6 +10,7 @@ export function QueryClientProvider({ children }: React.PropsWithChildren) {
       new QueryClient({
         defaultOptions: {
           queries: {
+            refetchOnWindowFocus: false,
             retry: false,
             useErrorBoundary: (error) => {
               // 인증 관련 에러일 때만 ErrorBoundary를 사용한다.
