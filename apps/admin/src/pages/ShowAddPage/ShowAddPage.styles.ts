@@ -149,6 +149,23 @@ const ShowAddForm = styled.form`
   gap: 68px;
 `;
 
+const ShowInfoFormContent = styled.div``;
+
+const ShowInfoFormDivider = styled.hr`
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  margin: 52px 0;
+`;
+
+const ShowInfoFormFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 52px;
+
+  button:first-of-type {
+    width: 128px;
+  }
+`;
+
 const ShowAddFormGroup = styled.div``;
 
 const ShowAddFormTitle = styled.h3`
@@ -449,6 +466,9 @@ export default {
   ProcessIndicatorText,
   CardDescription,
   ShowAddForm,
+  ShowInfoFormContent,
+  ShowInfoFormDivider,
+  ShowInfoFormFooter,
   ShowAddFormGroup,
   ShowAddFormTitle,
   ShowAddFormRow,
