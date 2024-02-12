@@ -17,6 +17,10 @@ interface FileUploadAreaProps {
   imageCount: number;
 }
 
+interface TicketGroupTitleProps {
+  required?: boolean;
+}
+
 const ShowInfoFormGroup = styled.div``;
 
 const ShowInfoFormTitle = styled.h3`
@@ -203,6 +207,97 @@ const TextArea = styled.textarea`
   }
 `;
 
+const TicketGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+`;
+
+const TicketGroupHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TicketGroupInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
+  display: flex;
+  ${({ theme }) => theme.typo.h1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+
+  &::after {
+    content: '*';
+    ${({ theme }) => theme.typo.b1};
+    color: ${({ theme }) => theme.palette.status.error};
+    display: ${({ required }) => (required ? 'inline' : 'none')};
+    margin-left: 2px;
+  }
+`;
+
+const TicketGroupDescription = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+
+  strong {
+    font-weight: 600;
+  }
+`;
+
+const TicketList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const Ticket = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
+  border-radius: 8px;
+  box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+`;
+
+const TicketInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const TicketTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const TicketTitleText = styled.h4`
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const TicketDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+`;
+
+const TicketAction = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TicketAddButtonContainer = styled.div`
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+`;
+
 export default {
   ShowInfoFormGroup,
   ShowInfoFormTitle,
@@ -221,4 +316,17 @@ export default {
   TextFieldSuffix,
   TextFieldRow,
   TextArea,
+  TicketGroup,
+  TicketGroupHeader,
+  TicketGroupInfo,
+  TicketGroupTitle,
+  TicketGroupDescription,
+  TicketList,
+  Ticket,
+  TicketInfo,
+  TicketTitle,
+  TicketTitleText,
+  TicketDescription,
+  TicketAction,
+  TicketAddButtonContainer,
 };

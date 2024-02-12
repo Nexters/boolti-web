@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const ShowInfoPage = styled.div`
   padding: 0 20px;
-  margin: 41px 0 68px;
+  margin: 40px 0 68px;
 `;
 
 const ShowInfoForm = styled.form``;

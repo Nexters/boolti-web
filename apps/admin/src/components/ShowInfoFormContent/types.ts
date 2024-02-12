@@ -10,3 +10,9 @@ export interface ShowInfoFormInputs {
   hostName: string;
   hostPhoneNumber: string;
 }
+
+export interface ShowTicketFormInputs {
+  startDate: string;
+  endDate: string;
+  ticketNotice: string;
+}
