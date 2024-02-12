@@ -10,7 +10,7 @@ import { CB } from './CB';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
 import { ChinaCB } from './ChinaCB';
-import { City } from './City';
+import { Citi } from './Citi';
 import { Clock } from './Clock';
 import { Close } from './Close';
 import { CU } from './CU';
@@ -46,6 +46,7 @@ import { Shinhan } from './Shinhan';
 import { Ticket } from './Ticket';
 import { Toss } from './Toss';
 import { UpDown } from './UpDown';
+import { UserProfile } from './UserProfile';
 import { Users } from './Users';
 import { Wallet } from './Wallet';
 import { Woori } from './Woori';
@@ -63,7 +64,7 @@ export {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   ChinaCB,
-  City,
+  Citi,
   Clock as ClockIcon,
   Close as CloseIcon,
   CU,
@@ -99,6 +100,7 @@ export {
   Ticket as TicketIcon,
   Toss,
   UpDown as UpDownIcon,
+  UserProfile,
   Users as UsersIcon,
   Wallet as WalletIcon,
   Woori,

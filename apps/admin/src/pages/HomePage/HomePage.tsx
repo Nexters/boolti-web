@@ -1,4 +1,4 @@
-import { useLogout } from '@boolti/api';
+import { useLogout, useUserAccountInfo, useUserSummary } from '@boolti/api';
 import { BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
@@ -14,8 +14,14 @@ import Styled from './HomePage.styles';
 
 const HomePage = () => {
   const navigate = useNavigate();
-
   const logout = useLogout();
+
+  const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();
+  const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
+  const { imagePath, email, nickname = '' } = userSummaryData ?? {};
+  const { bankAccount } = userAccountInfoData ?? {};
+  const { bankName, bankAccountNumber, bankAccountHolder } = bankAccount ?? {};
+  const isLoading = isUserAccountInfoLoading || isUserSummaryLoading;
 
   return (
     <Layout
@@ -41,31 +47,35 @@ const HomePage = () => {
       }
     >
       <Styled.Container>
-        <UserProfile
-          profileImage="https://picsum.photos/200"
-          username="%사용자명%"
-          email="Boolti@boolti.io"
-        />
-        <Styled.Seperator size={40} />
-        <AccountInfo accountHolder="김불티" accountNumber="000000000000" orgName="토스뱅크" />
-        <Styled.Seperator size={80} />
-        <ShowList
-          shows={[
-            {
-              thumbnailPath: 'https://picsum.photos/200',
-              title: 'Show Title',
-              date: '2024-01-20',
-              host: '%사용자명%',
-            },
-            {
-              thumbnailPath: 'https://picsum.photos/200',
-              title: 'Show Title2',
-              date: '2024-01-21',
-              host: '%사용자명%',
-            },
-          ]}
-        />
-        <Styled.Seperator size={80} />
+        {!isLoading && (
+          <>
+            <UserProfile profileImage={imagePath} username={nickname} email={email} />
+            <Styled.Seperator size={40} />
+            <AccountInfo
+              bankAccountHolder={bankAccountHolder}
+              bankAccountNumber={bankAccountNumber}
+              bankName={bankName}
+            />
+            <Styled.Seperator size={80} />
+            <ShowList
+              shows={[
+                {
+                  thumbnailPath: 'https://picsum.photos/200',
+                  title: 'Show Title',
+                  date: '2024-01-20',
+                  host: '%사용자명%',
+                },
+                {
+                  thumbnailPath: 'https://picsum.photos/200',
+                  title: 'Show Title2',
+                  date: '2024-01-21',
+                  host: '%사용자명%',
+                },
+              ]}
+            />
+            <Styled.Seperator size={80} />
+          </>
+        )}
       </Styled.Container>
       <Footer />
     </Layout>

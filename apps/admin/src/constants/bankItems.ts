@@ -4,7 +4,7 @@ import {
   BoA,
   CB,
   ChinaCB,
-  City,
+  Citi,
   CU,
   Deutsche,
   DGB,
@@ -35,133 +35,166 @@ export const bankItems = [
   {
     name: 'NH농협',
     icon: NH,
+    code: '011',
   },
   {
     name: '카카오뱅크',
     icon: KakaoBank,
+    code: '090',
   },
   {
     name: 'KB국민',
     icon: KB,
+    code: '004',
   },
   {
     name: '신한',
     icon: Shinhan,
+    code: '088',
   },
   {
     name: '토스뱅크',
     icon: Toss,
+    code: '092',
   },
   {
     name: '우리',
     icon: Woori,
+    code: '020',
   },
   {
     name: 'IBK기업',
     icon: IBK,
+    code: '003',
   },
   {
     name: '하나',
     icon: Hana,
+    code: '080',
   },
   {
     name: '새마을',
     icon: MG,
+    code: '045',
   },
   {
     name: '부산',
     icon: BNK,
+    code: '032',
   },
   {
     name: '대구',
     icon: DGB,
+    code: '031',
   },
   {
     name: '케이뱅크',
     icon: K,
+    code: '089',
   },
   {
     name: '신협',
     icon: CU,
+    code: '048',
   },
   {
     name: '우체국',
     icon: EPost,
+    code: '071',
   },
   {
     name: 'SC제일',
     icon: SC,
+    code: '023',
   },
   {
     name: '경남',
     icon: BNK,
+    code: '039',
   },
   {
     name: '광주',
     icon: Kwangju,
+    code: '034',
   },
   {
     name: '수협',
     icon: NFF,
+    code: '007',
   },
   {
     name: '전북',
     icon: Kwangju,
+    code: '037',
   },
   {
     name: '저축은행',
     icon: SB,
+    code: '050',
   },
   {
     name: '제주',
     icon: Shinhan,
+    code: '035',
   },
   {
     name: '씨티',
-    icon: City,
+    icon: Citi,
+    code: '027',
   },
   {
     name: 'KDB산업',
     icon: KDB,
+    code: '002',
   },
   {
     name: '산림조합',
     icon: NFCF,
+    code: '064',
   },
   {
     name: 'SBI저축은행',
     icon: SBI,
+    code: '0103',
   },
   {
     name: 'BOA',
     icon: BoA,
+    code: '060',
   },
   {
     name: '중국',
     icon: CB,
+    code: '063',
   },
   {
     name: 'HSBC',
     icon: HSBC,
+    code: '054',
   },
   {
     name: '중국공상',
     icon: ICBC,
+    code: '062',
   },
   {
     name: '도이치',
     icon: Deutsche,
+    code: '055',
   },
   {
     name: 'JP모건',
     icon: JPMorgan,
+    code: '057',
   },
   {
     name: 'BNP파라바',
     icon: BNP,
+    code: '061',
   },
   {
     name: '중국건설',
     icon: ChinaCB,
+    code: '067',
   },
 ];

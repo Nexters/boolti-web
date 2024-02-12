@@ -1,3 +1,4 @@
+import { UserProfile as DefaultUserProfileIcon } from '@boolti/icon';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -7,7 +8,10 @@ const Container = styled.div`
 
 const ProfileImage = styled.img`
   border-radius: 100%;
-  background-color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const DefaultProfileImage = styled(DefaultUserProfileIcon)`
+  border-radius: 100%;
 `;
 
 const TextContainer = styled.div`
@@ -31,4 +35,5 @@ export default {
   TextContainer,
   Username,
   Email,
+  DefaultProfileImage,
 };
