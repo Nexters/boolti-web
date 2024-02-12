@@ -20,7 +20,7 @@ const ContentContainer = styled.div`
 `;
 
 const Content = styled.div`
-  width: ${({ theme }) => theme.breakpoint.desktop};
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
   margin: 0 auto;
 `;
 
