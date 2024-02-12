@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from '@boolti/icon';
 import { Badge } from '@boolti/ui';
-import { format } from 'date-fns/format';
+import { differenceInDays, format, isAfter, isBefore, isToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 import Styled from './ShowListItem.styles';
@@ -10,10 +10,45 @@ interface Props {
   title: string;
   date: string;
   hostName: string;
-  runningTime: number;
   thumbnailPath: string;
   salesStartTime: string;
   salesEndTime: string;
+}
+
+function getBadgeProps(
+  date: string,
+  salesStartTime: string,
+  salesEndTime: string,
+): React.ComponentProps<typeof Badge> {
+  const today = new Date();
+  if (isToday(date)) {
+    return {
+      children: '공연 당일',
+      colorTheme: 'red',
+    };
+  }
+  if (isBefore(date, today)) {
+    return {
+      children: '공연 종료',
+      colorTheme: 'grey',
+    };
+  }
+  if (isBefore(salesStartTime, today)) {
+    return {
+      children: `티켓 판매 오픈 D-${differenceInDays(today, salesStartTime)}`,
+      colorTheme: 'purple',
+    };
+  }
+  if (isAfter(salesStartTime, today) && isBefore(salesEndTime, today)) {
+    return {
+      children: '티켓 판매 중',
+      colorTheme: 'blue',
+    };
+  }
+  return {
+    children: '티켓 판매 종료',
+    colorTheme: 'green',
+  };
 }
 
 const ShowListItem = ({
@@ -35,7 +70,7 @@ const ShowListItem = ({
           <Styled.TextContainer>
             <Styled.TitleContainer>
               <Styled.Title>{title}</Styled.Title>
-              <Badge colorTheme="red">공연 당일</Badge>
+              <Badge {...getBadgeProps(date, salesStartTime, salesEndTime)} />
             </Styled.TitleContainer>
             <Styled.InfoContainer>
               <Styled.InfoColumn>
