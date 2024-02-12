@@ -4852,6 +4852,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"
     react-hook-form: "npm:^7.50.0"
+    react-intersection-observer: "npm:^9.8.0"
     react-router-dom: "npm:^6.21.3"
     the-new-css-reset: "npm:^1.11.2"
     typescript: "npm:^5.2.2"
@@ -9986,6 +9987,19 @@ __metadata:
     react: ">=16"
     react-dom: ">=16"
   checksum: 591ecec3c6adc1cdb70f00165a57baa3d7f75d0d30fa767213c36496bdcc6be2b2e6a3edbf7c04f7d726a1b17dcfb5e7feb2136b04b17c9ccb769894b970f365
+  languageName: node
+  linkType: hard
+
+"react-intersection-observer@npm:^9.8.0":
+  version: 9.8.0
+  resolution: "react-intersection-observer@npm:9.8.0"
+  peerDependencies:
+    react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: e108a861ca3415fb80b97f4791bff52eb7ae26d36f09b474fc02637f9937c6c17e2b12078e38c8a06b423c46a1b737bcfee68e873a2ccf9f5a1dc50884e0d8d0
   languageName: node
   linkType: hard
 

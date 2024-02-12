@@ -15,7 +15,9 @@ const Header = styled.header`
   padding: 0 20px;
 `;
 
-const ContentContainer = styled.div``;
+const ContentContainer = styled.div`
+  position: relative;
+`;
 
 const Content = styled.div`
   width: ${({ theme }) => theme.breakpoint.desktop};

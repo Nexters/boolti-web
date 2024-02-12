@@ -1,4 +1,4 @@
-import ShowDetailLayout from '~/components/ShowDetailLayout/ShowDetailLayout';
+import ShowDetailLayout from '~/components/ShowDetailLayout';
 
 import Styled from './ShowInfoPage.styles';
 
