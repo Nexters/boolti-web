@@ -8,6 +8,6 @@ export { BooltiHTTPError };
 export * from './constants';
 export * from './mutations';
 export * from './queries';
-export { queryKey } from './queryKey';
+export { queryKeys } from './queryKey';
 
 export { useQueryClient };

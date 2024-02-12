@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { queryKey } from '../queryKey';
+import { queryKeys } from '../queryKey';
 
-const useUserSummary = () => useQuery(queryKey.userSummary);
+const useUserSummary = () => useQuery(queryKeys.user.summary);
 
 export default useUserSummary;
