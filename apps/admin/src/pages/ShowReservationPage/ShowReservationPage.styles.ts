@@ -5,6 +5,51 @@ const Container = styled.div`
   margin: 40px 0 68px;
 `;
 
+const TicketSummaryContainer = styled.div`
+  display: flex;
+`;
+
+const TicketSummary = styled.div<{ color: 'grey' | 'red' }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 260px;
+  padding: 16px 20px;
+  border-radius: 8px;
+  ${({ color, theme }) => {
+    switch (color) {
+      case 'grey':
+        return `
+          background-color: ${theme.palette.grey.g00};
+          color: ${theme.palette.grey.g60};
+          & > b {
+            color: ${theme.palette.grey.g90};
+          }
+        `;
+      case 'red':
+        return `
+          background-color: ${theme.palette.primary.o0};
+          color: ${theme.palette.primary.o2};
+        `;
+    }
+  }}
+  &:not(:last-child) {
+    margin-right: 12px;
+  }
+`;
+
+const TicketSumamryLabel = styled.span`
+  ${({ theme }) => theme.typo.b2};
+`;
+
+const TicketSumamryValue = styled.b`
+  ${({ theme }) => theme.typo.sh2};
+`;
+
 export default {
   Container,
+  TicketSummaryContainer,
+  TicketSummary,
+  TicketSumamryLabel,
+  TicketSumamryValue,
 };

@@ -30,14 +30,18 @@ export const showQueryKeys = createQueryKeys('show', {
   }),
   reservation: (
     showId: number,
-    page: number,
     reservationNameOrPhoneNumber: string | undefined = undefined,
     ticketType: TicketType | undefined = undefined,
     ticketStatus: ReservationStatus | undefined = undefined,
   ) => ({
-    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, ticketStatus],
-    queryFn: () =>
-      fetcher.get<PageReservationResponse>(`/web/v1/host/shows/${showId}/reservations`),
+    queryKey: [showId, reservationNameOrPhoneNumber, ticketType, ticketStatus],
+    queryFn: ({ pageParam = 0 }) => {
+      return fetcher.get<PageReservationResponse>(`web/v1/host/shows/${showId}/reservations`, {
+        searchParams: {
+          page: pageParam,
+        },
+      });
+    },
   }),
 });
 
