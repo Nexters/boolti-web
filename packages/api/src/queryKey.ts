@@ -1,7 +1,7 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 
 import { fetcher } from './fetcher';
-import { ShowResponse } from './types/show';
+import { ShowResponse, ShowSalesInfoResponse } from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export interface Hello {
@@ -12,6 +12,10 @@ export const queryKey = createQueryKeys('boolti', {
   showDetail: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowResponse>(`web/v1/host/shows/${showId}`),
+  }),
+  showSalesInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<ShowSalesInfoResponse>(`web/v1/host/shows/${showId}/sales-infos`),
   }),
   userAccountInfo: {
     queryKey: null,

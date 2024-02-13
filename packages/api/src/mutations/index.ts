@@ -1,7 +1,9 @@
 import useAddShow from './useAddShow';
 import useCreateInvitationTickets from './useCreateInvitationTickets';
 import useCreateSalesTickets from './useCreateSalesTickets';
+import useDeleteShow from './useDeleteShow';
 import useEditSalesTicketInfo from './useEditSalesTicketInfo';
+import useEditShowInfo from './useEditShowInfo';
 import useKakaoLogin from './useKakaoLogin';
 import useKakaoToken from './useKakaoToken';
 import useKakaoUserInfo from './useKakaoUserInfo';
@@ -14,7 +16,9 @@ export {
   useAddShow,
   useCreateInvitationTickets,
   useCreateSalesTickets,
+  useDeleteShow,
   useEditSalesTicketInfo,
+  useEditShowInfo,
   useKakaoLogin,
   useKakaoToken,
   useKakaoUserInfo,

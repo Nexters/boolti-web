@@ -9,8 +9,9 @@ import ImageResize from 'image-resize';
 import ky from 'ky';
 
 import { fetcher } from '../fetcher';
+import { ShowImage } from '../types';
 
-export interface ImageFile extends File {
+export interface ImageFile extends Partial<File> {
   preview: string;
 }
 
@@ -52,7 +53,7 @@ const putS3Upload = (uploadUrl: string, file: File) =>
   });
 
 const useUploadShowImage = () =>
-  useMutation(async (files: ImageFile[]) => {
+  useMutation<ShowImage[], unknown, ImageFile[], unknown>(async (files: ImageFile[]) => {
     const resizedImages = await Promise.all(
       files.map(async (file) => {
         const imageFile = await imageResize.play(file.preview);
@@ -64,7 +65,7 @@ const useUploadShowImage = () =>
 
     return await Promise.all(
       resizedImages.map(async (image, index) => {
-        const [imageUrl, thumbnailUrl] = await Promise.all(
+        const [path, thumbnailPath] = await Promise.all(
           Object.entries(image).map(async ([type, dataUrl]) => {
             const fileName = type === 'imageFile' ? 'image.png' : 'thumbnail.png';
 
@@ -76,7 +77,7 @@ const useUploadShowImage = () =>
           }),
         );
 
-        return { sequence: index + 1, imageUrl, thumbnailUrl };
+        return { sequence: index + 1, path, thumbnailPath };
       }),
     );
   });

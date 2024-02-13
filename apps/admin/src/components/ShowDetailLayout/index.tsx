@@ -14,14 +14,16 @@ import Styled from './ShowDetailLayout.styles.ts';
 interface ShowDetailLayoutProps {
   showName: string;
   children?: React.ReactNode;
+  onClickMiddleware?: () => Promise<boolean>;
 }
 
-const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
+const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailLayoutProps) => {
   const { ref: topObserverRef, inView: topInView } = useInView({
     threshold: 1,
   });
   const { ref: headerObserverRef, inView: headerInView } = useInView({
-    threshold: 0.01,
+    threshold: 1,
+    initialInView: true,
   });
   const theme = useTheme();
 
@@ -45,7 +47,11 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
                 <Styled.HeaderLeft>
                   <Styled.BackButton
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
+
                       navigate(PATH.HOME);
                     }}
                   >
@@ -57,8 +63,11 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
               right={
                 <TextButton
                   onClick={async () => {
-                    await logoutMutation.mutateAsync();
+                    if (onClickMiddleware && !(await onClickMiddleware())) {
+                      return;
+                    }
 
+                    await logoutMutation.mutateAsync();
                     navigate(PATH.LOGIN);
                   }}
                 >
@@ -71,8 +80,12 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
               <Styled.Tab>
                 <Styled.TabItem
                   active={matchInfoTab !== null}
-                  onClick={() => {
+                  onClick={async () => {
                     if (!params.showId) return;
+
+                    if (onClickMiddleware && !(await onClickMiddleware())) {
+                      return;
+                    }
 
                     navigate(HREF.SHOW_INFO(params.showId));
                   }}
@@ -81,8 +94,12 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
                 </Styled.TabItem>
                 <Styled.TabItem
                   active={matchTicketTab !== null}
-                  onClick={() => {
+                  onClick={async () => {
                     if (!params.showId) return;
+
+                    if (onClickMiddleware && !(await onClickMiddleware())) {
+                      return;
+                    }
 
                     navigate(HREF.SHOW_TICKET(params.showId));
                   }}
@@ -91,8 +108,12 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
                 </Styled.TabItem>
                 <Styled.TabItem
                   active={matchReservationTab !== null}
-                  onClick={() => {
+                  onClick={async () => {
                     if (!params.showId) return;
+
+                    if (onClickMiddleware && !(await onClickMiddleware())) {
+                      return;
+                    }
 
                     navigate(HREF.SHOW_RESERVATION(params.showId));
                   }}
@@ -101,8 +122,12 @@ const ShowDetailLayout = ({ showName, children }: ShowDetailLayoutProps) => {
                 </Styled.TabItem>
                 <Styled.TabItem
                   active={matchEntryTab !== null}
-                  onClick={() => {
+                  onClick={async () => {
                     if (!params.showId) return;
+
+                    if (onClickMiddleware && !(await onClickMiddleware())) {
+                      return;
+                    }
 
                     navigate(HREF.SHOW_ENTRY(params.showId));
                   }}

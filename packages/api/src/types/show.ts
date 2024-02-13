@@ -26,3 +26,10 @@ export interface ShowResponse {
   host: ShowHost;
   isEnded: boolean;
 }
+
+export interface ShowSalesInfoResponse {
+  showId: number;
+  salesStartTime: string;
+  salesEndTime: string;
+  ticketNotice: string;
+}
