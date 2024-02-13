@@ -2874,7 +2874,6 @@ const RAW_RUNTIME_STATE =
           ["nanoid", "npm:5.0.4"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
-          ["react-helmet-async", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.0.4"],\
           ["react-hot-toast", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.4.1"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
         ],\
@@ -13801,44 +13800,6 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["react-fast-compare", [\
-      ["npm:3.2.2", {\
-        "packageLocation": "../../.yarn/berry/cache/react-fast-compare-npm-3.2.2-45b585a872-10c0.zip/node_modules/react-fast-compare/",\
-        "packageDependencies": [\
-          ["react-fast-compare", "npm:3.2.2"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["react-helmet-async", [\
-      ["npm:2.0.4", {\
-        "packageLocation": "../../.yarn/berry/cache/react-helmet-async-npm-2.0.4-cdcbc49056-10c0.zip/node_modules/react-helmet-async/",\
-        "packageDependencies": [\
-          ["react-helmet-async", "npm:2.0.4"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.0.4", {\
-        "packageLocation": "./.yarn/__virtual__/react-helmet-async-virtual-ff0e38d5ce/3/.yarn/berry/cache/react-helmet-async-npm-2.0.4-cdcbc49056-10c0.zip/node_modules/react-helmet-async/",\
-        "packageDependencies": [\
-          ["react-helmet-async", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.0.4"],\
-          ["@types/react", "npm:18.2.48"],\
-          ["@types/react-dom", "npm:18.2.18"],\
-          ["invariant", "npm:2.2.4"],\
-          ["react", "npm:18.2.0"],\
-          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
-          ["react-fast-compare", "npm:3.2.2"],\
-          ["shallowequal", "npm:1.1.0"]\
-        ],\
-        "packagePeers": [\
-          "@types/react-dom",\
-          "@types/react",\
-          "react-dom",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
     ["react-hook-form", [\
       ["npm:7.50.0", {\
         "packageLocation": "../../.yarn/berry/cache/react-hook-form-npm-7.50.0-8a1e1a392c-10c0.zip/node_modules/react-hook-form/",\
@@ -14610,15 +14571,6 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["shallow-clone", "npm:3.0.1"],\
           ["kind-of", "npm:6.0.3"]\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["shallowequal", [\
-      ["npm:1.1.0", {\
-        "packageLocation": "../../.yarn/berry/cache/shallowequal-npm-1.1.0-6688d419cb-10c0.zip/node_modules/shallowequal/",\
-        "packageDependencies": [\
-          ["shallowequal", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
