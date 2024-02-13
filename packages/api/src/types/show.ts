@@ -121,3 +121,10 @@ export interface PageReservationResponse {
   last: boolean;
   empty: boolean;
 }
+
+export interface ReservationSummaryResponse {
+  salesTicketSoldCount: number;
+  invitationTicketSoldCount: number;
+  totalSoldCount: number;
+  totalSalesAmount: number;
+}

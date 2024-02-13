@@ -4,6 +4,7 @@ import { fetcher } from './fetcher';
 import {
   PageReservationResponse,
   ReservationStatus,
+  ReservationSummaryResponse,
   ShowResponse,
   ShowSalesInfoResponse,
   ShowSummaryResponse,
@@ -27,6 +28,11 @@ export const showQueryKeys = createQueryKeys('show', {
   salesInfo: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowSalesInfoResponse>(`web/v1/host/shows/${showId}/sales-infos`),
+  }),
+  reservationSummary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ReservationSummaryResponse>(`web/v1/host/shows/${showId}/reservation-summaries`),
   }),
   reservation: (
     showId: number,
