@@ -17,11 +17,11 @@ function Meta({ children }: React.PropsWithChildren) {
           name="og:description"
           content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요🤟"
         />
-        <meta property="og:url" content="http://boolti.in/" />
+        <meta property="og:url" content="https://boolti.in/" />
         <meta property="og:image" content="/thumbnail.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />
-        <link rel="canonical" href="http://boolti.in/" />
+        <link rel="canonical" href="https://boolti.in/" />
       </Helmet>
       {children}
     </HelmetProvider>
