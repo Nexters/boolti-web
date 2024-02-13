@@ -1,26 +1,30 @@
 import {
   ImageFile,
   ShowImage,
+  useDeleteShow,
   useEditShowInfo,
   useShowDetail,
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, useConfirm, useToast } from '@boolti/ui';
+import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import ShowDeleteForm from '~/components/ShowDeleteForm';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import { PATH } from '~/constants/routes';
 
 import Styled from './ShowInfoPage.styles';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
+  const navigate = useNavigate();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
@@ -32,9 +36,11 @@ const ShowInfoPage = () => {
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
+  const deleteShowMutation = useDeleteShow();
 
   const toast = useToast();
   const confirm = useConfirm();
+  const deleteShowDialog = useDialog();
 
   const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
     if (!show) return;
@@ -166,7 +172,29 @@ const ShowInfoPage = () => {
             >
               저장하기
             </Button>
-            <Button size="bold" colorTheme="line" type="button" disabled={salesStarted}>
+            <Button
+              size="bold"
+              colorTheme="line"
+              type="button"
+              disabled={salesStarted}
+              onClick={() => {
+                deleteShowDialog.open({
+                  title: '공연 삭제하기',
+                  content: (
+                    <ShowDeleteForm
+                      showName={show.name}
+                      onSubmit={async () => {
+                        await deleteShowMutation.mutateAsync(show.id);
+
+                        deleteShowDialog.close();
+                        navigate(PATH.HOME);
+                        toast.success('공연을 삭제했습니다.');
+                      }}
+                    />
+                  ),
+                });
+              }}
+            >
               공연 삭제하기
             </Button>
           </Styled.ShowInfoFormFooter>
