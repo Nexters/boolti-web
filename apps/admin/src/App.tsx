@@ -2,7 +2,7 @@ import 'the-new-css-reset/css/reset.css';
 import './index.css';
 
 import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
-import { BooltiUIProvider, Meta } from '@boolti/ui';
+import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
@@ -31,11 +31,7 @@ const PublicRoute = () => {
 
 const publicRoutes = [
   {
-    element: (
-      <Meta>
-        <PublicRoute />
-      </Meta>
-    ),
+    element: <PublicRoute />,
     children: [
       {
         path: PATH.INDEX,
@@ -77,9 +73,7 @@ const privateRoutes = [
   {
     element: (
       <AuthErrorBoundary>
-        <Meta>
-          <PrivateRoute />
-        </Meta>
+        <PrivateRoute />
       </AuthErrorBoundary>
     ),
     children: [

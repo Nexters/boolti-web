@@ -5,7 +5,6 @@ import Confirm from './Confirm';
 import DatePicker from './DatePicker';
 import Dialog from './Dialog';
 import Footer from './Footer';
-import Meta from './Meta';
 import TextButton from './TextButton';
 import TextField from './TextField';
 
@@ -17,7 +16,6 @@ export {
   DatePicker,
   Dialog,
   Footer,
-  Meta,
   TextButton,
   TextField,
 };
