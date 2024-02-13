@@ -22,7 +22,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     threshold: 1,
   });
   const { ref: headerObserverRef, inView: headerInView } = useInView({
-    threshold: 0.01,
+    threshold: 1,
+    initialInView: true,
   });
   const theme = useTheme();
 
