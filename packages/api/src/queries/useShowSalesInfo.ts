@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { queryKey } from '../queryKey';
+import { queryKeys } from '../queryKey';
 
-const useShowSalesInfo = (showId: number) => useQuery(queryKey.showSalesInfo(showId));
+const useShowSalesInfo = (showId: number) => useQuery(queryKeys.show.salesInfo(showId));
 
 export default useShowSalesInfo;
