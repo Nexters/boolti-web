@@ -6,9 +6,10 @@ import { ShowInfoFormInputs } from './types';
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs>;
+  disabled?: boolean;
 }
 
-const ShowDetailInfoFormContent = ({ form }: ShowDetailInfoFormContentProps) => {
+const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
   const { register } = form;
 
   return (
@@ -23,7 +24,8 @@ const ShowDetailInfoFormContent = ({ form }: ShowDetailInfoFormContentProps) => 
           <Styled.TextArea
             placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
             rows={10}
-            {...register('notice', { required: true })}
+            disabled={disabled}
+            {...register('notice', { required: true, disabled })}
           />
         </Styled.ShowInfoFormContent>
       </Styled.ShowInfoFormRow>
@@ -36,7 +38,8 @@ const ShowDetailInfoFormContent = ({ form }: ShowDetailInfoFormContentProps) => 
               size="big"
               placeholder="대표자 이름을 입력해 주세요"
               required
-              {...register('hostName', { required: true })}
+              disabled={disabled}
+              {...register('hostName', { required: true, disabled })}
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
@@ -50,7 +53,8 @@ const ShowDetailInfoFormContent = ({ form }: ShowDetailInfoFormContentProps) => 
               size="big"
               placeholder="대표자 연락처를 입력해 주세요"
               required
-              {...register('hostPhoneNumber', { required: true })}
+              disabled={disabled}
+              {...register('hostPhoneNumber', { required: true, disabled })}
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>

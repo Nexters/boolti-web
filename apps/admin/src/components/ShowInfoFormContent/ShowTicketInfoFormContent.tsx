@@ -8,9 +8,14 @@ import { ShowTicketFormInputs } from './types';
 interface ShowTicketInfoFormContentProps {
   form: UseFormReturn<ShowTicketFormInputs>;
   showDate: string;
+  disabled?: boolean;
 }
 
-const ShowTicketInfoFormContent = ({ form, showDate }: ShowTicketInfoFormContentProps) => {
+const ShowTicketInfoFormContent = ({
+  form,
+  showDate,
+  disabled,
+}: ShowTicketInfoFormContentProps) => {
   const { register, watch, control } = form;
 
   return (
@@ -41,6 +46,7 @@ const ShowTicketInfoFormContent = ({ form, showDate }: ShowTicketInfoFormContent
                       )}
                       defaultValue={watch('startDate') || ''}
                       required
+                      disabled={disabled}
                     />
                   )}
                   name="startDate"
@@ -69,6 +75,7 @@ const ShowTicketInfoFormContent = ({ form, showDate }: ShowTicketInfoFormContent
                       )}
                       defaultValue={watch('endDate') || ''}
                       required
+                      disabled={disabled}
                     />
                   )}
                   name="endDate"
@@ -88,7 +95,8 @@ const ShowTicketInfoFormContent = ({ form, showDate }: ShowTicketInfoFormContent
             <Styled.TextArea
               placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
               rows={10}
-              {...register('ticketNotice')}
+              disabled={disabled}
+              {...register('ticketNotice', { disabled })}
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>

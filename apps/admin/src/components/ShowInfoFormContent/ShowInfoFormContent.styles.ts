@@ -205,6 +205,12 @@ const TextArea = styled.textarea`
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g30};
   }
+
+  &:disabled {
+    background: ${({ theme }) => theme.palette.grey.g10};
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+    color: ${({ theme }) => theme.palette.grey.g40};
+  }
 `;
 
 const TicketGroup = styled.div`

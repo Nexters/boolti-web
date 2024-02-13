@@ -12,6 +12,7 @@ const MAX_IMAGE_COUNT = 3;
 interface ShowBasicInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs>;
   imageFiles: ImageFile[];
+  disabled?: boolean;
   onDropImage: (acceptedFiles: File[]) => void;
   onDeleteImage: (file: ImageFile) => void;
 }
@@ -19,6 +20,7 @@ interface ShowBasicInfoFormContentProps {
 const ShowBasicInfoFormContent = ({
   form,
   imageFiles,
+  disabled,
   onDropImage,
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
@@ -48,12 +50,17 @@ const ShowBasicInfoFormContent = ({
                 key={file.preview}
                 style={{ backgroundImage: `url(${file.preview})` }}
               >
-                <Styled.PreviewImageDeleteButton type="button" onClick={() => onDeleteImage(file)}>
-                  <CloseIcon />
-                </Styled.PreviewImageDeleteButton>
+                {!disabled && (
+                  <Styled.PreviewImageDeleteButton
+                    type="button"
+                    onClick={() => onDeleteImage(file)}
+                  >
+                    <CloseIcon />
+                  </Styled.PreviewImageDeleteButton>
+                )}
               </Styled.PreviewImage>
             ))}
-            {imageFiles.length < MAX_IMAGE_COUNT && (
+            {imageFiles.length < MAX_IMAGE_COUNT && !disabled && (
               <Styled.FileUploadArea {...getRootProps()} imageCount={imageFiles.length}>
                 <input {...getInputProps()} />
                 <FileUpIcon />
@@ -72,7 +79,8 @@ const ShowBasicInfoFormContent = ({
               size="big"
               placeholder="공연명을 입력해 주세요 (띄어쓰기 포함 최대 40자)"
               required
-              {...register('name', { required: true })}
+              disabled={disabled}
+              {...register('name', { required: true, disabled })}
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
@@ -95,6 +103,7 @@ const ShowBasicInfoFormContent = ({
                   placeholder={value}
                   defaultValue={watch('date')}
                   required
+                  disabled={disabled}
                 />
               )}
               name="date"
@@ -110,7 +119,8 @@ const ShowBasicInfoFormContent = ({
               inputType="time"
               size="big"
               required
-              {...register('startTime', { required: true })}
+              disabled={disabled}
+              {...register('startTime', { required: true, disabled })}
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
@@ -122,7 +132,8 @@ const ShowBasicInfoFormContent = ({
               size="big"
               min={0}
               required
-              {...register('runningTime', { required: true })}
+              disabled={disabled}
+              {...register('runningTime', { required: true, disabled })}
             />
             <Styled.TextFieldSuffix>분</Styled.TextFieldSuffix>
           </Styled.TextField>
@@ -137,7 +148,8 @@ const ShowBasicInfoFormContent = ({
               size="big"
               placeholder="공연장명을 입력해 주세요"
               required
-              {...register('placeName', { required: true })}
+              disabled={disabled}
+              {...register('placeName', { required: true, disabled })}
             />
           </Styled.TextField>
           <Styled.TextFieldRow>
@@ -147,7 +159,8 @@ const ShowBasicInfoFormContent = ({
                 size="big"
                 placeholder="도로명 주소를 입력해 주세요"
                 required
-                {...register('placeStreetAddress', { required: true })}
+                disabled={disabled}
+                {...register('placeStreetAddress', { required: true, disabled })}
               />
             </Styled.TextField>
             <Styled.TextField flex={1}>
@@ -156,7 +169,8 @@ const ShowBasicInfoFormContent = ({
                 size="big"
                 placeholder="상세 주소를 입력해 주세요"
                 required
-                {...register('placeDetailAddress', { required: true })}
+                disabled={disabled}
+                {...register('placeDetailAddress', { required: true, disabled })}
               />
             </Styled.TextField>
           </Styled.TextFieldRow>

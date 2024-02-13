@@ -47,11 +47,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     // 공연 생성
     await addShowMutation.mutateAsync({
       name: showInfoForm.getValues('name'),
-      images: showImageInfo.map((info) => ({
-        sequence: info.sequence,
-        thumbnailPath: info.thumbnailUrl,
-        path: info.imageUrl,
-      })),
+      images: showImageInfo,
       date: `${showInfoForm.getValues('date')}T${showInfoForm.getValues('startTime')}:00.000Z`,
       runningTime: Number(showInfoForm.getValues('runningTime')),
       place: {
