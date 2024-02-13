@@ -33,7 +33,8 @@ const Poster = styled.div<{ thumbnailPath: string }>`
   height: 184px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-image: url(${({ thumbnailPath }) => thumbnailPath});
-  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   margin-right: 28px;
   border-radius: 6px;
 `;

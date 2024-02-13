@@ -39,7 +39,15 @@ const ShowList = ({ shows }: Props) => {
         </Button>
       </Styled.Header>
       {isEmpty ? (
-        <ShowListItem isEmpty thumbnailPath="" title="" date="" host="" />
+        <ShowListItem
+          isEmpty
+          thumbnailPath=""
+          title=""
+          date=""
+          hostName=""
+          salesStartTime=""
+          salesEndTime=""
+        />
       ) : (
         <Styled.List>
           {shows.map((show, index) => (

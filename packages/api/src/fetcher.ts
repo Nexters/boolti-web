@@ -1,7 +1,7 @@
 import type { Options, ResponsePromise } from 'ky';
 import ky from 'ky';
 
-import BooltiHTTPError from './BooltiHTTPError';
+import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
 // TODO 환경 변수로 API 베이스 설정
@@ -55,21 +55,17 @@ export const instance = ky.create({
           }
         }
 
-        try {
-          if (!response.ok && response.bodyUsed) {
-            const body = await response.json();
+        if (!response.ok) {
+          const body = await response.json();
 
+          if (body) {
             throw new BooltiHTTPError(response, request, options, {
               errorTraceId: body.errorTraceId,
               type: body.type,
               detail: body.detail,
             });
           }
-        } catch (error) {
-          throw new BooltiHTTPError(response, request, options);
-        }
 
-        if (!response.ok) {
           throw new BooltiHTTPError(response, request, options);
         }
       },
@@ -80,10 +76,13 @@ export const instance = ky.create({
 
 export async function resultify<T>(response: ResponsePromise) {
   try {
-    // TODO 바디가 없는 경우 어떻게 할지 논의 필요
     return await response.json<T>();
   } catch (error) {
-    console.error('[fetcher.ts] resultify에서 JSON 파싱을 하는 도중 오류 발생');
+    if (error instanceof Error && isBooltiHTTPError(error)) {
+      console.error('[BooltiHTTPError] errorTraceId:', error.errorTraceId);
+      console.error('[BooltiHTTPError] type', error.type);
+      console.error('[BooltiHTTPError] detail', error.detail);
+    }
     throw error;
   }
 }

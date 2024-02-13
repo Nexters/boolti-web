@@ -1,4 +1,4 @@
-import { useLogout, useUserAccountInfo, useUserSummary } from '@boolti/api';
+import { useLogout, useShowList, useUserAccountInfo, useUserSummary } from '@boolti/api';
 import { BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
@@ -18,10 +18,13 @@ const HomePage = () => {
 
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();
   const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
+  const { data: showList = [], isLoading: isShowListLoading } = useShowList();
+
   const { imagePath, email, nickname = '' } = userSummaryData ?? {};
   const { bankAccount } = userAccountInfoData ?? {};
   const { bankName, bankAccountNumber, bankAccountHolder } = bankAccount ?? {};
-  const isLoading = isUserAccountInfoLoading || isUserSummaryLoading;
+
+  const isLoading = isUserAccountInfoLoading || isUserSummaryLoading || isShowListLoading;
 
   return (
     <Layout
@@ -57,22 +60,7 @@ const HomePage = () => {
               bankName={bankName}
             />
             <Styled.Seperator size={80} />
-            <ShowList
-              shows={[
-                {
-                  thumbnailPath: 'https://picsum.photos/200',
-                  title: 'Show Title',
-                  date: '2024-01-20',
-                  host: '%사용자명%',
-                },
-                {
-                  thumbnailPath: 'https://picsum.photos/200',
-                  title: 'Show Title2',
-                  date: '2024-01-21',
-                  host: '%사용자명%',
-                },
-              ]}
-            />
+            <ShowList shows={showList} />
             <Styled.Seperator size={80} />
           </>
         )}

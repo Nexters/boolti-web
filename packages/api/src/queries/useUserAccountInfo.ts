@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { queryKey } from '../queryKey';
+import { queryKeys } from '../queryKey';
 
-const useUserAccountInfo = () => useQuery(queryKey.userAccountInfo);
+const useUserAccountInfo = () => useQuery(queryKeys.user.accountInfo);
 
 export default useUserAccountInfo;
