@@ -7,17 +7,18 @@ const Container = styled.div`
 
 const TicketSummaryContainer = styled.div`
   display: flex;
+  margin-bottom: 40px;
 `;
 
-const TicketSummary = styled.div<{ color: 'grey' | 'red' }>`
+const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 260px;
   padding: 16px 20px;
   border-radius: 8px;
-  ${({ color, theme }) => {
-    switch (color) {
+  ${({ colorTheme, theme }) => {
+    switch (colorTheme) {
       case 'grey':
         return `
           background-color: ${theme.palette.grey.g00};

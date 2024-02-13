@@ -23,19 +23,19 @@ const ShowReservationPage = () => {
     <ShowDetailLayout showName={show.name}>
       <Styled.Container>
         <Styled.TicketSummaryContainer>
-          <Styled.TicketSummary color="grey">
+          <Styled.TicketSummary colorTheme="grey">
             <Styled.TicketSumamryLabel>일반 티켓</Styled.TicketSumamryLabel>
             <Styled.TicketSumamryValue>{salesTicketSoldCount}매</Styled.TicketSumamryValue>
           </Styled.TicketSummary>
-          <Styled.TicketSummary color="grey">
+          <Styled.TicketSummary colorTheme="grey">
             <Styled.TicketSumamryLabel>초청 티켓</Styled.TicketSumamryLabel>
             <Styled.TicketSumamryValue>{invitationTicketSoldCount}매</Styled.TicketSumamryValue>
           </Styled.TicketSummary>
-          <Styled.TicketSummary color="grey">
+          <Styled.TicketSummary colorTheme="grey">
             <Styled.TicketSumamryLabel>총 발권된 티켓</Styled.TicketSumamryLabel>
             <Styled.TicketSumamryValue>{totalSoldCount}매</Styled.TicketSumamryValue>
           </Styled.TicketSummary>
-          <Styled.TicketSummary color="red">
+          <Styled.TicketSummary colorTheme="red">
             <Styled.TicketSumamryLabel>공연 수익</Styled.TicketSumamryLabel>
             <Styled.TicketSumamryValue>
               {totalSalesAmount.toLocaleString()}원
