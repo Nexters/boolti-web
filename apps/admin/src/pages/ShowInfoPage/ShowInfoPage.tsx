@@ -6,7 +6,7 @@ import {
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, useToast } from '@boolti/ui';
+import { Button, useConfirm, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -24,7 +24,7 @@ const ShowInfoPage = () => {
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
-
+  const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
   const showInfoForm = useForm<ShowInfoFormInputs>();
 
   const { data: show } = useShowDetail(Number(params!.showId));
@@ -34,6 +34,7 @@ const ShowInfoPage = () => {
   const uploadShowImageMutation = useUploadShowImage();
 
   const toast = useToast();
+  const confirm = useConfirm();
 
   const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
     if (!show) return;
@@ -72,6 +73,26 @@ const ShowInfoPage = () => {
     toast.success('공연 정보를 저장했습니다.');
   };
 
+  const confirmSaveShowInfo = async () => {
+    if (!showInfoForm.formState.isDirty && !isImageFilesDirty) {
+      return true;
+    }
+
+    const result = await confirm(
+      '저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.\n변경된 정보를 저장할까요?',
+      {
+        cancel: '취소하기',
+        confirm: '저장하기',
+      },
+    );
+
+    if (result) {
+      showInfoForm.handleSubmit(onSubmit)();
+    }
+
+    return true;
+  };
+
   useEffect(() => {
     if (!show) return;
 
@@ -97,7 +118,7 @@ const ShowInfoPage = () => {
   const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
 
   return (
-    <ShowDetailLayout showName={show.name}>
+    <ShowDetailLayout showName={show.name} onClickMiddleware={confirmSaveShowInfo}>
       <Styled.ShowInfoPage>
         <Styled.ShowInfoForm onSubmit={showInfoForm.handleSubmit(onSubmit)}>
           <Styled.ShowInfoFormContent>
