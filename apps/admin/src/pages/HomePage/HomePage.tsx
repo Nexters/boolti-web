@@ -26,7 +26,6 @@ const HomePage = () => {
 
   const isLoading = isUserAccountInfoLoading || isUserSummaryLoading || isShowListLoading;
 
-  console.log(showList);
   return (
     <Layout
       header={
