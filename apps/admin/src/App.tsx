@@ -2,7 +2,7 @@ import 'the-new-css-reset/css/reset.css';
 import './index.css';
 
 import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
-import { BooltiUIProvider } from '@boolti/ui';
+import { BooltiUIProvider, Meta } from '@boolti/ui';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
@@ -100,11 +100,13 @@ const router = createBrowserRouter([...publicRoutes, ...privateRoutes]);
 
 const App = () => {
   return (
-    <QueryClientProvider>
-      <BooltiUIProvider>
-        <RouterProvider router={router} />
-      </BooltiUIProvider>
-    </QueryClientProvider>
+    <Meta>
+      <QueryClientProvider>
+        <BooltiUIProvider>
+          <RouterProvider router={router} />
+        </BooltiUIProvider>
+      </QueryClientProvider>
+    </Meta>
   );
 };
 
