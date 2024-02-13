@@ -31,7 +31,11 @@ const PublicRoute = () => {
 
 const publicRoutes = [
   {
-    element: <PublicRoute />,
+    element: (
+      <Meta>
+        <PublicRoute />
+      </Meta>
+    ),
     children: [
       {
         path: PATH.INDEX,
@@ -73,7 +77,9 @@ const privateRoutes = [
   {
     element: (
       <AuthErrorBoundary>
-        <PrivateRoute />
+        <Meta>
+          <PrivateRoute />
+        </Meta>
       </AuthErrorBoundary>
     ),
     children: [
@@ -100,13 +106,11 @@ const router = createBrowserRouter([...publicRoutes, ...privateRoutes]);
 
 const App = () => {
   return (
-    <Meta>
-      <QueryClientProvider>
-        <BooltiUIProvider>
-          <RouterProvider router={router} />
-        </BooltiUIProvider>
-      </QueryClientProvider>
-    </Meta>
+    <QueryClientProvider>
+      <BooltiUIProvider>
+        <RouterProvider router={router} />
+      </BooltiUIProvider>
+    </QueryClientProvider>
   );
 };
 
