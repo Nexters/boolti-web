@@ -37,13 +37,13 @@ function getBadgeProps(
       colorTheme: 'grey',
     };
   }
-  if (isBefore(salesStartTime, today)) {
+  if (isBefore(today, salesStartTime)) {
     return {
-      children: `티켓 판매 오픈 D-${differenceInDays(today, salesStartTime)}`,
+      children: `티켓 판매 오픈 D-${differenceInDays(salesStartTime, today)}`,
       colorTheme: 'purple',
     };
   }
-  if (isAfter(salesStartTime, today) && isBefore(salesEndTime, today)) {
+  if (isAfter(today, salesStartTime) && isBefore(today, salesEndTime)) {
     return {
       children: '티켓 판매 중',
       colorTheme: 'blue',
