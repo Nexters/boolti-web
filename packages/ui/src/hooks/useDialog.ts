@@ -12,16 +12,19 @@ const useDialog = () => {
     ({
       content,
       title,
+      isAuto,
       onClose,
     }: {
       content: React.ReactNode;
       title?: string;
+      isAuto?: boolean;
       onClose?: () => void;
     }) => {
       const newDialog: IDialog = {
         id: id.current,
         content,
         title,
+        isAuto,
         onClose,
       };
 
