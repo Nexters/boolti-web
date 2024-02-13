@@ -1,9 +1,10 @@
 import { ChevronRightIcon, PlusIcon } from '@boolti/icon';
-import { Button } from '@boolti/ui';
+import { Button, useDialog } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
+import EntranceConfirmDialogContent from '../EntranceConfirmDialogContent';
 import ShowListItem from '../ShowListItem';
 import Styled from './ShowList.styles';
 
@@ -13,6 +14,7 @@ interface Props {
 
 const ShowList = ({ shows }: Props) => {
   const navigate = useNavigate();
+  const { open } = useDialog();
 
   const isEmpty = shows.length === 0;
 
@@ -21,7 +23,15 @@ const ShowList = ({ shows }: Props) => {
       <Styled.Header>
         <Styled.TextContainer>
           <Styled.HeaderText>등록한 공연</Styled.HeaderText>
-          <Styled.InfoButton>
+          <Styled.InfoButton
+            onClick={() => {
+              open({
+                title: '관객 입장 확인 방법',
+                content: <EntranceConfirmDialogContent />,
+                isAuto: true,
+              });
+            }}
+          >
             관객 입장은 어떻게 확인하나요?
             <ChevronRightIcon />
           </Styled.InfoButton>

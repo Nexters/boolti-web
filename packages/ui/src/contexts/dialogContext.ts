@@ -3,6 +3,7 @@ import { createContext } from 'react';
 export interface IDialog {
   id: string;
   content: React.ReactNode;
+  isAuto?: boolean;
   title?: string;
   onClose?: () => void;
 }

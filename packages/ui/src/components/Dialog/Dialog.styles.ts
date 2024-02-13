@@ -12,8 +12,8 @@ const DimmedArea = styled.div`
   z-index: 999;
 `;
 
-const Dialog = styled.div`
-  width: ${DIALOG_WIDTH};
+const Dialog = styled.div<{ isAuto: boolean }>`
+  width: ${({ isAuto }) => (isAuto ? 'auto' : DIALOG_WIDTH)};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
 `;

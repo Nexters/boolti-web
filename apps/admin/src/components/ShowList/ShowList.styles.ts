@@ -24,6 +24,7 @@ const InfoButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
   margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};

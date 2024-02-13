@@ -6,17 +6,18 @@ import Styled from './Dialog.styles';
 interface DialogProps {
   open: boolean;
   children: React.ReactNode;
+  isAuto?: boolean;
   title?: string;
   onClose?: () => void;
 }
 
-const Dialog = ({ open, children, title, onClose }: DialogProps) => {
+const Dialog = ({ open, isAuto = false, children, title, onClose }: DialogProps) => {
   if (!open) return null;
 
   return (
     <Portal>
       <Styled.DimmedArea>
-        <Styled.Dialog>
+        <Styled.Dialog isAuto={isAuto}>
           <Styled.DialogHeader>
             <Styled.DialogTitle>{title}</Styled.DialogTitle>
             <Styled.DialogCloseButton aria-label="닫기" onClick={onClose}>
