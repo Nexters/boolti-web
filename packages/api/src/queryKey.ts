@@ -1,7 +1,14 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
 
 import { fetcher } from './fetcher';
-import { ShowResponse, ShowSalesInfoResponse, ShowSummaryResponse } from './types/show';
+import {
+  PageReservationResponse,
+  ReservationStatus,
+  ShowResponse,
+  ShowSalesInfoResponse,
+  ShowSummaryResponse,
+  TicketType,
+} from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export interface Hello {
@@ -20,6 +27,17 @@ export const showQueryKeys = createQueryKeys('show', {
   salesInfo: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowSalesInfoResponse>(`web/v1/host/shows/${showId}/sales-infos`),
+  }),
+  reservation: (
+    showId: number,
+    page: number,
+    reservationNameOrPhoneNumber: string | undefined = undefined,
+    ticketType: TicketType | undefined = undefined,
+    ticketStatus: ReservationStatus | undefined = undefined,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, ticketStatus],
+    queryFn: () =>
+      fetcher.get<PageReservationResponse>(`/web/v1/host/shows/${showId}/reservations`),
   }),
 });
 
