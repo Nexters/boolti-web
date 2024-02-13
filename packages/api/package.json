@@ -14,6 +14,7 @@
     "@tanstack/query-core": "^4.32.6",
     "@tanstack/react-query": "^4.32.6",
     "@tanstack/react-query-devtools": "^4.32.6",
+    "image-resize": "^1.3.2",
     "ky": "^1.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

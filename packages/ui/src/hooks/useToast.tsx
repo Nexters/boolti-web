@@ -71,7 +71,7 @@ const useToast = () => {
       },
     }),
     {},
-  );
+  ) as Record<keyof typeof toastVariables, ToastFunction>;
 };
 
 export default useToast;

@@ -51,3 +51,10 @@ export type ShowSummaryResponse = Array<{
   /** 공연 수정 시간.ISO8601 */
   modifiedAt: string;
 }>;
+
+export interface ShowSalesInfoResponse {
+  showId: number;
+  salesStartTime: string;
+  salesEndTime: string;
+  ticketNotice: string;
+}

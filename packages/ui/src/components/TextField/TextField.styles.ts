@@ -38,7 +38,7 @@ const InputContainer = styled.div`
   }
 `;
 
-const InputLabel = styled.label<{ hasError?: boolean }>`
+const InputLabel = styled.label<{ hasError?: boolean; disabled?: boolean }>`
   display: block;
   width: 100%;
   height: 48px;
@@ -49,6 +49,14 @@ const InputLabel = styled.label<{ hasError?: boolean }>`
     ${({ hasError, theme }) => (hasError ? theme.palette.status.error : theme.palette.grey.g90)};
   background: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b3};
+
+  ${({ disabled, theme }) =>
+    disabled &&
+    `
+      border: 1px solid ${theme.palette.grey.g20};
+      background: ${theme.palette.grey.g10};
+      color: ${theme.palette.grey.g40};
+    `}
 `;
 
 const Input = styled.input<{ hasError?: boolean }>`

@@ -9,5 +9,6 @@ export * from './constants';
 export * from './mutations';
 export * from './queries';
 export { queryKeys } from './queryKey';
+export type * from './types';
 
 export { useQueryClient };

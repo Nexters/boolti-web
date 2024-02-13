@@ -3,22 +3,22 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Styled from './TicketForm.styles';
 
-export interface GeneralTicketFormInputs {
+export interface SalesTicketFormInputs {
   name: string;
   price: number;
   quantity: number;
 }
 
-interface GeneralTicketFormProps {
-  onSubmit: SubmitHandler<GeneralTicketFormInputs>;
+interface SalesTicketFormProps {
+  onSubmit: SubmitHandler<SalesTicketFormInputs>;
 }
 
-const GeneralTicketForm = ({ onSubmit }: GeneralTicketFormProps) => {
+const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
   const {
     handleSubmit,
     register,
     formState: { isDirty, isValid },
-  } = useForm<GeneralTicketFormInputs>();
+  } = useForm<SalesTicketFormInputs>();
 
   return (
     <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
@@ -76,4 +76,4 @@ const GeneralTicketForm = ({ onSubmit }: GeneralTicketFormProps) => {
   );
 };
 
-export default GeneralTicketForm;
+export default SalesTicketForm;
