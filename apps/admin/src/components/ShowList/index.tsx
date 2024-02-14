@@ -51,6 +51,7 @@ const ShowList = ({ shows }: Props) => {
       {isEmpty ? (
         <ShowListItem
           isEmpty
+          id={0}
           thumbnailPath=""
           title=""
           date=""

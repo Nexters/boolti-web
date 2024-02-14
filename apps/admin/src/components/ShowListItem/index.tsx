@@ -2,11 +2,15 @@ import { ChevronRightIcon } from '@boolti/icon';
 import { Badge } from '@boolti/ui';
 import { differenceInDays, format, isAfter, isBefore, isToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { generatePath, useNavigate } from 'react-router-dom';
+
+import { PATH } from '~/constants/routes';
 
 import Styled from './ShowListItem.styles';
 
 interface Props {
   isEmpty?: boolean;
+  id: number;
   title: string;
   date: string;
   hostName: string;
@@ -33,13 +37,13 @@ function getBadgeProps(
       colorTheme: 'grey',
     };
   }
-  if (isBefore(salesStartTime, today)) {
+  if (isBefore(today, salesStartTime)) {
     return {
-      children: `티켓 판매 오픈 D-${differenceInDays(today, salesStartTime)}`,
+      children: `티켓 판매 오픈 D-${differenceInDays(salesStartTime, today)}`,
       colorTheme: 'purple',
     };
   }
-  if (isAfter(salesStartTime, today) && isBefore(salesEndTime, today)) {
+  if (isAfter(today, salesStartTime) && isBefore(today, salesEndTime)) {
     return {
       children: '티켓 판매 중',
       colorTheme: 'blue',
@@ -54,18 +58,24 @@ function getBadgeProps(
 const ShowListItem = ({
   isEmpty,
   thumbnailPath,
+  id,
   title,
   date,
   hostName,
   salesStartTime,
   salesEndTime,
 }: Props) => {
+  const navigate = useNavigate();
   return (
     <Styled.Container as={isEmpty ? 'div' : 'li'}>
       {isEmpty ? (
         <Styled.EmptyText>아직 등록한 공연이 없어요.</Styled.EmptyText>
       ) : (
-        <Styled.Button>
+        <Styled.Button
+          onClick={() => {
+            navigate(generatePath(PATH.SHOW_INFO, { showId: id }));
+          }}
+        >
           <Styled.Poster thumbnailPath={thumbnailPath} />
           <Styled.TextContainer>
             <Styled.TitleContainer>

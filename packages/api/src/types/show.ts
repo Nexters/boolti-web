@@ -59,6 +59,86 @@ export interface ShowSalesInfoResponse {
   ticketNotice: string;
 }
 
+export type TicketType = 'SALE' | 'INVITE';
+
+export type ReservationStatus =
+  | 'WAITING_FOR_DEPOSIT'
+  | 'CANCELLED'
+  | 'RESERVATION_COMPLETED'
+  | 'WAITING_FOR_REFUND'
+  | 'REFUND_COMPLETED';
+
+export interface ReservationResponse {
+  /** 티켓 ID */
+  ticketId: number;
+  /** 티켓 유형 */
+  ticketType: TicketType;
+  /** 티켓 이름 */
+  ticketName: string;
+  /** 예매 ID */
+  reservationId: number;
+  /** 예매자 이름 */
+  reservationName: string;
+  /** 예매자 전화번호 */
+  reservationPhoneNumber: string;
+  /** 예매 상태 */
+  reservationStatus: ReservationStatus;
+  /** 티켓 가격 */
+  ticketPrice: number;
+  /** 결제 수단 */
+  means: 'ACCOUNT_TRANSFER' | 'CARD';
+  /** 티켓 발권일시 */
+  ticketIssuedAt: string;
+  /** 티켓 생성일시.아마 예매일과 동일 */
+  ticketCreatedAt: string;
+}
+
+export interface PageReservationResponse {
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  content: ReservationResponse[];
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  numberOfElements: number;
+  pageable: {
+    offset: number;
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    pageNumber: number;
+    pageSize: number;
+    unpaged: boolean;
+    paged: boolean;
+  };
+  first: boolean;
+  last: boolean;
+  empty: boolean;
+}
+
+export interface ReservationSummaryResponse {
+  /** 판매 티켓 발권 수량 */
+  salesTicketSoldCount: number;
+  /** 초대 티켓 발권 수량 */
+  invitationTicketSoldCount: number;
+  /** 총 판매 티켓 수량 */
+  totalSoldCount: number;
+  /** 총 판매 금액 */
+  totalSalesAmount: number;
+  /** 발권 대기 건수 */
+  waitCount: number;
+  /** 발권 완료 건수 */
+  completeCount: number;
+  /** 발권 취소 건수 */
+  cancelCount: number;
+}
+
 export type ShowSalesTicketResponse = {
   id: number;
   ticketName: string;

@@ -13,7 +13,9 @@ import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
 import ShowAddCompletePage from './pages/ShowAddCompletePage/ShowAddCompletePage';
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
+import ShowEnteryPage from './pages/ShowEnteryPage/ShowEnterancePage';
 import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
+import ShowReservationPage from './pages/ShowReservationPage/ShowReservationPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
@@ -86,8 +88,8 @@ const privateRoutes = [
       { path: PATH.SHOW_ADD_TICKET, element: <ShowAddPage step="ticket" /> },
       { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
       { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
-      { path: PATH.SHOW_RESERVATION, element: null },
-      { path: PATH.SHOW_ENTRY, element: null },
+      { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
+      { path: PATH.SHOW_ENTRY, element: <ShowEnteryPage /> },
       {
         path: PATH.SHOW_ADD_COMPLETE,
         element: <ShowAddCompletePage />,

@@ -3555,6 +3555,15 @@ const RAW_RUNTIME_STATE =
           ["@floating-ui/utils", "npm:0.2.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:1.6.3", {\
+        "packageLocation": "../../.yarn/berry/cache/@floating-ui-dom-npm-1.6.3-cf39e1c671-10c0.zip/node_modules/@floating-ui/dom/",\
+        "packageDependencies": [\
+          ["@floating-ui/dom", "npm:1.6.3"],\
+          ["@floating-ui/core", "npm:1.6.0"],\
+          ["@floating-ui/utils", "npm:0.2.1"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@floating-ui/react-dom", [\
@@ -7167,6 +7176,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/react-transition-group", [\
+      ["npm:4.4.10", {\
+        "packageLocation": "../../.yarn/berry/cache/@types-react-transition-group-npm-4.4.10-5e11bed850-10c0.zip/node_modules/@types/react-transition-group/",\
+        "packageDependencies": [\
+          ["@types/react-transition-group", "npm:4.4.10"],\
+          ["@types/react", "npm:18.2.48"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/resolve", [\
       ["npm:1.20.6", {\
         "packageLocation": "../../.yarn/berry/cache/@types-resolve-npm-1.20.6-6ab126a04b-10c0.zip/node_modules/@types/resolve/",\
@@ -7802,6 +7821,7 @@ const RAW_RUNTIME_STATE =
           ["react-hook-form", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:7.50.0"],\
           ["react-intersection-observer", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:9.8.0"],\
           ["react-router-dom", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:6.21.3"],\
+          ["react-select", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.8.0"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vite", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.0.11"]\
@@ -9294,6 +9314,17 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/dom-accessibility-api-npm-0.6.3-0345e4dede-10c0.zip/node_modules/dom-accessibility-api/",\
         "packageDependencies": [\
           ["dom-accessibility-api", "npm:0.6.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["dom-helpers", [\
+      ["npm:5.2.1", {\
+        "packageLocation": "../../.yarn/berry/cache/dom-helpers-npm-5.2.1-b38bb4470b-10c0.zip/node_modules/dom-helpers/",\
+        "packageDependencies": [\
+          ["dom-helpers", "npm:5.2.1"],\
+          ["@babel/runtime", "npm:7.23.9"],\
+          ["csstype", "npm:3.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -12338,6 +12369,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["memoize-one", [\
+      ["npm:6.0.0", {\
+        "packageLocation": "../../.yarn/berry/cache/memoize-one-npm-6.0.0-8b2a2cd020-10c0.zip/node_modules/memoize-one/",\
+        "packageDependencies": [\
+          ["memoize-one", "npm:6.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["memoizerific", [\
       ["npm:1.11.3", {\
         "packageLocation": "../../.yarn/berry/cache/memoizerific-npm-1.11.3-3cd7adb7ec-10c0.zip/node_modules/memoizerific/",\
@@ -14049,6 +14089,41 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-select", [\
+      ["npm:5.8.0", {\
+        "packageLocation": "../../.yarn/berry/cache/react-select-npm-5.8.0-468e0395bb-10c0.zip/node_modules/react-select/",\
+        "packageDependencies": [\
+          ["react-select", "npm:5.8.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.8.0", {\
+        "packageLocation": "./.yarn/__virtual__/react-select-virtual-7a2c609099/3/.yarn/berry/cache/react-select-npm-5.8.0-468e0395bb-10c0.zip/node_modules/react-select/",\
+        "packageDependencies": [\
+          ["react-select", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.8.0"],\
+          ["@babel/runtime", "npm:7.23.9"],\
+          ["@emotion/cache", "npm:11.11.0"],\
+          ["@emotion/react", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:11.11.3"],\
+          ["@floating-ui/dom", "npm:1.6.3"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["@types/react-transition-group", "npm:4.4.10"],\
+          ["memoize-one", "npm:6.0.0"],\
+          ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
+          ["react-transition-group", "virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:4.4.5"],\
+          ["use-isomorphic-layout-effect", "virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:1.1.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-style-singleton", [\
       ["npm:2.2.1", {\
         "packageLocation": "../../.yarn/berry/cache/react-style-singleton-npm-2.2.1-e45b97b153-10c0.zip/node_modules/react-style-singleton/",\
@@ -14085,6 +14160,36 @@ const RAW_RUNTIME_STATE =
         ],\
         "packagePeers": [\
           "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["react-transition-group", [\
+      ["npm:4.4.5", {\
+        "packageLocation": "../../.yarn/berry/cache/react-transition-group-npm-4.4.5-98ea4ef96e-10c0.zip/node_modules/react-transition-group/",\
+        "packageDependencies": [\
+          ["react-transition-group", "npm:4.4.5"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:4.4.5", {\
+        "packageLocation": "./.yarn/__virtual__/react-transition-group-virtual-f6ce558bae/3/.yarn/berry/cache/react-transition-group-npm-4.4.5-98ea4ef96e-10c0.zip/node_modules/react-transition-group/",\
+        "packageDependencies": [\
+          ["react-transition-group", "virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:4.4.5"],\
+          ["@babel/runtime", "npm:7.23.9"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["dom-helpers", "npm:5.2.1"],\
+          ["loose-envify", "npm:1.4.0"],\
+          ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
           "react"\
         ],\
         "linkType": "HARD"\
@@ -15862,6 +15967,28 @@ const RAW_RUNTIME_STATE =
           ["@types/react", null],\
           ["react", null],\
           ["tslib", "npm:2.6.2"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["use-isomorphic-layout-effect", [\
+      ["npm:1.1.2", {\
+        "packageLocation": "../../.yarn/berry/cache/use-isomorphic-layout-effect-npm-1.1.2-65facd0a4b-10c0.zip/node_modules/use-isomorphic-layout-effect/",\
+        "packageDependencies": [\
+          ["use-isomorphic-layout-effect", "npm:1.1.2"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:1.1.2", {\
+        "packageLocation": "./.yarn/__virtual__/use-isomorphic-layout-effect-virtual-163045e361/3/.yarn/berry/cache/use-isomorphic-layout-effect-npm-1.1.2-65facd0a4b-10c0.zip/node_modules/use-isomorphic-layout-effect/",\
+        "packageDependencies": [\
+          ["use-isomorphic-layout-effect", "virtual:7a2c6090995d562710f85524a44fd68933e1b1fd02d7b4a822f976f640183643314e81b95d214e5b763d84122b40de71406b5ebb4439019bf1994315f06b2579#npm:1.1.2"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["react", "npm:18.2.0"]\
         ],\
         "packagePeers": [\
           "@types/react",\
