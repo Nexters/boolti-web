@@ -120,6 +120,8 @@ const ShowTicketPage = () => {
                 toast.success('일반 티켓을 생성했습니다.');
               }}
               onDeleteTicket={async (ticket) => {
+                if (ticket.id === undefined) return;
+
                 const result = await confirm(
                   '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
                   {
@@ -165,6 +167,8 @@ const ShowTicketPage = () => {
                 toast.success('초청 티켓을 생성했습니다.');
               }}
               onDeleteTicket={async (ticket) => {
+                if (ticket.id === undefined) return;
+
                 const result = await confirm(
                   '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
                   {
