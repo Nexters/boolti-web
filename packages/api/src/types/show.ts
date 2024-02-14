@@ -123,11 +123,22 @@ export interface PageReservationResponse {
 }
 
 export interface ReservationSummaryResponse {
+  /** 판매 티켓 발권 수량 */
   salesTicketSoldCount: number;
+  /** 초대 티켓 발권 수량 */
   invitationTicketSoldCount: number;
+  /** 총 판매 티켓 수량 */
   totalSoldCount: number;
+  /** 총 판매 금액 */
   totalSalesAmount: number;
+  /** 발권 대기 건수 */
+  waitCount: number;
+  /** 발권 완료 건수 */
+  completeCount: number;
+  /** 발권 취소 건수 */
+  cancelCount: number;
 }
+
 export type ShowSalesTicketResponse = {
   id: number;
   ticketName: string;

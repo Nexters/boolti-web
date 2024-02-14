@@ -14,6 +14,7 @@ import { ChevronRight } from './ChevronRight';
 import { ChevronUp } from './ChevronUp';
 import { ChinaCB } from './ChinaCB';
 import { Citi } from './Citi';
+import { Clear } from './Clear';
 import { Clock } from './Clock';
 import { Close } from './Close';
 import { CU } from './CU';
@@ -71,6 +72,7 @@ export {
   ChevronUp as ChevronUpIcon,
   ChinaCB,
   Citi,
+  Clear as ClearIcon,
   Clock as ClockIcon,
   Close as CloseIcon,
   CU,

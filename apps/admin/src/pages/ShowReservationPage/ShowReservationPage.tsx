@@ -1,13 +1,17 @@
 import { useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
-import { useNavigate, useParams } from 'react-router-dom';
+import { ClearIcon, SearchIcon } from '@boolti/icon';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import ShowDetailLayout from '~/components/ShowDetailLayout';
+import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const navigate = useNavigate();
+  const [selectedTicketType, setSelectedTicketType] = useState('ALL');
+  const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -16,8 +20,15 @@ const ShowReservationPage = () => {
 
   if (!show || !reservationSummary) return null;
 
-  const { salesTicketSoldCount, totalSalesAmount, invitationTicketSoldCount, totalSoldCount } =
-    reservationSummary;
+  const {
+    salesTicketSoldCount,
+    totalSalesAmount,
+    invitationTicketSoldCount,
+    totalSoldCount,
+    waitCount,
+    completeCount,
+    cancelCount,
+  } = reservationSummary;
 
   return (
     <ShowDetailLayout showName={show.name}>
@@ -42,6 +53,37 @@ const ShowReservationPage = () => {
             </Styled.TicketSumamryValue>
           </Styled.TicketSummary>
         </Styled.TicketSummaryContainer>
+        <Styled.TicketReservationSummaryContainer>
+          <Styled.TicketReservationSummaryButton isSelected>
+            발권 대기 <span>{waitCount}</span>
+          </Styled.TicketReservationSummaryButton>
+          <Styled.TicketReservationSummaryButton>
+            발권 완료 <span>{completeCount}</span>
+          </Styled.TicketReservationSummaryButton>
+          <Styled.TicketReservationSummaryButton>
+            발권 취소 <span>{cancelCount}</span>
+          </Styled.TicketReservationSummaryButton>
+          <TicketTypeSelect onChange={(value) => setSelectedTicketType(value)} />
+          <Styled.InputContainer>
+            <Styled.Input
+              value={searchText}
+              onChange={(event) => {
+                setSearchText(event.target.value);
+              }}
+              placeholder="예매자 이름, 연락처 검색"
+            />
+            <Styled.ButtonContainer>
+              {searchText !== '' && (
+                <Styled.InputButton onClick={() => setSearchText('')}>
+                  <ClearIcon />
+                </Styled.InputButton>
+              )}
+              <Styled.InputButton>
+                <SearchIcon />
+              </Styled.InputButton>
+            </Styled.ButtonContainer>
+          </Styled.InputContainer>
+        </Styled.TicketReservationSummaryContainer>
       </Styled.Container>
     </ShowDetailLayout>
   );
