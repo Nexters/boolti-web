@@ -20,9 +20,10 @@ interface ShowDetailLayoutProps {
 const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailLayoutProps) => {
   const { ref: topObserverRef, inView: topInView } = useInView({
     threshold: 1,
+    initialInView: true,
   });
   const { ref: headerObserverRef, inView: headerInView } = useInView({
-    threshold: 1,
+    threshold: 0.01,
     initialInView: true,
   });
   const theme = useTheme();

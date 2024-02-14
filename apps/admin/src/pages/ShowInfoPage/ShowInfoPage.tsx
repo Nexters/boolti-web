@@ -105,7 +105,7 @@ const ShowInfoPage = () => {
     showInfoForm.reset({
       name: show.name,
       date: format(show.date, 'yyyy-MM-dd'),
-      startTime: format(show.date, 'hh:mm'),
+      startTime: format(show.date, 'HH:mm'),
       runningTime: `${show.runningTime}`,
       placeName: show.place.name,
       placeStreetAddress: show.place.streetAddress,

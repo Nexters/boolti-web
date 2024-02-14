@@ -128,3 +128,24 @@ export interface ReservationSummaryResponse {
   totalSoldCount: number;
   totalSalesAmount: number;
 }
+export type ShowSalesTicketResponse = {
+  id: number;
+  ticketName: string;
+  price: number;
+  quantity: number;
+  totalForSale: number;
+}[];
+
+export type ShowInvitationTicketResponse = {
+  id: number;
+  ticketName: string;
+  price: number;
+  quantity: number;
+  totalForSale: number;
+}[];
+
+export type ShowInvitationCodeListResponse = {
+  id: number;
+  code: string;
+  used: boolean;
+}[];

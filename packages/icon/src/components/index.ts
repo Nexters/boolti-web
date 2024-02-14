@@ -5,10 +5,13 @@ import { BNK } from './BNK';
 import { BNP } from './BNP';
 import { BoA } from './BoA';
 import { Boolti } from './Boolti';
+import { BooltiSmall } from './BooltiSmall';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
+import { ChevronDown } from './ChevronDown';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
+import { ChevronUp } from './ChevronUp';
 import { ChinaCB } from './ChinaCB';
 import { Citi } from './Citi';
 import { Clock } from './Clock';
@@ -59,10 +62,13 @@ export {
   BNP,
   BoA,
   Boolti as BooltiLogo,
+  BooltiSmall as BooltiSmallLogo,
   Calendar as CalendarIcon,
   CB,
+  ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  ChevronUp as ChevronUpIcon,
   ChinaCB,
   Citi,
   Clock as ClockIcon,

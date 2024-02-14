@@ -5,16 +5,15 @@ import {
   PageReservationResponse,
   ReservationStatus,
   ReservationSummaryResponse,
+  ShowInvitationCodeListResponse,
+  ShowInvitationTicketResponse,
   ShowResponse,
   ShowSalesInfoResponse,
+  ShowSalesTicketResponse,
   ShowSummaryResponse,
   TicketType,
 } from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
-
-export interface Hello {
-  hello: string;
-}
 
 export const showQueryKeys = createQueryKeys('show', {
   detail: (showId: number) => ({
@@ -48,6 +47,23 @@ export const showQueryKeys = createQueryKeys('show', {
         },
       });
     },
+    salesTicketList: (showId: number) => ({
+      queryKey: [showId],
+      queryFn: () =>
+        fetcher.get<ShowSalesTicketResponse>(`web/v1/host/shows/${showId}/sales-tickets`),
+    }),
+    invitationTicketList: (showId: number) => ({
+      queryKey: [showId],
+      queryFn: () =>
+        fetcher.get<ShowInvitationTicketResponse>(`web/v1/host/shows/${showId}/invitation-tickets`),
+    }),
+    invitationCodeList: (invitationTicketId: number) => ({
+      queryKey: [invitationTicketId],
+      queryFn: () =>
+        fetcher.get<ShowInvitationCodeListResponse>(
+          `web/v1/host/invitation-tickets/${invitationTicketId}/invitation-codes`,
+        ),
+    }),
   }),
 });
 

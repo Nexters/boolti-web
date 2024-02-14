@@ -2,21 +2,23 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 const LoginPage = styled.div`
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  position: relative;
   background-color: ${({ theme }) => theme.palette.grey.g20};
 `;
 
-const LoginContent = styled.div``;
+const LoginContent = styled.div`
+  padding: 180px 20px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const Card = styled.div`
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px #8b8b8b26;
-  margin-bottom: 40px;
   border-radius: 8px;
 `;
 
@@ -48,12 +50,25 @@ const CardContentTitle = styled.h3`
   margin-bottom: 48px;
 `;
 
+const CardContentTitleText = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  svg {
+    margin-left: 8px;
+    margin-right: 2px;
+  }
+`;
+
 const LoginButtonContainer = styled.div`
-  width: 388px;
+  width: 100%;
+  max-width: 388px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 80px;
+  padding: 0 20px;
 `;
 
 const LoginButtonIcon = styled.div`
@@ -102,6 +117,11 @@ const BottomLink = styled(Link)`
   cursor: pointer;
 `;
 
+const Footer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+
 export default {
   LoginPage,
   LoginContent,
@@ -110,10 +130,12 @@ export default {
   CardHeaderTitle,
   CardContent,
   CardContentTitle,
+  CardContentTitleText,
   LoginButtonContainer,
   LoginButtonIcon,
   KakaoLoginButton,
   AppleLoginButton,
   BottomLinkContainer,
   BottomLink,
+  Footer,
 };

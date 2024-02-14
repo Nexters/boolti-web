@@ -8,19 +8,21 @@ import { ShowTicketFormInputs } from './types';
 interface ShowTicketInfoFormContentProps {
   form: UseFormReturn<ShowTicketFormInputs>;
   showDate: string;
+  salesStartTime?: string;
   disabled?: boolean;
 }
 
 const ShowTicketInfoFormContent = ({
   form,
   showDate,
+  salesStartTime,
   disabled,
 }: ShowTicketInfoFormContentProps) => {
   const { register, watch, control } = form;
 
   return (
     <Styled.ShowInfoFormGroup>
-      <Styled.ShowInfoFormTitle>티켓 정보</Styled.ShowInfoFormTitle>
+      <Styled.ShowInfoFormTitle>티켓 판매 정보</Styled.ShowInfoFormTitle>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormRow>
@@ -68,7 +70,11 @@ const ShowTicketInfoFormContent = ({
                       onChange={onChange}
                       onBlur={onBlur}
                       placeholder={value}
-                      min={format(watch('startDate') || new Date(), 'yyyy-MM-dd')}
+                      min={format(
+                        watch('startDate') ||
+                          (salesStartTime ? new Date(salesStartTime) : new Date()),
+                        'yyyy-MM-dd',
+                      )}
                       max={format(
                         sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
                         'yyyy-MM-dd',
@@ -89,7 +95,8 @@ const ShowTicketInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel>티켓 구매 시 안내사항</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            (ex. 주류반입이 불가한 공연장입니다. 드시던 음료는 입구에 놓고 입장해주세요.)
+            예매자에게 안내할 사항이 있다면 작성해 주세요. 작성한 내용은 티켓 상세 화면에
+            노출됩니다.
           </Styled.ShowInfoFormDescription>
           <Styled.TextField>
             <Styled.TextArea
