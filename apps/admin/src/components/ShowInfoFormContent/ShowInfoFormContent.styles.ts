@@ -193,7 +193,7 @@ const TextFieldRow = styled.div`
 
 const TextArea = styled.textarea`
   width: 100%;
-  margin-top: 16px;
+  margin-top: 8px;
   padding: 12px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g90};
   border-radius: 4px;
@@ -233,6 +233,7 @@ const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   display: flex;
   ${({ theme }) => theme.typo.h1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  margin-bottom: 2px;
 
   &::after {
     content: '*';
@@ -260,14 +261,19 @@ const TicketList = styled.div`
 
 const Ticket = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 24px 28px;
+  flex-direction: column;
   border-radius: 8px;
   box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
+`;
+
+const TicketContent = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 24px 28px;
 `;
 
 const TicketInfo = styled.div`
@@ -295,6 +301,55 @@ const TicketDescription = styled.p`
 const TicketAction = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const TicketCodeListContainer = styled.div`
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
+`;
+
+const TicketCodeList = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 575px;
+  overflow-y: auto;
+`;
+
+const TicketCode = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+`;
+
+const TicketCodeInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+const TicketCodeNumber = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+`;
+
+const TicketCodeText = styled.span`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const TicketCodeStatus = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TicketCodeListButton = styled.button`
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 `;
 
 const TicketAddButtonContainer = styled.div`
@@ -329,10 +384,19 @@ export default {
   TicketGroupDescription,
   TicketList,
   Ticket,
+  TicketContent,
   TicketInfo,
   TicketTitle,
   TicketTitleText,
   TicketDescription,
   TicketAction,
+  TicketCodeListContainer,
+  TicketCodeList,
+  TicketCode,
+  TicketCodeInfo,
+  TicketCodeNumber,
+  TicketCodeText,
+  TicketCodeStatus,
+  TicketCodeListButton,
   TicketAddButtonContainer,
 };

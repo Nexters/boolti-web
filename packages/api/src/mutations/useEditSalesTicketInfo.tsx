@@ -15,7 +15,7 @@ const postEditSalesTicketInfo = ({
   salesEndTime,
   ticketNotice,
 }: EditSalesTicketInfoRequest) =>
-  fetcher.put(`web/v1/host/shows/${showId}/sales-tickets`, {
+  fetcher.put(`web/v1/host/shows/${showId}/sales-infos`, {
     json: {
       salesStartTime,
       salesEndTime,

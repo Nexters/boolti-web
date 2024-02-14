@@ -11,6 +11,14 @@ const ShowTicketFormContent = styled.div`
   max-width: 600px;
 `;
 
+const ShowTicketSubmitContainer = styled.div`
+  margin-top: 32px;
+
+  button {
+    width: 120px;
+  }
+`;
+
 const ShowTicketFormDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
   margin: 52px 0;
@@ -20,5 +28,6 @@ export default {
   ShowTicketPage,
   ShowTicketForm,
   ShowTicketFormContent,
+  ShowTicketSubmitContainer,
   ShowTicketFormDivider,
 };

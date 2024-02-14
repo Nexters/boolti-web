@@ -1,7 +1,14 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
 
 import { fetcher } from './fetcher';
-import { ShowResponse, ShowSalesInfoResponse, ShowSummaryResponse } from './types/show';
+import {
+  ShowInvitationCodeListResponse,
+  ShowInvitationTicketResponse,
+  ShowResponse,
+  ShowSalesInfoResponse,
+  ShowSalesTicketResponse,
+  ShowSummaryResponse,
+} from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export interface Hello {
@@ -20,6 +27,23 @@ export const showQueryKeys = createQueryKeys('show', {
   salesInfo: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowSalesInfoResponse>(`web/v1/host/shows/${showId}/sales-infos`),
+  }),
+  salesTicketList: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowSalesTicketResponse>(`web/v1/host/shows/${showId}/sales-tickets`),
+  }),
+  invitationTicketList: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowInvitationTicketResponse>(`web/v1/host/shows/${showId}/invitation-tickets`),
+  }),
+  invitationCodeList: (invitationTicketId: number) => ({
+    queryKey: [invitationTicketId],
+    queryFn: () =>
+      fetcher.get<ShowInvitationCodeListResponse>(
+        `web/v1/host/invitation-tickets/${invitationTicketId}/invitation-codes`,
+      ),
   }),
 });
 

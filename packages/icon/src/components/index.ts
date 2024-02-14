@@ -7,8 +7,10 @@ import { BoA } from './BoA';
 import { Boolti } from './Boolti';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
+import { ChevronDown } from './ChevronDown';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
+import { ChevronUp } from './ChevronUp';
 import { ChinaCB } from './ChinaCB';
 import { Citi } from './Citi';
 import { Clock } from './Clock';
@@ -61,8 +63,10 @@ export {
   Boolti as BooltiLogo,
   Calendar as CalendarIcon,
   CB,
+  ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
+  ChevronUp as ChevronUpIcon,
   ChinaCB,
   Citi,
   Clock as ClockIcon,

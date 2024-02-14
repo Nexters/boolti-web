@@ -12,9 +12,7 @@ interface PostCreateSalesTicketRequest {
 const postCreateSalesTicket = (body: PostCreateSalesTicketRequest) =>
   fetcher.post('web/v1/host/sales-tickets', { json: body });
 
-const useCreateSalesTickets = () =>
-  useMutation((body: PostCreateSalesTicketRequest[]) =>
-    Promise.all(body.map((ticket) => postCreateSalesTicket(ticket))),
-  );
+const useCreateSalesTicket = () =>
+  useMutation((body: PostCreateSalesTicketRequest) => postCreateSalesTicket(body));
 
-export default useCreateSalesTickets;
+export default useCreateSalesTicket;

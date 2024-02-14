@@ -6,7 +6,7 @@ import Styled from './TicketForm.styles';
 export interface SalesTicketFormInputs {
   name: string;
   price: number;
-  quantity: number;
+  totalForSale: number;
 }
 
 interface SalesTicketFormProps {
@@ -61,7 +61,7 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
               inputType="number"
               size="big"
               min={1}
-              {...register('quantity', { required: true, value: 1 })}
+              {...register('totalForSale', { required: true, value: 1 })}
             />
             <Styled.TextFieldSuffix>매</Styled.TextFieldSuffix>
           </Styled.TextField>

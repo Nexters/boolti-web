@@ -5,18 +5,34 @@ import { SubmitHandler } from 'react-hook-form';
 import SalesTicketForm, { SalesTicketFormInputs } from '../TicketForm/SalesTicketForm';
 import Styled from './ShowInfoFormContent.styles';
 
+export interface SalesTicket {
+  id?: number;
+  name: string;
+  price: number;
+  quantity: number;
+  totalForSale: number;
+}
+
 interface ShowSalesTicketFormContentProps {
-  salesTicketList: SalesTicketFormInputs[];
+  salesTicketList: SalesTicket[];
+  salesStartTime?: string;
+  fullEditable?: boolean;
+  disabled?: boolean;
   onSubmitTicket: SubmitHandler<SalesTicketFormInputs>;
-  onDeleteTicket: (ticket: SalesTicketFormInputs) => void;
+  onDeleteTicket: (ticket: SalesTicket) => void;
 }
 
 const ShowSalesTicketFormContent = ({
   salesTicketList,
+  salesStartTime,
+  fullEditable = false,
+  disabled,
   onSubmitTicket,
   onDeleteTicket,
 }: ShowSalesTicketFormContentProps) => {
   const salesTicketDialog = useDialog();
+
+  const isSingleTicket = salesTicketList.length === 1;
 
   const handleSubmitTicket: SubmitHandler<SalesTicketFormInputs> = (data) => {
     salesTicketDialog.close();
@@ -53,29 +69,45 @@ const ShowSalesTicketFormContent = ({
       </Styled.TicketGroupHeader>
       {salesTicketList.length > 0 && (
         <Styled.TicketList>
-          {salesTicketList.map((ticket) => (
-            <Styled.Ticket key={ticket.name}>
-              <Styled.TicketInfo>
-                <Styled.TicketTitle>
-                  <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
-                  <Badge colorTheme="red">
-                    재고 {ticket.quantity}/{ticket.quantity}
-                  </Badge>
-                </Styled.TicketTitle>
-                <Styled.TicketDescription>{ticket.price}원 · 1인당 1매</Styled.TicketDescription>
-              </Styled.TicketInfo>
-              <Styled.TicketAction>
-                <Button
-                  type="button"
-                  colorTheme="line"
-                  size="bold"
-                  onClick={() => onDeleteTicket(ticket)}
-                >
-                  삭제하기
-                </Button>
-              </Styled.TicketAction>
-            </Styled.Ticket>
-          ))}
+          {salesTicketList.map((ticket) => {
+            const isSoldTicket = ticket.totalForSale > ticket.quantity;
+            const isSalesStarted = salesStartTime ? new Date(salesStartTime) <= new Date() : false;
+            const isDeleteDisabled = isSingleTicket || isSoldTicket || isSalesStarted;
+
+            return (
+              <Styled.Ticket key={ticket.id ?? ticket.name}>
+                <Styled.TicketContent>
+                  <Styled.TicketInfo>
+                    <Styled.TicketTitle>
+                      <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
+                      <Badge colorTheme={ticket.quantity === 0 ? 'grey' : 'red'}>
+                        재고 {ticket.quantity}/{ticket.totalForSale}
+                      </Badge>
+                    </Styled.TicketTitle>
+                    <Styled.TicketDescription>
+                      {ticket.price}원 · 1인당 1매
+                    </Styled.TicketDescription>
+                  </Styled.TicketInfo>
+                  <Styled.TicketAction>
+                    <Button
+                      type="button"
+                      colorTheme="line"
+                      size="bold"
+                      disabled={(() => {
+                        if (disabled) return disabled;
+                        if (fullEditable) return false;
+
+                        return isDeleteDisabled;
+                      })()}
+                      onClick={() => onDeleteTicket(ticket)}
+                    >
+                      삭제하기
+                    </Button>
+                  </Styled.TicketAction>
+                </Styled.TicketContent>
+              </Styled.Ticket>
+            );
+          })}
         </Styled.TicketList>
       )}
     </Styled.TicketGroup>
