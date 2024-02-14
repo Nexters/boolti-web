@@ -1,6 +1,7 @@
-import { AppleIcon, KakaotalkIcon } from '@boolti/icon';
-import { useNavigate } from 'react-router-dom';
+import { BooltiSmallLogo, KakaotalkIcon } from '@boolti/icon';
+import { Footer } from '@boolti/ui';
 
+import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 
 import Styled from './LoginPage.styles';
@@ -27,8 +28,6 @@ declare global {
 const redirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 
 const LoginPage = () => {
-  const navigate = useNavigate();
-
   return (
     <Styled.LoginPage>
       <Styled.LoginContent>
@@ -38,9 +37,11 @@ const LoginPage = () => {
           </Styled.CardHeader>
           <Styled.CardContent>
             <Styled.CardContentTitle>
-              지금 불티에서
-              <br />
-              티켓을 불티나게 팔아보세요!
+              <Styled.CardContentTitleText>
+                지금 <BooltiSmallLogo />
+                에서
+              </Styled.CardContentTitleText>
+              <Styled.CardContentTitleText>티켓을 불티나게 팔아보세요!</Styled.CardContentTitleText>
             </Styled.CardContentTitle>
             <Styled.LoginButtonContainer>
               <Styled.KakaoLoginButton
@@ -53,7 +54,7 @@ const LoginPage = () => {
                 </Styled.LoginButtonIcon>
                 카카오톡으로 시작하기
               </Styled.KakaoLoginButton>
-              <Styled.AppleLoginButton
+              {/* <Styled.AppleLoginButton
                 onClick={() => {
                   navigate('/signup/complete');
                 }}
@@ -62,18 +63,22 @@ const LoginPage = () => {
                   <AppleIcon />
                 </Styled.LoginButtonIcon>
                 Apple로 시작하기
-              </Styled.AppleLoginButton>
+              </Styled.AppleLoginButton> */}
             </Styled.LoginButtonContainer>
             <Styled.BottomLinkContainer>
-              {/* Note: 추후 실제 링크로 교체 */}
-              <Styled.BottomLink to="https://naver.com">개인정보 처리방침</Styled.BottomLink>
-              <Styled.BottomLink to="https://naver.com">서비스 이용약관</Styled.BottomLink>
+              <Styled.BottomLink to={LINK.PRIVACY_POLICY} target="_blank">
+                개인정보 처리방침
+              </Styled.BottomLink>
+              <Styled.BottomLink to={LINK.TERMS} target="_blank">
+                서비스 이용약관
+              </Styled.BottomLink>
             </Styled.BottomLinkContainer>
           </Styled.CardContent>
         </Styled.Card>
-        {/* Note: 추후 로고로 교체 */}
-        <p style={{ textAlign: 'center' }}>Boolti logo</p>
       </Styled.LoginContent>
+      <Styled.Footer>
+        <Footer />
+      </Styled.Footer>
     </Styled.LoginPage>
   );
 };
