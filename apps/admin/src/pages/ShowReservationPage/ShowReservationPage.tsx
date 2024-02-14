@@ -1,4 +1,4 @@
-import { useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
+import { useShowDetail, useShowReservationSummary } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -10,13 +10,13 @@ import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const [selectedTicketType, setSelectedTicketType] = useState('ALL');
+  const [, setSelectedTicketType] = useState('ALL');
   const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservations = [], hasNextPage } = useShowReservations(showId);
+  // const { data: reservations = [], hasNextPage } = useShowReservations(showId);
 
   if (!show || !reservationSummary) return null;
 
