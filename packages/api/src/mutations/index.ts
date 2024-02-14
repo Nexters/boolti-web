@@ -1,6 +1,8 @@
 import useAddShow from './useAddShow';
-import useCreateInvitationTickets from './useCreateInvitationTickets';
-import useCreateSalesTickets from './useCreateSalesTickets';
+import useCreateInvitationTicket from './useCreateInvitationTicket';
+import useCreateSalesTicket from './useCreateSalesTicket';
+import useDeleteInvitationTicket from './useDeleteInvitationTicket';
+import useDeleteSalesTicket from './useDeleteSalesTicket';
 import useDeleteShow from './useDeleteShow';
 import useEditSalesTicketInfo from './useEditSalesTicketInfo';
 import useEditShowInfo from './useEditShowInfo';
@@ -14,8 +16,10 @@ import useUploadShowImage, { ImageFile } from './useUploadShowImage';
 
 export {
   useAddShow,
-  useCreateInvitationTickets,
-  useCreateSalesTickets,
+  useCreateInvitationTicket,
+  useCreateSalesTicket,
+  useDeleteInvitationTicket,
+  useDeleteSalesTicket,
   useDeleteShow,
   useEditSalesTicketInfo,
   useEditShowInfo,

@@ -1,18 +1,20 @@
 import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { Button } from '@boolti/ui';
+import { Button, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
 
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
-import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
-import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
+import ShowInvitationTicketFormContent, {
+  InvitationTicket,
+} from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
+import ShowSalesTicketFormContent, {
+  SalesTicket,
+} from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
 import { ShowInfoFormInputs, ShowTicketFormInputs } from '~/components/ShowInfoFormContent/types';
-import { InvitationTicketFormInputs } from '~/components/TicketForm/InvitationTicketForm';
-import { SalesTicketFormInputs } from '~/components/TicketForm/SalesTicketForm';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
@@ -25,16 +27,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
-  const [salesTicketList, setSalesTicketList] = useState<SalesTicketFormInputs[]>([]);
-  const [invitationTicketList, setInvitationTicketList] = useState<InvitationTicketFormInputs[]>(
-    [],
-  );
+  const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
+  const [invitationTicketList, setInvitationTicketList] = useState<InvitationTicket[]>([]);
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
+
+  const toast = useToast();
 
   const onSubmitInfoForm: SubmitHandler<ShowInfoFormInputs> = async () => {
     navigate(PATH.SHOW_ADD_TICKET);
@@ -186,25 +188,51 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                   />
                   <Styled.TicketGroupContainer>
                     <ShowSalesTicketFormContent
+                      fullEditable
                       salesTicketList={salesTicketList}
                       onSubmitTicket={(ticket) => {
-                        setSalesTicketList((prevList) => [...prevList, ticket]);
+                        setSalesTicketList((prevList) =>
+                          [...prevList, ticket].map((ticket) => ({
+                            name: ticket.name,
+                            price: ticket.price,
+                            quantity: ticket.totalForSale,
+                            totalForSale: ticket.totalForSale,
+                          })),
+                        );
+                        toast.success('일반 티켓을 생성했습니다.');
                       }}
                       onDeleteTicket={(ticket) => {
                         setSalesTicketList((prevList) =>
                           prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                         );
+                        toast.success('티켓을 삭제했습니다.');
                       }}
                     />
                     <ShowInvitationTicketFormContent
+                      fullEditable
                       invitationTicketList={invitationTicketList}
+                      description={
+                        <>
+                          초청 티켓 이용을 원하시면 티켓을 생성해주세요.
+                          <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 티켓 관리</strong>
+                          에서 확인할 수 있습니다.
+                        </>
+                      }
                       onSubmitTicket={(ticket) => {
-                        setInvitationTicketList((prevList) => [...prevList, ticket]);
+                        setInvitationTicketList((prevList) =>
+                          [...prevList, ticket].map((ticket) => ({
+                            name: ticket.name,
+                            quantity: ticket.totalForSale,
+                            totalForSale: ticket.totalForSale,
+                          })),
+                        );
+                        toast.success('초청 티켓을 생성했습니다.');
                       }}
                       onDeleteTicket={(ticket) => {
                         setInvitationTicketList((prevList) =>
                           prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                         );
+                        toast.success('티켓을 삭제했습니다.');
                       }}
                     />
                   </Styled.TicketGroupContainer>

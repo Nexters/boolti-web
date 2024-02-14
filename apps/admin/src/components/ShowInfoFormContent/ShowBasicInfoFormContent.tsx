@@ -1,6 +1,7 @@
 import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { TextField } from '@boolti/ui';
+import { add, format } from 'date-fns';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
@@ -102,6 +103,7 @@ const ShowBasicInfoFormContent = ({
                   onBlur={onBlur}
                   placeholder={value}
                   defaultValue={watch('date')}
+                  min={format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')}
                   required
                   disabled={disabled}
                 />

@@ -11,9 +11,7 @@ interface PostCreateInvitationTicketRequest {
 const postCreateInvitationTicket = (body: PostCreateInvitationTicketRequest) =>
   fetcher.post('web/v1/host/invitation-tickets', { json: body });
 
-const useCreateInvitationTickets = () =>
-  useMutation((body: PostCreateInvitationTicketRequest[]) =>
-    Promise.all(body.map((ticket) => postCreateInvitationTicket(ticket))),
-  );
+const useCreateInvitationTicket = () =>
+  useMutation((body: PostCreateInvitationTicketRequest) => postCreateInvitationTicket(body));
 
-export default useCreateInvitationTickets;
+export default useCreateInvitationTicket;
