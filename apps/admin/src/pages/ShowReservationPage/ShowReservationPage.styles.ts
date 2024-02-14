@@ -5,6 +5,19 @@ const Container = styled.div`
   margin: 40px 0 68px;
 `;
 
+const Empty = styled.div`
+  margin: 0 auto;
+  width: 1080px;
+  height: 770px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: pre-wrap;
+  text-align: center;
+  ${({ theme }) => theme.typo.b4};
+  color: ${({ theme }) => theme.palette.grey.g40};
+`;
+
 const TicketSummaryContainer = styled.div`
   display: flex;
   margin-bottom: 40px;
@@ -137,4 +150,5 @@ export default {
   Input,
   InputButton,
   ButtonContainer,
+  Empty,
 };
