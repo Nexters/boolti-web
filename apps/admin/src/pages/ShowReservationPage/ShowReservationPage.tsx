@@ -1,4 +1,4 @@
-import { useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
+import { ReservationStatus, useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Styled from './ShowReservationPage.styles';
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
   const [, setSelectedTicketType] = useState('ALL');
+  const [selectedReservationStatus, setSelectedReservationStatus] = useState<ReservationStatus>('WAITING_FOR_DEPOSIT')
   const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
@@ -19,7 +20,7 @@ const ShowReservationPage = () => {
   const { data: reservationSummary } = useShowReservationSummary(showId);
   const { data: reservationPages, hasNextPage } = useShowReservations(showId);
 
-  const reservations = (reservationPages?.pages ?? []).flatMap((reservationPage) => reservationPage.content);
+  const reservations = (reservationPages?.pages ?? []).flatMap((reservationPage) => reservationPage.content).filter(({ reservationStatus }) => reservationStatus === selectedReservationStatus);
 
   if (!show || !reservationSummary) return null;
 
@@ -63,13 +64,28 @@ const ShowReservationPage = () => {
             </Styled.TicketSummary>
           </Styled.TicketSummaryContainer>
           <Styled.TicketReservationSummaryContainer>
-            <Styled.TicketReservationSummaryButton isSelected>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedReservationStatus('WAITING_FOR_DEPOSIT')
+              }}
+              isSelected={selectedReservationStatus === 'WAITING_FOR_DEPOSIT'}
+            >
               발권 대기 <span>{waitCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedReservationStatus('RESERVATION_COMPLETED')
+              }}
+              isSelected={selectedReservationStatus === 'RESERVATION_COMPLETED'}
+            >
               발권 완료 <span>{completeCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedReservationStatus('CANCELLED')
+              }}
+              isSelected={selectedReservationStatus === 'CANCELLED'}
+            >
               발권 취소 <span>{cancelCount}</span>
             </Styled.TicketReservationSummaryButton>
             <TicketTypeSelect onChange={(value) => setSelectedTicketType(value)} />

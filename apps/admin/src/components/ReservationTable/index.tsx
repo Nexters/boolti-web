@@ -32,7 +32,7 @@ const columns = [
   }),
   columnHelper.accessor('ticketPrice', {
     header: () => <span>결제 금액</span>,
-    cell: props => <span>{props.getValue()}</span>,
+    cell: props => <span>{props.getValue().toLocaleString()}원</span>,
   }),
   columnHelper.accessor('means', {
     header: () => <span>결제 방법</span>,
