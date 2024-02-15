@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 `;
 
 const Header = styled.div`
