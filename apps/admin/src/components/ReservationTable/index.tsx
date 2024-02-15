@@ -44,48 +44,42 @@ const columns = [
   }),
 ]
 
-
-
 interface Props {
   data: ReservationResponse[];
 }
 
 const ReservationTable = ({ data }: Props) => {
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel(), })
-  console.log(data);
-  console.log(table)
   return (
     <Styled.Container>
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </Styled.Container>
+      <Styled.Header>
+        {table.getHeaderGroups().map(headerGroup => (
+          <Styled.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map(header => (
+              <Styled.HeaderItem key={header.id}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
+              </Styled.HeaderItem>
+            ))}
+          </Styled.HeaderRow>
+        ))}
+      </Styled.Header>
+      <Styled.Body>
+        {table.getRowModel().rows.map(row => (
+          <Styled.Row key={row.id}>
+            {row.getVisibleCells().map(cell => (
+              <Styled.Item key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Styled.Item>
+            ))}
+          </Styled.Row>
+        ))}
+      </Styled.Body>
+    </Styled.Container >
   )
 }
 
