@@ -106,8 +106,6 @@ const Item = styled.span`
   }
 `;
 
-
-
 export default {
   Container,
   Header,
@@ -116,4 +114,4 @@ export default {
   Body,
   Row,
   Item,
-}
+};

@@ -1,4 +1,9 @@
-import { ReservationStatus, useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
+import {
+  ReservationStatus,
+  useShowDetail,
+  useShowReservations,
+  useShowReservationSummary,
+} from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -11,8 +16,9 @@ import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const [, setSelectedTicketType] = useState('ALL');
-  const [selectedReservationStatus, setSelectedReservationStatus] = useState<ReservationStatus>('WAITING_FOR_DEPOSIT')
+  const [selectedTicketType, setSelectedTicketType] = useState('ALL');
+  const [selectedReservationStatus, setSelectedReservationStatus] =
+    useState<ReservationStatus>('WAITING_FOR_DEPOSIT');
   const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
@@ -20,7 +26,13 @@ const ShowReservationPage = () => {
   const { data: reservationSummary } = useShowReservationSummary(showId);
   const { data: reservationPages, hasNextPage } = useShowReservations(showId);
 
-  const reservations = (reservationPages?.pages ?? []).flatMap((reservationPage) => reservationPage.content).filter(({ reservationStatus }) => reservationStatus === selectedReservationStatus);
+  const reservations = (reservationPages?.pages ?? [])
+    .flatMap((reservationPage) => reservationPage.content)
+    .filter(
+      ({ reservationStatus, ticketType }) =>
+        reservationStatus === selectedReservationStatus &&
+        (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+    );
 
   if (!show || !reservationSummary) return null;
 
@@ -66,7 +78,7 @@ const ShowReservationPage = () => {
           <Styled.TicketReservationSummaryContainer>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('WAITING_FOR_DEPOSIT')
+                setSelectedReservationStatus('WAITING_FOR_DEPOSIT');
               }}
               isSelected={selectedReservationStatus === 'WAITING_FOR_DEPOSIT'}
             >
@@ -74,7 +86,7 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('RESERVATION_COMPLETED')
+                setSelectedReservationStatus('RESERVATION_COMPLETED');
               }}
               isSelected={selectedReservationStatus === 'RESERVATION_COMPLETED'}
             >
@@ -82,7 +94,7 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('CANCELLED')
+                setSelectedReservationStatus('CANCELLED');
               }}
               isSelected={selectedReservationStatus === 'CANCELLED'}
             >
