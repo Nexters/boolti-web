@@ -5,10 +5,7 @@ import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
 // TODO 환경 변수로 API 베이스 설정
-const API_URL =
-  window.location.origin === 'https://boolti.in'
-    ? 'https://api.boolti.in'
-    : 'https://dev.api.boolti.in';
+const API_URL = 'https://dev.api.boolti.in';
 
 interface PostRefreshTokenResponse {
   accessToken: string;
