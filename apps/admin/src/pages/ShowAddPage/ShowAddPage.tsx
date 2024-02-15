@@ -43,6 +43,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitTicketForm: SubmitHandler<ShowTicketFormInputs> = async () => {
+    if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading') return
+
     // 공연 이미지 업로드
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
