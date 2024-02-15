@@ -7,7 +7,7 @@ const SignUpCompletePage = styled.div`
 `;
 
 const SignUpCompleteContent = styled.div`
-  padding: 150px 20px 50px;
+  padding: 300px 20px 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;

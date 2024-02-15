@@ -20,7 +20,7 @@ const SignUpCompletePage = () => {
         <Styled.Card>
           <Styled.CardContent>
             {/* Note: 추후 이미지 교체 */}
-            <div
+            {/* <div
               style={{
                 width: '388px',
                 height: '230px',
@@ -29,7 +29,7 @@ const SignUpCompletePage = () => {
               }}
             >
               img
-            </div>
+            </div> */}
             <Styled.CardContentTitle>어서오세요 {userSummary.nickname}님!</Styled.CardContentTitle>
             <Styled.CardContentDescription>
               원활한 이용을 위해{' '}
