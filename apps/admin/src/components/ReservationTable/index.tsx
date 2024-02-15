@@ -6,6 +6,8 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import { formatPhoneNumber } from '~/utils/format';
+
 import Styled from './ReservationTable.styles';
 
 const columnHelper = createColumnHelper<ReservationResponse>();
@@ -29,7 +31,7 @@ const columns = [
   }),
   columnHelper.accessor('reservationPhoneNumber', {
     header: () => <span>연락처</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    cell: (props) => <span>{formatPhoneNumber(props.getValue())}</span>,
   }),
   columnHelper.accessor('reservationId', {
     header: () => <span>주문 번호</span>,
