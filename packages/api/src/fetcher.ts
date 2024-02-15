@@ -4,8 +4,7 @@ import ky from 'ky';
 import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
-// TODO 환경 변수로 API 베이스 설정
-const API_URL = 'https://dev.api.boolti.in';
+const API_URL = import.meta.env.VITE_BASE_API_URL;
 
 interface PostRefreshTokenResponse {
   accessToken: string;
