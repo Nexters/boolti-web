@@ -1,8 +1,9 @@
-import { useShowDetail, useShowReservationSummary } from '@boolti/api';
+import { useShowDetail, useShowReservations, useShowReservationSummary } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import ReservationTable from '~/components/ReservationTable';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
@@ -16,7 +17,9 @@ const ShowReservationPage = () => {
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  // const { data: reservations = [], hasNextPage } = useShowReservations(showId);
+  const { data: reservationPages, hasNextPage } = useShowReservations(showId);
+
+  const reservations = (reservationPages?.pages ?? []).flatMap((reservationPage) => reservationPage.content);
 
   if (!show || !reservationSummary) return null;
 
@@ -90,6 +93,7 @@ const ShowReservationPage = () => {
               </Styled.ButtonContainer>
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
+          <ReservationTable data={reservations} />
         </Styled.Container>
       )}
     </ShowDetailLayout>
