@@ -4,7 +4,6 @@ import { SearchParamsOption } from 'ky';
 import { fetcher } from './fetcher';
 import {
   PageReservationResponse,
-  ReservationStatus,
   ReservationSummaryResponse,
   ShowInvitationCodeListResponse,
   ShowInvitationTicketResponse,
@@ -12,6 +11,7 @@ import {
   ShowSalesInfoResponse,
   ShowSalesTicketResponse,
   ShowSummaryResponse,
+  TicketStatus,
   TicketType,
 } from './types/show';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
@@ -37,7 +37,7 @@ export const showQueryKeys = createQueryKeys('show', {
   reservation: (
     showId: number,
     ticketType: TicketType | undefined = undefined,
-    ticketStatus: ReservationStatus | undefined = undefined,
+    ticketStatus: TicketStatus | undefined = undefined,
     reservationNameOrPhoneNumber: string | undefined = undefined,
   ) => ({
     queryKey: [showId, reservationNameOrPhoneNumber, ticketType, ticketStatus],
