@@ -25,7 +25,7 @@ const ShowReservationPage = () => {
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationPages } = useShowReservations(
+  const { data: reservationPages, isLoading: isReservationPagesLoading } = useShowReservations(
     showId,
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
@@ -128,12 +128,16 @@ const ShowReservationPage = () => {
               </Styled.ButtonContainer>
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
-          <ReservationTable data={reservations} selectedTicketStatus={selectedTicketStatus} />
-          <Pagination
-            totalPages={totalPages}
-            currentPage={currentPage}
-            onClickPage={setCurrentPage}
-          />
+          {!isReservationPagesLoading && (
+            <ReservationTable data={reservations} selectedTicketStatus={selectedTicketStatus} />
+          )}
+          {reservations.length !== 0 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onClickPage={setCurrentPage}
+            />
+          )}
         </Styled.Container>
       )}
     </ShowDetailLayout>

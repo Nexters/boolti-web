@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   overflow: hidden;
   margin: 16px 0;
@@ -113,6 +115,15 @@ const Item = styled.span`
   }
 `;
 
+const Empty = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  ${({ theme }) => theme.typo.b4};
+  color: ${({ theme }) => theme.palette.grey.g40};
+`;
+
 export default {
   Container,
   Header,
@@ -121,4 +132,5 @@ export default {
   Body,
   Row,
   Item,
+  Empty,
 };
