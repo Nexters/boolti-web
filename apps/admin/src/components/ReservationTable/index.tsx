@@ -18,7 +18,7 @@ const columns = [
   }),
   columnHelper.accessor('ticketType', {
     header: '티켓 타입',
-    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`
+    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
   }),
   columnHelper.accessor('ticketName', {
     header: '티켓 이름',
@@ -35,11 +35,11 @@ const columns = [
   }),
   columnHelper.accessor('ticketPrice', {
     header: '결제 금액',
-    cell: (props) => `${props.getValue().toLocaleString()}원`
+    cell: (props) => `${props.getValue().toLocaleString()}원`,
   }),
   columnHelper.accessor('means', {
     header: '결제 방법',
-    cell: (props) => props.getValue() === 'CARD' ? '카드 결제' : '초청 코드'
+    cell: (props) => (props.getValue() === 'CARD' ? '카드 결제' : '초청 코드'),
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: '발권일시',

@@ -1,4 +1,5 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
+import { SearchParamsOption } from 'ky';
 
 import { fetcher } from './fetcher';
 import {
@@ -35,16 +36,26 @@ export const showQueryKeys = createQueryKeys('show', {
   }),
   reservation: (
     showId: number,
-    reservationNameOrPhoneNumber: string | undefined = undefined,
     ticketType: TicketType | undefined = undefined,
     ticketStatus: ReservationStatus | undefined = undefined,
+    reservationNameOrPhoneNumber: string | undefined = undefined,
   ) => ({
     queryKey: [showId, reservationNameOrPhoneNumber, ticketType, ticketStatus],
     queryFn: ({ pageParam = 0 }) => {
+      const searchParams: SearchParamsOption = {
+        page: pageParam,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (ticketStatus) {
+        searchParams.ticketStatus = ticketStatus;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
       return fetcher.get<PageReservationResponse>(`web/v1/host/shows/${showId}/reservations`, {
-        searchParams: {
-          page: pageParam,
-        },
+        searchParams,
       });
     },
   }),

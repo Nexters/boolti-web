@@ -1,5 +1,6 @@
 import {
-  ReservationStatus,
+  TicketStatus,
+  TicketType,
   useShowDetail,
   useShowReservations,
   useShowReservationSummary,
@@ -16,21 +17,25 @@ import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const [selectedTicketType, setSelectedTicketType] = useState('ALL');
-  const [selectedReservationStatus, setSelectedReservationStatus] =
-    useState<ReservationStatus>('WAITING_FOR_DEPOSIT');
+  const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
+  const [selectedTicketStatus, setSelectedTicketStatus] =
+    useState<TicketStatus>('WAIT');
   const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationPages, hasNextPage } = useShowReservations(showId);
+  const { data: reservationPages, hasNextPage } = useShowReservations(
+    showId,
+    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
+    selectedTicketStatus,
+  );
 
   const reservations = (reservationPages?.pages ?? [])
     .flatMap((reservationPage) => reservationPage.content)
     .filter(
-      ({ reservationStatus, ticketType }) =>
-        reservationStatus === selectedReservationStatus &&
+      ({ ticketStatus, ticketType }) =>
+        ticketStatus === selectedTicketStatus &&
         (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
     );
 
@@ -78,29 +83,29 @@ const ShowReservationPage = () => {
           <Styled.TicketReservationSummaryContainer>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('WAITING_FOR_DEPOSIT');
+                setSelectedTicketStatus('WAIT');
               }}
-              isSelected={selectedReservationStatus === 'WAITING_FOR_DEPOSIT'}
+              isSelected={selectedTicketStatus === 'WAIT'}
             >
               발권 대기 <span>{waitCount}</span>
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('RESERVATION_COMPLETED');
+                setSelectedTicketStatus('COMPLETE');
               }}
-              isSelected={selectedReservationStatus === 'RESERVATION_COMPLETED'}
+              isSelected={selectedTicketStatus === 'COMPLETE'}
             >
               발권 완료 <span>{completeCount}</span>
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setSelectedReservationStatus('CANCELLED');
+                setSelectedTicketStatus('CANCEL');
               }}
-              isSelected={selectedReservationStatus === 'CANCELLED'}
+              isSelected={selectedTicketStatus === 'CANCEL'}
             >
               발권 취소 <span>{cancelCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <TicketTypeSelect onChange={(value) => setSelectedTicketType(value)} />
+            <TicketTypeSelect onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')} />
             <Styled.InputContainer>
               <Styled.Input
                 value={searchText}
