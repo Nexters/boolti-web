@@ -2,10 +2,6 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
-  overflow: hidden;
-  margin: 16px 0;
-  height: 547px;
 `;
 
 const Button = styled.button<{ isCurrent?: boolean }>`
