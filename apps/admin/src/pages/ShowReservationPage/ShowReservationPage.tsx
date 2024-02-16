@@ -41,6 +41,11 @@ const ShowReservationPage = () => {
       (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
   );
 
+  const onClickReset = () => {
+    setSelectedTicketType('ALL');
+    setSearchText('');
+  }
+
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchText(searchText);
@@ -138,7 +143,12 @@ const ShowReservationPage = () => {
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
           {!isReservationPagesLoading && (
-            <ReservationTable data={reservations} selectedTicketStatus={selectedTicketStatus} />
+            <ReservationTable
+              data={reservations}
+              selectedTicketStatus={selectedTicketStatus}
+              isSearchResult={debouncedSearchText !== ''}
+              onClickReset={onClickReset}
+            />
           )}
           {reservations.length !== 0 && (
             <Pagination

@@ -1,3 +1,4 @@
+import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -117,11 +118,19 @@ const Item = styled.span`
 
 const Empty = styled.div`
   display: flex;
+  flex-direction: column;
+  flex: 1;
   justify-content: center;
   align-items: center;
-  flex: 1;
+  white-space: pre-wrap;
+  text-align: center;
   ${({ theme }) => theme.typo.b4};
   color: ${({ theme }) => theme.palette.grey.g40};
+`;
+
+const ResetButton = styled(Button)`
+display: block;
+margin-top: 18px;
 `;
 
 export default {
@@ -133,4 +142,5 @@ export default {
   Row,
   Item,
   Empty,
+  ResetButton,
 };

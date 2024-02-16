@@ -55,9 +55,11 @@ const emptyLabel: Record<TicketStatus, string> = {
 interface Props {
   data: ReservationResponse[];
   selectedTicketStatus: TicketStatus;
+  isSearchResult: boolean;
+  onClickReset?: VoidFunction;
 }
 
-const ReservationTable = ({ data, selectedTicketStatus }: Props) => {
+const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickReset }: Props) => {
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
   return (
     <Styled.Container>
@@ -75,7 +77,16 @@ const ReservationTable = ({ data, selectedTicketStatus }: Props) => {
         ))}
       </Styled.Header>
       {data.length === 0 ? (
-        <Styled.Empty>{emptyLabel[selectedTicketStatus]}</Styled.Empty>
+        <Styled.Empty>
+          {isSearchResult ? (
+            <>
+              검색 결과가 없어요.{'\n'}예매자 이름 또는 연락처를 변경해보세요.
+              <Styled.ResetButton colorTheme='line' size='bold' onClick={onClickReset}>검색 초기화</Styled.ResetButton>
+            </>
+          ) : (
+            emptyLabel[selectedTicketStatus]
+          )}
+        </Styled.Empty>
       ) : (
         <Styled.Body>
           {table.getRowModel().rows.map((row) => (
