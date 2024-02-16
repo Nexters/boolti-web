@@ -1,8 +1,16 @@
-import { useShowDetail, useShowReservationSummary } from '@boolti/api';
+import {
+  TicketStatus,
+  TicketType,
+  useShowDetail,
+  useShowReservations,
+  useShowReservationSummary,
+} from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Pagination from '~/components/Pagination';
+import ReservationTable from '~/components/ReservationTable';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
@@ -10,13 +18,40 @@ import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const [, setSelectedTicketType] = useState('ALL');
+  const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
+  const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('WAIT');
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  // const { data: reservations = [], hasNextPage } = useShowReservations(showId);
+  const { data: reservationPages, isLoading: isReservationPagesLoading } = useShowReservations(
+    showId,
+    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
+    selectedTicketStatus,
+    debouncedSearchText,
+  );
+  const [currentPage, setCurrentPage] = useState(0);
+  const currentReservationPage = (reservationPages?.pages ?? [])[currentPage];
+  const totalPages = currentReservationPage?.totalPages;
+  const reservations = (currentReservationPage?.content ?? []).filter(
+    ({ ticketStatus, ticketType }) =>
+      ticketStatus === selectedTicketStatus &&
+      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+  );
+
+  const onClickReset = () => {
+    setSelectedTicketType('ALL');
+    setSearchText('');
+  }
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+    return () => clearTimeout(timerId);
+  }, [searchText]);
 
   if (!show || !reservationSummary) return null;
 
@@ -60,16 +95,33 @@ const ShowReservationPage = () => {
             </Styled.TicketSummary>
           </Styled.TicketSummaryContainer>
           <Styled.TicketReservationSummaryContainer>
-            <Styled.TicketReservationSummaryButton isSelected>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedTicketStatus('WAIT');
+              }}
+              isSelected={selectedTicketStatus === 'WAIT'}
+            >
               발권 대기 <span>{waitCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedTicketStatus('COMPLETE');
+              }}
+              isSelected={selectedTicketStatus === 'COMPLETE'}
+            >
               발권 완료 <span>{completeCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton>
+            <Styled.TicketReservationSummaryButton
+              onClick={() => {
+                setSelectedTicketStatus('CANCEL');
+              }}
+              isSelected={selectedTicketStatus === 'CANCEL'}
+            >
               발권 취소 <span>{cancelCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <TicketTypeSelect onChange={(value) => setSelectedTicketType(value)} />
+            <TicketTypeSelect
+              onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
+            />
             <Styled.InputContainer>
               <Styled.Input
                 value={searchText}
@@ -90,6 +142,21 @@ const ShowReservationPage = () => {
               </Styled.ButtonContainer>
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
+          {!isReservationPagesLoading && (
+            <ReservationTable
+              data={reservations}
+              selectedTicketStatus={selectedTicketStatus}
+              isSearchResult={debouncedSearchText !== ''}
+              onClickReset={onClickReset}
+            />
+          )}
+          {reservations.length !== 0 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onClickPage={setCurrentPage}
+            />
+          )}
         </Styled.Container>
       )}
     </ShowDetailLayout>

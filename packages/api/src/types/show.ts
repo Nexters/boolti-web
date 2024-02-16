@@ -68,6 +68,8 @@ export type ReservationStatus =
   | 'WAITING_FOR_REFUND'
   | 'REFUND_COMPLETED';
 
+export type TicketStatus = 'WAIT' | 'COMPLETE' | 'CANCEL';
+
 export interface ReservationResponse {
   /** 티켓 ID */
   ticketId: number;
@@ -85,6 +87,8 @@ export interface ReservationResponse {
   reservationStatus: ReservationStatus;
   /** 티켓 가격 */
   ticketPrice: number;
+  /** 티켓 상태 */
+  ticketStatus: TicketStatus;
   /** 결제 수단 */
   means: 'ACCOUNT_TRANSFER' | 'CARD';
   /** 티켓 발권일시 */

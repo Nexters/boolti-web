@@ -6666,6 +6666,42 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@tanstack/react-table", [\
+      ["npm:8.12.0", {\
+        "packageLocation": "../../.yarn/berry/cache/@tanstack-react-table-npm-8.12.0-c4f59838fd-10c0.zip/node_modules/@tanstack/react-table/",\
+        "packageDependencies": [\
+          ["@tanstack/react-table", "npm:8.12.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:8.12.0", {\
+        "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-1c11967ce8/3/.yarn/berry/cache/@tanstack-react-table-npm-8.12.0-c4f59838fd-10c0.zip/node_modules/@tanstack/react-table/",\
+        "packageDependencies": [\
+          ["@tanstack/react-table", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:8.12.0"],\
+          ["@tanstack/table-core", "npm:8.12.0"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@tanstack/table-core", [\
+      ["npm:8.12.0", {\
+        "packageLocation": "../../.yarn/berry/cache/@tanstack-table-core-npm-8.12.0-6e128c99eb-10c0.zip/node_modules/@tanstack/table-core/",\
+        "packageDependencies": [\
+          ["@tanstack/table-core", "npm:8.12.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@testing-library/dom", [\
       ["npm:9.3.4", {\
         "packageLocation": "../../.yarn/berry/cache/@testing-library-dom-npm-9.3.4-cfb609c4fc-10c0.zip/node_modules/@testing-library/dom/",\
@@ -7811,6 +7847,7 @@ const RAW_RUNTIME_STATE =
           ["@emotion/babel-plugin", "npm:11.11.0"],\
           ["@emotion/react", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:11.11.3"],\
           ["@emotion/styled", "virtual:85869d3eba7afdb6f94c001c9503942ddc4354e881daf63c24e9d58366ea9f25c6bac2df65ae0f5266c54cd36fe68f0d9568da3a1ab62446405c98ac852f4431#npm:11.11.0"],\
+          ["@tanstack/react-table", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:8.12.0"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
