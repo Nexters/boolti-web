@@ -4,6 +4,7 @@ const Container = styled.div`
   width: 100%;
   overflow: hidden;
   margin: 16px 0;
+  height: 547px;
 `;
 
 const Header = styled.div`
@@ -72,7 +73,7 @@ const Item = styled.span`
   display: block;
   overflow: hidden;
   flex: 0 0 auto;
-  padding: 12px;
+  padding: 14px 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

@@ -1,4 +1,4 @@
-import { ReservationResponse } from '@boolti/api';
+import { ReservationResponse, TicketStatus } from '@boolti/api';
 import {
   createColumnHelper,
   flexRender,
@@ -48,9 +48,10 @@ const columns = [
 
 interface Props {
   data: ReservationResponse[];
+  selectedTicketStatus: TicketStatus;
 }
 
-const ReservationTable = ({ data }: Props) => {
+const ReservationTable = ({ data, selectedTicketStatus }: Props) => {
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
   return (
     <Styled.Container>
@@ -67,17 +68,21 @@ const ReservationTable = ({ data }: Props) => {
           </Styled.HeaderRow>
         ))}
       </Styled.Header>
-      <Styled.Body>
-        {table.getRowModel().rows.map((row) => (
-          <Styled.Row key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <Styled.Item key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Styled.Item>
-            ))}
-          </Styled.Row>
-        ))}
-      </Styled.Body>
+      {data.length === 0 ? (
+        <>{selectedTicketStatus}</>
+      ) : (
+        <Styled.Body>
+          {table.getRowModel().rows.map((row) => (
+            <Styled.Row key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <Styled.Item key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Styled.Item>
+              ))}
+            </Styled.Row>
+          ))}
+        </Styled.Body>
+      )}
     </Styled.Container>
   );
 };

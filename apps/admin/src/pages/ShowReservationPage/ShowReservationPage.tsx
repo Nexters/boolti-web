@@ -9,6 +9,7 @@ import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import Pagination from '~/components/Pagination';
 import ReservationTable from '~/components/ReservationTable';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
@@ -24,14 +25,15 @@ const ShowReservationPage = () => {
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationPages, hasNextPage } = useShowReservations(
+  const { data: reservationPages } = useShowReservations(
     showId,
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
   );
   const [currentPage, setCurrentPage] = useState(0);
-
-  const reservations = ((reservationPages?.pages ?? [])[currentPage]?.content ?? []).filter(
+  const currentReservationPage = (reservationPages?.pages ?? [])[currentPage];
+  const { totalPages = 0 } = currentReservationPage;
+  const reservations = (currentReservationPage?.content ?? []).filter(
     ({ ticketStatus, ticketType }) =>
       ticketStatus === selectedTicketStatus &&
       (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
@@ -126,7 +128,12 @@ const ShowReservationPage = () => {
               </Styled.ButtonContainer>
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
-          <ReservationTable data={reservations} />
+          <ReservationTable data={reservations} selectedTicketStatus={selectedTicketStatus} />
+          <Pagination
+            totalPages={totalPages}
+            currentPage={currentPage}
+            onClickPage={setCurrentPage}
+          />
         </Styled.Container>
       )}
     </ShowDetailLayout>
