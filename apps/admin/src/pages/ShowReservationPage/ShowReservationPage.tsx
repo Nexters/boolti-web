@@ -6,7 +6,7 @@ import {
   useShowReservationSummary,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Pagination from '~/components/Pagination';
@@ -21,6 +21,7 @@ const ShowReservationPage = () => {
   const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
   const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('WAIT');
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -29,15 +30,23 @@ const ShowReservationPage = () => {
     showId,
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
+    debouncedSearchText,
   );
   const [currentPage, setCurrentPage] = useState(0);
   const currentReservationPage = (reservationPages?.pages ?? [])[currentPage];
-  const { totalPages = 0 } = currentReservationPage;
+  const totalPages = currentReservationPage?.totalPages;
   const reservations = (currentReservationPage?.content ?? []).filter(
     ({ ticketStatus, ticketType }) =>
       ticketStatus === selectedTicketStatus &&
       (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
   );
+
+  useEffect(() => {
+    const timerId = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+    return () => clearTimeout(timerId);
+  }, [searchText]);
 
   if (!show || !reservationSummary) return null;
 
