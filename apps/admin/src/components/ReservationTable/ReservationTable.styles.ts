@@ -20,33 +20,34 @@ const HeaderItem = styled.span`
   display: inline-block;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
+  text-align: center;
   padding: 12px;
-  &:not(:last-child) {
+  &:not(:last-of-type) {
     margin-right: 12px;
   }
-  &:nth-child(1) {
+  &:nth-of-type(1) {
     width: 88px;
   }
-  &:nth-child(2) {
+  &:nth-of-type(2) {
     width: 80px;
   }
-  &:nth-child(3) {
+  &:nth-of-type(3) {
     width: 180px;
   }
-  &:nth-child(4) {
+  &:nth-of-type(4) {
     width: 100px;
   }
-  &:nth-child(5) {
+  &:nth-of-type(5) {
     width: 140px;
   }
-  &:nth-child(6) {
+  &:nth-of-type(6) {
     width: 96px;
   }
-  &:nth-child(7) {
+  &:nth-of-type(7) {
     text-align: right;
     width: 92px;
   }
-  &:nth-child(8) {
+  &:nth-of-type(8) {
     width: 92px;
   }
 `;
@@ -71,37 +72,38 @@ const Item = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  text-align: center;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
-  &:not(:last-child) {
+  &:not(:last-of-type) {
     margin-right: 12px;
   }
-  &:nth-child(1) {
+  &:nth-of-type(1) {
     width: 88px;
   }
-  &:nth-child(2) {
+  &:nth-of-type(2) {
     width: 80px;
   }
-  &:nth-child(3) {
+  &:nth-of-type(3) {
     width: 180px;
   }
-  &:nth-child(4) {
+  &:nth-of-type(4) {
     width: 100px;
   }
-  &:nth-child(5) {
+  &:nth-of-type(5) {
     width: 140px;
   }
-  &:nth-child(6) {
+  &:nth-of-type(6) {
     width: 96px;
   }
-  &:nth-child(7) {
+  &:nth-of-type(7) {
     text-align: right;
     width: 92px;
   }
-  &:nth-child(8) {
+  &:nth-of-type(8) {
     width: 92px;
   }
-  &:nth-child(9) {
+  &:nth-of-type(9) {
     width: 100px;
   }
 `;

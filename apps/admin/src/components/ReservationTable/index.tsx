@@ -14,40 +14,35 @@ const columnHelper = createColumnHelper<ReservationResponse>();
 
 const columns = [
   columnHelper.accessor('ticketId', {
-    header: () => <span>티켓 번호</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    header: '티켓 번호',
   }),
   columnHelper.accessor('ticketType', {
-    header: () => <span>티켓 타입</span>,
-    cell: (props) => <span>{`${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`}</span>,
+    header: '티켓 타입',
+    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`
   }),
   columnHelper.accessor('ticketName', {
-    header: () => <span>티켓 이름</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    header: '티켓 이름',
   }),
   columnHelper.accessor('reservationName', {
-    header: () => <span>예매자 이름</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    header: '예매자 이름',
   }),
   columnHelper.accessor('reservationPhoneNumber', {
-    header: () => <span>연락처</span>,
-    cell: (props) => <span>{formatPhoneNumber(props.getValue())}</span>,
+    header: '연락처',
+    cell: (props) => formatPhoneNumber(props.getValue()),
   }),
   columnHelper.accessor('reservationId', {
-    header: () => <span>주문 번호</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    header: '주문 번호',
   }),
   columnHelper.accessor('ticketPrice', {
-    header: () => <span>결제 금액</span>,
-    cell: (props) => <span>{props.getValue().toLocaleString()}원</span>,
+    header: '결제 금액',
+    cell: (props) => `${props.getValue().toLocaleString()}원`
   }),
   columnHelper.accessor('means', {
-    header: () => <span>결제 방법</span>,
-    cell: (props) => <span>{props.getValue() === 'CARD' ? '카드 결제' : '초청 코드'}</span>,
+    header: '결제 방법',
+    cell: (props) => props.getValue() === 'CARD' ? '카드 결제' : '초청 코드'
   }),
   columnHelper.accessor('ticketIssuedAt', {
-    header: () => <span>발권일시</span>,
-    cell: (props) => <span>{props.getValue()}</span>,
+    header: '발권일시',
   }),
 ];
 
