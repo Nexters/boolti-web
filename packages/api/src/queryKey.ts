@@ -1,5 +1,5 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
-import { SearchParamsOption } from 'ky';
+import type { SearchParamsOption } from 'ky';
 
 import { fetcher } from './fetcher';
 import {

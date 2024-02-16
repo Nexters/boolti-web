@@ -68,8 +68,7 @@ export type ReservationStatus =
   | 'WAITING_FOR_REFUND'
   | 'REFUND_COMPLETED';
 
-export type TicketStatus =
-  'WAIT' | 'COMPLETE' | 'CANCEL'
+export type TicketStatus = 'WAIT' | 'COMPLETE' | 'CANCEL';
 
 export interface ReservationResponse {
   /** 티켓 ID */

@@ -18,8 +18,7 @@ import Styled from './ShowReservationPage.styles';
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
   const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
-  const [selectedTicketStatus, setSelectedTicketStatus] =
-    useState<TicketStatus>('WAIT');
+  const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('WAIT');
   const [searchText, setSearchText] = useState('');
 
   const showId = Number(params!.showId);
@@ -30,14 +29,13 @@ const ShowReservationPage = () => {
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
   );
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const reservations = (reservationPages?.pages ?? [])
-    .flatMap((reservationPage) => reservationPage.content)
-    .filter(
-      ({ ticketStatus, ticketType }) =>
-        ticketStatus === selectedTicketStatus &&
-        (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
-    );
+  const reservations = ((reservationPages?.pages ?? [])[currentPage]?.content ?? []).filter(
+    ({ ticketStatus, ticketType }) =>
+      ticketStatus === selectedTicketStatus &&
+      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+  );
 
   if (!show || !reservationSummary) return null;
 
@@ -105,7 +103,9 @@ const ShowReservationPage = () => {
             >
               발권 취소 <span>{cancelCount}</span>
             </Styled.TicketReservationSummaryButton>
-            <TicketTypeSelect onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')} />
+            <TicketTypeSelect
+              onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
+            />
             <Styled.InputContainer>
               <Styled.Input
                 value={searchText}

@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   width: 100%;
+  overflow: hidden;
   margin: 16px 0;
 `;
 
@@ -12,16 +13,19 @@ const Header = styled.div`
 `;
 
 const HeaderRow = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
   width: 100%;
   padding-left: 8px;
 `;
 
 const HeaderItem = styled.span`
-  display: inline-block;
-  ${({ theme }) => theme.typo.b2};
-  color: ${({ theme }) => theme.palette.grey.g60};
+  display: block;
+  flex: 0 0 auto;
   text-align: center;
   padding: 12px;
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g60};
   &:not(:last-of-type) {
     margin-right: 12px;
   }
