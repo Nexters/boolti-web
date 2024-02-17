@@ -1,3 +1,5 @@
+import { PageResponse, ReservationStatus, TicketStatus, TicketType } from './common';
+
 export interface ShowImage {
   sequence: number;
   thumbnailPath: string;
@@ -59,17 +61,6 @@ export interface ShowSalesInfoResponse {
   ticketNotice: string;
 }
 
-export type TicketType = 'SALE' | 'INVITE';
-
-export type ReservationStatus =
-  | 'WAITING_FOR_DEPOSIT'
-  | 'CANCELLED'
-  | 'RESERVATION_COMPLETED'
-  | 'WAITING_FOR_REFUND'
-  | 'REFUND_COMPLETED';
-
-export type TicketStatus = 'WAIT' | 'COMPLETE' | 'CANCEL';
-
 export interface ReservationResponse {
   /** 티켓 ID */
   ticketId: number;
@@ -97,34 +88,7 @@ export interface ReservationResponse {
   ticketCreatedAt: string;
 }
 
-export interface PageReservationResponse {
-  totalPages: number;
-  totalElements: number;
-  size: number;
-  content: ReservationResponse[];
-  number: number;
-  sort: {
-    empty: boolean;
-    sorted: boolean;
-    unsorted: boolean;
-  };
-  numberOfElements: number;
-  pageable: {
-    offset: number;
-    sort: {
-      empty: boolean;
-      sorted: boolean;
-      unsorted: boolean;
-    };
-    pageNumber: number;
-    pageSize: number;
-    unpaged: boolean;
-    paged: boolean;
-  };
-  first: boolean;
-  last: boolean;
-  empty: boolean;
-}
+export type PageReservationResponse = PageResponse<ReservationResponse>;
 
 export interface ReservationSummaryResponse {
   /** 판매 티켓 발권 수량 */

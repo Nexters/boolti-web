@@ -3,6 +3,9 @@ import type { SearchParamsOption } from 'ky';
 
 import { fetcher } from './fetcher';
 import {
+  EntranceInfoResponse,
+  EntranceSummaryResponse,
+  PageEntranceResponse,
   PageReservationResponse,
   ReservationSummaryResponse,
   ShowInvitationCodeListResponse,
@@ -13,8 +16,43 @@ import {
   ShowSummaryResponse,
   TicketStatus,
   TicketType,
-} from './types/show';
+} from './types';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
+
+export const entranceQueryKeys = createQueryKeys('enterance', {
+  list: (
+    showId: number,
+    isEntered: boolean,
+    ticketType?: TicketType,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, ticketType, isEntered, reservationNameOrPhoneNumber],
+    queryFn: ({ pageParam = 0 }) => {
+      const searchParams: SearchParamsOption = {
+        page: pageParam,
+        isEntered,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageEntranceResponse>(`web/v1/shows/${showId}/entrances`, {
+        searchParams,
+      });
+    },
+  }),
+  summary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<EntranceSummaryResponse>(`web/v1/shows/${showId}/entrance-summaries`),
+  }),
+  info: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<EntranceInfoResponse>(`web/v1/shows/${showId}/entrance-infos`),
+  }),
+});
 
 export const showQueryKeys = createQueryKeys('show', {
   detail: (showId: number) => ({
@@ -38,7 +76,7 @@ export const showQueryKeys = createQueryKeys('show', {
     showId: number,
     ticketType: TicketType | undefined = undefined,
     ticketStatus: TicketStatus | undefined = undefined,
-    reservationNameOrPhoneNumber: string | undefined = undefined,
+    reservationNameOrPhoneNumber?: string,
   ) => ({
     queryKey: [showId, reservationNameOrPhoneNumber, ticketType, ticketStatus],
     queryFn: ({ pageParam = 0 }) => {
@@ -90,4 +128,4 @@ export const userQueryKeys = createQueryKeys('user', {
   },
 });
 
-export const queryKeys = mergeQueryKeys(showQueryKeys, userQueryKeys);
+export const queryKeys = mergeQueryKeys(showQueryKeys, userQueryKeys, entranceQueryKeys);
