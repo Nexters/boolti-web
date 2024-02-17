@@ -18,3 +18,14 @@ interface EntranceResponse {
 }
 
 export type PageEntranceResponse = PageResponse<EntranceResponse>;
+
+export interface EntranceSummaryResponse {
+  notEnteredTicketCount: number;
+  enteredTicketCount: number;
+  totalTicketCount: number;
+}
+
+export interface EntranceInfoResponse {
+  /** 관리자 입장 코드 */
+  managerCode: string;
+}

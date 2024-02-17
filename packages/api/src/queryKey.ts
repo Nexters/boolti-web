@@ -11,7 +11,8 @@ import {
   ShowSalesInfoResponse,
   ShowSalesTicketResponse,
   ShowSummaryResponse,
-  TicketStatus, TicketType,
+  TicketStatus,
+  TicketType,
 } from './types';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
