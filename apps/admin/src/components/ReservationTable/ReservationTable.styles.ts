@@ -129,8 +129,8 @@ const Empty = styled.div`
 `;
 
 const ResetButton = styled(Button)`
-display: block;
-margin-top: 18px;
+  display: block;
+  margin-top: 18px;
 `;
 
 export default {

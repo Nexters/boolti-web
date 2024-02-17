@@ -44,7 +44,7 @@ const ShowReservationPage = () => {
   const onClickReset = () => {
     setSelectedTicketType('ALL');
     setSearchText('');
-  }
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {

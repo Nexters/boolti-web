@@ -13,9 +13,7 @@ const SIZE_PER_PAGE = 10;
 const Pagination = ({ totalPages, currentPage, onClickPage }: Props) => {
   const start = Math.floor(currentPage / SIZE_PER_PAGE) * SIZE_PER_PAGE;
   const end = start + SIZE_PER_PAGE;
-  const pages = Array
-    .from({ length: totalPages }, (_, i) => i)
-    .slice(start, end);
+  const pages = Array.from({ length: totalPages }, (_, i) => i).slice(start, end);
   return (
     <Styled.Container>
       <Styled.Button

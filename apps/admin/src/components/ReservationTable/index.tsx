@@ -81,7 +81,9 @@ const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickR
           {isSearchResult ? (
             <>
               검색 결과가 없어요.{'\n'}예매자 이름 또는 연락처를 변경해보세요.
-              <Styled.ResetButton colorTheme='line' size='bold' onClick={onClickReset}>검색 초기화</Styled.ResetButton>
+              <Styled.ResetButton colorTheme="line" size="bold" onClick={onClickReset}>
+                검색 초기화
+              </Styled.ResetButton>
             </>
           ) : (
             emptyLabel[selectedTicketStatus]
