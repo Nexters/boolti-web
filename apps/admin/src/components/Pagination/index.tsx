@@ -8,14 +8,20 @@ interface Props {
   onClickPage?: (page: number) => void;
 }
 
+const SIZE_PER_PAGE = 10;
+
 const Pagination = ({ totalPages, currentPage, onClickPage }: Props) => {
-  const pages = Array.from({ length: totalPages }, (_, i) => i);
+  const start = Math.floor(currentPage / SIZE_PER_PAGE) * SIZE_PER_PAGE;
+  const end = start + SIZE_PER_PAGE;
+  const pages = Array
+    .from({ length: totalPages }, (_, i) => i)
+    .slice(start, end);
   return (
     <Styled.Container>
       <Styled.Button
         disabled={currentPage === 0}
         onClick={() => {
-          onClickPage?.(0);
+          onClickPage?.(Math.max(currentPage - SIZE_PER_PAGE, 0));
         }}
       >
         <ChevronLeftIcon />
@@ -34,7 +40,7 @@ const Pagination = ({ totalPages, currentPage, onClickPage }: Props) => {
       <Styled.Button
         disabled={currentPage === totalPages - 1}
         onClick={() => {
-          onClickPage?.(totalPages - 1);
+          onClickPage?.(Math.min(currentPage + SIZE_PER_PAGE, totalPages - 1));
         }}
       >
         <ChevronRightIcon />
