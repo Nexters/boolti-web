@@ -1,6 +1,6 @@
 import { PageResponse, TicketType } from './common';
 
-interface EntranceResponse {
+export interface EntranceResponse {
   /** 티켓 ID */
   ticketId: number;
   /** 티켓 타입 */

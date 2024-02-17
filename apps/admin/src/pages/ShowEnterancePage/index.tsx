@@ -10,7 +10,9 @@ import { useDialog } from '@boolti/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import EnteranceTable from '~/components/EnteranceTable';
 import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
+import Pagination from '~/components/Pagination';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
@@ -24,6 +26,7 @@ const ShowEnterancePage = () => {
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -35,6 +38,19 @@ const ShowEnterancePage = () => {
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     debouncedSearchText,
   );
+
+  const currentEnterances = (enterances?.pages ?? [])[currentPage];
+  const totalPages = currentEnterances?.totalPages;
+  const reservations = (currentEnterances?.content ?? []).filter(
+    ({ entered, ticketType }) =>
+      entered === isEnteredTicket &&
+      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+  );
+
+  const onClickReset = () => {
+    setSelectedTicketType('ALL');
+    setSearchText('');
+  };
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -63,13 +79,15 @@ const ShowEnterancePage = () => {
         <Styled.Container>
           <Styled.InfoContainer>
             <Styled.InfoText>인증코드 : {managerCode}</Styled.InfoText>
-            <Styled.QuestionTextButton onClick={() => {
-              open({
-                title: '관객 입장 확인 방법',
-                content: <EntranceConfirmDialogContent />,
-                isAuto: true,
-              });
-            }}>
+            <Styled.QuestionTextButton
+              onClick={() => {
+                open({
+                  title: '관객 입장 확인 방법',
+                  content: <EntranceConfirmDialogContent />,
+                  isAuto: true,
+                });
+              }}
+            >
               인증 코드는 어떻게 사용할 수 있나요?
             </Styled.QuestionTextButton>
           </Styled.InfoContainer>
@@ -90,7 +108,7 @@ const ShowEnterancePage = () => {
           <Styled.EnteranceSummaryContainer>
             <Styled.EnteranceSummaryButton
               onClick={() => {
-                setIsEnteredTicket(true);
+                setIsEnteredTicket(false);
               }}
               isSelected={!isEnteredTicket}
             >
@@ -98,7 +116,7 @@ const ShowEnterancePage = () => {
             </Styled.EnteranceSummaryButton>
             <Styled.EnteranceSummaryButton
               onClick={() => {
-                setIsEnteredTicket(false);
+                setIsEnteredTicket(true);
               }}
               isSelected={isEnteredTicket}
             >
@@ -127,6 +145,21 @@ const ShowEnterancePage = () => {
               </Styled.ButtonContainer>
             </Styled.InputContainer>
           </Styled.EnteranceSummaryContainer>
+          {!isEntranceListLoading && (
+            <EnteranceTable
+              data={reservations}
+              isEnteredTicket={isEnteredTicket}
+              isSearchResult={debouncedSearchText !== ''}
+              onClickReset={onClickReset}
+            />
+          )}
+          {reservations.length !== 0 && (
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              onClickPage={setCurrentPage}
+            />
+          )}
         </Styled.Container>
       )}
     </ShowDetailLayout>
