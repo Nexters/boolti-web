@@ -11,9 +11,8 @@ import {
   ShowSalesInfoResponse,
   ShowSalesTicketResponse,
   ShowSummaryResponse,
-  TicketStatus,
-  TicketType,
-} from './types/show';
+  TicketStatus, TicketType,
+} from './types';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export const showQueryKeys = createQueryKeys('show', {

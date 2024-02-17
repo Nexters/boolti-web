@@ -33,7 +33,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchInfoTab = useMatch(PATH.SHOW_INFO);
   const matchTicketTab = useMatch(PATH.SHOW_TICKET);
   const matchReservationTab = useMatch(PATH.SHOW_RESERVATION);
-  const matchEntryTab = useMatch(PATH.SHOW_ENTRY);
+  const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
 
   const logoutMutation = useLogout();
 
@@ -130,7 +130,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       return;
                     }
 
-                    navigate(HREF.SHOW_ENTRY(params.showId));
+                    navigate(HREF.SHOW_ENTRANCE(params.showId));
                   }}
                 >
                   입장 관리
