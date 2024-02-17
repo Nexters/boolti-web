@@ -15,7 +15,7 @@ import ShowAddCompletePage from './pages/ShowAddCompletePage/ShowAddCompletePage
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
 import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
-import ShowReservationPage from './pages/ShowReservationPage/ShowReservationPage';
+import ShowReservationPage from './pages/ShowReservationPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
