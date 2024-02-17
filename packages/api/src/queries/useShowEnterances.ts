@@ -5,12 +5,12 @@ import { TicketType } from '../types';
 
 const useShowEnterances = (
   showId: number,
-  ticketType: TicketType,
   isEntered: boolean,
+  ticketType?: TicketType,
   reservationNameOrPhoneNumber?: string,
 ) =>
   useInfiniteQuery({
-    ...queryKeys.enterance.list(showId, ticketType, isEntered, reservationNameOrPhoneNumber),
+    ...queryKeys.enterance.list(showId, isEntered, ticketType, reservationNameOrPhoneNumber),
     getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.number + 1),
     getPreviousPageParam: (firstPage) => (firstPage.first ? undefined : firstPage.number - 1),
   });

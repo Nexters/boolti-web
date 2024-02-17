@@ -22,21 +22,23 @@ import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './typ
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
     showId: number,
-    ticketType: TicketType,
     isEntered: boolean,
+    ticketType?: TicketType,
     reservationNameOrPhoneNumber?: string,
   ) => ({
     queryKey: [showId, ticketType, isEntered, reservationNameOrPhoneNumber],
     queryFn: ({ pageParam = 0 }) => {
       const searchParams: SearchParamsOption = {
         page: pageParam,
-        ticketType,
         isEntered,
       };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
       if (reservationNameOrPhoneNumber) {
         searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
       }
-      return fetcher.get<PageEntranceResponse>(`/web/v1/shows/${showId}/entrances`, {
+      return fetcher.get<PageEntranceResponse>(`web/v1/shows/${showId}/entrances`, {
         searchParams,
       });
     },
@@ -44,11 +46,11 @@ export const entranceQueryKeys = createQueryKeys('enterance', {
   summary: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<EntranceSummaryResponse>(`/web/v1/shows/${showId}/entrance-summaries`),
+      fetcher.get<EntranceSummaryResponse>(`web/v1/shows/${showId}/entrance-summaries`),
   }),
   info: (showId: number) => ({
     queryKey: [showId],
-    queryFn: () => fetcher.get<EntranceInfoResponse>(`/web/v1/shows/${showId}/entrance-infos`),
+    queryFn: () => fetcher.get<EntranceInfoResponse>(`web/v1/shows/${showId}/entrance-infos`),
   }),
 });
 
