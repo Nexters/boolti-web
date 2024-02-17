@@ -3,9 +3,9 @@ import { useParams } from 'react-router-dom';
 
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 
-import Styled from './ShowEnteryPage.styles';
+import Styled from './ShowEnterancePage.styles';
 
-const ShowEnteryPage = () => {
+const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
 
   const { data: show } = useShowDetail(Number(params!.showId));
@@ -19,4 +19,4 @@ const ShowEnteryPage = () => {
   );
 };
 
-export default ShowEnteryPage;
+export default ShowEnterancePage;
