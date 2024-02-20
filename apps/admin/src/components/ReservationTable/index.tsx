@@ -63,19 +63,17 @@ const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickR
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
   return (
     <Styled.Container>
-      <Styled.Header>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Styled.HeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </Styled.HeaderItem>
-            ))}
-          </Styled.HeaderRow>
-        ))}
-      </Styled.Header>
+      {table.getHeaderGroups().map((headerGroup) => (
+        <Styled.HeaderRow key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <Styled.HeaderItem key={header.id}>
+              {header.isPlaceholder
+                ? null
+                : flexRender(header.column.columnDef.header, header.getContext())}
+            </Styled.HeaderItem>
+          ))}
+        </Styled.HeaderRow>
+      ))}
       {data.length === 0 ? (
         <Styled.Empty>
           {isSearchResult ? (
@@ -90,7 +88,7 @@ const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickR
           )}
         </Styled.Empty>
       ) : (
-        <Styled.Body>
+        <>
           {table.getRowModel().rows.map((row) => (
             <Styled.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
@@ -100,7 +98,7 @@ const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickR
               ))}
             </Styled.Row>
           ))}
-        </Styled.Body>
+        </>
       )}
     </Styled.Container>
   );
