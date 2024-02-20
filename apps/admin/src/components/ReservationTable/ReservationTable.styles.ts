@@ -6,7 +6,6 @@ const Container = styled.div`
   height: 547px;
 `;
 
-
 const HeaderRow = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -52,7 +51,6 @@ const HeaderItem = styled.span`
     width: 92px;
   }
 `;
-
 
 const Row = styled.div`
   display: flex;

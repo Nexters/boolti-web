@@ -40,7 +40,6 @@ const columns = [
   }),
 ];
 
-
 interface Props {
   data: EntranceResponse[];
   isEnteredTicket: boolean;

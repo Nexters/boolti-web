@@ -51,8 +51,7 @@ const HeaderItem = styled.span`
   }
 `;
 
-const Body = styled.div`
-`;
+const Body = styled.div``;
 
 const Row = styled.div`
   display: flex;
