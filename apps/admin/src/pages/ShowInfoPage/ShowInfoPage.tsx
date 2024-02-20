@@ -7,7 +7,7 @@ import {
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
+import { Button, Drawer, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -41,6 +41,8 @@ const ShowInfoPage = () => {
   const toast = useToast();
   const confirm = useConfirm();
   const deleteShowDialog = useDialog();
+
+  const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(true);
 
   const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
     if (!show) return;
@@ -192,6 +194,15 @@ const ShowInfoPage = () => {
           </Styled.ShowInfoFormFooter>
         </Styled.ShowInfoForm>
       </Styled.ShowInfoPage>
+      <Drawer
+        open={previewDrawerOpen}
+        title="공연 상세 미리보기"
+        onClose={() => {
+          setPreviewDrawerOpen(false);
+        }}
+      >
+        안녕
+      </Drawer>
     </ShowDetailLayout>
   );
 };
