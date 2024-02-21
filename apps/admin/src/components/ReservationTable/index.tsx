@@ -37,9 +37,9 @@ const columns = [
     header: '결제 금액',
     cell: (props) => `${props.getValue().toLocaleString()}원`,
   }),
-  columnHelper.accessor('means', {
+  columnHelper.accessor('ticketType', {
     header: '결제 방법',
-    cell: (props) => (props.getValue() === 'CARD' ? '카드 결제' : '초청 코드'),
+    cell: (props) => (props.getValue() === 'INVITE' ? '초청 코드' : '카드 결제'),
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: '발권일시',
