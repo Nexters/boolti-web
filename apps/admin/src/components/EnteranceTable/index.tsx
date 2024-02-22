@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { format } from 'date-fns/format';
 
 import { formatPhoneNumber } from '~/utils/format';
 
@@ -24,10 +25,10 @@ const columns = [
     header: '티켓 이름',
   }),
   columnHelper.accessor('reservationName', {
-    header: '연락처',
+    header: '예매자 이름',
   }),
   columnHelper.accessor('reservationPhoneNumber', {
-    header: '전화번호',
+    header: '연락처',
     cell: (props) => formatPhoneNumber(props.getValue()),
   }),
   columnHelper.accessor('entered', {
@@ -36,7 +37,7 @@ const columns = [
   }),
   columnHelper.accessor('enteredAt', {
     header: '입장 일시',
-    cell: (props) => props.getValue(),
+    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
   }),
 ];
 

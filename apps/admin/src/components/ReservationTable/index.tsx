@@ -49,7 +49,7 @@ const columns = [
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: '발권일시',
-    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : ''),
+    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
   }),
 ];
 
