@@ -12,7 +12,7 @@ const EntranceConfirmDialogContent = () => {
           '\n' +
           '각 공연에 부여된 QR 스캐너는 불티앱 ‘마이 > QR 스캔 > 해당 공연’으로 접근할 수 있습니다.'}
       </Styled.Description>
-      <Styled.Image src="/code.png" alt="" />
+      <Styled.Image src="/qr.png" alt="" />
       <Styled.Seperator />
       <Styled.Title>인증 코드</Styled.Title>
       <Styled.Description>
@@ -22,7 +22,7 @@ const EntranceConfirmDialogContent = () => {
           '\n' +
           '예매자 앱 화면 ‘티켓 상세 > 화면 하단 버튼’을 통해 코드 입력 및 인증을 진행할 수 있습니다.'}
       </Styled.Description>
-      <Styled.Image src="/qr.png" alt="" />
+      <Styled.Image src="/code.png" alt="" />
     </Styled.Container>
   );
 };
