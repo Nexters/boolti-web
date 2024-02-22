@@ -51,19 +51,17 @@ const EnteranceTable = ({ isSearchResult, data, isEnteredTicket, onClickReset }:
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
   return (
     <Styled.Container>
-      <Styled.Header>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Styled.HeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </Styled.HeaderItem>
-            ))}
-          </Styled.HeaderRow>
-        ))}
-      </Styled.Header>
+      {table.getHeaderGroups().map((headerGroup) => (
+        <Styled.HeaderRow key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <Styled.HeaderItem key={header.id}>
+              {header.isPlaceholder
+                ? null
+                : flexRender(header.column.columnDef.header, header.getContext())}
+            </Styled.HeaderItem>
+          ))}
+        </Styled.HeaderRow>
+      ))}
       {data.length === 0 ? (
         <Styled.Empty>
           {isSearchResult ? (
@@ -80,17 +78,15 @@ const EnteranceTable = ({ isSearchResult, data, isEnteredTicket, onClickReset }:
           )}
         </Styled.Empty>
       ) : (
-        <Styled.Body>
-          {table.getRowModel().rows.map((row) => (
-            <Styled.Row key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <Styled.Item key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Styled.Item>
-              ))}
-            </Styled.Row>
-          ))}
-        </Styled.Body>
+        table.getRowModel().rows.map((row) => (
+          <Styled.Row key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <Styled.Item key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Styled.Item>
+            ))}
+          </Styled.Row>
+        ))
       )}
     </Styled.Container>
   );

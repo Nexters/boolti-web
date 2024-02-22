@@ -1,18 +1,17 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '../queryKey';
 import { TicketType } from '../types';
 
 const useShowEnterances = (
   showId: number,
+  page: number,
   isEntered: boolean,
   ticketType?: TicketType,
   reservationNameOrPhoneNumber?: string,
 ) =>
-  useInfiniteQuery({
-    ...queryKeys.enterance.list(showId, isEntered, ticketType, reservationNameOrPhoneNumber),
-    getNextPageParam: (lastPage) => (lastPage.last ? undefined : lastPage.number + 1),
-    getPreviousPageParam: (firstPage) => (firstPage.first ? undefined : firstPage.number - 1),
+  useQuery({
+    ...queryKeys.enterance.list(showId, page, isEntered, ticketType, reservationNameOrPhoneNumber),
   });
 
 export default useShowEnterances;

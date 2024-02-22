@@ -24,18 +24,18 @@ const ShowReservationPage = () => {
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
   const showId = Number(params!.showId);
+  const [currentPage, setCurrentPage] = useState(0);
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationPages, isLoading: isReservationPagesLoading } = useShowReservations(
+  const { data: reservationData, isLoading: isReservationPagesLoading } = useShowReservations(
     showId,
+    currentPage,
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
     debouncedSearchText,
   );
-  const [currentPage, setCurrentPage] = useState(0);
-  const currentReservationPage = (reservationPages?.pages ?? [])[currentPage];
-  const totalPages = currentReservationPage?.totalPages;
-  const reservations = (currentReservationPage?.content ?? []).filter(
+  const totalPages = reservationData?.totalPages ?? 0;
+  const reservations = (reservationData?.content ?? []).filter(
     ({ ticketStatus, ticketType }) =>
       ticketStatus === selectedTicketStatus &&
       (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
@@ -97,6 +97,7 @@ const ShowReservationPage = () => {
           <Styled.TicketReservationSummaryContainer>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
+                setCurrentPage(0);
                 setSelectedTicketStatus('WAIT');
               }}
               isSelected={selectedTicketStatus === 'WAIT'}
@@ -105,6 +106,7 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
+                setCurrentPage(0);
                 setSelectedTicketStatus('COMPLETE');
               }}
               isSelected={selectedTicketStatus === 'COMPLETE'}
@@ -113,6 +115,7 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
+                setCurrentPage(0);
                 setSelectedTicketStatus('CANCEL');
               }}
               isSelected={selectedTicketStatus === 'CANCEL'}
@@ -143,12 +146,14 @@ const ShowReservationPage = () => {
             </Styled.InputContainer>
           </Styled.TicketReservationSummaryContainer>
           {!isReservationPagesLoading && (
-            <ReservationTable
-              data={reservations}
-              selectedTicketStatus={selectedTicketStatus}
-              isSearchResult={debouncedSearchText !== ''}
-              onClickReset={onClickReset}
-            />
+            <Styled.TableContainer>
+              <ReservationTable
+                data={reservations}
+                selectedTicketStatus={selectedTicketStatus}
+                isSearchResult={debouncedSearchText !== ''}
+                onClickReset={onClickReset}
+              />
+            </Styled.TableContainer>
           )}
           {reservations.length !== 0 && (
             <Pagination

@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { format } from 'date-fns';
 
 import { formatPhoneNumber } from '~/utils/format';
 
@@ -39,10 +40,16 @@ const columns = [
   }),
   columnHelper.accessor('means', {
     header: '결제 방법',
-    cell: (props) => (props.getValue() === 'CARD' ? '카드 결제' : props.getValue() === 'ACCOUNT_TRANSFER' ? '계좌 이체' : ''),
+    cell: (props) =>
+      props.getValue() === 'CARD'
+        ? '카드 결제'
+        : props.getValue() === 'ACCOUNT_TRANSFER'
+          ? '계좌 이체'
+          : '',
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: '발권일시',
+    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : ''),
   }),
 ];
 
