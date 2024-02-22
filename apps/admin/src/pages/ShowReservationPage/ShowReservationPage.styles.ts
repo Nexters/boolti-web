@@ -138,6 +138,14 @@ const InputButton = styled.button`
   align-items: center;
 `;
 
+const TableContainer = styled.div`
+  width: 100%;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 export default {
   Container,
   TicketSummaryContainer,
@@ -147,6 +155,7 @@ export default {
   TicketReservationSummaryContainer,
   TicketReservationSummaryButton,
   InputContainer,
+  TableContainer,
   Input,
   InputButton,
   ButtonContainer,

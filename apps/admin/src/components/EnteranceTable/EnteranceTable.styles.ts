@@ -2,20 +2,21 @@ import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 16px 0;
+  width: ${({ theme }) => theme.breakpoint.desktop};
   height: 547px;
-`;
-
-const Header = styled.div`
-  border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  background-color: ${({ theme }) => theme.palette.grey.g00};
 `;
 
 const HeaderRow = styled.div`
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   padding-left: 8px;
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
 
 const HeaderItem = styled.span`
@@ -50,8 +51,6 @@ const HeaderItem = styled.span`
     width: 148px;
   }
 `;
-
-const Body = styled.div``;
 
 const Row = styled.div`
   display: flex;
@@ -112,10 +111,8 @@ const ResetButton = styled(Button)`
 
 export default {
   Container,
-  Header,
   HeaderItem,
   HeaderRow,
-  Body,
   Row,
   Item,
   Empty,

@@ -5,6 +5,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { format } from 'date-fns/format';
 
 import { formatPhoneNumber } from '~/utils/format';
 
@@ -24,10 +25,10 @@ const columns = [
     header: '티켓 이름',
   }),
   columnHelper.accessor('reservationName', {
-    header: '연락처',
+    header: '예매자 이름',
   }),
   columnHelper.accessor('reservationPhoneNumber', {
-    header: '전화번호',
+    header: '연락처',
     cell: (props) => formatPhoneNumber(props.getValue()),
   }),
   columnHelper.accessor('entered', {
@@ -36,7 +37,7 @@ const columns = [
   }),
   columnHelper.accessor('enteredAt', {
     header: '입장 일시',
-    cell: (props) => props.getValue(),
+    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
   }),
 ];
 
@@ -51,19 +52,17 @@ const EnteranceTable = ({ isSearchResult, data, isEnteredTicket, onClickReset }:
   const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
   return (
     <Styled.Container>
-      <Styled.Header>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Styled.HeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </Styled.HeaderItem>
-            ))}
-          </Styled.HeaderRow>
-        ))}
-      </Styled.Header>
+      {table.getHeaderGroups().map((headerGroup) => (
+        <Styled.HeaderRow key={headerGroup.id}>
+          {headerGroup.headers.map((header) => (
+            <Styled.HeaderItem key={header.id}>
+              {header.isPlaceholder
+                ? null
+                : flexRender(header.column.columnDef.header, header.getContext())}
+            </Styled.HeaderItem>
+          ))}
+        </Styled.HeaderRow>
+      ))}
       {data.length === 0 ? (
         <Styled.Empty>
           {isSearchResult ? (
@@ -80,17 +79,15 @@ const EnteranceTable = ({ isSearchResult, data, isEnteredTicket, onClickReset }:
           )}
         </Styled.Empty>
       ) : (
-        <Styled.Body>
-          {table.getRowModel().rows.map((row) => (
-            <Styled.Row key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <Styled.Item key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </Styled.Item>
-              ))}
-            </Styled.Row>
-          ))}
-        </Styled.Body>
+        table.getRowModel().rows.map((row) => (
+          <Styled.Row key={row.id}>
+            {row.getVisibleCells().map((cell) => (
+              <Styled.Item key={cell.id}>
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </Styled.Item>
+            ))}
+          </Styled.Row>
+        ))
       )}
     </Styled.Container>
   );

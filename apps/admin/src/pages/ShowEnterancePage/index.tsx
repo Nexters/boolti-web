@@ -32,16 +32,16 @@ const ShowEnterancePage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: entranceSummary } = useShowEnteranceSummary(showId);
   const { data: enteranceInfo } = useShowEnteranceInfo(showId);
-  const { data: enterances, isLoading: isEntranceListLoading } = useShowEnterances(
+  const { data: enteranceData, isLoading: isEntranceListLoading } = useShowEnterances(
     showId,
+    currentPage,
     isEnteredTicket,
     selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     debouncedSearchText,
   );
 
-  const currentEnterances = (enterances?.pages ?? [])[currentPage];
-  const totalPages = currentEnterances?.totalPages;
-  const reservations = (currentEnterances?.content ?? []).filter(
+  const totalPages = enteranceData?.totalPages ?? 0;
+  const reservations = (enteranceData?.content ?? []).filter(
     ({ entered, ticketType }) =>
       entered === isEnteredTicket &&
       (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
@@ -108,6 +108,7 @@ const ShowEnterancePage = () => {
           <Styled.EnteranceSummaryContainer>
             <Styled.EnteranceSummaryButton
               onClick={() => {
+                setCurrentPage(0);
                 setIsEnteredTicket(false);
               }}
               isSelected={!isEnteredTicket}
@@ -116,6 +117,7 @@ const ShowEnterancePage = () => {
             </Styled.EnteranceSummaryButton>
             <Styled.EnteranceSummaryButton
               onClick={() => {
+                setCurrentPage(0);
                 setIsEnteredTicket(true);
               }}
               isSelected={isEnteredTicket}
@@ -146,12 +148,14 @@ const ShowEnterancePage = () => {
             </Styled.InputContainer>
           </Styled.EnteranceSummaryContainer>
           {!isEntranceListLoading && (
-            <EnteranceTable
-              data={reservations}
-              isEnteredTicket={isEnteredTicket}
-              isSearchResult={debouncedSearchText !== ''}
-              onClickReset={onClickReset}
-            />
+            <Styled.TableContainer>
+              <EnteranceTable
+                data={reservations}
+                isEnteredTicket={isEnteredTicket}
+                isSearchResult={debouncedSearchText !== ''}
+                onClickReset={onClickReset}
+              />
+            </Styled.TableContainer>
           )}
           {reservations.length !== 0 && (
             <Pagination

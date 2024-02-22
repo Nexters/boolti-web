@@ -2,12 +2,16 @@ import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
   margin: 16px 0;
+  width: ${({ theme }) => theme.breakpoint.desktop};
   height: 547px;
 `;
 
 const HeaderRow = styled.div`
   display: flex;
+  flex: 0 0 auto;
   flex-wrap: nowrap;
   padding-left: 8px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
@@ -18,7 +22,6 @@ const HeaderRow = styled.div`
 const HeaderItem = styled.span`
   display: inline-block;
   flex: 0 0 auto;
-  text-align: center;
   padding: 12px;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
@@ -64,7 +67,6 @@ const Item = styled.span`
   flex: 0 0 auto;
   padding: 14px 12px;
   white-space: nowrap;
-  text-align: center;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   &:not(:last-of-type) {

@@ -22,14 +22,15 @@ import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './typ
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
     showId: number,
+    page: number,
     isEntered: boolean,
     ticketType?: TicketType,
     reservationNameOrPhoneNumber?: string,
   ) => ({
-    queryKey: [showId, ticketType, isEntered, reservationNameOrPhoneNumber],
-    queryFn: ({ pageParam = 0 }) => {
+    queryKey: [showId, page, ticketType, isEntered, reservationNameOrPhoneNumber],
+    queryFn: () => {
       const searchParams: SearchParamsOption = {
-        page: pageParam,
+        page,
         isEntered,
       };
       if (ticketType) {
@@ -74,14 +75,15 @@ export const showQueryKeys = createQueryKeys('show', {
   }),
   reservation: (
     showId: number,
+    page: number,
     ticketType: TicketType | undefined = undefined,
     ticketStatus: TicketStatus | undefined = undefined,
     reservationNameOrPhoneNumber?: string,
   ) => ({
-    queryKey: [showId, reservationNameOrPhoneNumber, ticketType, ticketStatus],
-    queryFn: ({ pageParam = 0 }) => {
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, ticketStatus],
+    queryFn: () => {
       const searchParams: SearchParamsOption = {
-        page: pageParam,
+        page,
       };
       if (ticketType) {
         searchParams.ticketType = ticketType;
