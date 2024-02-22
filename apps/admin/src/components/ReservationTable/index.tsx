@@ -45,7 +45,7 @@ const columns = [
         ? '카드 결제'
         : props.getValue() === 'ACCOUNT_TRANSFER'
           ? '계좌 이체'
-          : '',
+          : '초청 코드',
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: '발권일시',
