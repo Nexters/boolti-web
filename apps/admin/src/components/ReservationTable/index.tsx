@@ -18,7 +18,7 @@ const columns = [
     header: '티켓 번호',
   }),
   columnHelper.accessor('ticketType', {
-    header: '티켓 타입',
+    header: '티켓 종류',
     cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
   }),
   columnHelper.accessor('ticketName', {
