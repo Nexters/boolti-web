@@ -40,7 +40,7 @@ const ShowEnterancePage = () => {
     debouncedSearchText,
   );
 
-  const totalPages = enteranceData?.totalPages;
+  const totalPages = enteranceData?.totalPages ?? 0;
   const reservations = (enteranceData?.content ?? []).filter(
     ({ entered, ticketType }) =>
       entered === isEnteredTicket &&
