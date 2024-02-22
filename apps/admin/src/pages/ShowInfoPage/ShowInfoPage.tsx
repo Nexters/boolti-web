@@ -131,7 +131,7 @@ const ShowInfoPage = () => {
             <ShowBasicInfoFormContent
               form={showInfoForm}
               imageFiles={imageFiles}
-              disabled={show.isEnded || salesStarted}
+              disabled={show.isEnded}
               onDropImage={(acceptedFiles) => {
                 setImageFiles((prevImageFiles) => [
                   ...prevImageFiles,
@@ -153,22 +153,14 @@ const ShowInfoPage = () => {
           </Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormDivider />
           <Styled.ShowInfoFormContent>
-            <ShowDetailInfoFormContent
-              form={showInfoForm}
-              disabled={show.isEnded || salesStarted}
-            />
+            <ShowDetailInfoFormContent form={showInfoForm} disabled={show.isEnded} />
           </Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormFooter>
             <Button
               size="bold"
               colorTheme="primary"
               type="submit"
-              disabled={
-                !showInfoForm.formState.isValid ||
-                imageFiles.length === 0 ||
-                show.isEnded ||
-                salesStarted
-              }
+              disabled={!showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded}
             >
               저장하기
             </Button>
