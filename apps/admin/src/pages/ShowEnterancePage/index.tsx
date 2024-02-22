@@ -59,6 +59,10 @@ const ShowEnterancePage = () => {
     return () => clearTimeout(timerId);
   }, [searchText]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedTicketType, isEnteredTicket, debouncedSearchText]);
+
   if (!show || !entranceSummary || !enteranceInfo) return null;
 
   const {
@@ -108,7 +112,6 @@ const ShowEnterancePage = () => {
           <Styled.EnteranceSummaryContainer>
             <Styled.EnteranceSummaryButton
               onClick={() => {
-                setCurrentPage(0);
                 setIsEnteredTicket(false);
               }}
               isSelected={!isEnteredTicket}
@@ -117,7 +120,6 @@ const ShowEnterancePage = () => {
             </Styled.EnteranceSummaryButton>
             <Styled.EnteranceSummaryButton
               onClick={() => {
-                setCurrentPage(0);
                 setIsEnteredTicket(true);
               }}
               isSelected={isEnteredTicket}

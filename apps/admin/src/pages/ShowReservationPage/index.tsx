@@ -53,6 +53,10 @@ const ShowReservationPage = () => {
     return () => clearTimeout(timerId);
   }, [searchText]);
 
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedTicketType, selectedTicketStatus, debouncedSearchText]);
+
   if (!show || !reservationSummary) return null;
 
   const {
@@ -97,7 +101,6 @@ const ShowReservationPage = () => {
           <Styled.TicketReservationSummaryContainer>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setCurrentPage(0);
                 setSelectedTicketStatus('WAIT');
               }}
               isSelected={selectedTicketStatus === 'WAIT'}
@@ -106,7 +109,6 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setCurrentPage(0);
                 setSelectedTicketStatus('COMPLETE');
               }}
               isSelected={selectedTicketStatus === 'COMPLETE'}
@@ -115,7 +117,6 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButton>
             <Styled.TicketReservationSummaryButton
               onClick={() => {
-                setCurrentPage(0);
                 setSelectedTicketStatus('CANCEL');
               }}
               isSelected={selectedTicketStatus === 'CANCEL'}
