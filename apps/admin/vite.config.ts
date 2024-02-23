@@ -8,6 +8,12 @@ export default defineConfig({
   },
   server: {
     port: 8080,
+    cors: false,
+    host: 'dev.boolti.in',
+    https: {
+      key: './dev.boolti.in-key.pem',
+      cert: './dev.boolti.in.pem',
+    },
   },
   plugins: [
     react({

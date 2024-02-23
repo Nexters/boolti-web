@@ -29,11 +29,12 @@ const postKakaoToken = ({ code }: PostKakaoTokenRequest) => {
         'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
       body,
+      retry: 0,
     })
     .json<PostKakaoTokenResponse>();
 };
 
 const useKakaoToken = () =>
-  useMutation(({ code }: PostKakaoTokenRequest) => postKakaoToken({ code }));
+  useMutation(({ code }: PostKakaoTokenRequest) => postKakaoToken({ code }), { retry: false });
 
 export default useKakaoToken;

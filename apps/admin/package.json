@@ -19,6 +19,7 @@
     "@emotion/styled": "^11.11.0",
     "@tanstack/react-table": "^8.12.0",
     "date-fns": "^3.3.1",
+    "jwt-decode": "^4.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
