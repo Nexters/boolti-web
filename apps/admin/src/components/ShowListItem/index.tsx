@@ -97,7 +97,7 @@ const ShowListItem = ({
                 <Styled.DateText>
                   {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}
                 </Styled.DateText>
-                <Styled.DateText> ~ </Styled.DateText>
+                <Styled.DateText> - </Styled.DateText>
                 <Styled.DateText>
                   {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
                 </Styled.DateText>
