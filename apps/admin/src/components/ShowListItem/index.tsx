@@ -73,7 +73,7 @@ const ShowListItem = ({
       ) : (
         <Styled.Button
           onClick={() => {
-            navigate(generatePath(PATH.SHOW_INFO, { showId: id }));
+            navigate(generatePath(PATH.SHOW_INFO, { showId: id.toString() }));
           }}
         >
           <Styled.Poster thumbnailPath={thumbnailPath} />
