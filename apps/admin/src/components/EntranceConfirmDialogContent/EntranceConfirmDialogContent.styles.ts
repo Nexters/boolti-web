@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  width: 856px;
-  height: 528px;
+  height: 60vh;
   overflow-y: auto;
   &::-webkit-scrollbar {
     display: none;
@@ -24,6 +23,7 @@ const Description = styled.h2`
 
 const Image = styled.img`
   width: 100%;
+  height: auto;
   max-block-size: unset;
 `;
 

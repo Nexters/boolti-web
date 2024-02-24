@@ -5,6 +5,7 @@ const DIALOG_WIDTH = '450px';
 const DimmedArea = styled.div`
   position: fixed;
   inset: 0;
+  padding: 0 20px;
   background-color: ${({ theme }) => theme.palette.dim.dialog};
   display: flex;
   justify-content: center;
