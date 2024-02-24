@@ -29,8 +29,13 @@ const Button = styled.button`
 `;
 
 const EmptyText = styled.p`
-  ${({ theme }) => theme.typo.b4};
+  margin: 108px auto;
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g40};
+
+  ${mq} {
+    ${({ theme }) => theme.typo.b4};
+  }
 `;
 
 const Poster = styled.div<{ thumbnailPath: string }>`
