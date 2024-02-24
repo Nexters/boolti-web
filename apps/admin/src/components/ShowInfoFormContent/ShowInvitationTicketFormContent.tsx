@@ -21,7 +21,6 @@ interface ShowInvitationTicketFormContentProps {
   fullEditable?: boolean;
   disabled?: boolean;
   showDate?: string;
-  salesStartTime?: string;
   onSubmitTicket: SubmitHandler<InvitationTicketFormInputs>;
   onDeleteTicket: (ticket: InvitationTicket) => void;
 }
@@ -32,7 +31,6 @@ const ShowInvitationTicketFormContent = ({
   fullEditable,
   disabled,
   showDate,
-  salesStartTime,
   onSubmitTicket,
   onDeleteTicket,
 }: ShowInvitationTicketFormContentProps) => {
@@ -74,8 +72,7 @@ const ShowInvitationTicketFormContent = ({
         <Styled.TicketList>
           {invitationTicketList.map((ticket) => {
             const isSoldTicket = ticket.totalForSale > ticket.quantity;
-            const isSalesStarted = salesStartTime ? new Date(salesStartTime) <= new Date() : false;
-            const isDeleteDisabled = isSingleTicket || isSoldTicket || isSalesStarted;
+            const isDeleteDisabled = isSingleTicket || isSoldTicket;
 
             return (
               <Styled.Ticket key={ticket.id ?? ticket.name}>
