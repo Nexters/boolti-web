@@ -24,9 +24,13 @@ const Dialog = styled.div<{ isAuto: boolean }>`
 `;
 
 const DialogHeader = styled.div`
+  display: none;
   padding: 16px 32px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g30};
   position: relative;
+  ${mq} {
+    display: block;
+  }
 `;
 
 const DialogTitle = styled.h2`
@@ -47,7 +51,9 @@ const DialogCloseButton = styled.button`
 `;
 
 const DialogContent = styled.div`
-  padding: 32px;
+  ${mq} {
+    padding: 32px;
+  }
 `;
 
 export default {

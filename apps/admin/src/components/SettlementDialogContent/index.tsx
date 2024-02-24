@@ -1,6 +1,7 @@
 import { queryKeys, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
+import { CloseIcon } from '@boolti/icon';
 import { Button, TextField, useToast } from '@boolti/ui';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { bankItems } from '~/constants/bankItems';
@@ -36,106 +37,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
-
-  const { mutate } = usePutUserSettlementAccountInfo();
-
-  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = (data) => {
-    mutate(data, {
-      onSuccess: async () => {
-        toast.success('정산 계좌를 저장했습니다.');
-        await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
-        onClose?.();
-      },
-      onError: () => {
-        toast.error('잠시후에 다시 시도하세요.');
-      },
-    });
-  };
-
-  useBodyScrollLock();
-
-  return (
-    <Styled.Container>
-      <Styled.Title>{titles[currentStepIndex]}</Styled.Title>
-      {currentStepIndex === 0 && (
-        <Styled.BankList>
-          {bankItems.map((bankItem) => (
-            <Styled.BankItem key={bankItem.name}>
-              <Styled.BankItemButton
-                type="button"
-                isUndefined={currentBankCode === undefined}
-                isSelected={currentBankCode === bankItem.code}
-                onClick={() => {
-                  setValue('bankCode', bankItem.code);
-                }}
-              >
-                <Styled.BankIcon>{<bankItem.icon />}</Styled.BankIcon>
-                <Styled.BankName>{bankItem.name}</Styled.BankName>
-              </Styled.BankItemButton>
-            </Styled.BankItem>
-          ))}
-        </Styled.BankList>
-      )}
-      {currentStepIndex === 1 && (
-        <>
-          <Styled.InputContainer>
-            <Styled.InputLabel>계좌번호</Styled.InputLabel>
-            <TextField
-              placeholder="계좌번호를 입력해 주세요"
-              size="small"
-              inputType="text"
-              errorMessage={accountNumberError}
-              {...register('accountNumber', {
-                required: true,
-                onBlur(event) {
-                  const value = event.target.value;
-                  setAccountNumberError(
-                    validateAccountNumber(value) && !isNaN(Number(value))
-                      ? undefined
-                      : '계좌번호를 확인 후 다시 입력해 주세요.',
-                  );
-                },
-              })}
-            />
-          </Styled.InputContainer>
-          <Styled.InputContainer>
-            <Styled.InputLabel>예금주</Styled.InputLabel>
-            <TextField
-              placeholder="예금주 이름을 입력해 주세요"
-              size="small"
-              inputType="text"
-              errorMessage={accountHolderError}
-              {...register('accountHolder', {
-                required: true,
-                onBlur(event) {
-                  setAccountHolderError(
-                    validateAccountHolder(event.target.value)
-                      ? undefined
-                      : '한글만 입력 가능합니다.',
-                  );
-                },
-              })}
-            />
-          </Styled.InputContainer>
-        </>
-      )}
-      {currentStepIndex === 2 && (
-        <Styled.ConfirmContainer>
-          <Styled.ConfrimTextContainer>
-            <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{currentBankName}</Styled.ConfrimTextValue>
-          </Styled.ConfrimTextContainer>
-          <Styled.ConfrimTextContainer>
-            <Styled.ConfirmTextLabel>계좌번호</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{currentAccountNumber}</Styled.ConfrimTextValue>
-          </Styled.ConfrimTextContainer>
-          <Styled.ConfrimTextContainer>
-            <Styled.ConfirmTextLabel>예금주</Styled.ConfirmTextLabel>
-            <Styled.ConfrimTextValue>{currentAccountHolder}</Styled.ConfrimTextValue>
-          </Styled.ConfrimTextContainer>
-        </Styled.ConfirmContainer>
-      )}
-      <Styled.ButtonContainer>
+  const Buttons = useMemo(() => {
+    return (
+      <>
         {currentStepIndex !== 0 && (
           <Button
             type="button"
@@ -156,7 +60,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
             (currentStepIndex === 0 && !currentBankName) ||
             (currentStepIndex === 1 &&
               (currentAccountNumber === '' ||
+                currentAccountNumber === undefined ||
                 currentAccountHolder === '' ||
+                currentAccountHolder === undefined ||
                 !!accountHolderError ||
                 !!accountNumberError))
           }
@@ -173,7 +79,129 @@ const SettlementDialogContent = ({ onClose }: Props) => {
         >
           {currentStepIndex === 2 ? '저장하기' : '다음으로'}
         </Button>
-      </Styled.ButtonContainer>
+      </>
+    );
+  }, [
+    accountHolderError,
+    accountNumberError,
+    currentAccountHolder,
+    currentAccountNumber,
+    currentBankName,
+    currentStepIndex,
+  ]);
+
+  const { mutate } = usePutUserSettlementAccountInfo();
+
+  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = (data) => {
+    mutate(data, {
+      onSuccess: async () => {
+        toast.success('정산 계좌를 저장했습니다.');
+        await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
+        onClose?.();
+      },
+      onError: () => {
+        toast.error('잠시후에 다시 시도하세요.');
+      },
+    });
+  };
+
+  useBodyScrollLock();
+
+  return (
+    <Styled.Container>
+      <Styled.Form>
+        <Styled.MobileTitle>
+          정산 계좌 입력하기
+          <Styled.MobileCloseButton onClick={onClose}>
+            <CloseIcon />
+          </Styled.MobileCloseButton>
+        </Styled.MobileTitle>
+        <Styled.Title>{titles[currentStepIndex]}</Styled.Title>
+        {currentStepIndex === 0 && (
+          <Styled.BankList>
+            {bankItems.map((bankItem) => (
+              <Styled.BankItem key={bankItem.name}>
+                <Styled.BankItemButton
+                  type="button"
+                  isUndefined={currentBankCode === undefined}
+                  isSelected={currentBankCode === bankItem.code}
+                  onClick={() => {
+                    setValue('bankCode', bankItem.code);
+                  }}
+                >
+                  <Styled.BankIcon>{<bankItem.icon />}</Styled.BankIcon>
+                  <Styled.BankName>{bankItem.name}</Styled.BankName>
+                </Styled.BankItemButton>
+              </Styled.BankItem>
+            ))}
+          </Styled.BankList>
+        )}
+        {currentStepIndex === 1 && (
+          <Styled.AccountInputContainer>
+            <Styled.InputContainer>
+              <Styled.InputLabel>계좌번호</Styled.InputLabel>
+              <TextField
+                className="text-field"
+                placeholder="계좌번호를 입력해 주세요"
+                size="small"
+                inputType="text"
+                errorMessage={accountNumberError}
+                {...register('accountNumber', {
+                  required: true,
+                  onBlur(event) {
+                    const value = event.target.value;
+                    setAccountNumberError(
+                      validateAccountNumber(value) && !isNaN(Number(value))
+                        ? undefined
+                        : '계좌번호를 확인 후 다시 입력해 주세요.',
+                    );
+                  },
+                })}
+              />
+            </Styled.InputContainer>
+            <Styled.InputContainer>
+              <Styled.InputLabel>예금주</Styled.InputLabel>
+              <TextField
+                className="text-field"
+                placeholder="예금주 이름을 입력해 주세요"
+                size="small"
+                inputType="text"
+                errorMessage={accountHolderError}
+                {...register('accountHolder', {
+                  required: true,
+                  onBlur(event) {
+                    setAccountHolderError(
+                      validateAccountHolder(event.target.value)
+                        ? undefined
+                        : '한글만 입력 가능합니다.',
+                    );
+                  },
+                })}
+              />
+            </Styled.InputContainer>
+          </Styled.AccountInputContainer>
+        )}
+        {currentStepIndex === 2 && (
+          <Styled.MobileConfirmContainer>
+            <Styled.ConfirmContainer>
+              <Styled.ConfrimTextContainer>
+                <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
+                <Styled.ConfrimTextValue>{currentBankName}</Styled.ConfrimTextValue>
+              </Styled.ConfrimTextContainer>
+              <Styled.ConfrimTextContainer>
+                <Styled.ConfirmTextLabel>계좌번호</Styled.ConfirmTextLabel>
+                <Styled.ConfrimTextValue>{currentAccountNumber}</Styled.ConfrimTextValue>
+              </Styled.ConfrimTextContainer>
+              <Styled.ConfrimTextContainer>
+                <Styled.ConfirmTextLabel>예금주</Styled.ConfirmTextLabel>
+                <Styled.ConfrimTextValue>{currentAccountHolder}</Styled.ConfrimTextValue>
+              </Styled.ConfrimTextContainer>
+            </Styled.ConfirmContainer>
+          </Styled.MobileConfirmContainer>
+        )}
+        <Styled.MobileButtonContainer>{Buttons}</Styled.MobileButtonContainer>
+        <Styled.ButtonContainer>{Buttons}</Styled.ButtonContainer>
+      </Styled.Form>
     </Styled.Container>
   );
 };

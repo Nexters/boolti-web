@@ -1,27 +1,83 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-const Container = styled.form``;
-
-const Title = styled.h2`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g70};
-  margin-bottom: 28px;
+const Container = styled.div`
+  min-width: 320px;
+  width: 100%;
+  border-radius: 12px 12px 0 0;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  ${mq} {
+    border-radius: none;
+    position: static;
+    transform: none;
+    width: auto;
+  }
 `;
 
-const BankList = styled.ul`
-  height: 290px;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
+const Form = styled.form`
+  position: relative;
+  padding: 0 24px;
+
+  ${mq} {
+    padding: 0;
+    margin: 0;
+  }
+`;
+
+const MobileTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0 8px 0;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  ${mq} {
     display: none;
   }
 `;
 
+const MobileCloseButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
+
+const Title = styled.h2`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  margin-bottom: 20px;
+
+  ${mq} {
+    ${({ theme }) => theme.typo.b3};
+    margin-bottom: 28px;
+  }
+`;
+
+const BankList = styled.ul`
+  height: 368px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  ${mq} {
+    gap: 12px;
+    height: 290px;
+  }
+`;
+
 const BankItem = styled.li`
-  width: 120px;
-  height: 74px;
+  min-width: 86px;
 `;
 
 const BankItemButton = styled.button<{ isSelected?: boolean; isUndefined?: boolean }>`
@@ -35,7 +91,7 @@ const BankItemButton = styled.button<{ isSelected?: boolean; isUndefined?: boole
   border-radius: 4px;
   border-width: 1px;
   border-style: solid;
-  padding: 8px 20px;
+  padding: 8px 16px;
   transition:
     border 0.2s ease-in-out,
     opacity 0.2s ease-in-out;
@@ -54,6 +110,9 @@ const BankItemButton = styled.button<{ isSelected?: boolean; isUndefined?: boole
       opacity: 0.4;
     `;
   }}
+  ${mq} {
+    padding: 8px 20px;
+  }
 `;
 
 const BankIcon = styled.div`
@@ -64,17 +123,46 @@ const BankIcon = styled.div`
 `;
 
 const BankName = styled.span`
-  ${({ theme }) => theme.typo.b1};
+  ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  ${mq} {
+    ${({ theme }) => theme.typo.b1};
+  }
 `;
 
 const ButtonContainer = styled.div`
+  display: none;
+
+  ${mq} {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    margin-top: 32px;
+    & > button {
+      margin-left: 8px;
+    }
+  }
+`;
+
+const MobileButtonContainer = styled.div`
   display: flex;
-  justify-content: flex-end;
+  position: absolute;
   width: 100%;
-  margin-top: 32px;
+  padding: 16px 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 13.07%);
+  bottom: 0;
+  left: 0;
   & > button {
-    margin-left: 8px;
+    &:last-of-type {
+      flex: 1;
+    }
+    &:nth-of-type(2) {
+      flex: 2;
+      margin-left: 8px;
+    }
+  }
+  ${mq} {
+    display: none;
   }
 `;
 
@@ -84,8 +172,23 @@ const InputLabel = styled.p`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
+const AccountInputContainer = styled.div`
+  padding-bottom: 64px;
+  ${mq} {
+    padding-bottom: 0;
+  }
+`;
+
 const InputContainer = styled.div`
   margin-bottom: 28px;
+
+  & > .text-field {
+    width: 100%;
+  }
+`;
+
+const MobileConfirmContainer = styled.div`
+  padding-bottom: 92px;
 `;
 
 const ConfirmContainer = styled.div`
@@ -117,6 +220,7 @@ const ConfrimTextValue = styled.span`
 `;
 
 export default {
+  MobileButtonContainer,
   Container,
   ButtonContainer,
   Title,
@@ -131,4 +235,9 @@ export default {
   ConfrimTextContainer,
   ConfirmTextLabel,
   ConfrimTextValue,
+  MobileCloseButton,
+  AccountInputContainer,
+  Form,
+  MobileTitle,
+  MobileConfirmContainer,
 };
