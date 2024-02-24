@@ -20,7 +20,7 @@ import Styled from './ShowEnterancePage.styles';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
-  const { open } = useDialog();
+  const { open, close } = useDialog();
 
   const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
@@ -87,7 +87,7 @@ const ShowEnterancePage = () => {
               onClick={() => {
                 open({
                   title: '관객 입장 확인 방법',
-                  content: <EntranceConfirmDialogContent />,
+                  content: <EntranceConfirmDialogContent close={close} />,
                   isAuto: true,
                 });
               }}

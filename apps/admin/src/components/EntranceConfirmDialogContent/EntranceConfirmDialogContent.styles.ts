@@ -49,6 +49,7 @@ const CloseButton = styled.button`
   align-items: center;
   width: 24px;
   height: 24px;
+  cursor: pointer;
 `;
 
 const Title = styled.h2`

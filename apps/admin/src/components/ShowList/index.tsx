@@ -14,7 +14,7 @@ interface Props {
 
 const ShowList = ({ shows }: Props) => {
   const navigate = useNavigate();
-  const { open } = useDialog();
+  const { open, close } = useDialog();
 
   const isEmpty = shows.length === 0;
 
@@ -27,7 +27,7 @@ const ShowList = ({ shows }: Props) => {
             onClick={() => {
               open({
                 title: '관객 입장 확인 방법',
-                content: <EntranceConfirmDialogContent />,
+                content: <EntranceConfirmDialogContent close={close} />,
                 isAuto: true,
               });
             }}

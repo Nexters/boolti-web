@@ -8,12 +8,12 @@ interface Props {
   close: VoidFunction;
 }
 
-const EntranceConfirmDialogContent = ({ }: Props) => {
+const EntranceConfirmDialogContent = ({ close }: Props) => {
   useBodyScrollLock();
   return (
     <Styled.Container>
       <Styled.MobileHeader>
-        <Styled.CloseButton>
+        <Styled.CloseButton onClick={close}>
           <CloseIcon />
         </Styled.CloseButton>
         <Styled.MobileHeaderText>관객 입장 확인 방법</Styled.MobileHeaderText>
