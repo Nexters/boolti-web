@@ -54,23 +54,10 @@ const AccountText = styled.span`
   }
 `;
 
-const AccountContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  flex-direction: column;
-
-  ${mq} {
-    align-items: center;
-    flex-direction: row;
-  }
-`;
-
 export default {
   Container,
   Title,
   Description,
   AccountText,
-  AccountContainer,
   InfoContainer,
 };

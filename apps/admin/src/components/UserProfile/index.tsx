@@ -10,7 +10,7 @@ const UserProfile = ({ profileImage, username, email }: Props) => {
   return (
     <Styled.Container>
       {profileImage ? (
-        <Styled.ProfileImage width={68} height={68} alt="" src={profileImage} />
+        <Styled.ProfileImage alt="" src={profileImage} />
       ) : (
         <Styled.DefaultProfileImage />
       )}

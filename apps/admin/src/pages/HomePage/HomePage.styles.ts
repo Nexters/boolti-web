@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -20,7 +21,11 @@ const LogoutLink = styled(Link)`
 
 const Container = styled.main`
   min-height: calc(100vh - 68px - 274px);
-  padding: 60px 20px 0;
+  padding: 20px 20px 0;
+
+  ${mq} {
+    padding: 60px 20px 0;
+  }
 `;
 
 export default {
