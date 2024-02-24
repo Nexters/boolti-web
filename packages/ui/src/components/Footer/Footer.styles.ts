@@ -5,7 +5,7 @@ const Container = styled.footer`
   padding: 48px 20px 28px 20px;
   max-width: ${({ theme }) => theme.breakpoint.desktop};
 
-  ${mq('desktop')} {
+  ${mq} {
     padding: 60px 20px;
   }
 `;
@@ -15,7 +15,7 @@ const Content = styled.div`
   justify-content: space-between;
   flex-direction: column;
 
-  ${mq('desktop')} {
+  ${mq} {
     flex-direction: row;
   }
 `;
@@ -24,14 +24,14 @@ const TextGroup = styled.div`
   display: none;
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq('desktop')} {
+  ${mq} {
     display: block;
   }
 `;
 
 const MobileTextGroup = styled(TextGroup)`
   display: block;
-  ${mq('desktop')} {
+  ${mq} {
     display: none;
   }
 `;
@@ -49,7 +49,7 @@ const BoldTtext = styled.span`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq('desktop')} {
+  ${mq} {
     margin-bottom: 12px;
     color: ${({ theme }) => theme.palette.grey.g90};
   }
@@ -58,7 +58,7 @@ const BoldTtext = styled.span`
 const LinkTextGroup = styled.div`
   margin-top: 24px;
 
-  ${mq('desktop')} {
+  ${mq} {
     margin-top: 32px;
   }
 `;
@@ -71,7 +71,7 @@ const IconGroup = styled.div`
   display: flex;
   margin-top: 32px;
 
-  ${mq('desktop')} {
+  ${mq} {
     margin-top: 0;
   }
 `;
