@@ -9,11 +9,14 @@ const Container = styled.li`
   box-shadow: 0px 8px 14px 0px rgba(136, 141, 157, 0.15);
   padding: 16px 20px;
   &:not(:last-of-type) {
-    margin-bottom: 24px;
+    margin-bottom: 16px;
   }
 
   ${mq} {
     padding: 28px 32px;
+    &:not(:last-of-type) {
+      margin-bottom: 24px;
+    }
   }
 `;
 
@@ -78,6 +81,7 @@ const TitleContainer = styled.div`
 `;
 
 const InfoColumn = styled.div`
+  display: flex;
   &:not(:last-of-type) {
     margin-bottom: 4px;
   }
@@ -86,16 +90,24 @@ const InfoColumn = styled.div`
 const InfoText = styled.span<{ isLabel?: boolean }>`
   display: inline-block;
   min-width: 60px;
+  margin-right: 16px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ isLabel, theme }) => (isLabel ? theme.palette.grey.g60 : theme.palette.grey.g90)};
 
   ${mq} {
     ${({ theme }) => theme.typo.b3};
   }
+`;
 
-  &:not(:last-of-type) {
-    margin-right: 16px;
-  }
+const DateTextContainer = styled.div`
+  display: inline-flex;
+  flex-wrap: wrap;
+`;
+
+const DateText = styled(InfoText)`
+  white-space: pre-wrap;
+  min-width: auto;
+  margin-right: 0;
 `;
 
 const IconContainer = styled.div`
@@ -119,7 +131,8 @@ export default {
   Button,
   TextContainer,
   Title,
-
+  DateText,
+  DateTextContainer,
   InfoColumn,
   InfoText,
   IconContainer,

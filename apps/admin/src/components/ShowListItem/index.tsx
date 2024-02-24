@@ -93,10 +93,15 @@ const ShowListItem = ({
             </Styled.InfoColumn>
             <Styled.InfoColumn>
               <Styled.InfoText isLabel>판매 기간</Styled.InfoText>
-              <Styled.InfoText>
-                {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })} ~{' '}
-                {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
-              </Styled.InfoText>
+              <Styled.DateTextContainer>
+                <Styled.DateText>
+                  {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                </Styled.DateText>
+                <Styled.DateText> ~ </Styled.DateText>
+                <Styled.DateText>
+                  {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                </Styled.DateText>
+              </Styled.DateTextContainer>
             </Styled.InfoColumn>
           </Styled.TextContainer>
           <Styled.IconContainer>
