@@ -1,35 +1,61 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.footer`
-  padding: 60px 20px;
-  width: ${({ theme }) => theme.breakpoint.desktop};
+  padding: 48px 20px 28px 20px;
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
+
+  ${mq} {
+    padding: 60px 20px;
+  }
 `;
 
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+
+  ${mq} {
+    flex-direction: row;
+  }
 `;
 
 const TextGroup = styled.div`
-  color: ${({ theme }) => theme.palette.grey.g70};
+  display: none;
+
+  ${mq} {
+    display: block;
+  }
+`;
+
+const MobileTextGroup = styled(TextGroup)`
+  display: block;
+  ${mq} {
+    display: none;
+  }
 `;
 
 const Text = styled.span`
   display: block;
   white-space: pre-line;
   ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
 `;
 
 const BoldTtext = styled.span`
   display: block;
   white-space: pre-line;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.g90};
+  color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
 const LinkTextGroup = styled.div`
-  margin-top: 32px;
+  margin-top: 24px;
+
+  ${mq} {
+    margin-top: 32px;
+  }
 `;
 
 const Link = styled.a`
@@ -38,6 +64,11 @@ const Link = styled.a`
 
 const IconGroup = styled.div`
   display: flex;
+  margin-top: 32px;
+
+  ${mq} {
+    margin-top: 0;
+  }
 `;
 
 const IconLink = styled.a`
@@ -65,4 +96,5 @@ export default {
   IconGroup,
   LinkTextGroup,
   IconLink,
+  MobileTextGroup,
 };
