@@ -8,24 +8,41 @@ const Container = styled.div`
   justify-content: center;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
-  padding: 28px 32px;
+  padding: 16px 20px;
   margin-top: 20px;
 
   ${mq} {
+    padding: 28px 32px;
     margin-top: 40px;
   }
 `;
 
-const Title = styled.p`
-  ${({ theme }) => theme.typo.h1};
-  color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 4px;
+const Title = styled.p<{ hasAccountInfo?: boolean }>`
+  ${({ theme, hasAccountInfo }) => (hasAccountInfo ? theme.typo.b3 : theme.typo.h1)};
+  color: ${({ theme, hasAccountInfo }) =>
+    hasAccountInfo ? theme.palette.grey.g70 : theme.palette.grey.g90};
+  margin-bottom: 2px;
 `;
 
 const Description = styled.span`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g70};
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+
+  ${mq} {
+    margin-bottom: 24px;
+  }
+`;
+
+const InfoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+
+  ${mq} {
+    margin-bottom: 24px;
+  }
 `;
 
 const AccountText = styled.span`
@@ -39,7 +56,14 @@ const AccountText = styled.span`
 
 const AccountContainer = styled.div`
   display: flex;
-  align-items: center;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+
+  ${mq} {
+    align-items: center;
+    flex-direction: row;
+  }
 `;
 
 export default {
@@ -48,4 +72,5 @@ export default {
   Description,
   AccountText,
   AccountContainer,
+  InfoContainer,
 };
