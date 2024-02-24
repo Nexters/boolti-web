@@ -33,7 +33,7 @@ const SignUpCompletePage = () => {
             <Styled.CardContentDescription>
               원활한 이용을 위해{' '}
               <Styled.CardContentLink to={LINK.TERMS} target="_blank">
-                서비스 이용약관
+                서비스 이용약관{'\n'}
               </Styled.CardContentLink>{' '}
               확인 후 동의해주세요.
             </Styled.CardContentDescription>
