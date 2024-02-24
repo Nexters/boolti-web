@@ -172,8 +172,8 @@ const InputLabel = styled.p`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
-const AccountInputContainer = styled.div`
-  padding-bottom: 64px;
+const MobileBottomContainer = styled.div`
+  padding-bottom: 92px;
   ${mq} {
     padding-bottom: 0;
   }
@@ -185,10 +185,6 @@ const InputContainer = styled.div`
   & > .text-field {
     width: 100%;
   }
-`;
-
-const MobileConfirmContainer = styled.div`
-  padding-bottom: 92px;
 `;
 
 const ConfirmContainer = styled.div`
@@ -236,8 +232,7 @@ export default {
   ConfirmTextLabel,
   ConfrimTextValue,
   MobileCloseButton,
-  AccountInputContainer,
+  MobileBottomContainer,
   Form,
   MobileTitle,
-  MobileConfirmContainer,
 };

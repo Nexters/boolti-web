@@ -142,7 +142,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
           </Styled.BankList>
         )}
         {currentStepIndex === 1 && (
-          <Styled.AccountInputContainer>
+          <Styled.MobileBottomContainer>
             <Styled.InputContainer>
               <Styled.InputLabel>계좌번호</Styled.InputLabel>
               <TextField
@@ -184,10 +184,10 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                 })}
               />
             </Styled.InputContainer>
-          </Styled.AccountInputContainer>
+          </Styled.MobileBottomContainer>
         )}
         {currentStepIndex === 2 && (
-          <Styled.MobileConfirmContainer>
+          <Styled.MobileBottomContainer>
             <Styled.ConfirmContainer>
               <Styled.ConfrimTextContainer>
                 <Styled.ConfirmTextLabel>은행</Styled.ConfirmTextLabel>
@@ -202,7 +202,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                 <Styled.ConfrimTextValue>{currentAccountHolder}</Styled.ConfrimTextValue>
               </Styled.ConfrimTextContainer>
             </Styled.ConfirmContainer>
-          </Styled.MobileConfirmContainer>
+          </Styled.MobileBottomContainer>
         )}
         <Styled.MobileButtonContainer>{Buttons}</Styled.MobileButtonContainer>
         <Styled.ButtonContainer>{Buttons}</Styled.ButtonContainer>
