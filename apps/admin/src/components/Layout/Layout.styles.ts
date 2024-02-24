@@ -21,6 +21,7 @@ const ContentContainer = styled.div`
 
 const Content = styled.div`
   max-width: ${({ theme }) => theme.breakpoint.desktop};
+  min-width: 320px;
   margin: 0 auto;
 `;
 
