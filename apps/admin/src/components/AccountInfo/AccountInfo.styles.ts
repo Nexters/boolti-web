@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -8,6 +9,11 @@ const Container = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
   padding: 28px 32px;
+  margin-top: 20px;
+
+  ${mq} {
+    margin-top: 40px;
+  }
 `;
 
 const Title = styled.p`

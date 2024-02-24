@@ -2,9 +2,9 @@ import { Button, mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  margin-bottom: 48px;
+  margin: 48px 0;
   ${mq} {
-    margin-bottom: 80px;
+    margin-bottom: 80px 0;
   }
 `;
 
