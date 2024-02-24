@@ -22,7 +22,6 @@ const Content = styled.div`
 
 const TextGroup = styled.div`
   display: none;
-  color: ${({ theme }) => theme.palette.grey.g70};
 
   ${mq} {
     display: block;
@@ -40,6 +39,7 @@ const Text = styled.span`
   display: block;
   white-space: pre-line;
   ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
 `;
 
 const BoldTtext = styled.span`
@@ -48,11 +48,6 @@ const BoldTtext = styled.span`
   margin-bottom: 8px;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
-
-  ${mq} {
-    margin-bottom: 12px;
-    color: ${({ theme }) => theme.palette.grey.g90};
-  }
 `;
 
 const LinkTextGroup = styled.div`
