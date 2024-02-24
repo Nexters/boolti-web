@@ -83,7 +83,7 @@ const CardContentLink = styled(Link)`
 const StartButton = styled.button`
   position: absolute;
   bottom: 32px;
-  width: 100%;
+  width: calc(100% - 40px);
   max-width: 388px;
   height: 48px;
   display: inline-flex;
