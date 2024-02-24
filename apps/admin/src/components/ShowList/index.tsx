@@ -1,5 +1,5 @@
 import { ChevronRightIcon, PlusIcon } from '@boolti/icon';
-import { Button, useDialog } from '@boolti/ui';
+import { useDialog } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
@@ -36,7 +36,18 @@ const ShowList = ({ shows }: Props) => {
             <ChevronRightIcon />
           </Styled.InfoButton>
         </Styled.TextContainer>
-        <Button
+        <Styled.MobileButton
+          type="button"
+          colorTheme="primary"
+          size="x-small"
+          icon={<PlusIcon />}
+          onClick={() => {
+            navigate(PATH.SHOW_ADD);
+          }}
+        >
+          공연 등록하기
+        </Styled.MobileButton>
+        <Styled.DesktopButton
           type="button"
           colorTheme="primary"
           size="bold"
@@ -46,7 +57,7 @@ const ShowList = ({ shows }: Props) => {
           }}
         >
           공연 등록하기
-        </Button>
+        </Styled.DesktopButton>
       </Styled.Header>
       {isEmpty ? (
         <ShowListItem

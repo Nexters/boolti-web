@@ -61,7 +61,6 @@ const HomePage = () => {
             />
             <Styled.Seperator size={80} />
             <ShowList shows={showList} />
-            <Styled.Seperator size={80} />
           </>
         )}
       </Styled.Container>
