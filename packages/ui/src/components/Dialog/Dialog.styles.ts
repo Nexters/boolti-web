@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import { mq } from '../../systems';
+
 const DIALOG_WIDTH = '450px';
 
 const DimmedArea = styled.div`
@@ -10,6 +12,9 @@ const DimmedArea = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 999;
+  ${mq} {
+    padding: 0 20px;
+  }
 `;
 
 const Dialog = styled.div<{ isAuto: boolean }>`

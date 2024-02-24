@@ -1,11 +1,23 @@
+import { CloseIcon } from '@boolti/icon';
+
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 import Styled from './EntranceConfirmDialogContent.styles';
 
-const EntranceConfirmDialogContent = () => {
+interface Props {
+  close: VoidFunction;
+}
+
+const EntranceConfirmDialogContent = ({ close }: Props) => {
   useBodyScrollLock();
   return (
     <Styled.Container>
+      <Styled.MobileHeader>
+        <Styled.CloseButton onClick={close}>
+          <CloseIcon />
+        </Styled.CloseButton>
+        <Styled.MobileHeaderText>관객 입장 확인 방법</Styled.MobileHeaderText>
+      </Styled.MobileHeader>
       <Styled.Title>QR 스캐너</Styled.Title>
       <Styled.Description>
         {'티켓 한 장당 1개씩 발급되는 QR코드로 빠르고 쉽게 예매자의 입장을 확인해 보세요.' +
