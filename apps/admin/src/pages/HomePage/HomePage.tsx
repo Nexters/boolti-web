@@ -37,6 +37,8 @@ const HomePage = () => {
           }
           right={
             <TextButton
+              colorTheme="netural"
+              size="regular"
               onClick={async () => {
                 await logout.mutateAsync();
 
