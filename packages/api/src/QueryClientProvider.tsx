@@ -1,5 +1,4 @@
 import { QueryClient, QueryClientProvider as BaseQueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useState } from 'react';
 
 import BooltiHTTPError from './BooltiHTTPError';
@@ -23,10 +22,5 @@ export function QueryClientProvider({ children }: React.PropsWithChildren) {
       }),
   );
 
-  return (
-    <BaseQueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools />
-    </BaseQueryClientProvider>
-  );
+  return <BaseQueryClientProvider client={queryClient}>{children}</BaseQueryClientProvider>;
 }

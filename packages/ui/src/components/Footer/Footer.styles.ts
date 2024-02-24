@@ -1,17 +1,39 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.footer`
-  padding: 60px 20px;
-  width: ${({ theme }) => theme.breakpoint.desktop};
+  padding: 48px 20px 28px 20px;
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
+
+  ${mq('desktop')} {
+    padding: 60px 20px;
+  }
 `;
 
 const Content = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+
+  ${mq('desktop')} {
+    flex-direction: row;
+  }
 `;
 
 const TextGroup = styled.div`
+  display: none;
   color: ${({ theme }) => theme.palette.grey.g70};
+
+  ${mq('desktop')} {
+    display: block;
+  }
+`;
+
+const MobileTextGroup = styled(TextGroup)`
+  display: block;
+  ${mq('desktop')} {
+    display: none;
+  }
 `;
 
 const Text = styled.span`
@@ -23,13 +45,22 @@ const Text = styled.span`
 const BoldTtext = styled.span`
   display: block;
   white-space: pre-line;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.g90};
+  color: ${({ theme }) => theme.palette.grey.g70};
+
+  ${mq('desktop')} {
+    margin-bottom: 12px;
+    color: ${({ theme }) => theme.palette.grey.g90};
+  }
 `;
 
 const LinkTextGroup = styled.div`
-  margin-top: 32px;
+  margin-top: 24px;
+
+  ${mq('desktop')} {
+    margin-top: 32px;
+  }
 `;
 
 const Link = styled.a`
@@ -38,6 +69,11 @@ const Link = styled.a`
 
 const IconGroup = styled.div`
   display: flex;
+  margin-top: 32px;
+
+  ${mq('desktop')} {
+    margin-top: 0;
+  }
 `;
 
 const IconLink = styled.a`
@@ -65,4 +101,5 @@ export default {
   IconGroup,
   LinkTextGroup,
   IconLink,
+  MobileTextGroup,
 };
