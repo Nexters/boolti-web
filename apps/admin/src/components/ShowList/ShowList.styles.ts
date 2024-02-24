@@ -1,4 +1,4 @@
-import { Button, mq } from '@boolti/ui';
+import { Button, mq, TextButton } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -30,7 +30,7 @@ const HeaderText = styled.h2`
   }
 `;
 
-const MobileButton = styled(Button)`
+const MobileButton = styled(TextButton)`
   display: flex;
   ${mq} {
     display: none;

@@ -39,7 +39,7 @@ const ShowList = ({ shows }: Props) => {
         <Styled.MobileButton
           type="button"
           colorTheme="primary"
-          size="x-small"
+          size="small"
           icon={<PlusIcon />}
           onClick={() => {
             navigate(PATH.SHOW_ADD);

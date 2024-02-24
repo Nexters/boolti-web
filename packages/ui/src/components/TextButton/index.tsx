@@ -1,6 +1,6 @@
-import Styled from './TextButton.styles';
+import Styled, { ButtonProps } from './TextButton.styles';
 
-interface Props extends React.ComponentProps<'button'> {
+interface Props extends React.ComponentProps<'button'>, ButtonProps {
   icon?: React.ReactNode;
   disabled?: boolean;
 }
