@@ -106,7 +106,6 @@ const ShowTicketPage = () => {
                 quantity: ticket.quantity,
                 totalForSale: ticket.totalForSale,
               }))}
-              salesStartTime={format(showSalesInfo.salesStartTime, 'yyyy-MM-dd')}
               disabled={show.isEnded}
               onSubmitTicket={async (ticket) => {
                 await createSalesTicketMutation.mutateAsync({
@@ -156,7 +155,6 @@ const ShowTicketPage = () => {
                 </>
               }
               showDate={format(show.date, 'yyyy-MM-dd')}
-              salesStartTime={format(showSalesInfo.salesStartTime, 'yyyy-MM-dd')}
               onSubmitTicket={async (ticket) => {
                 await createInvitationTicketMutation.mutateAsync({
                   showId: show.id,

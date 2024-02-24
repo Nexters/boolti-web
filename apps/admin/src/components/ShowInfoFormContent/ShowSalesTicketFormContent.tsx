@@ -15,7 +15,6 @@ export interface SalesTicket {
 
 interface ShowSalesTicketFormContentProps {
   salesTicketList: SalesTicket[];
-  salesStartTime?: string;
   fullEditable?: boolean;
   disabled?: boolean;
   onSubmitTicket: SubmitHandler<SalesTicketFormInputs>;
@@ -24,7 +23,6 @@ interface ShowSalesTicketFormContentProps {
 
 const ShowSalesTicketFormContent = ({
   salesTicketList,
-  salesStartTime,
   fullEditable = false,
   disabled,
   onSubmitTicket,
@@ -71,8 +69,7 @@ const ShowSalesTicketFormContent = ({
         <Styled.TicketList>
           {salesTicketList.map((ticket) => {
             const isSoldTicket = ticket.totalForSale > ticket.quantity;
-            const isSalesStarted = salesStartTime ? new Date(salesStartTime) <= new Date() : false;
-            const isDeleteDisabled = isSingleTicket || isSoldTicket || isSalesStarted;
+            const isDeleteDisabled = isSingleTicket || isSoldTicket;
 
             return (
               <Styled.Ticket key={ticket.id ?? ticket.name}>
