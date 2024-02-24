@@ -1,6 +1,5 @@
 import { LOCAL_STORAGE, useAppleLogin, useSignUp } from '@boolti/api';
 import { AppleIcon, BooltiSmallLogo, KakaotalkIcon } from '@boolti/icon';
-import { Footer } from '@boolti/ui';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 
@@ -155,9 +154,6 @@ const LoginPage = () => {
           </Styled.CardContent>
         </Styled.Card>
       </Styled.LoginContent>
-      <Styled.Footer>
-        <Footer />
-      </Styled.Footer>
     </Styled.LoginPage>
   );
 };
