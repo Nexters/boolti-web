@@ -1,7 +1,7 @@
 import { queryKeys, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
 import { Button, TextField, useToast } from '@boolti/ui';
-import { useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { bankItems } from '~/constants/bankItems';
@@ -37,6 +37,25 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
+  const { mutate } = usePutUserSettlementAccountInfo();
+
+  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = useCallback(
+    (data) => {
+      mutate(data, {
+        onSuccess: async () => {
+          toast.success('정산 계좌를 저장했습니다.');
+          await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
+          onClose?.();
+        },
+        onError: () => {
+          toast.error('잠시후에 다시 시도하세요.');
+        },
+      });
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [onClose],
+  );
+
   const Buttons = useMemo(() => {
     return (
       <>
@@ -88,23 +107,9 @@ const SettlementDialogContent = ({ onClose }: Props) => {
     currentAccountNumber,
     currentBankName,
     currentStepIndex,
+    handleSubmit,
+    onSubmit,
   ]);
-
-  const { mutate } = usePutUserSettlementAccountInfo();
-
-  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = (data) => {
-    mutate(data, {
-      onSuccess: async () => {
-        toast.success('정산 계좌를 저장했습니다.');
-        await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
-        onClose?.();
-      },
-      onError: () => {
-        toast.error('잠시후에 다시 시도하세요.');
-      },
-    });
-  };
-
   useBodyScrollLock();
 
   return (
