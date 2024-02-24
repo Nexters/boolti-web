@@ -39,7 +39,7 @@ function getBadgeProps(
   }
   if (isBefore(today, salesStartTime)) {
     return {
-      children: `티켓 판매 오픈 D-${differenceInDays(salesStartTime, today)}`,
+      children: `티켓 판매 오픈 D-${differenceInDays(salesStartTime, today) + 1}`,
       colorTheme: 'purple',
     };
   }
@@ -82,23 +82,27 @@ const ShowListItem = ({
               <Styled.Title>{title}</Styled.Title>
               <Badge {...getBadgeProps(date, salesStartTime, salesEndTime)} />
             </Styled.TitleContainer>
-            <Styled.InfoContainer>
-              <Styled.InfoColumn>
-                <Styled.InfoText isLabel>호스트</Styled.InfoText>
-                <Styled.InfoText>{hostName}</Styled.InfoText>
-              </Styled.InfoColumn>
-              <Styled.InfoColumn>
-                <Styled.InfoText isLabel>공연일시</Styled.InfoText>
-                <Styled.InfoText>{format(date, 'yyyy.MM.dd (E)', { locale: ko })}</Styled.InfoText>
-              </Styled.InfoColumn>
-              <Styled.InfoColumn>
-                <Styled.InfoText isLabel>티켓 판매 기간</Styled.InfoText>
-                <Styled.InfoText>
-                  {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })} ~{' '}
+
+            <Styled.InfoColumn>
+              <Styled.InfoText isLabel>호스트</Styled.InfoText>
+              <Styled.InfoText>{hostName}</Styled.InfoText>
+            </Styled.InfoColumn>
+            <Styled.InfoColumn>
+              <Styled.InfoText isLabel>공연일시</Styled.InfoText>
+              <Styled.InfoText>{format(date, 'yyyy.MM.dd (E)', { locale: ko })}</Styled.InfoText>
+            </Styled.InfoColumn>
+            <Styled.InfoColumn>
+              <Styled.InfoText isLabel>판매 기간</Styled.InfoText>
+              <Styled.DateTextContainer>
+                <Styled.DateText>
+                  {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                </Styled.DateText>
+                <Styled.DateText> - </Styled.DateText>
+                <Styled.DateText>
                   {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
-                </Styled.InfoText>
-              </Styled.InfoColumn>
-            </Styled.InfoContainer>
+                </Styled.DateText>
+              </Styled.DateTextContainer>
+            </Styled.InfoColumn>
           </Styled.TextContainer>
           <Styled.IconContainer>
             <ChevronRightIcon />

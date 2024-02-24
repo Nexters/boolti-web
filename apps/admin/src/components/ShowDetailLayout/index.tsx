@@ -63,6 +63,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
               }
               right={
                 <TextButton
+                  size="regular"
+                  colorTheme="netural"
                   onClick={async () => {
                     if (onClickMiddleware && !(await onClickMiddleware())) {
                       return;
@@ -141,7 +143,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
         }
         headerContainerStyle={{
           position: 'sticky',
-          top: '-68px',
+          top: '-64px',
           zIndex: '100',
           boxShadow: topInView ? 'none' : `0 8px 14px 0 ${theme.palette.shadow}`,
           transition: 'box-shadow 0.1s ease-in-out',

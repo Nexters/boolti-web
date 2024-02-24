@@ -39,7 +39,7 @@ const TopObserver = styled.div`
 
 const HeaderObserver = styled.div`
   position: absolute;
-  top: calc(-197px + 68px - 40px);
+  top: calc(-197px + 64px - 40px);
   left: 0;
   width: 100%;
   height: 1px;

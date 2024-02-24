@@ -14,10 +14,31 @@ export default meta;
 
 type Story = StoryObj<typeof TextButton>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    colorTheme: 'netural',
+    size: 'regular',
+  },
+};
 
 export const Icon: Story = {
   args: {
+    colorTheme: 'netural',
+    size: 'regular',
     icon: <GithubIcon />,
+  },
+};
+
+export const Small: Story = {
+  args: {
+    size: 'small',
+    colorTheme: 'netural',
+  },
+};
+
+export const Primary: Story = {
+  args: {
+    size: 'small',
+    colorTheme: 'primary',
   },
 };

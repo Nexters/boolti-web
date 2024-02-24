@@ -37,6 +37,8 @@ const HomePage = () => {
           }
           right={
             <TextButton
+              colorTheme="netural"
+              size="regular"
               onClick={async () => {
                 await logout.mutateAsync();
 
@@ -53,15 +55,12 @@ const HomePage = () => {
         {!isLoading && (
           <>
             <UserProfile profileImage={imagePath} username={nickname} email={email} />
-            <Styled.Seperator size={40} />
             <AccountInfo
               bankAccountHolder={bankAccountHolder}
               bankAccountNumber={bankAccountNumber}
               bankName={bankName}
             />
-            <Styled.Seperator size={80} />
             <ShowList shows={showList} />
-            <Styled.Seperator size={80} />
           </>
         )}
       </Styled.Container>
