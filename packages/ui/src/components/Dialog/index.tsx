@@ -17,14 +17,14 @@ const Dialog = ({ open, isAuto = false, children, title, onClose }: DialogProps)
   return (
     <Portal>
       <Styled.DimmedArea>
-        <Styled.Dialog isAuto={isAuto}>
+        <Styled.Dialog className="dialog" isAuto={isAuto}>
           <Styled.DialogHeader>
             <Styled.DialogTitle>{title}</Styled.DialogTitle>
             <Styled.DialogCloseButton aria-label="닫기" onClick={onClose}>
               <CloseIcon />
             </Styled.DialogCloseButton>
           </Styled.DialogHeader>
-          <Styled.DialogContent>{children}</Styled.DialogContent>
+          <Styled.DialogContent className="dialog__content">{children}</Styled.DialogContent>
         </Styled.Dialog>
       </Styled.DimmedArea>
     </Portal>
