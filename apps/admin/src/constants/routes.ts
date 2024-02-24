@@ -12,7 +12,7 @@ export const PATH = {
   SHOW_TICKET: '/show/:showId/ticket',
   SHOW_RESERVATION: '/show/:showId/reservation',
   SHOW_ENTRANCE: '/show/:showId/enterance',
-};
+} as const;
 
 export const HREF = {
   SHOW_INFO: (showId: string | number) => `/show/${showId}/info`,

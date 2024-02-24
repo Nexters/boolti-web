@@ -2,12 +2,14 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 const SignUpCompletePage = styled.div`
-  position: relative;
+  width: 100vw;
+  height: 100vh;
   background-color: ${({ theme }) => theme.palette.grey.g20};
 `;
 
 const SignUpCompleteContent = styled.div`
-  padding: 300px 20px 100px;
+  height: 100%;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -64,11 +66,6 @@ const StartButton = styled.button`
   cursor: pointer;
 `;
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: center;
-`;
-
 export default {
   SignUpCompletePage,
   SignUpCompleteContent,
@@ -78,5 +75,4 @@ export default {
   CardContentDescription,
   CardContentLink,
   StartButton,
-  Footer,
 };

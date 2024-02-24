@@ -1,5 +1,4 @@
 import { useUserSummary } from '@boolti/api';
-import { Footer } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
 import { LINK } from '~/constants/link';
@@ -48,9 +47,6 @@ const SignUpCompletePage = () => {
           </Styled.CardContent>
         </Styled.Card>
       </Styled.SignUpCompleteContent>
-      <Styled.Footer>
-        <Footer />
-      </Styled.Footer>
     </Styled.SignUpCompletePage>
   );
 };
