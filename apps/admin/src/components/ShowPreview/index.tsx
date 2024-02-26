@@ -61,7 +61,7 @@ const ShowPreview = ({
           slidesPerView={1}
           pagination={{
             clickable: false,
-            renderBullet: (index: number, className: string) => {
+            renderBullet: (_: number, className: string) => {
               return '<span class="' + className + '"></span>';
             },
           }}
