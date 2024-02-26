@@ -4,6 +4,7 @@ import Button from './Button';
 import Confirm from './Confirm';
 import DatePicker from './DatePicker';
 import Dialog from './Dialog';
+import Drawer from './Drawer';
 import Footer from './Footer';
 import TextButton from './TextButton';
 import TextField from './TextField';
@@ -15,6 +16,7 @@ export {
   Confirm,
   DatePicker,
   Dialog,
+  Drawer,
   Footer,
   TextButton,
   TextField,

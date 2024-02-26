@@ -7,7 +7,7 @@ import {
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
+import { Button, Drawer, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,8 +18,10 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import ShowPreview from '~/components/ShowPreview';
 import { PATH } from '~/constants/routes';
 
+import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
 
 const ShowInfoPage = () => {
@@ -41,6 +43,8 @@ const ShowInfoPage = () => {
   const toast = useToast();
   const confirm = useConfirm();
   const deleteShowDialog = useDialog();
+
+  const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(false);
 
   const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
     if (!show) return;
@@ -77,6 +81,7 @@ const ShowInfoPage = () => {
     });
 
     toast.success('공연 정보를 저장했습니다.');
+    setPreviewDrawerOpen(false);
   };
 
   const confirmSaveShowInfo = async () => {
@@ -159,8 +164,11 @@ const ShowInfoPage = () => {
             <Button
               size="bold"
               colorTheme="primary"
-              type="submit"
+              type="button"
               disabled={!showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded}
+              onClick={() => {
+                setPreviewDrawerOpen(true);
+              }}
             >
               저장하기
             </Button>
@@ -190,6 +198,70 @@ const ShowInfoPage = () => {
               공연 삭제하기
             </Button>
           </Styled.ShowInfoFormFooter>
+          <Drawer
+            open={previewDrawerOpen}
+            title="공연 상세 미리보기"
+            onClose={() => {
+              setPreviewDrawerOpen(false);
+            }}
+          >
+            <Styled.ShowInfoPreviewContainer>
+              <Styled.ShowInfoPreview>
+                <Styled.ShowInfoPreviewFrameContainer>
+                  <Styled.ShowInfoPreviewFrame>
+                    <PreviewFrame />
+                  </Styled.ShowInfoPreviewFrame>
+                  <Styled.ShowPreviewContainer>
+                    <Styled.ShowPreview>
+                      <ShowPreview
+                        images={imageFiles.map((file) => file.preview)}
+                        name={showInfoForm.watch('name') ? showInfoForm.watch('name') : ''}
+                        date={
+                          showInfoForm.watch('date')
+                            ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                            : ''
+                        }
+                        startTime={showInfoForm.watch('startTime')}
+                        runningTime={showInfoForm.watch('runningTime')}
+                        salesStartTime={
+                          showSalesInfo
+                            ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                            : ''
+                        }
+                        salesEndTime={
+                          showSalesInfo ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)') : ''
+                        }
+                        placeName={showInfoForm.watch('placeName')}
+                        placeStreetAddress={showInfoForm.watch('placeStreetAddress')}
+                        placeDetailAddress={showInfoForm.watch('placeDetailAddress')}
+                        notice={showInfoForm.watch('notice')}
+                        hostName={showInfoForm.watch('hostName')}
+                        hostPhoneNumber={showInfoForm.watch('hostPhoneNumber')}
+                      />
+                    </Styled.ShowPreview>
+                  </Styled.ShowPreviewContainer>
+                </Styled.ShowInfoPreviewFrameContainer>
+              </Styled.ShowInfoPreview>
+              <Styled.ShowInfoPreviewFooter>
+                <Styled.ShowInfoPreviewCloseButton
+                  type="button"
+                  onClick={() => {
+                    setPreviewDrawerOpen(false);
+                  }}
+                >
+                  닫기
+                </Styled.ShowInfoPreviewCloseButton>
+                <Styled.ShowInfoPreviewSubmitButton
+                  type="button"
+                  onClick={() => {
+                    showInfoForm.handleSubmit(onSubmit)();
+                  }}
+                >
+                  저장하기
+                </Styled.ShowInfoPreviewSubmitButton>
+              </Styled.ShowInfoPreviewFooter>
+            </Styled.ShowInfoPreviewContainer>
+          </Drawer>
         </Styled.ShowInfoForm>
       </Styled.ShowInfoPage>
     </ShowDetailLayout>

@@ -3,6 +3,8 @@ import './index.css';
 
 import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
+import { setDefaultOptions } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
@@ -18,6 +20,8 @@ import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
+
+setDefaultOptions({ locale: ko });
 
 const PublicRoute = () => {
   const isLogin =
