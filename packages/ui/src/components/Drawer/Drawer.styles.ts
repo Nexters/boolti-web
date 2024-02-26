@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
-import { animated } from "@react-spring/web";
+import styled from '@emotion/styled';
+import { animated } from '@react-spring/web';
 
 interface DrawerProps {
   width?: string;
@@ -24,7 +24,7 @@ const Drawer = styled(animated.div)<DrawerProps>`
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: -12px 0px 20px 0px ${({ theme }) => theme.palette.shadow};
   z-index: 1000;
-`
+`;
 
 const DrawerHeader = styled.div`
   height: 66px;
@@ -34,19 +34,21 @@ const DrawerHeader = styled.div`
   padding-left: 28px;
   padding-right: 21px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
-`
+`;
 
 const DrawerTitle = styled.h3`
   ${({ theme }) => theme.typo.sh2};
-`
+`;
 
 const DrawerCloseButton = styled.button`
   width: 24px;
   height: 24px;
   cursor: pointer;
-`
+`;
 
-const DrawerContent = styled.div``
+const DrawerContent = styled.div`
+  height: calc(100% - 66px);
+`;
 
 export default {
   DimmedArea,
@@ -55,4 +57,4 @@ export default {
   DrawerTitle,
   DrawerCloseButton,
   DrawerContent,
-}
+};

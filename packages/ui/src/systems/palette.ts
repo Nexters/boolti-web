@@ -48,6 +48,32 @@ const palette = {
     dialog: 'rgba(86, 86, 86, 0.25)',
   },
   shadow: 'rgba(136, 141, 157, 0.15)',
+  mobile: {
+    primary: {
+      o1: '#FF6827',
+    },
+    status: {
+      error: '#FF4D4F',
+      success: '#52C41A',
+    },
+    grey: {
+      w: '#FFFFFF',
+      g05: '#F6F7FF',
+      g10: '#E7EAF2',
+      g15: '#D8DBE5',
+      g20: '#BEC1CE',
+      g30: '#A2A5B4',
+      g40: '#888D9D',
+      g50: '#6F7485',
+      g60: '#595D6D',
+      g70: '#434753',
+      g80: '#2E303A',
+      g85: '#1B1D23',
+      g90: '#121318',
+      g95: '#090A0B',
+      b: '#000000',
+    },
+  },
 } as const;
 
 export default palette;
