@@ -99,52 +99,56 @@ const ShowReservationPage = () => {
             </Styled.TicketSummary>
           </Styled.TicketSummaryContainer>
           <Styled.TicketReservationSummaryContainer>
-            <Styled.TicketReservationSummaryButton
-              onClick={() => {
-                setSelectedTicketStatus('WAIT');
-              }}
-              isSelected={selectedTicketStatus === 'WAIT'}
-            >
-              발권 대기 <span>{waitCount}</span>
-            </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton
-              onClick={() => {
-                setSelectedTicketStatus('COMPLETE');
-              }}
-              isSelected={selectedTicketStatus === 'COMPLETE'}
-            >
-              발권 완료 <span>{completeCount}</span>
-            </Styled.TicketReservationSummaryButton>
-            <Styled.TicketReservationSummaryButton
-              onClick={() => {
-                setSelectedTicketStatus('CANCEL');
-              }}
-              isSelected={selectedTicketStatus === 'CANCEL'}
-            >
-              발권 취소 <span>{cancelCount}</span>
-            </Styled.TicketReservationSummaryButton>
-            <TicketTypeSelect
-              onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
-            />
-            <Styled.InputContainer>
-              <Styled.Input
-                value={searchText}
-                onChange={(event) => {
-                  setSearchText(event.target.value);
+            <Styled.TicketReservationSummaryButtonContainer>
+              <Styled.TicketReservationSummaryButton
+                onClick={() => {
+                  setSelectedTicketStatus('WAIT');
                 }}
-                placeholder="예매자 이름, 연락처 검색"
+                isSelected={selectedTicketStatus === 'WAIT'}
+              >
+                발권 대기 <span>{waitCount}</span>
+              </Styled.TicketReservationSummaryButton>
+              <Styled.TicketReservationSummaryButton
+                onClick={() => {
+                  setSelectedTicketStatus('COMPLETE');
+                }}
+                isSelected={selectedTicketStatus === 'COMPLETE'}
+              >
+                발권 완료 <span>{completeCount}</span>
+              </Styled.TicketReservationSummaryButton>
+              <Styled.TicketReservationSummaryButton
+                onClick={() => {
+                  setSelectedTicketStatus('CANCEL');
+                }}
+                isSelected={selectedTicketStatus === 'CANCEL'}
+              >
+                발권 취소 <span>{cancelCount}</span>
+              </Styled.TicketReservationSummaryButton>
+            </Styled.TicketReservationSummaryButtonContainer>
+            <Styled.FilterContainer>
+              <TicketTypeSelect
+                onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
               />
-              <Styled.ButtonContainer>
-                {searchText !== '' && (
-                  <Styled.InputButton onClick={() => setSearchText('')}>
-                    <ClearIcon />
+              <Styled.InputContainer>
+                <Styled.Input
+                  value={searchText}
+                  onChange={(event) => {
+                    setSearchText(event.target.value);
+                  }}
+                  placeholder="예매자 이름, 연락처 검색"
+                />
+                <Styled.ButtonContainer>
+                  {searchText !== '' && (
+                    <Styled.InputButton onClick={() => setSearchText('')}>
+                      <ClearIcon />
+                    </Styled.InputButton>
+                  )}
+                  <Styled.InputButton>
+                    <SearchIcon />
                   </Styled.InputButton>
-                )}
-                <Styled.InputButton>
-                  <SearchIcon />
-                </Styled.InputButton>
-              </Styled.ButtonContainer>
-            </Styled.InputContainer>
+                </Styled.ButtonContainer>
+              </Styled.InputContainer>
+            </Styled.FilterContainer>
           </Styled.TicketReservationSummaryContainer>
           {!isReservationPagesLoading && (
             <Styled.TableContainer>
