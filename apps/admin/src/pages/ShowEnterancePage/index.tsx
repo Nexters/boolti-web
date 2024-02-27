@@ -110,44 +110,48 @@ const ShowEnterancePage = () => {
             </Styled.Summary>
           </Styled.SummaryContainer>
           <Styled.EnteranceSummaryContainer>
-            <Styled.EnteranceSummaryButton
-              onClick={() => {
-                setIsEnteredTicket(false);
-              }}
-              isSelected={!isEnteredTicket}
-            >
-              미입장 <span>{notEnteredTicketCount}</span>
-            </Styled.EnteranceSummaryButton>
-            <Styled.EnteranceSummaryButton
-              onClick={() => {
-                setIsEnteredTicket(true);
-              }}
-              isSelected={isEnteredTicket}
-            >
-              입장 확인 <span>{enteredTicketCount}</span>
-            </Styled.EnteranceSummaryButton>
-            <TicketTypeSelect
-              onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
-            />
-            <Styled.InputContainer>
-              <Styled.Input
-                value={searchText}
-                onChange={(event) => {
-                  setSearchText(event.target.value);
+            <Styled.SummaryButtonContainer>
+              <Styled.EnteranceSummaryButton
+                onClick={() => {
+                  setIsEnteredTicket(false);
                 }}
-                placeholder="예매자 이름, 연락처 검색"
+                isSelected={!isEnteredTicket}
+              >
+                미입장 <span>{notEnteredTicketCount}</span>
+              </Styled.EnteranceSummaryButton>
+              <Styled.EnteranceSummaryButton
+                onClick={() => {
+                  setIsEnteredTicket(true);
+                }}
+                isSelected={isEnteredTicket}
+              >
+                입장 확인 <span>{enteredTicketCount}</span>
+              </Styled.EnteranceSummaryButton>
+            </Styled.SummaryButtonContainer>
+            <Styled.FilterContainer>
+              <TicketTypeSelect
+                onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
               />
-              <Styled.ButtonContainer>
-                {searchText !== '' && (
-                  <Styled.InputButton onClick={() => setSearchText('')}>
-                    <ClearIcon />
+              <Styled.InputContainer>
+                <Styled.Input
+                  value={searchText}
+                  onChange={(event) => {
+                    setSearchText(event.target.value);
+                  }}
+                  placeholder="예매자 이름, 연락처 검색"
+                />
+                <Styled.ButtonContainer>
+                  {searchText !== '' && (
+                    <Styled.InputButton onClick={() => setSearchText('')}>
+                      <ClearIcon />
+                    </Styled.InputButton>
+                  )}
+                  <Styled.InputButton>
+                    <SearchIcon />
                   </Styled.InputButton>
-                )}
-                <Styled.InputButton>
-                  <SearchIcon />
-                </Styled.InputButton>
-              </Styled.ButtonContainer>
-            </Styled.InputContainer>
+                </Styled.ButtonContainer>
+              </Styled.InputContainer>
+            </Styled.FilterContainer>
           </Styled.EnteranceSummaryContainer>
           {!isEntranceListLoading && (
             <Styled.TableContainer>

@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -20,39 +21,60 @@ const Empty = styled.div`
 
 const InfoContainer = styled.div`
   display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 20px 24px;
+  padding: 12px 16px;
   justify-content: space-between;
-  align-items: center;
+  align-items: start;
   margin-bottom: 20px;
   border-radius: 8px;
-  border: ${({ theme }) => theme.palette.grey.g20};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
+  ${mq} {
+    flex-direction: row;
+    align-items: center;
+    padding: 20px 24px;
+  }
 `;
 
 const InfoText = styled.span`
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+
+  ${mq} {
+    ${({ theme }) => theme.typo.sh2};
+  }
 `;
 
 const QuestionTextButton = styled.button`
-  ${({ theme }) => theme.typo.b2};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g60};
   text-decoration-line: underline;
   cursor: pointer;
+  margin-top: 4px;
+  ${mq} {
+    ${({ theme }) => theme.typo.b2};
+    margin-top: 0;
+  }
 `;
 
 const SummaryContainer = styled.div`
-  display: flex;
-  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 8px;
+  margin-bottom: 32px;
+  ${mq} {
+    margin-bottom: 40px;
+    display: flex;
+  }
 `;
 
 const Summary = styled.div<{ colorTheme: 'grey' | 'red' }>`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 352px;
+  flex-direction: column;
+  align-items: start;
   padding: 16px 20px;
   border-radius: 8px;
   ${({ colorTheme, theme }) => {
@@ -72,13 +94,23 @@ const Summary = styled.div<{ colorTheme: 'grey' | 'red' }>`
         `;
     }
   }}
-  &:not(:last-child) {
-    margin-right: 12px;
+  ${mq} {
+    flex-direction: row;
+    width: 352px;
+    align-items: center;
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
   }
 `;
 
 const SumamryLabel = styled.span`
-  ${({ theme }) => theme.typo.b2};
+  ${({ theme }) => theme.typo.b1};
+  margin-bottom: 4px;
+  ${mq} {
+    margin-bottom: 0;
+    ${({ theme }) => theme.typo.b2};
+  }
 `;
 
 const SumamryValue = styled.b`
@@ -86,6 +118,32 @@ const SumamryValue = styled.b`
 `;
 
 const EnteranceSummaryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 100%;
+  ${mq} {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
+const FilterContainer = styled.div`
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ${mq} {
+    margin-top: 0;
+    width: auto;
+  }
+`;
+
+const SummaryButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -186,6 +244,8 @@ export default {
   Input,
   InputButton,
   ButtonContainer,
+  FilterContainer,
+  SummaryButtonContainer,
   Empty,
   TableContainer,
 };

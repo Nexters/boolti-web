@@ -1,6 +1,9 @@
 import { ChevronRightIcon } from '@boolti/icon';
+import { breakpoint } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import Select from 'react-select';
+
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
 interface Props {
   onChange: (value: string) => void;
@@ -8,6 +11,7 @@ interface Props {
 
 const TicketTypeSelect = ({ onChange }: Props) => {
   const theme = useTheme();
+  const width = useDeviceWidth();
   return (
     <Select
       onChange={(newItem) => newItem?.value && onChange(newItem.value)}
@@ -25,7 +29,7 @@ const TicketTypeSelect = ({ onChange }: Props) => {
           cursor: 'pointer',
           border: 'none !important',
           boxShadow: 'none !important',
-          padding: 12,
+          padding: width > Number(breakpoint.mobile) ? 12 : 0,
         }),
         valueContainer: (base) => ({
           ...base,

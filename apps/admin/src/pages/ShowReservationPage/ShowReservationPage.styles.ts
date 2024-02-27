@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -19,15 +20,21 @@ const Empty = styled.div`
 `;
 
 const TicketSummaryContainer = styled.div`
-  display: flex;
-  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 8px;
+  margin-bottom: 32px;
+  ${mq} {
+    margin-bottom: 40px;
+    display: flex;
+  }
 `;
 
 const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 260px;
+  flex-direction: column;
+  align-items: start;
   padding: 16px 20px;
   border-radius: 8px;
   ${({ colorTheme, theme }) => {
@@ -47,13 +54,23 @@ const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
         `;
     }
   }}
-  &:not(:last-child) {
-    margin-right: 12px;
+  ${mq} {
+    flex-direction: row;
+    width: 260px;
+    align-items: center;
+    &:not(:last-child) {
+      margin-right: 12px;
+    }
   }
 `;
 
 const TicketSumamryLabel = styled.span`
-  ${({ theme }) => theme.typo.b2};
+  ${({ theme }) => theme.typo.b1};
+  margin-bottom: 4px;
+  ${mq} {
+    margin-bottom: 0;
+    ${({ theme }) => theme.typo.b2};
+  }
 `;
 
 const TicketSumamryValue = styled.b`
@@ -61,6 +78,32 @@ const TicketSumamryValue = styled.b`
 `;
 
 const TicketReservationSummaryContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-direction: column;
+  width: 100%;
+  ${mq} {
+    width: auto;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
+const FilterContainer = styled.div`
+  margin-top: 12px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ${mq} {
+    margin-top: 0;
+    width: auto;
+  }
+`;
+
+const TicketReservationSummaryButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -153,11 +196,13 @@ export default {
   TicketSumamryLabel,
   TicketSumamryValue,
   TicketReservationSummaryContainer,
+  TicketReservationSummaryButtonContainer,
   TicketReservationSummaryButton,
   InputContainer,
   TableContainer,
   Input,
   InputButton,
   ButtonContainer,
+  FilterContainer,
   Empty,
 };
