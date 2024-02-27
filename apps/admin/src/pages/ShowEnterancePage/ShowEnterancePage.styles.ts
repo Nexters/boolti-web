@@ -173,7 +173,7 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
     ${({ theme }) => theme.typo.c1};
     color: ${({ theme }) => theme.palette.grey.w};
     background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
+      isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   }
 `;
 
