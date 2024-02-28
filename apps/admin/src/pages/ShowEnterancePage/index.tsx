@@ -1,5 +1,4 @@
 import {
-  TicketType,
   useShowDetail,
   useShowEnteranceInfo,
   useShowEnterances,
@@ -22,7 +21,9 @@ const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
   const { open, close } = useDialog();
 
-  const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
+  const [selectedTicketType, setSelectedTicketType] = useState<
+    React.ComponentProps<typeof TicketTypeSelect>['value']
+  >({ value: 'ALL', label: '티켓 전체' });
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
@@ -36,7 +37,7 @@ const ShowEnterancePage = () => {
     showId,
     currentPage,
     isEnteredTicket,
-    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
+    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
     debouncedSearchText,
   );
 
@@ -44,11 +45,11 @@ const ShowEnterancePage = () => {
   const reservations = (enteranceData?.content ?? []).filter(
     ({ entered, ticketType }) =>
       entered === isEnteredTicket &&
-      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
   );
 
   const onClickReset = () => {
-    setSelectedTicketType('ALL');
+    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
     setSearchText('');
   };
 
@@ -114,6 +115,7 @@ const ShowEnterancePage = () => {
               <Styled.EnteranceSummaryButton
                 onClick={() => {
                   setIsEnteredTicket(false);
+                  onClickReset();
                 }}
                 isSelected={!isEnteredTicket}
               >
@@ -122,6 +124,7 @@ const ShowEnterancePage = () => {
               <Styled.EnteranceSummaryButton
                 onClick={() => {
                   setIsEnteredTicket(true);
+                  onClickReset();
                 }}
                 isSelected={isEnteredTicket}
               >
@@ -130,7 +133,8 @@ const ShowEnterancePage = () => {
             </Styled.SummaryButtonContainer>
             <Styled.FilterContainer>
               <TicketTypeSelect
-                onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
+                value={selectedTicketType}
+                onChange={(value) => setSelectedTicketType(value)}
               />
               <Styled.InputContainer>
                 <Styled.Input
