@@ -5,18 +5,29 @@ import Select from 'react-select';
 
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
+type Value = (typeof options)[number];
+
 interface Props {
-  onChange: (value: string) => void;
+  value: Value;
+  onChange: (value: Value) => void;
 }
 
-const TicketTypeSelect = ({ onChange }: Props) => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const options = [
+  { value: 'ALL', label: '티켓 전체' },
+  { value: 'SALE', label: '일반 티켓' },
+  { value: 'INVITE', label: '초청 티켓' },
+] as const;
+
+const TicketTypeSelect = ({ onChange, value }: Props) => {
   const theme = useTheme();
   const width = useDeviceWidth();
   return (
     <Select
-      onChange={(newItem) => newItem?.value && onChange(newItem.value)}
+      onChange={(newItem) => newItem && onChange(newItem as Value)}
       components={{ DropdownIndicator: ChevronRightIcon }}
       isSearchable={false}
+      value={value}
       options={[
         { value: 'ALL', label: '티켓 전체' },
         { value: 'SALE', label: '일반 티켓' },

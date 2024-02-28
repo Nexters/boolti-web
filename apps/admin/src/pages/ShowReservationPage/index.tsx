@@ -1,6 +1,5 @@
 import {
   TicketStatus,
-  TicketType,
   useShowDetail,
   useShowReservations,
   useShowReservationSummary,
@@ -18,7 +17,9 @@ import Styled from './ShowReservationPage.styles';
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
-  const [selectedTicketType, setSelectedTicketType] = useState<TicketType | 'ALL'>('ALL');
+  const [selectedTicketType, setSelectedTicketType] = useState<
+    React.ComponentProps<typeof TicketTypeSelect>['value']
+  >({ value: 'ALL', label: '티켓 전체' });
   const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('WAIT');
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
@@ -30,7 +31,7 @@ const ShowReservationPage = () => {
   const { data: reservationData, isLoading: isReservationPagesLoading } = useShowReservations(
     showId,
     currentPage,
-    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
+    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
     selectedTicketStatus,
     debouncedSearchText,
   );
@@ -38,11 +39,11 @@ const ShowReservationPage = () => {
   const reservations = (reservationData?.content ?? []).filter(
     ({ ticketStatus, ticketType }) =>
       ticketStatus === selectedTicketStatus &&
-      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
+      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
   );
 
   const onClickReset = () => {
-    setSelectedTicketType('ALL');
+    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
     setSearchText('');
   };
 
@@ -103,6 +104,7 @@ const ShowReservationPage = () => {
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
                   setSelectedTicketStatus('WAIT');
+                  onClickReset();
                 }}
                 isSelected={selectedTicketStatus === 'WAIT'}
               >
@@ -111,6 +113,7 @@ const ShowReservationPage = () => {
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
                   setSelectedTicketStatus('COMPLETE');
+                  onClickReset();
                 }}
                 isSelected={selectedTicketStatus === 'COMPLETE'}
               >
@@ -119,6 +122,7 @@ const ShowReservationPage = () => {
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
                   setSelectedTicketStatus('CANCEL');
+                  onClickReset();
                 }}
                 isSelected={selectedTicketStatus === 'CANCEL'}
               >
@@ -127,7 +131,8 @@ const ShowReservationPage = () => {
             </Styled.TicketReservationSummaryButtonContainer>
             <Styled.FilterContainer>
               <TicketTypeSelect
-                onChange={(value) => setSelectedTicketType(value as TicketType | 'ALL')}
+                value={selectedTicketType}
+                onChange={(value) => setSelectedTicketType(value)}
               />
               <Styled.InputContainer>
                 <Styled.Input
