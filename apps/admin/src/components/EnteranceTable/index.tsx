@@ -14,7 +14,7 @@ import Styled from './EnteranceTable.styles';
 const columnHelper = createColumnHelper<EntranceResponse>();
 
 const columns = [
-  columnHelper.accessor('ticketId', {
+  columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
   }),
   columnHelper.accessor('ticketType', {

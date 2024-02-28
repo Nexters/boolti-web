@@ -15,6 +15,8 @@ export interface EntranceResponse {
   entered: boolean;
   /** 입장 시각 */
   enteredAt: string;
+  /** CS용(유저용) 티켓 ID */
+  csTicketId: string;
 }
 
 export type PageEntranceResponse = PageResponse<EntranceResponse>;
