@@ -14,7 +14,7 @@ import Styled from './ReservationTable.styles';
 const columnHelper = createColumnHelper<ReservationResponse>();
 
 const columns = [
-  columnHelper.accessor('ticketId', {
+  columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
   }),
   columnHelper.accessor('ticketType', {
@@ -31,7 +31,7 @@ const columns = [
     header: '연락처',
     cell: (props) => formatPhoneNumber(props.getValue()),
   }),
-  columnHelper.accessor('reservationId', {
+  columnHelper.accessor('csReservationId', {
     header: '주문 번호',
   }),
   columnHelper.accessor('ticketPrice', {
