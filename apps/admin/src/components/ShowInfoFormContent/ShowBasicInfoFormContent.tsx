@@ -65,7 +65,16 @@ const ShowBasicInfoFormContent = ({
               <Styled.FileUploadArea {...getRootProps()} imageCount={imageFiles.length}>
                 <input {...getInputProps()} />
                 <FileUpIcon />
-                <Styled.FileUploadAreaText>이미지 업로드</Styled.FileUploadAreaText>
+                <Styled.FileUploadAreaText>
+                  {imageFiles.length >= 2 ? (
+                    <>
+                      <span>이미지</span>
+                      <span>업로드</span>
+                    </>
+                  ) : (
+                    '이미지 업로드'
+                  )}
+                </Styled.FileUploadAreaText>
               </Styled.FileUploadArea>
             )}
           </Styled.PreviewImageContainer>

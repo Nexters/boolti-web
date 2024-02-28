@@ -49,6 +49,7 @@ import { Search } from './Search';
 import { Shinhan } from './Shinhan';
 import { Ticket } from './Ticket';
 import { Toss } from './Toss';
+import { Trash } from './Trash';
 import { UpDown } from './UpDown';
 import { UserProfile } from './UserProfile';
 import { Users } from './Users';
@@ -107,6 +108,7 @@ export {
   Shinhan,
   Ticket as TicketIcon,
   Toss,
+  Trash as TrashIcon,
   UpDown as UpDownIcon,
   UserProfile,
   Users as UsersIcon,
