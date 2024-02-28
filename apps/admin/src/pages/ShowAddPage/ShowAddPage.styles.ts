@@ -1,4 +1,4 @@
-import { Button } from '@boolti/ui';
+import { Button, mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface ProcessIndicatorItemProps {
@@ -24,6 +24,11 @@ interface FileUploadAreaProps {
 
 const ShowAddPage = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.g00};
+  display: none;
+
+  ${mq} {
+    display: block;
+  }
 `;
 
 const HeaderContainer = styled.div``;
@@ -43,6 +48,7 @@ const BackButton = styled.button`
   align-items: center;
   background: none;
   border: none;
+  z-index: 1;
   cursor: pointer;
 `;
 
@@ -215,6 +221,7 @@ const ShowAddFormButtonContainer = styled.div`
 
 const ShowAddFormButton = styled(Button)<ShowAddFormButtonProps>`
   width: ${({ width }) => width};
+  padding: 0 8px;
 `;
 
 const PreviewImageContainer = styled.div`
@@ -354,6 +361,50 @@ const TicketGroupContainer = styled.div`
   gap: 68px;
 `;
 
+const MobileShowAddPage = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  display: block;
+
+  ${mq} {
+    display: none;
+  }
+`;
+
+const MobileHeader = styled.header`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 20px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
+`;
+
+const MobileHeaderText = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const MobileContent = styled.div`
+  padding: 32px 20px;
+`;
+
+const MobileDescription = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  text-align: center;
+  margin-bottom: 32px;
+`;
+
 export default {
   ShowAddPage,
   HeaderContainer,
@@ -392,4 +443,9 @@ export default {
   TextFieldRow,
   TextArea,
   TicketGroupContainer,
+  MobileShowAddPage,
+  MobileHeader,
+  MobileHeaderText,
+  MobileContent,
+  MobileDescription,
 };

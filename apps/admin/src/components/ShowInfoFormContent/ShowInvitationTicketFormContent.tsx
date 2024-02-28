@@ -1,5 +1,5 @@
 import { PlusIcon } from '@boolti/icon';
-import { Badge, Button, useDialog } from '@boolti/ui';
+import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
 import InvitationTicketForm, {
@@ -68,6 +68,29 @@ const ShowInvitationTicketFormContent = ({
           </Button>
         </Styled.TicketAddButtonContainer>
       </Styled.TicketGroupHeader>
+      <Styled.MobileTicketGroupHeader>
+        <Styled.MobileTicketGroupInfo>
+          <Styled.TicketGroupTitle>초청 티켓</Styled.TicketGroupTitle>
+          <Styled.TicketAddButtonContainer>
+            <TextButton
+              type="button"
+              size="small"
+              colorTheme="netural"
+              icon={<PlusIcon />}
+              onClick={() => {
+                invitationTicketDialog.open({
+                  title: '초청 티켓 생성하기',
+                  content: <InvitationTicketForm onSubmit={handleSubmitTicket} />,
+                });
+              }}
+            >
+              생성하기
+            </TextButton>
+          </Styled.TicketAddButtonContainer>
+        </Styled.MobileTicketGroupInfo>
+        <Styled.TicketGroupDescription>{description}</Styled.TicketGroupDescription>
+      </Styled.MobileTicketGroupHeader>
+
       {invitationTicketList.length > 0 && (
         <Styled.TicketList>
           {invitationTicketList.map((ticket) => {

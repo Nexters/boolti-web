@@ -1,5 +1,5 @@
-import { PlusIcon } from '@boolti/icon';
-import { Badge, Button, useDialog } from '@boolti/ui';
+import { PlusIcon, TrashIcon } from '@boolti/icon';
+import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
 import SalesTicketForm, { SalesTicketFormInputs } from '../TicketForm/SalesTicketForm';
@@ -65,6 +65,31 @@ const ShowSalesTicketFormContent = ({
           </Button>
         </Styled.TicketAddButtonContainer>
       </Styled.TicketGroupHeader>
+      <Styled.MobileTicketGroupHeader>
+        <Styled.MobileTicketGroupInfo>
+          <Styled.TicketGroupTitle required>일반 티켓</Styled.TicketGroupTitle>
+          <Styled.TicketAddButtonContainer>
+            <TextButton
+              type="button"
+              size="small"
+              colorTheme="netural"
+              icon={<PlusIcon />}
+              onClick={() => {
+                salesTicketDialog.open({
+                  title: '일반 티켓 생성하기',
+                  content: <SalesTicketForm onSubmit={handleSubmitTicket} />,
+                });
+              }}
+            >
+              생성하기
+            </TextButton>
+          </Styled.TicketAddButtonContainer>
+        </Styled.MobileTicketGroupInfo>
+        <Styled.TicketGroupDescription>
+          티켓 판매를 위해서는 최소 1개 이상의 티켓이 필요해요.
+          <br />* 1매 이상 판매된 티켓은 삭제할 수 없습니다.
+        </Styled.TicketGroupDescription>
+      </Styled.MobileTicketGroupHeader>
       {salesTicketList.length > 0 && (
         <Styled.TicketList>
           {salesTicketList.map((ticket) => {
@@ -101,6 +126,21 @@ const ShowSalesTicketFormContent = ({
                       삭제하기
                     </Button>
                   </Styled.TicketAction>
+                  <Styled.MobileTicketAction>
+                    <TextButton
+                      type="button"
+                      colorTheme="netural"
+                      size="small"
+                      icon={<TrashIcon />}
+                      disabled={(() => {
+                        if (disabled) return disabled;
+                        if (fullEditable) return false;
+
+                        return isDeleteDisabled;
+                      })()}
+                      onClick={() => onDeleteTicket(ticket)}
+                    ></TextButton>
+                  </Styled.MobileTicketAction>
                 </Styled.TicketContent>
               </Styled.Ticket>
             );

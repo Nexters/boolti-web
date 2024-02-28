@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const TicketForm = styled.form`
@@ -6,14 +7,25 @@ const TicketForm = styled.form`
 `;
 
 const Description = styled.p`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g70};
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+
+  ${mq} {
+    ${({ theme }) => theme.typo.b3};
+    color: ${({ theme }) => theme.palette.grey.g70};
+  }
 `;
 
 const TicketFormRow = styled.div`
   margin-bottom: 28px;
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 28px;
+
+  ${mq} {
+    flex-direction: row;
+    gap: 24px;
+  }
 `;
 
 const TicketFormContent = styled.div`
@@ -45,9 +57,21 @@ const TextFieldSuffix = styled.span`
 `;
 
 const TicketFormButton = styled.div`
-  margin-top: 4px;
   display: flex;
   justify-content: flex-end;
+  padding-bottom: 16px;
+
+  button {
+    width: 100%;
+  }
+
+  ${mq} {
+    margin-top: 4px;
+
+    button {
+      width: auto;
+    }
+  }
 `;
 
 export default {

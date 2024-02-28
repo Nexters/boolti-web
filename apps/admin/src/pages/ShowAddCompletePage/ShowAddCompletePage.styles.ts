@@ -1,7 +1,13 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowAddCompletePage = styled.div`
+  display: none;
   background-color: ${({ theme }) => theme.palette.grey.g00};
+
+  ${mq} {
+    display: block;
+  }
 `;
 
 const HeaderContainer = styled.div``;
@@ -89,6 +95,86 @@ const CardContentButtonContainer = styled.div`
   }
 `;
 
+const MobileShowAddCompletePage = styled.div`
+  width: 100%;
+  height: 100vh;
+
+  ${mq} {
+    display: none;
+  }
+`;
+
+const MobileHeader = styled.header`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 20px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
+`;
+
+const MobileHeaderText = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const MobileContent = styled.div`
+  height: calc(100% - 52px - 80px);
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const MobileContentImage = styled.img`
+  margin-bottom: 28px;
+
+  ${mq} {
+    margin-bottom: 0;
+  }
+`;
+
+const MobileContentTitle = styled.h3`
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g80};
+  text-align: center;
+  margin-bottom: 4px;
+
+  ${mq} {
+    ${({ theme }) => theme.typo.h2};
+  }
+`;
+
+const MobileContentDescription = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  text-align: center;
+  margin-bottom: 32px;
+`;
+
+const MobileContentButtonContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 80px;
+  padding: 16px 20px;
+
+  button {
+    width: 100%;
+  }
+`;
+
 export default {
   ShowAddCompletePage,
   HeaderContainer,
@@ -104,4 +190,12 @@ export default {
   CardContentTitle,
   CardContentDescription,
   CardContentButtonContainer,
+  MobileShowAddCompletePage,
+  MobileHeader,
+  MobileHeaderText,
+  MobileContent,
+  MobileContentImage,
+  MobileContentTitle,
+  MobileContentDescription,
+  MobileContentButtonContainer,
 };
