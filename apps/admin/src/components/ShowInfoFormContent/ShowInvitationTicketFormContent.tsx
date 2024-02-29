@@ -20,7 +20,7 @@ interface ShowInvitationTicketFormContentProps {
   description: React.ReactNode;
   fullEditable?: boolean;
   disabled?: boolean;
-  showDate?: string;
+  isShowEnded?: boolean;
   onSubmitTicket: SubmitHandler<InvitationTicketFormInputs>;
   onDeleteTicket: (ticket: InvitationTicket) => void;
 }
@@ -30,7 +30,7 @@ const ShowInvitationTicketFormContent = ({
   description,
   fullEditable,
   disabled,
-  showDate,
+  isShowEnded,
   onSubmitTicket,
   onDeleteTicket,
 }: ShowInvitationTicketFormContentProps) => {
@@ -143,7 +143,10 @@ const ShowInvitationTicketFormContent = ({
                 </Styled.TicketContent>
                 {ticket.id !== undefined && (
                   <Styled.TicketCodeListContainer>
-                    <ShowInvitationCodeList invitationTicketId={ticket.id} showDate={showDate} />
+                    <ShowInvitationCodeList
+                      invitationTicketId={ticket.id}
+                      isShowEnded={isShowEnded}
+                    />
                   </Styled.TicketCodeListContainer>
                 )}
               </Styled.Ticket>
