@@ -181,7 +181,7 @@ const ShowInfoPage = () => {
                 size="bold"
                 colorTheme="line"
                 type="button"
-                disabled={salesStarted}
+                disabled={salesStarted && !show.isEnded}
                 onClick={() => {
                   deleteShowDialog.open({
                     title: '공연 삭제하기',
