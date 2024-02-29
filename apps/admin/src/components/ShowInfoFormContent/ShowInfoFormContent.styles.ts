@@ -21,6 +21,10 @@ interface TicketGroupTitleProps {
   required?: boolean;
 }
 
+interface MobileTicketActionProps {
+  disabled?: boolean;
+}
+
 const ShowInfoFormGroup = styled.div``;
 
 const ShowInfoFormTitle = styled.h3`
@@ -391,13 +395,21 @@ const TicketCode = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 28px;
+  padding: 12px 20px;
+
+  ${mq} {
+    padding: 16px 28px;
+  }
 `;
 
 const TicketCodeInfo = styled.div`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
+
+  ${mq} {
+    gap: 16px;
+  }
 `;
 
 const TicketCodeNumber = styled.span`
@@ -417,12 +429,19 @@ const TicketCodeStatus = styled.div`
 
 const TicketCodeListButton = styled.button`
   width: 100%;
-  height: 60px;
+  height: 46px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+
+  ${mq} {
+    height: 60px;
+    ${({ theme }) => theme.typo.sh1};
+  }
 `;
 
 const TicketAddButtonContainer = styled.div`
@@ -451,7 +470,7 @@ const MobileTicketGroupInfo = styled.div`
   align-items: center;
 `;
 
-const MobileTicketAction = styled.div`
+const MobileTicketAction = styled.div<MobileTicketActionProps>`
   button {
     width: 24px;
     height: 24px;
@@ -465,6 +484,8 @@ const MobileTicketAction = styled.div`
       svg {
         width: 24px;
         height: 24px;
+        stroke: ${({ theme, disabled }) =>
+          disabled ? theme.palette.grey.g70 : theme.palette.grey.g90};
       }
     }
   }

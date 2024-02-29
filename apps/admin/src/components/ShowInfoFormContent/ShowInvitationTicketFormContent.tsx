@@ -1,4 +1,4 @@
-import { PlusIcon } from '@boolti/icon';
+import { PlusIcon, TrashIcon } from '@boolti/icon';
 import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
@@ -125,6 +125,21 @@ const ShowInvitationTicketFormContent = ({
                       삭제하기
                     </Button>
                   </Styled.TicketAction>
+                  <Styled.MobileTicketAction disabled={disabled}>
+                    <TextButton
+                      type="button"
+                      colorTheme="netural"
+                      size="small"
+                      icon={<TrashIcon />}
+                      disabled={(() => {
+                        if (disabled) return disabled;
+                        if (fullEditable) return false;
+
+                        return isDeleteDisabled;
+                      })()}
+                      onClick={() => onDeleteTicket(ticket)}
+                    />
+                  </Styled.MobileTicketAction>
                 </Styled.TicketContent>
                 {ticket.id !== undefined && (
                   <Styled.TicketCodeListContainer>

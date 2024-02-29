@@ -139,7 +139,7 @@ const ShowSalesTicketFormContent = ({
                         return isDeleteDisabled;
                       })()}
                       onClick={() => onDeleteTicket(ticket)}
-                    ></TextButton>
+                    />
                   </Styled.MobileTicketAction>
                 </Styled.TicketContent>
               </Styled.Ticket>

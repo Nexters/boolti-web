@@ -1,6 +1,9 @@
 import styled from '@emotion/styled';
 
+import { mq } from '../../systems';
+
 const CONFIRM_WIDTH = '450px';
+const CONFIRM_MOBILE_WIDTH = '264px';
 
 const DimmedArea = styled.div`
   position: fixed;
@@ -13,23 +16,39 @@ const DimmedArea = styled.div`
 `;
 
 const Confirm = styled.div`
-  width: ${CONFIRM_WIDTH};
+  width: ${CONFIRM_MOBILE_WIDTH};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  padding: 32px;
+  padding: 20px;
+
+  ${mq} {
+    width: ${CONFIRM_WIDTH};
+    padding: 32px;
+  }
 `;
 
 const ConfirmMessage = styled.p`
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 32px;
+  margin-bottom: 24px;
+
+  ${mq} {
+    ${({ theme }) => theme.typo.b3};
+    margin-bottom: 32px;
+  }
 `;
 
 const ConfirmButtonContainer = styled.div`
-  text-align: right;
+  display: flex;
+  gap: 8px;
+
+  ${mq} {
+    justify-content: flex-end;
+  }
 `;
 
 const CancelButton = styled.button`
+  flex: 1;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -40,11 +59,15 @@ const CancelButton = styled.button`
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.sh1};
-  margin-right: 8px;
   cursor: pointer;
+
+  ${mq} {
+    flex: initial;
+  }
 `;
 
 const ConfirmButton = styled.button`
+  flex: 1;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -55,6 +78,10 @@ const ConfirmButton = styled.button`
   color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.sh1};
   cursor: pointer;
+
+  ${mq} {
+    flex: initial;
+  }
 `;
 
 export default {
