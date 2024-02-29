@@ -17,6 +17,7 @@
 - `apps/admin`: 불티에서 공연을 생성하고 관리하는 사용자들을 위한 서비스입니다.
 - `apps/preview`: 공연 예매 페이지를 공유했을 때 랜딩될 페이지입니다. (WIP)
 - `apps/super-admin`: 불티 팀원이 사용할 슈퍼 어드민 페이지입니다. (WIP)
+- `apps/storybook`: 불티에서 공통적으로 사용될 디자인 컴포넌트를 확인할 수 있는 Storybook 페이지입니다.
 - `packages/api`: 웹 클라이언트에서 사용되는 서버 API 호출 관련 로직이 포함된 패키지입니다.
 - `packages/config-eslint`: 각 패키지에서 공통적으로 사용될 ESLint 관련 설정이 포함된 패키지입니다.
 - `packages/config-typescript`: 각 패키지에서 공통적으로 사용될 TypeScript 관련 설정이 포함된 패키지입니다.
