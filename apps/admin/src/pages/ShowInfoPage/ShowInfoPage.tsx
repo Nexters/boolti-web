@@ -161,42 +161,48 @@ const ShowInfoPage = () => {
             <ShowDetailInfoFormContent form={showInfoForm} disabled={show.isEnded} />
           </Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormFooter>
-            <Button
-              size="bold"
-              colorTheme="primary"
-              type="button"
-              disabled={!showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded}
-              onClick={() => {
-                setPreviewDrawerOpen(true);
-              }}
-            >
-              저장하기
-            </Button>
-            <Button
-              size="bold"
-              colorTheme="line"
-              type="button"
-              disabled={salesStarted}
-              onClick={() => {
-                deleteShowDialog.open({
-                  title: '공연 삭제하기',
-                  content: (
-                    <ShowDeleteForm
-                      showName={show.name}
-                      onSubmit={async () => {
-                        await deleteShowMutation.mutateAsync(show.id);
+            <Styled.SaveButton>
+              <Button
+                size="bold"
+                colorTheme="primary"
+                type="button"
+                disabled={
+                  !showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
+                }
+                onClick={() => {
+                  setPreviewDrawerOpen(true);
+                }}
+              >
+                저장하기
+              </Button>
+            </Styled.SaveButton>
+            <Styled.DeleteButton>
+              <Button
+                size="bold"
+                colorTheme="line"
+                type="button"
+                disabled={salesStarted && !show.isEnded}
+                onClick={() => {
+                  deleteShowDialog.open({
+                    title: '공연 삭제하기',
+                    content: (
+                      <ShowDeleteForm
+                        showName={show.name}
+                        onSubmit={async () => {
+                          await deleteShowMutation.mutateAsync(show.id);
 
-                        deleteShowDialog.close();
-                        navigate(PATH.HOME);
-                        toast.success('공연을 삭제했습니다.');
-                      }}
-                    />
-                  ),
-                });
-              }}
-            >
-              공연 삭제하기
-            </Button>
+                          deleteShowDialog.close();
+                          navigate(PATH.HOME);
+                          toast.success('공연을 삭제했습니다.');
+                        }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                공연 삭제하기
+              </Button>
+            </Styled.DeleteButton>
           </Styled.ShowInfoFormFooter>
           <Drawer
             open={previewDrawerOpen}

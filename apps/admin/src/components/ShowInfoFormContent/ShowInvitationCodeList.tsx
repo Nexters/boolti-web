@@ -7,15 +7,16 @@ import Styled from './ShowInfoFormContent.styles';
 
 interface ShowInvitationCodeListProps {
   invitationTicketId: number;
-  showDate?: string;
+  isShowEnded?: boolean;
 }
 
-const ShowInvitationCodeList = ({ invitationTicketId, showDate }: ShowInvitationCodeListProps) => {
+const ShowInvitationCodeList = ({
+  invitationTicketId,
+  isShowEnded,
+}: ShowInvitationCodeListProps) => {
   const { data: invitationCodeList } = useInvitationCodeList(invitationTicketId);
 
   const [isTicketCodeListOpen, setIsTicketCodeListOpen] = useState(false);
-
-  const isShowEnded = showDate ? new Date(showDate) < new Date() : false;
 
   if (!invitationCodeList || invitationCodeList.length === 0) return null;
 

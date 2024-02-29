@@ -1,8 +1,13 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowInfoPage = styled.div`
   padding: 0 20px;
-  margin: 40px 0 68px;
+  margin: 20px 0 32px;
+
+  ${mq} {
+    margin: 40px 0 68px;
+  }
 `;
 
 const ShowInfoForm = styled.form``;
@@ -13,7 +18,11 @@ const ShowInfoFormContent = styled.div`
 
 const ShowInfoFormDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  margin: 52px 0;
+  margin: 48px 0;
+
+  ${mq} {
+    margin: 52px 0;
+  }
 `;
 
 const ShowInfoFormFooter = styled.div`
@@ -21,7 +30,25 @@ const ShowInfoFormFooter = styled.div`
   justify-content: space-between;
   margin-top: 52px;
 
-  button:first-of-type {
+  button {
+    width: 100%;
+    padding: 0;
+  }
+`;
+
+const SaveButton = styled.div`
+  width: 96px;
+
+  ${mq} {
+    width: 128px;
+  }
+`;
+
+const DeleteButton = styled.div`
+  display: none;
+
+  ${mq} {
+    display: block;
     width: 128px;
   }
 `;
@@ -109,6 +136,8 @@ export default {
   ShowInfoFormContent,
   ShowInfoFormDivider,
   ShowInfoFormFooter,
+  SaveButton,
+  DeleteButton,
   ShowInfoPreviewContainer,
   ShowInfoPreview,
   ShowInfoPreviewFrameContainer,

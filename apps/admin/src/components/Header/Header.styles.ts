@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Header = styled.div`
@@ -5,6 +6,11 @@ const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 20px;
+
+  ${mq} {
+    padding: 0;
+  }
 `;
 
 const HeaderLeft = styled.div`

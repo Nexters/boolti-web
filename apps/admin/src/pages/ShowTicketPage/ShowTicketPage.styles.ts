@@ -1,8 +1,13 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowTicketPage = styled.div`
   padding: 0 20px;
-  margin: 40px 0 68px;
+  margin: 20px 0 32px;
+
+  ${mq} {
+    margin: 40px 0 68px;
+  }
 `;
 
 const ShowTicketForm = styled.form``;
@@ -21,7 +26,11 @@ const ShowTicketSubmitContainer = styled.div`
 
 const ShowTicketFormDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  margin: 52px 0;
+  margin: 48px 0;
+
+  ${mq} {
+    margin: 52px 0;
+  }
 `;
 
 export default {

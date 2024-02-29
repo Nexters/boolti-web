@@ -154,7 +154,7 @@ const ShowTicketPage = () => {
                   <br />* 사용 완료 처리된 코드는 재사용할 수 없습니다.
                 </>
               }
-              showDate={format(show.date, 'yyyy-MM-dd')}
+              isShowEnded={show.isEnded}
               onSubmitTicket={async (ticket) => {
                 await createInvitationTicketMutation.mutateAsync({
                   showId: show.id,
