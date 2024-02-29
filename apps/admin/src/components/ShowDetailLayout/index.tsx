@@ -80,64 +80,66 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
             />
             <Styled.HeaderContent>
               <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
-              <Styled.Tab>
-                <Styled.TabItem
-                  active={matchInfoTab !== null}
-                  onClick={async () => {
-                    if (!params.showId) return;
+              <Styled.TabContainer>
+                <Styled.Tab>
+                  <Styled.TabItem
+                    active={matchInfoTab !== null}
+                    onClick={async () => {
+                      if (!params.showId) return;
 
-                    if (onClickMiddleware && !(await onClickMiddleware())) {
-                      return;
-                    }
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
 
-                    navigate(HREF.SHOW_INFO(params.showId));
-                  }}
-                >
-                  공연 기본 정보
-                </Styled.TabItem>
-                <Styled.TabItem
-                  active={matchTicketTab !== null}
-                  onClick={async () => {
-                    if (!params.showId) return;
+                      navigate(HREF.SHOW_INFO(params.showId));
+                    }}
+                  >
+                    공연 기본 정보
+                  </Styled.TabItem>
+                  <Styled.TabItem
+                    active={matchTicketTab !== null}
+                    onClick={async () => {
+                      if (!params.showId) return;
 
-                    if (onClickMiddleware && !(await onClickMiddleware())) {
-                      return;
-                    }
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
 
-                    navigate(HREF.SHOW_TICKET(params.showId));
-                  }}
-                >
-                  티켓 관리
-                </Styled.TabItem>
-                <Styled.TabItem
-                  active={matchReservationTab !== null}
-                  onClick={async () => {
-                    if (!params.showId) return;
+                      navigate(HREF.SHOW_TICKET(params.showId));
+                    }}
+                  >
+                    티켓 관리
+                  </Styled.TabItem>
+                  <Styled.TabItem
+                    active={matchReservationTab !== null}
+                    onClick={async () => {
+                      if (!params.showId) return;
 
-                    if (onClickMiddleware && !(await onClickMiddleware())) {
-                      return;
-                    }
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
 
-                    navigate(HREF.SHOW_RESERVATION(params.showId));
-                  }}
-                >
-                  예매자 관리
-                </Styled.TabItem>
-                <Styled.TabItem
-                  active={matchEntryTab !== null}
-                  onClick={async () => {
-                    if (!params.showId) return;
+                      navigate(HREF.SHOW_RESERVATION(params.showId));
+                    }}
+                  >
+                    예매자 관리
+                  </Styled.TabItem>
+                  <Styled.TabItem
+                    active={matchEntryTab !== null}
+                    onClick={async () => {
+                      if (!params.showId) return;
 
-                    if (onClickMiddleware && !(await onClickMiddleware())) {
-                      return;
-                    }
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
 
-                    navigate(HREF.SHOW_ENTRANCE(params.showId));
-                  }}
-                >
-                  입장 관리
-                </Styled.TabItem>
-              </Styled.Tab>
+                      navigate(HREF.SHOW_ENTRANCE(params.showId));
+                    }}
+                  >
+                    입장 관리
+                  </Styled.TabItem>
+                </Styled.Tab>
+              </Styled.TabContainer>
             </Styled.HeaderContent>
           </>
         }

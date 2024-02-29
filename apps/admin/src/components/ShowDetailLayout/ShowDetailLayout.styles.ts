@@ -1,3 +1,4 @@
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface TabItemProps {
@@ -54,27 +55,64 @@ const HeaderContent = styled.div`
 `;
 
 const ShowName = styled.h2<ShowNameProps>`
-  ${({ theme, size }) => (size === 'small' ? theme.typo.h1 : theme.typo.h3)};
-  margin: ${({ size }) => (size === 'small' ? '22px 0 8px' : '28px 0 12px')};
+  ${({ theme }) => theme.typo.h1};
+  margin: 12px 0 8px;
+  padding: 0 20px;
   transition:
     font-size 0.1s ease-in-out,
     margin 0.1s ease-in-out;
+
+  ${mq} {
+    padding: 0;
+    ${({ theme, size }) => (size === 'small' ? theme.typo.h1 : theme.typo.h3)};
+    margin: ${({ size }) => (size === 'small' ? '22px 0 8px' : '28px 0 12px')};
+  }
+`;
+
+const TabContainer = styled.div`
+  padding: 0 20px;
+  white-space: nowrap;
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: nowrap;
+
+  ${mq} {
+    padding: 0;
+  }
 `;
 
 const Tab = styled.div`
   display: flex;
-  gap: 40px;
+  flex-wrap: nowrap;
+  gap: 20px;
+
+  ${mq} {
+    gap: 40px;
+  }
 `;
 
 const TabItem = styled.div<TabItemProps>`
+  position: relative;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  padding-top: 12px;
-  padding-bottom: 16px;
-  ${({ active, theme }) =>
-    active && `border-bottom: 2px solid ${theme.palette.primary.o1}; font-weight: 600;`};
+  height: 48px;
+  ${({ active }) => active && `font-weight: 600;`};
   cursor: pointer;
+
+  &::after {
+    content: '';
+    display: ${({ active }) => (active ? 'block' : 'none')};
+    width: 100%;
+    height: 2px;
+    background-color: ${({ theme }) => theme.palette.primary.o1};
+    position: absolute;
+    bottom: 0;
+  }
+
+  ${mq} {
+    height: 52px;
+  }
 `;
 
 export default {
@@ -85,6 +123,7 @@ export default {
   HeaderObserver,
   HeaderContent,
   ShowName,
+  TabContainer,
   Tab,
   TabItem,
 };
