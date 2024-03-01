@@ -36,8 +36,6 @@ const ShowInvitationTicketFormContent = ({
 }: ShowInvitationTicketFormContentProps) => {
   const invitationTicketDialog = useDialog();
 
-  const isSingleTicket = invitationTicketList.length === 1;
-
   const handleSubmitTicket: SubmitHandler<InvitationTicketFormInputs> = (data) => {
     invitationTicketDialog.close();
 
@@ -95,7 +93,7 @@ const ShowInvitationTicketFormContent = ({
         <Styled.TicketList>
           {invitationTicketList.map((ticket) => {
             const isSoldTicket = ticket.totalForSale > ticket.quantity;
-            const isDeleteDisabled = isSingleTicket || isSoldTicket;
+            const isDeleteDisabled = isSoldTicket;
 
             return (
               <Styled.Ticket key={ticket.id ?? ticket.name}>
