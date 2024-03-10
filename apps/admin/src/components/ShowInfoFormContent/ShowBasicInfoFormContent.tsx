@@ -25,7 +25,7 @@ const ShowBasicInfoFormContent = ({
   onDropImage,
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
-  const { register, watch, control } = form;
+  const { watch, control } = form;
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -84,13 +84,24 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연명</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="text"
-              size="big"
-              placeholder="공연명을 입력해 주세요 (띄어쓰기 포함 최대 40자)"
-              required
-              disabled={disabled}
-              {...register('name', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="text"
+                  size="big"
+                  placeholder="공연명을 입력해 주세요 (띄어쓰기 포함 최대 40자)"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="name"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
@@ -115,6 +126,7 @@ const ShowBasicInfoFormContent = ({
                   min={format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')}
                   required
                   disabled={disabled}
+                  value={value ?? ''}
                 />
               )}
               name="date"
@@ -126,25 +138,47 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 시작 시간</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="time"
-              size="big"
-              required
-              disabled={disabled}
-              {...register('startTime', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="time"
+                  size="big"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="startTime"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>러닝타임</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="number"
-              size="big"
-              min={0}
-              required
-              disabled={disabled}
-              {...register('runningTime', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="number"
+                  size="big"
+                  min={0}
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="runningTime"
             />
             <Styled.TextFieldSuffix>분</Styled.TextFieldSuffix>
           </Styled.TextField>
@@ -154,34 +188,67 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 장소</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="text"
-              size="big"
-              placeholder="공연장명을 입력해 주세요"
-              required
-              disabled={disabled}
-              {...register('placeName', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="text"
+                  size="big"
+                  placeholder="공연장명을 입력해 주세요"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="placeName"
             />
           </Styled.TextField>
           <Styled.TextFieldRow>
             <Styled.TextField flex={2}>
-              <TextField
-                inputType="text"
-                size="big"
-                placeholder="도로명 주소를 입력해 주세요"
-                required
-                disabled={disabled}
-                {...register('placeStreetAddress', { required: true, disabled })}
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextField
+                    inputType="text"
+                    size="big"
+                    placeholder="도로명 주소를 입력해 주세요"
+                    required
+                    disabled={disabled}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value ?? ''}
+                  />
+                )}
+                name="placeStreetAddress"
               />
             </Styled.TextField>
             <Styled.TextField flex={1}>
-              <TextField
-                inputType="text"
-                size="big"
-                placeholder="상세 주소를 입력해 주세요"
-                required
-                disabled={disabled}
-                {...register('placeDetailAddress', { required: true, disabled })}
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextField
+                    inputType="text"
+                    size="big"
+                    placeholder="상세 주소를 입력해 주세요"
+                    required
+                    disabled={disabled}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value ?? ''}
+                  />
+                )}
+                name="placeDetailAddress"
               />
             </Styled.TextField>
           </Styled.TextFieldRow>

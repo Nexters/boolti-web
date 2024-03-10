@@ -1,5 +1,5 @@
 import { TextField } from '@boolti/ui';
-import { UseFormReturn } from 'react-hook-form';
+import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowInfoFormInputs } from './types';
@@ -10,7 +10,7 @@ interface ShowDetailInfoFormContentProps {
 }
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
-  const { register } = form;
+  const { control } = form;
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -21,11 +21,22 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
           <Styled.ShowInfoFormDescription>
             예매자에게 알리고 싶은 공연 내용을 작성해주세요.
           </Styled.ShowInfoFormDescription>
-          <Styled.TextArea
-            placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
-            rows={10}
-            disabled={disabled}
-            {...register('notice', { required: true, disabled })}
+          <Controller
+            control={control}
+            rules={{
+              required: true,
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Styled.TextArea
+                placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                rows={10}
+                disabled={disabled}
+                onChange={onChange}
+                onBlur={onBlur}
+                value={value ?? ''}
+              />
+            )}
+            name="notice"
           />
         </Styled.ShowInfoFormContent>
       </Styled.ShowInfoFormRow>
@@ -33,13 +44,24 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>대표자 이름</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="text"
-              size="big"
-              placeholder="대표자 이름을 입력해 주세요"
-              required
-              disabled={disabled}
-              {...register('hostName', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="text"
+                  size="big"
+                  placeholder="대표자 이름을 입력해 주세요"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="hostName"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
@@ -48,13 +70,24 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>대표 연락처</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="text"
-              size="big"
-              placeholder="대표자 연락처를 입력해 주세요"
-              required
-              disabled={disabled}
-              {...register('hostPhoneNumber', { required: true, disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  inputType="text"
+                  size="big"
+                  placeholder="대표자 연락처를 입력해 주세요"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="hostPhoneNumber"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
