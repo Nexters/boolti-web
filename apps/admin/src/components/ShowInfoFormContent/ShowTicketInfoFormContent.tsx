@@ -18,7 +18,7 @@ const ShowTicketInfoFormContent = ({
   salesStartTime,
   disabled,
 }: ShowTicketInfoFormContentProps) => {
-  const { register, watch, control } = form;
+  const { watch, control } = form;
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -99,11 +99,22 @@ const ShowTicketInfoFormContent = ({
             노출됩니다.
           </Styled.ShowInfoFormDescription>
           <Styled.TextField>
-            <Styled.TextArea
-              placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
-              rows={10}
-              disabled={disabled}
-              {...register('ticketNotice', { disabled })}
+            <Controller
+              control={control}
+              rules={{
+                required: false,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Styled.TextArea
+                  placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                  rows={10}
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value ?? ''}
+                />
+              )}
+              name="ticketNotice"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
