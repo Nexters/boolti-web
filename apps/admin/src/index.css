@@ -2,8 +2,22 @@
 
 @font-face {
   font-family: 'SB Aggro';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/SBAggroB.woff') format('woff');
+  src: url('./assets/fonts/SBAggroB.otf') format('opentype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SB Aggro';
+  src: url('./assets/fonts/SBAggroM.otf') format('opentype');
   font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SB Aggro';
+  src: url('./assets/fonts/SBAggroL.otf') format('opentype');
+  font-weight: lighter;
   font-style: normal;
 }
 

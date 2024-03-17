@@ -27,7 +27,7 @@ const Dialog = styled.div<{ isAuto: boolean }>`
   left: 0;
 
   ${mq} {
-    width: ${DIALOG_WIDTH};
+    width: ${({ isAuto }) => (isAuto ? 'auto' : DIALOG_WIDTH)};
     position: initial;
     bottom: auto;
     left: auto;
