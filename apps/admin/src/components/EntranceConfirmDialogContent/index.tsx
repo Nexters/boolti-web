@@ -28,7 +28,7 @@ const EntranceConfirmDialogContent = ({ close }: Props) => {
       <Styled.Seperator />
       <Styled.Title>인증 코드</Styled.Title>
       <Styled.Description>
-        {'QR 리더기가 작동하지 않을 때는 인증 코드로 예매자의 입장을 확인해 보세요.' +
+        {'QR 스캐너가 작동하지 않을 때는 인증 코드로 예매자의 입장을 확인해 보세요.' +
           '\n' +
           '각 공연에 부여된 인증 코드는 [앱] 해당 공연의 QR 스캐너 화면, [웹] 공연 상세 > 입장 관리 화면에서 확인 가능하며,' +
           '\n' +

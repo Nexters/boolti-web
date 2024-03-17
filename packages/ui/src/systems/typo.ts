@@ -45,7 +45,7 @@ const generatePointTypo = (size: number, weight: number, lineHeight: number) => 
   font-display: auto;
   font-weight: ${weight};
   font-size: ${size}px;
-  letter-spacing: -3px;
+  letter-spacing: -3%;
 `;
 
 const typo = {

@@ -26,8 +26,8 @@ const Container = styled.span<BadgeProps>`
 
   ${mq} {
     ${({ theme }) => theme.typo.b1};
-    padding: 3px 8px;
-    height: 32px;
+    padding: 0 8px;
+    height: 28px;
   }
 `;
 

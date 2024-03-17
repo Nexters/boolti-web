@@ -8,7 +8,7 @@ const LoginPage = styled.div`
   align-items: center;
   width: 100vw;
   height: 100vh;
-  background-color: ${({ theme }) => theme.palette.grey.g20};
+  background-color: ${({ theme }) => theme.palette.grey.g00};
 `;
 
 const LoginContent = styled.div`

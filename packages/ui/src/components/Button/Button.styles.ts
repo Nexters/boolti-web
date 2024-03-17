@@ -71,7 +71,7 @@ const Container = styled.button<ButtonProps>`
             background-color: ${theme.palette.primary.o2};
           }
           &:disabled {
-            color: ${theme.palette.grey.g60};
+            color: ${theme.palette.grey.g40};
             border-color: ${theme.palette.grey.g20};
             background-color: ${theme.palette.grey.g20};
           }

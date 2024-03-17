@@ -27,7 +27,7 @@ const TextContainer = styled.div`
 `;
 
 const Username = styled.p`
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.h2};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   ${mq} {

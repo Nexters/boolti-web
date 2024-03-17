@@ -1,5 +1,5 @@
 export const validateAccountNumber = (accountNumber: string) => {
-  return accountNumber.length <= 14;
+  return 11 <= accountNumber.length && accountNumber.length <= 14;
 };
 
 export const validateAccountHolder = (accountHolder: string) => {
