@@ -62,16 +62,15 @@ const TextContainer = styled.div`
 `;
 
 const Title = styled.h2`
-  max-width: 240px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 8px;
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.point.p1};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   ${mq} {
-    ${({ theme }) => theme.typo.h2_m};
+    ${({ theme }) => theme.typo.point.p4};
     max-width: auto;
   }
 `;
