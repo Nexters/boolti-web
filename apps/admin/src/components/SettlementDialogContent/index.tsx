@@ -155,11 +155,15 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                   required: true,
                   onBlur(event) {
                     const value = event.target.value;
-                    setAccountNumberError(
-                      validateAccountNumber(value) && !isNaN(Number(value))
-                        ? undefined
-                        : '계좌번호를 확인 후 다시 입력해 주세요.',
-                    );
+                    let errorMessage: undefined | string = undefined;
+
+                    if (value === '') {
+                      errorMessage = '필수 입력사항입니다.';
+                    } else if (validateAccountNumber(value) && !isNaN(Number(value))) {
+                      errorMessage = '계좌번호를 확인 후 다시 입력해 주세요.';
+                    }
+
+                    setAccountNumberError(errorMessage);
                   },
                 })}
               />
@@ -175,11 +179,14 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                 {...register('accountHolder', {
                   required: true,
                   onBlur(event) {
-                    setAccountHolderError(
-                      validateAccountHolder(event.target.value)
-                        ? undefined
-                        : '한글만 입력 가능합니다.',
-                    );
+                    const value = event.target.value;
+                    let errorMessage: undefined | string = undefined;
+                    if (value === '') {
+                      errorMessage = '필수 입력사항입니다.';
+                    } else if (validateAccountHolder(value)) {
+                      errorMessage = '한글만 입력 가능합니다.';
+                    }
+                    setAccountHolderError(errorMessage);
                   },
                 })}
               />

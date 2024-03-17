@@ -121,6 +121,7 @@ const ErrorMessage = styled.span`
   position: absolute;
   bottom: -4px;
   transform: translateY(100%);
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.status.error};
 `;
 
