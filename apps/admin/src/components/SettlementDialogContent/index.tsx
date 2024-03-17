@@ -159,7 +159,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
 
                     if (value === '') {
                       errorMessage = '필수 입력사항입니다.';
-                    } else if (validateAccountNumber(value) && !isNaN(Number(value))) {
+                    } else if (!validateAccountNumber(value) || isNaN(Number(value))) {
                       errorMessage = '계좌번호를 확인 후 다시 입력해 주세요.';
                     }
 
