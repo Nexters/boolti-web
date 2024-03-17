@@ -1,6 +1,6 @@
 import { useLogout, useShowList, useUserAccountInfo, useUserSummary } from '@boolti/api';
 import { BooltiLogo } from '@boolti/icon';
-import { Footer, TextButton } from '@boolti/ui';
+import { Footer, TextButton, useConfirm } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
 import AccountInfo from '~/components/AccountInfo';
@@ -15,6 +15,7 @@ import Styled from './HomePage.styles';
 const HomePage = () => {
   const navigate = useNavigate();
   const logout = useLogout();
+  const confirm = useConfirm();
 
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();
   const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
@@ -40,9 +41,14 @@ const HomePage = () => {
               colorTheme="netural"
               size="regular"
               onClick={async () => {
-                await logout.mutateAsync();
-
-                navigate(PATH.LOGIN, { replace: true });
+                const result = await confirm('로그아웃 할까요?', {
+                  cancel: '취소하기',
+                  confirm: '로그아웃',
+                });
+                if (result) {
+                  await logout.mutateAsync();
+                  navigate(PATH.LOGIN, { replace: true });
+                }
               }}
             >
               로그아웃
