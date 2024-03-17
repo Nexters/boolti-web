@@ -66,12 +66,15 @@ const Input = styled.input<{ hasError?: boolean }>`
   color: ${({ theme }) => theme.palette.grey.g90};
   border: 1px solid
     ${({ hasError, theme }) =>
-      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g90};
+      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   background: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b3};
   &:placeholder-shown {
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g30};
+  }
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g90};
   }
   &:disabled {
     background: ${({ theme }) => theme.palette.grey.g10};
