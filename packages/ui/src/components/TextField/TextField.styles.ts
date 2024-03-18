@@ -123,6 +123,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ErrorMessage = styled.span`
+  margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.status.error};
 `;
