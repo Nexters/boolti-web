@@ -29,6 +29,7 @@ const ShowList = ({ shows }: Props) => {
                 title: '관객 입장 확인 방법',
                 content: <EntranceConfirmDialogContent close={close} />,
                 isAuto: true,
+                width: '920px',
               });
             }}
           >

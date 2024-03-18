@@ -5,6 +5,7 @@ export interface IDialog {
   content: React.ReactNode;
   isAuto?: boolean;
   title?: string;
+  width?: string;
   onClose?: () => void;
 }
 
