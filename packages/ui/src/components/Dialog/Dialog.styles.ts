@@ -18,7 +18,7 @@ const DimmedArea = styled.div`
   }
 `;
 
-const Dialog = styled.div<{ isAuto: boolean }>`
+const Dialog = styled.div<{ isAuto: boolean; width?: string }>`
   width: 100%;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
@@ -27,7 +27,7 @@ const Dialog = styled.div<{ isAuto: boolean }>`
   left: 0;
 
   ${mq} {
-    width: ${({ isAuto }) => (isAuto ? 'auto' : DIALOG_WIDTH)};
+    width: ${({ isAuto, width }) => (isAuto ? 'auto' : width ?? DIALOG_WIDTH)};
     position: initial;
     bottom: auto;
     left: auto;

@@ -7,17 +7,18 @@ interface DialogProps {
   open: boolean;
   children: React.ReactNode;
   isAuto?: boolean;
+  width?: string;
   title?: string;
   onClose?: () => void;
 }
 
-const Dialog = ({ open, isAuto = false, children, title, onClose }: DialogProps) => {
+const Dialog = ({ open, isAuto = false, children, title, onClose, width }: DialogProps) => {
   if (!open) return null;
 
   return (
     <Portal>
       <Styled.DimmedArea>
-        <Styled.Dialog className="dialog" isAuto={isAuto}>
+        <Styled.Dialog className="dialog" isAuto={isAuto} width={width}>
           <Styled.DialogHeader>
             <Styled.DialogTitle>{title}</Styled.DialogTitle>
             <Styled.DialogCloseButton aria-label="닫기" onClick={onClose}>
