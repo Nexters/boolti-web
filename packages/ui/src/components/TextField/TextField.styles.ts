@@ -12,6 +12,7 @@ export interface TextFieldProps {
 const Container = styled.div<TextFieldProps>`
   position: relative;
   display: flex;
+  flex-direction: column;
   ${({ size }) => {
     switch (size) {
       case 'small':
@@ -122,9 +123,7 @@ const ButtonContainer = styled.div`
 `;
 
 const ErrorMessage = styled.span`
-  position: absolute;
-  bottom: -4px;
-  transform: translateY(100%);
+  margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.status.error};
 `;
