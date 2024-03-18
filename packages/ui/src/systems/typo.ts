@@ -24,7 +24,7 @@ const generateTypo = (size: number, weight: number, lineHeight: number) => css`
   font-size: ${size}px;
 `;
 
-const generatePointTypo = (size: number, weight: number | string, lineHeight: number) => css`
+const generatePointTypo = (size: number, weight: number, lineHeight: number) => css`
   font-family:
     'SB Aggro',
     -apple-system,
@@ -61,10 +61,10 @@ const typo = {
   b1: generateTypo(14, 400, 22),
   c1: generateTypo(12, 400, 18),
   point: {
-    p4: generatePointTypo(24, 'normal', 34),
-    p3: generatePointTypo(24, 'normal', 34),
-    p2: generatePointTypo(20, 'normal', 30),
-    p1: generatePointTypo(16, 'normal', 26),
+    p4: generatePointTypo(24, 400, 34),
+    p3: generatePointTypo(24, 400, 34),
+    p2: generatePointTypo(20, 400, 30),
+    p1: generatePointTypo(16, 400, 26),
   },
 } as const;
 
