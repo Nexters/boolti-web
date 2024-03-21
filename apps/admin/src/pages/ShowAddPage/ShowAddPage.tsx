@@ -198,9 +198,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           setSalesTicketList((prevList) =>
                             [...prevList, ticket].map((ticket) => ({
                               name: ticket.name,
-                              price: ticket.price,
-                              quantity: ticket.totalForSale,
-                              totalForSale: ticket.totalForSale,
+                              price: Number(ticket.price),
+                              quantity: Number(ticket.totalForSale),
+                              totalForSale: Number(ticket.totalForSale),
                             })),
                           );
                           toast.success('일반 티켓을 생성했습니다.');
@@ -372,9 +372,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     setSalesTicketList((prevList) =>
                       [...prevList, ticket].map((ticket) => ({
                         name: ticket.name,
-                        price: ticket.price,
-                        quantity: ticket.totalForSale,
-                        totalForSale: ticket.totalForSale,
+                        price: Number(ticket.price),
+                        quantity: Number(ticket.totalForSale),
+                        totalForSale: Number(ticket.totalForSale),
                       })),
                     );
                     toast.success('일반 티켓을 생성했습니다.');
