@@ -111,8 +111,8 @@ const ShowTicketPage = () => {
                 await createSalesTicketMutation.mutateAsync({
                   showId: show.id,
                   ticketName: ticket.name,
-                  price: ticket.price,
-                  totalForSale: ticket.totalForSale,
+                  price: Number(ticket.price),
+                  totalForSale: Number(ticket.totalForSale),
                 });
 
                 await refetchSalesTicketList();
@@ -159,7 +159,7 @@ const ShowTicketPage = () => {
                 await createInvitationTicketMutation.mutateAsync({
                   showId: show.id,
                   ticketName: ticket.name,
-                  totalForSale: ticket.totalForSale,
+                  totalForSale: Number(ticket.totalForSale),
                 });
                 await refetchInvitationTicketList();
                 toast.success('초청 티켓을 생성했습니다.');
