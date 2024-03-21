@@ -1,11 +1,12 @@
 import { Button, TextField } from '@boolti/ui';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import Styled from './TicketForm.styles';
 
 export interface InvitationTicketFormInputs {
   name: string;
-  totalForSale: number;
+  totalForSale: string;
 }
 
 interface InvitationTicketFormProps {
@@ -16,8 +17,14 @@ const InvitationTicketForm = ({ onSubmit }: InvitationTicketFormProps) => {
   const {
     handleSubmit,
     register,
+    getValues,
     formState: { isDirty, isValid },
   } = useForm<InvitationTicketFormInputs>();
+
+  const [hasBlurred, setHasBlurred] = useState<Record<keyof InvitationTicketFormInputs, boolean>>({
+    name: false,
+    totalForSale: false,
+  });
 
   return (
     <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
@@ -39,6 +46,13 @@ const InvitationTicketForm = ({ onSubmit }: InvitationTicketFormProps) => {
               placeholder="티켓 이름을 입력해 주세요 (12자 이내)"
               autoFocus
               {...register('name', { required: true })}
+              onBlur={(event) => {
+                register('name', { required: true }).onBlur(event);
+                setHasBlurred((prev) => ({ ...prev, name: true }));
+              }}
+              errorMessage={
+                hasBlurred.name && getValues('name') === '' ? '필수 입력사항입니다.' : ''
+              }
             />
           </Styled.TextField>
         </Styled.TicketFormContent>
@@ -51,7 +65,14 @@ const InvitationTicketForm = ({ onSubmit }: InvitationTicketFormProps) => {
               inputType="number"
               size="big"
               min={1}
-              {...register('totalForSale', { required: true, value: 1 })}
+              {...register('totalForSale', { required: true, value: '1' })}
+              onBlur={(event) => {
+                register('totalForSale', { required: true }).onBlur(event);
+                setHasBlurred((prev) => ({ ...prev, totalForSale: true }));
+              }}
+              errorMessage={
+                hasBlurred.totalForSale && !getValues('totalForSale') ? '필수 입력사항입니다.' : ''
+              }
             />
             <Styled.TextFieldSuffix>매</Styled.TextFieldSuffix>
           </Styled.TextField>

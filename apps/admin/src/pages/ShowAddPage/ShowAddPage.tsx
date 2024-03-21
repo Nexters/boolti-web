@@ -227,8 +227,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           setInvitationTicketList((prevList) =>
                             [...prevList, ticket].map((ticket) => ({
                               name: ticket.name,
-                              quantity: ticket.totalForSale,
-                              totalForSale: ticket.totalForSale,
+                              quantity: Number(ticket.totalForSale),
+                              totalForSale: Number(ticket.totalForSale),
                             })),
                           );
                           toast.success('초청 티켓을 생성했습니다.');
@@ -400,8 +400,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     setInvitationTicketList((prevList) =>
                       [...prevList, ticket].map((ticket) => ({
                         name: ticket.name,
-                        quantity: ticket.totalForSale,
-                        totalForSale: ticket.totalForSale,
+                        quantity: Number(ticket.totalForSale),
+                        totalForSale: Number(ticket.totalForSale),
                       })),
                     );
                     toast.success('초청 티켓을 생성했습니다.');
