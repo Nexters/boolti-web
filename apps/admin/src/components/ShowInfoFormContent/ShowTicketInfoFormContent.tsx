@@ -1,9 +1,12 @@
 import { TextField } from '@boolti/ui';
 import { format, sub } from 'date-fns';
+import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowTicketFormInputs } from './types';
+
+type ShowTicketFormRequiredInputs = Omit<ShowTicketFormInputs, 'ticketNotice'>;
 
 interface ShowTicketInfoFormContentProps {
   form: UseFormReturn<ShowTicketFormInputs>;
@@ -19,6 +22,13 @@ const ShowTicketInfoFormContent = ({
   disabled,
 }: ShowTicketInfoFormContentProps) => {
   const { watch, control } = form;
+
+  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowTicketFormRequiredInputs, boolean>>(
+    {
+      startDate: false,
+      endDate: false,
+    },
+  );
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -39,7 +49,10 @@ const ShowTicketInfoFormContent = ({
                       inputType="date"
                       size="big"
                       onChange={onChange}
-                      onBlur={onBlur}
+                      onBlur={() => {
+                        onBlur();
+                        setHasBlurred((prev) => ({ ...prev, startDate: true }));
+                      }}
                       placeholder={value}
                       min={format(new Date(), 'yyyy-MM-dd')}
                       max={format(
@@ -49,6 +62,9 @@ const ShowTicketInfoFormContent = ({
                       defaultValue={watch('startDate') || ''}
                       required
                       disabled={disabled}
+                      errorMessage={
+                        hasBlurred.startDate && !value ? '필수 입력사항입니다.' : undefined
+                      }
                     />
                   )}
                   name="startDate"
@@ -68,7 +84,10 @@ const ShowTicketInfoFormContent = ({
                       inputType="date"
                       size="big"
                       onChange={onChange}
-                      onBlur={onBlur}
+                      onBlur={() => {
+                        onBlur();
+                        setHasBlurred((prev) => ({ ...prev, endDate: true }));
+                      }}
                       placeholder={value}
                       min={format(
                         watch('startDate') ||
@@ -82,6 +101,9 @@ const ShowTicketInfoFormContent = ({
                       defaultValue={watch('endDate') || ''}
                       required
                       disabled={disabled}
+                      errorMessage={
+                        hasBlurred.endDate && !value ? '필수 입력사항입니다.' : undefined
+                      }
                     />
                   )}
                   name="endDate"

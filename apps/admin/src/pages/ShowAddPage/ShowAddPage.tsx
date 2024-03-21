@@ -119,7 +119,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                   <Styled.CardDescription>
                     등록하려는 공연의 정보를 입력해 주세요.
                     <br />
-                    공연 정보는 티켓 판매 시작 전까지 수정할 수 있어요.
+                    공연 정보는 공연일 하루 전까지 수정할 수 있어요.
                   </Styled.CardDescription>
                   <Styled.ShowAddForm onSubmit={showInfoForm.handleSubmit(onSubmitInfoForm)}>
                     <Styled.ShowInfoFormContent>
@@ -181,9 +181,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ProcessIndicatorItem>
                   </Styled.ProcessIndicator>
                   <Styled.CardDescription>
-                    등록하려는 공연의 정보를 입력해 주세요.
+                    티켓 판매 기간을 설정하고 티켓을 생성해 주세요.
                     <br />
-                    공연 정보는 티켓 판매 시작 전까지 수정할 수 있어요.
+                    티켓은 판매 종료일까지 추가할 수 있어요.
                   </Styled.CardDescription>
                   <Styled.ShowAddForm onSubmit={showTicketForm.handleSubmit(onSubmitTicketForm)}>
                     <ShowTicketInfoFormContent

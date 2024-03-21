@@ -18,7 +18,7 @@ interface FileUploadAreaProps {
 }
 
 interface TextAreaProps {
-  hasError: boolean;
+  hasError?: boolean;
 }
 
 interface TicketGroupTitleProps {
