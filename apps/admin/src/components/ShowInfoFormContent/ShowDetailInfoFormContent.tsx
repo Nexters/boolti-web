@@ -1,8 +1,11 @@
 import { TextField } from '@boolti/ui';
+import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowInfoFormInputs } from './types';
+
+type ShowBasicInfoFormInputs = Pick<ShowInfoFormInputs, 'notice' | 'hostName' | 'hostPhoneNumber'>;
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs>;
@@ -11,6 +14,12 @@ interface ShowDetailInfoFormContentProps {
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
   const { control } = form;
+
+  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowBasicInfoFormInputs, boolean>>({
+    notice: false,
+    hostName: false,
+    hostPhoneNumber: false,
+  });
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -27,14 +36,23 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
               required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
-              <Styled.TextArea
-                placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
-                rows={10}
-                disabled={disabled}
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value ?? ''}
-              />
+              <Styled.TextAreaContainer>
+                <Styled.TextArea
+                  placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                  rows={10}
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, notice: true }));
+                  }}
+                  value={value ?? ''}
+                  hasError={hasBlurred.notice && !value}
+                />
+                {hasBlurred.notice && !value && (
+                  <Styled.TextAreaErrorMessage>필수 입력사항입니다.</Styled.TextAreaErrorMessage>
+                )}
+              </Styled.TextAreaContainer>
             )}
             name="notice"
           />
@@ -57,8 +75,12 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, hostName: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={hasBlurred.hostName && !value ? '필수 입력사항입니다.' : undefined}
                 />
               )}
               name="hostName"
@@ -83,8 +105,14 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, hostPhoneNumber: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={
+                    hasBlurred.hostPhoneNumber && !value ? '필수 입력사항입니다.' : undefined
+                  }
                 />
               )}
               name="hostPhoneNumber"

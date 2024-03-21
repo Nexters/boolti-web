@@ -2,6 +2,7 @@ import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { TextField } from '@boolti/ui';
 import { add, format } from 'date-fns';
+import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
@@ -9,6 +10,8 @@ import Styled from './ShowInfoFormContent.styles';
 import { ShowInfoFormInputs } from './types';
 
 const MAX_IMAGE_COUNT = 3;
+
+type ShowBasicInfoFormInputs = Omit<ShowInfoFormInputs, 'notice' | 'hostName' | 'hostPhoneNumber'>;
 
 interface ShowBasicInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs>;
@@ -33,6 +36,16 @@ const ShowBasicInfoFormContent = ({
     },
     maxFiles: MAX_IMAGE_COUNT,
     onDrop: onDropImage,
+  });
+
+  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowBasicInfoFormInputs, boolean>>({
+    name: false,
+    date: false,
+    startTime: false,
+    runningTime: false,
+    placeName: false,
+    placeStreetAddress: false,
+    placeDetailAddress: false,
   });
 
   return (
@@ -97,8 +110,12 @@ const ShowBasicInfoFormContent = ({
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, name: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={hasBlurred.name && !value ? '필수 입력사항입니다.' : undefined}
                 />
               )}
               name="name"
@@ -120,13 +137,17 @@ const ShowBasicInfoFormContent = ({
                   inputType="date"
                   size="big"
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, date: true }));
+                  }}
                   placeholder={value}
                   defaultValue={watch('date')}
                   min={format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')}
                   required
                   disabled={disabled}
                   value={value ?? ''}
+                  errorMessage={hasBlurred.date && !value ? '필수 입력사항입니다.' : undefined}
                 />
               )}
               name="date"
@@ -150,8 +171,12 @@ const ShowBasicInfoFormContent = ({
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, startTime: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={hasBlurred.startTime && !value ? '필수 입력사항입니다.' : undefined}
                 />
               )}
               name="startTime"
@@ -174,8 +199,14 @@ const ShowBasicInfoFormContent = ({
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, runningTime: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={
+                    hasBlurred.runningTime && !value ? '필수 입력사항입니다.' : undefined
+                  }
                 />
               )}
               name="runningTime"
@@ -201,8 +232,12 @@ const ShowBasicInfoFormContent = ({
                   required
                   disabled={disabled}
                   onChange={onChange}
-                  onBlur={onBlur}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, placeName: true }));
+                  }}
                   value={value ?? ''}
+                  errorMessage={hasBlurred.placeName && !value ? '필수 입력사항입니다.' : undefined}
                 />
               )}
               name="placeName"
@@ -223,8 +258,14 @@ const ShowBasicInfoFormContent = ({
                     required
                     disabled={disabled}
                     onChange={onChange}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      onBlur();
+                      setHasBlurred((prev) => ({ ...prev, placeStreetAddress: true }));
+                    }}
                     value={value ?? ''}
+                    errorMessage={
+                      hasBlurred.placeStreetAddress && !value ? '필수 입력사항입니다.' : undefined
+                    }
                   />
                 )}
                 name="placeStreetAddress"
@@ -244,8 +285,14 @@ const ShowBasicInfoFormContent = ({
                     required
                     disabled={disabled}
                     onChange={onChange}
-                    onBlur={onBlur}
+                    onBlur={() => {
+                      onBlur();
+                      setHasBlurred((prev) => ({ ...prev, placeDetailAddress: true }));
+                    }}
                     value={value ?? ''}
+                    errorMessage={
+                      hasBlurred.placeDetailAddress && !value ? '필수 입력사항입니다.' : undefined
+                    }
                   />
                 )}
                 name="placeDetailAddress"
