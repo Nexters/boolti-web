@@ -17,6 +17,10 @@ interface FileUploadAreaProps {
   imageCount: number;
 }
 
+interface TextAreaProps {
+  hasError: boolean;
+}
+
 interface TicketGroupTitleProps {
   required?: boolean;
 }
@@ -243,11 +247,18 @@ const TextFieldRow = styled.div`
   }
 `;
 
-const TextArea = styled.textarea`
+const TextAreaContainer = styled.div`
+  position: relative;
+  display: flex;
+`;
+
+const TextArea = styled.textarea<TextAreaProps>`
   width: 100%;
   margin-top: 8px;
   padding: 12px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  border: 1px solid
+    ${({ theme, hasError }) =>
+      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -258,11 +269,23 @@ const TextArea = styled.textarea`
     color: ${({ theme }) => theme.palette.grey.g30};
   }
 
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  }
+
   &:disabled {
     background: ${({ theme }) => theme.palette.grey.g10};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g40};
   }
+`;
+
+const TextAreaErrorMessage = styled.p`
+  position: absolute;
+  bottom: -4px;
+  transform: translateY(100%);
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.status.error};
 `;
 
 const TicketGroup = styled.div`
@@ -512,7 +535,9 @@ export default {
   TextField,
   TextFieldSuffix,
   TextFieldRow,
+  TextAreaContainer,
   TextArea,
+  TextAreaErrorMessage,
   TicketGroup,
   TicketGroupHeader,
   TicketGroupInfo,
