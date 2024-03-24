@@ -7,7 +7,7 @@ import {
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, Drawer, useConfirm, useDialog, useToast } from '@boolti/ui';
+import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,7 +18,6 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
-import ShowPreview from '~/components/ShowPreview';
 import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
