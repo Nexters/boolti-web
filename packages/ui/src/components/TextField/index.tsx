@@ -27,7 +27,12 @@ const TextField = forwardRef<HTMLInputElement, Props>(function TextField(
     <Styled.Container disabled={disabled} size={size} className={className} inputType={inputType}>
       <Styled.InputContainer>
         {inputType === 'date' && (
-          <Styled.InputLabel hasError={!!errorMessage} htmlFor={uuid.current} disabled={disabled}>
+          <Styled.InputLabel
+            hasError={!!errorMessage}
+            htmlFor={uuid.current}
+            disabled={disabled}
+            hasValue={rest.value ? !!rest.value : !!placeholder}
+          >
             {rest.value ? rest.value : placeholder}
           </Styled.InputLabel>
         )}

@@ -39,7 +39,7 @@ const InputContainer = styled.div`
   }
 `;
 
-const InputLabel = styled.label<{ hasError?: boolean; disabled?: boolean }>`
+const InputLabel = styled.label<{ hasError?: boolean; disabled?: boolean; hasValue?: boolean }>`
   display: block;
   width: 100%;
   height: 48px;
@@ -58,6 +58,11 @@ const InputLabel = styled.label<{ hasError?: boolean; disabled?: boolean }>`
       background: ${theme.palette.grey.g10};
       color: ${theme.palette.grey.g40};
     `}
+
+  &::after {
+    content: '-';
+    display: ${({ hasValue }) => (hasValue ? 'none' : 'inline')};
+  }
 `;
 
 const Input = styled.input<{ hasError?: boolean }>`
