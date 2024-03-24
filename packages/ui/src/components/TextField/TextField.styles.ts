@@ -47,7 +47,7 @@ const InputLabel = styled.label<{ hasError?: boolean; disabled?: boolean }>`
   padding: 12px 13px;
   color: ${({ theme }) => theme.palette.grey.g90};
   border: 1px solid
-    ${({ hasError, theme }) => (hasError ? theme.palette.status.error : theme.palette.grey.g90)};
+    ${({ hasError, theme }) => (hasError ? theme.palette.status.error : theme.palette.grey.g20)};
   background: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b3};
 
