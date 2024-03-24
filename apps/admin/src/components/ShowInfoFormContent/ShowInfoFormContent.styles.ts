@@ -250,6 +250,7 @@ const TextFieldRow = styled.div`
 const TextAreaContainer = styled.div`
   position: relative;
   display: flex;
+  flex-direction: column;
 `;
 
 const TextArea = styled.textarea<TextAreaProps>`
@@ -281,9 +282,7 @@ const TextArea = styled.textarea<TextAreaProps>`
 `;
 
 const TextAreaErrorMessage = styled.p`
-  position: absolute;
-  bottom: -4px;
-  transform: translateY(100%);
+  margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.status.error};
 `;
