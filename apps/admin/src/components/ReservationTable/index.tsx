@@ -35,11 +35,17 @@ const columns = [
     header: '주문 번호',
   }),
   columnHelper.accessor('ticketPrice', {
-    header: '결제 금액',
+    header: (props) =>
+      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
+        ? '환불 금액'
+        : '결제 금액',
     cell: (props) => `${props.getValue().toLocaleString()}원`,
   }),
   columnHelper.accessor('means', {
-    header: '결제 방법',
+    header: (props) =>
+      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
+        ? '환불 방법'
+        : '결제 방법',
     cell: (props) =>
       props.getValue() === 'CARD'
         ? '카드 결제'
@@ -48,7 +54,10 @@ const columns = [
           : '초청 코드',
   }),
   columnHelper.accessor('ticketIssuedAt', {
-    header: '발권일시',
+    header: (props) =>
+      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
+        ? '환불일시'
+        : '발권일시',
     cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
   }),
 ];
@@ -67,7 +76,14 @@ interface Props {
 }
 
 const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickReset }: Props) => {
-  const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+    meta: {
+      ticketStatus: selectedTicketStatus,
+    },
+  });
   return (
     <Styled.Container>
       {table.getHeaderGroups().map((headerGroup) => (
