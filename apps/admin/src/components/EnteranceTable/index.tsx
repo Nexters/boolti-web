@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table';
 import { format } from 'date-fns/format';
 
+import { boldText } from '~/utils/boldText';
 import { formatPhoneNumber } from '~/utils/format';
 
 import Styled from './EnteranceTable.styles';
@@ -26,10 +27,25 @@ const columns = [
   }),
   columnHelper.accessor('reservationName', {
     header: '예매자 이름',
+    cell: (props) => {
+      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
+      return (
+        <span dangerouslySetInnerHTML={{ __html: boldText(props.getValue(), searchText) }}></span>
+      );
+    },
   }),
   columnHelper.accessor('reservationPhoneNumber', {
     header: '연락처',
-    cell: (props) => formatPhoneNumber(props.getValue()),
+    cell: (props) => {
+      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: boldText(formatPhoneNumber(props.getValue()), searchText),
+          }}
+        ></span>
+      );
+    },
   }),
   columnHelper.accessor('entered', {
     header: '상태',
@@ -44,12 +60,20 @@ const columns = [
 interface Props {
   data: EntranceResponse[];
   isEnteredTicket: boolean;
-  isSearchResult: boolean;
+  searchText: string;
   onClickReset?: VoidFunction;
 }
 
-const EnteranceTable = ({ isSearchResult, data, isEnteredTicket, onClickReset }: Props) => {
-  const table = useReactTable({ columns, data, getCoreRowModel: getCoreRowModel() });
+const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Props) => {
+  const isSearchResult = searchText !== '';
+  const table = useReactTable({
+    columns,
+    data,
+    getCoreRowModel: getCoreRowModel(),
+    meta: {
+      searchText,
+    },
+  });
   return (
     <Styled.Container>
       {table.getHeaderGroups().map((headerGroup) => (

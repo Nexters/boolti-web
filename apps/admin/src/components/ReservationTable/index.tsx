@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-table';
 import { format } from 'date-fns';
 
+import { boldText } from '~/utils/boldText';
 import { formatPhoneNumber } from '~/utils/format';
 
 import Styled from './ReservationTable.styles';
@@ -26,10 +27,25 @@ const columns = [
   }),
   columnHelper.accessor('reservationName', {
     header: '예매자 이름',
+    cell: (props) => {
+      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
+      return (
+        <span dangerouslySetInnerHTML={{ __html: boldText(props.getValue(), searchText) }}></span>
+      );
+    },
   }),
   columnHelper.accessor('reservationPhoneNumber', {
     header: '연락처',
-    cell: (props) => formatPhoneNumber(props.getValue()),
+    cell: (props) => {
+      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: boldText(formatPhoneNumber(props.getValue()), searchText),
+          }}
+        ></span>
+      );
+    },
   }),
   columnHelper.accessor('csReservationId', {
     header: '주문 번호',
@@ -71,17 +87,19 @@ const emptyLabel: Record<TicketStatus, string> = {
 interface Props {
   data: ReservationResponse[];
   selectedTicketStatus: TicketStatus;
-  isSearchResult: boolean;
+  searchText: string;
   onClickReset?: VoidFunction;
 }
 
-const ReservationTable = ({ isSearchResult, data, selectedTicketStatus, onClickReset }: Props) => {
+const ReservationTable = ({ searchText, data, selectedTicketStatus, onClickReset }: Props) => {
+  const isSearchResult = searchText !== '';
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
     meta: {
       ticketStatus: selectedTicketStatus,
+      searchText,
     },
   });
   return (

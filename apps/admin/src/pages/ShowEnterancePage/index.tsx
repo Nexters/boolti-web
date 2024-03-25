@@ -162,7 +162,7 @@ const ShowEnterancePage = () => {
               <EnteranceTable
                 data={reservations}
                 isEnteredTicket={isEnteredTicket}
-                isSearchResult={debouncedSearchText !== ''}
+                searchText={debouncedSearchText}
                 onClickReset={onClickReset}
               />
             </Styled.TableContainer>
