@@ -66,11 +66,10 @@ const Title = styled.h2`
   overflow: hidden;
   text-overflow: ellipsis;
   margin-right: 8px;
-  ${({ theme }) => theme.typo.point.p1};
+  ${({ theme }) => theme.typo.point.p4};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   ${mq} {
-    ${({ theme }) => theme.typo.point.p4};
     max-width: auto;
   }
 `;

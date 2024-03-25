@@ -46,7 +46,7 @@ const InfoContainer = styled.div`
 `;
 
 const AccountText = styled.span`
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.h1};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-right: 8px;
   &:last-of-type {
