@@ -167,7 +167,7 @@ const ShowEnterancePage = () => {
               />
             </Styled.TableContainer>
           )}
-          {reservations.length !== 0 && (
+          {totalPages > 1 && (
             <Pagination
               totalPages={totalPages}
               currentPage={currentPage}
