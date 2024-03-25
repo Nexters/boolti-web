@@ -66,6 +66,9 @@ const Item = styled.span`
   text-align: left;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
+  & strong {
+    background-color: ${({ theme }) => theme.palette.red.sub};
+  }
   &:not(:last-of-type) {
     margin-right: 12px;
   }

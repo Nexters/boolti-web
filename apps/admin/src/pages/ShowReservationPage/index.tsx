@@ -160,7 +160,7 @@ const ShowReservationPage = () => {
               <ReservationTable
                 data={reservations}
                 selectedTicketStatus={selectedTicketStatus}
-                isSearchResult={debouncedSearchText !== ''}
+                searchText={debouncedSearchText}
                 onClickReset={onClickReset}
               />
             </Styled.TableContainer>
