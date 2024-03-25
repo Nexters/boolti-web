@@ -83,7 +83,7 @@ const ShowEnterancePage = () => {
       ) : (
         <Styled.Container>
           <Styled.InfoContainer>
-            <Styled.InfoText>인증코드 : {managerCode}</Styled.InfoText>
+            <Styled.InfoText>입장코드 : {managerCode}</Styled.InfoText>
             <Styled.QuestionTextButton
               onClick={() => {
                 open({
@@ -167,7 +167,7 @@ const ShowEnterancePage = () => {
               />
             </Styled.TableContainer>
           )}
-          {reservations.length !== 0 && (
+          {totalPages > 1 && (
             <Pagination
               totalPages={totalPages}
               currentPage={currentPage}

@@ -154,7 +154,7 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
   justify-content: center;
   align-items: center;
   cursor: ${({ isSelected }) => (isSelected ? 'unset' : 'pointer')};
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme, isSelected }) => (isSelected ? theme.typo.sh1 : theme.typo.b3)};
   color: ${({ theme, isSelected }) =>
     isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   margin-right: 16px;
@@ -167,13 +167,13 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    min-width: 20px;
+    padding: 0 6px;
     border-radius: 30px;
     margin-left: 4px;
     ${({ theme }) => theme.typo.c1};
     color: ${({ theme }) => theme.palette.grey.w};
     background-color: ${({ theme, isSelected }) =>
-      isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
+      isSelected ? theme.palette.grey.g90 : theme.palette.grey.g50};
   }
 `;
 
