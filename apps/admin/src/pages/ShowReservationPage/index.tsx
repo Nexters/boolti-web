@@ -173,7 +173,18 @@ const ShowReservationPage = () => {
                   emptyText={emptyLabel[selectedTicketStatus]}
                 />
               </Styled.TableContainer>
-              <MobileCardList items={[]} emptyText={emptyLabel[selectedTicketStatus]} />
+              <MobileCardList
+                items={reservations.map((reservation) => ({
+                  id: reservation.ticketId,
+                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
+                  name: reservation.reservationName,
+                  phoneNumber: reservation.reservationPhoneNumber,
+                  ticketName: reservation.ticketName,
+                  count: 1,
+                }))}
+                searchText={debouncedSearchText}
+                emptyText={emptyLabel[selectedTicketStatus]}
+              />
             </>
           )}
           {totalPages > 1 && (

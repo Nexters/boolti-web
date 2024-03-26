@@ -4,6 +4,7 @@ import styled from '@emotion/styled';
 const Container = styled.div<{ isEmpty: boolean }>`
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
   padding: 0 20px;
   margin-top: 12px;
@@ -17,4 +18,41 @@ const Container = styled.div<{ isEmpty: boolean }>`
   }
 `;
 
-export default { Container };
+const CardItem = styled.div`
+  width: 100%;
+  padding: 20px 0;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  & + & {
+    margin-top: 9px;
+  }
+  & strong {
+    background-color: ${({ theme }) => theme.palette.primary.o1};
+  }
+`;
+
+const DateText = styled.div`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g50};
+`;
+
+const UserInfoText = styled.div`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const TicketInfoText = styled.div`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+`;
+
+export default { Container, CardItem, Row, DateText, UserInfoText, TicketInfoText };
