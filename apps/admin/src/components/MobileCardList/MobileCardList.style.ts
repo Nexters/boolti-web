@@ -6,6 +6,7 @@ const Container = styled.div<{ isEmpty: boolean }>`
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  white-space: pre-wrap;
   padding: 0 20px;
   margin-top: 12px;
   min-height: ${({ isEmpty }) => (isEmpty ? '240px' : 'auto')};
@@ -55,4 +56,9 @@ const TicketInfoText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
-export default { Container, CardItem, Row, DateText, UserInfoText, TicketInfoText };
+const ResetButton = styled.button`
+  font-weight: 600;
+  text-decoration: underline;
+`;
+
+export default { Container, CardItem, Row, DateText, UserInfoText, TicketInfoText, ResetButton };

@@ -20,10 +20,12 @@ interface Props {
   items: Item[];
   searchText: string;
   emptyText: string;
+  onClickReset: VoidFunction;
 }
 
-function MobileCardList({ searchText, items, emptyText }: Props) {
+function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
   const isEmpty = items.length === 0;
+  const isSearchResult = searchText !== '';
   const Elements = items.map((item) => {
     return (
       <Styled.CardItem key={item.id}>
@@ -44,7 +46,22 @@ function MobileCardList({ searchText, items, emptyText }: Props) {
       </Styled.CardItem>
     );
   });
-  return <Styled.Container isEmpty={isEmpty}>{isEmpty ? emptyText : Elements}</Styled.Container>;
+  return (
+    <Styled.Container isEmpty={isEmpty}>
+      {isEmpty ? (
+        isSearchResult ? (
+          <>
+            {`검색 결과가 없어요.\n예매자 이름 또는 연락처를 변경해보세요.`}
+            <Styled.ResetButton onClick={onClickReset}>검색 초기화</Styled.ResetButton>
+          </>
+        ) : (
+          emptyText
+        )
+      ) : (
+        Elements
+      )}
+    </Styled.Container>
+  );
 }
 
 export default MobileCardList;

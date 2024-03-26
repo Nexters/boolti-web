@@ -184,6 +184,7 @@ const ShowReservationPage = () => {
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={emptyLabel[selectedTicketStatus]}
+                onClickReset={onClickReset}
               />
             </>
           )}
