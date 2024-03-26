@@ -8,12 +8,19 @@ import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
 import ReservationTable from '~/components/ReservationTable';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowReservationPage.styles';
+
+const emptyLabel: Record<TicketStatus, string> = {
+  WAIT: '발권 대기중인 티켓이 없어요.',
+  COMPLETE: '발권 왼료된 티켓이 없어요.',
+  CANCEL: '발권 취소된 티켓이 없어요.',
+};
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
@@ -156,14 +163,18 @@ const ShowReservationPage = () => {
             </Styled.FilterContainer>
           </Styled.TicketReservationSummaryContainer>
           {!isReservationPagesLoading && (
-            <Styled.TableContainer>
-              <ReservationTable
-                data={reservations}
-                selectedTicketStatus={selectedTicketStatus}
-                searchText={debouncedSearchText}
-                onClickReset={onClickReset}
-              />
-            </Styled.TableContainer>
+            <>
+              <Styled.TableContainer>
+                <ReservationTable
+                  data={reservations}
+                  selectedTicketStatus={selectedTicketStatus}
+                  searchText={debouncedSearchText}
+                  onClickReset={onClickReset}
+                  emptyText={emptyLabel[selectedTicketStatus]}
+                />
+              </Styled.TableContainer>
+              <MobileCardList items={[]} emptyText={emptyLabel[selectedTicketStatus]} />
+            </>
           )}
           {totalPages > 1 && (
             <Pagination
