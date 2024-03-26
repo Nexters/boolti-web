@@ -82,6 +82,8 @@ const TicketReservationSummaryContainer = styled.div`
   justify-content: center;
   align-items: start;
   flex-direction: column;
+  flex-wrap: wrap;
+  gap: 12px;
   width: 100%;
   ${mq} {
     width: auto;
@@ -92,13 +94,11 @@ const TicketReservationSummaryContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin-top: 12px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   ${mq} {
-    margin-top: 0;
     width: auto;
   }
 `;
@@ -182,10 +182,14 @@ const InputButton = styled.button`
 `;
 
 const TableContainer = styled.div`
-  width: 100%;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    display: none;
+  display: none;
+  ${mq} {
+    display: block;
+    width: 100%;
+    overflow-x: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 
