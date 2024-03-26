@@ -36,7 +36,7 @@ const Row = styled.div`
     margin-top: 9px;
   }
   & strong {
-    background-color: ${({ theme }) => theme.palette.primary.o1};
+    background-color: ${({ theme }) => theme.palette.primary.o0};
   }
 `;
 
