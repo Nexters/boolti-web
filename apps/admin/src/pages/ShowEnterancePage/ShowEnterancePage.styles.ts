@@ -179,11 +179,14 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
 
 const InputContainer = styled.div`
   position: relative;
+  flex-shrink: 1;
+
 `;
 
 const Input = styled.input`
   display: flex;
-  width: 262px;
+  width: 100%;
+  max-width: 262px;
   padding: 8px 72px 8px 16px;
   justify-content: space-between;
   align-items: center;
