@@ -8,7 +8,7 @@ const Container = styled.div<{ isEmpty: boolean }>`
   align-items: center;
   white-space: pre-wrap;
   padding: 0 20px;
-  margin-top: 12px;
+  margin: 12px 0 24px 0;
   min-height: ${({ isEmpty }) => (isEmpty ? '240px' : 'auto')};
   text-align: center;
   ${({ theme }) => theme.typo.b3};

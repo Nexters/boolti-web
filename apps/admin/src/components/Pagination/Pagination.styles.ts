@@ -1,11 +1,7 @@
-import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  display: none;
-  ${mq} {
-    display: flex;
-  }
+  display: flex;
 `;
 
 const Button = styled.button<{ isCurrent?: boolean }>`
