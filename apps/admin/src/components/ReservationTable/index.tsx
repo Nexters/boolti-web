@@ -78,20 +78,21 @@ const columns = [
   }),
 ];
 
-const emptyLabel: Record<TicketStatus, string> = {
-  WAIT: '발권 대기중인 티켓이 없어요.',
-  COMPLETE: '발권 왼료된 티켓이 없어요.',
-  CANCEL: '발권 취소된 티켓이 없어요.',
-};
-
 interface Props {
+  emptyText: string;
   data: ReservationResponse[];
   selectedTicketStatus: TicketStatus;
   searchText: string;
   onClickReset?: VoidFunction;
 }
 
-const ReservationTable = ({ searchText, data, selectedTicketStatus, onClickReset }: Props) => {
+const ReservationTable = ({
+  emptyText,
+  searchText,
+  data,
+  selectedTicketStatus,
+  onClickReset,
+}: Props) => {
   const isSearchResult = searchText !== '';
   const table = useReactTable({
     columns,
@@ -125,7 +126,7 @@ const ReservationTable = ({ searchText, data, selectedTicketStatus, onClickReset
               </Styled.ResetButton>
             </>
           ) : (
-            emptyLabel[selectedTicketStatus]
+            emptyText
           )}
         </Styled.Empty>
       ) : (

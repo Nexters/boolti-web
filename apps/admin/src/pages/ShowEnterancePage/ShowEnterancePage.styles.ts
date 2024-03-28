@@ -122,6 +122,8 @@ const EnteranceSummaryContainer = styled.div`
   justify-content: center;
   align-items: start;
   flex-direction: column;
+  flex-wrap: wrap;
+  gap: 12px;
   width: 100%;
   ${mq} {
     width: auto;
@@ -132,13 +134,11 @@ const EnteranceSummaryContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  margin-top: 12px;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   ${mq} {
-    margin-top: 0;
     width: auto;
   }
 `;
@@ -179,11 +179,13 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
 
 const InputContainer = styled.div`
   position: relative;
+  flex-shrink: 1;
 `;
 
 const Input = styled.input`
   display: flex;
-  width: 262px;
+  width: 100%;
+  max-width: 262px;
   padding: 8px 72px 8px 16px;
   justify-content: space-between;
   align-items: center;
@@ -222,10 +224,14 @@ const InputButton = styled.button`
 `;
 
 const TableContainer = styled.div`
-  width: 100%;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    display: none;
+  display: none;
+  ${mq} {
+    display: block;
+    width: 100%;
+    overflow-x: scroll;
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 `;
 

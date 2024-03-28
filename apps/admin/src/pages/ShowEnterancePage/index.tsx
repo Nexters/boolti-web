@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 
 import EnteranceTable from '~/components/EnteranceTable';
 import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
+import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
@@ -158,14 +159,30 @@ const ShowEnterancePage = () => {
             </Styled.FilterContainer>
           </Styled.EnteranceSummaryContainer>
           {!isEntranceListLoading && (
-            <Styled.TableContainer>
-              <EnteranceTable
-                data={reservations}
-                isEnteredTicket={isEnteredTicket}
+            <>
+              <Styled.TableContainer>
+                <EnteranceTable
+                  data={reservations}
+                  isEnteredTicket={isEnteredTicket}
+                  searchText={debouncedSearchText}
+                  onClickReset={onClickReset}
+                />
+              </Styled.TableContainer>
+              <MobileCardList
+                items={reservations.map((reservation) => ({
+                  id: reservation.ticketId,
+                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
+                  name: reservation.reservationName,
+                  date: reservation.enteredAt,
+                  phoneNumber: reservation.reservationPhoneNumber,
+                  ticketName: reservation.ticketName,
+                  count: 1,
+                }))}
                 searchText={debouncedSearchText}
+                emptyText={isEnteredTicket ? '입장 관객이 없어요.' : '미입장 관객이 없어요.'}
                 onClickReset={onClickReset}
               />
-            </Styled.TableContainer>
+            </>
           )}
           {totalPages > 1 && (
             <Pagination

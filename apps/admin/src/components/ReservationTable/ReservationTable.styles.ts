@@ -70,7 +70,7 @@ const Item = styled.span`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   & strong {
-    background-color: ${({ theme }) => theme.palette.primary.o1};
+    background-color: ${({ theme }) => theme.palette.primary.o0};
   }
   &:not(:last-of-type) {
     margin-right: 12px;

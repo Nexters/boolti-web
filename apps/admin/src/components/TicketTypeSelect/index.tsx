@@ -35,6 +35,10 @@ const TicketTypeSelect = ({ onChange, value }: Props) => {
       ]}
       defaultValue={{ value: 'ALL', label: '티켓 전체' }}
       styles={{
+        container: (base) => ({
+          ...base,
+          flexShrink: 0,
+        }),
         control: (base) => ({
           ...base,
           cursor: 'pointer',
