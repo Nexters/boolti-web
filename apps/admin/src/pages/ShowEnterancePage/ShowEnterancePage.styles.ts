@@ -180,7 +180,6 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
 const InputContainer = styled.div`
   position: relative;
   flex-shrink: 1;
-
 `;
 
 const Input = styled.input`
