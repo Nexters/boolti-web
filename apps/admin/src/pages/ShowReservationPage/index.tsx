@@ -8,12 +8,19 @@ import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
+import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
 import ReservationTable from '~/components/ReservationTable';
 import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowReservationPage.styles';
+
+const emptyLabel: Record<TicketStatus, string> = {
+  WAIT: '발권 대기중인 티켓이 없어요.',
+  COMPLETE: '발권 왼료된 티켓이 없어요.',
+  CANCEL: '발권 취소된 티켓이 없어요.',
+};
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
@@ -156,14 +163,30 @@ const ShowReservationPage = () => {
             </Styled.FilterContainer>
           </Styled.TicketReservationSummaryContainer>
           {!isReservationPagesLoading && (
-            <Styled.TableContainer>
-              <ReservationTable
-                data={reservations}
-                selectedTicketStatus={selectedTicketStatus}
+            <>
+              <Styled.TableContainer>
+                <ReservationTable
+                  data={reservations}
+                  selectedTicketStatus={selectedTicketStatus}
+                  searchText={debouncedSearchText}
+                  onClickReset={onClickReset}
+                  emptyText={emptyLabel[selectedTicketStatus]}
+                />
+              </Styled.TableContainer>
+              <MobileCardList
+                items={reservations.map((reservation) => ({
+                  id: reservation.ticketId,
+                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
+                  name: reservation.reservationName,
+                  phoneNumber: reservation.reservationPhoneNumber,
+                  ticketName: reservation.ticketName,
+                  count: 1,
+                }))}
                 searchText={debouncedSearchText}
+                emptyText={emptyLabel[selectedTicketStatus]}
                 onClickReset={onClickReset}
               />
-            </Styled.TableContainer>
+            </>
           )}
           {totalPages > 1 && (
             <Pagination
