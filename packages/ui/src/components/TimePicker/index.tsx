@@ -56,12 +56,14 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
       hourRef.current?.scrollTo({ top: (36 + 8) * (currentHour - 1) });
       minuteRef.current?.scrollTo({ top: (36 + 8) * (currentMinute / 10) });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   useEffect(() => {
     if (nextValue) {
       onChange?.(nextValue);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentHour, currentMinute]);
 
   return (

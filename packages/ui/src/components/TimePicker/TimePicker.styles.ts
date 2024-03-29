@@ -68,7 +68,7 @@ const Item = styled.button<{ isActive?: boolean }>`
   cursor: ${({ isActive }) => (isActive ? 'unset' : 'pointer')};
   &:hover {
     background-color: ${({ isActive, theme }) =>
-    isActive ? theme.palette.primary.o1 : theme.palette.primary.o0};
+      isActive ? theme.palette.primary.o1 : theme.palette.primary.o0};
   }
   &:not(:last-child) {
     margin-bottom: 8px;
