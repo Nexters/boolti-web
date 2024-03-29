@@ -1,6 +1,6 @@
 import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
-import { TextField } from '@boolti/ui';
+import { TextField, TimePicker } from '@boolti/ui';
 import { add, format } from 'date-fns';
 import { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -164,21 +164,22 @@ const ShowBasicInfoFormContent = ({
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  inputType="time"
-                  size="big"
-                  required
-                  disabled={disabled}
-                  onChange={onChange}
-                  onBlur={() => {
-                    onBlur();
-                    setHasBlurred((prev) => ({ ...prev, startTime: true }));
-                  }}
-                  value={value ?? ''}
-                  errorMessage={hasBlurred.startTime && !value ? '필수 입력사항입니다.' : undefined}
-                />
-              )}
+              render={({ field: { onChange, onBlur, value } }) => {
+                return (
+                  <TimePicker
+                    disabled={disabled}
+                    onChange={onChange}
+                    onBlur={() => {
+                      onBlur();
+                      setHasBlurred((prev) => ({ ...prev, startTime: true }));
+                    }}
+                    value={value}
+                    errorMessage={
+                      hasBlurred.startTime && !value ? '필수 입력사항입니다.' : undefined
+                    }
+                  />
+                );
+              }}
               name="startTime"
             />
           </Styled.TextField>

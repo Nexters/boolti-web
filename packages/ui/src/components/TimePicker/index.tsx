@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
+import TextField from '../TextField';
 import Styled from './TimePicker.styles';
 
 function addZero(n: number) {
@@ -11,22 +12,29 @@ const hours = new Array(12).fill({ length: 12 }).map((_, index) => addZero(index
 const minutes = new Array(6).fill({ length: 6 }).map((_, index) => addZero(index * 10));
 
 interface Props {
-  hour: number;
-  minute: number;
-  onChange?: (hour: number, minute: number) => void;
+  disabled?: boolean;
+  onBlur?: VoidFunction;
+  errorMessage: React.ComponentProps<typeof TextField>['errorMessage'];
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
-function TimePicker({ hour, minute, onChange }: Props) {
+function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const hourRef = useRef<HTMLDivElement>(null);
   const minuteRef = useRef<HTMLDivElement>(null);
-  const [isAM, setIsAM] = useState(hour < 12);
-  const [open, setIsOpen] = useState(true);
+  const [hour, minute] = value ? value.split(':').map(Number) : [];
+  const [isAM, setIsAM] = useState(value ? hour < 12 : true);
+  const [open, setIsOpen] = useState(false);
   const [currentHour, setCurrentHour] = useState(hour);
   const [currentMinute, setCurrentMinute] = useState(minute);
-  const value = `${addZero((isAM ? 0 : 12) + (currentHour % 12))}:${addZero(currentMinute)}`;
+  const nextValue =
+    currentHour !== undefined && currentMinute !== undefined
+      ? `${addZero((isAM ? 0 : 12) + (currentHour % 12))}:${addZero(currentMinute)}`
+      : undefined;
 
   useOnClickOutside(ref, () => {
+    onBlur?.();
     setIsOpen(false);
   });
 
@@ -38,39 +46,51 @@ function TimePicker({ hour, minute, onChange }: Props) {
   }, [open]);
 
   useEffect(() => {
-    onChange?.(hour, minute);
+    if (nextValue) {
+      onChange?.(nextValue);
+    }
   }, [currentHour, currentMinute]);
 
   return (
     <>
-      <Styled.Container
-        open={open}
-        onClick={() => {
-          setIsOpen((prev) => !prev);
-        }}
-      >
-        <Styled.Text
-          inputType="time"
-          size="big"
-          value={value}
-          onChange={() => {
-            /** */
+      <Styled.Container open={open}>
+        <Styled.TextContainer
+          onClick={() => {
+            if (!disabled) {
+              setIsOpen((prev) => !prev);
+            }
           }}
-        />
+        >
+          <Styled.Text
+            inputType="time"
+            size="big"
+            value={
+              hour !== undefined && minute !== undefined
+                ? `${isAM ? '오전' : '오후'} ${addZero(isAM ? hour % 12 : hour)}:${addZero(minute)}`
+                : undefined
+            }
+            disabled={disabled}
+            errorMessage={errorMessage}
+          />
+        </Styled.TextContainer>
         {open && (
           <Styled.Control ref={ref}>
             <Styled.List>
               <Styled.Item
+                type="button"
                 isActive={isAM}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsAM(true);
                 }}
               >
                 오전
               </Styled.Item>
               <Styled.Item
+                type="button"
                 isActive={!isAM}
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsAM(false);
                 }}
               >
@@ -80,9 +100,11 @@ function TimePicker({ hour, minute, onChange }: Props) {
             <Styled.List hasPadding ref={hourRef}>
               {hours.map((hour, index) => (
                 <Styled.Item
+                  type="button"
                   key={hour}
                   isActive={currentHour === index + 1}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setCurrentHour(index + 1);
                   }}
                 >
@@ -93,9 +115,11 @@ function TimePicker({ hour, minute, onChange }: Props) {
             <Styled.List hasPadding ref={minuteRef}>
               {minutes.map((minute) => (
                 <Styled.Item
+                  type="button"
                   key={minute}
                   isActive={currentMinute === Number(minute)}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     setCurrentMinute(Number(minute));
                   }}
                 >

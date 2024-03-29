@@ -8,11 +8,6 @@ const meta: Meta<typeof TimePicker> = {
 
 type Story = StoryObj<typeof TimePicker>;
 
-export const Default: Story = {
-  args: {
-    hour: 1,
-    minute: 0,
-  },
-};
+export const Default: Story = {};
 
 export default meta;

@@ -6,6 +6,8 @@ const Container = styled.div<{ open: boolean }>`
   position: relative;
 `;
 
+const TextContainer = styled.div``;
+
 const Text = styled(TextField)`
   cursor: pointer;
   pointer-events: none;
@@ -13,6 +15,7 @@ const Text = styled(TextField)`
 
 const Control = styled.div`
   position: absolute;
+  z-index: 1;
   bottom: 0;
   transform: translateY(calc(100% + 4px));
   border-radius: 4px;
@@ -56,4 +59,4 @@ const Item = styled.button<{ isActive?: boolean }>`
   }
 `;
 
-export default { Container, Text, Control, List, Item };
+export default { TextContainer, Container, Text, Control, List, Item };
