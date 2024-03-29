@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
+import { CloseIcon } from '@boolti/icon';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useOnClickOutside } from '../../hooks/useOnClickOutside';
 import TextField from '../TextField';
@@ -32,6 +33,18 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
     currentHour !== undefined && currentMinute !== undefined
       ? `${addZero((isAM ? 0 : 12) + (currentHour % 12))}:${addZero(currentMinute)}`
       : undefined;
+
+  useLayoutEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    if (open) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = originalStyle;
+    }
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, [open]);
 
   useOnClickOutside(ref, () => {
     onBlur?.();
@@ -75,58 +88,71 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
         </Styled.TextContainer>
         {open && (
           <Styled.Control ref={ref}>
-            <Styled.List>
-              <Styled.Item
-                type="button"
-                isActive={isAM}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsAM(true);
+            <Styled.Title>
+              시간 선택하기
+              <Styled.CloseButton
+                onClick={() => {
+                  onBlur?.();
+                  setIsOpen(false);
                 }}
               >
-                오전
-              </Styled.Item>
-              <Styled.Item
-                type="button"
-                isActive={!isAM}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIsAM(false);
-                }}
-              >
-                오후
-              </Styled.Item>
-            </Styled.List>
-            <Styled.List hasPadding ref={hourRef}>
-              {hours.map((hour, index) => (
+                <CloseIcon />
+              </Styled.CloseButton>
+            </Styled.Title>
+            <Styled.ListContainer>
+              <Styled.List>
                 <Styled.Item
                   type="button"
-                  key={hour}
-                  isActive={currentHour === index + 1}
+                  isActive={isAM}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentHour(index + 1);
+                    setIsAM(true);
                   }}
                 >
-                  {hour}
+                  오전
                 </Styled.Item>
-              ))}
-            </Styled.List>
-            <Styled.List hasPadding ref={minuteRef}>
-              {minutes.map((minute) => (
                 <Styled.Item
                   type="button"
-                  key={minute}
-                  isActive={currentMinute === Number(minute)}
+                  isActive={!isAM}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setCurrentMinute(Number(minute));
+                    setIsAM(false);
                   }}
                 >
-                  {minute}
+                  오후
                 </Styled.Item>
-              ))}
-            </Styled.List>
+              </Styled.List>
+              <Styled.List hasPadding ref={hourRef}>
+                {hours.map((hour, index) => (
+                  <Styled.Item
+                    type="button"
+                    key={hour}
+                    isActive={currentHour === index + 1}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentHour(index + 1);
+                    }}
+                  >
+                    {hour}
+                  </Styled.Item>
+                ))}
+              </Styled.List>
+              <Styled.List hasPadding ref={minuteRef}>
+                {minutes.map((minute) => (
+                  <Styled.Item
+                    type="button"
+                    key={minute}
+                    isActive={currentMinute === Number(minute)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setCurrentMinute(Number(minute));
+                    }}
+                  >
+                    {minute}
+                  </Styled.Item>
+                ))}
+              </Styled.List>
+            </Styled.ListContainer>
           </Styled.Control>
         )}
       </Styled.Container>
