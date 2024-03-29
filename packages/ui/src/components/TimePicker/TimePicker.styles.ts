@@ -43,6 +43,7 @@ const ListContainer = styled.div`
 `;
 
 const List = styled.div<{ hasPadding?: boolean }>`
+  flex: 1;
   height: 238px;
   overflow-y: scroll;
   &:not(:last-child) {
