@@ -26,7 +26,7 @@ const TextField = forwardRef<HTMLInputElement, Props>(function TextField(
   return (
     <Styled.Container disabled={disabled} size={size} className={className} inputType={inputType}>
       <Styled.InputContainer>
-        {inputType === 'date' && (
+        {(inputType === 'date' || inputType === 'time') && (
           <Styled.InputLabel
             hasError={!!errorMessage}
             htmlFor={uuid.current}
@@ -41,16 +41,18 @@ const TextField = forwardRef<HTMLInputElement, Props>(function TextField(
             {rest.fileName ? rest.fileName : placeholder}
           </Styled.InputLabel>
         )}
-        <Styled.Input
-          ref={ref}
-          hasError={!!errorMessage}
-          id={uuid.current}
-          data-placeholder={placeholder}
-          placeholder={placeholder}
-          disabled={disabled}
-          type={inputType}
-          {...rest}
-        />
+        {inputType !== 'time' && (
+          <Styled.Input
+            ref={ref}
+            hasError={!!errorMessage}
+            id={uuid.current}
+            data-placeholder={placeholder}
+            placeholder={placeholder}
+            disabled={disabled}
+            type={inputType}
+            {...rest}
+          />
+        )}
         {inputType === 'date' && !disabled && <CalendarIcon />}
         {inputType === 'time' && !disabled && <ClockIcon />}
       </Styled.InputContainer>

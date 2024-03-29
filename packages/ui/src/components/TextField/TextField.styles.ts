@@ -87,6 +87,12 @@ const Input = styled.input<{ hasError?: boolean }>`
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g40};
   }
+  &[type='time'] {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
   &[type='date'] {
     opacity: 0;
     position: absolute;

@@ -8,6 +8,7 @@ import Drawer from './Drawer';
 import Footer from './Footer';
 import TextButton from './TextButton';
 import TextField from './TextField';
+import TimePicker from './TimePicker';
 
 export {
   Badge,
@@ -20,4 +21,5 @@ export {
   Footer,
   TextButton,
   TextField,
+  TimePicker,
 };
