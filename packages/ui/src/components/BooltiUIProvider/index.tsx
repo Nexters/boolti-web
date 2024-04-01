@@ -1,3 +1,5 @@
+import '../../index.css';
+
 import ConfirmProvider from '../ConfirmProvider';
 import DialogProvider from '../DialogProvider';
 import ThemeProvider from '../ThemeProvider';

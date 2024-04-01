@@ -219,29 +219,28 @@ const ShowInfoPage = () => {
                   <Styled.ShowPreviewContainer>
                     <Styled.ShowPreview>
                       <ShowPreview
-                        images={imageFiles.map((file) => file.preview)}
-                        name={showInfoForm.watch('name') ? showInfoForm.watch('name') : ''}
-                        date={
-                          showInfoForm.watch('date')
+                        show={{
+                          images: imageFiles.map((file) => file.preview),
+                          name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                          date: showInfoForm.watch('date')
                             ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                            : ''
-                        }
-                        startTime={showInfoForm.watch('startTime')}
-                        runningTime={showInfoForm.watch('runningTime')}
-                        salesStartTime={
-                          showSalesInfo
+                            : '',
+                          startTime: showInfoForm.watch('startTime'),
+                          runningTime: showInfoForm.watch('runningTime'),
+                          salesStartTime: showSalesInfo
                             ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                            : ''
-                        }
-                        salesEndTime={
-                          showSalesInfo ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)') : ''
-                        }
-                        placeName={showInfoForm.watch('placeName')}
-                        placeStreetAddress={showInfoForm.watch('placeStreetAddress')}
-                        placeDetailAddress={showInfoForm.watch('placeDetailAddress')}
-                        notice={showInfoForm.watch('notice')}
-                        hostName={showInfoForm.watch('hostName')}
-                        hostPhoneNumber={showInfoForm.watch('hostPhoneNumber')}
+                            : '',
+                          salesEndTime: showSalesInfo
+                            ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                            : '',
+                          placeName: showInfoForm.watch('placeName'),
+                          placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                          placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                          notice: showInfoForm.watch('notice'),
+                          hostName: showInfoForm.watch('hostName'),
+                          hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                        }}
+                        hasNoticePage
                       />
                     </Styled.ShowPreview>
                   </Styled.ShowPreviewContainer>

@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
 
+interface ShowInfoDescriptionProps {
+  isFullContent?: boolean;
+}
+
 const ShowPreview = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
@@ -25,6 +29,11 @@ const ShowPreviewHeader = styled.div`
 
   .swiper-pagination-bullet-active {
     opacity: 1;
+  }
+
+  .swiper-slide {
+    display: flex;
+    justify-content: center;
   }
 `;
 
@@ -55,7 +64,15 @@ const ShowPreviewTicketPeriodBackground = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  width: 100%;
   height: 88px;
+
+  svg {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
 `;
 
 const ShowPreviewTicketPeriodInfo = styled.div`
@@ -131,15 +148,19 @@ const ShowInfoSubtitle = styled.h4`
   margin-bottom: 8px;
 `;
 
-const ShowInfoDescription = styled.p`
+const ShowInfoDescription = styled.p<ShowInfoDescriptionProps>`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
 
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 10;
+  ${({ isFullContent }) =>
+    isFullContent &&
+    `
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 10;
+    `}
 `;
 
 const ShowInfoBox = styled.div`
