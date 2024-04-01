@@ -10,6 +10,7 @@ import {
   ReservationSummaryResponse,
   ShowInvitationCodeListResponse,
   ShowInvitationTicketResponse,
+  ShowPreviewResponse,
   ShowResponse,
   ShowSalesInfoResponse,
   ShowSalesTicketResponse,
@@ -115,6 +116,10 @@ export const showQueryKeys = createQueryKeys('show', {
       fetcher.get<ShowInvitationCodeListResponse>(
         `web/v1/host/invitation-tickets/${invitationTicketId}/invitation-codes`,
       ),
+  }),
+  preview: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
   }),
 });
 

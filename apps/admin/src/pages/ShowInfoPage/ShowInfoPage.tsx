@@ -7,7 +7,7 @@ import {
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, Drawer, useConfirm, useDialog, useToast } from '@boolti/ui';
+import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -18,7 +18,6 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
-import ShowPreview from '~/components/ShowPreview';
 import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
@@ -220,29 +219,28 @@ const ShowInfoPage = () => {
                   <Styled.ShowPreviewContainer>
                     <Styled.ShowPreview>
                       <ShowPreview
-                        images={imageFiles.map((file) => file.preview)}
-                        name={showInfoForm.watch('name') ? showInfoForm.watch('name') : ''}
-                        date={
-                          showInfoForm.watch('date')
+                        show={{
+                          images: imageFiles.map((file) => file.preview),
+                          name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                          date: showInfoForm.watch('date')
                             ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                            : ''
-                        }
-                        startTime={showInfoForm.watch('startTime')}
-                        runningTime={showInfoForm.watch('runningTime')}
-                        salesStartTime={
-                          showSalesInfo
+                            : '',
+                          startTime: showInfoForm.watch('startTime'),
+                          runningTime: showInfoForm.watch('runningTime'),
+                          salesStartTime: showSalesInfo
                             ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                            : ''
-                        }
-                        salesEndTime={
-                          showSalesInfo ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)') : ''
-                        }
-                        placeName={showInfoForm.watch('placeName')}
-                        placeStreetAddress={showInfoForm.watch('placeStreetAddress')}
-                        placeDetailAddress={showInfoForm.watch('placeDetailAddress')}
-                        notice={showInfoForm.watch('notice')}
-                        hostName={showInfoForm.watch('hostName')}
-                        hostPhoneNumber={showInfoForm.watch('hostPhoneNumber')}
+                            : '',
+                          salesEndTime: showSalesInfo
+                            ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                            : '',
+                          placeName: showInfoForm.watch('placeName'),
+                          placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                          placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                          notice: showInfoForm.watch('notice'),
+                          hostName: showInfoForm.watch('hostName'),
+                          hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                        }}
+                        hasNoticePage
                       />
                     </Styled.ShowPreview>
                   </Styled.ShowPreviewContainer>

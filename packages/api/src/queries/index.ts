@@ -6,6 +6,7 @@ import useShowEnteranceInfo from './useShowEnteranceInfo';
 import useShowEnterances from './useShowEnterances';
 import useShowEnteranceSummary from './useShowEnteranceSummary';
 import useShowList from './useShowList';
+import useShowPreview from './useShowPreview';
 import useShowReservations from './useShowReservations';
 import useShowReservationSummary from './useShowReservationSummary';
 import useShowSalesInfo from './useShowSalesInfo';
@@ -21,6 +22,7 @@ export {
   useShowEnterances,
   useShowEnteranceSummary,
   useShowList,
+  useShowPreview,
   useShowReservations,
   useShowReservationSummary,
   useShowSalesInfo,

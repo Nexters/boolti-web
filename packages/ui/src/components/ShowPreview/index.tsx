@@ -9,37 +9,41 @@ import Styled from './ShowPreview.styles';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowPreviewProps {
-  images: string[];
-  name: string;
-  date: string;
-  startTime: string;
-  runningTime: string;
-  salesStartTime: string;
-  salesEndTime: string;
-  placeName: string;
-  placeStreetAddress: string;
-  placeDetailAddress: string;
-  notice: string;
-  hostName: string;
-  hostPhoneNumber: string;
+  show: {
+    images: string[];
+    name: string;
+    date: string;
+    startTime: string;
+    runningTime: string;
+    salesStartTime: string;
+    salesEndTime: string;
+    placeName: string;
+    placeStreetAddress: string;
+    placeDetailAddress: string;
+    notice: string;
+    hostName: string;
+    hostPhoneNumber: string;
+  };
+  hasNoticePage?: boolean;
 }
 
-const ShowPreview = ({
-  images,
-  name,
-  date,
-  startTime,
-  runningTime,
-  salesStartTime,
-  salesEndTime,
-  placeName,
-  placeStreetAddress,
-  placeDetailAddress,
-  notice,
-  hostName,
-  hostPhoneNumber,
-}: ShowPreviewProps) => {
+const ShowPreview = ({ show, hasNoticePage }: ShowPreviewProps) => {
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
+  const {
+    images,
+    name,
+    date,
+    startTime,
+    runningTime,
+    salesStartTime,
+    salesEndTime,
+    placeName,
+    placeStreetAddress,
+    placeDetailAddress,
+    notice,
+    hostName,
+    hostPhoneNumber,
+  } = show;
 
   if (noticeOpen) {
     return (
@@ -144,7 +148,13 @@ const ShowPreview = ({
           <Styled.ShowInfoGroup>
             <Styled.ShowInfoTitleContainer>
               <Styled.ShowInfoTitle>장소</Styled.ShowInfoTitle>
-              <Styled.ShowInfoTitleButton type="button">
+              <Styled.ShowInfoTitleButton
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(`${placeStreetAddress} ${placeDetailAddress}`);
+                  alert('공연장 주소가 복사되었어요');
+                }}
+              >
                 <svg
                   width="14"
                   height="14"
@@ -185,16 +195,18 @@ const ShowPreview = ({
           <Styled.ShowInfoGroup>
             <Styled.ShowInfoTitleContainer>
               <Styled.ShowInfoTitle>공연 내용</Styled.ShowInfoTitle>
-              <Styled.ShowInfoTitleTextButton
-                type="button"
-                onClick={() => {
-                  setNoticeOpen(true);
-                }}
-              >
-                전체보기
-              </Styled.ShowInfoTitleTextButton>
+              {hasNoticePage && (
+                <Styled.ShowInfoTitleTextButton
+                  type="button"
+                  onClick={() => {
+                    setNoticeOpen(true);
+                  }}
+                >
+                  전체보기
+                </Styled.ShowInfoTitleTextButton>
+              )}
             </Styled.ShowInfoTitleContainer>
-            <Styled.ShowInfoDescription>
+            <Styled.ShowInfoDescription isFullContent={hasNoticePage}>
               {notice.split('\n').map((text, index) => (
                 <React.Fragment key={`${text}_${index}`}>
                   {text}

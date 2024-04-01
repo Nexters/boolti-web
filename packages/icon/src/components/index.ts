@@ -46,6 +46,7 @@ import { SB } from './SB';
 import { SBI } from './SBI';
 import { SC } from './SC';
 import { Search } from './Search';
+import { Share } from './Share';
 import { Shinhan } from './Shinhan';
 import { Ticket } from './Ticket';
 import { Toss } from './Toss';
@@ -105,6 +106,7 @@ export {
   SBI,
   SC,
   Search as SearchIcon,
+  Share as ShareIcon,
   Shinhan,
   Ticket as TicketIcon,
   Toss,

@@ -132,3 +132,36 @@ export type ShowInvitationCodeListResponse = {
   code: string;
   used: boolean;
 }[];
+
+export interface ShowPreviewResponse {
+  id: number;
+  groupId: number;
+  name: string;
+  placeName: string;
+  date: string;
+  runningTime: number;
+  streetAddress: string;
+  detailAddress: string;
+  latitude: number;
+  longitude: number;
+  notice: string;
+  managerCode: string;
+  salesStartTime: string;
+  salesEndTime: string;
+  deletedAt: string;
+  showImg: [
+    {
+      id: number;
+      showId: number;
+      path: string;
+      thumbnailPath: string;
+      sequence: number;
+      createdAt: string;
+      modifiedAt: string;
+      removedAt: string;
+    },
+  ];
+  hostName: string;
+  hostPhoneNumber: string;
+  reservationStatus: boolean;
+}
