@@ -53,6 +53,8 @@ const ShowPreviewPage = () => {
   const { data } = useShowPreview(Number(params.showId));
   const dialog = useDialog();
 
+  const dynamicLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${params.showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+
   if (params === undefined || Number.isNaN(Number(params.showId))) {
     return <Navigate to="https://boolti.in" replace />;
   }
@@ -62,10 +64,10 @@ const ShowPreviewPage = () => {
       await navigator.share({
         title: data?.name ?? '',
         text: data?.notice ?? '',
-        url: window.location.href, // TODO: 다이나믹 링크로 변경
+        url: dynamicLink,
       });
     } catch (error) {
-      navigator.clipboard.writeText(window.location.href); // TODO: 다이나믹 링크로 변경
+      navigator.clipboard.writeText(dynamicLink);
 
       alert('공연 링크가 복사되었어요');
     }
@@ -78,7 +80,7 @@ const ShowPreviewPage = () => {
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={window.location.href} size={182} level="H" />
+              <QRCodeSVG value={dynamicLink} size={182} level="H" />
             </Styled.QRCodeContainer>
             <BooltiGrayLogo />
           </Styled.DialogQRCodeContainer>
@@ -96,7 +98,7 @@ const ShowPreviewPage = () => {
   };
 
   const reservationButtonMobileClickHandler = () => {
-    console.log('mobile');
+    window.location.href = dynamicLink;
   };
 
   return (
