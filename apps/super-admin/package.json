@@ -12,10 +12,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@boolti/api": "*",
+    "@boolti/ui": "*",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "date-fns": "^3.3.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.3",
+    "the-new-css-reset": "^1.11.2"
   },
   "devDependencies": {
     "@boolti/eslint-config": "*",
