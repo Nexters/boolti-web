@@ -8,9 +8,15 @@ const Container = styled(Layout)({
 });
 
 const Content = styled(Layout.Content)({
+  width: '100%',
   display: 'flex',
+  flexDirection: 'column',
   justifyContent: 'center',
   alignItems: 'center',
 });
 
-export default { Container, Content };
+const LogoContainer = styled.div({
+  marginBottom: 32,
+});
+
+export default { Container, Content, LogoContainer };

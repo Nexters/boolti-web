@@ -1,4 +1,6 @@
+import { LoginOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdmingLogin } from '@boolti/api';
+import { BooltiLogo } from '@boolti/icon';
 import { App, Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -18,11 +20,15 @@ function LoginPage() {
   return (
     <Styled.Container>
       <Styled.Content>
+        <Styled.LogoContainer>
+          <BooltiLogo />
+        </Styled.LogoContainer>
         <Form
-          name="basic"
-          labelCol={{ span: 8 }}
-          wrapperCol={{ span: 16 }}
-          style={{ maxWidth: 600 }}
+          name="login-form"
+          labelCol={{ span: 8, style: { margin: '0 auto' } }}
+          wrapperCol={{ span: 16, style: { margin: '0 auto' } }}
+          style={{ maxWidth: 600, width: '100%' }}
+          layout="vertical"
           onFinish={async (values) => {
             try {
               const { id, pw } = values;
@@ -54,8 +60,14 @@ function LoginPage() {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item wrapperCol={{ offset: 8, span: 16, style: { margin: '0 auto' } }}>
+            <Button
+              icon={<LoginOutlined />}
+              type="primary"
+              size="large"
+              htmlType="submit"
+              style={{ width: '100%' }}
+            >
               LOGIN
             </Button>
           </Form.Item>
