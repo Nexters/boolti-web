@@ -46,8 +46,10 @@ const HomePage = () => {
           }}
         />
       </Header>
-      <Layout style={{ marginLeft: 200 }}>
-        <Content style={{ minHeight: '100vh', padding: '24px', overflow: 'initial' }}></Content>
+      <Layout>
+        <Content
+          style={{ minHeight: 'calc(100vh - 64px)', padding: '24px', overflow: 'initial' }}
+        ></Content>
       </Layout>
     </Layout>
   );
