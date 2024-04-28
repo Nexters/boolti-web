@@ -27,7 +27,7 @@ function LoginPage() {
           name="login-form"
           labelCol={{ span: 8, style: { margin: '0 auto' } }}
           wrapperCol={{ span: 16, style: { margin: '0 auto' } }}
-          style={{ maxWidth: 600, width: '100%' }}
+          style={{ maxWidth: 400, width: '100%' }}
           layout="vertical"
           onFinish={async (values) => {
             try {
