@@ -4,10 +4,10 @@ import { useMutation } from '@tanstack/react-query';
 import { LOCAL_STORAGE } from '../constants';
 import { fetcher } from '../fetcher';
 
-const postAdminLogout = () => fetcher.post('sa-api/v1/logout');
+const postLogout = () => fetcher.post('sa-api/v1/logout');
 
 const useAdminLogout = (options?: UseMutationOptions) =>
-  useMutation(postAdminLogout, {
+  useMutation(postLogout, {
     ...options,
     onSuccess: (data, variables, context) => {
       window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);

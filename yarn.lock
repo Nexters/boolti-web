@@ -12149,8 +12149,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "super-admin@workspace:apps/super-admin"
   dependencies:
+    "@ant-design/icons": "npm:^5.3.6"
     "@boolti/api": "npm:*"
     "@boolti/eslint-config": "npm:*"
+    "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@boolti/ui": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
