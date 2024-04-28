@@ -5,6 +5,7 @@ import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
+const IS_SUPER_ADMIN = import.meta.env.IS_SUPER_ADMIN ?? false;
 
 interface PostRefreshTokenResponse {
   accessToken: string;
@@ -12,11 +13,14 @@ interface PostRefreshTokenResponse {
 }
 
 const postRefreshToken = async () => {
-  const response = await ky.post(`${API_URL}/web/papi/v1/login/refresh`, {
-    json: {
-      refreshToken: window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+  const response = await ky.post(
+    `${API_URL}/${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/papi/v1/login/refresh`,
+    {
+      json: {
+        refreshToken: window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+      },
     },
-  });
+  );
 
   return await response.json<PostRefreshTokenResponse>();
 };
