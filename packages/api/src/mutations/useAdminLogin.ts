@@ -13,11 +13,11 @@ interface PostAdminLoginResponse {
 }
 
 const postAdminLogin = ({ id, pw }: PostAdminLoginRequest) =>
-  fetcher.post<PostAdminLoginResponse>('sa-api/papi/v1/login-id-pw', {
+  fetcher.post<PostAdminLoginResponse>('sa-api/papi/v1/login/id-pw', {
     json: { id, pw },
   });
 
-const useKakaoLogin = () =>
+const useAdmingLogin = () =>
   useMutation(({ id, pw }: PostAdminLoginRequest) => postAdminLogin({ id, pw }));
 
-export default useKakaoLogin;
+export default useAdmingLogin;

@@ -3,6 +3,7 @@ import './index.css';
 
 import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
+import { App } from 'antd';
 import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
@@ -68,14 +69,16 @@ const privateRoutes = [
 
 const router = createBrowserRouter([...publicRoutes, ...privateRoutes]);
 
-const App = () => {
+const SuperAdmin = () => {
   return (
     <QueryClientProvider>
       <BooltiUIProvider>
-        <RouterProvider router={router} />
+        <App message={{ maxCount: 1 }}>
+          <RouterProvider router={router} />
+        </App>
       </BooltiUIProvider>
     </QueryClientProvider>
   );
 };
 
-export default App;
+export default SuperAdmin;
