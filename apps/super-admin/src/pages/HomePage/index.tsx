@@ -1,7 +1,10 @@
 import { LogoutOutlined } from '@ant-design/icons';
-import { useAdminLogout } from '@boolti/api';
+import { LOCAL_STORAGE, useAdminLogout } from '@boolti/api';
 import { BooltiSmallLogo } from '@boolti/icon';
-import { App, Layout, Menu } from 'antd';
+import { Layout, Menu } from 'antd';
+import { useNavigate } from 'react-router-dom';
+
+import { PATH } from '~/constants/routes';
 
 const { Content, Header } = Layout;
 
@@ -16,7 +19,7 @@ const items: React.ComponentProps<typeof Menu>['items'] = [
 
 const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
-  const { message } = App.useApp();
+  const navigate = useNavigate();
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -32,8 +35,10 @@ const HomePage = () => {
               case 'logout': {
                 try {
                   await mutateAsync();
-                } catch {
-                  message.error('로그아웃에 실패했습니다.');
+                } finally {
+                  window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+                  window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
+                  navigate(PATH.LOGIN);
                 }
                 break;
               }
