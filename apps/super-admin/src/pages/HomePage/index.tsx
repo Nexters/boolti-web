@@ -1,7 +1,7 @@
 import { LogoutOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdminLogout } from '@boolti/api';
 import { BooltiSmallLogo } from '@boolti/icon';
-import { Layout, Menu } from 'antd';
+import { Card, Flex, Layout, Menu, Pagination, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
@@ -48,8 +48,39 @@ const HomePage = () => {
       </Header>
       <Layout>
         <Content
-          style={{ minHeight: 'calc(100vh - 64px)', padding: '24px', overflow: 'initial' }}
-        ></Content>
+          style={{
+            minHeight: 'calc(100vh - 64px)',
+            padding: '36px 50px',
+            overflow: 'initial',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Flex vertical>
+            <Typography.Title level={3} style={{ marginBottom: 32 }}>
+              공연목록
+            </Typography.Title>
+            <Flex gap="small" wrap="wrap">
+              <Card title="Card title" style={{ width: 'calc(50% - 8px)' }}>
+                Card content
+              </Card>
+
+              <Card title="Card title" style={{ width: 'calc(50% - 8px)' }}>
+                Card content
+              </Card>
+
+              <Card title="Card title" style={{ width: 'calc(50% - 8px)' }}>
+                Card content
+              </Card>
+
+              <Card title="Card title" style={{ width: 'calc(50% - 8px)' }}>
+                Card content
+              </Card>
+            </Flex>
+          </Flex>
+
+          <Pagination style={{ marginTop: 'auto' }} defaultCurrent={1} total={1} />
+        </Content>
       </Layout>
     </Layout>
   );
