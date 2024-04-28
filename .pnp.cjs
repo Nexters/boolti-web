@@ -16976,7 +16976,6 @@ const RAW_RUNTIME_STATE =
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
-          ["@boolti/ui", "workspace:packages/ui"],\
           ["@emotion/babel-plugin", "npm:11.11.0"],\
           ["@emotion/react", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:11.11.3"],\
           ["@emotion/styled", "virtual:85869d3eba7afdb6f94c001c9503942ddc4354e881daf63c24e9d58366ea9f25c6bac2df65ae0f5266c54cd36fe68f0d9568da3a1ab62446405c98ac852f4431#npm:11.11.0"],\
