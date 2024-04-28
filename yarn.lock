@@ -12154,6 +12154,7 @@ __metadata:
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
+    "@boolti/ui": "npm:*"
     "@emotion/babel-plugin": "npm:^11.11.0"
     "@emotion/react": "npm:^11.11.3"
     "@emotion/styled": "npm:^11.11.0"
