@@ -1,18 +1,20 @@
 import { PageResponse } from './common';
 
+export type SuperAdminShowStatus =
+  | 'SALES_BEFORE'
+  | 'SALES_IN_PROGRESS'
+  | 'SALES_END'
+  | 'SETTLEMENT_REQUIRED'
+  | 'SETTLEMENT_IN_PROGRESS'
+  | 'SETTLEMENT_DONE';
+
 export type AdminShowResponse = PageResponse<{
   /** 공연 ID */
   id: number;
   /** 공연 이름 */
   showName: string;
   /** 공연 상태.슈퍼어드민에서만 사용. */
-  superAdminShowStatus:
-    | 'SALES_BEFORE'
-    | 'SALES_IN_PROGRESS'
-    | 'SALES_END'
-    | 'SETTLEMENT_REQUIRED'
-    | 'SETTLEMENT_IN_PROGRESS'
-    | 'SETTLEMENT_DONE';
+  superAdminShowStatus: SuperAdminShowStatus;
   /** 공연 포스터 이미지 경로(썸네일) */
   thumbnailPath?: string;
   /** 공연 대표 호스트 ID */

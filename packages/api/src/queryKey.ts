@@ -18,7 +18,7 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
-import { AdminShowResponse } from './types/adminShow';
+import { AdminShowResponse, SuperAdminShowStatus } from './types/adminShow';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
@@ -62,7 +62,7 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     page = 0,
     size = 10,
     showNameOrHostName?: string,
-    sueperAdminShowStatus?: string,
+    sueperAdminShowStatus?: SuperAdminShowStatus,
     sort: string[] = [],
   ) => ({
     queryKey: [page, size, showNameOrHostName, sueperAdminShowStatus, JSON.stringify(sort)],

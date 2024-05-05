@@ -1,5 +1,6 @@
 import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdminLogout } from '@boolti/api';
+import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
 import { BooltiSmallLogo } from '@boolti/icon';
 import { Button, Card, Dropdown, Flex, Layout, Menu, Pagination, Typography } from 'antd';
 import { useState } from 'react';
@@ -18,20 +19,20 @@ const headerItems: React.ComponentProps<typeof Menu>['items'] = [
   },
 ];
 
-const selectItems = [
-  { key: '1', label: '전체' },
-  { key: '2', label: '판매 전' },
-  { key: '3', label: '판매 중' },
-  { key: '4', label: '판매 종료' },
-  { key: '5', label: '정산 필요' },
-  { key: '6', label: '정산 중' },
-  { key: '7', label: '정산 완료' },
+const selectItems: Array<{ key: SuperAdminShowStatus | 'ALL'; label: string }> = [
+  { key: 'ALL', label: '전체' },
+  { key: 'SALES_BEFORE', label: '판매 전' },
+  { key: 'SALES_IN_PROGRESS', label: '판매 중' },
+  { key: 'SALES_END', label: '판매 종료' },
+  { key: 'SETTLEMENT_REQUIRED', label: '정산 필요' },
+  { key: 'SETTLEMENT_IN_PROGRESS', label: '정산 중' },
+  { key: 'SETTLEMENT_DONE', label: '정산 완료' },
 ];
 
 const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
-  const [selectedItem, setSelectedItem] = useState('1');
+  const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
