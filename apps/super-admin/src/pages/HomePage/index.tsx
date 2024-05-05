@@ -1,5 +1,5 @@
 import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
-import { LOCAL_STORAGE, useAdminLogout } from '@boolti/api';
+import { LOCAL_STORAGE, useAdminLogout, useAdminShowList } from '@boolti/api';
 import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
 import { BooltiSmallLogo } from '@boolti/icon';
 import { Button, Card, Dropdown, Flex, Layout, Menu, Pagination, Typography } from 'antd';
@@ -33,6 +33,7 @@ const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
+  const { isLoading } = useAdminShowList(0, selectedItem === 'ALL' ? undefined : selectedItem);
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -69,52 +70,56 @@ const HomePage = () => {
             flexDirection: 'column',
           }}
         >
-          <Flex vertical>
-            <Typography.Title level={3} style={{ marginBottom: 36 }}>
-              공연목록
-            </Typography.Title>
+          {!isLoading && (
+            <>
+              <Flex vertical>
+                <Typography.Title level={3} style={{ marginBottom: 36 }}>
+                  공연목록
+                </Typography.Title>
 
-            <Dropdown
-              trigger={['click']}
-              menu={{
-                items: selectItems,
-                selectable: true,
-                defaultSelectedKeys: ['1'],
-                onClick: (e) => {
-                  setSelectedItem(e.key);
-                },
-              }}
-            >
-              <Button
-                style={{ marginBottom: 24, width: 130, textAlign: 'left', marginLeft: 'auto' }}
-              >
-                <Flex align="center" justify="space-between">
-                  {selectItems.find(({ key }) => key === selectedItem)?.label}
-                  <DownOutlined />
+                <Dropdown
+                  trigger={['click']}
+                  menu={{
+                    items: selectItems,
+                    selectable: true,
+                    defaultSelectedKeys: ['ALL'],
+                    onClick: (e) => {
+                      setSelectedItem(e.key as SuperAdminShowStatus | 'ALL');
+                    },
+                  }}
+                >
+                  <Button
+                    style={{ marginBottom: 24, width: 130, textAlign: 'left', marginLeft: 'auto' }}
+                  >
+                    <Flex align="center" justify="space-between">
+                      {selectItems.find(({ key }) => key === selectedItem)?.label}
+                      <DownOutlined />
+                    </Flex>
+                  </Button>
+                </Dropdown>
+
+                <Flex gap="small" wrap="wrap">
+                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
+                    Card content
+                  </Card>
+
+                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
+                    Card content
+                  </Card>
+
+                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
+                    Card content
+                  </Card>
+
+                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
+                    Card content
+                  </Card>
                 </Flex>
-              </Button>
-            </Dropdown>
+              </Flex>
 
-            <Flex gap="small" wrap="wrap">
-              <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                Card content
-              </Card>
-
-              <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                Card content
-              </Card>
-
-              <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                Card content
-              </Card>
-
-              <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                Card content
-              </Card>
-            </Flex>
-          </Flex>
-
-          <Pagination style={{ marginTop: 'auto' }} defaultCurrent={1} total={1} />
+              <Pagination style={{ marginTop: 'auto' }} defaultCurrent={1} total={1} />
+            </>
+          )}
         </Content>
       </Layout>
     </Layout>
