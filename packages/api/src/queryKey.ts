@@ -18,6 +18,7 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
+import { AdminShowResponse } from './types/adminShow';
 import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
@@ -53,6 +54,34 @@ export const entranceQueryKeys = createQueryKeys('enterance', {
   info: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<EntranceInfoResponse>(`web/v1/shows/${showId}/entrance-infos`),
+  }),
+});
+
+export const adminShowQueryKeys = createQueryKeys('adminShow', {
+  list: (
+    page = 0,
+    size = 10,
+    showNameOrHostName?: string,
+    sueperAdminShowStatus?: string,
+    sort: string[] = [],
+  ) => ({
+    queryKey: [page, size, showNameOrHostName, sueperAdminShowStatus, JSON.stringify(sort)],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        size,
+        sort: JSON.stringify(sort),
+      };
+      if (showNameOrHostName) {
+        searchParams.showNameOrHostName = showNameOrHostName;
+      }
+      if (sueperAdminShowStatus) {
+        searchParams.sueperAdminShowStatus = sueperAdminShowStatus;
+      }
+      return fetcher.get<AdminShowResponse>(`sa-api/v1/shows`, {
+        searchParams,
+      });
+    },
   }),
 });
 
@@ -135,4 +164,9 @@ export const userQueryKeys = createQueryKeys('user', {
   },
 });
 
-export const queryKeys = mergeQueryKeys(showQueryKeys, userQueryKeys, entranceQueryKeys);
+export const queryKeys = mergeQueryKeys(
+  adminShowQueryKeys,
+  showQueryKeys,
+  userQueryKeys,
+  entranceQueryKeys,
+);
