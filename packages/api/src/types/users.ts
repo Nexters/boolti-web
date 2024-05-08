@@ -1,4 +1,5 @@
 export interface BankAccount {
+  bankAccountId: number;
   bankName: string;
   /** 은행 코드 */
   bankCode: string;
@@ -24,3 +25,5 @@ export interface UserProfileSummaryResponse {
   /** 사용자 프로필 이미지 경로 */
   imagePath?: string;
 }
+
+export type BankAccountListResponse = BankAccount[];

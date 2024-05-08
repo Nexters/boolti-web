@@ -1,4 +1,5 @@
-import { Button, useDialog } from '@boolti/ui';
+import { queryKeys, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
+import { Button, useDialog, useToast } from '@boolti/ui';
 
 import SettlementDialogContent from '../SettlementDialogContent';
 import Styled from './AccountInfo.styles';
@@ -12,6 +13,11 @@ interface Props {
 
 const AccountInfo = ({ bankName, bankAccountHolder, bankAccountNumber }: Props) => {
   const { open, close } = useDialog();
+  const toast = useToast();
+  const queryClient = useQueryClient();
+
+  const putUserSettlementAccountInfoMutation = usePutUserSettlementAccountInfo();
+
   return (
     <Styled.Container>
       <Styled.Title hasAccountInfo={Boolean(bankName && bankAccountHolder && bankAccountNumber)}>
@@ -31,7 +37,22 @@ const AccountInfo = ({ bankName, bankAccountHolder, bankAccountNumber }: Props) 
         onClick={() => {
           open({
             title: '정산 계좌 입력하기',
-            content: <SettlementDialogContent onClose={close} />,
+            content: (
+              <SettlementDialogContent
+                onClose={close}
+                onSubmit={async (data) => {
+                  try {
+                    await putUserSettlementAccountInfoMutation.mutateAsync(data);
+                    toast.success('정산 계좌를 저장했습니다.');
+                    await queryClient.invalidateQueries({
+                      queryKey: queryKeys.user.accountInfo.queryKey,
+                    });
+                  } catch (error) {
+                    toast.error('잠시 후에 다시 시도하세요.');
+                  }
+                }}
+              />
+            ),
           });
         }}
         type="button"

@@ -8,6 +8,7 @@ import { Boolti } from './Boolti';
 import { BooltiSmall } from './BooltiSmall';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
+import { Check } from './Check';
 import { ChevronDown } from './ChevronDown';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
@@ -68,6 +69,7 @@ export {
   BooltiSmall as BooltiSmallLogo,
   Calendar as CalendarIcon,
   CB,
+  Check as CheckIcon,
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,

@@ -14,11 +14,17 @@ import {
   ShowResponse,
   ShowSalesInfoResponse,
   ShowSalesTicketResponse,
+  ShowSettlementEventResponse,
+  ShowSettlementInfoResponse,
   ShowSummaryResponse,
   TicketStatus,
   TicketType,
 } from './types';
-import { SettlementAccountInfoResponse, UserProfileSummaryResponse } from './types/users';
+import {
+  BankAccountListResponse,
+  SettlementAccountInfoResponse,
+  UserProfileSummaryResponse,
+} from './types/users';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -121,6 +127,23 @@ export const showQueryKeys = createQueryKeys('show', {
     queryKey: [showId],
     queryFn: () => fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
   }),
+  settlementInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowSettlementInfoResponse>(`web/v1/host/shows/${showId}/settlement-infos`),
+  }),
+  settlementStatement: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<string>(`web/v1/host/shows/${showId}/settlement-statements/last/file`),
+  }),
+  lastSettlementEvent: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowSettlementEventResponse>(
+        `web/v1/host/shows/${showId}/settlement-events/last`,
+      ),
+  }),
 });
 
 export const userQueryKeys = createQueryKeys('user', {
@@ -132,6 +155,10 @@ export const userQueryKeys = createQueryKeys('user', {
   summary: {
     queryKey: null,
     queryFn: () => fetcher.get<UserProfileSummaryResponse>(`web/v1/host/users/me/summaries`),
+  },
+  bankAccountList: {
+    queryKey: null,
+    queryFn: () => fetcher.get<BankAccountListResponse>(`web/v1/host/users/me/bank-accounts`),
   },
 });
 
