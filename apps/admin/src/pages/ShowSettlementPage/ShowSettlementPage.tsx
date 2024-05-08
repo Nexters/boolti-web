@@ -1,4 +1,5 @@
 import {
+  useAddBankAccount,
   useBankAccountList,
   usePutShowSettlementBankAccount,
   useShowDetail,
@@ -7,7 +8,7 @@ import {
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
 import { PlusIcon } from '@boolti/icon';
-import { Select, useDialog } from '@boolti/ui';
+import { Select, useDialog, useToast } from '@boolti/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ const ShowSettlementPage = () => {
   const [account, setAccount] = useState<string | null>(null);
 
   const settlementDialog = useDialog();
+  const toast = useToast();
 
   const { data: show } = useShowDetail(Number(params!.showId));
   const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
@@ -33,6 +35,7 @@ const ShowSettlementPage = () => {
   );
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(Number(params!.showId));
   const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(Number(params!.showId));
+  const addBankAccountMutation = useAddBankAccount();
 
   const bankAccountOptions =
     bankAccountList?.map((bankAccount) => ({
@@ -114,8 +117,18 @@ const ShowSettlementPage = () => {
                           content: (
                             <SettlementDialogContent
                               onClose={settlementDialog.close}
-                              onSubmitSuccess={() => {
-                                refetchBankAccountList();
+                              onSubmit={async (data) => {
+                                try {
+                                  await addBankAccountMutation.mutateAsync({
+                                    bankCode: data.bankCode,
+                                    accountHolder: data.accountHolder,
+                                    accountNumber: data.accountNumber,
+                                  });
+                                  toast.success('정산 계좌를 추가했습니다.');
+                                  refetchBankAccountList();
+                                } catch (error) {
+                                  toast.error('잠시 후에 다시 시도하세요.');
+                                }
                               }}
                             />
                           ),

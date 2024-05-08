@@ -1,11 +1,5 @@
-import {
-  queryKeys,
-  useAddBankAccount,
-  usePutUserSettlementAccountInfo,
-  useQueryClient,
-} from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
-import { Button, TextField, useToast } from '@boolti/ui';
+import { Button, TextField } from '@boolti/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -23,7 +17,7 @@ const titles = [
 
 interface Props {
   onClose?: VoidFunction;
-  onSubmitSuccess?: VoidFunction;
+  onSubmit: SubmitHandler<SettlementDialogFormInputs>;
 }
 
 interface SettlementDialogFormInputs {
@@ -32,9 +26,7 @@ interface SettlementDialogFormInputs {
   accountNumber: string;
 }
 
-const SettlementDialogContent = ({ onClose }: Props) => {
-  const toast = useToast();
-  const queryClient = useQueryClient();
+const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const { setValue, register, handleSubmit, watch } = useForm<SettlementDialogFormInputs>();
   const currentBankCode = watch('bankCode');
@@ -43,26 +35,12 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
-  const putUserSettlementAccountInfoMutation = usePutUserSettlementAccountInfo();
-  const addBankAccountMutation = useAddBankAccount();
 
-  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = useCallback(
+  const submitHandler: SubmitHandler<SettlementDialogFormInputs> = useCallback(
     async (data) => {
-      try {
-        await putUserSettlementAccountInfoMutation.mutateAsync(data);
-        await addBankAccountMutation.mutateAsync({
-          bankCode: data.bankCode,
-          accountHolder: data.accountHolder,
-          accountNumber: data.accountNumber,
-        });
-        toast.success('정산 계좌를 저장했습니다.');
-        await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
-        onClose?.();
-      } catch (error) {
-        toast.error('잠시 후에 다시 시도하세요.');
-      }
+      onSubmit(data);
     },
-    [addBankAccountMutation, onClose, putUserSettlementAccountInfoMutation, queryClient, toast],
+    [onSubmit],
   );
 
   const Buttons = useMemo(() => {
@@ -99,7 +77,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               return;
             }
             if (currentStepIndex === 2) {
-              handleSubmit(onSubmit)(event);
+              handleSubmit(submitHandler)(event);
               return;
             }
             setCurrentStepIndex((prev) => prev + 1);
@@ -117,7 +95,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
     currentBankName,
     currentStepIndex,
     handleSubmit,
-    onSubmit,
+    submitHandler,
   ]);
   useBodyScrollLock();
 
