@@ -9,15 +9,10 @@ import ImageResize from 'image-resize';
 import ky from 'ky';
 
 import { fetcher } from '../fetcher';
-import { ShowImage } from '../types';
+import { PostUploadUrlResponse, ShowImage } from '../types';
 
 export interface ImageFile extends Partial<File> {
   preview: string;
-}
-
-interface PostUploadUrlResponse {
-  uploadUrl: string;
-  expectedUrl: string;
 }
 
 const thumbnailImageResize = new ImageResize({

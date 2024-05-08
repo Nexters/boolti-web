@@ -165,3 +165,28 @@ export interface ShowPreviewResponse {
   hostPhoneNumber: string;
   reservationStatus: boolean;
 }
+
+export interface ShowSettlementInfoResponse {
+  idCardPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  settlementBankAccountPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  bankAccount: {
+    bankAccountHolder: string;
+    bankAccountId: number;
+    bankAccountNumber: string;
+    bankCode: string;
+    bankName: string;
+  } | null;
+}
+
+export interface ShowSettlementEventResponse {
+  showId: number;
+  settlementEventId: number | null;
+  settlementEventType: 'SEND' | 'REQUEST' | 'DONE' | null;
+  triggeredAt: string | null;
+}

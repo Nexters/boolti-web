@@ -1,4 +1,9 @@
-import { queryKeys, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
+import {
+  queryKeys,
+  useAddBankAccount,
+  usePutUserSettlementAccountInfo,
+  useQueryClient,
+} from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
 import { Button, TextField, useToast } from '@boolti/ui';
 import { useCallback, useMemo, useState } from 'react';
@@ -18,6 +23,7 @@ const titles = [
 
 interface Props {
   onClose?: VoidFunction;
+  onSubmitSuccess?: VoidFunction;
 }
 
 interface SettlementDialogFormInputs {
@@ -37,23 +43,26 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
-  const { mutate } = usePutUserSettlementAccountInfo();
+  const putUserSettlementAccountInfoMutation = usePutUserSettlementAccountInfo();
+  const addBankAccountMutation = useAddBankAccount();
 
   const onSubmit: SubmitHandler<SettlementDialogFormInputs> = useCallback(
-    (data) => {
-      mutate(data, {
-        onSuccess: async () => {
-          toast.success('정산 계좌를 저장했습니다.');
-          await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
-          onClose?.();
-        },
-        onError: () => {
-          toast.error('잠시후에 다시 시도하세요.');
-        },
-      });
+    async (data) => {
+      try {
+        await putUserSettlementAccountInfoMutation.mutateAsync(data);
+        await addBankAccountMutation.mutateAsync({
+          bankCode: data.bankCode,
+          accountHolder: data.accountHolder,
+          accountNumber: data.accountNumber,
+        });
+        toast.success('정산 계좌를 저장했습니다.');
+        await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
+        onClose?.();
+      } catch (error) {
+        toast.error('잠시 후에 다시 시도하세요.');
+      }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onClose],
+    [addBankAccountMutation, onClose, putUserSettlementAccountInfoMutation, queryClient, toast],
   );
 
   const Buttons = useMemo(() => {
@@ -183,7 +192,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                     let errorMessage: undefined | string = undefined;
                     if (value === '') {
                       errorMessage = '필수 입력사항입니다.';
-                    } else if (validateAccountHolder(value)) {
+                    } else if (!validateAccountHolder(value)) {
                       errorMessage = '한글만 입력 가능합니다.';
                     }
                     setAccountHolderError(errorMessage);
