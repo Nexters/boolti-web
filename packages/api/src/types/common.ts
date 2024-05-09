@@ -2,6 +2,8 @@ export type TicketType = 'SALE' | 'INVITE';
 
 export type ReservationStatus =
   | 'WAITING_FOR_DEPOSIT'
+  | 'WAITING_FOR_CARD_PAYMENT'
+  | 'WAITING_FOR_SIMPLE_PAYMENT'
   | 'CANCELLED'
   | 'RESERVATION_COMPLETED'
   | 'WAITING_FOR_REFUND'
