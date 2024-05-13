@@ -33,7 +33,11 @@ const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
-  const { isLoading } = useAdminShowList(0, selectedItem === 'ALL' ? undefined : selectedItem);
+  const { isLoading, data } = useAdminShowList(
+    0,
+    selectedItem === 'ALL' ? undefined : selectedItem,
+  );
+  const { content = [] } = data ?? {};
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -99,21 +103,42 @@ const HomePage = () => {
                 </Dropdown>
 
                 <Flex gap="small" wrap="wrap">
-                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                    Card content
-                  </Card>
-
-                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                    Card content
-                  </Card>
-
-                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                    Card content
-                  </Card>
-
-                  <Card title="Card title" style={{ width: 'calc(50% - 4px)' }}>
-                    Card content
-                  </Card>
+                  {content.map(
+                    ({
+                      id,
+                      showName,
+                      thumbnailPath,
+                      hostName,
+                      superAdminShowStatus,
+                      date,
+                      salesStartTime,
+                      salesEndTime,
+                    }) => (
+                      <Card title={showName} extra={id} style={{ width: 'calc(50% - 4px)' }}>
+                        <Flex>
+                          <div
+                            style={{
+                              width: 120,
+                              height: 160,
+                              borderRadius: 8,
+                              backgroundImage: `url(${thumbnailPath})`,
+                              backgroundSize: 'cover',
+                              backgroundPosition: 'center center',
+                              backgroundRepeat: 'no-repeat',
+                            }}
+                          />
+                          <Flex vertical>
+                            <Flex>{superAdminShowStatus}</Flex>
+                            <Flex>판매자: {hostName}</Flex>
+                            <Flex>공연일시: {date}</Flex>
+                            <Flex>
+                              판매 기간: {salesStartTime}~{salesEndTime}
+                            </Flex>
+                          </Flex>
+                        </Flex>
+                      </Card>
+                    ),
+                  )}
                 </Flex>
               </Flex>
 
