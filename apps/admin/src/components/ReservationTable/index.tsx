@@ -62,12 +62,18 @@ const columns = [
       (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
         ? '환불 방법'
         : '결제 방법',
-    cell: (props) =>
-      props.getValue() === 'CARD'
-        ? '카드 결제'
-        : props.getValue() === 'ACCOUNT_TRANSFER'
-          ? '계좌 이체'
-          : '초청 코드',
+    cell: (props) => {
+      switch (props.getValue()) {
+        case 'ACCOUNT_TRANSFER':
+          return '계좌이체';
+        case 'CARD':
+          return '카드';
+        case 'FREE':
+          return '-';
+        case 'SIMPLE_PAYMENT':
+          return '간편결제';
+      }
+    },
   }),
   columnHelper.accessor('ticketIssuedAt', {
     header: (props) =>

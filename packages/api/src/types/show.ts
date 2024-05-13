@@ -81,7 +81,7 @@ export interface ReservationResponse {
   /** 티켓 상태 */
   ticketStatus: TicketStatus;
   /** 결제 수단 */
-  means: 'ACCOUNT_TRANSFER' | 'CARD';
+  means: 'ACCOUNT_TRANSFER' | 'CARD' | 'FREE' | 'SIMPLE_PAYMENT';
   /** 티켓 발권일시 */
   ticketIssuedAt: string;
   /** 티켓 생성일시.아마 예매일과 동일 */
