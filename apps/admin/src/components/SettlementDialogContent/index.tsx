@@ -1,6 +1,5 @@
-import { queryKeys, usePutUserSettlementAccountInfo, useQueryClient } from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
-import { Button, TextField, useToast } from '@boolti/ui';
+import { Button, TextField } from '@boolti/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -18,6 +17,7 @@ const titles = [
 
 interface Props {
   onClose?: VoidFunction;
+  onSubmit: SubmitHandler<SettlementDialogFormInputs>;
 }
 
 interface SettlementDialogFormInputs {
@@ -26,9 +26,7 @@ interface SettlementDialogFormInputs {
   accountNumber: string;
 }
 
-const SettlementDialogContent = ({ onClose }: Props) => {
-  const toast = useToast();
-  const queryClient = useQueryClient();
+const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const { setValue, register, handleSubmit, watch } = useForm<SettlementDialogFormInputs>();
   const currentBankCode = watch('bankCode');
@@ -37,23 +35,12 @@ const SettlementDialogContent = ({ onClose }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
-  const { mutate } = usePutUserSettlementAccountInfo();
 
-  const onSubmit: SubmitHandler<SettlementDialogFormInputs> = useCallback(
-    (data) => {
-      mutate(data, {
-        onSuccess: async () => {
-          toast.success('정산 계좌를 저장했습니다.');
-          await queryClient.invalidateQueries({ queryKey: queryKeys.user.accountInfo.queryKey });
-          onClose?.();
-        },
-        onError: () => {
-          toast.error('잠시후에 다시 시도하세요.');
-        },
-      });
+  const submitHandler: SubmitHandler<SettlementDialogFormInputs> = useCallback(
+    async (data) => {
+      onSubmit(data);
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [onClose],
+    [onSubmit],
   );
 
   const Buttons = useMemo(() => {
@@ -90,7 +77,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
               return;
             }
             if (currentStepIndex === 2) {
-              handleSubmit(onSubmit)(event);
+              handleSubmit(submitHandler)(event);
               return;
             }
             setCurrentStepIndex((prev) => prev + 1);
@@ -108,7 +95,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
     currentBankName,
     currentStepIndex,
     handleSubmit,
-    onSubmit,
+    submitHandler,
   ]);
   useBodyScrollLock();
 
@@ -183,7 +170,7 @@ const SettlementDialogContent = ({ onClose }: Props) => {
                     let errorMessage: undefined | string = undefined;
                     if (value === '') {
                       errorMessage = '필수 입력사항입니다.';
-                    } else if (validateAccountHolder(value)) {
+                    } else if (!validateAccountHolder(value)) {
                       errorMessage = '한글만 입력 가능합니다.';
                     }
                     setAccountHolderError(errorMessage);

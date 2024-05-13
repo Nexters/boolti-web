@@ -6,6 +6,7 @@ import DatePicker from './DatePicker';
 import Dialog from './Dialog';
 import Drawer from './Drawer';
 import Footer from './Footer';
+import Select from './Select';
 import ShowPreview from './ShowPreview';
 import TextButton from './TextButton';
 import TextField from './TextField';
@@ -20,6 +21,7 @@ export {
   Dialog,
   Drawer,
   Footer,
+  Select,
   ShowPreview,
   TextButton,
   TextField,

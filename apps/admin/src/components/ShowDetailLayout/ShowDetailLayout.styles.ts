@@ -82,6 +82,7 @@ const TabContainer = styled.div`
 `;
 
 const Tab = styled.div`
+  position: relative;
   display: flex;
   flex-wrap: nowrap;
   gap: 20px;

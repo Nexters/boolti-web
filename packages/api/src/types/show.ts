@@ -81,7 +81,7 @@ export interface ReservationResponse {
   /** 티켓 상태 */
   ticketStatus: TicketStatus;
   /** 결제 수단 */
-  means: 'ACCOUNT_TRANSFER' | 'CARD';
+  means: 'ACCOUNT_TRANSFER' | 'CARD' | 'FREE' | 'SIMPLE_PAYMENT';
   /** 티켓 발권일시 */
   ticketIssuedAt: string;
   /** 티켓 생성일시.아마 예매일과 동일 */
@@ -164,4 +164,29 @@ export interface ShowPreviewResponse {
   hostName: string;
   hostPhoneNumber: string;
   reservationStatus: boolean;
+}
+
+export interface ShowSettlementInfoResponse {
+  idCardPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  settlementBankAccountPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  bankAccount: {
+    bankAccountHolder: string;
+    bankAccountId: number;
+    bankAccountNumber: string;
+    bankCode: string;
+    bankName: string;
+  } | null;
+}
+
+export interface ShowSettlementEventResponse {
+  showId: number;
+  settlementEventId: number | null;
+  settlementEventType: 'SEND' | 'REQUEST' | 'DONE' | null;
+  triggeredAt: string | null;
 }

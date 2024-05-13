@@ -18,6 +18,7 @@ import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
 import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
 import ShowReservationPage from './pages/ShowReservationPage';
+import ShowSettlementPage from './pages/ShowSettlementPage/ShowSettlementPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 
@@ -94,6 +95,7 @@ const privateRoutes = [
       { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
       { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
       { path: PATH.SHOW_ENTRANCE, element: <ShowEnterancePage /> },
+      { path: PATH.SHOW_SETTLEMENT, element: <ShowSettlementPage /> },
       {
         path: PATH.SHOW_ADD_COMPLETE,
         element: <ShowAddCompletePage />,

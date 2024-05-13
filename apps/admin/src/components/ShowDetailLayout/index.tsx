@@ -4,6 +4,7 @@ import { TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip';
 
 import { HREF, PATH } from '~/constants/routes';
 
@@ -34,8 +35,22 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchTicketTab = useMatch(PATH.SHOW_TICKET);
   const matchReservationTab = useMatch(PATH.SHOW_RESERVATION);
   const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
+  const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
 
   const logoutMutation = useLogout();
+
+  const tooltipStyle = {
+    color: theme.palette.grey.w,
+    padding: '6px 8px',
+    backgroundColor: theme.palette.grey.g90,
+    borderRadius: '4px',
+    boxShadow: `0px 4px 10px 0px ${theme.palette.shadow}`,
+    fontWeight: '400',
+    fontStyle: 'normal',
+    lineHeight: '18px',
+    fontDisplay: 'auto',
+    fontSize: '12px',
+  };
 
   return (
     <>
@@ -137,6 +152,31 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     }}
                   >
                     입장 관리
+                  </Styled.TabItem>
+                  <Styled.TabItem
+                    active={matchSettlementTab !== null}
+                    onClick={async () => {
+                      if (!params.showId) return;
+
+                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                        return;
+                      }
+
+                      navigate(HREF.SHOW_SETTLEMENT(params.showId));
+                    }}
+                    id="settlement-page-tooltip"
+                  >
+                    정산 관리
+                    <Tooltip
+                      content="정산 정보를 입력해 주세요"
+                      anchorSelect="#settlement-page-tooltip"
+                      isOpen
+                      style={tooltipStyle}
+                      place="top"
+                      positionStrategy="fixed"
+                      offset={0}
+                      opacity={0.85}
+                    />
                   </Styled.TabItem>
                 </Styled.Tab>
               </Styled.TabContainer>
