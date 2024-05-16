@@ -68,10 +68,10 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     page = 0,
     size = 10,
     showNameOrHostName?: string,
-    sueperAdminShowStatus?: SuperAdminShowStatus,
+    superAdminShowStatus?: SuperAdminShowStatus,
     sort: string[] = [],
   ) => ({
-    queryKey: [page, size, showNameOrHostName, sueperAdminShowStatus, JSON.stringify(sort)],
+    queryKey: [page, size, showNameOrHostName, superAdminShowStatus, JSON.stringify(sort)],
     queryFn: () => {
       const searchParams: SearchParamsOption = {
         page,
@@ -81,8 +81,8 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
       if (showNameOrHostName) {
         searchParams.showNameOrHostName = showNameOrHostName;
       }
-      if (sueperAdminShowStatus) {
-        searchParams.sueperAdminShowStatus = sueperAdminShowStatus;
+      if (superAdminShowStatus) {
+        searchParams.superAdminShowStatus = superAdminShowStatus;
       }
       return fetcher.get<AdminShowResponse>(`sa-api/v1/shows`, {
         searchParams,

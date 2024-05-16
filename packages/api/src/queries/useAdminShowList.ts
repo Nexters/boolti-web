@@ -5,9 +5,9 @@ import { SuperAdminShowStatus } from '../types/adminShow';
 
 const useAdminShowList = (
   page: number,
-  sueperAdminShowStatus?: SuperAdminShowStatus,
+  superAdminShowStatus?: SuperAdminShowStatus,
   showNameOrHostName?: string,
   size?: number,
-) => useQuery(queryKeys.adminShow.list(page, size, showNameOrHostName, sueperAdminShowStatus));
+) => useQuery(queryKeys.adminShow.list(page, size, showNameOrHostName, superAdminShowStatus));
 
 export default useAdminShowList;
