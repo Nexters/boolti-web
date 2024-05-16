@@ -12,6 +12,7 @@ import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
 import { PATH } from './constants/routes';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
+import SettlementPage from './pages/SettlementPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -62,6 +63,10 @@ const privateRoutes = [
       {
         path: PATH.INDEX,
         element: <HomePage />,
+      },
+      {
+        path: PATH.SETTLEMENT,
+        element: <SettlementPage />,
       },
     ],
   },
