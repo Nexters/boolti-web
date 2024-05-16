@@ -47,12 +47,12 @@ const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
-  const [currentPage, setCurrentPage] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const { isLoading, data } = useAdminShowList(
-    currentPage,
+    currentPage - 1,
     selectedItem === 'ALL' ? undefined : selectedItem,
   );
-  const { content = [], totalPages = 0 } = data ?? {};
+  const { content = [], totalElements = 0, totalPages = 0 } = data ?? {};
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -203,14 +203,16 @@ const HomePage = () => {
                 </Flex>
               </Flex>
 
-              <Pagination
-                style={{ marginTop: 'auto' }}
-                defaultCurrent={1}
-                total={totalPages}
-                onChange={(page) => {
-                  setCurrentPage(page);
-                }}
-              />
+              {totalPages > 0 && (
+                <Pagination
+                  style={{ marginTop: 'auto' }}
+                  current={currentPage}
+                  total={totalElements}
+                  onChange={(page) => {
+                    setCurrentPage(page);
+                  }}
+                />
+              )}
             </>
           )}
         </Content>
