@@ -47,11 +47,12 @@ const HomePage = () => {
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
+  const [currentPage, setCurrentPage] = useState(0);
   const { isLoading, data } = useAdminShowList(
-    0,
+    currentPage,
     selectedItem === 'ALL' ? undefined : selectedItem,
   );
-  const { content = [] } = data ?? {};
+  const { content = [], totalPages = 0 } = data ?? {};
   return (
     <Layout>
       <Header style={{ display: 'flex', alignItems: 'center' }}>
@@ -115,7 +116,7 @@ const HomePage = () => {
                     </Flex>
                   </Button>
                 </Dropdown>
-                <Flex gap="middle" wrap="wrap">
+                <Flex gap="middle" wrap="wrap" style={{ marginBottom: 20 }}>
                   {content.map(
                     ({
                       id,
@@ -131,7 +132,12 @@ const HomePage = () => {
                         ({ key }) => key === superAdminShowStatus,
                       );
                       return (
-                        <Card style={{ width: 'calc(50% - 8px)' }}>
+                        <Card
+                          style={{ width: 'calc(50% - 8px)', cursor: 'pointer' }}
+                          onClick={() => {
+                            //TODO 상세 이동
+                          }}
+                        >
                           <Flex>
                             <div
                               style={{
@@ -197,7 +203,14 @@ const HomePage = () => {
                 </Flex>
               </Flex>
 
-              <Pagination style={{ marginTop: 'auto' }} defaultCurrent={1} total={1} />
+              <Pagination
+                style={{ marginTop: 'auto' }}
+                defaultCurrent={1}
+                total={totalPages}
+                onChange={(page) => {
+                  setCurrentPage(page);
+                }}
+              />
             </>
           )}
         </Content>
