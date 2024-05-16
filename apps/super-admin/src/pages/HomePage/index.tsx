@@ -2,7 +2,21 @@ import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdminLogout, useAdminShowList } from '@boolti/api';
 import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
 import { BooltiSmallLogo } from '@boolti/icon';
-import { Button, Card, Dropdown, Flex, Layout, Menu, Pagination, Typography } from 'antd';
+import {
+  Badge,
+  Button,
+  Card,
+  Divider,
+  Dropdown,
+  Flex,
+  Layout,
+  Menu,
+  Pagination,
+  Space,
+  Typography,
+} from 'antd';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,14 +33,14 @@ const headerItems: React.ComponentProps<typeof Menu>['items'] = [
   },
 ];
 
-const selectItems: Array<{ key: SuperAdminShowStatus | 'ALL'; label: string }> = [
-  { key: 'ALL', label: '전체' },
-  { key: 'SALES_BEFORE', label: '판매 전' },
-  { key: 'SALES_IN_PROGRESS', label: '판매 중' },
-  { key: 'SALES_END', label: '판매 종료' },
-  { key: 'SETTLEMENT_REQUIRED', label: '정산 필요' },
-  { key: 'SETTLEMENT_IN_PROGRESS', label: '정산 중' },
-  { key: 'SETTLEMENT_DONE', label: '정산 완료' },
+const selectItems: Array<{ key: SuperAdminShowStatus | 'ALL'; label: string; color: string }> = [
+  { key: 'ALL', label: '전체', color: 'blue' },
+  { key: 'SALES_BEFORE', label: '판매 전', color: 'purple' },
+  { key: 'SALES_IN_PROGRESS', label: '판매 중', color: 'cyan' },
+  { key: 'SALES_END', label: '판매 종료', color: 'green' },
+  { key: 'SETTLEMENT_REQUIRED', label: '정산 필요', color: 'yellow' },
+  { key: 'SETTLEMENT_IN_PROGRESS', label: '정산 중', color: 'red' },
+  { key: 'SETTLEMENT_DONE', label: '정산 완료', color: 'gold' },
 ];
 
 const HomePage = () => {
@@ -101,8 +115,7 @@ const HomePage = () => {
                     </Flex>
                   </Button>
                 </Dropdown>
-
-                <Flex gap="small" wrap="wrap">
+                <Flex gap="middle" wrap="wrap">
                   {content.map(
                     ({
                       id,
@@ -111,33 +124,75 @@ const HomePage = () => {
                       hostName,
                       superAdminShowStatus,
                       date,
-                      salesStartTime,
-                      salesEndTime,
-                    }) => (
-                      <Card title={showName} extra={id} style={{ width: 'calc(50% - 4px)' }}>
-                        <Flex>
-                          <div
-                            style={{
-                              width: 120,
-                              height: 160,
-                              borderRadius: 8,
-                              backgroundImage: `url(${thumbnailPath})`,
-                              backgroundSize: 'cover',
-                              backgroundPosition: 'center center',
-                              backgroundRepeat: 'no-repeat',
-                            }}
-                          />
-                          <Flex vertical>
-                            <Flex>{superAdminShowStatus}</Flex>
-                            <Flex>판매자: {hostName}</Flex>
-                            <Flex>공연일시: {date}</Flex>
-                            <Flex>
-                              판매 기간: {salesStartTime}~{salesEndTime}
+                      salesStartTime = '',
+                      salesEndTime = '',
+                    }) => {
+                      const currentStatus = selectItems.find(
+                        ({ key }) => key === superAdminShowStatus,
+                      );
+                      return (
+                        <Card style={{ width: 'calc(50% - 8px)' }}>
+                          <Flex>
+                            <div
+                              style={{
+                                width: 120,
+                                height: 160,
+                                flexShrink: 0,
+                                borderRadius: 8,
+                                backgroundImage: `url(${thumbnailPath})`,
+                                backgroundSize: 'cover',
+                                backgroundPosition: 'center center',
+                                backgroundRepeat: 'no-repeat',
+                              }}
+                            />
+                            <Flex
+                              vertical
+                              justify="space-between"
+                              style={{ marginLeft: 12, flex: 1, overflow: 'hidden' }}
+                            >
+                              <Flex vertical>
+                                <Typography>{id}</Typography>
+                                <Typography.Title
+                                  level={5}
+                                  style={{
+                                    margin: 0,
+                                    display: 'flex',
+                                    justifyContent: 'start',
+                                    alignItems: 'center',
+                                  }}
+                                >
+                                  {showName}
+                                  <Badge
+                                    style={{ marginLeft: 8 }}
+                                    count={currentStatus?.label}
+                                    color={currentStatus?.color}
+                                  />
+                                </Typography.Title>
+                              </Flex>
+                              <Flex vertical style={{ width: '100%' }}>
+                                <Space split={<Divider type="vertical" />}>
+                                  <Typography style={{ width: 60 }}>판매자</Typography>
+                                  <Typography.Text ellipsis>{hostName}</Typography.Text>
+                                </Space>
+                                <Space split={<Divider type="vertical" />}>
+                                  <Typography style={{ width: 60 }}>공연일시</Typography>
+                                  <Typography.Text ellipsis>
+                                    {format(date, 'yyyy.MM.dd (E)', { locale: ko })}
+                                  </Typography.Text>
+                                </Space>
+                                <Space split={<Divider type="vertical" />}>
+                                  <Typography style={{ width: 60 }}>판매 기간</Typography>
+                                  <Typography.Text ellipsis>
+                                    {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}~
+                                    {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                                  </Typography.Text>
+                                </Space>
+                              </Flex>
                             </Flex>
                           </Flex>
-                        </Flex>
-                      </Card>
-                    ),
+                        </Card>
+                      );
+                    },
                   )}
                 </Flex>
               </Flex>
