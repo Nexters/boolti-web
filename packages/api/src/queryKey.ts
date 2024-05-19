@@ -20,6 +20,7 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
+import { AdminShowResponse, SuperAdminShowStatus } from './types/adminShow';
 import {
   BankAccountListResponse,
   SettlementAccountInfoResponse,
@@ -59,6 +60,34 @@ export const entranceQueryKeys = createQueryKeys('enterance', {
   info: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<EntranceInfoResponse>(`web/v1/shows/${showId}/entrance-infos`),
+  }),
+});
+
+export const adminShowQueryKeys = createQueryKeys('adminShow', {
+  list: (
+    page = 0,
+    size = 10,
+    showNameOrHostName?: string,
+    superAdminShowStatus?: SuperAdminShowStatus,
+    sort: string[] = [],
+  ) => ({
+    queryKey: [page, size, showNameOrHostName, superAdminShowStatus, JSON.stringify(sort)],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        size,
+        sort: JSON.stringify(sort),
+      };
+      if (showNameOrHostName) {
+        searchParams.showNameOrHostName = showNameOrHostName;
+      }
+      if (superAdminShowStatus) {
+        searchParams.superAdminShowStatus = superAdminShowStatus;
+      }
+      return fetcher.get<AdminShowResponse>(`sa-api/v1/shows`, {
+        searchParams,
+      });
+    },
   }),
 });
 
@@ -162,4 +191,9 @@ export const userQueryKeys = createQueryKeys('user', {
   },
 });
 
-export const queryKeys = mergeQueryKeys(showQueryKeys, userQueryKeys, entranceQueryKeys);
+export const queryKeys = mergeQueryKeys(
+  adminShowQueryKeys,
+  showQueryKeys,
+  userQueryKeys,
+  entranceQueryKeys,
+);
