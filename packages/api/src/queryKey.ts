@@ -20,7 +20,7 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
-import { AdminShowResponse, SuperAdminShowStatus } from './types/adminShow';
+import { AdminShowResponse, SettlementInfoResponse, SuperAdminShowStatus } from './types/adminShow';
 import {
   BankAccountListResponse,
   SettlementAccountInfoResponse,
@@ -88,6 +88,11 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
         searchParams,
       });
     },
+  }),
+  settlementInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SettlementInfoResponse>(`/sa-api/v1/shows/${showId}/settlement-infos`),
   }),
 });
 

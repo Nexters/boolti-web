@@ -28,3 +28,21 @@ export type AdminShowResponse = PageResponse<{
   /** 공연 판매 종료 날짜, 시간.ISO8601.optional */
   salesEndTime?: string;
 }>;
+
+export interface SettlementInfoResponse {
+  idCardPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  settlementBankAccountPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  bankAccount: {
+    bankAccountId: number;
+    bankName: string;
+    bankCode: string;
+    bankAccountNumber: string;
+    bankAccountHolder: string;
+  } | null;
+}

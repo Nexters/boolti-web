@@ -15561,6 +15561,26 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["npm:7.51.4", {\
+        "packageLocation": "../../.yarn/berry/cache/react-hook-form-npm-7.51.4-e976742d97-10c0.zip/node_modules/react-hook-form/",\
+        "packageDependencies": [\
+          ["react-hook-form", "npm:7.51.4"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:232e603623c6aa5f04c1f52638e42410e80f2df61e9746c4e68f4490c04aaedb0f5482de97c3c59385467945c1be685c7d29204c3a0df171e99753f24e760d60#npm:7.51.4", {\
+        "packageLocation": "./.yarn/__virtual__/react-hook-form-virtual-92bdd8bbe9/3/.yarn/berry/cache/react-hook-form-npm-7.51.4-e976742d97-10c0.zip/node_modules/react-hook-form/",\
+        "packageDependencies": [\
+          ["react-hook-form", "virtual:232e603623c6aa5f04c1f52638e42410e80f2df61e9746c4e68f4490c04aaedb0f5482de97c3c59385467945c1be685c7d29204c3a0df171e99753f24e760d60#npm:7.51.4"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:7.50.0", {\
         "packageLocation": "./.yarn/__virtual__/react-hook-form-virtual-d903b042bf/3/.yarn/berry/cache/react-hook-form-npm-7.50.0-8a1e1a392c-10c0.zip/node_modules/react-hook-form/",\
         "packageDependencies": [\
@@ -17016,6 +17036,7 @@ const RAW_RUNTIME_STATE =
           ["date-fns", "npm:3.3.1"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
+          ["react-hook-form", "virtual:232e603623c6aa5f04c1f52638e42410e80f2df61e9746c4e68f4490c04aaedb0f5482de97c3c59385467945c1be685c7d29204c3a0df171e99753f24e760d60#npm:7.51.4"],\
           ["react-router-dom", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:6.21.3"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
