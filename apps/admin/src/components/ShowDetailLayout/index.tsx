@@ -185,6 +185,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                         anchorSelect="#settlement-page-tooltip"
                         isOpen
                         style={tooltipStyle}
+                        className="tooltip"
                         place="top"
                         positionStrategy="fixed"
                         offset={0}
