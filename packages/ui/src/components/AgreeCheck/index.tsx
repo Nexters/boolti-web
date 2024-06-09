@@ -38,7 +38,7 @@ const AgreeCheck = ({ checked, description, onChange }: AgreeCheckProps) => {
   return (
     <Styled.AgreeCheck>
       <Styled.Input type="checkbox" checked={checked} onChange={onChange} />
-      {checked ? <CheckCircleActive /> : <CheckCircle />}
+      <Styled.Icon>{checked ? <CheckCircleActive /> : <CheckCircle />}</Styled.Icon>
       <Styled.Description>{description}</Styled.Description>
     </Styled.AgreeCheck>
   );

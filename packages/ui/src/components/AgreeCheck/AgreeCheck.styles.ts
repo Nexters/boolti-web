@@ -7,6 +7,10 @@ const AgreeCheck = styled.label`
   cursor: pointer;
 `;
 
+const Icon = styled.div`
+  flex-shrink: 0;
+`;
+
 const Input = styled.input`
   display: none;
 `;
@@ -18,6 +22,7 @@ const Description = styled.p`
 
 export default {
   AgreeCheck,
+  Icon,
   Input,
   Description,
 };
