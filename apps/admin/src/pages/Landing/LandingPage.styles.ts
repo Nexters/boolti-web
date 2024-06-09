@@ -17,6 +17,7 @@ const Container = styled.div`
 
 const Header = styled.header`
   position: fixed;
+  z-index: 1;
   top: 0;
   left: 0;
   width: 100%;
@@ -49,7 +50,6 @@ const BooltiIcon = styled.div`
     width: 74px;
     height: 28px;
   }
-
   & > svg {
     width: 100%;
     height: 100%;
@@ -57,6 +57,7 @@ const BooltiIcon = styled.div`
 `;
 
 const KeyVisual = styled.section`
+  position: relative;
   width: 100%;
   margin-top: -49px;
   height: 740px;
@@ -67,6 +68,30 @@ const KeyVisual = styled.section`
   ${mq} {
     margin-top: -69px;
     height: 1300px;
+  }
+  &::before,
+  &::after {
+    content: "''";
+    position: absolute;
+    top: 0;
+    width: 20%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      #020205 45.03%,
+      rgba(2, 2, 5, 0.81) 81.17%,
+      rgba(2, 2, 5, 0) 100%
+    );
+    filter: blur(27.700000762939453px);
+  }
+  &::before {
+    left: 0;
+    margin-left: -5%;
+  }
+  &::after {
+    right: 0;
+    margin-right: -5%;
+    transform: rotate(180deg);
   }
 `;
 
