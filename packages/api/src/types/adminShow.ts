@@ -1,4 +1,5 @@
 import { PageResponse } from './common';
+import { ShowResponse } from './show';
 
 export type SuperAdminShowStatus =
   | 'SALES_BEFORE'
@@ -46,3 +47,22 @@ export interface SettlementInfoResponse {
     bankAccountHolder: string;
   } | null;
 }
+
+export interface SettlementEventResponse {
+  SEND: string | null;
+  REQUEST: string | null;
+  DONE: string | null;
+}
+
+export type TicketSalesInfo = {
+  salesTicketId: number;
+  ticketType: string;
+  ticketName: string;
+  price: number;
+  salesCount: number;
+  amount: number;
+}[];
+
+export type TicketSalesInfoResponse = TicketSalesInfo;
+
+export type AdminShowDetailResponse = ShowResponse;

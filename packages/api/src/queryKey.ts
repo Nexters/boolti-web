@@ -20,7 +20,14 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
-import { AdminShowResponse, SettlementInfoResponse, SuperAdminShowStatus } from './types/adminShow';
+import {
+  AdminShowDetailResponse,
+  AdminShowResponse,
+  SettlementEventResponse,
+  SettlementInfoResponse,
+  SuperAdminShowStatus,
+  TicketSalesInfoResponse,
+} from './types/adminShow';
 import {
   BankAccountListResponse,
   SettlementAccountInfoResponse,
@@ -92,7 +99,21 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   settlementInfo: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<SettlementInfoResponse>(`/sa-api/v1/shows/${showId}/settlement-infos`),
+      fetcher.get<SettlementInfoResponse>(`sa-api/v1/shows/${showId}/settlement-infos`),
+  }),
+  settlementEvent: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SettlementEventResponse>(`sa-api/v1/shows/${showId}/settlement-events/each-last`),
+  }),
+  ticketSalesInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<TicketSalesInfoResponse>(`sa-api/v1/shows/${showId}/ticket-sales-infos`),
+  }),
+  showDetail: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
   }),
 });
 

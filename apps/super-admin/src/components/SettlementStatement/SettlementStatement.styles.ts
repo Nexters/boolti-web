@@ -5,6 +5,10 @@ interface TextFieldProps {
   align?: 'left' | 'right';
 }
 
+interface SelectProps {
+  width?: string;
+}
+
 const SettlementStatement = styled.div`
   width: 920px;
   height: 600px;
@@ -211,8 +215,15 @@ const SettlementStatementForm = styled.form``;
 const SettlementStatementFooter = styled.div`
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   padding-top: 48px;
   padding-bottom: 32px;
+`;
+
+const SettlementStatementPreviewContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 600px;
 `;
 
 const TextFieldRow = styled.div`
@@ -233,12 +244,30 @@ const TextField = styled.input<TextFieldProps>`
   &::placeholder {
     color: ${({ theme }) => theme.palette.grey.g30};
   }
+
+  &::-webkit-inner-spin-button {
+    appearance: none;
+  }
+`;
+
+const Select = styled.select<SelectProps>`
+  width: ${({ width }) => width ?? '100%'};
+  height: 32px;
+  padding: 0 12px;
+  ${({ theme }) => theme.typo.b1};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 4px;
+  color: ${({ theme }) => theme.palette.grey.g90};
+  display: inline-flex;
+  align-items: center;
 `;
 
 export default {
   SettlementStatement,
   SettlementStatementForm,
   SettlementStatementFooter,
+  SettlementStatementPreviewContainer,
   TextFieldRow,
   TextField,
+  Select,
 };

@@ -1,5 +1,6 @@
 import useAddBankAccount from './useAddBankAccount';
 import useAddShow from './useAddShow';
+import useAdminCreateSettlementStatement from './useAdminCreateSettlementStatement';
 import useAdmingLogin from './useAdminLogin';
 import useAdminLogout from './useAdminLogout';
 import useAppleLogin from './useAppleLogin';
@@ -25,6 +26,7 @@ import useUploadShowImage, { ImageFile } from './useUploadShowImage';
 export {
   useAddBankAccount,
   useAddShow,
+  useAdminCreateSettlementStatement,
   useAdmingLogin,
   useAdminLogout,
   useAppleLogin,

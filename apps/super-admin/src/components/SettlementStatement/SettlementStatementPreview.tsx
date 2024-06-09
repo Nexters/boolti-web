@@ -1,8 +1,45 @@
 import { Button } from '@boolti/ui';
+import { SubmitHandler } from 'react-hook-form';
+
+import { bankItems } from '~/constants/bankItems';
 
 import Styled from './SettlementStatement.styles';
+import { SettlementStatementData } from './SettlementStatementFormDialog';
 
-const SettlementStatement = () => {
+interface SettlementStatementPreviewProps {
+  data: SettlementStatementData;
+  onPrev: () => void;
+  onSubmit: SubmitHandler<SettlementStatementData>;
+}
+
+const SettlementStatementPreview = ({
+  data,
+  onPrev,
+  onSubmit,
+}: SettlementStatementPreviewProps) => {
+  const {
+    showName,
+    hostName,
+    businessNumber,
+    accountHolder,
+    bankCode,
+    accountNumber,
+    salesAmount,
+    salesItems,
+    fee,
+    brokerageFee,
+    paymentAgencyFee,
+    vat,
+    adjustmentAmount,
+    adjustmentReason,
+    totalSettlementAmount,
+    dateText,
+  } = data;
+
+  const submitHandler = () => {
+    onSubmit(data);
+  };
+
   return (
     <Styled.SettlementStatement>
       {/* https://codesandbox.io/p/sandbox/boolti-settlement-statement-t8dndd */}
@@ -11,25 +48,29 @@ const SettlementStatement = () => {
         <h2>공연 정보</h2>
         <div className="header-section-row">
           <h3>공연명</h3>
-          <span>공연명</span>
+          <span>{showName}</span>
         </div>
         <div className="header-section-row">
           <h3>주최자명</h3>
-          <span>주최자명</span>
+          <span>{hostName}</span>
         </div>
       </div>
       <div className="header-section">
         <h2>정산 정보</h2>
-        <div className="header-section-row">
-          <h3>사업자등록번호</h3>
-          <span>202-43-63442</span>
-        </div>
+        {businessNumber && (
+          <div className="header-section-row">
+            <h3>사업자등록번호</h3>
+            <span>{businessNumber}</span>
+          </div>
+        )}
         <div className="header-section-row">
           <h3>정산 계좌 정보</h3>
+          <span>{accountHolder}</span>
+        </div>
+        <div className="header-section-row">
+          <h3></h3>
           <span>
-            김불티
-            <br />
-            토스뱅크 000000-00-000000
+            {bankItems.find((item) => item.code === bankCode)?.name} {accountNumber}
           </span>
         </div>
       </div>
@@ -37,74 +78,64 @@ const SettlementStatement = () => {
         <div className="table-row">
           <div className="row">
             <h3>A. 총 판매액</h3>
-            <span>800,000원</span>
+            <span>{salesAmount}원</span>
           </div>
         </div>
         <div className="table-sub-row">
           <ul>
-            <li>
-              <span className="dot"></span>
-              <div className="row">
-                <h3>일반 티켓 A (60매)</h3>
-                <span>600,000원</span>
-              </div>
-            </li>
-            <li>
-              <span className="dot"></span>
-              <div className="row">
-                <h3>일반 티켓 B (20매)</h3>
-                <span>200,000원</span>
-              </div>
-            </li>
-            <li>
-              <span className="dot"></span>
-              <div className="row">
-                <h3>초청 티켓 (10매)</h3>
-                <span>0원</span>
-              </div>
-            </li>
+            {salesItems.map((item) => (
+              <li key={item.id}>
+                <span className="dot"></span>
+                <div className="row">
+                  <h3>
+                    {item.ticketName} ({item.salesCount}매)
+                  </h3>
+                  <span>{item.amount}원</span>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="table-row">
           <div className="row">
             <h3>B. 수수료</h3>
-            <span>34,400원</span>
+            <span>{fee}원</span>
           </div>
         </div>
         <div className="table-sub-row">
           <div className="row">
             <h3>중개 수수료</h3>
-            <span>8,000원</span>
+            <span>{brokerageFee}원</span>
           </div>
         </div>
         <div className="table-sub-row">
           <div className="row">
             <h3>결제 대행 수수료</h3>
-            <span>26,400원</span>
+            <span>{paymentAgencyFee}원</span>
           </div>
         </div>
         <div className="table-row">
           <div className="row">
             <h3>C. 부가가치세</h3>
-            <span>3,440원</span>
+            <span>{vat}원</span>
           </div>
         </div>
         <div className="table-row">
           <div className="row">
             <h3>D. 조정액</h3>
-            <span>0원</span>
+            <span>{adjustmentAmount}원</span>
           </div>
         </div>
         <div className="table-sub-row">
           <div className="row">
             <h3>조정 사유</h3>
-            <span>-</span>
+            <span>{adjustmentReason}</span>
           </div>
         </div>
         <div className="table-row">
           <div className="row">
             <h3>최종 정산액 (A - B - C - D)</h3>
-            <span>762,160원</span>
+            <span>{totalSettlementAmount}원</span>
           </div>
         </div>
       </div>
@@ -133,15 +164,18 @@ const SettlementStatement = () => {
         </div>
       </div>
       <div className="footer-section">
-        <p>2024.03.03 스튜디오 불티</p>
+        <p>{dateText} 스튜디오 불티</p>
       </div>
       <Styled.SettlementStatementFooter>
-        <Button colorTheme="netural" size="medium">
-          생성하기
+        <Button type="button" colorTheme="line" size="medium" onClick={onPrev}>
+          이전으로
+        </Button>
+        <Button colorTheme="netural" size="medium" onClick={submitHandler}>
+          발송하기
         </Button>
       </Styled.SettlementStatementFooter>
     </Styled.SettlementStatement>
   );
 };
 
-export default SettlementStatement;
+export default SettlementStatementPreview;

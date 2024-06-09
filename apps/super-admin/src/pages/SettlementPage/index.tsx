@@ -1,15 +1,30 @@
-import { useSettlementInfo } from '@boolti/api';
+import {
+  useAdminCreateSettlementStatement,
+  useAdminSettlementEvent,
+  useAdminSettlementInfo,
+  useAdminShowDetail,
+  useAdminTicketSalesInfo,
+} from '@boolti/api';
 import { PlusIcon } from '@boolti/icon';
-import { Button, useDialog } from '@boolti/ui';
+import { Button, useDialog, useToast } from '@boolti/ui';
+import { useParams } from 'react-router-dom';
 
-import SettlementStatementForm from '~/components/SettlementStatement/SettlementStatementForm';
+import SettlementStatementFormDialog from '~/components/SettlementStatement/SettlementStatementFormDialog';
 
 import Styled from './SettlementPage.styles';
 
 const SettlementPage = () => {
-  const dialog = useDialog();
+  const params = useParams<{ showId: string }>();
 
-  const { data: settlementInfo } = useSettlementInfo(1);
+  const dialog = useDialog();
+  const toast = useToast();
+
+  const { data: adminShowDetail } = useAdminShowDetail(Number(params!.showId));
+  const { data: adminSettlementEvent } = useAdminSettlementEvent(Number(params!.showId));
+  const { data: adminSettlementInfo } = useAdminSettlementInfo(Number(params!.showId));
+  const { data: adminTicketSalesInfo } = useAdminTicketSalesInfo(Number(params!.showId));
+
+  const createSettlementStatementMutation = useAdminCreateSettlementStatement();
 
   return (
     <Styled.SettlementPage>
@@ -22,47 +37,112 @@ const SettlementPage = () => {
           신분증과 정산 계좌 정보, 통장 사본을 꼼꼼히 확인한 후 발송을 진행해 주세요.
         </Styled.PageDescription>
       </Styled.PageHeader>
-      <Styled.Section>
-        <Styled.SectionTitle>정산 진행 현황</Styled.SectionTitle>
-        <Styled.Progress>
-          <Styled.ProgressItem active>
-            <Styled.ProgressItemNumber active>1</Styled.ProgressItemNumber>
-            <Styled.ProgressItemTitle active>내역서 발송</Styled.ProgressItemTitle>
-            <Styled.ProgressItemDescription>2024.01.21 00:00</Styled.ProgressItemDescription>
-          </Styled.ProgressItem>
-          <Styled.ProgressItem>
-            <Styled.ProgressItemNumber>2</Styled.ProgressItemNumber>
-            <Styled.ProgressItemTitle>주최자 확인 및 정산 요청</Styled.ProgressItemTitle>
-          </Styled.ProgressItem>
-          <Styled.ProgressItem>
-            <Styled.ProgressItemNumber>3</Styled.ProgressItemNumber>
-            <Styled.ProgressItemTitle>정산 완료</Styled.ProgressItemTitle>
-          </Styled.ProgressItem>
-        </Styled.Progress>
-      </Styled.Section>
-      <Styled.SectionDivider />
+      {adminSettlementEvent &&
+        (adminSettlementEvent?.SEND !== null ||
+          adminSettlementEvent?.REQUEST !== null ||
+          adminSettlementEvent?.DONE !== null) && (
+          <>
+            <Styled.Section>
+              <Styled.SectionTitle>정산 진행 현황</Styled.SectionTitle>
+              <Styled.Progress>
+                <Styled.ProgressItem active={!!adminSettlementEvent?.SEND}>
+                  <Styled.ProgressItemNumber active={!!adminSettlementEvent?.SEND}>
+                    1
+                  </Styled.ProgressItemNumber>
+                  <Styled.ProgressItemTitle active={!!adminSettlementEvent?.SEND}>
+                    내역서 발송
+                  </Styled.ProgressItemTitle>
+                  {adminSettlementEvent?.SEND && (
+                    <Styled.ProgressItemDescription>
+                      {adminSettlementEvent.SEND}
+                    </Styled.ProgressItemDescription>
+                  )}
+                </Styled.ProgressItem>
+                <Styled.ProgressItem active={!!adminSettlementEvent?.REQUEST}>
+                  <Styled.ProgressItemNumber active={!!adminSettlementEvent?.REQUEST}>
+                    2
+                  </Styled.ProgressItemNumber>
+                  <Styled.ProgressItemTitle active={!!adminSettlementEvent?.REQUEST}>
+                    주최자 확인 및 정산 요청
+                  </Styled.ProgressItemTitle>
+                  {adminSettlementEvent?.REQUEST && (
+                    <Styled.ProgressItemDescription>
+                      {adminSettlementEvent.REQUEST}
+                    </Styled.ProgressItemDescription>
+                  )}
+                </Styled.ProgressItem>
+                <Styled.ProgressItem active={!!adminSettlementEvent?.DONE}>
+                  <Styled.ProgressItemNumber active={!!adminSettlementEvent?.DONE}>
+                    3
+                  </Styled.ProgressItemNumber>
+                  <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
+                    정산 완료
+                  </Styled.ProgressItemTitle>
+                  {adminSettlementEvent?.DONE && (
+                    <Styled.ProgressItemDescription>
+                      {adminSettlementEvent.DONE}
+                    </Styled.ProgressItemDescription>
+                  )}
+                </Styled.ProgressItem>
+              </Styled.Progress>
+            </Styled.Section>
+            <Styled.SectionDivider />
+          </>
+        )}
       <Styled.Section>
         <Styled.SectionTitle>사용자 입력 정보</Styled.SectionTitle>
         <Styled.UserInfo>
           <Styled.UserInfoItem>
             <Styled.UserInfoTitle>신분증 또는 사업자등록증 사본</Styled.UserInfoTitle>
             <Styled.UserInfoContent>
-              <Styled.UserInfoLink>김불티_신분증.jpg</Styled.UserInfoLink>
+              {adminSettlementInfo?.idCardPhotoFile ? (
+                <Styled.UserInfoLink href={adminSettlementInfo?.idCardPhotoFile?.url}>
+                  {adminSettlementInfo.idCardPhotoFile.fileName}
+                </Styled.UserInfoLink>
+              ) : (
+                <Styled.UserInfoText>-</Styled.UserInfoText>
+              )}
             </Styled.UserInfoContent>
           </Styled.UserInfoItem>
           <Styled.UserInfoItem>
             <Styled.UserInfoTitle>정산 계좌</Styled.UserInfoTitle>
             <Styled.UserInfoContent>
-              <Styled.UserInfoText>신한은행 110-123-456789</Styled.UserInfoText>
-              <Button colorTheme="netural" size="x-small">
-                복사하기
-              </Button>
+              {adminSettlementInfo?.bankAccount ? (
+                <>
+                  <Styled.UserInfoText>
+                    {adminSettlementInfo.bankAccount.bankName}{' '}
+                    {adminSettlementInfo.bankAccount.bankAccountNumber}
+                  </Styled.UserInfoText>
+                  <Button
+                    colorTheme="netural"
+                    size="x-small"
+                    onClick={async () => {
+                      if (!adminSettlementInfo.bankAccount) return;
+
+                      await navigator.clipboard.writeText(
+                        `${adminSettlementInfo.bankAccount.bankName} ${adminSettlementInfo.bankAccount.bankAccountNumber}`,
+                      );
+                      toast.success('계좌 정보가 복사되었습니다.');
+                    }}
+                  >
+                    복사하기
+                  </Button>
+                </>
+              ) : (
+                <Styled.UserInfoText>-</Styled.UserInfoText>
+              )}
             </Styled.UserInfoContent>
           </Styled.UserInfoItem>
           <Styled.UserInfoItem>
             <Styled.UserInfoTitle>통장 사본</Styled.UserInfoTitle>
             <Styled.UserInfoContent>
-              <Styled.UserInfoLink>김불티_신분증.jpg</Styled.UserInfoLink>
+              {adminSettlementInfo?.settlementBankAccountPhotoFile ? (
+                <Styled.UserInfoLink href={adminSettlementInfo.settlementBankAccountPhotoFile.url}>
+                  {adminSettlementInfo.settlementBankAccountPhotoFile.fileName}
+                </Styled.UserInfoLink>
+              ) : (
+                <Styled.UserInfoText>-</Styled.UserInfoText>
+              )}
             </Styled.UserInfoContent>
           </Styled.UserInfoItem>
         </Styled.UserInfo>
@@ -82,22 +162,31 @@ const SettlementPage = () => {
             </Styled.TableHeader>
           </Styled.TableHead>
           <Styled.TableBody>
-            <Styled.TableRow>
-              <Styled.TableItem>일반 티켓</Styled.TableItem>
-              <Styled.TableItem minWidth={180}>일반 티켓 A</Styled.TableItem>
-              <Styled.TableItem align="right">10,000원</Styled.TableItem>
-              <Styled.TableItem align="right">60매</Styled.TableItem>
-              <Styled.TableItem align="right">600,000원</Styled.TableItem>
-              <Styled.TableItem></Styled.TableItem>
-            </Styled.TableRow>
-            <Styled.TableRow>
-              <Styled.TableItem>총 판매</Styled.TableItem>
-              <Styled.TableItem minWidth={180}></Styled.TableItem>
-              <Styled.TableItem align="right">10,000원</Styled.TableItem>
-              <Styled.TableItem align="right">60매</Styled.TableItem>
-              <Styled.TableItem align="right">600,000원</Styled.TableItem>
-              <Styled.TableItem></Styled.TableItem>
-            </Styled.TableRow>
+            {adminTicketSalesInfo?.map((ticket) => {
+              const ticketTypeText = (() => {
+                if (ticket.ticketType === 'SALE') return '일반 티켓';
+                if (ticket.ticketType === 'INVITE') return '초청 티켓';
+
+                return null;
+              })();
+
+              return (
+                <Styled.TableRow key={ticket.salesTicketId}>
+                  <Styled.TableItem>{ticketTypeText}</Styled.TableItem>
+                  <Styled.TableItem minWidth={180}>{ticket.ticketName}</Styled.TableItem>
+                  <Styled.TableItem align="right">
+                    {ticket.price.toLocaleString()}원
+                  </Styled.TableItem>
+                  <Styled.TableItem align="right">
+                    {ticket.salesCount.toLocaleString()}매
+                  </Styled.TableItem>
+                  <Styled.TableItem align="right">
+                    {ticket.amount.toLocaleString()}원
+                  </Styled.TableItem>
+                  <Styled.TableItem></Styled.TableItem>
+                </Styled.TableRow>
+              );
+            })}
           </Styled.TableBody>
         </Styled.Table>
       </Styled.Section>
@@ -109,7 +198,71 @@ const SettlementPage = () => {
           onClick={() => {
             dialog.open({
               title: '정산 내역서 생성하기',
-              content: <SettlementStatementForm onSubmit={() => {}} />,
+              content: (
+                <SettlementStatementFormDialog
+                  ticketSalesInfo={adminTicketSalesInfo ?? []}
+                  initialValues={{
+                    showName: adminShowDetail?.name ?? '',
+                    hostName: adminShowDetail?.host.name ?? '',
+                    accountHolder: adminSettlementInfo?.bankAccount?.bankAccountHolder ?? '',
+                    bankCode: adminSettlementInfo?.bankAccount?.bankCode ?? '',
+                    accountNumber: adminSettlementInfo?.bankAccount?.bankAccountNumber ?? '',
+                  }}
+                  onSubmit={async (data) => {
+                    try {
+                      const body = {
+                        showName: data.showName,
+                        hostName: data.hostName,
+                        settlementBankInfo: {
+                          bankCode: data.bankCode,
+                          bankAccountNumber: data.accountNumber,
+                          bankAccountHolder: data.accountHolder,
+                        },
+                        businessLicenseNumber: data.businessNumber,
+                        salesAmount: parseInt(data.salesAmount.replace(/,/g, '')),
+                        salesItems: data.salesItems.reduce<
+                          {
+                            salesTicketTypeId: number;
+                            amount: number;
+                          }[]
+                        >((acc, item) => {
+                          acc.push({
+                            salesTicketTypeId: parseInt(item.salesTicketId.replace(/,/g, '')),
+                            amount: parseInt(item.amount.replace(/,/g, '')),
+                          });
+
+                          return acc;
+                        }, []),
+                        fee: parseInt(data.fee.replace(/,/g, '')),
+                        feeItems: [
+                          {
+                            feeType: 'BROKERAGE_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
+                            amount: parseInt(data.brokerageFee.replace(/,/g, '')),
+                          },
+                          {
+                            feeType: 'PAYMENT_AGENCY_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
+                            amount: parseInt(data.paymentAgencyFee.replace(/,/g, '')),
+                          },
+                        ],
+                        vat: parseInt(data.vat.replace(/,/g, '')),
+                        roundAmount: parseInt(data.adjustmentAmount.replace(/,/g, '')),
+                        roundReason: data.adjustmentReason,
+                      };
+
+                      await createSettlementStatementMutation.mutateAsync({
+                        showId: Number(params.showId),
+                        body,
+                      });
+
+                      toast.success('정산 내역서를 발송했어요.');
+                      dialog.close();
+                    } catch (error) {
+                      console.error(error);
+                      toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
+                    }
+                  }}
+                />
+              ),
               isAuto: true,
             });
           }}
