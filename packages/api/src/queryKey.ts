@@ -1,7 +1,7 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
 import type { SearchParamsOption } from 'ky';
 
-import { fetcher } from './fetcher';
+import { fetcher, instance } from './fetcher';
 import {
   EntranceInfoResponse,
   EntranceSummaryResponse,
@@ -190,7 +190,7 @@ export const showQueryKeys = createQueryKeys('show', {
   settlementStatement: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<string>(`web/v1/host/shows/${showId}/settlement-statements/last/file`),
+      instance.get(`web/v1/host/shows/${showId}/settlement-statements/last/file`).blob(),
   }),
   lastSettlementEvent: (showId: number) => ({
     queryKey: [showId],

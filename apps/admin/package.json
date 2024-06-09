@@ -27,6 +27,7 @@
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.50.0",
     "react-intersection-observer": "^9.8.0",
+    "react-pdf": "^9.0.0",
     "react-router-dom": "^6.21.3",
     "react-select": "^5.8.0",
     "react-tooltip": "^5.26.3",

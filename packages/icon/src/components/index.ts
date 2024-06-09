@@ -21,6 +21,7 @@ import { Close } from './Close';
 import { CU } from './CU';
 import { Deutsche } from './Deutsche';
 import { DGB } from './DGB';
+import { Download } from './Download';
 import { Edit } from './Edit';
 import { EPost } from './EPost';
 import { FileUp } from './FileUp';
@@ -82,6 +83,7 @@ export {
   CU,
   Deutsche,
   DGB,
+  Download as DownloadIcon,
   Edit as EditIcon,
   EPost,
   FileUp as FileUpIcon,

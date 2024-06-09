@@ -68,7 +68,7 @@ const FileInput = ({
           ) : (
             <Styled.FileName>{fileName}</Styled.FileName>
           )}
-          {clearable && (
+          {clearable && !props.readOnly && (
             <Styled.FileCancelButton type="button" onClick={clearClickHandler}>
               <ClearIcon />
             </Styled.FileCancelButton>

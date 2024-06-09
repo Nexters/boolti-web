@@ -1,15 +1,23 @@
+import 'react-pdf/dist/Page/AnnotationLayer.css';
+import 'react-pdf/dist/Page/TextLayer.css';
+
 import {
+  ShowSettlementEventResponse,
   useAddBankAccount,
   useBankAccountList,
   usePutShowSettlementBankAccount,
+  useRequestSettlement,
   useShowDetail,
+  useShowLastSettlementEvent,
   useShowSettlementInfo,
+  useShowSettlementStatement,
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
-import { PlusIcon } from '@boolti/icon';
-import { Select, useDialog, useToast } from '@boolti/ui';
-import { useEffect, useState } from 'react';
+import { DownloadIcon, PlusIcon } from '@boolti/icon';
+import { AgreeCheck, Button, Select, TextButton, useDialog, useToast } from '@boolti/ui';
+import { useEffect, useMemo, useState } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
 
 import FileInput from '~/components/FileInput/FileInput';
@@ -18,10 +26,17 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 
 import Styled from './ShowSettlementPage.styles';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
+const isSettlementStarted = (eventType?: ShowSettlementEventResponse['settlementEventType']) => {
+  return eventType === 'SEND' || eventType === 'REQUEST' || eventType === 'DONE';
+};
+
 const ShowSettlementPage = () => {
   const params = useParams<{ showId: string }>();
 
   const [account, setAccount] = useState<string | null>(null);
+  const [agreeChecked, setAgreeChecked] = useState<boolean>(false);
 
   const settlementDialog = useDialog();
   const toast = useToast();
@@ -29,13 +44,23 @@ const ShowSettlementPage = () => {
   const { data: show } = useShowDetail(Number(params!.showId));
   const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
-  // const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId));
   const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
     Number(params!.showId),
   );
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(Number(params!.showId));
   const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(Number(params!.showId));
   const addBankAccountMutation = useAddBankAccount();
+  const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
+
+  const settlementStatementFile = useMemo(() => {
+    if (settlementStatementBlob) {
+      return new Blob([settlementStatementBlob], { type: 'application/pdf' });
+    }
+
+    return null;
+  }, [settlementStatementBlob]);
 
   const bankAccountOptions =
     bankAccountList?.map((bankAccount) => ({
@@ -70,7 +95,9 @@ const ShowSettlementPage = () => {
         {settlementInfo && (
           <>
             <Styled.PageSection>
-              <Styled.PageTitle>정산 정보</Styled.PageTitle>
+              <Styled.PageSectionHeader>
+                <Styled.PageTitle>정산 정보</Styled.PageTitle>
+              </Styled.PageSectionHeader>
               <Styled.FormGroupContainer>
                 <Styled.FormGroup>
                   <Styled.FormGroupLabel>
@@ -86,6 +113,7 @@ const ShowSettlementPage = () => {
                     downloadUrl={settlementInfo?.idCardPhotoFile?.url}
                     initialFileName={settlementInfo?.idCardPhotoFile?.fileName}
                     accept="image/jpeg, image/png, .pdf"
+                    readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                     onChange={async (event) => {
                       if (event.target.files?.[0]) {
                         uploadIDCardPhotoFileMutation.mutateAsync(event.target.files[0]);
@@ -102,6 +130,7 @@ const ShowSettlementPage = () => {
                       value={account}
                       options={bankAccountOptions}
                       placeholder="계좌 선택"
+                      disabled={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                       additionalButton={
                         <Styled.AccountAddButton>
                           계좌 추가 <PlusIcon />
@@ -146,6 +175,7 @@ const ShowSettlementPage = () => {
                     downloadUrl={settlementInfo?.settlementBankAccountPhotoFile?.url}
                     initialFileName={settlementInfo?.settlementBankAccountPhotoFile?.fileName}
                     accept="image/jpeg, image/png, .pdf"
+                    readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                     onChange={async (event) => {
                       if (event.target.files?.[0]) {
                         uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
@@ -157,10 +187,66 @@ const ShowSettlementPage = () => {
             </Styled.PageSection>
             <Styled.PageSectionDivider />
             <Styled.PageSection>
-              <Styled.PageTitle>정산 내역서</Styled.PageTitle>
-              <Styled.PageDescription>
-                정산 내역서는 티켓 판매종료 후 생성돼요
-              </Styled.PageDescription>
+              <Styled.PageSectionHeader>
+                <Styled.PageTitle>정산 내역서</Styled.PageTitle>
+                <TextButton
+                  colorTheme="netural"
+                  size="small"
+                  icon={<DownloadIcon />}
+                  onClick={() => {
+                    if (!settlementStatementBlob) return;
+
+                    const downloadUrl = URL.createObjectURL(settlementStatementBlob);
+
+                    const anchorElement = document.createElement('a');
+                    anchorElement.href = downloadUrl;
+                    anchorElement.download = `불티 정산 내역서 - ${show.name}.pdf`;
+                    anchorElement.click();
+
+                    URL.revokeObjectURL(downloadUrl);
+                  }}
+                >
+                  다운로드
+                </TextButton>
+              </Styled.PageSectionHeader>
+              {lastSettlementEvent?.settlementEventType !== null ? (
+                <>
+                  <Styled.DocumentContainer>
+                    <Document file={settlementStatementFile}>
+                      <Page pageNumber={1} />
+                    </Document>
+                  </Styled.DocumentContainer>
+                  <Styled.DocumentFooter>
+                    <AgreeCheck
+                      checked={agreeChecked}
+                      description="정산 내역 및 안내사항을 모두 확인하였으며 정산을 요청합니다."
+                      onChange={(event) => {
+                        setAgreeChecked(event.target.checked);
+                      }}
+                    />
+                    <Button
+                      colorTheme="primary"
+                      size="bold"
+                      disabled={!agreeChecked}
+                      onClick={async () => {
+                        try {
+                          await requestSettlementMutation.mutateAsync();
+
+                          toast.success('정산을 요청했습니다');
+                        } catch (error) {
+                          toast.error('정산 요청에 실패했습니다. 잠시 후에 다시 시도해주세요.');
+                        }
+                      }}
+                    >
+                      정산 요청하기
+                    </Button>
+                  </Styled.DocumentFooter>
+                </>
+              ) : (
+                <Styled.PageDescription>
+                  정산 내역서는 티켓 판매종료 후 생성돼요
+                </Styled.PageDescription>
+              )}
             </Styled.PageSection>
           </>
         )}

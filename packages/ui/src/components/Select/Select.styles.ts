@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 
 interface SelectProps {
   selected: boolean;
+  disabled?: boolean;
 }
 
 interface SelectOptionProps {
@@ -16,14 +17,19 @@ const Select = styled.div<SelectProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  cursor: pointer;
   height: 48px;
   padding: 0 12px;
-  color: ${({ theme, selected }) => (selected ? theme.palette.grey.g90 : theme.palette.grey.g30)};
-  background-color: ${({ theme }) => theme.palette.grey.w};
+  color: ${({ theme, selected, disabled }) => {
+    if (disabled) return theme.palette.grey.g40;
+    if (selected) return theme.palette.grey.g90;
+    return theme.palette.grey.g30;
+  }};
+  background-color: ${({ theme, disabled }) =>
+    disabled ? theme.palette.grey.g10 : theme.palette.grey.w};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 4px;
   position: relative;
+  cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
 `;
 
 const SelectText = styled.span`

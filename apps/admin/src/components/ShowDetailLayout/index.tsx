@@ -1,4 +1,4 @@
-import { useLogout } from '@boolti/api';
+import { useLogout, useShowLastSettlementEvent } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -11,6 +11,13 @@ import { HREF, PATH } from '~/constants/routes';
 import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
+
+const settlementTooltipText = {
+  SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
+  REQUEST: '정산 진행 중이에요',
+  DONE: '정산이 완료되었어요',
+  DEFAULT: '정산 정보를 입력해 주세요',
+};
 
 interface ShowDetailLayoutProps {
   showName: string;
@@ -37,6 +44,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
   const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
 
+  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const logoutMutation = useLogout();
 
   const tooltipStyle = {
@@ -167,16 +175,22 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     id="settlement-page-tooltip"
                   >
                     정산 관리
-                    <Tooltip
-                      content="정산 정보를 입력해 주세요"
-                      anchorSelect="#settlement-page-tooltip"
-                      isOpen
-                      style={tooltipStyle}
-                      place="top"
-                      positionStrategy="fixed"
-                      offset={0}
-                      opacity={0.85}
-                    />
+                    {lastSettlementEvent?.settlementEventType !== undefined && (
+                      <Tooltip
+                        content={
+                          settlementTooltipText[
+                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                          ]
+                        }
+                        anchorSelect="#settlement-page-tooltip"
+                        isOpen
+                        style={tooltipStyle}
+                        place="top"
+                        positionStrategy="fixed"
+                        offset={0}
+                        opacity={0.85}
+                      />
+                    )}
                   </Styled.TabItem>
                 </Styled.Tab>
               </Styled.TabContainer>
