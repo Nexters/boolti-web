@@ -80,8 +80,13 @@ const FormGroupLabel = styled.div`
   color: ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.b3};
   display: flex;
-  align-items: center;
-  gap: 4px;
+  flex-direction: column;
+
+  ${mq} {
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+  }
 `;
 
 const FormGroupLabelText = styled.span`
