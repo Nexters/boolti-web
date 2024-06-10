@@ -14,6 +14,7 @@ import LandingPage from './pages/Landing/LandingPage';
 import LoginPage from './pages/Login/LoginPage';
 import OAuthApplePage from './pages/OAuth/OAuthApplePage';
 import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
+import QRPage from './pages/QRPage/QRPage';
 import ShowAddCompletePage from './pages/ShowAddCompletePage/ShowAddCompletePage';
 import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
@@ -35,6 +36,10 @@ const publicRoutes = [
       {
         path: PATH.LOGIN,
         element: <LoginPage />,
+      },
+      {
+        path: PATH.QR,
+        element: <QRPage />,
       },
       {
         path: PATH.OAUTH_KAKAO,

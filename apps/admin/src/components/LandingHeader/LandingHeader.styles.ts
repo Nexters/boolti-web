@@ -1,6 +1,7 @@
-import { mq } from '@boolti/ui';
+import { Button as _Button, mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Header = styled.header`
   position: fixed;
@@ -64,6 +65,9 @@ const MobileButton = styled.button`
 `;
 
 const MobileMenu = styled(m.div)`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   margin-top: auto;
   width: 100%;
 
@@ -72,10 +76,24 @@ const MobileMenu = styled(m.div)`
   }
 `;
 
+const InternalLink = styled(Link)`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.w};
+  padding: 12px 0;
+`;
+
+const Button = styled(_Button)`
+  display: flex;
+  width: 100%;
+  margin: 12px 0 20px;
+`;
+
 export default {
   Header,
   HeaderContaienr,
   BooltiIcon,
   MobileButton,
   MobileMenu,
+  InternalLink,
+  Button,
 };
