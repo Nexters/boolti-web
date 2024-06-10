@@ -8279,6 +8279,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-dom", "npm:18.2.18"],\
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
           ["date-fns", "npm:3.3.1"],\
+          ["framer-motion", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:11.2.10"],\
           ["jwt-decode", "npm:4.0.0"],\
           ["lodash.debounce", "npm:4.0.8"],\
           ["react", "npm:18.2.0"],\
@@ -11185,6 +11186,37 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/forwarded-npm-0.2.0-6473dabe35-10c0.zip/node_modules/forwarded/",\
         "packageDependencies": [\
           ["forwarded", "npm:0.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["framer-motion", [\
+      ["npm:11.2.10", {\
+        "packageLocation": "../../.yarn/berry/cache/framer-motion-npm-11.2.10-3bbc864848-10c0.zip/node_modules/framer-motion/",\
+        "packageDependencies": [\
+          ["framer-motion", "npm:11.2.10"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:11.2.10", {\
+        "packageLocation": "./.yarn/__virtual__/framer-motion-virtual-2ad5dccee7/3/.yarn/berry/cache/framer-motion-npm-11.2.10-3bbc864848-10c0.zip/node_modules/framer-motion/",\
+        "packageDependencies": [\
+          ["framer-motion", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:11.2.10"],\
+          ["@emotion/is-prop-valid", null],\
+          ["@types/emotion__is-prop-valid", null],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
+          ["react", "npm:18.2.0"],\
+          ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
+          ["tslib", "npm:2.6.2"]\
+        ],\
+        "packagePeers": [\
+          "@emotion/is-prop-valid",\
+          "@types/emotion__is-prop-valid",\
+          "@types/react-dom",\
+          "@types/react",\
+          "react-dom",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\
