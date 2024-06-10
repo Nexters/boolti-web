@@ -1,10 +1,22 @@
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
-import { useState } from 'react';
+import { useTheme } from '@emotion/react';
+import { useEffect, useState } from 'react';
+
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
 import Styled from './LandingHeader.styles';
 
 const LandingHeader = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const theme = useTheme();
+  const isDesktop = useDeviceWidth() > parseInt(theme.breakpoint.mobile, 10);
+
+  useEffect(() => {
+    if (isDesktop) {
+      setIsExpanded(false);
+    }
+  }, [isDesktop]);
+
   return (
     <Styled.Header>
       <Styled.HeaderContaienr>
