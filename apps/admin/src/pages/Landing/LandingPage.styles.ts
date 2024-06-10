@@ -57,8 +57,5 @@ const KeyVisual = styled.section`
 
 export default {
   Container,
-  Header,
-  HeaderContaienr,
   KeyVisual,
-  BooltiIcon,
 };
