@@ -1,21 +1,33 @@
+import { LOCAL_STORAGE, useLogout } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
-import { useTheme } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { PATH } from '~/constants/routes';
 
 import Styled from './LandingHeader.styles';
 
 const LandingHeader = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const theme = useTheme();
-  const isDesktop = useDeviceWidth() > parseInt(theme.breakpoint.mobile, 10);
+  const logout = useLogout();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (isDesktop) {
-      setIsExpanded(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isLogin, setIsLogin] = useState(
+    Boolean(
+      window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
+        window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+    ),
+  );
+
+  const onClickAuthButton = async () => {
+    if (isLogin) {
+      await logout.mutateAsync();
+      setIsLogin(false);
+      return;
     }
-  }, [isDesktop]);
+
+    navigate(PATH.LOGIN);
+  };
 
   return (
     <Styled.Header>
@@ -23,6 +35,14 @@ const LandingHeader = () => {
         <Styled.BooltiIcon>
           <BooltiDark />
         </Styled.BooltiIcon>
+
+        <Styled.DesktopMenu>
+          <Styled.InternalLink to={PATH.QR}>앱 바로가기</Styled.InternalLink>
+          <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
+          <Styled.AuthButton onClick={onClickAuthButton}>
+            {isLogin ? '로그아웃' : '로그인'}
+          </Styled.AuthButton>
+        </Styled.DesktopMenu>
 
         {/** 모바일용 */}
         <Styled.MobileButton
@@ -38,13 +58,26 @@ const LandingHeader = () => {
         animate={isExpanded ? 'visible' : 'invisible'}
         variants={{
           invisible: {
-            height: 'auto',
+            opacity: 0,
+            height: 0,
           },
           visible: {
+            opacity: 1,
             height: 172,
           },
         }}
-      ></Styled.MobileMenu>
+      >
+        <Styled.InternalLink to={PATH.QR}>앱 바로가기</Styled.InternalLink>
+        <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
+        <Styled.MobileAuthButton
+          colorTheme={isLogin ? 'netural' : 'primary'}
+          size="bold"
+          role="button"
+          onClick={onClickAuthButton}
+        >
+          {isLogin ? '로그아웃' : '로그인'}
+        </Styled.MobileAuthButton>
+      </Styled.MobileMenu>
     </Styled.Header>
   );
 };

@@ -6,6 +6,7 @@ export const PATH = {
   SIGNUP_COMPLETE: '/signup/complete',
   HOME: '/home',
   SHOW_ADD: '/show/add',
+  QR: '/qr',
   SHOW_ADD_TICKET: '/show/add/ticket',
   SHOW_ADD_COMPLETE: '/show/add/complete',
   SHOW_INFO: '/show/:showId/info',

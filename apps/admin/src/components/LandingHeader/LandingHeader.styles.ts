@@ -1,6 +1,7 @@
-import { mq } from '@boolti/ui';
+import { Button as _Button, mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Header = styled.header`
   position: fixed;
@@ -64,6 +65,9 @@ const MobileButton = styled.button`
 `;
 
 const MobileMenu = styled(m.div)`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   margin-top: auto;
   width: 100%;
 
@@ -72,10 +76,53 @@ const MobileMenu = styled(m.div)`
   }
 `;
 
+const DesktopMenu = styled.div`
+  display: none;
+  ${mq} {
+    flex: 1;
+    padding-left: 48px;
+    display: flex;
+  }
+`;
+
+const InternalLink = styled(Link)`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.w};
+  cursor: pointer;
+
+  padding: 12px 0;
+  ${mq} {
+    ${({ theme }) => theme.typo.sh1};
+    padding: 0 18px;
+  }
+`;
+
+const AuthButton = styled.button`
+  ${({ theme }) => theme.typo.sh1};
+  cursor: pointer;
+
+  padding: 0 18px;
+  color: ${({ theme }) => theme.palette.grey.w};
+  &:last-child {
+    margin-left: auto;
+  }
+`;
+
+const MobileAuthButton = styled(_Button)`
+  display: flex;
+  cursor: pointer;
+  width: 100%;
+  margin: 12px 0 20px;
+`;
+
 export default {
   Header,
+  DesktopMenu,
   HeaderContaienr,
   BooltiIcon,
   MobileButton,
   MobileMenu,
+  InternalLink,
+  MobileAuthButton,
+  AuthButton,
 };
