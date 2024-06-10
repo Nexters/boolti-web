@@ -39,6 +39,7 @@ import { KB } from './KB';
 import { KDB } from './KDB';
 import { KIS } from './KIS';
 import { Kwangju } from './Kwangju';
+import { Menu } from './Menu';
 import { MG } from './MG';
 import { NFCF } from './NFCF';
 import { NFF } from './NFF';
@@ -101,6 +102,7 @@ export {
   KDB,
   KIS,
   Kwangju,
+  Menu as MenuIcon,
   MG,
   NFCF,
   NFF,
