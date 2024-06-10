@@ -1,29 +1,19 @@
 import { LOCAL_STORAGE } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
-import { useTheme } from '@emotion/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
-import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
 import Styled from './LandingHeader.styles';
 
 const LandingHeader = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const theme = useTheme();
   const navigate = useNavigate();
 
-  const isDesktop = useDeviceWidth() > parseInt(theme.breakpoint.mobile, 10);
   const isLogin =
     window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
     window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
-
-  useEffect(() => {
-    if (isDesktop) {
-      setIsExpanded(false);
-    }
-  }, [isDesktop]);
 
   return (
     <Styled.Header>
