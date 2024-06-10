@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE } from '@boolti/api';
+import { LOCAL_STORAGE, useLogout } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -8,12 +8,26 @@ import { PATH } from '~/constants/routes';
 import Styled from './LandingHeader.styles';
 
 const LandingHeader = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const logout = useLogout();
   const navigate = useNavigate();
 
-  const isLogin =
-    window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
-    window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isLogin, setIsLogin] = useState(
+    Boolean(
+      window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
+        window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+    ),
+  );
+
+  const onClickAuthButton = async () => {
+    if (isLogin) {
+      await logout.mutateAsync();
+      setIsLogin(false);
+      return;
+    }
+
+    navigate(PATH.LOGIN);
+  };
 
   return (
     <Styled.Header>
@@ -21,6 +35,14 @@ const LandingHeader = () => {
         <Styled.BooltiIcon>
           <BooltiDark />
         </Styled.BooltiIcon>
+
+        <Styled.DesktopMenu>
+          <Styled.InternalLink to={PATH.QR}>앱 바로가기</Styled.InternalLink>
+          <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
+          <Styled.AuthButton onClick={onClickAuthButton}>
+            {isLogin ? '로그아웃' : '로그인'}
+          </Styled.AuthButton>
+        </Styled.DesktopMenu>
 
         {/** 모바일용 */}
         <Styled.MobileButton
@@ -47,16 +69,14 @@ const LandingHeader = () => {
       >
         <Styled.InternalLink to={PATH.QR}>앱 바로가기</Styled.InternalLink>
         <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
-        <Styled.Button
+        <Styled.MobileAuthButton
           colorTheme={isLogin ? 'netural' : 'primary'}
           size="bold"
           role="button"
-          onClick={() => {
-            navigate(PATH.LOGIN);
-          }}
+          onClick={onClickAuthButton}
         >
           {isLogin ? '로그아웃' : '로그인'}
-        </Styled.Button>
+        </Styled.MobileAuthButton>
       </Styled.MobileMenu>
     </Styled.Header>
   );
