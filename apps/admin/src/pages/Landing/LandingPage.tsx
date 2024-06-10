@@ -1,5 +1,6 @@
-import { BooltiDark } from '@boolti/icon';
 import { domAnimation, LazyMotion } from 'framer-motion';
+
+import LandingHeader from '~/components/LandingHeader/LandingHeader';
 
 import Styled from './LandingPage.styles';
 
@@ -7,13 +8,7 @@ const LandingPage = () => {
   return (
     <LazyMotion features={domAnimation}>
       <Styled.Container>
-        <Styled.Header>
-          <Styled.HeaderContaienr>
-            <Styled.BooltiIcon>
-              <BooltiDark />
-            </Styled.BooltiIcon>
-          </Styled.HeaderContaienr>
-        </Styled.Header>
+        <LandingHeader />
         <Styled.KeyVisual />
       </Styled.Container>
     </LazyMotion>
