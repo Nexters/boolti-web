@@ -5145,6 +5145,7 @@ __metadata:
     framer-motion: "npm:^11.2.10"
     jwt-decode: "npm:^4.0.0"
     lodash.debounce: "npm:^4.0.8"
+    qrcode.react: "npm:^3.1.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"

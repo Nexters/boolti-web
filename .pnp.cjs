@@ -8282,6 +8282,7 @@ const RAW_RUNTIME_STATE =
           ["framer-motion", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:11.2.10"],\
           ["jwt-decode", "npm:4.0.0"],\
           ["lodash.debounce", "npm:4.0.8"],\
+          ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-dropzone", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:14.2.3"],\
@@ -8413,7 +8414,7 @@ const RAW_RUNTIME_STATE =
           ["classnames", "npm:2.5.1"],\
           ["copy-to-clipboard", "npm:3.3.3"],\
           ["dayjs", "npm:1.11.11"],\
-          ["qrcode.react", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:3.1.0"],\
+          ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["rc-cascader", "virtual:9c92ebbfb0d48cb69c03277e9d32dc1be8debfde2fd3d317bbc2348ae65b5bc3defb1e251c8092ca25d5b106222e948206a7e1afc9b19153286fac604cd279de#npm:3.24.1"],\
           ["rc-checkbox", "virtual:9c92ebbfb0d48cb69c03277e9d32dc1be8debfde2fd3d317bbc2348ae65b5bc3defb1e251c8092ca25d5b106222e948206a7e1afc9b19153286fac604cd279de#npm:3.2.0"],\
           ["rc-collapse", "virtual:9c92ebbfb0d48cb69c03277e9d32dc1be8debfde2fd3d317bbc2348ae65b5bc3defb1e251c8092ca25d5b106222e948206a7e1afc9b19153286fac604cd279de#npm:3.7.3"],\
@@ -14066,7 +14067,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-helmet", "npm:6.1.11"],\
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
           ["date-fns", "npm:3.6.0"],\
-          ["qrcode.react", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:3.1.0"],\
+          ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-helmet", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.1.0"],\
@@ -14236,10 +14237,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:3.1.0", {\
-        "packageLocation": "./.yarn/__virtual__/qrcode.react-virtual-d72b12e1ba/3/.yarn/berry/cache/qrcode.react-npm-3.1.0-068f53fc24-10c0.zip/node_modules/qrcode.react/",\
+      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0", {\
+        "packageLocation": "./.yarn/__virtual__/qrcode.react-virtual-104e130737/3/.yarn/berry/cache/qrcode.react-npm-3.1.0-068f53fc24-10c0.zip/node_modules/qrcode.react/",\
         "packageDependencies": [\
-          ["qrcode.react", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:3.1.0"],\
+          ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["@types/react", "npm:18.2.48"],\
           ["react", "npm:18.2.0"]\
         ],\
