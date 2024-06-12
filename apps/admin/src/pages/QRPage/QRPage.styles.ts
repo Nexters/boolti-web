@@ -2,10 +2,6 @@ import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const QRCodePage = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
   background-color: ${({ theme }) => theme.palette.grey.g00};
 `;
 
@@ -17,19 +13,15 @@ const Logo = styled.div`
   height: 22.7px;
 
   ${mq} {
-    width: 174px;
+    width: 120px;
     height: 44px;
   }
 `;
 
-const Layout = styled.div`
-  background-color: ${({ theme }) => theme.palette.grey.g00};
-`;
-
-const QRCodeContainer = styled.div`
+const QRCodeContents = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   flex-direction: column;
   padding: 60px 0 0;
   margin: 40px auto;
@@ -53,7 +45,7 @@ const QRCodeDescriptionText = styled.div`
   margin-bottom: 40px;
 `;
 
-const QRCodeImageWrapper = styled.div`
+const QRCodeContainer = styled.div`
   width: 400px;
   height: 360px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
@@ -65,11 +57,9 @@ const QRCodeImageWrapper = styled.div`
   flex-direction: column;
 `;
 
-const QRCodeImage = styled.img`
-  width: 200px;
-  height: 200px;
-  margin: 68px 0 20px 0;
+const QRCodeWrapper = styled.div`
   padding: 9px;
+  margin: 68px 0 20px 0;
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: 1px solid transparent;
   border-radius: 4px;
@@ -78,10 +68,9 @@ const QRCodeImage = styled.img`
 export default {
   QRCodePage,
   Logo,
-  Layout,
-  QRCodeContainer,
+  QRCodeContents,
   QRCodeTitleText,
   QRCodeDescriptionText,
-  QRCodeImageWrapper,
-  QRCodeImage,
+  QRCodeContainer,
+  QRCodeWrapper,
 };

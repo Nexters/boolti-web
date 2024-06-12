@@ -6,6 +6,7 @@ import { BNP } from './BNP';
 import { BoA } from './BoA';
 import { Boolti } from './Boolti';
 import { BooltiDark } from './BooltiDark';
+import { BooltiGrey } from './BooltiGrey';
 import { BooltiSmall } from './BooltiSmall';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
@@ -68,6 +69,7 @@ export {
   BNP,
   BoA,
   BooltiDark,
+  BooltiGrey,
   Boolti as BooltiLogo,
   BooltiSmall as BooltiSmallLogo,
   Calendar as CalendarIcon,
