@@ -1,5 +1,6 @@
 import { domAnimation, LazyMotion } from 'framer-motion';
 
+import KeyVisual from '~/components/KeyVisual/KeyVisual';
 import LandingHeader from '~/components/LandingHeader/LandingHeader';
 
 import Styled from './LandingPage.styles';
@@ -9,7 +10,8 @@ const LandingPage = () => {
     <LazyMotion features={domAnimation}>
       <Styled.Container>
         <LandingHeader />
-        <Styled.KeyVisual />
+
+        <KeyVisual />
       </Styled.Container>
     </LazyMotion>
   );
