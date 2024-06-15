@@ -8,7 +8,6 @@ const Container = styled(m.div)`
   align-items: center;
   height: 48px;
   width: 100%;
-  padding: 0 20px;
   ${mq} {
     height: 64px;
   }
