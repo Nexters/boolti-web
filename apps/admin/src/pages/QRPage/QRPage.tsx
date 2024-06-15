@@ -1,4 +1,3 @@
-import { LOCAL_STORAGE } from '@boolti/api';
 import { BooltiGrey, BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -10,6 +9,7 @@ import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ProfileDropdown from '~/components/ProfileDropdown';
 import { PATH } from '~/constants/routes';
+import { getIsLogin } from '~/utils/auth';
 
 import Styled from './QRPage.styles';
 
@@ -17,12 +17,7 @@ const QRPage = () => {
   const theme = useTheme();
   // TODO: 다이나믹 링크값 변경
   const dynamicLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
-  const [isLogin, setIsLogin] = useState(
-    Boolean(
-      window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
-        window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
-    ),
-  );
+  const [isLogin] = useState(Boolean(getIsLogin()));
   const navigate = useNavigate();
 
   return (
@@ -43,7 +38,13 @@ const QRPage = () => {
                   <BooltiLogo />
                 </Styled.Logo>
                 {/* TODO: 공연 준비하기 페이지로 이동 */}
-                <TextButton colorTheme="netural" size="regular" onClick={() => {}}>
+                <TextButton
+                  colorTheme="netural"
+                  size="regular"
+                  onClick={() => {
+                    /** noop */
+                  }}
+                >
                   공연 준비하기
                 </TextButton>
               </>

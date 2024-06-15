@@ -1,4 +1,4 @@
-import { desktopMq } from '@boolti/ui';
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
@@ -15,7 +15,7 @@ const Container = styled.section`
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
-  ${desktopMq} {
+  ${mq} {
     margin-top: -69px;
     padding-top: 69px;
     height: 1300px;
@@ -69,7 +69,7 @@ const Title = styled.h1`
     }
   }
 
-  ${desktopMq} {
+  ${mq} {
     font-size: 74px;
     line-height: normal;
     margin-top: 246px;
@@ -82,7 +82,7 @@ const Title = styled.h1`
   }
 `;
 
-const Description = styled(m.p)`
+const Description = styled(m.span)`
   z-index: 1;
   display: inline-block;
   position: relative;
@@ -116,8 +116,9 @@ const Description = styled(m.p)`
     transform: translate3d(-50%, -50%, 0) rotate(6.4deg);
   }
 
-  ${desktopMq} {
-    width: 1010px;
+  ${mq} {
+    width: calc(100% - 80px);
+    max-width: 1010px;
     margin-top: 400px;
     ${({ theme }) => theme.typo.b4};
     font-size: 32px;
@@ -145,7 +146,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
           height: 40px;
           transform: roate(24deg);
 
-          ${desktopMq} {
+          ${mq} {
             top: -30%;
             left: -36px;
             width: 96px;
@@ -161,7 +162,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
             height: 42px;
             transform: rotate(-50deg);
 
-            ${desktopMq} {
+            ${mq} {
               top: 30%;
               right: -46px;
               width: 114px;
@@ -174,7 +175,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
 `;
 
 export const MobileBreak = styled.br`
-  ${desktopMq} {
+  ${mq} {
     display: none;
   }
 `;

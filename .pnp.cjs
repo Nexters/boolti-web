@@ -8280,6 +8280,7 @@ const RAW_RUNTIME_STATE =
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
           ["date-fns", "npm:3.3.1"],\
           ["framer-motion", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:11.2.10"],\
+          ["jotai", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:2.8.3"],\
           ["jwt-decode", "npm:4.0.0"],\
           ["lodash.debounce", "npm:4.0.8"],\
           ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
@@ -12496,6 +12497,28 @@ const RAW_RUNTIME_STATE =
           ["jest-util", "npm:29.7.0"],\
           ["merge-stream", "npm:2.0.0"],\
           ["supports-color", "npm:8.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["jotai", [\
+      ["npm:2.8.3", {\
+        "packageLocation": "../../.yarn/berry/cache/jotai-npm-2.8.3-d80ff9e6f4-10c0.zip/node_modules/jotai/",\
+        "packageDependencies": [\
+          ["jotai", "npm:2.8.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:2.8.3", {\
+        "packageLocation": "./.yarn/__virtual__/jotai-virtual-1992163e0c/3/.yarn/berry/cache/jotai-npm-2.8.3-d80ff9e6f4-10c0.zip/node_modules/jotai/",\
+        "packageDependencies": [\
+          ["jotai", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:2.8.3"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
         ],\
         "linkType": "HARD"\
       }]\

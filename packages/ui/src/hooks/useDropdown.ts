@@ -10,6 +10,7 @@ const useDropdown = () => {
     return () => {
       document.removeEventListener('click', handleClickOutSide);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
 
   const toggleDropdown = () => {

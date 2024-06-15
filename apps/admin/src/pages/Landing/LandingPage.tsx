@@ -1,17 +1,24 @@
+import { Footer } from '@boolti/ui';
 import { domAnimation, LazyMotion } from 'framer-motion';
 
-import KeyVisual from '~/components/KeyVisual/KeyVisual';
-import LandingHeader from '~/components/LandingHeader/LandingHeader';
-
+import { Header, KeyVisual, OrganizerSection, UserSection } from './components';
 import Styled from './LandingPage.styles';
 
 const LandingPage = () => {
   return (
     <LazyMotion features={domAnimation}>
       <Styled.Container>
-        <LandingHeader />
+        <Header />
 
         <KeyVisual />
+
+        <OrganizerSection />
+
+        <UserSection />
+
+        <Styled.FooterContainer>
+          <Footer />
+        </Styled.FooterContainer>
       </Styled.Container>
     </LazyMotion>
   );

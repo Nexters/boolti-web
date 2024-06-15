@@ -1,19 +1,29 @@
-import { desktopMq } from '@boolti/ui';
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
 const Container = styled(m.div)`
+  overflow: hidden;
   width: 100vw;
   min-height: 100vh;
   padding-top: 48px;
   &::-webkit-scrollbar {
     display: none;
   }
-  ${desktopMq} {
+  ${mq} {
     padding-top: 68px;
+  }
+`;
+
+const FooterContainer = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+
+  & > footer {
+    margin: 0 auto;
   }
 `;
 
 export default {
   Container,
+  FooterContainer,
 };
