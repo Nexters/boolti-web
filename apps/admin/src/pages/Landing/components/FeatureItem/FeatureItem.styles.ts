@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div<{ position: 'left' | 'right' }>`
   display: flex;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   padding: 80px 0 40px;

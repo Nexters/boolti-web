@@ -1,6 +1,6 @@
 import { domAnimation, LazyMotion } from 'framer-motion';
 
-import { Header, KeyVisual, OrganizerSection } from './components';
+import { Header, KeyVisual, OrganizerSection, UserSection } from './components';
 import Styled from './LandingPage.styles';
 
 const LandingPage = () => {
@@ -12,6 +12,8 @@ const LandingPage = () => {
         <KeyVisual />
 
         <OrganizerSection />
+
+        <UserSection />
       </Styled.Container>
     </LazyMotion>
   );

@@ -2,7 +2,7 @@ import { atom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-type VisibleSection = 'key-visal' | 'organizer';
+type VisibleSection = 'key-visal' | 'organizer' | 'user';
 
 export const visibleSectionAtom = atom<VisibleSection>('key-visal');
 

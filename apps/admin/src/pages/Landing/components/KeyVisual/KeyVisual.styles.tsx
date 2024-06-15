@@ -82,7 +82,7 @@ const Title = styled.h1`
   }
 `;
 
-const Description = styled(m.p)`
+const Description = styled(m.span)`
   z-index: 1;
   display: inline-block;
   position: relative;
