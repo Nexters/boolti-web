@@ -1,22 +1,9 @@
 import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
-import { m } from 'framer-motion';
 
 import lightImg from '~/assets/images/light.png';
 
-const Container = styled(m.div)`
-  width: 100vw;
-  min-height: 100vh;
-  padding-top: 48px;
-  &::-webkit-scrollbar {
-    display: none;
-  }
-  ${mq} {
-    padding-top: 68px;
-  }
-`;
-
-const OrangeSection = styled.section`
+const Container = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -110,7 +97,6 @@ const MobileAdminPrevieImage = styled.img`
 export default {
   BackgroundLight,
   Container,
-  OrangeSection,
   Title,
   Description,
   Button,

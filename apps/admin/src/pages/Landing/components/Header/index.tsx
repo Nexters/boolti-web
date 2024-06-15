@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
-import Styled from './LandingHeader.styles';
+import Styled from './Header.styles';
 
-const LandingHeader = () => {
+const Header = () => {
   const logout = useLogout();
   const navigate = useNavigate();
 
@@ -82,4 +82,4 @@ const LandingHeader = () => {
   );
 };
 
-export default LandingHeader;
+export default Header;

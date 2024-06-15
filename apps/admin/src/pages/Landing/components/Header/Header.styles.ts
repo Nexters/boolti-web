@@ -1,4 +1,4 @@
-import { Button as _Button, desktopMq } from '@boolti/ui';
+import { Button as _Button, mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -14,7 +14,7 @@ const Header = styled.header`
   background: ${({ theme }) => `${theme.palette.grey.g60}${theme.palette.opacity[40]}`};
   backdrop-filter: blur(40px);
   padding: 0 20px;
-  ${desktopMq} {
+  ${mq} {
     padding: 0 20px;
   }
 `;
@@ -27,7 +27,7 @@ const HeaderContaienr = styled.div`
   justify-content: space-between;
   max-width: ${({ theme }) => theme.breakpoint.desktop};
   height: 48px;
-  ${desktopMq} {
+  ${mq} {
     height: 68px;
   }
 `;
@@ -35,7 +35,7 @@ const HeaderContaienr = styled.div`
 const BooltiIcon = styled.div`
   width: 55.5px;
   height: 21px;
-  ${desktopMq} {
+  ${mq} {
     width: 74px;
     height: 28px;
   }
@@ -59,7 +59,7 @@ const MobileButton = styled.button`
     height: 24px;
   }
 
-  ${desktopMq} {
+  ${mq} {
     display: none;
   }
 `;
@@ -71,14 +71,14 @@ const MobileMenu = styled(m.div)`
   margin-top: auto;
   width: 100%;
 
-  ${desktopMq} {
+  ${mq} {
     display: none;
   }
 `;
 
 const DesktopMenu = styled.div`
   display: none;
-  ${desktopMq} {
+  ${mq} {
     flex: 1;
     padding-left: 48px;
     display: flex;
@@ -91,7 +91,7 @@ const InternalLink = styled(Link)`
   cursor: pointer;
 
   padding: 12px 0;
-  ${desktopMq} {
+  ${mq} {
     ${({ theme }) => theme.typo.sh1};
     padding: 0 18px;
   }
