@@ -1,23 +1,27 @@
-import { LOCAL_STORAGE, useLogout } from '@boolti/api';
+import { useLogout } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
+import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
+import { useScrollDirection } from '~/hooks/useScrollDirection';
+import { getIsLogin } from '~/utils/auth';
 
+import { visibleSectionAtom } from '../../atoms/visibleSectionAtom';
+import { Tab } from '..';
 import Styled from './Header.styles';
 
 const Header = () => {
+  const currentVisibleSection = useAtomValue(visibleSectionAtom);
+  const scrollDirection = useScrollDirection();
+  const visible = currentVisibleSection === 'key-visal' || scrollDirection === 'up';
+
   const logout = useLogout();
   const navigate = useNavigate();
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLogin, setIsLogin] = useState(
-    Boolean(
-      window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
-        window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
-    ),
-  );
+  const [isLogin, setIsLogin] = useState(Boolean(getIsLogin()));
 
   const onClickAuthButton = async () => {
     if (isLogin) {
@@ -31,7 +35,21 @@ const Header = () => {
 
   return (
     <Styled.Header>
-      <Styled.HeaderContaienr>
+      <Styled.HeaderContaienr
+        initial={false}
+        animate={visible ? 'visible' : 'hidden'}
+        transition={{ duration: 0.4 }}
+        variants={{
+          hidden: {
+            maxHeight: 0,
+            opacity: 0,
+          },
+          visible: {
+            maxHeight: 100,
+            opacity: 1,
+          },
+        }}
+      >
         <Styled.BooltiIcon>
           <BooltiDark />
         </Styled.BooltiIcon>
@@ -55,7 +73,7 @@ const Header = () => {
       </Styled.HeaderContaienr>
       <Styled.MobileMenu
         initial={false}
-        animate={isExpanded ? 'visible' : 'invisible'}
+        animate={isExpanded && visible ? 'visible' : 'invisible'}
         variants={{
           invisible: {
             opacity: 0,
@@ -78,6 +96,8 @@ const Header = () => {
           {isLogin ? '로그아웃' : '로그인'}
         </Styled.MobileAuthButton>
       </Styled.MobileMenu>
+
+      <Tab />
     </Styled.Header>
   );
 };

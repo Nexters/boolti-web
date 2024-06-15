@@ -2,6 +2,7 @@ import { BooltiDark } from '@boolti/icon';
 import { useAnimation, useInView } from 'framer-motion';
 import { useEffect, useRef } from 'react';
 
+import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import Styled from './KeyVisual.styles';
 
 const Union = () => {
@@ -18,8 +19,9 @@ const Union = () => {
 };
 
 const KeyVisual = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { amount: 'all' });
+  const { ref: sectionRef } = useVisibleSectionAtom('key-visal');
+  const hiddenElementRef = useRef(null);
+  const isInView = useInView(hiddenElementRef, { amount: 'all' });
   const animation = useAnimation();
 
   useEffect(() => {
@@ -29,7 +31,7 @@ const KeyVisual = () => {
   }, [isInView, animation]);
 
   return (
-    <Styled.Container>
+    <Styled.Container ref={sectionRef}>
       <Styled.Title>
         핫한 공연 예매의 시작
         <BooltiDark />
@@ -61,7 +63,7 @@ const KeyVisual = () => {
         <Styled.FloatingUnion position="right">
           <Union />
         </Styled.FloatingUnion>
-        <Styled.Hidden ref={ref} />
+        <Styled.Hidden ref={hiddenElementRef} />
       </Styled.Description>
     </Styled.Container>
   );

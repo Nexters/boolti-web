@@ -1,14 +1,14 @@
-import { forwardRef } from 'react';
-
 import mobileAdminPreviewImg from '~/assets/images/mobile-admin-preview.png';
 import pcAdminPreviewImg from '~/assets/images/pc-admin-preview.png';
 import { PATH } from '~/constants/routes';
 
+import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import Styled from './OrganizerSection.styles';
 
-const OrganizerSection = forwardRef<HTMLElement>((_, ref) => {
+const OrganizerSection = () => {
+  const { ref: sectionRef } = useVisibleSectionAtom('organizer');
   return (
-    <Styled.Container ref={ref}>
+    <Styled.Container ref={sectionRef} id="organizer">
       <Styled.BackgroundLight />
       <Styled.Title>누구보다 바쁜{'\n'}주최자를 위한 웹</Styled.Title>
       <Styled.Description>
@@ -20,6 +20,6 @@ const OrganizerSection = forwardRef<HTMLElement>((_, ref) => {
       <Styled.PcAdminPreviewImage src={pcAdminPreviewImg} />
     </Styled.Container>
   );
-});
+};
 
 export default OrganizerSection;

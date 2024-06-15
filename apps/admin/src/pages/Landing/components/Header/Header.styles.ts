@@ -19,7 +19,7 @@ const Header = styled.header`
   }
 `;
 
-const HeaderContaienr = styled.div`
+const HeaderContaienr = styled(m.div)`
   margin: 0 auto;
   width: 100%;
   display: flex;

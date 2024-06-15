@@ -5,6 +5,7 @@ import { m } from 'framer-motion';
 import lightImg from '~/assets/images/light.png';
 
 const Container = styled(m.div)`
+  overflow: hidden;
   width: 100vw;
   min-height: 100vh;
   padding-top: 48px;
