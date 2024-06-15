@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ProfileDropdown from '~/components/ProfileDropdown';
+import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 import { getIsLogin } from '~/utils/auth';
 
@@ -15,8 +16,6 @@ import Styled from './QRPage.styles';
 
 const QRPage = () => {
   const theme = useTheme();
-  // TODO: 다이나믹 링크값 변경
-  const dynamicLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
   const [isLogin] = useState(Boolean(getIsLogin()));
   const navigate = useNavigate();
 
@@ -72,7 +71,7 @@ const QRPage = () => {
           </Styled.QRCodeDescriptionText>
           <Styled.QRCodeContainer>
             <Styled.QRCodeWrapper>
-              <QRCodeSVG value={dynamicLink} size={182} level="L" />
+              <QRCodeSVG value={LINK.DYNAMIC_LINK} size={182} level="L" />
             </Styled.QRCodeWrapper>
             <BooltiGrey />
           </Styled.QRCodeContainer>

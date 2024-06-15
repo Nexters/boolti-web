@@ -1,7 +1,7 @@
 import { Footer } from '@boolti/ui';
 import { domAnimation, LazyMotion } from 'framer-motion';
 
-import { Header, KeyVisual, OrganizerSection, UserSection } from './components';
+import { Header, KeyVisual, MoreInformation, OrganizerSection, UserSection } from './components';
 import Styled from './LandingPage.styles';
 
 const LandingPage = () => {
@@ -15,6 +15,8 @@ const LandingPage = () => {
         <OrganizerSection />
 
         <UserSection />
+
+        <MoreInformation />
 
         <Styled.FooterContainer>
           <Footer />

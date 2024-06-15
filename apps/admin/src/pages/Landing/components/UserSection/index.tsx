@@ -1,9 +1,12 @@
 import { useTheme } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 
 import entranceNotificationImg from '~/assets/images/entrance-notification.png';
 import showInfoImg from '~/assets/images/show-info.png';
 import ticketPreviewImg from '~/assets/images/ticket-preview.png';
 import ticketPurchaseImg from '~/assets/images/ticket-purchase.png';
+import { LINK } from '~/constants/link';
+import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
 import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
@@ -12,8 +15,10 @@ import Styled from './UserSection.styles';
 
 const UserSection = () => {
   const { ref: sectionRef } = useVisibleSectionAtom('user');
+  const navigate = useNavigate();
   const deviceWidth = useDeviceWidth();
   const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
   return (
     <Styled.Section ref={sectionRef} id="user">
       <Styled.Container>
@@ -23,7 +28,13 @@ const UserSection = () => {
         </Styled.Description>
         <Styled.Button
           colorTheme="primary"
-          size={deviceWidth >= parseInt(theme.breakpoint.mobile, 10) ? 'bold' : 'regular'}
+          size={isMobile ? 'regular' : 'bold'}
+          onClick={() => {
+            if (isMobile) {
+              return window.open(LINK.DYNAMIC_LINK, '_blank');
+            }
+            navigate(PATH.QR);
+          }}
         >
           앱 바로가기
         </Styled.Button>
