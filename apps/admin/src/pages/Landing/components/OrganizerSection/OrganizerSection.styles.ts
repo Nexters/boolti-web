@@ -4,7 +4,11 @@ import { Link } from 'react-router-dom';
 
 import lightImg from '~/assets/images/light.png';
 
-const Container = styled.section`
+const Section = styled.section`
+  width: 100%;
+`;
+
+const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,8 +17,23 @@ const Container = styled.section`
   background-color: #ff5b15;
   padding-top: 80px;
 
+  &::after {
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 80px);
+    height: 40px;
+    content: '';
+    opacity: 0.25;
+    background: linear-gradient(180deg, rgba(255, 92, 22, 0) 9.57%, #ff5d17 90.96%);
+  }
+
   ${mq} {
     padding-top: 130px;
+
+    &::after {
+      width: calc(100% - 160px);
+      height: 160px;
+    }
   }
 `;
 
@@ -88,7 +107,7 @@ const PcAdminPreviewImage = styled.img`
 
 const MobileAdminPrevieImage = styled.img`
   margin-top: 32px;
-  max-width: 152px;
+  max-width: 320px;
   height: auto;
   width: calc(100% - 80px);
   border-radius: 12px 12px 0px 0px;
@@ -98,6 +117,7 @@ const MobileAdminPrevieImage = styled.img`
 `;
 
 export default {
+  Section,
   BackgroundLight,
   Container,
   Title,

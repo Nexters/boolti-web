@@ -7,7 +7,7 @@ type VisibleSection = 'key-visal' | 'organizer';
 export const visibleSectionAtom = atom<VisibleSection>('key-visal');
 
 export const useVisibleSectionAtom = (section: VisibleSection) => {
-  const { ref, inView, entry } = useInView({ threshold: 0.51 });
+  const { ref, inView, entry } = useInView({ threshold: 0.2 });
   const setVisibleSection = useSetAtom(visibleSectionAtom);
 
   useEffect(() => {
