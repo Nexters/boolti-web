@@ -19,7 +19,7 @@ const Union = () => {
 
 const KeyVisual = () => {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 'all' });
+  const isInView = useInView(ref, { amount: 'all' });
   const animation = useAnimation();
 
   useEffect(() => {
