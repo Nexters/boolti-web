@@ -102,7 +102,17 @@ const Header = () => {
           },
         }}
       >
-        <Styled.InternalLink to={PATH.QR}>앱 바로가기</Styled.InternalLink>
+        <Styled.InternalLink
+          to="#"
+          onClick={() => {
+            if (isMobile) {
+              return window.open(LINK.DYNAMIC_LINK, '_blank');
+            }
+            navigate(PATH.QR);
+          }}
+        >
+          앱 바로가기
+        </Styled.InternalLink>
         <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
         <Styled.MobileAuthButton
           colorTheme={isLogin ? 'netural' : 'primary'}
