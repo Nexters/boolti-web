@@ -1,0 +1,62 @@
+import { Button as _Button, mq } from '@boolti/ui';
+import styled from '@emotion/styled';
+
+import lightImg from '~/assets/images/more-information-light.png';
+
+export const Container = styled.section`
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  padding: 80px 0;
+  background-color: ${({ theme }) => theme.palette.grey.b};
+  ${mq} {
+    padding: 160px 0 240px;
+  }
+`;
+
+const BackgroundLight = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('${lightImg}');
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: cover;
+`;
+
+const Text = styled.p`
+  z-index: 1;
+
+  white-space: pre-wrap;
+  text-align: center;
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.w};
+
+  ${mq} {
+    font-size: 40px;
+    font-weight: bold;
+    line-height: 50px;
+  }
+`;
+
+const Button = styled(_Button)`
+  z-index: 1;
+  cursor: pointer;
+  margin-top: 12px;
+
+  ${mq} {
+    margin-top: 40px;
+  }
+`;
+
+export default {
+  Container,
+  BackgroundLight,
+  Text,
+  Button,
+};
