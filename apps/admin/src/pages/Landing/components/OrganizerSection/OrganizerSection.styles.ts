@@ -1,5 +1,6 @@
 import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 import lightImg from '~/assets/images/light.png';
 
@@ -57,7 +58,9 @@ const Description = styled.p`
   }
 `;
 
-const Button = styled.button`
+const Button = styled(Link)`
+  z-index: 1;
+  cursor: pointer;
   padding: 9px 16px;
   border-radius: 4px;
   margin-top: 12px;
