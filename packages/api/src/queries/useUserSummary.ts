@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '../queryKey';
 
-const useUserSummary = () => useQuery(queryKeys.user.summary);
+const useUserSummary = ({ enabled }: { enabled?: boolean } = {}) =>
+  useQuery({ enabled, ...queryKeys.user.summary });
 
 export default useUserSummary;

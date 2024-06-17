@@ -86,6 +86,9 @@ const DesktopMenu = styled.div`
 `;
 
 const InternalLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.w};
   cursor: pointer;
@@ -95,6 +98,10 @@ const InternalLink = styled(Link)`
     ${({ theme }) => theme.typo.sh1};
     padding: 0 18px;
   }
+`;
+
+const DropDownContainer = styled.div`
+  margin-left: auto;
 `;
 
 const AuthButton = styled.button`
@@ -124,5 +131,6 @@ export default {
   MobileMenu,
   InternalLink,
   MobileAuthButton,
+  DropDownContainer,
   AuthButton,
 };
