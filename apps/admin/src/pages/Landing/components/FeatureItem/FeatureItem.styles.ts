@@ -52,6 +52,8 @@ const CategoryText = styled.span`
 
   ${mq} {
     ${({ theme }) => theme.typo.h2};
+    font-size: 20px;
+    line-height: 24px;
   }
 `;
 
@@ -62,9 +64,9 @@ const Title = styled.h3`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 48px;
+    font-size: 40px;
     margin: 12px 0 20px;
-    line-height: 70px;
+    line-height: 60px;
   }
 `;
 
@@ -74,8 +76,8 @@ const Description = styled.p`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 32px;
   }
 `;
 
