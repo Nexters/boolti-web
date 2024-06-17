@@ -1,3 +1,4 @@
+import { useUserSummary } from '@boolti/api';
 import { BooltiGrey, BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -16,6 +17,8 @@ import Styled from './QRPage.styles';
 
 const QRPage = () => {
   const theme = useTheme();
+  const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserSummary();
+
   const [isLogin] = useState(Boolean(getIsLogin()));
   const navigate = useNavigate();
 
@@ -50,7 +53,10 @@ const QRPage = () => {
             }
             right={
               isLogin ? (
-                <ProfileDropdown />
+                <ProfileDropdown
+                  userProfile={userAccountInfoData}
+                  isLoading={isUserAccountInfoLoading}
+                />
               ) : (
                 <TextButton
                   colorTheme="netural"
