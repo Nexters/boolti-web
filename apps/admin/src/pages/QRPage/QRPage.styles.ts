@@ -1,4 +1,3 @@
-import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const QRCodePage = styled.div`
@@ -6,16 +5,10 @@ const QRCodePage = styled.div`
 `;
 
 const Logo = styled.div`
-  display: inline-flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 60px;
-  height: 22.7px;
-
-  ${mq} {
-    width: 120px;
-    height: 44px;
-  }
+  width: 74px;
+  height: 28px;
+  margin-right: 48px;
+  cursor: pointer;
 `;
 
 const QRCodeContents = styled.div`
