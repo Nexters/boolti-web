@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { tableMap } from './constants/tables';
 import Styled from './SitePolicyPage.styles';
 
 const SitePolicyPage = () => {
   const { policyId = '' } = useParams<{ policyId: string }>();
+  const [searchParams] = useSearchParams();
 
   const table = tableMap[policyId];
 
@@ -37,7 +38,12 @@ const SitePolicyPage = () => {
                     <tr>
                       {tableRows.map((row) => {
                         if (row[index]) {
-                          return <td rowSpan={row[index].rowSpan}>{row[index].children}</td>;
+                          const item = row[index];
+                          return (
+                            <td rowSpan={item.rowSpan}>
+                              {item.type === 'function' ? item.getText(searchParams) : item.text}
+                            </td>
+                          );
                         }
                         return null;
                       })}
@@ -53,8 +59,10 @@ const SitePolicyPage = () => {
             {headers.map((header, index) => (
               <tr key={index}>
                 <th>{header}</th>
-                {tableRows[index].map((row) => (
-                  <td key={row.children}>{row.children}</td>
+                {tableRows[index].map((row, index) => (
+                  <td key={index}>
+                    {row.type === 'function' ? row.getText(searchParams) : row.text}
+                  </td>
                 ))}
               </tr>
             ))}
