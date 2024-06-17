@@ -32,7 +32,7 @@ const HeaderContaienr = styled(m.div)`
   }
 `;
 
-const BooltiIcon = styled.div`
+const BooltiIcon = styled.button`
   width: 55.5px;
   height: 21px;
   cursor: pointer;
