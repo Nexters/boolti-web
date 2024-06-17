@@ -18,7 +18,6 @@ import Styled from './QRPage.styles';
 const QRPage = () => {
   const theme = useTheme();
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserSummary();
-
   const [isLogin] = useState(Boolean(getIsLogin()));
   const navigate = useNavigate();
 
