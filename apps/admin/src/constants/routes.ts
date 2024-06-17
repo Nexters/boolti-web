@@ -14,6 +14,7 @@ export const PATH = {
   SHOW_RESERVATION: '/show/:showId/reservation',
   SHOW_ENTRANCE: '/show/:showId/enterance',
   SHOW_SETTLEMENT: '/show/:showId/settlement',
+  SITE_POLICY: '/site-policy/:policyId',
 } as const;
 
 export const HREF = {

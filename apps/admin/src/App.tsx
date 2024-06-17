@@ -23,6 +23,7 @@ import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage/ShowSettlementPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
+import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -48,6 +49,10 @@ const publicRoutes = [
       {
         path: PATH.OAUTH_APPLE,
         element: <OAuthApplePage />,
+      },
+      {
+        path: PATH.SITE_POLICY,
+        element: <SitePolicyPage />,
       },
       {
         path: '*',
