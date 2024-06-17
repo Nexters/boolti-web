@@ -40,7 +40,7 @@ const Text = styled.p`
   ${mq} {
     font-size: 40px;
     font-weight: bold;
-    line-height: 50px;
+    line-height: 60px;
   }
 `;
 
