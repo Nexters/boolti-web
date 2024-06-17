@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 const QRCodePage = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.g00};
 `;
 
-const Logo = styled.div`
+const Logo = styled(Link)`
   width: 74px;
   height: 28px;
   margin-right: 48px;
