@@ -10,7 +10,14 @@ interface ConfirmProps {
   onConfirm?: () => void;
 }
 
-const Confirm = ({ children, cancelText, confirmText, confirmButtonColorTheme, onCancel, onConfirm }: ConfirmProps) => {
+const Confirm = ({
+  children,
+  cancelText,
+  confirmText,
+  confirmButtonColorTheme,
+  onCancel,
+  onConfirm,
+}: ConfirmProps) => {
   return (
     <Portal>
       <Styled.DimmedArea>
@@ -20,7 +27,11 @@ const Confirm = ({ children, cancelText, confirmText, confirmButtonColorTheme, o
             <Styled.CancelButton type="button" onClick={onCancel}>
               {cancelText ?? '취소'}
             </Styled.CancelButton>
-            <Styled.ConfirmButton type="button" colorTheme={confirmButtonColorTheme} onClick={onConfirm}>
+            <Styled.ConfirmButton
+              type="button"
+              colorTheme={confirmButtonColorTheme}
+              onClick={onConfirm}
+            >
               {confirmText ?? '확인'}
             </Styled.ConfirmButton>
           </Styled.ConfirmButtonContainer>

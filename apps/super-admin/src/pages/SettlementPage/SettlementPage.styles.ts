@@ -195,10 +195,10 @@ const TableItem = styled.td<TableItemProps>`
   }
 `;
 
-const ConfirmContent = styled.div``
+const ConfirmContent = styled.div``;
 
 const ConfirmParagraph = styled.p<ConfirmParagraphProps>`
-  ${({ theme, bold }) => bold ? theme.typo.sh1 : theme.typo.b3};
+  ${({ theme, bold }) => (bold ? theme.typo.sh1 : theme.typo.b3)};
   color: ${({ theme }) => theme.palette.grey.g90};
   line-height: 24px;
 `;
@@ -231,5 +231,5 @@ export default {
   TableRow,
   TableItem,
   ConfirmContent,
-  ConfirmParagraph
+  ConfirmParagraph,
 };

@@ -23,13 +23,13 @@ const SettlementPage = () => {
   const settlementCompleteConfirm = useConfirm();
 
   const { data: adminShowDetail } = useAdminShowDetail(Number(params!.showId));
-  const { data: adminSettlementEvent, refetch: refetchAdminSettlementEvent } = useAdminSettlementEvent(Number(params!.showId));
+  const { data: adminSettlementEvent, refetch: refetchAdminSettlementEvent } =
+    useAdminSettlementEvent(Number(params!.showId));
   const { data: adminSettlementInfo } = useAdminSettlementInfo(Number(params!.showId));
   const { data: adminTicketSalesInfo } = useAdminTicketSalesInfo(Number(params!.showId));
 
   const createSettlementStatementMutation = useAdminCreateSettlementStatement();
   const settlementDoneMutation = useAdminSettlementDone();
-
 
   return (
     <Styled.SettlementPage>
@@ -81,29 +81,45 @@ const SettlementPage = () => {
                     3
                   </Styled.ProgressItemNumber>
                   <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
-                    {adminSettlementEvent?.SEND && adminSettlementEvent?.REQUEST && !adminSettlementEvent?.DONE ? (
-                      <Button colorTheme="netural" size="small" onClick={async () => {
-                        const confirm = await settlementCompleteConfirm(<Styled.ConfirmContent>
-                          <Styled.ConfirmParagraph bold>정산 완료 처리 전 다시 한 번 확인해 주세요!</Styled.ConfirmParagraph>
-                          <Styled.ConfirmParagraph>사용자가 입력한 정산 계좌에 정확한 정산액을 이체해야 합니다.</Styled.ConfirmParagraph>
-                        </Styled.ConfirmContent>, {
-                          cancel: '돌아가기',
-                          confirm: '정산 완료 처리하기',
-                        }, {
-                          confirmButtonColorTheme: 'neutral',
-                        });
+                    {adminSettlementEvent?.SEND &&
+                    adminSettlementEvent?.REQUEST &&
+                    !adminSettlementEvent?.DONE ? (
+                      <Button
+                        colorTheme="netural"
+                        size="small"
+                        onClick={async () => {
+                          const confirm = await settlementCompleteConfirm(
+                            <Styled.ConfirmContent>
+                              <Styled.ConfirmParagraph bold>
+                                정산 완료 처리 전 다시 한 번 확인해 주세요!
+                              </Styled.ConfirmParagraph>
+                              <Styled.ConfirmParagraph>
+                                사용자가 입력한 정산 계좌에 정확한 정산액을 이체해야 합니다.
+                              </Styled.ConfirmParagraph>
+                            </Styled.ConfirmContent>,
+                            {
+                              cancel: '돌아가기',
+                              confirm: '정산 완료 처리하기',
+                            },
+                            {
+                              confirmButtonColorTheme: 'neutral',
+                            },
+                          );
 
-                        if (confirm) {
-                          try {
-                            await settlementDoneMutation.mutateAsync(Number(params.showId));
-                          } catch (error) {
-                            console.error(error)
-                            toast.error('정산 완료 처리에 실패했습니다. 다시 시도해주세요.')
+                          if (confirm) {
+                            try {
+                              await settlementDoneMutation.mutateAsync(Number(params.showId));
+                            } catch (error) {
+                              console.error(error);
+                              toast.error('정산 완료 처리에 실패했습니다. 다시 시도해주세요.');
+                            }
+
+                            refetchAdminSettlementEvent();
                           }
-
-                          refetchAdminSettlementEvent()
-                        }
-                      }}>정산 완료</Button>
+                        }}
+                      >
+                        정산 완료
+                      </Button>
                     ) : (
                       '정산 완료'
                     )}
@@ -118,8 +134,7 @@ const SettlementPage = () => {
             </Styled.Section>
             <Styled.SectionDivider />
           </>
-        )
-      }
+        )}
       <Styled.Section>
         <Styled.SectionTitle>사용자 입력 정보</Styled.SectionTitle>
         <Styled.UserInfo>
@@ -239,8 +254,7 @@ const SettlementPage = () => {
           </Styled.TableBody>
         </Styled.Table>
       </Styled.Section>
-      {
-        !adminSettlementEvent?.SEND &&
+      {!adminSettlementEvent?.SEND &&
         !adminSettlementEvent?.REQUEST &&
         !adminSettlementEvent?.DONE && (
           <Styled.Section>
@@ -248,7 +262,13 @@ const SettlementPage = () => {
               type="button"
               size="medium"
               colorTheme="netural"
-              disabled={adminShowDetail?.settlementStatus !== 'SETTLEMENT_REQUIRED' || adminSettlementInfo?.bankAccount === null || adminSettlementInfo?.idCardPhotoFile === null || adminSettlementInfo?.settlementBankAccountPhotoFile === null || adminSettlementInfo?.settlementBankAccountPhotoFile === null}
+              disabled={
+                adminShowDetail?.settlementStatus !== 'SETTLEMENT_REQUIRED' ||
+                adminSettlementInfo?.bankAccount === null ||
+                adminSettlementInfo?.idCardPhotoFile === null ||
+                adminSettlementInfo?.settlementBankAccountPhotoFile === null ||
+                adminSettlementInfo?.settlementBankAccountPhotoFile === null
+              }
               onClick={() => {
                 dialog.open({
                   title: '정산 내역서 생성하기',
@@ -329,9 +349,8 @@ const SettlementPage = () => {
               내역서 생성하기
             </Button>
           </Styled.Section>
-        )
-      }
-    </Styled.SettlementPage >
+        )}
+    </Styled.SettlementPage>
   );
 };
 
