@@ -6,9 +6,10 @@ interface Props {
   description: string;
   position: 'left' | 'right';
   imageSrc: string;
+  maxWidth: [number, number];
 }
 
-const FeatureItem = ({ category, title, description, position, imageSrc }: Props) => {
+const FeatureItem = ({ category, title, description, position, imageSrc, maxWidth }: Props) => {
   return (
     <Styled.Container position={position}>
       <Styled.TextContainer>
@@ -19,7 +20,7 @@ const FeatureItem = ({ category, title, description, position, imageSrc }: Props
         <Styled.Title>{title}</Styled.Title>
         <Styled.Description>{description}</Styled.Description>
       </Styled.TextContainer>
-      <Styled.Image src={imageSrc} alt="" />
+      <Styled.Image maxWidth={maxWidth} src={imageSrc} alt="" />
     </Styled.Container>
   );
 };

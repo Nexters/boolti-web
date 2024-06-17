@@ -52,6 +52,8 @@ const CategoryText = styled.span`
 
   ${mq} {
     ${({ theme }) => theme.typo.h2};
+    font-size: 20px;
+    line-height: 24px;
   }
 `;
 
@@ -62,9 +64,9 @@ const Title = styled.h3`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 48px;
+    font-size: 40px;
     margin: 12px 0 20px;
-    line-height: 70px;
+    line-height: 60px;
   }
 `;
 
@@ -74,14 +76,14 @@ const Description = styled.p`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 32px;
   }
 `;
 
-const Image = styled.img`
+const Image = styled.img<{ maxWidth: [number, number] }>`
   width: calc(100% - 70px);
-  max-width: 360px;
+  max-width: ${({ maxWidth }) => maxWidth[0]}px;
   margin-top: 40px;
 
   ${mq} {
@@ -90,7 +92,7 @@ const Image = styled.img`
     overflow: hidden;
     flex: 1 1 auto;
     width: auto;
-    max-width: 712px;
+    max-width: ${({ maxWidth }) => maxWidth[1]}px;
     margin-top: 0;
   }
 `;

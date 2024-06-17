@@ -29,6 +29,7 @@ const OrganizerSection = () => {
         description={'예매에 필요한 정보를 입력하고\n판매할 티켓을 생성하면 끝!'}
         position="left"
         imageSrc={createShowImg}
+        maxWidth={[360, 712]}
       />
       <FeatureItem
         category="입장 관리"
@@ -36,6 +37,7 @@ const OrganizerSection = () => {
         description={'모바일 뷰로 PC를 사용하기 어려운\n공연장에서도 쉽게 입장을 확인해요'}
         position="right"
         imageSrc={manageEnteranceImg}
+        maxWidth={[360, 724]}
       />
     </Styled.Section>
   );
