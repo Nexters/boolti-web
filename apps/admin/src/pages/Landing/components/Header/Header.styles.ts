@@ -35,6 +35,9 @@ const HeaderContaienr = styled(m.div)`
 const BooltiIcon = styled.div`
   width: 55.5px;
   height: 21px;
+  cursor: pointer;
+  z-index: 1;
+
   ${mq} {
     width: 74px;
     height: 28px;
