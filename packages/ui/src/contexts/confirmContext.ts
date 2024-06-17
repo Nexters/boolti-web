@@ -1,5 +1,9 @@
 import { createContext } from 'react';
 
+export interface ConfirmOptions {
+  confirmButtonColorTheme?: 'primary' | 'neutral';
+}
+
 export interface ConfirmButtonText {
   cancel?: string;
   confirm?: string;
@@ -8,6 +12,7 @@ export interface ConfirmButtonText {
 export interface IConfirm {
   message: React.ReactNode;
   buttonText?: ConfirmButtonText;
+  options?: ConfirmOptions;
   resolve: (value: boolean | PromiseLike<boolean>) => void;
 }
 

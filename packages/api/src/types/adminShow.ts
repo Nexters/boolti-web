@@ -1,4 +1,5 @@
 import { PageResponse } from './common';
+import { ShowResponse } from './show';
 
 export type SuperAdminShowStatus =
   | 'SALES_BEFORE'
@@ -28,3 +29,40 @@ export type AdminShowResponse = PageResponse<{
   /** 공연 판매 종료 날짜, 시간.ISO8601.optional */
   salesEndTime?: string;
 }>;
+
+export interface SettlementInfoResponse {
+  idCardPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  settlementBankAccountPhotoFile: {
+    url: string;
+    fileName: string;
+  } | null;
+  bankAccount: {
+    bankAccountId: number;
+    bankName: string;
+    bankCode: string;
+    bankAccountNumber: string;
+    bankAccountHolder: string;
+  } | null;
+}
+
+export interface SettlementEventResponse {
+  SEND: string | null;
+  REQUEST: string | null;
+  DONE: string | null;
+}
+
+export type TicketSalesInfo = {
+  salesTicketId: number;
+  ticketType: string;
+  ticketName: string;
+  price: number;
+  salesCount: number;
+  amount: number;
+}[];
+
+export type TicketSalesInfoResponse = TicketSalesInfo;
+
+export type AdminShowDetailResponse = ShowResponse;

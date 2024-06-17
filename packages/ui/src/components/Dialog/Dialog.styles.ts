@@ -75,6 +75,7 @@ const DialogCloseButton = styled.button`
 
 const DialogContent = styled.div`
   padding: 0 24px;
+  overflow-y: auto;
 
   ${mq} {
     padding: 32px;

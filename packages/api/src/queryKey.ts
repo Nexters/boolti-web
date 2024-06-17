@@ -1,7 +1,7 @@
 import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory';
 import type { SearchParamsOption } from 'ky';
 
-import { fetcher } from './fetcher';
+import { fetcher, instance } from './fetcher';
 import {
   EntranceInfoResponse,
   EntranceSummaryResponse,
@@ -20,7 +20,14 @@ import {
   TicketStatus,
   TicketType,
 } from './types';
-import { AdminShowResponse, SuperAdminShowStatus } from './types/adminShow';
+import {
+  AdminShowDetailResponse,
+  AdminShowResponse,
+  SettlementEventResponse,
+  SettlementInfoResponse,
+  SuperAdminShowStatus,
+  TicketSalesInfoResponse,
+} from './types/adminShow';
 import {
   BankAccountListResponse,
   SettlementAccountInfoResponse,
@@ -88,6 +95,25 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
         searchParams,
       });
     },
+  }),
+  settlementInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SettlementInfoResponse>(`sa-api/v1/shows/${showId}/settlement-infos`),
+  }),
+  settlementEvent: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SettlementEventResponse>(`sa-api/v1/shows/${showId}/settlement-events/each-last`),
+  }),
+  ticketSalesInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<TicketSalesInfoResponse>(`sa-api/v1/shows/${showId}/ticket-sales-infos`),
+  }),
+  showDetail: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
   }),
 });
 
@@ -164,7 +190,7 @@ export const showQueryKeys = createQueryKeys('show', {
   settlementStatement: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<string>(`web/v1/host/shows/${showId}/settlement-statements/last/file`),
+      instance.get(`web/v1/host/shows/${showId}/settlement-statements/last/file`).blob(),
   }),
   lastSettlementEvent: (showId: number) => ({
     queryKey: [showId],

@@ -27,6 +27,7 @@ export interface ShowResponse {
   notice: string;
   host: ShowHost;
   isEnded: boolean;
+  settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
 }
 
 export type ShowSummaryResponse = Array<{

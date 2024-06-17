@@ -17,6 +17,7 @@ const ConfirmProvider = ({ children }: ConfirmProviderProps) => {
         <Confirm
           cancelText={currentConfirm.buttonText?.cancel}
           confirmText={currentConfirm.buttonText?.confirm}
+          confirmButtonColorTheme={currentConfirm.options?.confirmButtonColorTheme}
           onCancel={() => {
             currentConfirm.resolve(false);
             setCurrentConfirm(null);

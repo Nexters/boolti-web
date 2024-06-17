@@ -111,7 +111,15 @@ const TabItem = styled.div<TabItemProps>`
     bottom: 0;
   }
 
+  .tooltip {
+    display: none;
+  }
+
   ${mq} {
+    .tooltip {
+      display: initial;
+    }
+
     height: 52px;
   }
 `;

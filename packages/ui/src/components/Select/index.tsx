@@ -13,6 +13,7 @@ interface SelectProps {
   options: SelectOption[];
   additionalButton?: React.ReactNode;
   placeholder?: string;
+  disabled?: boolean;
   onSelect: (option: SelectOption) => void;
   onAdditionalButtonClick?: () => void;
 }
@@ -22,6 +23,7 @@ const Select = ({
   options,
   additionalButton,
   placeholder = '',
+  disabled = false,
   onSelect,
   onAdditionalButtonClick,
 }: SelectProps) => {
@@ -52,14 +54,19 @@ const Select = ({
     <Styled.SelectContainer ref={selectContainerRef}>
       <Styled.Select
         selected={value !== null}
+        disabled={disabled}
         onClick={() => {
+          if (disabled) return;
+
           setOpen((prev) => !prev);
         }}
       >
         <Styled.SelectText>{value === null ? placeholder : selectedLabel}</Styled.SelectText>
-        <Styled.ChevronDownIconContainer>
-          <ChevronDownIcon />
-        </Styled.ChevronDownIconContainer>
+        {!disabled && (
+          <Styled.ChevronDownIconContainer>
+            <ChevronDownIcon />
+          </Styled.ChevronDownIconContainer>
+        )}
       </Styled.Select>
       {open && (
         <Styled.Dropdown>

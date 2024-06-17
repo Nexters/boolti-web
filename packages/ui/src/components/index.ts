@@ -1,3 +1,4 @@
+import AgreeCheck from './AgreeCheck';
 import Badge from './Badge';
 import BooltiUIProvider from './BooltiUIProvider';
 import Button from './Button';
@@ -13,6 +14,7 @@ import TextField from './TextField';
 import TimePicker from './TimePicker';
 
 export {
+  AgreeCheck,
   Badge,
   BooltiUIProvider,
   Button,
