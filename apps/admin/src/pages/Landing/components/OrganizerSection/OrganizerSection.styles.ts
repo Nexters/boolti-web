@@ -57,8 +57,8 @@ const Title = styled.h2`
 
   ${mq} {
     white-space: normal;
-    font-size: 48px;
-    line-height: 60px;
+    font-size: 40px;
+    line-height: 40px;
   }
 `;
 
@@ -72,8 +72,8 @@ const Description = styled.p`
   ${mq} {
     white-space: normal;
     margin-top: 8px;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 20px;
+    line-height: 32px;
   }
 `;
 
