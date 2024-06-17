@@ -1,4 +1,4 @@
-import { useLogout } from '@boolti/api';
+import { useLogout, UserProfileSummaryResponse } from '@boolti/api';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { TextButton } from '@boolti/ui';
 import { useDropdown } from '@boolti/ui/src/hooks';
@@ -6,7 +6,8 @@ import { useDropdown } from '@boolti/ui/src/hooks';
 import Styled from './ProfileDropdown.styles';
 
 interface ProfileDropdownProps {
-  image?: string;
+  userProfile?: UserProfileSummaryResponse;
+  isLoading: boolean;
 }
 
 // TODO: UserProfile svg 공통화
@@ -29,14 +30,19 @@ const ProfileSVG = () => (
   </svg>
 );
 
-const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
+const ProfileDropdown = ({ userProfile, isLoading }: ProfileDropdownProps) => {
+  const { imagePath: thumbnail } = userProfile ?? {};
   const { isOpen, toggleDropdown } = useDropdown();
   const logoutMutation = useLogout();
 
   return (
     <Styled.DropdownContainer onClick={() => toggleDropdown()}>
       <Styled.UserProfileImageWrapper>
-        {image ? <Styled.UserProfileImage src={image} alt="유저 프로필 이미지" /> : <ProfileSVG />}
+        {thumbnail && !isLoading ? (
+          <Styled.UserProfileImage src={thumbnail} alt="유저 프로필 이미지" />
+        ) : (
+          <ProfileSVG />
+        )}
       </Styled.UserProfileImageWrapper>
       {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
       {isOpen && (
