@@ -87,7 +87,6 @@ const DesktopMenu = styled.div`
 
 const InternalLink = styled(Link)`
   display: flex;
-  justify-content: center;
   align-items: center;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.w};
