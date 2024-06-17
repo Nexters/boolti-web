@@ -33,7 +33,9 @@ const QRPage = () => {
           <Header
             left={
               <>
-                <Styled.Logo>
+                <Styled.Logo
+                  onClick={() => navigate(PATH.INDEX)}
+                >
                   <BooltiLogo />
                 </Styled.Logo>
                 {/* TODO: 공연 준비하기 페이지로 이동 */}
