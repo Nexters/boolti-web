@@ -1,12 +1,14 @@
 import {
   useAdminCreateSettlementStatement,
+  useAdminSettlementDone,
   useAdminSettlementEvent,
   useAdminSettlementInfo,
   useAdminShowDetail,
   useAdminTicketSalesInfo,
 } from '@boolti/api';
 import { PlusIcon } from '@boolti/icon';
-import { Button, useDialog, useToast } from '@boolti/ui';
+import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
+import { format } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 import SettlementStatementFormDialog from '~/components/SettlementStatement/SettlementStatementFormDialog';
@@ -18,13 +20,16 @@ const SettlementPage = () => {
 
   const dialog = useDialog();
   const toast = useToast();
+  const settlementCompleteConfirm = useConfirm();
 
   const { data: adminShowDetail } = useAdminShowDetail(Number(params!.showId));
-  const { data: adminSettlementEvent } = useAdminSettlementEvent(Number(params!.showId));
+  const { data: adminSettlementEvent, refetch: refetchAdminSettlementEvent } = useAdminSettlementEvent(Number(params!.showId));
   const { data: adminSettlementInfo } = useAdminSettlementInfo(Number(params!.showId));
   const { data: adminTicketSalesInfo } = useAdminTicketSalesInfo(Number(params!.showId));
 
   const createSettlementStatementMutation = useAdminCreateSettlementStatement();
+  const settlementDoneMutation = useAdminSettlementDone();
+
 
   return (
     <Styled.SettlementPage>
@@ -54,7 +59,7 @@ const SettlementPage = () => {
                   </Styled.ProgressItemTitle>
                   {adminSettlementEvent?.SEND && (
                     <Styled.ProgressItemDescription>
-                      {adminSettlementEvent.SEND}
+                      {format(adminSettlementEvent.SEND, 'yyyy-MM-dd HH:mm')}
                     </Styled.ProgressItemDescription>
                   )}
                 </Styled.ProgressItem>
@@ -67,7 +72,7 @@ const SettlementPage = () => {
                   </Styled.ProgressItemTitle>
                   {adminSettlementEvent?.REQUEST && (
                     <Styled.ProgressItemDescription>
-                      {adminSettlementEvent.REQUEST}
+                      {format(adminSettlementEvent.REQUEST, 'yyyy-MM-dd HH:mm')}
                     </Styled.ProgressItemDescription>
                   )}
                 </Styled.ProgressItem>
@@ -76,11 +81,36 @@ const SettlementPage = () => {
                     3
                   </Styled.ProgressItemNumber>
                   <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
-                    정산 완료
+                    {adminSettlementEvent?.SEND && adminSettlementEvent?.REQUEST && !adminSettlementEvent?.DONE ? (
+                      <Button colorTheme="netural" size="small" onClick={async () => {
+                        const confirm = await settlementCompleteConfirm(<Styled.ConfirmContent>
+                          <Styled.ConfirmParagraph bold>정산 완료 처리 전 다시 한 번 확인해 주세요!</Styled.ConfirmParagraph>
+                          <Styled.ConfirmParagraph>사용자가 입력한 정산 계좌에 정확한 정산액을 이체해야 합니다.</Styled.ConfirmParagraph>
+                        </Styled.ConfirmContent>, {
+                          cancel: '돌아가기',
+                          confirm: '정산 완료 처리하기',
+                        }, {
+                          confirmButtonColorTheme: 'neutral',
+                        });
+
+                        if (confirm) {
+                          try {
+                            await settlementDoneMutation.mutateAsync(Number(params.showId));
+                          } catch (error) {
+                            console.error(error)
+                            toast.error('정산 완료 처리에 실패했습니다. 다시 시도해주세요.')
+                          }
+
+                          refetchAdminSettlementEvent()
+                        }
+                      }}>정산 완료</Button>
+                    ) : (
+                      '정산 완료'
+                    )}
                   </Styled.ProgressItemTitle>
                   {adminSettlementEvent?.DONE && (
                     <Styled.ProgressItemDescription>
-                      {adminSettlementEvent.DONE}
+                      {format(adminSettlementEvent.DONE, 'yyyy-MM-dd HH:mm')}
                     </Styled.ProgressItemDescription>
                   )}
                 </Styled.ProgressItem>
@@ -88,7 +118,8 @@ const SettlementPage = () => {
             </Styled.Section>
             <Styled.SectionDivider />
           </>
-        )}
+        )
+      }
       <Styled.Section>
         <Styled.SectionTitle>사용자 입력 정보</Styled.SectionTitle>
         <Styled.UserInfo>
@@ -187,91 +218,120 @@ const SettlementPage = () => {
                 </Styled.TableRow>
               );
             })}
+            <Styled.TableRow>
+              <Styled.TableItem>총 판매</Styled.TableItem>
+              <Styled.TableItem></Styled.TableItem>
+              <Styled.TableItem></Styled.TableItem>
+              <Styled.TableItem align="right">
+                {adminTicketSalesInfo
+                  ?.reduce<number>((acc, cur) => acc + cur.salesCount, 0)
+                  .toLocaleString()}
+                매
+              </Styled.TableItem>
+              <Styled.TableItem align="right">
+                {adminTicketSalesInfo
+                  ?.reduce<number>((acc, cur) => acc + cur.amount, 0)
+                  .toLocaleString()}
+                원
+              </Styled.TableItem>
+              <Styled.TableItem></Styled.TableItem>
+            </Styled.TableRow>
           </Styled.TableBody>
         </Styled.Table>
       </Styled.Section>
-      <Styled.Section>
-        <Button
-          type="button"
-          size="medium"
-          colorTheme="netural"
-          onClick={() => {
-            dialog.open({
-              title: '정산 내역서 생성하기',
-              content: (
-                <SettlementStatementFormDialog
-                  ticketSalesInfo={adminTicketSalesInfo ?? []}
-                  initialValues={{
-                    showName: adminShowDetail?.name ?? '',
-                    hostName: adminShowDetail?.host.name ?? '',
-                    accountHolder: adminSettlementInfo?.bankAccount?.bankAccountHolder ?? '',
-                    bankCode: adminSettlementInfo?.bankAccount?.bankCode ?? '',
-                    accountNumber: adminSettlementInfo?.bankAccount?.bankAccountNumber ?? '',
-                  }}
-                  onSubmit={async (data) => {
-                    try {
-                      const body = {
-                        showName: data.showName,
-                        hostName: data.hostName,
-                        settlementBankInfo: {
-                          bankCode: data.bankCode,
-                          bankAccountNumber: data.accountNumber,
-                          bankAccountHolder: data.accountHolder,
-                        },
-                        businessLicenseNumber: data.businessNumber,
-                        salesAmount: parseInt(data.salesAmount.replace(/,/g, '')),
-                        salesItems: data.salesItems.reduce<
-                          {
-                            salesTicketTypeId: number;
-                            amount: number;
-                          }[]
-                        >((acc, item) => {
-                          acc.push({
-                            salesTicketTypeId: parseInt(item.salesTicketId.replace(/,/g, '')),
-                            amount: parseInt(item.amount.replace(/,/g, '')),
+      {
+        !adminSettlementEvent?.SEND &&
+        !adminSettlementEvent?.REQUEST &&
+        !adminSettlementEvent?.DONE && (
+          <Styled.Section>
+            <Button
+              type="button"
+              size="medium"
+              colorTheme="netural"
+              disabled={adminShowDetail?.settlementStatus !== 'SETTLEMENT_REQUIRED' || adminSettlementInfo?.bankAccount === null || adminSettlementInfo?.idCardPhotoFile === null || adminSettlementInfo?.settlementBankAccountPhotoFile === null || adminSettlementInfo?.settlementBankAccountPhotoFile === null}
+              onClick={() => {
+                dialog.open({
+                  title: '정산 내역서 생성하기',
+                  content: (
+                    <SettlementStatementFormDialog
+                      ticketSalesInfo={adminTicketSalesInfo ?? []}
+                      initialValues={{
+                        showName: adminShowDetail?.name ?? '',
+                        hostName: adminShowDetail?.host.name ?? '',
+                        accountHolder: adminSettlementInfo?.bankAccount?.bankAccountHolder ?? '',
+                        bankCode: adminSettlementInfo?.bankAccount?.bankCode ?? '',
+                        accountNumber: adminSettlementInfo?.bankAccount?.bankAccountNumber ?? '',
+                      }}
+                      onSubmit={async (data) => {
+                        try {
+                          if (createSettlementStatementMutation.isLoading) return;
+
+                          const body = {
+                            showName: data.showName,
+                            hostName: data.hostName,
+                            settlementBankInfo: {
+                              bankCode: data.bankCode,
+                              bankAccountNumber: data.accountNumber,
+                              bankAccountHolder: data.accountHolder,
+                            },
+                            businessLicenseNumber: data.businessNumber,
+                            salesAmount: parseInt(data.salesAmount.replace(/,/g, '')),
+                            salesItems: data.salesItems.reduce<
+                              {
+                                salesTicketTypeId: number;
+                                amount: number;
+                              }[]
+                            >((acc, item) => {
+                              acc.push({
+                                salesTicketTypeId: parseInt(item.salesTicketId.replace(/,/g, '')),
+                                amount: parseInt(item.amount.replace(/,/g, '')),
+                              });
+
+                              return acc;
+                            }, []),
+                            fee: parseInt(data.fee.replace(/,/g, '')),
+                            feeItems: [
+                              {
+                                feeType: 'BROKERAGE_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
+                                amount: parseInt(data.brokerageFee.replace(/,/g, '')),
+                              },
+                              {
+                                feeType: 'PAYMENT_AGENCY_FEE' as
+                                  | 'BROKERAGE_FEE'
+                                  | 'PAYMENT_AGENCY_FEE',
+                                amount: parseInt(data.paymentAgencyFee.replace(/,/g, '')),
+                              },
+                            ],
+                            vat: parseInt(data.vat.replace(/,/g, '')),
+                            roundAmount: parseInt(data.adjustmentAmount.replace(/,/g, '')),
+                            roundReason: data.adjustmentReason,
+                          };
+
+                          await createSettlementStatementMutation.mutateAsync({
+                            showId: Number(params.showId),
+                            body,
                           });
 
-                          return acc;
-                        }, []),
-                        fee: parseInt(data.fee.replace(/,/g, '')),
-                        feeItems: [
-                          {
-                            feeType: 'BROKERAGE_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
-                            amount: parseInt(data.brokerageFee.replace(/,/g, '')),
-                          },
-                          {
-                            feeType: 'PAYMENT_AGENCY_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
-                            amount: parseInt(data.paymentAgencyFee.replace(/,/g, '')),
-                          },
-                        ],
-                        vat: parseInt(data.vat.replace(/,/g, '')),
-                        roundAmount: parseInt(data.adjustmentAmount.replace(/,/g, '')),
-                        roundReason: data.adjustmentReason,
-                      };
-
-                      await createSettlementStatementMutation.mutateAsync({
-                        showId: Number(params.showId),
-                        body,
-                      });
-
-                      toast.success('정산 내역서를 발송했어요.');
-                      dialog.close();
-                    } catch (error) {
-                      console.error(error);
-                      toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
-                    }
-                  }}
-                />
-              ),
-              isAuto: true,
-            });
-          }}
-        >
-          <PlusIcon />
-          내역서 생성하기
-        </Button>
-      </Styled.Section>
-    </Styled.SettlementPage>
+                          toast.success('정산 내역서를 발송했어요.');
+                          dialog.close();
+                        } catch (error) {
+                          console.error(error);
+                          toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
+                        }
+                      }}
+                    />
+                  ),
+                  isAuto: true,
+                });
+              }}
+            >
+              <PlusIcon />
+              내역서 생성하기
+            </Button>
+          </Styled.Section>
+        )
+      }
+    </Styled.SettlementPage >
   );
 };
 

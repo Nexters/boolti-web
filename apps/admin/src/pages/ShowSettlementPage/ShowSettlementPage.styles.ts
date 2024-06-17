@@ -54,6 +54,9 @@ const DocumentContainer = styled.div`
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 8px;
+  box-shadow: 0 8px 14px 0 ${({ theme }) => theme.palette.shadow};
 `;
 
 const DocumentFooter = styled.div`

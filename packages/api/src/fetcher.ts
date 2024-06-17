@@ -75,6 +75,7 @@ export const instance = ky.create({
     ],
   },
   retry: 0,
+  timeout: 30_000,
 });
 
 export async function resultify<T>(response: ResponsePromise) {

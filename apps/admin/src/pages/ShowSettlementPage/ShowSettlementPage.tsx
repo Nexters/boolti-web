@@ -37,6 +37,7 @@ const ShowSettlementPage = () => {
 
   const [account, setAccount] = useState<string | null>(null);
   const [agreeChecked, setAgreeChecked] = useState<boolean>(false);
+  const [numPages, setNumPages] = useState<number>(0);
 
   const settlementDialog = useDialog();
   const toast = useToast();
@@ -189,60 +190,70 @@ const ShowSettlementPage = () => {
             <Styled.PageSection>
               <Styled.PageSectionHeader>
                 <Styled.PageTitle>정산 내역서</Styled.PageTitle>
-                <TextButton
-                  colorTheme="netural"
-                  size="small"
-                  icon={<DownloadIcon />}
-                  onClick={() => {
-                    if (!settlementStatementBlob) return;
+                {settlementStatementFile && (
 
-                    const downloadUrl = URL.createObjectURL(settlementStatementBlob);
+                  <TextButton
+                    colorTheme="netural"
+                    size="small"
+                    icon={<DownloadIcon />}
+                    onClick={() => {
+                      if (!settlementStatementBlob) return;
 
-                    const anchorElement = document.createElement('a');
-                    anchorElement.href = downloadUrl;
-                    anchorElement.download = `불티 정산 내역서 - ${show.name}.pdf`;
-                    anchorElement.click();
+                      const downloadUrl = URL.createObjectURL(settlementStatementBlob);
 
-                    URL.revokeObjectURL(downloadUrl);
-                  }}
-                >
-                  다운로드
-                </TextButton>
+                      const anchorElement = document.createElement('a');
+                      anchorElement.href = downloadUrl;
+                      anchorElement.download = `불티 정산 내역서 - ${show.name}.pdf`;
+                      anchorElement.click();
+
+                      URL.revokeObjectURL(downloadUrl);
+                    }}
+                  >
+                    다운로드
+                  </TextButton>
+                )}
               </Styled.PageSectionHeader>
-              {lastSettlementEvent?.settlementEventType !== null ? (
+              {(lastSettlementEvent?.settlementEventType !== null && settlementStatementFile !== null) && (
                 <>
                   <Styled.DocumentContainer>
-                    <Document file={settlementStatementFile}>
-                      <Page pageNumber={1} />
+                    <Document file={settlementStatementFile} onLoadSuccess={(data: { numPages: number }) => {
+                      setNumPages(data.numPages)
+                    }}>
+                      {Array.from(new Array(numPages), (_, index) => (
+                        <Page key={index} pageNumber={index + 1} width={1070} height={1200} />
+                      ))}
                     </Document>
                   </Styled.DocumentContainer>
-                  <Styled.DocumentFooter>
-                    <AgreeCheck
-                      checked={agreeChecked}
-                      description="정산 내역 및 안내사항을 모두 확인하였으며 정산을 요청합니다."
-                      onChange={(event) => {
-                        setAgreeChecked(event.target.checked);
-                      }}
-                    />
-                    <Button
-                      colorTheme="primary"
-                      size="bold"
-                      disabled={!agreeChecked}
-                      onClick={async () => {
-                        try {
-                          await requestSettlementMutation.mutateAsync();
+                  {lastSettlementEvent?.settlementEventType === 'SEND' && (
+                    <Styled.DocumentFooter>
+                      <AgreeCheck
+                        checked={agreeChecked}
+                        description="정산 내역 및 안내사항을 모두 확인하였으며 정산을 요청합니다."
+                        onChange={(event) => {
+                          setAgreeChecked(event.target.checked);
+                        }}
+                      />
+                      <Button
+                        colorTheme="primary"
+                        size="bold"
+                        disabled={!agreeChecked}
+                        onClick={async () => {
+                          try {
+                            await requestSettlementMutation.mutateAsync();
 
-                          toast.success('정산을 요청했습니다');
-                        } catch (error) {
-                          toast.error('정산 요청에 실패했습니다. 잠시 후에 다시 시도해주세요.');
-                        }
-                      }}
-                    >
-                      정산 요청하기
-                    </Button>
-                  </Styled.DocumentFooter>
+                            toast.success('정산을 요청했습니다');
+                          } catch (error) {
+                            toast.error('정산 요청에 실패했습니다. 잠시 후에 다시 시도해주세요.');
+                          }
+                        }}
+                      >
+                        정산 요청하기
+                      </Button>
+                    </Styled.DocumentFooter>
+                  )}
                 </>
-              ) : (
+              )}
+              {!lastSettlementEvent?.settlementEventType && (
                 <Styled.PageDescription>
                   정산 내역서는 티켓 판매종료 후 생성돼요
                 </Styled.PageDescription>

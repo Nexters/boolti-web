@@ -9,6 +9,10 @@ interface TableItemProps {
   minWidth?: number;
 }
 
+interface ConfirmParagraphProps {
+  bold?: boolean;
+}
+
 const SettlementPage = styled.div`
   padding: 26px 44px 56px;
 `;
@@ -191,6 +195,14 @@ const TableItem = styled.td<TableItemProps>`
   }
 `;
 
+const ConfirmContent = styled.div``
+
+const ConfirmParagraph = styled.p<ConfirmParagraphProps>`
+  ${({ theme, bold }) => bold ? theme.typo.sh1 : theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  line-height: 24px;
+`;
+
 export default {
   SettlementPage,
   Breadcrumb,
@@ -218,4 +230,6 @@ export default {
   TableHeaderItem,
   TableRow,
   TableItem,
+  ConfirmContent,
+  ConfirmParagraph
 };

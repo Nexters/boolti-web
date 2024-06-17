@@ -5,6 +5,10 @@ import { mq } from '../../systems';
 const CONFIRM_WIDTH = '450px';
 const CONFIRM_MOBILE_WIDTH = '264px';
 
+interface ConfirmButtonProps {
+  colorTheme?: 'primary' | 'neutral';
+}
+
 const DimmedArea = styled.div`
   position: fixed;
   inset: 0;
@@ -27,7 +31,7 @@ const Confirm = styled.div`
   }
 `;
 
-const ConfirmMessage = styled.p`
+const ConfirmMessage = styled.div`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 24px;
@@ -66,7 +70,7 @@ const CancelButton = styled.button`
   }
 `;
 
-const ConfirmButton = styled.button`
+const ConfirmButton = styled.button<ConfirmButtonProps>`
   flex: 1;
   display: inline-flex;
   justify-content: center;
@@ -74,7 +78,11 @@ const ConfirmButton = styled.button`
   height: 48px;
   padding: 0 20px;
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.palette.primary.o1};
+  background-color: ${({ theme, colorTheme }) => {
+    if (colorTheme === 'neutral') return theme.palette.grey.g90;
+
+    return theme.palette.primary.o1;
+  }};
   color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.sh1};
   cursor: pointer;

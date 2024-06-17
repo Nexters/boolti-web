@@ -22,10 +22,12 @@ import useSignUp from './useSignUp';
 import useUploadBankAccountCopyPhoto from './useUploadBankAccountCopyPhoto';
 import useUploadIDCardPhotoFile from './useUploadIDCardPhotoFile';
 import useUploadShowImage, { ImageFile } from './useUploadShowImage';
+import useAdminSettlementDone from './useAdminSettlementDone';
 
 export {
   useAddBankAccount,
   useAddShow,
+  useAdminSettlementDone,
   useAdminCreateSettlementStatement,
   useAdmingLogin,
   useAdminLogout,
