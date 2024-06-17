@@ -79,9 +79,9 @@ const Description = styled.p`
   }
 `;
 
-const Image = styled.img`
+const Image = styled.img<{ maxWidth: [number, number] }>`
   width: calc(100% - 70px);
-  max-width: 360px;
+  max-width: ${({ maxWidth }) => maxWidth[0]}px;
   margin-top: 40px;
 
   ${mq} {
@@ -90,7 +90,7 @@ const Image = styled.img`
     overflow: hidden;
     flex: 1 1 auto;
     width: auto;
-    max-width: 712px;
+    max-width: ${({ maxWidth }) => maxWidth[1]}px;
     margin-top: 0;
   }
 `;
