@@ -17,6 +17,7 @@ const Container = styled.div<{ position: 'left' | 'right' }>`
 `;
 
 const Circle = styled.div`
+  z-index: 0;
   width: 70px;
   height: 70px;
   border-radius: 100%;
@@ -44,6 +45,7 @@ const TextContainer = styled.div`
 `;
 
 const CategoryText = styled.span`
+  z-index: 1;
   display: inline-block;
   position: relative;
   ${({ theme }) => theme.typo.b1};
@@ -58,6 +60,8 @@ const CategoryText = styled.span`
 `;
 
 const Title = styled.h3`
+  position: relative;
+  z-index: 1;
   ${({ theme }) => theme.typo.point.p4};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin: 6px 0;

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Header = styled.header`
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   top: 0;
   left: 0;
   width: 100%;
@@ -86,6 +86,8 @@ const DesktopMenu = styled.div`
 `;
 
 const InternalLink = styled(Link)`
+  display: flex;
+  align-items: center;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.w};
   cursor: pointer;
@@ -95,6 +97,10 @@ const InternalLink = styled(Link)`
     ${({ theme }) => theme.typo.sh1};
     padding: 0 18px;
   }
+`;
+
+const DropDownContainer = styled.div`
+  margin-left: auto;
 `;
 
 const AuthButton = styled.button`
@@ -124,5 +130,6 @@ export default {
   MobileMenu,
   InternalLink,
   MobileAuthButton,
+  DropDownContainer,
   AuthButton,
 };
