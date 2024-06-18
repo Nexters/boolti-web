@@ -5,7 +5,7 @@ import Styled from './Tab.styles';
 
 const items = [
   { key: 'organizer', children: '주최자용 웹' },
-  { key: 'user', children: '예매자용 웹' },
+  { key: 'user', children: '예매자용 앱' },
 ] as const;
 
 const Tab = () => {
