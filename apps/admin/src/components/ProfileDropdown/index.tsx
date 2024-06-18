@@ -2,10 +2,11 @@ import { useLogout } from '@boolti/api';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { TextButton } from '@boolti/ui';
 import { useDropdown } from '@boolti/ui/src/hooks';
+import { useNavigate } from 'react-router-dom';
+
+import { PATH } from '~/constants/routes';
 
 import Styled from './ProfileDropdown.styles';
-import { useNavigate } from 'react-router-dom';
-import { PATH } from '~/constants/routes';
 
 interface ProfileDropdownProps {
   image?: string;
@@ -51,7 +52,7 @@ const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
             onClick={async () => {
               await logoutMutation.mutateAsync();
               if (location.pathname === PATH.INDEX) {
-                location.reload()
+                location.reload();
               }
               navigate(PATH.INDEX, { replace: true });
             }}
