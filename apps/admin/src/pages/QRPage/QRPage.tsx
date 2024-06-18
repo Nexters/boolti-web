@@ -17,7 +17,7 @@ import Styled from './QRPage.styles';
 
 const QRPage = () => {
   const theme = useTheme();
-  const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserSummary();
+  const { data: userAccountInfoData } = useUserSummary();
   const [isLogin] = useState(Boolean(getIsLogin()));
   const navigate = useNavigate();
 
@@ -52,10 +52,7 @@ const QRPage = () => {
             }
             right={
               isLogin ? (
-                <ProfileDropdown
-                  userProfile={userAccountInfoData}
-                  isLoading={isUserAccountInfoLoading}
-                />
+                <ProfileDropdown image={userAccountInfoData?.imagePath} />
               ) : (
                 <TextButton
                   colorTheme="netural"
