@@ -1,10 +1,11 @@
-import { useLogout } from '@boolti/api';
+import { useLogout, useUserSummary } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
 import { useTheme } from '@emotion/react';
 import { useAtomValue } from 'jotai';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ProfileDropdown from '~/components/ProfileDropdown';
 import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
@@ -29,6 +30,9 @@ const Header = () => {
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isLogin, setIsLogin] = useState(Boolean(getIsLogin()));
+
+  const { data } = useUserSummary({ enabled: isLogin });
+  const { imagePath } = data ?? {};
 
   const onClickAuthButton = async () => {
     if (isLogin) {
@@ -57,7 +61,7 @@ const Header = () => {
           },
         }}
       >
-        <Styled.BooltiIcon>
+        <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
           <BooltiDark />
         </Styled.BooltiIcon>
 
@@ -74,9 +78,13 @@ const Header = () => {
             앱 바로가기
           </Styled.InternalLink>
           <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
-          <Styled.AuthButton onClick={onClickAuthButton}>
-            {isLogin ? '로그아웃' : '로그인'}
-          </Styled.AuthButton>
+          {isLogin ? (
+            <Styled.DropDownContainer>
+              <ProfileDropdown image={imagePath} />
+            </Styled.DropDownContainer>
+          ) : (
+            <Styled.AuthButton onClick={onClickAuthButton}>로그인</Styled.AuthButton>
+          )}
         </Styled.DesktopMenu>
 
         {/** 모바일용 */}

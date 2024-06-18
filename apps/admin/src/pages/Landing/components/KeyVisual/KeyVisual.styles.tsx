@@ -140,7 +140,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
     switch (position) {
       case 'left': {
         return `
-          top: 0;
+          top: -30px;
           left: 10px;
           width: 40px;
           height: 40px;
