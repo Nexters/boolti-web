@@ -4,6 +4,8 @@ import { TextButton } from '@boolti/ui';
 import { useDropdown } from '@boolti/ui/src/hooks';
 
 import Styled from './ProfileDropdown.styles';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '~/constants/routes';
 
 interface ProfileDropdownProps {
   image?: string;
@@ -32,6 +34,7 @@ const ProfileSVG = () => (
 const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
   const { isOpen, toggleDropdown } = useDropdown();
   const logoutMutation = useLogout();
+  const navigate = useNavigate();
 
   return (
     <Styled.DropdownContainer onClick={() => toggleDropdown()}>
@@ -47,6 +50,10 @@ const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
             colorTheme="netural"
             onClick={async () => {
               await logoutMutation.mutateAsync();
+              if (location.pathname === PATH.INDEX) {
+                location.reload()
+              }
+              navigate(PATH.INDEX, { replace: true });
             }}
           >
             로그아웃
