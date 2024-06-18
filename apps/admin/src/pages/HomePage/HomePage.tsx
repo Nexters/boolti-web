@@ -32,7 +32,7 @@ const HomePage = () => {
       header={
         <Header
           left={
-            <Styled.Logo>
+            <Styled.Logo to={PATH.INDEX}>
               <BooltiLogo />
             </Styled.Logo>
           }
