@@ -12,8 +12,6 @@ const DropdownContainer = styled.div`
 const UserProfileImageWrapper = styled.div`
   width: 36px;
   height: 36px;
-  border: 1px solid transparent;
-  border-radius: 50%;
   margin-right: 6px;
 `;
 
@@ -21,6 +19,7 @@ const UserProfileImage = styled.img`
   border-radius: 50%;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
 `;
 
 const DropdownMenuWrapper = styled.div`
