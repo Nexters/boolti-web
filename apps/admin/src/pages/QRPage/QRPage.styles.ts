@@ -1,21 +1,15 @@
-import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 const QRCodePage = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.g00};
 `;
 
-const Logo = styled.div`
-  display: inline-flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 60px;
-  height: 22.7px;
-
-  ${mq} {
-    width: 120px;
-    height: 44px;
-  }
+const Logo = styled(Link)`
+  width: 74px;
+  height: 28px;
+  margin-right: 48px;
+  cursor: pointer;
 `;
 
 const QRCodeContents = styled.div`

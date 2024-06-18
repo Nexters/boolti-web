@@ -61,7 +61,7 @@ const Header = () => {
           },
         }}
       >
-        <Styled.BooltiIcon>
+        <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
           <BooltiDark />
         </Styled.BooltiIcon>
 
