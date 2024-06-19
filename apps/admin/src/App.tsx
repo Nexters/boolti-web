@@ -5,7 +5,13 @@ import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  Outlet,
+  RouterProvider,
+  ScrollRestoration,
+} from 'react-router-dom';
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
 import { PATH } from './constants/routes';
@@ -29,6 +35,12 @@ setDefaultOptions({ locale: ko });
 
 const publicRoutes = [
   {
+    element: (
+      <>
+        <ScrollRestoration />
+        <Outlet />
+      </>
+    ),
     children: [
       {
         path: PATH.INDEX,
@@ -71,7 +83,12 @@ const PrivateRoute = () => {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 
-  return <Outlet />;
+  return (
+    <>
+      <ScrollRestoration />
+      <Outlet />
+    </>
+  );
 };
 
 const privateRoutes = [
