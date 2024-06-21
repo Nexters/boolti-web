@@ -30,6 +30,7 @@ import ShowSettlementPage from './pages/ShowSettlementPage/ShowSettlementPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
+import GiftRegisterPage from './pages/GiftRegisterPage/GiftRegisterPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -114,6 +115,10 @@ const privateRoutes = [
       {
         path: PATH.SHOW_ADD_COMPLETE,
         element: <ShowAddCompletePage />,
+      },
+      {
+        path: PATH.GIFT_REGISTER,
+        element: <GiftRegisterPage />,
       },
     ],
   },
