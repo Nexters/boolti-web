@@ -47,7 +47,7 @@ const Text = styled.p`
 const Button = styled(_Button)`
   z-index: 1;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 16px;
 
   ${mq} {
     margin-top: 28px;
