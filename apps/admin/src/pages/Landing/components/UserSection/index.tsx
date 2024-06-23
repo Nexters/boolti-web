@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 
 import entranceNotificationImg from '~/assets/images/entrance-notification.png';
 import mobileTicketPreivewImg from '~/assets/images/mobile-ticket-preview.png';
+import pcTicketPreviewImg from '~/assets/images/pc-ticket-preview.png';
 import showInfoImg from '~/assets/images/show-info.png';
-import ticketPreviewImg from '~/assets/images/pc-ticket-preview.png';
 import ticketPurchaseImg from '~/assets/images/ticket-purchase.png';
 import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
@@ -39,7 +39,7 @@ const UserSection = () => {
         >
           앱 바로가기
         </Styled.Button>
-        <Styled.TicketPreviewImage src={ticketPreviewImg} />
+        <Styled.TicketPreviewImage src={pcTicketPreviewImg} />
         <Styled.MobileTicketPreviewImage src={mobileTicketPreivewImg} />
       </Styled.Container>
       <FeatureItem
