@@ -2,7 +2,7 @@ import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Header = styled.div`
-  height: 64px;
+  height: 68px;
   display: flex;
   justify-content: space-between;
   align-items: center;
