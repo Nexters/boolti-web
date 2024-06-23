@@ -10,8 +10,10 @@ const Container = styled.div<{ position: 'left' | 'right' }>`
   flex-direction: column;
 
   ${mq} {
-    padding: 110px 60px 0;
-    gap: 112px;
+    max-width: ${({ theme }) => theme.breakpoint.desktop};
+    margin: 0 auto;
+    padding: 110px 20px 0;
+    justify-content: space-between;
     flex-direction: ${({ position }) => (position === 'left' ? 'row' : 'row-reverse')};
   }
 `;

@@ -49,7 +49,7 @@ const UserSection = () => {
         position="left"
         imageSrc={showInfoImg}
         maxWidth={[360, 536]}
-        imagePadding={[0, 24]}
+        imagePadding={[0, 12]}
       />
       <FeatureItem
         category="티켓 결제"
@@ -58,7 +58,6 @@ const UserSection = () => {
         position="right"
         imageSrc={ticketPurchaseImg}
         maxWidth={[360, 536]}
-        imagePadding={[0, 38]}
       />
       <FeatureItem
         category="입장 알림"
@@ -67,7 +66,6 @@ const UserSection = () => {
         position="left"
         imageSrc={entranceNotificationImg}
         maxWidth={[360, 536]}
-        imagePadding={[0, 24]}
       />
     </Styled.Section>
   );
