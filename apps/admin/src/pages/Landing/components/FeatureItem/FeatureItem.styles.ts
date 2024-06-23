@@ -10,7 +10,7 @@ const Container = styled.div<{ position: 'left' | 'right' }>`
   flex-direction: column;
 
   ${mq} {
-    padding: 110px 60px 60px;
+    padding: 110px 60px 0;
     gap: 112px;
     flex-direction: ${({ position }) => (position === 'left' ? 'row' : 'row-reverse')};
   }
@@ -68,9 +68,9 @@ const Title = styled.h3`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 40px;
+    font-size: 32px;
     margin: 12px 0 20px;
-    line-height: 60px;
+    line-height: 52px;
   }
 `;
 
