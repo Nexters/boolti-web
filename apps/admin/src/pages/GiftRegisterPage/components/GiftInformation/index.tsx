@@ -1,3 +1,4 @@
+import { useConfirm } from '@boolti/ui';
 import Styled from './GiftInformation.styles';
 import { ChevronRightIcon } from '@boolti/icon';
 
@@ -24,6 +25,7 @@ const GiftInformation = ({
   isCancelled,
   isRegistered,
 }: Props) => {
+  const confirm = useConfirm();
   const isRegistable = !isRegistered && !isCancelled && !isRejected;
   return (
     <>
@@ -50,7 +52,21 @@ const GiftInformation = ({
             <Styled.ExpireDate>{date}</Styled.ExpireDate>까지 선물을 등록해 주세요
           </Styled.RegisterDescription>
         )}
-        <Styled.Button disabled={!isRegistable} onClick={() => {}}>
+        <Styled.Button
+          disabled={!isRegistable}
+          onClick={async () => {
+            const result = await confirm(
+              '불티 앱에서만 이용이 가능합니다.스토어로 이동하시겠습니까?',
+              {
+                cancel: '취소하기',
+                confirm: '이동하기',
+              },
+            );
+            if (result) {
+              // store로 이동
+            }
+          }}
+        >
           {isRegistered && '등록한 선물'}
           {(isCancelled || isRejected) && (
             <>
