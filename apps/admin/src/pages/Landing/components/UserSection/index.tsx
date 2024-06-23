@@ -62,7 +62,7 @@ const UserSection = () => {
         description={'공연 30분 전 입장 알림 발송으로\n티켓을 미리 준비하고 빠르게 입장해요'}
         position="left"
         imageSrc={entranceNotificationImg}
-        maxWidth={[360, 618]}
+        maxWidth={[360, 536]}
       />
     </Styled.Section>
   );
