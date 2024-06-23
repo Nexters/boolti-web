@@ -18,7 +18,7 @@ const Container = styled.section`
   ${mq} {
     margin-top: -69px;
     padding-top: 69px;
-    height: 1300px;
+    height: 1200px;
   }
   &::before,
   &::after {
@@ -70,7 +70,7 @@ const Title = styled.h1`
   }
 
   ${mq} {
-    font-size: 74px;
+    font-size: 48px;
     line-height: normal;
     margin-top: 246px;
 
@@ -121,7 +121,7 @@ const Description = styled(m.span)`
     max-width: 1010px;
     margin-top: 400px;
     ${({ theme }) => theme.typo.b4};
-    font-size: 32px;
+    font-size: 28px;
     line-height: 48px;
     letter-spacing: -0.64px;
 

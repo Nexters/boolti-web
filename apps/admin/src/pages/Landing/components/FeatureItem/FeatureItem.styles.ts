@@ -10,8 +10,10 @@ const Container = styled.div<{ position: 'left' | 'right' }>`
   flex-direction: column;
 
   ${mq} {
-    padding: 110px 60px 60px;
-    gap: 112px;
+    max-width: ${({ theme }) => theme.breakpoint.desktop};
+    margin: 0 auto;
+    padding: 110px 20px 0;
+    justify-content: space-between;
     flex-direction: ${({ position }) => (position === 'left' ? 'row' : 'row-reverse')};
   }
 `;
@@ -68,9 +70,9 @@ const Title = styled.h3`
   white-space: pre-wrap;
 
   ${mq} {
-    font-size: 40px;
+    font-size: 32px;
     margin: 12px 0 20px;
-    line-height: 60px;
+    line-height: 52px;
   }
 `;
 
@@ -85,10 +87,11 @@ const Description = styled.p`
   }
 `;
 
-const Image = styled.img<{ maxWidth: [number, number] }>`
-  width: calc(100% - 70px);
+const Image = styled.img<{ maxWidth: [number, number]; padding: [number, number] }>`
+  width: calc(100% - 40px);
   max-width: ${({ maxWidth }) => maxWidth[0]}px;
   margin-top: 40px;
+  padding: ${({ padding }) => padding[0]}px ${({ padding }) => padding[1]}px;
 
   ${mq} {
     min-width: 0;

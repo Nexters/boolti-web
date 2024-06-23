@@ -13,7 +13,7 @@ export const Container = styled.section`
   padding: 80px 0;
   background-color: ${({ theme }) => theme.palette.grey.b};
   ${mq} {
-    padding: 160px 0 240px;
+    height: 400px;
   }
 `;
 
@@ -38,7 +38,7 @@ const Text = styled.p`
   color: ${({ theme }) => theme.palette.grey.w};
 
   ${mq} {
-    font-size: 40px;
+    font-size: 32px;
     font-weight: bold;
     line-height: 60px;
   }
@@ -47,10 +47,10 @@ const Text = styled.p`
 const Button = styled(_Button)`
   z-index: 1;
   cursor: pointer;
-  margin-top: 12px;
+  margin-top: 16px;
 
   ${mq} {
-    margin-top: 40px;
+    margin-top: 28px;
   }
 `;
 
