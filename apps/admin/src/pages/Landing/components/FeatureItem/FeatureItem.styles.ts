@@ -85,10 +85,11 @@ const Description = styled.p`
   }
 `;
 
-const Image = styled.img<{ maxWidth: [number, number] }>`
-  width: calc(100% - 70px);
+const Image = styled.img<{ maxWidth: [number, number]; padding: [number, number] }>`
+  width: calc(100% - 40px);
   max-width: ${({ maxWidth }) => maxWidth[0]}px;
   margin-top: 40px;
+  padding: ${({ padding }) => padding[0]}px ${({ padding }) => padding[1]}px;
 
   ${mq} {
     min-width: 0;

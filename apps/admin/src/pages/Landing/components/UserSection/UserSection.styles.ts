@@ -57,12 +57,21 @@ const Button = styled(_Button)`
 `;
 
 const TicketPreviewImage = styled.img`
-  width: calc(100% - 60px);
-  max-width: 1080px;
-  margin-top: 32px;
+  display: none;
   ${mq} {
+    display: block;
     width: calc(100% - 160px);
+    max-width: 1080px;
     margin-top: 80px;
+  }
+`;
+
+const MobileTicketPreviewImage = styled.img`
+  margin-top: 32px;
+  width: calc(100% - 60px);
+  display: block;
+  ${mq} {
+    display: none;
   }
 `;
 
@@ -73,4 +82,5 @@ export default {
   Description,
   Button,
   TicketPreviewImage,
+  MobileTicketPreviewImage,
 };

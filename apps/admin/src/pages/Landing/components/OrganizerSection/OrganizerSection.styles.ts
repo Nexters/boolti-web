@@ -109,7 +109,7 @@ const MobileAdminPrevieImage = styled.img`
   margin-top: 32px;
   max-width: 320px;
   height: auto;
-  width: calc(100% - 80px);
+  width: calc(100% - 168px);
   border-radius: 12px 12px 0px 0px;
   ${mq} {
     display: none;

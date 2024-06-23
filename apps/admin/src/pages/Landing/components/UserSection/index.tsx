@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import entranceNotificationImg from '~/assets/images/entrance-notification.png';
 import showInfoImg from '~/assets/images/show-info.png';
 import ticketPreviewImg from '~/assets/images/ticket-preview.png';
+import mobileTicketPreivewImg from '~/assets/images/mobile-ticket-preview.png';
 import ticketPurchaseImg from '~/assets/images/ticket-purchase.png';
 import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
@@ -39,6 +40,7 @@ const UserSection = () => {
           앱 바로가기
         </Styled.Button>
         <Styled.TicketPreviewImage src={ticketPreviewImg} />
+        <Styled.MobileTicketPreviewImage src={mobileTicketPreivewImg} />
       </Styled.Container>
       <FeatureItem
         category="공연 정보"
@@ -47,6 +49,7 @@ const UserSection = () => {
         position="left"
         imageSrc={showInfoImg}
         maxWidth={[360, 536]}
+        imagePadding={[0, 24]}
       />
       <FeatureItem
         category="티켓 결제"
@@ -55,6 +58,7 @@ const UserSection = () => {
         position="right"
         imageSrc={ticketPurchaseImg}
         maxWidth={[360, 536]}
+        imagePadding={[0, 38]}
       />
       <FeatureItem
         category="입장 알림"
@@ -63,6 +67,7 @@ const UserSection = () => {
         position="left"
         imageSrc={entranceNotificationImg}
         maxWidth={[360, 536]}
+        imagePadding={[0, 24]}
       />
     </Styled.Section>
   );

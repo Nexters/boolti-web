@@ -29,7 +29,7 @@ const OrganizerSection = () => {
         description={'예매에 필요한 정보를 입력하고\n판매할 티켓을 생성하면 끝!'}
         position="left"
         imageSrc={createShowImg}
-        maxWidth={[360, 700]}
+        maxWidth={[360, 634]}
       />
       <FeatureItem
         category="입장 관리"
