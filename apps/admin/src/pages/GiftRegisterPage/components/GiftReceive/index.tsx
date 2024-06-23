@@ -1,6 +1,6 @@
 import { boldText } from '~/utils/boldText';
 import Styled from './GiftReceive.styles';
-import giftLetterImg from '~/assets/images/gift-letter.png';
+import invitationImg from '~/assets/images/gift-invitation.png';
 
 interface Props {
   sender: string;
@@ -14,7 +14,7 @@ const GiftReceive = ({ sender, openGift }: Props) => {
       <Styled.Description
         dangerouslySetInnerHTML={{ __html: boldText(description, sender) }}
       ></Styled.Description>
-      <Styled.LetterImg src={giftLetterImg} alt="선물봉투" onClick={() => openGift()} />
+      <Styled.LetterImg src={invitationImg} alt="선물봉투" onClick={() => openGift()} />
     </Styled.Container>
   );
 };
