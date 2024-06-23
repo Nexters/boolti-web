@@ -20,8 +20,8 @@ const GiftGuide = ({ isRegistered, isCancelled }: Props) => {
       <Styled.DescriptoinList>
         {isRegistrable && (
           <>
-            {descriptionList.map((item) => (
-              <Styled.DescriptionListItem>{item}</Styled.DescriptionListItem>
+            {descriptionList.map((item, index) => (
+              <Styled.DescriptionListItem key={index}>{item}</Styled.DescriptionListItem>
             ))}
             <Styled.RejectButton
               onClick={async () => {
