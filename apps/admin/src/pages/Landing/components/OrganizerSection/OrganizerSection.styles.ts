@@ -28,7 +28,7 @@ const Container = styled.div`
   }
 
   ${mq} {
-    padding-top: 130px;
+    padding-top: 128px;
 
     &::after {
       width: calc(100% - 160px);
@@ -57,8 +57,8 @@ const Title = styled.h2`
 
   ${mq} {
     white-space: normal;
-    font-size: 40px;
-    line-height: 40px;
+    font-size: 32px;
+    line-height: 38px;
   }
 `;
 
@@ -98,10 +98,10 @@ const PcAdminPreviewImage = styled.img`
   ${mq} {
     display: block;
     width: calc(100% - 160px);
-    max-width: 1208px;
+    max-width: 1080px;
     height: auto;
     border-radius: 32px 32px 0px 0px;
-    margin-top: 62px;
+    margin-top: 80px;
   }
 `;
 
