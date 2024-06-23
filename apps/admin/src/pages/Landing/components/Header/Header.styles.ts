@@ -28,6 +28,7 @@ const HeaderContaienr = styled(m.div)`
   max-width: ${({ theme }) => theme.breakpoint.desktop};
   height: 48px;
   ${mq} {
+    padding: 0 20px;
     height: 68px;
   }
 `;
