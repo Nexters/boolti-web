@@ -15,7 +15,7 @@ const Container = styled.div`
   padding-top: 80px;
 
   ${mq} {
-    padding-top: 130px;
+    padding-top: 128px;
   }
 `;
 
@@ -27,8 +27,8 @@ const Title = styled.h2`
 
   ${mq} {
     white-space: normal;
-    font-size: 40px;
-    line-height: 40px;
+    font-size: 32px;
+    line-height: 38px;
   }
 `;
 
@@ -58,11 +58,11 @@ const Button = styled(_Button)`
 
 const TicketPreviewImage = styled.img`
   width: calc(100% - 60px);
-  max-width: 1030px;
+  max-width: 1080px;
   margin-top: 32px;
   ${mq} {
     width: calc(100% - 160px);
-    margin-top: 60px;
+    margin-top: 80px;
   }
 `;
 
