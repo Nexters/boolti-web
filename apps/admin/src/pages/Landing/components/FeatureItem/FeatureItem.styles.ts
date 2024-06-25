@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg, mq_md } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div<{ position: 'left' | 'right' }>`
@@ -9,12 +9,17 @@ const Container = styled.div<{ position: 'left' | 'right' }>`
   padding: 80px 0 40px;
   flex-direction: column;
 
-  ${mq} {
+  ${mq_lg} {
     max-width: ${({ theme }) => theme.breakpoint.desktop};
     margin: 0 auto;
     padding: 110px 20px 0;
     justify-content: space-between;
     flex-direction: ${({ position }) => (position === 'left' ? 'row' : 'row-reverse')};
+  }
+  ${mq_md} {
+    flex-direction: column;
+    align-items: ${({ position }) => (position === 'left' ? 'flex-start' : 'flex-end')};
+    max-width: ${({ theme }) => theme.breakpoint.tablet};
   }
 `;
 
@@ -30,7 +35,7 @@ const Circle = styled.div`
   top: -125%;
   left: -75%;
 
-  ${mq} {
+  ${mq_lg} {
     width: 120px;
     height: 120px;
     top: -150%;
@@ -40,7 +45,7 @@ const Circle = styled.div`
 const TextContainer = styled.div`
   text-align: center;
 
-  ${mq} {
+  ${mq_lg} {
     flex: 0 0 auto;
     text-align: left;
   }
@@ -54,7 +59,7 @@ const CategoryText = styled.span`
   font-weight: bold;
   color: ${({ theme }) => theme.palette.primary.o1};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h2};
     font-size: 20px;
     line-height: 24px;
@@ -69,10 +74,14 @@ const Title = styled.h3`
   margin: 6px 0;
   white-space: pre-wrap;
 
-  ${mq} {
+  ${mq_lg} {
     font-size: 32px;
     margin: 12px 0 20px;
     line-height: 52px;
+  }
+
+  ${mq_md} {
+    margin: 12px 0 6px;
   }
 `;
 
@@ -81,25 +90,35 @@ const Description = styled.p`
   color: ${({ theme }) => theme.palette.grey.g60};
   white-space: pre-wrap;
 
-  ${mq} {
+  ${mq_lg} {
     font-size: 20px;
     line-height: 32px;
   }
 `;
 
-const Image = styled.img<{ maxWidth: [number, number]; padding: [number, number] }>`
+const Image = styled.img<{
+  maxWidth: [number, number, number];
+  padding: [number, number];
+  position: 'left' | 'right';
+}>`
   width: calc(100% - 40px);
   max-width: ${({ maxWidth }) => maxWidth[0]}px;
   margin-top: 40px;
   padding: ${({ padding }) => padding[0]}px ${({ padding }) => padding[1]}px;
 
-  ${mq} {
+  ${mq_md} {
+    margin-top: 40px !important;
+    margin-${({ position }) => position}: auto;
+    max-width: ${({ maxWidth }) => maxWidth[1]}px !important;
+  }
+
+  ${mq_lg} {
     min-width: 0;
     min-height: 0;
     overflow: hidden;
     flex: 1 1 auto;
     width: auto;
-    max-width: ${({ maxWidth }) => maxWidth[1]}px;
+    max-width: ${({ maxWidth }) => maxWidth[2]}px;
     margin-top: 0;
   }
 `;
