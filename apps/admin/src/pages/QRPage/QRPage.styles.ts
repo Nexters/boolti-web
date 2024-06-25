@@ -29,7 +29,7 @@ const QRCodeContents = styled.div`
 
 const QRCodeTitleText = styled.h3`
   ${({ theme }) => theme.typo.h3};
-  color: ${({ theme }) => theme.palette.grey.b};
+  color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 12px;
 `;
 
