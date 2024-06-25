@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
@@ -15,7 +15,7 @@ const Container = styled.section`
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
-  ${mq} {
+  ${mq_lg} {
     margin-top: -69px;
     padding-top: 69px;
     height: 1200px;
@@ -69,7 +69,7 @@ const Title = styled.h1`
     }
   }
 
-  ${mq} {
+  ${mq_lg} {
     font-size: 48px;
     line-height: normal;
     margin-top: 246px;
@@ -116,7 +116,7 @@ const Description = styled(m.span)`
     transform: translate3d(-50%, -50%, 0) rotate(6.4deg);
   }
 
-  ${mq} {
+  ${mq_lg} {
     width: calc(100% - 80px);
     max-width: 1010px;
     margin-top: 400px;
@@ -146,7 +146,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
           height: 40px;
           transform: roate(24deg);
 
-          ${mq} {
+          ${mq_lg} {
             top: -30%;
             left: -36px;
             width: 96px;
@@ -162,7 +162,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
             height: 42px;
             transform: rotate(-50deg);
 
-            ${mq} {
+            ${mq_lg} {
               top: 30%;
               right: -46px;
               width: 114px;
@@ -175,7 +175,7 @@ const FloatingUnion = styled.div<{ position: 'left' | 'right' }>`
 `;
 
 export const MobileBreak = styled.br`
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;

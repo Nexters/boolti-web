@@ -1,11 +1,11 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowSettlementPage = styled.div`
   padding: 0 20px;
   margin: 20px 0 32px;
 
-  ${mq} {
+  ${mq_lg} {
     margin: 40px 0 68px;
   }
 `;
@@ -85,7 +85,7 @@ const FormGroupLabel = styled.div`
   display: flex;
   flex-direction: column;
 
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     align-items: center;
     gap: 4px;

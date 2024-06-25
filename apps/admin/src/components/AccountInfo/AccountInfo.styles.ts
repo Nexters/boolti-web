@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -11,7 +11,7 @@ const Container = styled.div`
   padding: 16px 20px;
   margin-top: 20px;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 28px 32px;
     margin-top: 40px;
   }
@@ -29,7 +29,7 @@ const Description = styled.span`
   color: ${({ theme }) => theme.palette.grey.g70};
   margin-bottom: 20px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 24px;
   }
 `;
@@ -40,7 +40,7 @@ const InfoContainer = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 24px;
   }
 `;

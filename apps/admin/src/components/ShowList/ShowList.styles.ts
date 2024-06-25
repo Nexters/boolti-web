@@ -1,9 +1,9 @@
-import { Button, mq, TextButton } from '@boolti/ui';
+import { Button, mq_lg, TextButton } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
   margin: 48px 0;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 80px 0;
   }
 `;
@@ -17,7 +17,7 @@ const Header = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 24px;
   }
 `;
@@ -25,21 +25,21 @@ const Header = styled.div`
 const HeaderText = styled.h2`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h2};
   }
 `;
 
 const MobileButton = styled(TextButton)`
   display: flex;
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
 
 const DesktopButton = styled(Button)`
   display: none;
-  ${mq} {
+  ${mq_lg} {
     display: flex;
   }
 `;
@@ -49,7 +49,7 @@ const TextContainer = styled.div``;
 const InfoButton = styled.button`
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const LoginContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
     height: auto;
   }
@@ -35,7 +35,7 @@ const Card = styled.div`
   box-shadow: 0px 8px 14px 0px #8b8b8b26;
   border-radius: 8px;
   padding: 0 20px 32px 20px;
-  ${mq} {
+  ${mq_lg} {
     width: 600px;
     padding: 0;
   }
@@ -43,7 +43,7 @@ const Card = styled.div`
 
 const CardHeader = styled.div`
   display: none;
-  ${mq} {
+  ${mq_lg} {
     width: 100%;
     height: 64px;
     display: flex;
@@ -63,7 +63,7 @@ const CardContent = styled.div`
   width: 100%;
   flex-direction: column;
   align-items: center;
-  ${mq} {
+  ${mq_lg} {
     padding-top: 60px;
     padding-bottom: 40px;
   }
@@ -75,7 +75,7 @@ const CardContentTitle = styled.h3`
   text-align: center;
   margin-bottom: 48px;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h3};
   }
 `;
@@ -90,7 +90,7 @@ const CardContentTitleText = styled.span`
     margin-left: 4px;
   }
 
-  ${mq} {
+  ${mq_lg} {
     svg {
       height: 26px;
       margin-left: 8px;
@@ -107,7 +107,7 @@ const LoginButtonContainer = styled.div`
   gap: 12px;
   margin-bottom: 0;
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 80px;
     padding: 0 20px;
   }
@@ -133,7 +133,7 @@ const KakaoLoginButton = styled.button`
   position: relative;
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     width: auto;
   }
 `;
@@ -151,7 +151,7 @@ const AppleLoginButton = styled.button`
   position: relative;
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     width: auto;
   }
 `;
@@ -163,7 +163,7 @@ const BottomLinkContainer = styled.div`
   color: ${({ theme }) => theme.palette.grey.g70};
   text-align: center;
 
-  ${mq} {
+  ${mq_lg} {
     position: static;
   }
 `;

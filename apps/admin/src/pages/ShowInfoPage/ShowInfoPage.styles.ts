@@ -1,11 +1,11 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowInfoPage = styled.div`
   padding: 0 20px;
   margin: 20px 0 32px;
 
-  ${mq} {
+  ${mq_lg} {
     margin: 40px 0 68px;
   }
 `;
@@ -20,7 +20,7 @@ const ShowInfoFormDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
   margin: 48px 0;
 
-  ${mq} {
+  ${mq_lg} {
     margin: 52px 0;
   }
 `;
@@ -39,7 +39,7 @@ const ShowInfoFormFooter = styled.div`
 const SaveButton = styled.div`
   width: 96px;
 
-  ${mq} {
+  ${mq_lg} {
     width: 128px;
   }
 `;
@@ -47,7 +47,7 @@ const SaveButton = styled.div`
 const DeleteButton = styled.div`
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: block;
     width: 128px;
   }

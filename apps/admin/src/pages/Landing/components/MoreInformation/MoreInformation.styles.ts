@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ export const Container = styled.section`
   width: 100%;
   padding: 80px 0;
   background-color: ${({ theme }) => theme.palette.grey.b};
-  ${mq} {
+  ${mq_lg} {
     height: 400px;
   }
 `;
@@ -38,7 +38,7 @@ const Text = styled.p`
   ${({ theme }) => theme.typo.sh2};
   color: ${({ theme }) => theme.palette.grey.w};
 
-  ${mq} {
+  ${mq_lg} {
     font-size: 32px;
     font-weight: bold;
     line-height: 60px;
@@ -54,7 +54,7 @@ const Button = styled(Link)`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.w};
   background-color: ${({ theme }) => theme.palette.primary.o1};
-  ${mq} {
+  ${mq_lg} {
     padding: 13px 20px;
     margin-top: 28px;
   }

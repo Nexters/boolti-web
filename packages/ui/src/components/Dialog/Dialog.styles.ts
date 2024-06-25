@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mq } from '../../systems';
+import { mq_lg } from '../../systems';
 
 const DIALOG_WIDTH = '450px';
 
@@ -10,7 +10,7 @@ const DimmedArea = styled.div`
   background-color: ${({ theme }) => theme.palette.dim.dialog};
   z-index: 999;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0 20px;
     display: flex;
     justify-content: center;
@@ -26,7 +26,7 @@ const Dialog = styled.div<{ isAuto: boolean; width?: string }>`
   bottom: 0;
   left: 0;
 
-  ${mq} {
+  ${mq_lg} {
     width: ${({ isAuto, width }) => (isAuto ? 'auto' : width ?? DIALOG_WIDTH)};
     position: initial;
     bottom: auto;
@@ -41,7 +41,7 @@ const DialogHeader = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 16px 32px;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g30};
   }
@@ -51,7 +51,7 @@ const DialogTitle = styled.h2`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.sh2};
   }
 `;
@@ -67,7 +67,7 @@ const DialogCloseButton = styled.button`
   align-items: center;
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     top: 17px;
     right: 32px;
   }
@@ -77,7 +77,7 @@ const DialogContent = styled.div`
   padding: 0 24px;
   overflow-y: auto;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 32px;
   }
 `;

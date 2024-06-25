@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
@@ -8,7 +8,7 @@ const Container = styled(m.div)`
   align-items: center;
   height: 48px;
   width: 100%;
-  ${mq} {
+  ${mq_lg} {
     height: 64px;
   }
 `;
@@ -35,7 +35,7 @@ const Button = styled.button<{ isActive?: boolean }>`
   border-bottom: 2px solid
     ${({ isActive, theme }) => (isActive ? theme.palette.primary.o1 : 'transparent')};
 
-  ${mq} {
+  ${mq_lg} {
     padding: 12px 0 16px 0;
   }
 `;

@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ const Logo = styled(Link)`
   height: 22.7px;
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     width: 174px;
     height: 44px;
   }
@@ -29,7 +29,7 @@ const Container = styled.main`
   min-height: calc(100vh - 64px - 274px);
   padding: 20px 20px 0;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 60px 20px 0;
   }
 `;

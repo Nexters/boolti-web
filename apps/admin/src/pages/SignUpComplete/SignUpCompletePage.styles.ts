@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const SignUpCompleteContent = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
     height: auto;
   }
@@ -35,7 +35,7 @@ const Card = styled.div`
   box-shadow: 0px 8px 14px 0px #8b8b8b26;
   border-radius: 8px;
 
-  ${mq} {
+  ${mq_lg} {
     width: 600px;
     padding: 0;
   }
@@ -53,7 +53,7 @@ const CardContentTitle = styled.h3`
   color: ${({ theme }) => theme.palette.grey.g90};
   text-align: center;
   margin-bottom: 4px;
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h3};
   }
 `;
@@ -62,7 +62,7 @@ const CardContentDescription = styled.p`
   text-align: center;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 40px;
     ${({ theme }) => theme.typo.b3};
   }
@@ -75,7 +75,7 @@ const CardContentLink = styled(Link)`
   font-weight: 600;
   text-decoration: underline;
   margin-bottom: 40px;
-  ${mq} {
+  ${mq_lg} {
     white-space: nowrap;
   }
 `;
@@ -94,7 +94,7 @@ const StartButton = styled.button`
   color: ${({ theme }) => theme.palette.grey.w};
   border-radius: 4px;
   cursor: pointer;
-  ${mq} {
+  ${mq_lg} {
     position: static;
   }
 `;
