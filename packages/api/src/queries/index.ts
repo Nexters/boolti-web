@@ -21,10 +21,12 @@ import useShowSettlementInfo from './useShowSettlementInfo';
 import useShowSettlementStatement from './useShowSettlementStatement';
 import useUserAccountInfo from './useUserAccountInfo';
 import useUserSummary from './useUserSummary';
+import useGift from './useGift';
 
 export {
   useAdminSettlementEvent,
   useAdminSettlementInfo,
+  useGift,
   useAdminShowDetail,
   useAdminShowList,
   useAdminTicketSalesInfo,
