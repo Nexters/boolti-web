@@ -55,8 +55,8 @@ const InvitationDescription = styled.p`
 `;
 
 const InvitationImage = styled.img`
-  width: 271px;
-  height: 180px;
+  width: 100%;
+  max-width: 270;
   margin-top: 28px;
 `;
 
@@ -69,8 +69,7 @@ const ShowContainer = styled.div`
 `;
 
 const PosterImage = styled.img`
-  width: 55px;
-  height: 77px;
+  width: 54px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g10};
   margin-right: 16px;
@@ -79,7 +78,7 @@ const PosterImage = styled.img`
 const ShowInformation = styled.div``;
 
 const ShowTitle = styled.h3`
-  word-break: keep-all;
+  word-break: keep-all
   ${({ theme }) => theme.typo.point.p1}
   color: ${({ theme }) => theme.palette.grey.g100};
 `;

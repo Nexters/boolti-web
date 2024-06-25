@@ -1,44 +1,34 @@
 import { useConfirm } from '@boolti/ui';
 import Styled from './GiftInformation.styles';
 import { ChevronRightIcon } from '@boolti/icon';
+import { useParams } from 'react-router-dom';
+import { useGift } from '@boolti/api';
+import { format } from 'date-fns/format';
 
-interface Props {
-  recipient: string;
-  description: string;
-  ticketImg: string;
-  showTitle: string;
-  posterImg: string;
-  date: string;
-  isRejected: boolean;
-  isCancelled: boolean;
-  isRegistered: boolean;
-}
-
-const GiftInformation = ({
-  recipient,
-  description,
-  ticketImg,
-  showTitle,
-  posterImg,
-  date,
-  isRejected,
-  isCancelled,
-  isRegistered,
-}: Props) => {
+const GiftInformation = () => {
   const confirm = useConfirm();
+
+  const { giftId = '' } = useParams<{ giftId: string }>();
+  const { data } = useGift(giftId);
+  const { recipientName, message, giftImageUrl, showImageUrl, showDate, showName } = data ?? {};
+
+  const isRegistered = false;
+  const isCancelled = false;
+  const isRejected = false;
   const isRegistable = !isRegistered && !isCancelled && !isRejected;
+
   return (
     <>
       <Styled.Container>
         <Styled.Wrapper>
-          <Styled.Recipient>TO. {recipient}</Styled.Recipient>
-          <Styled.InvitationDescription>{description}</Styled.InvitationDescription>
-          <Styled.InvitationImage src={ticketImg} alt="초대장 이미지" />
+          <Styled.Recipient>TO. {recipientName}</Styled.Recipient>
+          <Styled.InvitationDescription>{message}</Styled.InvitationDescription>
+          <Styled.InvitationImage src={giftImageUrl} alt="초대장 이미지" draggable={false} />
         </Styled.Wrapper>
         <Styled.ShowContainer>
-          <Styled.PosterImage src={posterImg} alt="포스터 이미지" />
+          <Styled.PosterImage src={showImageUrl} alt="포스터 이미지" draggable={false} />
           <Styled.ShowInformation>
-            <Styled.ShowTitle>{showTitle}</Styled.ShowTitle>
+            <Styled.ShowTitle>{showName}</Styled.ShowTitle>
             <Styled.ShowDetailLink onClick={() => {}}>
               공연 자세히 보기
               <ChevronRightIcon />
@@ -49,7 +39,10 @@ const GiftInformation = ({
       <Styled.Footer>
         {isRegistable && (
           <Styled.RegisterDescription>
-            <Styled.ExpireDate>{date}</Styled.ExpireDate>까지 선물을 등록해 주세요
+            <Styled.ExpireDate>
+              {format(showDate ?? new Date(), 'yyyy년 M월 d일')}
+            </Styled.ExpireDate>
+            까지 선물을 등록해 주세요
           </Styled.RegisterDescription>
         )}
         <Styled.Button
