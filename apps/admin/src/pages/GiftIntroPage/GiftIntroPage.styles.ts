@@ -8,6 +8,10 @@ const Container = styled.div`
   background: linear-gradient(#121215, #434753);
 `;
 
+const Button = styled.button`
+  cursor: pointer;
+`;
+
 const LetterImg = styled.img``;
 
 const Description = styled.p`
@@ -24,6 +28,7 @@ const Description = styled.p`
 
 export default {
   Container,
+  Button,
   LetterImg,
   Description,
 };

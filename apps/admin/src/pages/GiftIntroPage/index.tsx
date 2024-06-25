@@ -12,7 +12,7 @@ const GiftIntroPage = () => {
       <Styled.Description>
         <strong>{sender}</strong>님이 선물을 보냈어요.{'\n'}터치해서 확인해 보세요!
       </Styled.Description>
-      <button
+      <Styled.Button
         role="link"
         onClick={() => {
           if (giftId) {
@@ -21,7 +21,7 @@ const GiftIntroPage = () => {
         }}
       >
         <Styled.LetterImg src={invitationImg} alt="선물봉투" />
-      </button>
+      </Styled.Button>
     </Styled.Container>
   );
 };
