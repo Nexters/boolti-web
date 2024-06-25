@@ -12,6 +12,12 @@ const Logo = styled(Link)`
   cursor: pointer;
 `;
 
+const Button = styled(Link)`
+  padding: 11px 18px;
+  color: ${({ theme }) => theme.palette.grey.g90};
+  ${({ theme }) => theme.typo.sh1};
+`;
+
 const QRCodeContents = styled.div`
   display: flex;
   align-items: center;
@@ -62,6 +68,7 @@ const QRCodeWrapper = styled.div`
 export default {
   QRCodePage,
   Logo,
+  Button,
   QRCodeContents,
   QRCodeTitleText,
   QRCodeDescriptionText,

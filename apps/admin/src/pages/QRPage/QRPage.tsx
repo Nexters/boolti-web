@@ -38,16 +38,7 @@ const QRPage = () => {
                 <Styled.Logo to={PATH.INDEX}>
                   <BooltiLogo />
                 </Styled.Logo>
-                {/* TODO: 공연 준비하기 페이지로 이동 */}
-                <TextButton
-                  colorTheme="netural"
-                  size="regular"
-                  onClick={() => {
-                    /** noop */
-                  }}
-                >
-                  공연 준비하기
-                </TextButton>
+                <Styled.Button to={PATH.HOME}>공연 준비하기</Styled.Button>
               </>
             }
             right={
