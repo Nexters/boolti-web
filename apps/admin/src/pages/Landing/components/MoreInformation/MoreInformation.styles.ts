@@ -1,5 +1,6 @@
-import { Button as _Button, mq } from '@boolti/ui';
+import { mq } from '@boolti/ui';
 import styled from '@emotion/styled';
+import { Link } from 'react-router-dom';
 
 import lightImg from '~/assets/images/more-information-light.png';
 
@@ -44,12 +45,17 @@ const Text = styled.p`
   }
 `;
 
-const Button = styled(_Button)`
+const Button = styled(Link)`
   z-index: 1;
   cursor: pointer;
+  border-radius: 4px;
   margin-top: 16px;
-
+  padding: 9px 16px;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.w};
+  background-color: ${({ theme }) => theme.palette.primary.o1};
   ${mq} {
+    padding: 13px 20px;
     margin-top: 28px;
   }
 `;
