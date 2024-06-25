@@ -25,7 +25,7 @@ const GiftIntroPage = () => {
             )}
           </Styled.Description>
           {error ? (
-            <Styled.LetterImg src={unknownGiftImg} alt="" />
+            <Styled.LetterImg src={unknownGiftImg} alt="" draggable={false} />
           ) : (
             <Styled.Button
               role="link"
@@ -35,7 +35,7 @@ const GiftIntroPage = () => {
                 }
               }}
             >
-              <Styled.LetterImg src={invitationImg} alt="" />
+              <Styled.LetterImg src={invitationImg} alt="" draggable={false} />
             </Styled.Button>
           )}
         </>
