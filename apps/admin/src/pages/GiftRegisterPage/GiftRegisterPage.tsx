@@ -1,21 +1,8 @@
 import Styled from './GiftRegisterPage.styles';
-import { useSearchParams } from 'react-router-dom';
 import GiftGuide from './components/GiftGuide';
 import GiftInformation from './components/GiftInformation';
-import GiftReceive from './components/GiftReceive';
-import { useState } from 'react';
 
 const GiftRegisterPage = () => {
-  const [searchParams] = useSearchParams();
-  const giftUuid = searchParams.get('uuid');
-  const [isOpen, setIsOpen] = useState(false);
-
-  console.log(giftUuid);
-
-  const handleOpenGift = () => {
-    setIsOpen(true);
-  };
-
   const giftMockData = {
     recipient: '박영호',
     description: '에스파의 콘서트에 온걸 환영해!',
@@ -32,13 +19,9 @@ const GiftRegisterPage = () => {
   return (
     <Styled.Container>
       <Styled.GiftWrapper>
-        {isOpen ? (
-          <GiftInformation {...giftMockData} />
-        ) : (
-          <GiftReceive sender={'보낸 분 이름'} openGift={handleOpenGift} />
-        )}
+        <GiftInformation {...giftMockData} />
       </Styled.GiftWrapper>
-      {isOpen && <GiftGuide isCancelled={false} isRegistered={false} />}
+      <GiftGuide isCancelled={false} isRegistered={false} />
     </Styled.Container>
   );
 };

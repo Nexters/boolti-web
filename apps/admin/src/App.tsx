@@ -31,6 +31,7 @@ import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
 import GiftRegisterPage from './pages/GiftRegisterPage/GiftRegisterPage';
+import GiftIntroPage from './pages/GiftIntroPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -66,6 +67,14 @@ const publicRoutes = [
       {
         path: PATH.SITE_POLICY,
         element: <SitePolicyPage />,
+      },
+      {
+        path: PATH.GIFT_INTRO,
+        element: <GiftIntroPage />,
+      },
+      {
+        path: PATH.GIFT_REGISTER,
+        element: <GiftRegisterPage />,
       },
       {
         path: '*',
@@ -115,10 +124,6 @@ const privateRoutes = [
       {
         path: PATH.SHOW_ADD_COMPLETE,
         element: <ShowAddCompletePage />,
-      },
-      {
-        path: PATH.GIFT_REGISTER,
-        element: <GiftRegisterPage />,
       },
     ],
   },

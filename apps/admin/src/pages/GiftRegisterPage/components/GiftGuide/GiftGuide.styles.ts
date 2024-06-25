@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 
 const Container = styled.section`
+  width: 100%;
+  max-width: ${({ theme }) => theme.breakpoint.mobile};
   padding: 28px 20px;
   background-color: ${({ theme }) => theme.palette.grey.w};
 `;

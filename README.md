@@ -8,12 +8,14 @@
 - Storybook : https://ui.boolti.in
 
 ## 기술 스택
+
 - React
 - TypeScript
 - Turborepo
 - Vite
 
 ## 패키지 설명
+
 - `apps/admin`: 불티에서 공연을 생성하고 관리하는 사용자들을 위한 서비스입니다.
 - `apps/preview`: 공연 예매 페이지를 공유했을 때 랜딩될 페이지입니다. (WIP)
 - `apps/super-admin`: 불티 팀원이 사용할 슈퍼 어드민 페이지입니다. (WIP)

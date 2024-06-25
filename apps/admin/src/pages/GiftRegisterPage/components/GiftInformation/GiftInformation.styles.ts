@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  width: 311px;
-  height: 519px;
+  max-width: 330px;
   border-radius: 8px;
   margin: 0 auto;
   padding-top: 68px;
@@ -80,6 +79,7 @@ const PosterImage = styled.img`
 const ShowInformation = styled.div``;
 
 const ShowTitle = styled.h3`
+  word-break: keep-all;
   ${({ theme }) => theme.typo.point.p1}
   color: ${({ theme }) => theme.palette.grey.g100};
 `;
@@ -93,9 +93,8 @@ const ShowDetailLink = styled.button`
 `;
 
 const Footer = styled.div`
-  position: absolute;
-  bottom: 28px;
   width: calc(100% - 40px);
+  margin: 64px auto 28px;
   text-align: center;
 `;
 
