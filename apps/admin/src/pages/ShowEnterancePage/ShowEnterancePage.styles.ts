@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -31,7 +31,7 @@ const InfoContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     align-items: center;
     padding: 20px 24px;
@@ -42,7 +42,7 @@ const InfoText = styled.span`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.sh2};
   }
 `;
@@ -53,7 +53,7 @@ const QuestionTextButton = styled.button`
   text-decoration-line: underline;
   cursor: pointer;
   margin-top: 4px;
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b2};
     margin-top: 0;
   }
@@ -64,7 +64,7 @@ const SummaryContainer = styled.div`
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 8px;
   margin-bottom: 32px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 40px;
     display: flex;
   }
@@ -94,7 +94,7 @@ const Summary = styled.div<{ colorTheme: 'grey' | 'red' }>`
         `;
     }
   }}
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     width: 352px;
     align-items: center;
@@ -107,7 +107,7 @@ const Summary = styled.div<{ colorTheme: 'grey' | 'red' }>`
 const SumamryLabel = styled.span`
   ${({ theme }) => theme.typo.b1};
   margin-bottom: 4px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 0;
     ${({ theme }) => theme.typo.b2};
   }
@@ -125,7 +125,7 @@ const EnteranceSummaryContainer = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   width: 100%;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
     flex-direction: row;
     align-items: center;
@@ -138,7 +138,7 @@ const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
   }
 `;
@@ -225,7 +225,7 @@ const InputButton = styled.button`
 
 const TableContainer = styled.div`
   display: none;
-  ${mq} {
+  ${mq_lg} {
     display: block;
     width: 100%;
     overflow-x: scroll;

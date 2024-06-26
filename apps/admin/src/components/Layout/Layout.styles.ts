@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Layout = styled.div`
@@ -14,7 +14,7 @@ const Header = styled.header`
   max-width: ${({ theme }) => theme.breakpoint.desktop};
   margin: 0 auto;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0 20px;
   }
 `;

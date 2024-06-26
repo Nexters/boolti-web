@@ -48,7 +48,7 @@ const UserSection = () => {
         description={'공연일, 공연장 위치, 안내 사항 등\n방문할 공연의 정보를 한눈에 확인해요'}
         position="left"
         imageSrc={showInfoImg}
-        maxWidth={[360, 536]}
+        maxWidth={[360, 536, 536]}
         imagePadding={[0, 12]}
       />
       <FeatureItem
@@ -57,7 +57,7 @@ const UserSection = () => {
         description={'카드, 계좌이체, 간편결제 등\n원하는 결제 수단으로 티켓을 구매해요'}
         position="right"
         imageSrc={ticketPurchaseImg}
-        maxWidth={[360, 536]}
+        maxWidth={[360, 536, 536]}
         imagePadding={[0, 18]}
       />
       <FeatureItem
@@ -66,7 +66,7 @@ const UserSection = () => {
         description={'공연 30분 전 입장 알림 발송으로\n티켓을 미리 준비하고 빠르게 입장해요'}
         position="left"
         imageSrc={entranceNotificationImg}
-        maxWidth={[360, 536]}
+        maxWidth={[360, 536, 536]}
         imagePadding={[0, 12]}
       />
     </Styled.Section>

@@ -1,4 +1,4 @@
-import { Button, mq } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface ShowInfoFormLabelProps {
@@ -36,7 +36,7 @@ const ShowInfoFormTitle = styled.h3`
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 16px;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h1};
   }
 `;
@@ -95,7 +95,7 @@ const PreviewImageContainer = styled.div`
   height: 124px;
   margin-top: 16px;
 
-  ${mq} {
+  ${mq_lg} {
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
     height: 256px;
@@ -131,7 +131,7 @@ const PreviewImage = styled.div`
     left: 0;
   }
 
-  ${mq} {
+  ${mq_lg} {
     &:first-of-type::after {
       font-size: 14px;
       line-height: 18px;
@@ -164,7 +164,7 @@ const PreviewImageDeleteButton = styled.button`
     stroke: ${({ theme }) => theme.palette.grey.w};
   }
 
-  ${mq} {
+  ${mq_lg} {
     width: 28px;
     height: 28px;
 
@@ -210,7 +210,7 @@ const FileUploadAreaText = styled.span`
   display: flex;
   flex-direction: column;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.sh2};
     width: auto;
     flex-direction: row;
@@ -241,7 +241,7 @@ const TextFieldRow = styled.div`
   display: flex;
   flex-direction: column;
 
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     gap: 8px;
   }
@@ -297,7 +297,7 @@ const TicketGroupHeader = styled.div`
   display: none;
   justify-content: space-between;
 
-  ${mq} {
+  ${mq_lg} {
     display: flex;
   }
 `;
@@ -320,7 +320,7 @@ const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
     margin-left: 2px;
   }
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h1};
     margin-bottom: 2px;
   }
@@ -358,7 +358,7 @@ const TicketContent = styled.div`
   gap: 16px;
   padding: 16px 20px;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 24px 28px;
   }
 `;
@@ -379,7 +379,7 @@ const TicketTitleText = styled.h4`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.sh2};
   }
 `;
@@ -388,7 +388,7 @@ const TicketDescription = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
   }
 `;
@@ -397,7 +397,7 @@ const TicketAction = styled.div`
   display: none;
   align-items: center;
 
-  ${mq} {
+  ${mq_lg} {
     display: flex;
   }
 `;
@@ -419,7 +419,7 @@ const TicketCode = styled.div`
   align-items: center;
   padding: 12px 20px;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 16px 28px;
   }
 `;
@@ -429,7 +429,7 @@ const TicketCodeInfo = styled.div`
   align-items: center;
   gap: 8px;
 
-  ${mq} {
+  ${mq_lg} {
     gap: 16px;
   }
 `;
@@ -460,7 +460,7 @@ const TicketCodeListButton = styled.button`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq} {
+  ${mq_lg} {
     height: 60px;
     ${({ theme }) => theme.typo.sh1};
   }
@@ -479,7 +479,7 @@ const MobileTicketGroupHeader = styled.div`
   align-items: center;
   gap: 4px;
 
-  ${mq} {
+  ${mq_lg} {
     display: none;
     flex-direction: row;
   }
@@ -512,7 +512,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
     }
   }
 
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;

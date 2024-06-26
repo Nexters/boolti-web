@@ -1,4 +1,4 @@
-import { Button, mq } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface ProcessIndicatorItemProps {
@@ -26,7 +26,7 @@ const ShowAddPage = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.g00};
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: block;
   }
 `;
@@ -365,7 +365,7 @@ const MobileShowAddPage = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.w};
   display: block;
 
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;

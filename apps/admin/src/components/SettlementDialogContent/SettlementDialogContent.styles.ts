@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -10,7 +10,7 @@ const Container = styled.div`
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  ${mq} {
+  ${mq_lg} {
     border-radius: none;
     position: static;
     transform: none;
@@ -22,7 +22,7 @@ const Form = styled.form`
   position: relative;
   padding: 0 24px;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0;
     margin: 0;
   }
@@ -35,7 +35,7 @@ const MobileTitle = styled.h2`
   padding: 16px 0 8px 0;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
@@ -54,7 +54,7 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.palette.grey.g70};
   margin-bottom: 20px;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
     margin-bottom: 28px;
   }
@@ -70,7 +70,7 @@ const BankList = styled.ul`
     display: none;
   }
 
-  ${mq} {
+  ${mq_lg} {
     gap: 12px;
     height: 290px;
   }
@@ -110,7 +110,7 @@ const BankItemButton = styled.button<{ isSelected?: boolean; isUndefined?: boole
       opacity: 0.4;
     `;
   }}
-  ${mq} {
+  ${mq_lg} {
     padding: 8px 20px;
   }
 `;
@@ -125,7 +125,7 @@ const BankIcon = styled.div`
 const BankName = styled.span`
   ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.grey.g90};
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b1};
   }
 `;
@@ -133,7 +133,7 @@ const BankName = styled.span`
 const ButtonContainer = styled.div`
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: flex;
     justify-content: flex-end;
     width: 100%;
@@ -161,7 +161,7 @@ const MobileButtonContainer = styled.div`
       margin-left: 8px;
     }
   }
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
@@ -174,7 +174,7 @@ const InputLabel = styled.p`
 
 const MobileBottomContainer = styled.div`
   padding-bottom: 92px;
-  ${mq} {
+  ${mq_lg} {
     padding-bottom: 0;
   }
 `;

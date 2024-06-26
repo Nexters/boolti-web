@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mq } from '../../systems/breakpoint';
+import { mq_lg } from '../../systems/breakpoint';
 import TextField from '../TextField';
 
 const Container = styled.div<{ open: boolean }>`
@@ -26,7 +26,7 @@ const Control = styled.div`
   box-shadow: 0px 8px 15px 0px ${({ theme }) => theme.palette.shadow};
   display: flex;
   flex-direction: column;
-  ${mq} {
+  ${mq_lg} {
     width: auto !important;
     position: absolute;
     border-radius: 4px;
@@ -37,7 +37,7 @@ const Control = styled.div`
 const ListContainer = styled.div`
   display: flex;
   padding: 22px 20px 24px;
-  ${mq} {
+  ${mq_lg} {
     padding: 16px 16px 20px 16px;
   }
 `;
@@ -74,7 +74,7 @@ const Item = styled.button<{ isActive?: boolean }>`
   &:not(:last-child) {
     margin-bottom: 8px;
   }
-  ${mq} {
+  ${mq_lg} {
     width: 56px;
   }
 `;
@@ -86,7 +86,7 @@ const Title = styled.div`
   padding: 16px 24px 8px;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;

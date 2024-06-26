@@ -1,11 +1,11 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowTicketPage = styled.div`
   padding: 0 20px;
   margin: 20px 0 32px;
 
-  ${mq} {
+  ${mq_lg} {
     margin: 40px 0 68px;
   }
 `;
@@ -28,7 +28,7 @@ const ShowTicketFormDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
   margin: 48px 0;
 
-  ${mq} {
+  ${mq_lg} {
     margin: 52px 0;
   }
 `;

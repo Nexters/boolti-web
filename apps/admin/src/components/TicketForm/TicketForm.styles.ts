@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const TicketForm = styled.form`
@@ -10,7 +10,7 @@ const Description = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
     color: ${({ theme }) => theme.palette.grey.g70};
   }
@@ -22,7 +22,7 @@ const TicketFormRow = styled.div`
   flex-direction: column;
   gap: 28px;
 
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     gap: 24px;
   }
@@ -65,7 +65,7 @@ const TicketFormButton = styled.div`
     width: 100%;
   }
 
-  ${mq} {
+  ${mq_lg} {
     margin-top: 4px;
 
     button {

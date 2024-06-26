@@ -1,5 +1,5 @@
 import { UserProfile as DefaultUserProfileIcon } from '@boolti/icon';
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -12,7 +12,7 @@ const ProfileImage = styled.img`
   width: 52px;
   height: 52px;
 
-  ${mq} {
+  ${mq_lg} {
     width: 68px;
     height: 68px;
   }
@@ -30,7 +30,7 @@ const Username = styled.p`
   ${({ theme }) => theme.typo.h2};
   color: ${({ theme }) => theme.palette.grey.g90};
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 6px;
   }
 `;
@@ -39,7 +39,7 @@ const Email = styled.span`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
   }
 `;

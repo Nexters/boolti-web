@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mq } from '../../systems';
+import { mq_lg } from '../../systems';
 
 const CONFIRM_WIDTH = '450px';
 const CONFIRM_MOBILE_WIDTH = '264px';
@@ -25,7 +25,7 @@ const Confirm = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.w};
   padding: 20px;
 
-  ${mq} {
+  ${mq_lg} {
     width: ${CONFIRM_WIDTH};
     padding: 32px;
   }
@@ -36,7 +36,7 @@ const ConfirmMessage = styled.div`
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 24px;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
     margin-bottom: 32px;
   }
@@ -46,7 +46,7 @@ const ConfirmButtonContainer = styled.div`
   display: flex;
   gap: 8px;
 
-  ${mq} {
+  ${mq_lg} {
     justify-content: flex-end;
   }
 `;
@@ -65,7 +65,7 @@ const CancelButton = styled.button`
   ${({ theme }) => theme.typo.sh1};
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     flex: initial;
   }
 `;
@@ -87,7 +87,7 @@ const ConfirmButton = styled.button<ConfirmButtonProps>`
   ${({ theme }) => theme.typo.sh1};
   cursor: pointer;
 
-  ${mq} {
+  ${mq_lg} {
     flex: initial;
   }
 `;

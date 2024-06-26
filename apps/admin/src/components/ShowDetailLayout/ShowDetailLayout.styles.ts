@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface TabItemProps {
@@ -62,7 +62,7 @@ const ShowName = styled.h2<ShowNameProps>`
     font-size 0.1s ease-in-out,
     margin 0.1s ease-in-out;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0;
     ${({ theme, size }) => (size === 'small' ? theme.typo.h1 : theme.typo.h3)};
     margin: ${({ size }) => (size === 'small' ? '22px 0 8px' : '28px 0 12px')};
@@ -76,7 +76,7 @@ const TabContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0;
   }
 `;
@@ -87,7 +87,7 @@ const Tab = styled.div`
   flex-wrap: nowrap;
   gap: 20px;
 
-  ${mq} {
+  ${mq_lg} {
     gap: 40px;
   }
 `;
@@ -115,7 +115,7 @@ const TabItem = styled.div<TabItemProps>`
     display: none;
   }
 
-  ${mq} {
+  ${mq_lg} {
     .tooltip {
       display: initial;
     }

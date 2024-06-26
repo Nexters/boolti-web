@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mq } from '../../systems';
+import { mq_lg } from '../../systems';
 
 type colorTheme = 'primary' | 'netural';
 type Size = 'small' | 'regular';
@@ -65,7 +65,7 @@ const Icon = styled.div`
   height: 20px;
   margin-right: 4px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-right: 8px;
   }
 `;

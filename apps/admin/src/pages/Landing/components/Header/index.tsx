@@ -132,7 +132,7 @@ const Header = () => {
         </Styled.MobileAuthButton>
       </Styled.MobileMenu>
 
-      <Tab />
+      {!isMobile && <Tab />}
     </Styled.Header>
   );
 };

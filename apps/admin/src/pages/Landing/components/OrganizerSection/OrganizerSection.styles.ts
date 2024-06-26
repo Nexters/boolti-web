@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
@@ -27,7 +27,7 @@ const Container = styled.div`
     background: linear-gradient(180deg, rgba(255, 92, 22, 0) 9.57%, #ff5d17 90.96%);
   }
 
-  ${mq} {
+  ${mq_lg} {
     padding-top: 128px;
 
     &::after {
@@ -55,7 +55,7 @@ const Title = styled.h2`
   color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.point.p4};
 
-  ${mq} {
+  ${mq_lg} {
     white-space: normal;
     font-size: 32px;
     line-height: 38px;
@@ -69,7 +69,7 @@ const Description = styled.p`
   white-space: pre-wrap;
   margin-top: 6px;
 
-  ${mq} {
+  ${mq_lg} {
     white-space: normal;
     margin-top: 8px;
     font-size: 20px;
@@ -87,7 +87,7 @@ const Button = styled(Link)`
   color: ${({ theme }) => theme.palette.primary.o1};
   ${({ theme }) => theme.typo.sh1};
 
-  ${mq} {
+  ${mq_lg} {
     padding: 13px 20px;
     margin-top: 24px;
   }
@@ -95,7 +95,7 @@ const Button = styled(Link)`
 
 const PcAdminPreviewImage = styled.img`
   display: none;
-  ${mq} {
+  ${mq_lg} {
     display: block;
     width: calc(100% - 160px);
     max-width: 1080px;
@@ -111,7 +111,7 @@ const MobileAdminPrevieImage = styled.img`
   height: auto;
   width: calc(100% - 168px);
   border-radius: 12px 12px 0px 0px;
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;

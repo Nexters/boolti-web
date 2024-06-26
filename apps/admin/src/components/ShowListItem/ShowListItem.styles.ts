@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.li`
@@ -12,7 +12,7 @@ const Container = styled.li`
     margin-bottom: 16px;
   }
 
-  ${mq} {
+  ${mq_lg} {
     padding: 28px 32px;
     &:not(:last-of-type) {
       margin-bottom: 24px;
@@ -33,7 +33,7 @@ const EmptyText = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g40};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b4};
   }
 `;
@@ -41,7 +41,7 @@ const EmptyText = styled.p`
 const Poster = styled.div<{ thumbnailPath: string }>`
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: block;
     width: 130px;
     height: 184px;
@@ -70,7 +70,7 @@ const Title = styled.h2`
   ${({ theme }) => theme.typo.point.p4};
   color: ${({ theme }) => theme.palette.grey.g90};
 
-  ${mq} {
+  ${mq_lg} {
     max-width: auto;
   }
 `;
@@ -79,7 +79,7 @@ const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 70px;
   }
 `;
@@ -98,7 +98,7 @@ const InfoText = styled.span<{ isLabel?: boolean }>`
   ${({ theme }) => theme.typo.b1};
   color: ${({ isLabel, theme }) => (isLabel ? theme.palette.grey.g60 : theme.palette.grey.g90)};
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
   }
 `;
@@ -123,7 +123,7 @@ const IconContainer = styled.div`
     width: 36px;
     height: 36px;
   }
-  ${mq} {
+  ${mq_lg} {
     display: block;
   }
 `;
