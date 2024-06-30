@@ -156,6 +156,7 @@ const ShowSettlementPage = () => {
                                   });
                                   toast.success('정산 계좌를 추가했습니다.');
                                   refetchBankAccountList();
+                                  settlementDialog.close();
                                 } catch (error) {
                                   toast.error('잠시 후에 다시 시도하세요.');
                                 }
