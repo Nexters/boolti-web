@@ -143,7 +143,7 @@ const ShowEnterancePage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder="예매자 이름, 연락처 검색"
+                  placeholder="방문자 이름, 연락처 검색"
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (

@@ -26,7 +26,7 @@ const columns = [
     header: '티켓 이름',
   }),
   columnHelper.accessor('reservationName', {
-    header: '예매자 이름',
+    header: '방문자 이름',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
@@ -126,7 +126,7 @@ const ReservationTable = ({
         <Styled.Empty>
           {isSearchResult ? (
             <>
-              검색 결과가 없어요.{'\n'}예매자 이름 또는 연락처를 변경해보세요.
+              검색 결과가 없어요.{'\n'}방문자 이름 또는 연락처를 변경해보세요.
               <Styled.ResetButton colorTheme="line" size="bold" onClick={onClickReset}>
                 검색 초기화
               </Styled.ResetButton>

@@ -145,7 +145,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       navigate(HREF.SHOW_RESERVATION(params.showId));
                     }}
                   >
-                    예매자 관리
+                    방문자 관리
                   </Styled.TabItem>
                   <Styled.TabItem
                     active={matchEntryTab !== null}

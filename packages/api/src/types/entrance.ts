@@ -7,9 +7,9 @@ export interface EntranceResponse {
   ticketType: TicketType;
   /** 티켓 이름 */
   ticketName: string;
-  /** 예매자 이름 */
+  /** 방문자 이름 */
   reservationName: string;
-  /** 예매자 연락처 */
+  /** 방문자 연락처 */
   reservationPhoneNumber: string;
   /** 입장 여부 */
   entered: boolean;

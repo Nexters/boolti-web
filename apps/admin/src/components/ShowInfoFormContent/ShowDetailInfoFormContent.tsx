@@ -28,7 +28,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 내용</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            예매자에게 알리고 싶은 공연 내용을 작성해주세요.
+            방문자에게 알리고 싶은 공연 내용을 작성해주세요.
           </Styled.ShowInfoFormDescription>
           <Controller
             control={control}
