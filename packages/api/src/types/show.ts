@@ -71,9 +71,9 @@ export interface ReservationResponse {
   ticketName: string;
   /** 예매 ID */
   reservationId: number;
-  /** 예매자 이름 */
+  /** 방문자 이름 */
   reservationName: string;
-  /** 예매자 전화번호 */
+  /** 방문자 전화번호 */
   reservationPhoneNumber: string;
   /** 예매 상태 */
   reservationStatus: ReservationStatus;

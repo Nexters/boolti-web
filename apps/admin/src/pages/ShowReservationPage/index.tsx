@@ -82,7 +82,7 @@ const ShowReservationPage = () => {
       {totalSoldCount === 0 ? (
         <Styled.Empty>
           아직 판매한 티켓이 없어요.{'\n'}
-          티켓을 판매하고 예매자 명단을 관리해 보세요.
+          티켓을 판매하고 방문자 명단을 관리해 보세요.
         </Styled.Empty>
       ) : (
         <Styled.Container>
@@ -147,7 +147,7 @@ const ShowReservationPage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder="예매자 이름, 연락처 검색"
+                  placeholder="방문자 이름, 연락처 검색"
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (

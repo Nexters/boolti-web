@@ -51,7 +51,7 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
       {isEmpty ? (
         isSearchResult ? (
           <>
-            {`검색 결과가 없어요.\n예매자 이름 또는 연락처를 변경해보세요.`}
+            {`검색 결과가 없어요.\n방문자 이름 또는 연락처를 변경해보세요.`}
             <Styled.ResetButton onClick={onClickReset}>검색 초기화</Styled.ResetButton>
           </>
         ) : (
