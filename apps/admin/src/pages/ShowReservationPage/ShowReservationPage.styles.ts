@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -24,7 +24,7 @@ const TicketSummaryContainer = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 8px;
   margin-bottom: 32px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 40px;
     display: flex;
   }
@@ -54,7 +54,7 @@ const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
         `;
     }
   }}
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
     width: 260px;
     align-items: center;
@@ -67,7 +67,7 @@ const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
 const TicketSumamryLabel = styled.span`
   ${({ theme }) => theme.typo.b1};
   margin-bottom: 4px;
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 0;
     ${({ theme }) => theme.typo.b2};
   }
@@ -85,7 +85,7 @@ const TicketReservationSummaryContainer = styled.div`
   flex-wrap: wrap;
   gap: 12px;
   width: 100%;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
     flex-direction: row;
     align-items: center;
@@ -98,7 +98,7 @@ const FilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  ${mq} {
+  ${mq_lg} {
     width: auto;
   }
 `;
@@ -185,7 +185,7 @@ const InputButton = styled.button`
 
 const TableContainer = styled.div`
   display: none;
-  ${mq} {
+  ${mq_lg} {
     display: block;
     width: 100%;
     overflow-x: scroll;

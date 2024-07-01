@@ -45,7 +45,7 @@ export const privacyTableContent: Table = {
       rows: [
         {
           type: 'text',
-          text: '성명, 휴대전화 번호, 이메일,상품구매정보(카드 결제 정보, 계좌 정보, 예매자 정보(성명, 휴대전화 번호)',
+          text: '성명, 휴대전화 번호, 이메일,상품구매정보(카드 결제 정보, 계좌 정보, 방문자 정보(성명, 휴대전화 번호)',
         },
         {
           type: 'text',
@@ -97,7 +97,7 @@ export const consentTableContent: Table = {
     },
     {
       head: '제공 항목',
-      rows: [{ type: 'text', text: '예매자명, 연락처, 주문번호, 결제금액, 결제 방법' }],
+      rows: [{ type: 'text', text: '방문자명, 연락처, 주문번호, 결제금액, 결제 방법' }],
     },
     {
       head: '보유 및 이용 기간',

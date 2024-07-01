@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { mq } from '../../systems';
+import { mq_lg } from '../../systems';
 
 type colorTheme = 'purple' | 'blue' | 'green' | 'red' | 'grey';
 
@@ -24,7 +24,7 @@ const Container = styled.span<BadgeProps>`
     `;
   }}
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.b1};
     padding: 0 8px;
     height: 28px;

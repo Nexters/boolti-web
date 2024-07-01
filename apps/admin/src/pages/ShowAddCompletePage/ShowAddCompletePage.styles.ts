@@ -1,11 +1,11 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const ShowAddCompletePage = styled.div`
   display: none;
   background-color: ${({ theme }) => theme.palette.grey.g00};
 
-  ${mq} {
+  ${mq_lg} {
     display: block;
   }
 `;
@@ -99,7 +99,7 @@ const MobileShowAddCompletePage = styled.div`
   width: 100%;
   height: 100vh;
 
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
@@ -140,7 +140,7 @@ const MobileContent = styled.div`
 const MobileContentImage = styled.img`
   margin-bottom: 28px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 0;
   }
 `;
@@ -151,7 +151,7 @@ const MobileContentTitle = styled.h3`
   text-align: center;
   margin-bottom: 4px;
 
-  ${mq} {
+  ${mq_lg} {
     ${({ theme }) => theme.typo.h2};
   }
 `;

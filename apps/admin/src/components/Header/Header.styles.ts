@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Header = styled.div`
@@ -8,7 +8,7 @@ const Header = styled.div`
   align-items: center;
   padding: 0 20px;
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0;
   }
 `;

@@ -16,7 +16,7 @@ const OrganizerSection = () => {
         <Styled.BackgroundLight />
         <Styled.Title>누구보다 바쁜{'\n'}주최자를 위한 웹</Styled.Title>
         <Styled.Description>
-          공연을 등록하고 예매자 명단과{'\n'}
+          공연을 등록하고 방문자 명단과{'\n'}
           정산된 수익을 한눈에 확인해 보세요
         </Styled.Description>
         <Styled.Button to={PATH.HOME}>공연 준비하기</Styled.Button>
@@ -29,7 +29,7 @@ const OrganizerSection = () => {
         description={'예매에 필요한 정보를 입력하고\n판매할 티켓을 생성하면 끝!'}
         position="left"
         imageSrc={createShowImg}
-        maxWidth={[360, 634]}
+        maxWidth={[360, 510, 634]}
       />
       <FeatureItem
         category="입장 관리"
@@ -37,7 +37,7 @@ const OrganizerSection = () => {
         description={'모바일 뷰로 PC를 사용하기 어려운\n공연장에서도 쉽게 입장을 확인해요'}
         position="right"
         imageSrc={manageEnteranceImg}
-        maxWidth={[360, 700]}
+        maxWidth={[360, 500, 700]}
       />
     </Styled.Section>
   );

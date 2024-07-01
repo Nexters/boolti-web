@@ -1,11 +1,11 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.footer`
   padding: 48px 20px 28px 20px;
   max-width: ${({ theme }) => theme.breakpoint.desktop};
 
-  ${mq} {
+  ${mq_lg} {
     padding: 60px 20px;
   }
 `;
@@ -15,7 +15,7 @@ const Content = styled.div`
   justify-content: space-between;
   flex-direction: column;
 
-  ${mq} {
+  ${mq_lg} {
     flex-direction: row;
   }
 `;
@@ -23,14 +23,14 @@ const Content = styled.div`
 const TextGroup = styled.div`
   display: none;
 
-  ${mq} {
+  ${mq_lg} {
     display: block;
   }
 `;
 
 const MobileTextGroup = styled(TextGroup)`
   display: block;
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
@@ -53,7 +53,7 @@ const BoldTtext = styled.span`
 const LinkTextGroup = styled.div`
   margin-top: 24px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-top: 32px;
   }
 `;
@@ -66,7 +66,7 @@ const IconGroup = styled.div`
   display: flex;
   margin-top: 32px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-top: 0;
   }
 `;

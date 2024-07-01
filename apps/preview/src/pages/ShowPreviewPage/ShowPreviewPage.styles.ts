@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const PREVIEW_MAX_WIDTH = '640px';
@@ -104,7 +104,7 @@ const DialogQRCodeContainer = styled.div`
   align-items: center;
   gap: 12px;
 
-  ${mq} {
+  ${mq_lg} {
     width: calc(100% + 64px);
     left: -32px;
     top: -32px;
@@ -135,7 +135,7 @@ const DialogDescription = styled.p`
   text-align: center;
   margin-bottom: 24px;
 
-  ${mq} {
+  ${mq_lg} {
     margin-bottom: 0;
   }
 `;

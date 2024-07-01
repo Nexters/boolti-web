@@ -117,7 +117,7 @@ const ShowTicketInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel>티켓 구매 시 안내사항</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            예매자에게 안내할 사항이 있다면 작성해 주세요. 작성한 내용은 티켓 상세 화면에
+            방문자에게 안내할 사항이 있다면 작성해 주세요. 작성한 내용은 티켓 상세 화면에
             노출됩니다.
           </Styled.ShowInfoFormDescription>
           <Styled.TextField>

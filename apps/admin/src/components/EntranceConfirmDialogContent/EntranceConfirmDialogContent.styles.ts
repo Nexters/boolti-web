@@ -1,4 +1,4 @@
-import { mq } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -9,7 +9,7 @@ const Container = styled.div`
     display: none;
   }
 
-  ${mq} {
+  ${mq_lg} {
     padding: 0;
     height: 60vh;
   }
@@ -28,7 +28,7 @@ const MobileHeader = styled.div`
   padding: 14px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
 
-  ${mq} {
+  ${mq_lg} {
     display: none;
   }
 `;
