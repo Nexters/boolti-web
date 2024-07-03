@@ -177,7 +177,7 @@ const HomePage = () => {
                               </Flex>
                               <Flex vertical style={{ width: '100%' }}>
                                 <Space split={<Divider type="vertical" />}>
-                                  <Typography style={{ width: 60 }}>판매자</Typography>
+                                  <Typography style={{ width: 60 }}>주최자</Typography>
                                   <Typography.Text ellipsis>{hostName}</Typography.Text>
                                 </Space>
                                 <Space split={<Divider type="vertical" />}>
