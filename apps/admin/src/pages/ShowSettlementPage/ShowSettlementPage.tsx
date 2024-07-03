@@ -148,6 +148,8 @@ const ShowSettlementPage = () => {
                             <SettlementDialogContent
                               onClose={settlementDialog.close}
                               onSubmit={async (data) => {
+                                if (addBankAccountMutation.isLoading) return;
+
                                 try {
                                   await addBankAccountMutation.mutateAsync({
                                     bankCode: data.bankCode,
