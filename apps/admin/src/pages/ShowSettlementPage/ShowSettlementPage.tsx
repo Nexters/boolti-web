@@ -43,7 +43,7 @@ const ShowSettlementPage = () => {
   const toast = useToast();
 
   const { data: show } = useShowDetail(Number(params!.showId));
-  const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
+  const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(Number(params!.showId));
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId));
@@ -117,7 +117,8 @@ const ShowSettlementPage = () => {
                     readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                     onChange={async (event) => {
                       if (event.target.files?.[0]) {
-                        uploadIDCardPhotoFileMutation.mutateAsync(event.target.files[0]);
+                        await uploadIDCardPhotoFileMutation.mutateAsync(event.target.files[0]);
+                        await refetchSettlementInfo();
                       }
                     }}
                   />
