@@ -138,9 +138,10 @@ const ShowSettlementPage = () => {
                           계좌 추가 <PlusIcon />
                         </Styled.AccountAddButton>
                       }
-                      onSelect={(option) => {
+                      onSelect={async (option) => {
                         setAccount(option.value);
-                        putShowSettlementBankAccountMutation.mutateAsync(Number(option.value));
+                        await putShowSettlementBankAccountMutation.mutateAsync(Number(option.value));
+                        refetchSettlementInfo();
                       }}
                       onAdditionalButtonClick={() => {
                         settlementDialog.open({
