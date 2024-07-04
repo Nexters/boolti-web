@@ -249,6 +249,7 @@ const ShowSettlementPage = () => {
                           onClick={async () => {
                             try {
                               await requestSettlementMutation.mutateAsync();
+                              await refetchSettlementInfo();
 
                               toast.success('정산을 요청했습니다');
                             } catch (error) {
@@ -257,6 +258,17 @@ const ShowSettlementPage = () => {
                           }}
                         >
                           정산 요청하기
+                        </Button>
+                      </Styled.DocumentFooter>
+                    )}
+                    {lastSettlementEvent?.settlementEventType === 'REQUEST' && (
+                      <Styled.DocumentFooter>
+                        <Button
+                          colorTheme="primary"
+                          size="bold"
+                          disabled
+                        >
+                          정산 요청 완료
                         </Button>
                       </Styled.DocumentFooter>
                     )}
