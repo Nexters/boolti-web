@@ -325,9 +325,11 @@ const SettlementPage = () => {
                             showId: Number(params.showId),
                             body,
                           });
+                          await refetchAdminSettlementEvent();
 
                           toast.success('정산 내역서를 발송했어요.');
                           dialog.close();
+
                         } catch (error) {
                           console.error(error);
                           toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
