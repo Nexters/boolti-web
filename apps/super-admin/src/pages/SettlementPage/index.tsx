@@ -263,13 +263,6 @@ const SettlementPage = () => {
               type="button"
               size="medium"
               colorTheme="netural"
-              disabled={
-                adminShowDetail?.settlementStatus !== 'SETTLEMENT_REQUIRED' ||
-                adminSettlementInfo?.bankAccount === null ||
-                adminSettlementInfo?.idCardPhotoFile === null ||
-                adminSettlementInfo?.settlementBankAccountPhotoFile === null ||
-                adminSettlementInfo?.settlementBankAccountPhotoFile === null
-              }
               onClick={() => {
                 dialog.open({
                   title: '정산 내역서 생성하기',
