@@ -19,6 +19,7 @@ import { AgreeCheck, Button, Select, TextButton, useDialog, useToast } from '@bo
 import { useEffect, useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
+import { format } from 'date-fns';
 
 import FileInput from '~/components/FileInput/FileInput';
 import SettlementDialogContent from '~/components/SettlementDialogContent';
@@ -261,6 +262,11 @@ const ShowSettlementPage = () => {
                     )}
                   </>
                 )}
+              {lastSettlementEvent?.settlementEventType === 'DONE' && lastSettlementEvent.triggeredAt && (
+                <Styled.SettlementDoneDescription>
+                  {format(new Date(lastSettlementEvent.triggeredAt), 'yyyy년 MM월 dd일')}자로 정산이 완료된 공연입니다.
+                </Styled.SettlementDoneDescription>
+              )}
               {!lastSettlementEvent?.settlementEventType && (
                 <Styled.PageDescription>
                   정산 내역서는 티켓 판매종료 후 생성돼요
