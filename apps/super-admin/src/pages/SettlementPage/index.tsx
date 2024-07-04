@@ -82,8 +82,8 @@ const SettlementPage = () => {
                   </Styled.ProgressItemNumber>
                   <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
                     {adminSettlementEvent?.SEND &&
-                    adminSettlementEvent?.REQUEST &&
-                    !adminSettlementEvent?.DONE ? (
+                      adminSettlementEvent?.REQUEST &&
+                      !adminSettlementEvent?.DONE ? (
                       <Button
                         colorTheme="netural"
                         size="small"
@@ -157,7 +157,8 @@ const SettlementPage = () => {
                 <>
                   <Styled.UserInfoText>
                     {adminSettlementInfo.bankAccount.bankName}{' '}
-                    {adminSettlementInfo.bankAccount.bankAccountNumber}
+                    {adminSettlementInfo.bankAccount.bankAccountNumber}{' '}
+                    {adminSettlementInfo.bankAccount.bankAccountHolder}
                   </Styled.UserInfoText>
                   <Button
                     colorTheme="netural"
@@ -166,7 +167,7 @@ const SettlementPage = () => {
                       if (!adminSettlementInfo.bankAccount) return;
 
                       await navigator.clipboard.writeText(
-                        `${adminSettlementInfo.bankAccount.bankName} ${adminSettlementInfo.bankAccount.bankAccountNumber}`,
+                        `${adminSettlementInfo.bankAccount.bankName} ${adminSettlementInfo.bankAccount.bankAccountNumber} ${adminSettlementInfo.bankAccount.bankAccountHolder}`,
                       );
                       toast.success('계좌 정보가 복사되었습니다.');
                     }}
