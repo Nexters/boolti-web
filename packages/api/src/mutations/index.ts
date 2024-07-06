@@ -23,8 +23,12 @@ import useSignUp from './useSignUp';
 import useUploadBankAccountCopyPhoto from './useUploadBankAccountCopyPhoto';
 import useUploadIDCardPhotoFile from './useUploadIDCardPhotoFile';
 import useUploadShowImage, { ImageFile } from './useUploadShowImage';
+import useDeleteBankAccountCopyPhoto from './useDeleteBankAccountCopyPhoto';
+import useDeleteIDCardPhotoFile from './useDeleteIDCardPhotoFile';
 
 export {
+  useDeleteBankAccountCopyPhoto,
+  useDeleteIDCardPhotoFile,
   useAddBankAccount,
   useAddShow,
   useAdminCreateSettlementStatement,

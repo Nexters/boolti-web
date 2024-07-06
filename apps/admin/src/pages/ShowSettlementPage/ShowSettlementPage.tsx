@@ -5,6 +5,8 @@ import {
   ShowSettlementEventResponse,
   useAddBankAccount,
   useBankAccountList,
+  useDeleteBankAccountCopyPhoto,
+  useDeleteIDCardPhotoFile,
   usePutShowSettlementBankAccount,
   useRequestSettlement,
   useShowDetail,
@@ -55,6 +57,8 @@ const ShowSettlementPage = () => {
   );
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(Number(params!.showId));
   const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(Number(params!.showId));
+  const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(Number(params!.showId))
+  const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(Number(params!.showId))
   const addBankAccountMutation = useAddBankAccount();
   const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
 
@@ -124,6 +128,10 @@ const ShowSettlementPage = () => {
                         await refetchSettlementInfo();
                       }
                     }}
+                    onClear={async () => {
+                      await deleteIDCardPhotoFileMutation.mutateAsync();
+                      await refetchSettlementInfo();
+                    }}
                   />
                 </Styled.FormGroup>
                 <Styled.FormGroup>
@@ -189,6 +197,10 @@ const ShowSettlementPage = () => {
                       if (event.target.files?.[0]) {
                         uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
                       }
+                    }}
+                    onClear={async () => {
+                      await deleteBankAccountCopyPhotoMutation.mutateAsync();
+                      await refetchSettlementInfo();
                     }}
                   />
                 </Styled.FormGroup>
