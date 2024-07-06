@@ -7,6 +7,7 @@ import useBankAccountList from './useBankAccountList';
 import useInvitationCodeList from './useInvitationCodeList';
 import useInvitationTicketList from './useInvitationTicketList';
 import useSalesTicketList from './useSalesTicketList';
+import useSettlementBanners from './useSettlementBanners';
 import useShowDetail from './useShowDetail';
 import useShowEnteranceInfo from './useShowEnteranceInfo';
 import useShowEnterances from './useShowEnterances';
@@ -21,7 +22,6 @@ import useShowSettlementInfo from './useShowSettlementInfo';
 import useShowSettlementStatement from './useShowSettlementStatement';
 import useUserAccountInfo from './useUserAccountInfo';
 import useUserSummary from './useUserSummary';
-import useSettlementBanners from './useSettlementBanners';
 
 export {
   useAdminSettlementEvent,
@@ -33,6 +33,7 @@ export {
   useInvitationCodeList,
   useInvitationTicketList,
   useSalesTicketList,
+  useSettlementBanners,
   useShowDetail,
   useShowEnteranceInfo,
   useShowEnterances,
@@ -47,5 +48,4 @@ export {
   useShowSettlementStatement,
   useUserAccountInfo,
   useUserSummary,
-  useSettlementBanners,
 };

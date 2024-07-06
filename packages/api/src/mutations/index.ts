@@ -7,6 +7,8 @@ import useAdminSettlementDone from './useAdminSettlementDone';
 import useAppleLogin from './useAppleLogin';
 import useCreateInvitationTicket from './useCreateInvitationTicket';
 import useCreateSalesTicket from './useCreateSalesTicket';
+import useDeleteBankAccountCopyPhoto from './useDeleteBankAccountCopyPhoto';
+import useDeleteIDCardPhotoFile from './useDeleteIDCardPhotoFile';
 import useDeleteInvitationTicket from './useDeleteInvitationTicket';
 import useDeleteSalesTicket from './useDeleteSalesTicket';
 import useDeleteShow from './useDeleteShow';
@@ -23,12 +25,8 @@ import useSignUp from './useSignUp';
 import useUploadBankAccountCopyPhoto from './useUploadBankAccountCopyPhoto';
 import useUploadIDCardPhotoFile from './useUploadIDCardPhotoFile';
 import useUploadShowImage, { ImageFile } from './useUploadShowImage';
-import useDeleteBankAccountCopyPhoto from './useDeleteBankAccountCopyPhoto';
-import useDeleteIDCardPhotoFile from './useDeleteIDCardPhotoFile';
 
 export {
-  useDeleteBankAccountCopyPhoto,
-  useDeleteIDCardPhotoFile,
   useAddBankAccount,
   useAddShow,
   useAdminCreateSettlementStatement,
@@ -38,6 +36,8 @@ export {
   useAppleLogin,
   useCreateInvitationTicket,
   useCreateSalesTicket,
+  useDeleteBankAccountCopyPhoto,
+  useDeleteIDCardPhotoFile,
   useDeleteInvitationTicket,
   useDeleteSalesTicket,
   useDeleteShow,
