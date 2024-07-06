@@ -191,3 +191,9 @@ export interface ShowSettlementEventResponse {
   settlementEventType: 'SEND' | 'REQUEST' | 'DONE' | null;
   triggeredAt: string | null;
 }
+
+export type SettlementBannersResponse = {
+  showId: number;
+  showName: string;
+  bannerType: 'REQUIRED' | 'DONE';
+}[]
