@@ -176,13 +176,14 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     id="settlement-page-tooltip"
                   >
                     정산 관리
-                    {lastSettlementEvent?.settlementEventType !== undefined && (
-                      settlementInfo?.bankAccount === null || settlementInfo?.idCardPhotoFile === null || settlementInfo?.settlementBankAccountPhotoFile === null
-                    ) && (
+                    {lastSettlementEvent?.settlementEventType !== undefined &&
+                      (settlementInfo?.bankAccount === null ||
+                        settlementInfo?.idCardPhotoFile === null ||
+                        settlementInfo?.settlementBankAccountPhotoFile === null) && (
                         <Tooltip
                           content={
                             settlementTooltipText[
-                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                              lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
                             ]
                           }
                           anchorSelect="#settlement-page-tooltip"

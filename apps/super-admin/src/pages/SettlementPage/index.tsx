@@ -82,8 +82,8 @@ const SettlementPage = () => {
                   </Styled.ProgressItemNumber>
                   <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
                     {adminSettlementEvent?.SEND &&
-                      adminSettlementEvent?.REQUEST &&
-                      !adminSettlementEvent?.DONE ? (
+                    adminSettlementEvent?.REQUEST &&
+                    !adminSettlementEvent?.DONE ? (
                       <Button
                         colorTheme="netural"
                         size="small"
@@ -329,7 +329,6 @@ const SettlementPage = () => {
 
                           toast.success('정산 내역서를 발송했어요.');
                           dialog.close();
-
                         } catch (error) {
                           console.error(error);
                           toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');

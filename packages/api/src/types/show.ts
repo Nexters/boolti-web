@@ -196,4 +196,4 @@ export type SettlementBannersResponse = {
   showId: number;
   showName: string;
   bannerType: 'REQUIRED' | 'DONE';
-}[]
+}[];

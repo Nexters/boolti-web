@@ -47,5 +47,5 @@ export {
   useShowSettlementStatement,
   useUserAccountInfo,
   useUserSummary,
-  useSettlementBanners
+  useSettlementBanners,
 };

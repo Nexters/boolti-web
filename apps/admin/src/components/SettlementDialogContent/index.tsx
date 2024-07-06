@@ -1,3 +1,4 @@
+import { useBankAccountList } from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
 import { Button, TextField, useToast } from '@boolti/ui';
 import { useCallback, useMemo, useState } from 'react';
@@ -8,7 +9,6 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { validateAccountHolder, validateAccountNumber } from '~/utils/validation';
 
 import Styled from './SettlementDialogContent.styles';
-import { useBankAccountList } from '@boolti/api';
 
 const titles = [
   '은행을 선택해 주세요.',
@@ -83,10 +83,11 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
             }
 
             if (currentStepIndex === 1) {
-              const isDuplicatedBankAccount = !!bankAccountList?.find((bankAccount) => (
-                bankAccount.bankCode === currentBankCode &&
-                bankAccount.bankAccountNumber === currentAccountNumber
-              ));
+              const isDuplicatedBankAccount = !!bankAccountList?.find(
+                (bankAccount) =>
+                  bankAccount.bankCode === currentBankCode &&
+                  bankAccount.bankAccountNumber === currentAccountNumber,
+              );
 
               if (isDuplicatedBankAccount) {
                 toast.error('이미 등록된 계좌입니다.');
@@ -102,7 +103,7 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
           }}
         >
           {currentStepIndex === 2 ? '저장하기' : '다음으로'}
-        </Button >
+        </Button>
       </>
     );
   }, [
@@ -112,6 +113,9 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
     currentAccountNumber,
     currentBankName,
     currentStepIndex,
+    bankAccountList,
+    currentBankCode,
+    toast,
     handleSubmit,
     submitHandler,
   ]);

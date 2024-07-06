@@ -202,11 +202,8 @@ export const showQueryKeys = createQueryKeys('show', {
   }),
   settlementBanners: (bannerType: 'REQUIRED' | 'DONE') => ({
     queryKey: [bannerType],
-    queryFn: () =>
-      fetcher.get<SettlementBannersResponse>(
-        `web/v1/host/settlement-banners`,
-      ),
-  })
+    queryFn: () => fetcher.get<SettlementBannersResponse>(`web/v1/host/settlement-banners`),
+  }),
 });
 
 export const userQueryKeys = createQueryKeys('user', {
