@@ -47,7 +47,9 @@ const ShowSettlementPage = () => {
   const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(Number(params!.showId));
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
-  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId));
+  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
+    enabled: lastSettlementEvent?.settlementEventType != null,
+  });
   const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
     Number(params!.showId),
   );
