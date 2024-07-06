@@ -119,6 +119,12 @@ const PageSectionDivider = styled.hr`
   margin: 52px 0;
 `;
 
+const SettlementDoneDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-top: 52px;
+`;
+
 export default {
   ShowSettlementPage,
   Notice,
@@ -137,4 +143,5 @@ export default {
   SelectContainer,
   AccountAddButton,
   PageSectionDivider,
+  SettlementDoneDescription,
 };

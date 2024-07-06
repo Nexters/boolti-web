@@ -7,6 +7,8 @@ import useAdminSettlementDone from './useAdminSettlementDone';
 import useAppleLogin from './useAppleLogin';
 import useCreateInvitationTicket from './useCreateInvitationTicket';
 import useCreateSalesTicket from './useCreateSalesTicket';
+import useDeleteBankAccountCopyPhoto from './useDeleteBankAccountCopyPhoto';
+import useDeleteIDCardPhotoFile from './useDeleteIDCardPhotoFile';
 import useDeleteInvitationTicket from './useDeleteInvitationTicket';
 import useDeleteSalesTicket from './useDeleteSalesTicket';
 import useDeleteShow from './useDeleteShow';
@@ -34,6 +36,8 @@ export {
   useAppleLogin,
   useCreateInvitationTicket,
   useCreateSalesTicket,
+  useDeleteBankAccountCopyPhoto,
+  useDeleteIDCardPhotoFile,
   useDeleteInvitationTicket,
   useDeleteSalesTicket,
   useDeleteShow,

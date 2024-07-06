@@ -5,6 +5,8 @@ import {
   ShowSettlementEventResponse,
   useAddBankAccount,
   useBankAccountList,
+  useDeleteBankAccountCopyPhoto,
+  useDeleteIDCardPhotoFile,
   usePutShowSettlementBankAccount,
   useRequestSettlement,
   useShowDetail,
@@ -16,6 +18,7 @@ import {
 } from '@boolti/api';
 import { DownloadIcon, PlusIcon } from '@boolti/icon';
 import { AgreeCheck, Button, Select, TextButton, useDialog, useToast } from '@boolti/ui';
+import { format } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
@@ -43,15 +46,21 @@ const ShowSettlementPage = () => {
   const toast = useToast();
 
   const { data: show } = useShowDetail(Number(params!.showId));
-  const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
+  const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(
+    Number(params!.showId),
+  );
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
-  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId));
+  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
+    enabled: lastSettlementEvent?.settlementEventType != null,
+  });
   const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
     Number(params!.showId),
   );
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(Number(params!.showId));
   const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(Number(params!.showId));
+  const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(Number(params!.showId));
+  const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(Number(params!.showId));
   const addBankAccountMutation = useAddBankAccount();
   const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
 
@@ -117,8 +126,13 @@ const ShowSettlementPage = () => {
                     readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                     onChange={async (event) => {
                       if (event.target.files?.[0]) {
-                        uploadIDCardPhotoFileMutation.mutateAsync(event.target.files[0]);
+                        await uploadIDCardPhotoFileMutation.mutateAsync(event.target.files[0]);
+                        await refetchSettlementInfo();
                       }
+                    }}
+                    onClear={async () => {
+                      await deleteIDCardPhotoFileMutation.mutateAsync();
+                      await refetchSettlementInfo();
                     }}
                   />
                 </Styled.FormGroup>
@@ -137,9 +151,12 @@ const ShowSettlementPage = () => {
                           계좌 추가 <PlusIcon />
                         </Styled.AccountAddButton>
                       }
-                      onSelect={(option) => {
+                      onSelect={async (option) => {
                         setAccount(option.value);
-                        putShowSettlementBankAccountMutation.mutateAsync(Number(option.value));
+                        await putShowSettlementBankAccountMutation.mutateAsync(
+                          Number(option.value),
+                        );
+                        refetchSettlementInfo();
                       }}
                       onAdditionalButtonClick={() => {
                         settlementDialog.open({
@@ -148,6 +165,8 @@ const ShowSettlementPage = () => {
                             <SettlementDialogContent
                               onClose={settlementDialog.close}
                               onSubmit={async (data) => {
+                                if (addBankAccountMutation.isLoading) return;
+
                                 try {
                                   await addBankAccountMutation.mutateAsync({
                                     bankCode: data.bankCode,
@@ -156,6 +175,7 @@ const ShowSettlementPage = () => {
                                   });
                                   toast.success('정산 계좌를 추가했습니다.');
                                   refetchBankAccountList();
+                                  settlementDialog.close();
                                 } catch (error) {
                                   toast.error('잠시 후에 다시 시도하세요.');
                                 }
@@ -181,6 +201,10 @@ const ShowSettlementPage = () => {
                       if (event.target.files?.[0]) {
                         uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
                       }
+                    }}
+                    onClear={async () => {
+                      await deleteBankAccountCopyPhotoMutation.mutateAsync();
+                      await refetchSettlementInfo();
                     }}
                   />
                 </Styled.FormGroup>
@@ -243,6 +267,7 @@ const ShowSettlementPage = () => {
                           onClick={async () => {
                             try {
                               await requestSettlementMutation.mutateAsync();
+                              await refetchSettlementInfo();
 
                               toast.success('정산을 요청했습니다');
                             } catch (error) {
@@ -254,7 +279,21 @@ const ShowSettlementPage = () => {
                         </Button>
                       </Styled.DocumentFooter>
                     )}
+                    {lastSettlementEvent?.settlementEventType === 'REQUEST' && (
+                      <Styled.DocumentFooter>
+                        <Button colorTheme="primary" size="bold" disabled>
+                          정산 요청 완료
+                        </Button>
+                      </Styled.DocumentFooter>
+                    )}
                   </>
+                )}
+              {lastSettlementEvent?.settlementEventType === 'DONE' &&
+                lastSettlementEvent.triggeredAt && (
+                  <Styled.SettlementDoneDescription>
+                    {format(new Date(lastSettlementEvent.triggeredAt), 'yyyy년 MM월 dd일')}자로
+                    정산이 완료된 공연입니다.
+                  </Styled.SettlementDoneDescription>
                 )}
               {!lastSettlementEvent?.settlementEventType && (
                 <Styled.PageDescription>

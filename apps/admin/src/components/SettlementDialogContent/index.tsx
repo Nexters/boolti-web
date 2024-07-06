@@ -1,5 +1,6 @@
+import { useBankAccountList } from '@boolti/api';
 import { CloseIcon } from '@boolti/icon';
-import { Button, TextField } from '@boolti/ui';
+import { Button, TextField, useToast } from '@boolti/ui';
 import { useCallback, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -35,6 +36,10 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
   const currentAccountNumber = watch('accountNumber');
   const [accountHolderError, setAccountHolderError] = useState<string | undefined>(undefined);
   const [accountNumberError, setAccountNumberError] = useState<string | undefined>(undefined);
+
+  const { data: bankAccountList } = useBankAccountList();
+
+  const toast = useToast();
 
   const submitHandler: SubmitHandler<SettlementDialogFormInputs> = useCallback(
     async (data) => {
@@ -76,6 +81,20 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
             if (currentStepIndex === 1 && (accountHolderError || accountNumberError)) {
               return;
             }
+
+            if (currentStepIndex === 1) {
+              const isDuplicatedBankAccount = !!bankAccountList?.find(
+                (bankAccount) =>
+                  bankAccount.bankCode === currentBankCode &&
+                  bankAccount.bankAccountNumber === currentAccountNumber,
+              );
+
+              if (isDuplicatedBankAccount) {
+                toast.error('이미 등록된 계좌입니다.');
+                return;
+              }
+            }
+
             if (currentStepIndex === 2) {
               handleSubmit(submitHandler)(event);
               return;
@@ -94,6 +113,9 @@ const SettlementDialogContent = ({ onClose, onSubmit }: Props) => {
     currentAccountNumber,
     currentBankName,
     currentStepIndex,
+    bankAccountList,
+    currentBankCode,
+    toast,
     handleSubmit,
     submitHandler,
   ]);

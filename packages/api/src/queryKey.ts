@@ -8,6 +8,7 @@ import {
   PageEntranceResponse,
   PageReservationResponse,
   ReservationSummaryResponse,
+  SettlementBannersResponse,
   ShowInvitationCodeListResponse,
   ShowInvitationTicketResponse,
   ShowPreviewResponse,
@@ -198,6 +199,10 @@ export const showQueryKeys = createQueryKeys('show', {
       fetcher.get<ShowSettlementEventResponse>(
         `web/v1/host/shows/${showId}/settlement-events/last`,
       ),
+  }),
+  settlementBanners: (bannerType: 'REQUIRED' | 'DONE') => ({
+    queryKey: [bannerType],
+    queryFn: () => fetcher.get<SettlementBannersResponse>(`web/v1/host/settlement-banners`),
   }),
 });
 

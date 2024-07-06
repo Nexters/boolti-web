@@ -7,6 +7,7 @@ import useBankAccountList from './useBankAccountList';
 import useInvitationCodeList from './useInvitationCodeList';
 import useInvitationTicketList from './useInvitationTicketList';
 import useSalesTicketList from './useSalesTicketList';
+import useSettlementBanners from './useSettlementBanners';
 import useShowDetail from './useShowDetail';
 import useShowEnteranceInfo from './useShowEnteranceInfo';
 import useShowEnterances from './useShowEnterances';
@@ -32,6 +33,7 @@ export {
   useInvitationCodeList,
   useInvitationTicketList,
   useSalesTicketList,
+  useSettlementBanners,
   useShowDetail,
   useShowEnteranceInfo,
   useShowEnterances,
