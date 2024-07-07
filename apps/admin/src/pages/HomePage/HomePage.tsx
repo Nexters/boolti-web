@@ -1,5 +1,5 @@
 import { useLogout, useShowList, useUserAccountInfo, useUserSummary } from '@boolti/api';
-import { BooltiLogo } from '@boolti/icon';
+import { BooltiLogo, ChevronRightIcon } from '@boolti/icon';
 import { Footer, TextButton, useConfirm } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
@@ -55,6 +55,12 @@ const HomePage = () => {
             </TextButton>
           }
         />
+      }
+      banner={
+        <Styled.Banner>
+          <Styled.BannerDescription><Styled.BannerShowTitle>‘Show Title’</Styled.BannerShowTitle> 공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.</Styled.BannerDescription>
+          <Styled.BannerLink to="">정산 내역서 보러 가기 <ChevronRightIcon /></Styled.BannerLink>
+        </Styled.Banner>
       }
     >
       <Styled.Container>

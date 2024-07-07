@@ -19,6 +19,19 @@ const Header = styled.header`
   }
 `;
 
+const BannerContainer = styled.div`
+  background-color: #EFF5FF;
+`
+
+const Banner = styled.div`
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
+  min-height: 56px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+`
+
 const ContentContainer = styled.div`
   position: relative;
 `;
@@ -33,6 +46,8 @@ export default {
   Layout,
   HeaderContainer,
   Header,
+  BannerContainer,
+  Banner,
   ContentContainer,
   Content,
 };
