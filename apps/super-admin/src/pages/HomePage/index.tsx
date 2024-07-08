@@ -135,7 +135,9 @@ const HomePage = () => {
                         <Card
                           style={{ width: 'calc(50% - 8px)', cursor: 'pointer' }}
                           onClick={() => {
-                            navigate({ pathname: generatePath(PATH.SETTLEMENT, { showId: id.toString() }) })
+                            navigate({
+                              pathname: generatePath(PATH.SETTLEMENT, { showId: id.toString() }),
+                            });
                           }}
                         >
                           <Flex>
