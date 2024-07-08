@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '../queryKey';
 
-const useSettlementBanners = (bannerType: 'REQUIRED' | 'DONE') =>
-  useQuery(queryKeys.show.settlementBanners(bannerType));
+const useSettlementBanners = () =>
+  useQuery(queryKeys.show.settlementBanners);
 
 export default useSettlementBanners;

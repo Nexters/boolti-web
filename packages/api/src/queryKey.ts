@@ -200,10 +200,10 @@ export const showQueryKeys = createQueryKeys('show', {
         `web/v1/host/shows/${showId}/settlement-events/last`,
       ),
   }),
-  settlementBanners: (bannerType: 'REQUIRED' | 'DONE') => ({
-    queryKey: [bannerType],
+  settlementBanners: {
+    queryKey: null,
     queryFn: () => fetcher.get<SettlementBannersResponse>(`web/v1/host/settlement-banners`),
-  }),
+  },
 });
 
 export const userQueryKeys = createQueryKeys('user', {
