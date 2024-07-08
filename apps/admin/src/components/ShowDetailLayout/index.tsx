@@ -61,21 +61,26 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     fontSize: '12px',
   };
 
-  const isSettlementInfoEmpty = (settlementInfo?.bankAccount === null ||
+  const isSettlementInfoEmpty =
+    settlementInfo?.bankAccount === null ||
     settlementInfo?.idCardPhotoFile === null ||
-    settlementInfo?.settlementBankAccountPhotoFile === null)
+    settlementInfo?.settlementBankAccountPhotoFile === null;
 
   const isTooltipVisible = (() => {
-    if (lastSettlementEvent?.settlementEventType === 'REQUEST' || lastSettlementEvent?.settlementEventType === 'DONE' || lastSettlementEvent?.settlementEventType === 'SEND') {
-      return true
+    if (
+      lastSettlementEvent?.settlementEventType === 'REQUEST' ||
+      lastSettlementEvent?.settlementEventType === 'DONE' ||
+      lastSettlementEvent?.settlementEventType === 'SEND'
+    ) {
+      return true;
     }
 
     if (lastSettlementEvent?.settlementEventType === null && isSettlementInfoEmpty) {
-      return true
+      return true;
     }
 
-    return false
-  })()
+    return false;
+  })();
 
   return (
     <>
@@ -196,7 +201,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       <Tooltip
                         content={
                           settlementTooltipText[
-                          lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
                           ]
                         }
                         anchorSelect="#settlement-page-tooltip"

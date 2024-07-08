@@ -20,8 +20,8 @@ const Header = styled.header`
 `;
 
 const BannerContainer = styled.div`
-  background-color: #EFF5FF;
-`
+  background-color: #eff5ff;
+`;
 
 const Banner = styled.div`
   max-width: ${({ theme }) => theme.breakpoint.desktop};
@@ -30,7 +30,7 @@ const Banner = styled.div`
   display: flex;
   align-items: center;
   padding: 0 20px;
-`
+`;
 
 const ContentContainer = styled.div`
   position: relative;

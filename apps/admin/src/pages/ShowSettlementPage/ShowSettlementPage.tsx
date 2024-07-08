@@ -52,11 +52,12 @@ const ShowSettlementPage = () => {
     Number(params!.showId),
   );
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
-  const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } =
+    useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
-  const { data: settlementBanners } = useSettlementBanners()
+  const { data: settlementBanners } = useSettlementBanners();
 
   const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
     Number(params!.showId),
@@ -67,7 +68,7 @@ const ShowSettlementPage = () => {
   const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(Number(params!.showId));
   const addBankAccountMutation = useAddBankAccount();
   const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
-  const readSettlementBanner = useReadSettlementBanner()
+  const readSettlementBanner = useReadSettlementBanner();
 
   const settlementStatementFile = useMemo(() => {
     if (settlementStatementBlob) {
@@ -96,8 +97,11 @@ const ShowSettlementPage = () => {
 
     if (!targetSettlementBanner) return;
 
-    readSettlementBanner.mutate({ showId: targetSettlementBanner.showId, bannerType: targetSettlementBanner.bannerType });
-  }, [])
+    readSettlementBanner.mutate({
+      showId: targetSettlementBanner.showId,
+      bannerType: targetSettlementBanner.bannerType,
+    });
+  }, [params.showId, readSettlementBanner, settlementBanners]);
 
   if (!show) return null;
 

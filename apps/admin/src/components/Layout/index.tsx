@@ -16,8 +16,11 @@ const Layout = ({ children, header, banner, layoutStyle, headerContainerStyle }:
           <Styled.Header>{header}</Styled.Header>
         </Styled.HeaderContainer>
       )}
-      {banner && <Styled.BannerContainer><Styled.Banner>{banner}
-      </Styled.Banner></Styled.BannerContainer>}
+      {banner && (
+        <Styled.BannerContainer>
+          <Styled.Banner>{banner}</Styled.Banner>
+        </Styled.BannerContainer>
+      )}
       <Styled.ContentContainer>
         <Styled.Content>{children}</Styled.Content>
       </Styled.ContentContainer>

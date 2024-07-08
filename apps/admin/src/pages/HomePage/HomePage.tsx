@@ -1,4 +1,10 @@
-import { useLogout, useSettlementBanners, useShowList, useUserAccountInfo, useUserSummary } from '@boolti/api';
+import {
+  useLogout,
+  useSettlementBanners,
+  useShowList,
+  useUserAccountInfo,
+  useUserSummary,
+} from '@boolti/api';
 import { BooltiLogo, ChevronRightIcon } from '@boolti/icon';
 import { Footer, TextButton, useConfirm } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +26,7 @@ const HomePage = () => {
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();
   const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
-  const { data: settlementBanners } = useSettlementBanners()
+  const { data: settlementBanners } = useSettlementBanners();
 
   const { imagePath, email, nickname = '' } = userSummaryData ?? {};
   const { bankAccount } = userAccountInfoData ?? {};
@@ -57,12 +63,20 @@ const HomePage = () => {
           }
         />
       }
-      banner={settlementBanners && settlementBanners.length > 0 && settlementBanners?.map((banner) => (
-        <Styled.Banner key={banner.showId}>
-          <Styled.BannerDescription><Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle> 공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.</Styled.BannerDescription>
-          <Styled.BannerLink to={HREF.SHOW_SETTLEMENT(banner.showId)}>정산 내역서 보러 가기 <ChevronRightIcon /></Styled.BannerLink>
-        </Styled.Banner>
-      ))
+      banner={
+        settlementBanners &&
+        settlementBanners.length > 0 &&
+        settlementBanners?.map((banner) => (
+          <Styled.Banner key={banner.showId}>
+            <Styled.BannerDescription>
+              <Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle> 공연의 정산
+              내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.
+            </Styled.BannerDescription>
+            <Styled.BannerLink to={HREF.SHOW_SETTLEMENT(banner.showId)}>
+              정산 내역서 보러 가기 <ChevronRightIcon />
+            </Styled.BannerLink>
+          </Styled.Banner>
+        ))
       }
     >
       <Styled.Container>
