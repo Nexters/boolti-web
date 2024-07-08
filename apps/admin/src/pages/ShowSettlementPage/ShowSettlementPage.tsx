@@ -8,7 +8,9 @@ import {
   useDeleteBankAccountCopyPhoto,
   useDeleteIDCardPhotoFile,
   usePutShowSettlementBankAccount,
+  useReadSettlementBanner,
   useRequestSettlement,
+  useSettlementBanners,
   useShowDetail,
   useShowLastSettlementEvent,
   useShowSettlementInfo,
@@ -50,10 +52,13 @@ const ShowSettlementPage = () => {
     Number(params!.showId),
   );
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
-  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } =
+    useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
+  const { data: settlementBanners } = useSettlementBanners();
+
   const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
     Number(params!.showId),
   );
@@ -63,6 +68,7 @@ const ShowSettlementPage = () => {
   const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(Number(params!.showId));
   const addBankAccountMutation = useAddBankAccount();
   const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
+  const readSettlementBanner = useReadSettlementBanner();
 
   const settlementStatementFile = useMemo(() => {
     if (settlementStatementBlob) {
@@ -83,6 +89,19 @@ const ShowSettlementPage = () => {
       setAccount(`${settlementInfo.bankAccount.bankAccountId}`);
     }
   }, [settlementInfo?.bankAccount?.bankAccountId]);
+
+  useEffect(() => {
+    const targetSettlementBanner = settlementBanners?.find(
+      (banner) => banner.showId === Number(params.showId),
+    );
+
+    if (!targetSettlementBanner) return;
+
+    readSettlementBanner.mutate({
+      showId: targetSettlementBanner.showId,
+      bannerType: targetSettlementBanner.bannerType,
+    });
+  }, [params.showId, readSettlementBanner, settlementBanners]);
 
   if (!show) return null;
 
@@ -268,6 +287,7 @@ const ShowSettlementPage = () => {
                             try {
                               await requestSettlementMutation.mutateAsync();
                               await refetchSettlementInfo();
+                              await refetchLastSettlementEvent();
 
                               toast.success('정산을 요청했습니다');
                             } catch (error) {

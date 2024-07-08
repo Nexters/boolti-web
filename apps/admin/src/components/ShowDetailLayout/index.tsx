@@ -61,6 +61,27 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     fontSize: '12px',
   };
 
+  const isSettlementInfoEmpty =
+    settlementInfo?.bankAccount === null ||
+    settlementInfo?.idCardPhotoFile === null ||
+    settlementInfo?.settlementBankAccountPhotoFile === null;
+
+  const isTooltipVisible = (() => {
+    if (
+      lastSettlementEvent?.settlementEventType === 'REQUEST' ||
+      lastSettlementEvent?.settlementEventType === 'DONE' ||
+      lastSettlementEvent?.settlementEventType === 'SEND'
+    ) {
+      return true;
+    }
+
+    if (lastSettlementEvent?.settlementEventType === null && isSettlementInfoEmpty) {
+      return true;
+    }
+
+    return false;
+  })();
+
   return (
     <>
       <Styled.TopObserver ref={topObserverRef} />
@@ -176,26 +197,23 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     id="settlement-page-tooltip"
                   >
                     정산 관리
-                    {lastSettlementEvent?.settlementEventType !== undefined &&
-                      (settlementInfo?.bankAccount === null ||
-                        settlementInfo?.idCardPhotoFile === null ||
-                        settlementInfo?.settlementBankAccountPhotoFile === null) && (
-                        <Tooltip
-                          content={
-                            settlementTooltipText[
-                              lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
-                            ]
-                          }
-                          anchorSelect="#settlement-page-tooltip"
-                          isOpen
-                          style={tooltipStyle}
-                          className="tooltip"
-                          place="top"
-                          positionStrategy="fixed"
-                          offset={0}
-                          opacity={0.85}
-                        />
-                      )}
+                    {isTooltipVisible && (
+                      <Tooltip
+                        content={
+                          settlementTooltipText[
+                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                          ]
+                        }
+                        anchorSelect="#settlement-page-tooltip"
+                        isOpen
+                        style={tooltipStyle}
+                        className="tooltip"
+                        place="top"
+                        positionStrategy="fixed"
+                        offset={0}
+                        opacity={0.85}
+                      />
+                    )}
                   </Styled.TabItem>
                 </Styled.Tab>
               </Styled.TabContainer>
