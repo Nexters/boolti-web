@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/newline-after-import
 import { useMutation } from '@tanstack/react-query';
 // Note: yarn build 실행 시, image-resize 라이브러리의 package.json 이슈로
 //       타입을 올바르게 불러오지 못하는 이슈가 있어 부득이하게 ts-ignore 처리합니다.

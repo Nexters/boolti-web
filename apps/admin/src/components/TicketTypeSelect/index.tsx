@@ -12,7 +12,6 @@ interface Props {
   onChange: (value: Value) => void;
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const options = [
   { value: 'ALL', label: '티켓 전체' },
   { value: 'SALE', label: '일반 티켓' },

@@ -18,7 +18,7 @@ import {
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
@@ -135,7 +135,9 @@ const HomePage = () => {
                         <Card
                           style={{ width: 'calc(50% - 8px)', cursor: 'pointer' }}
                           onClick={() => {
-                            //TODO 상세 이동
+                            navigate({
+                              pathname: generatePath(PATH.SETTLEMENT, { showId: id.toString() }),
+                            });
                           }}
                         >
                           <Flex>
