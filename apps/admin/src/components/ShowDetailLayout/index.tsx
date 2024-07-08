@@ -81,8 +81,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     }}
                   >
                     <ArrowLeftIcon />
+                    <Styled.HeaderText>주최자 홈</Styled.HeaderText>
                   </Styled.BackButton>
-                  <Styled.HeaderText>주최자 홈</Styled.HeaderText>
                 </Styled.HeaderLeft>
               }
               right={
