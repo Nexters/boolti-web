@@ -52,7 +52,7 @@ const ShowSettlementPage = () => {
     Number(params!.showId),
   );
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
-  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
@@ -283,6 +283,7 @@ const ShowSettlementPage = () => {
                             try {
                               await requestSettlementMutation.mutateAsync();
                               await refetchSettlementInfo();
+                              await refetchLastSettlementEvent();
 
                               toast.success('정산을 요청했습니다');
                             } catch (error) {
