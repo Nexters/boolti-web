@@ -18,6 +18,11 @@ import { HREF, PATH } from '~/constants/routes';
 
 import Styled from './HomePage.styles';
 
+const bannerDescription = {
+  REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
+  DONE: '공연의 정산이 완료되었어요.',
+};
+
 const HomePage = () => {
   const navigate = useNavigate();
   const logout = useLogout();
@@ -69,8 +74,8 @@ const HomePage = () => {
         settlementBanners?.map((banner) => (
           <Styled.Banner key={banner.showId}>
             <Styled.BannerDescription>
-              <Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle> 공연의 정산
-              내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.
+              <Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle>{' '}
+              {bannerDescription[banner.bannerType]}
             </Styled.BannerDescription>
             <Styled.BannerLink to={HREF.SHOW_SETTLEMENT(banner.showId)}>
               정산 내역서 보러 가기 <ChevronRightIcon />
