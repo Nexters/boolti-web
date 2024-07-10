@@ -107,7 +107,7 @@ const ShowSalesTicketFormContent = ({
                       </Badge>
                     </Styled.TicketTitle>
                     <Styled.TicketDescription>
-                      {ticket.price}원 · 1인당 1매
+                      {ticket.price}원
                     </Styled.TicketDescription>
                   </Styled.TicketInfo>
                   <Styled.TicketAction>
