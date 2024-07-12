@@ -53,9 +53,6 @@ const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
             colorTheme="netural"
             onClick={async () => {
               await logoutMutation.mutateAsync();
-              if (location.pathname === PATH.INDEX) {
-                location.reload();
-              }
               navigate(PATH.INDEX, { replace: true });
             }}
           >
