@@ -30,7 +30,7 @@ import ShowSettlementPage from './pages/ShowSettlementPage/ShowSettlementPage';
 import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
 import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
-import GiftRegisterPage from './pages/GiftRegisterPage/GiftRegisterPage';
+import GiftRegisterPage from './pages/GiftRegisterPage';
 import GiftIntroPage from './pages/GiftIntroPage';
 
 setDefaultOptions({ locale: ko });
