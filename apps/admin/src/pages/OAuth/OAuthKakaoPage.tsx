@@ -44,7 +44,7 @@ const OAuthKakaoPage = () => {
       setToken(accessToken, refreshToken);
       navigate(PATH.SIGNUP_COMPLETE, { replace: true });
     },
-    [kakaoUserInfoMutation, navigate, signUpMutation],
+    [kakaoUserInfoMutation, navigate, signUpMutation, setToken],
   );
 
   const kakaoLogin = useCallback(async () => {
@@ -63,7 +63,7 @@ const OAuthKakaoPage = () => {
 
     setToken(accessToken, refreshToken);
     navigate(PATH.HOME);
-  }, [code, kakaoLoginMutation, kakaoSignUp, kakaoTokenMutation, navigate]);
+  }, [code, kakaoLoginMutation, kakaoSignUp, kakaoTokenMutation, navigate, setToken]);
 
   useEffect(() => {
     kakaoLogin();
