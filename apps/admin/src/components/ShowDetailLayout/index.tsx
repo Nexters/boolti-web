@@ -11,6 +11,7 @@ import { HREF, PATH } from '~/constants/routes';
 import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
+import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -35,7 +36,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     initialInView: true,
   });
   const theme = useTheme();
-
+  const { removeToken } = useAuthAtom();
   const navigate = useNavigate();
   const params = useParams<{ showId: string }>();
   const matchInfoTab = useMatch(PATH.SHOW_INFO);
@@ -46,7 +47,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
 
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
-  const logoutMutation = useLogout();
+  const logoutMutation = useLogout({}, removeToken);
 
   const tooltipStyle = {
     color: theme.palette.grey.w,

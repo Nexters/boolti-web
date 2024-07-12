@@ -10,13 +10,14 @@ import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useScrollDirection } from '~/hooks/useScrollDirection';
-import { getIsLogin } from '~/utils/auth';
 
 import { visibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import { Tab } from '..';
 import Styled from './Header.styles';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 const Header = () => {
+  const { isLogin, removeToken } = useAuthAtom();
   const currentVisibleSection = useAtomValue(visibleSectionAtom);
   const scrollDirection = useScrollDirection();
   const visible = currentVisibleSection === 'key-visal' || scrollDirection === 'up';
@@ -25,19 +26,16 @@ const Header = () => {
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
-  const logout = useLogout();
+  const logout = useLogout({}, removeToken);
   const navigate = useNavigate();
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLogin, setIsLogin] = useState(Boolean(getIsLogin()));
-
   const { data } = useUserSummary({ enabled: isLogin });
   const { imagePath } = data ?? {};
 
   const onClickAuthButton = async () => {
     if (isLogin) {
       await logout.mutateAsync();
-      setIsLogin(false);
       return;
     }
 

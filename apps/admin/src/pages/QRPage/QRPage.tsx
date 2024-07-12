@@ -3,7 +3,6 @@ import { BooltiGrey, BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { QRCodeSVG } from 'qrcode.react';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '~/components/Header';
@@ -11,13 +10,13 @@ import Layout from '~/components/Layout';
 import ProfileDropdown from '~/components/ProfileDropdown';
 import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
-import { getIsLogin } from '~/utils/auth';
 
 import Styled from './QRPage.styles';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 const QRPage = () => {
+  const { isLogin } = useAuthAtom();
   const theme = useTheme();
-  const [isLogin] = useState(Boolean(getIsLogin()));
   const { data: userAccountInfoData } = useUserSummary({ enabled: isLogin });
   const navigate = useNavigate();
 

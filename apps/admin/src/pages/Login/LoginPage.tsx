@@ -49,7 +49,7 @@ declare global {
 const kakaoRedirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 
 const LoginPage = () => {
-  const { login } = useAuthAtom();
+  const { setToken } = useAuthAtom();
   const navigate = useNavigate();
 
   const appleLoginMutation = useAppleLogin();
@@ -71,7 +71,7 @@ const LoginPage = () => {
       oauthIdentity,
     });
 
-    login(accessToken, refreshToken);
+    setToken(accessToken, refreshToken);
     navigate(PATH.SIGNUP_COMPLETE, { replace: true });
   };
 
@@ -97,7 +97,7 @@ const LoginPage = () => {
         return;
       }
 
-      login(accessToken, refreshToken);
+      setToken(accessToken, refreshToken);
       navigate(PATH.HOME);
     } catch (error) {
       console.error(error);

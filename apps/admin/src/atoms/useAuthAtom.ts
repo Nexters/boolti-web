@@ -29,24 +29,23 @@ export const useAuthAtom = () => {
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
   const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
 
-  const login = (accessToken: string, refreshToken: string) => {
+  const setToken = (accessToken: string, refreshToken: string) => {
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
   };
 
-  const logout = () => {
+  const removeToken = () => {
     setAccessToken(RESET);
     setRefreshToken(RESET);
   };
 
   const isLogin = useMemo(() => {
-    console.log(accessToken, refreshToken);
     return !!accessToken && !!refreshToken;
   }, [accessToken, refreshToken]);
 
   return {
-    login,
-    logout,
+    setToken,
+    removeToken,
     isLogin,
   };
 };
