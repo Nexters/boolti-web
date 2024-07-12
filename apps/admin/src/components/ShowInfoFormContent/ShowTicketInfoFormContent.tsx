@@ -54,7 +54,7 @@ const ShowTicketInfoFormContent = ({
                         setHasBlurred((prev) => ({ ...prev, startDate: true }));
                       }}
                       placeholder={value}
-                      min={format(new Date(), 'yyyy-MM-dd')}
+                      min={format(salesStartTime ?? new Date(), 'yyyy-MM-dd')}
                       max={format(
                         sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
                         'yyyy-MM-dd',
@@ -91,7 +91,7 @@ const ShowTicketInfoFormContent = ({
                       placeholder={value}
                       min={format(
                         watch('startDate') ||
-                          (salesStartTime ? new Date(salesStartTime) : new Date()),
+                        (salesStartTime ? new Date(salesStartTime) : new Date()),
                         'yyyy-MM-dd',
                       )}
                       max={format(

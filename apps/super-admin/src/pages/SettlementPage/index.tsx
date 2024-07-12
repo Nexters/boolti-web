@@ -157,7 +157,8 @@ const SettlementPage = () => {
                 <>
                   <Styled.UserInfoText>
                     {adminSettlementInfo.bankAccount.bankName}{' '}
-                    {adminSettlementInfo.bankAccount.bankAccountNumber}
+                    {adminSettlementInfo.bankAccount.bankAccountNumber}{' '}
+                    {adminSettlementInfo.bankAccount.bankAccountHolder}
                   </Styled.UserInfoText>
                   <Button
                     colorTheme="netural"
@@ -166,7 +167,7 @@ const SettlementPage = () => {
                       if (!adminSettlementInfo.bankAccount) return;
 
                       await navigator.clipboard.writeText(
-                        `${adminSettlementInfo.bankAccount.bankName} ${adminSettlementInfo.bankAccount.bankAccountNumber}`,
+                        `${adminSettlementInfo.bankAccount.bankName} ${adminSettlementInfo.bankAccount.bankAccountNumber} ${adminSettlementInfo.bankAccount.bankAccountHolder}`,
                       );
                       toast.success('계좌 정보가 복사되었습니다.');
                     }}
@@ -262,13 +263,6 @@ const SettlementPage = () => {
               type="button"
               size="medium"
               colorTheme="netural"
-              disabled={
-                adminShowDetail?.settlementStatus !== 'SETTLEMENT_REQUIRED' ||
-                adminSettlementInfo?.bankAccount === null ||
-                adminSettlementInfo?.idCardPhotoFile === null ||
-                adminSettlementInfo?.settlementBankAccountPhotoFile === null ||
-                adminSettlementInfo?.settlementBankAccountPhotoFile === null
-              }
               onClick={() => {
                 dialog.open({
                   title: '정산 내역서 생성하기',
@@ -331,6 +325,7 @@ const SettlementPage = () => {
                             showId: Number(params.showId),
                             body,
                           });
+                          await refetchAdminSettlementEvent();
 
                           toast.success('정산 내역서를 발송했어요.');
                           dialog.close();

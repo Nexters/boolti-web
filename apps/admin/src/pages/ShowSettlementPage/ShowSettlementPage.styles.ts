@@ -116,7 +116,13 @@ const AccountAddButton = styled.div`
 
 const PageSectionDivider = styled.hr`
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  margin: 52px 0;
+  margin: 88px 0 52px 0;
+`;
+
+const SettlementDoneDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-top: 52px;
 `;
 
 export default {
@@ -137,4 +143,5 @@ export default {
   SelectContainer,
   AccountAddButton,
   PageSectionDivider,
+  SettlementDoneDescription,
 };

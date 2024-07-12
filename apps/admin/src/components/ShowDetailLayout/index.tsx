@@ -1,4 +1,4 @@
-import { useLogout, useShowLastSettlementEvent } from '@boolti/api';
+import { useLogout, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -45,6 +45,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
 
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
+  const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
   const logoutMutation = useLogout();
 
   const tooltipStyle = {
@@ -59,6 +60,27 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     fontDisplay: 'auto',
     fontSize: '12px',
   };
+
+  const isSettlementInfoEmpty =
+    settlementInfo?.bankAccount === null ||
+    settlementInfo?.idCardPhotoFile === null ||
+    settlementInfo?.settlementBankAccountPhotoFile === null;
+
+  const isTooltipVisible = (() => {
+    if (
+      lastSettlementEvent?.settlementEventType === 'REQUEST' ||
+      lastSettlementEvent?.settlementEventType === 'DONE' ||
+      lastSettlementEvent?.settlementEventType === 'SEND'
+    ) {
+      return true;
+    }
+
+    if (lastSettlementEvent?.settlementEventType === null && isSettlementInfoEmpty) {
+      return true;
+    }
+
+    return false;
+  })();
 
   return (
     <>
@@ -80,8 +102,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     }}
                   >
                     <ArrowLeftIcon />
+                    <Styled.HeaderText>주최자 홈</Styled.HeaderText>
                   </Styled.BackButton>
-                  <Styled.HeaderText>주최자 홈</Styled.HeaderText>
                 </Styled.HeaderLeft>
               }
               right={
@@ -175,7 +197,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     id="settlement-page-tooltip"
                   >
                     정산 관리
-                    {lastSettlementEvent?.settlementEventType !== undefined && (
+                    {isTooltipVisible && (
                       <Tooltip
                         content={
                           settlementTooltipText[

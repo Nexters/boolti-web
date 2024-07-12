@@ -17,7 +17,6 @@ import TicketTypeSelect from '~/components/TicketTypeSelect';
 import Styled from './ShowReservationPage.styles';
 
 const emptyLabel: Record<TicketStatus, string> = {
-  WAIT: '발권 대기중인 티켓이 없어요.',
   COMPLETE: '발권 왼료된 티켓이 없어요.',
   CANCEL: '발권 취소된 티켓이 없어요.',
 };
@@ -27,7 +26,7 @@ const ShowReservationPage = () => {
   const [selectedTicketType, setSelectedTicketType] = useState<
     React.ComponentProps<typeof TicketTypeSelect>['value']
   >({ value: 'ALL', label: '티켓 전체' });
-  const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('WAIT');
+  const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('COMPLETE');
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
 
@@ -72,7 +71,6 @@ const ShowReservationPage = () => {
     totalSalesAmount,
     invitationTicketSoldCount,
     totalSoldCount,
-    waitCount,
     completeCount,
     cancelCount,
   } = reservationSummary;
@@ -108,15 +106,6 @@ const ShowReservationPage = () => {
           </Styled.TicketSummaryContainer>
           <Styled.TicketReservationSummaryContainer>
             <Styled.TicketReservationSummaryButtonContainer>
-              <Styled.TicketReservationSummaryButton
-                onClick={() => {
-                  setSelectedTicketStatus('WAIT');
-                  onClickReset();
-                }}
-                isSelected={selectedTicketStatus === 'WAIT'}
-              >
-                발권 대기 <span>{waitCount}</span>
-              </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
                   setSelectedTicketStatus('COMPLETE');

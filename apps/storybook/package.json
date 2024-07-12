@@ -6,8 +6,8 @@
   "main": ".storybook/main.ts",
   "types": ".storybook/main.ts",
   "scripts": {
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint . --ext ts,tsx --fix",
+    "lint": "TIMING=1 eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build"
