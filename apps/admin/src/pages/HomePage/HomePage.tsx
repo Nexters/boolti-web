@@ -27,7 +27,11 @@ const bannerDescription = {
 const HomePage = () => {
   const { removeToken } = useAuthAtom();
   const navigate = useNavigate();
-  const logout = useLogout({}, removeToken);
+  const logout = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const confirm = useConfirm();
 
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();

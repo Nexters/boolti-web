@@ -47,7 +47,11 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
 
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
-  const logoutMutation = useLogout({}, removeToken);
+  const logoutMutation = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
 
   const tooltipStyle = {
     color: theme.palette.grey.w,

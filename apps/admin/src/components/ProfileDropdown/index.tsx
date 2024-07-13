@@ -36,7 +36,11 @@ const ProfileSVG = () => (
 const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
   const { isOpen, toggleDropdown } = useDropdown();
   const { removeToken } = useAuthAtom();
-  const logoutMutation = useLogout({}, removeToken);
+  const logoutMutation = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const navigate = useNavigate();
 
   return (

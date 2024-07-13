@@ -26,7 +26,11 @@ const Header = () => {
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
-  const logout = useLogout({}, removeToken);
+  const logout = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const navigate = useNavigate();
 
   const [isExpanded, setIsExpanded] = useState(false);
