@@ -17,7 +17,7 @@ import { useAuthAtom } from '~/atoms/useAuthAtom';
 const QRPage = () => {
   const { isLogin } = useAuthAtom();
   const theme = useTheme();
-  const { data: userAccountInfoData } = useUserSummary({ enabled: isLogin });
+  const { data: userAccountInfoData } = useUserSummary({ enabled: isLogin() });
   const navigate = useNavigate();
 
   return (
@@ -41,7 +41,7 @@ const QRPage = () => {
               </>
             }
             right={
-              isLogin ? (
+              isLogin() ? (
                 <ProfileDropdown image={userAccountInfoData?.imagePath} />
               ) : (
                 <TextButton

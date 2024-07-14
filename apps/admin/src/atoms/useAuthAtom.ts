@@ -1,7 +1,6 @@
 import { LOCAL_STORAGE } from '@boolti/api';
 import { useAtom } from 'jotai';
 import { atomWithStorage, RESET } from 'jotai/utils';
-import { useMemo } from 'react';
 
 const storageMethod = {
   getItem: (key: string, initialValue: string | null) => {
@@ -39,9 +38,7 @@ export const useAuthAtom = () => {
     setRefreshToken(RESET);
   };
 
-  const isLogin = useMemo(() => {
-    return !!accessToken && !!refreshToken;
-  }, [accessToken, refreshToken]);
+  const isLogin = () => !!accessToken && !!refreshToken;
 
   return {
     setToken,

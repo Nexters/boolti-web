@@ -34,11 +34,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const { data } = useUserSummary({ enabled: isLogin });
+  const { data } = useUserSummary({ enabled: isLogin() });
   const { imagePath } = data ?? {};
 
   const onClickAuthButton = async () => {
-    if (isLogin) {
+    if (isLogin()) {
       await logout.mutateAsync();
       return;
     }
@@ -80,7 +80,7 @@ const Header = () => {
             앱 바로가기
           </Styled.InternalLink>
           <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
-          {isLogin ? (
+          {isLogin() ? (
             <Styled.DropDownContainer>
               <ProfileDropdown image={imagePath} />
             </Styled.DropDownContainer>
@@ -125,12 +125,12 @@ const Header = () => {
         </Styled.InternalLink>
         <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
         <Styled.MobileAuthButton
-          colorTheme={isLogin ? 'netural' : 'primary'}
+          colorTheme={isLogin() ? 'netural' : 'primary'}
           size="bold"
           role="button"
           onClick={onClickAuthButton}
         >
-          {isLogin ? '로그아웃' : '로그인'}
+          {isLogin() ? '로그아웃' : '로그인'}
         </Styled.MobileAuthButton>
       </Styled.MobileMenu>
 

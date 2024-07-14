@@ -78,7 +78,7 @@ const publicRoutes = [
 const PrivateRoute = () => {
   const { isLogin } = useAuthAtom();
 
-  if (!isLogin) {
+  if (!isLogin()) {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 
