@@ -27,11 +27,12 @@ const TextContainer = styled.div`
 `;
 
 const Username = styled.p`
-  ${({ theme }) => theme.typo.h2};
+  ${({ theme }) => theme.typo.sh2};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   ${mq_lg} {
     margin-bottom: 6px;
+    ${({ theme }) => theme.typo.h2};
   }
 `;
 
