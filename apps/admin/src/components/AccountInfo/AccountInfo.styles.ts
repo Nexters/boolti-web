@@ -18,18 +18,23 @@ const Container = styled.div`
 `;
 
 const Title = styled.p<{ hasAccountInfo?: boolean }>`
-  ${({ theme, hasAccountInfo }) => (hasAccountInfo ? theme.typo.b3 : theme.typo.h1)};
+  ${({ theme, hasAccountInfo }) => (hasAccountInfo ? theme.typo.b1 : theme.typo.sh1)};
   color: ${({ theme, hasAccountInfo }) =>
     hasAccountInfo ? theme.palette.grey.g70 : theme.palette.grey.g90};
   margin-bottom: 2px;
+
+  ${mq_lg} {
+    ${({ theme, hasAccountInfo }) => (hasAccountInfo ? theme.typo.b3 : theme.typo.h1)};
+  }
 `;
 
 const Description = styled.span`
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
   margin-bottom: 20px;
 
   ${mq_lg} {
+    ${({ theme }) => theme.typo.b3};
     margin-bottom: 24px;
   }
 `;
@@ -46,11 +51,15 @@ const InfoContainer = styled.div`
 `;
 
 const AccountText = styled.span`
-  ${({ theme }) => theme.typo.h1};
+  ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-right: 8px;
   &:last-of-type {
     margin-right: 16px;
+  }
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.h1};
   }
 `;
 

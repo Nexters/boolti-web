@@ -32,6 +32,7 @@ const Confirm = styled.div`
 `;
 
 const ConfirmMessage = styled.div`
+  text-align: center;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 24px;

@@ -46,7 +46,7 @@ const ShowList = ({ shows }: Props) => {
             navigate(PATH.SHOW_ADD);
           }}
         >
-          공연 등록하기
+          등록하기
         </Styled.MobileButton>
         <Styled.DesktopButton
           type="button"
