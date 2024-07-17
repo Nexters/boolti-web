@@ -10,10 +10,12 @@ const useLogout = (options?: UseMutationOptions) =>
   useMutation(postLogout, {
     ...options,
     onSuccess: (data, variables, context) => {
-      window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
-      window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
-
-      options?.onSuccess?.(data, variables, context);
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context);
+      } else {
+        window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+        window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
+      }
     },
   });
 

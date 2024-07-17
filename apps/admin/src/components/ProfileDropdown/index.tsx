@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ProfileDropdown.styles';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 interface ProfileDropdownProps {
   image?: string;
@@ -34,7 +35,12 @@ const ProfileSVG = () => (
 
 const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
   const { isOpen, toggleDropdown } = useDropdown();
-  const logoutMutation = useLogout();
+  const { removeToken } = useAuthAtom();
+  const logoutMutation = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const navigate = useNavigate();
 
   return (
@@ -51,9 +57,6 @@ const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
             colorTheme="netural"
             onClick={async () => {
               await logoutMutation.mutateAsync();
-              if (location.pathname === PATH.INDEX) {
-                location.reload();
-              }
               navigate(PATH.INDEX, { replace: true });
             }}
           >

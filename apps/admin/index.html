@@ -1,45 +1,67 @@
 <!doctype html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="https://boolti.in/favicon.png" />
+    <meta
+      name="description"
+      content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
+    />
+    <meta property="og:title" content="손쉬운 예매 빠른 입장은 불티" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
+    <meta
+      name="og:description"
+      content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
+    />
+    <meta property="og:url" content="https://boolti.in/" />
+    <meta property="og:image" content="https://boolti.in/thumbnail.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="600" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta property="twitter:domain" content="boolti.in" />
+    <meta property="twitter:url" content="https://boolti.in/" />
+    <meta name="twitter:title" content="손쉬운 예매 빠른 입장은 불티" />
+    <meta
+      name="twitter:description"
+      content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
+    />
+    <meta name="twitter:image" content="/thumbnail.png" />
+    <link rel="canonical" href="https://boolti.in/" />
+    <title>손쉬운 예매 빠른 입장은 불티</title>
+    <script
+      src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js"
+      integrity="sha384-6MFdIr0zOira1CHQkedUqJVql0YtcZA1P0nbPrQYJXVJZUkTk/oX4U9GhUIs3/z8"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      Kakao.init('%VITE_KAKAO_JAVASCRIPT_KEY%');
+    </script>
+    <script
+      type="text/javascript"
+      src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+    ></script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKHNG1QPW4"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="shortcut icon" href="https://boolti.in/favicon.png" />
-  <meta name="description" content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요." />
-  <meta property="og:title" content="손쉬운 예매 빠른 입장은 불티" />
-  <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
-  <meta name="og:description" content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요." />
-  <meta property="og:url" content="https://boolti.in/" />
-  <meta property="og:image" content="https://boolti.in/thumbnail.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="600" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta property="twitter:domain" content="boolti.in" />
-  <meta property="twitter:url" content="https://boolti.in/" />
-  <meta name="twitter:title" content="손쉬운 예매 빠른 입장은 불티" />
-  <meta name="twitter:description" content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요." />
-  <meta name="twitter:image" content="/thumbnail.png" />
-  <link rel="canonical" href="https://boolti.in/" />
-  <title>손쉬운 예매 빠른 입장은 불티</title>
-  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.6.0/kakao.min.js"
-    integrity="sha384-6MFdIr0zOira1CHQkedUqJVql0YtcZA1P0nbPrQYJXVJZUkTk/oX4U9GhUIs3/z8"
-    crossorigin="anonymous"></script>
-  <script>
-    Kakao.init('%VITE_KAKAO_JAVASCRIPT_KEY%');
-  </script>
-  <script type="text/javascript"
-    src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
-  <meta name="appleid-signin-client-id" content="%VITE_APPLE_CLIENT_ID%" />
-  <meta name="appleid-signin-scope" content="name email" />
-  <meta name="appleid-signin-redirect-uri" content="%VITE_APPLE_REDIRECT_URI%" />
-  <meta name="appleid-signin-state" content="signin" />
-  <meta name="appleid-signin-use-popup" content="true" />
-</head>
+      gtag('config', 'G-KKHNG1QPW4');
+    </script>
+    <meta name="appleid-signin-client-id" content="%VITE_APPLE_CLIENT_ID%" />
+    <meta name="appleid-signin-scope" content="name email" />
+    <meta name="appleid-signin-redirect-uri" content="%VITE_APPLE_REDIRECT_URI%" />
+    <meta name="appleid-signin-state" content="signin" />
+    <meta name="appleid-signin-use-popup" content="true" />
+  </head>
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

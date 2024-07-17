@@ -1,7 +1,7 @@
 import 'the-new-css-reset/css/reset.css';
 import './index.css';
 
-import { LOCAL_STORAGE, QueryClientProvider } from '@boolti/api';
+import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -32,6 +32,7 @@ import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
 import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
 import GiftRegisterPage from './pages/GiftRegisterPage';
 import GiftIntroPage from './pages/GiftIntroPage';
+import { useAuthAtom } from './atoms/useAuthAtom';
 
 setDefaultOptions({ locale: ko });
 
@@ -85,11 +86,9 @@ const publicRoutes = [
 ];
 
 const PrivateRoute = () => {
-  const isLogin =
-    window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
-    window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
+  const { isLogin } = useAuthAtom();
 
-  if (!isLogin) {
+  if (!isLogin()) {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 
