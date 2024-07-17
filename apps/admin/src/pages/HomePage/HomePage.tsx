@@ -17,6 +17,7 @@ import UserProfile from '~/components/UserProfile';
 import { HREF, PATH } from '~/constants/routes';
 
 import Styled from './HomePage.styles';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 const bannerDescription = {
   REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
@@ -24,8 +25,13 @@ const bannerDescription = {
 };
 
 const HomePage = () => {
+  const { removeToken } = useAuthAtom();
   const navigate = useNavigate();
-  const logout = useLogout();
+  const logout = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const confirm = useConfirm();
 
   const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();

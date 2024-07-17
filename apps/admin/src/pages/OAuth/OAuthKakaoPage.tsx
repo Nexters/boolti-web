@@ -1,16 +1,12 @@
-import {
-  LOCAL_STORAGE,
-  useKakaoLogin,
-  useKakaoToken,
-  useKakaoUserInfo,
-  useSignUp,
-} from '@boolti/api';
+import { useKakaoLogin, useKakaoToken, useKakaoUserInfo, useSignUp } from '@boolti/api';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 import { PATH } from '~/constants/routes';
 
 const OAuthKakaoPage = () => {
+  const { setToken } = useAuthAtom();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -45,12 +41,10 @@ const OAuthKakaoPage = () => {
         imgPath: userInfo.kakao_account?.profile?.profile_image_url,
       });
 
-      window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-      window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
-
+      setToken(accessToken, refreshToken);
       navigate(PATH.SIGNUP_COMPLETE, { replace: true });
     },
-    [kakaoUserInfoMutation, navigate, signUpMutation],
+    [kakaoUserInfoMutation, navigate, signUpMutation, setToken],
   );
 
   const kakaoLogin = useCallback(async () => {
@@ -67,11 +61,9 @@ const OAuthKakaoPage = () => {
       return;
     }
 
-    window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-    window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
-
+    setToken(accessToken, refreshToken);
     navigate(PATH.HOME);
-  }, [code, kakaoLoginMutation, kakaoSignUp, kakaoTokenMutation, navigate]);
+  }, [code, kakaoLoginMutation, kakaoSignUp, kakaoTokenMutation, navigate, setToken]);
 
   useEffect(() => {
     kakaoLogin();

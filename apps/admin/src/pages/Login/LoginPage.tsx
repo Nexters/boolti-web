@@ -1,4 +1,4 @@
-import { LOCAL_STORAGE, useAppleLogin, useSignUp } from '@boolti/api';
+import { useAppleLogin, useSignUp } from '@boolti/api';
 import { AppleIcon, BooltiSmallLogo, KakaotalkIcon } from '@boolti/icon';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 
 import Styled from './LoginPage.styles';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 declare global {
   interface Window {
@@ -48,6 +49,7 @@ declare global {
 const kakaoRedirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 
 const LoginPage = () => {
+  const { setToken } = useAuthAtom();
   const navigate = useNavigate();
 
   const appleLoginMutation = useAppleLogin();
@@ -69,9 +71,7 @@ const LoginPage = () => {
       oauthIdentity,
     });
 
-    window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-    window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
-
+    setToken(accessToken, refreshToken);
     navigate(PATH.SIGNUP_COMPLETE, { replace: true });
   };
 
@@ -97,9 +97,7 @@ const LoginPage = () => {
         return;
       }
 
-      window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-      window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
-
+      setToken(accessToken, refreshToken);
       navigate(PATH.HOME);
     } catch (error) {
       console.error(error);
