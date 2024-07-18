@@ -26,6 +26,7 @@ import useSignUp from './useSignUp';
 import useUploadBankAccountCopyPhoto from './useUploadBankAccountCopyPhoto';
 import useUploadIDCardPhotoFile from './useUploadIDCardPhotoFile';
 import useUploadShowImage, { ImageFile } from './useUploadShowImage';
+import useRejectGift from './useRejectGift';
 
 export {
   useAddBankAccount,
@@ -56,6 +57,7 @@ export {
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
   useUploadShowImage,
+  useRejectGift,
 };
 
 export type { ImageFile };

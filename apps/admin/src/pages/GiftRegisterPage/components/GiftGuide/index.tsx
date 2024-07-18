@@ -1,20 +1,28 @@
 import { useConfirm } from '@boolti/ui';
 import Styled from './GiftGuide.styles';
+import { useGift, useRejectGift } from '@boolti/api';
+import { useParams } from 'react-router-dom';
+import { GiftStatus } from '@boolti/api/src/types/gift';
 
-interface Props {
-  isRegistered: boolean;
-  isCancelled: boolean;
-}
-
-const GiftGuide = ({ isRegistered, isCancelled }: Props) => {
+const GiftGuide = () => {
   const confirm = useConfirm();
-  const isRegistrable = !isRegistered && !isCancelled;
+  const { giftId = '' } = useParams<{ giftId: string }>();
+  const { data } = useGift(giftId);
+
+  const { status } = data ?? {};
+
+  const isRegistered = status === GiftStatus.REGISTERED;
+  const isCancelled = status === GiftStatus.CANCELLED;
+  const isRegistrable = status === GiftStatus.REGISTRABLE;
+  const isRejected = status === GiftStatus.REJECTED;
+
+  const rejectGiftMutation = useRejectGift(giftId);
+
   const descriptionList = [
     '선물 등록 후에는 거절 또는 결제 취소 및 환불이 불가합니다.',
     '기한 내 미등록 시 선물 거절 처리되며 결제가 자동 취소됩니다.',
     '선물 거절 시 보낸 분께 알림이 발송되며 결제가 자동 취소됩니다.',
   ];
-
   return (
     <Styled.Container>
       <Styled.DescriptoinList>
@@ -33,7 +41,7 @@ const GiftGuide = ({ isRegistered, isCancelled }: Props) => {
                   },
                 );
                 if (result) {
-                  // 거절하기 mutate
+                  await rejectGiftMutation.mutateAsync();
                 }
               }}
             >
@@ -46,7 +54,7 @@ const GiftGuide = ({ isRegistered, isCancelled }: Props) => {
             선물 등록 후에는 거절 또는 결제 취소 및 환불이 불가합니다.
           </Styled.DescriptionListItem>
         )}
-        {isCancelled && (
+        {(isCancelled || isRejected) && (
           <Styled.DescriptionListItem>
             취소되어 등록할 수 없는 선물입니다.
           </Styled.DescriptionListItem>
