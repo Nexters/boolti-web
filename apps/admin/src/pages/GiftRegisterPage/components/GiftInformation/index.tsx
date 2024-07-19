@@ -4,18 +4,22 @@ import { ChevronRightIcon } from '@boolti/icon';
 import { useParams } from 'react-router-dom';
 import { useGift } from '@boolti/api';
 import { format } from 'date-fns/format';
+import { GiftStatus } from '@boolti/api/src/types/gift';
 
 const GiftInformation = () => {
   const confirm = useConfirm();
-
   const { giftId = '' } = useParams<{ giftId: string }>();
   const { data } = useGift(giftId);
-  const { recipientName, message, giftImageUrl, showImageUrl, showDate, showName } = data ?? {};
 
-  const isRegistered = false;
-  const isCancelled = false;
-  const isRejected = false;
-  const isRegistable = !isRegistered && !isCancelled && !isRejected;
+  const { recipientName, message, showId, status, giftImageUrl, showImageUrl, showDate, showName } =
+    data ?? {};
+
+  const isRegistered = status === GiftStatus.REGISTERED;
+  const isCancelled = status === GiftStatus.CANCELLED;
+  const isRejected = status === GiftStatus.REJECTED;
+  const isRegistrable = status === GiftStatus.REGISTRABLE;
+  const showDetailLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+  const giftRegisterLink = `https://boolti.page.link/?link=https://app.boolti.in/gift/${giftId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
 
   return (
     <>
@@ -29,7 +33,7 @@ const GiftInformation = () => {
           <Styled.PosterImage src={showImageUrl} alt="포스터 이미지" draggable={false} />
           <Styled.ShowInformation>
             <Styled.ShowTitle>{showName}</Styled.ShowTitle>
-            <Styled.ShowDetailLink onClick={() => {}}>
+            <Styled.ShowDetailLink onClick={() => (window.location.href = showDetailLink)}>
               공연 자세히 보기
               <ChevronRightIcon />
             </Styled.ShowDetailLink>
@@ -37,7 +41,7 @@ const GiftInformation = () => {
         </Styled.ShowContainer>
       </Styled.Container>
       <Styled.Footer>
-        {isRegistable && (
+        {isRegistrable && (
           <Styled.RegisterDescription>
             <Styled.ExpireDate>
               {format(showDate ?? new Date(), 'yyyy년 M월 d일')}
@@ -46,7 +50,7 @@ const GiftInformation = () => {
           </Styled.RegisterDescription>
         )}
         <Styled.Button
-          disabled={!isRegistable}
+          disabled={!isRegistrable}
           onClick={async () => {
             const result = await confirm(
               '불티 앱에서만 이용이 가능합니다.스토어로 이동하시겠습니까?',
@@ -56,7 +60,7 @@ const GiftInformation = () => {
               },
             );
             if (result) {
-              // store로 이동
+              window.location.href = giftRegisterLink;
             }
           }}
         >
@@ -70,7 +74,7 @@ const GiftInformation = () => {
               </Styled.CancelText>
             </>
           )}
-          {isRegistable && '선물 등록하기'}
+          {isRegistrable && '선물 등록하기'}
         </Styled.Button>
       </Styled.Footer>
     </>
