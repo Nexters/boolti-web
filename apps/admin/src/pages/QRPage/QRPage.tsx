@@ -63,7 +63,7 @@ const QRPage = () => {
           </Styled.QRCodeDescriptionText>
           <Styled.QRCodeContainer>
             <Styled.QRCodeWrapper>
-              <QRCodeSVG value={LINK.DYNAMIC_LINK} size={182} level="L" />
+              <QRCodeSVG value={LINK.APP_QR} size={182} level="L" />
             </Styled.QRCodeWrapper>
             <BooltiGrey />
           </Styled.QRCodeContainer>
