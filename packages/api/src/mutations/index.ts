@@ -26,6 +26,9 @@ import useSignUp from './useSignUp';
 import useUploadBankAccountCopyPhoto from './useUploadBankAccountCopyPhoto';
 import useUploadIDCardPhotoFile from './useUploadIDCardPhotoFile';
 import useUploadShowImage, { ImageFile } from './useUploadShowImage';
+import useAddHost from './useAddHost';
+import useEditHost from './useEditHost';
+import useDeleteHost from './useDeleteHost';
 
 export {
   useAddBankAccount,
@@ -56,6 +59,9 @@ export {
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
   useUploadShowImage,
+  useAddHost,
+  useEditHost,
+  useDeleteHost,
 };
 
 export type { ImageFile };
