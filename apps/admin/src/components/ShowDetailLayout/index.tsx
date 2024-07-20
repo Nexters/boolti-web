@@ -1,6 +1,6 @@
 import { useLogout, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
-import { ArrowLeftIcon } from '@boolti/icon';
-import { TextButton } from '@boolti/ui';
+import { ArrowLeftIcon, ChevronDownIcon } from '@boolti/icon';
+import { Button, TextButton, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +12,7 @@ import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
+import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent/index.tsx';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -44,6 +45,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchReservationTab = useMatch(PATH.SHOW_RESERVATION);
   const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
   const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
+  const authoritySettingDialog = useDialog();
 
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
   const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
@@ -129,7 +131,24 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
               }
             />
             <Styled.HeaderContent>
-              <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
+              <Styled.ShowNameWrapper>
+                <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
+                <Button
+                  type="button"
+                  colorTheme="netural"
+                  size="small"
+                  onClick={() => {
+                    authoritySettingDialog.open({
+                      title: '권한 설정',
+                      width: '600px',
+                      content: <AuthoritySettingDialogContent />,
+                    });
+                  }}
+                >
+                  <ChevronDownIcon />
+                  권한 설정
+                </Button>
+              </Styled.ShowNameWrapper>
               <Styled.TabContainer>
                 <Styled.Tab>
                   <Styled.TabItem

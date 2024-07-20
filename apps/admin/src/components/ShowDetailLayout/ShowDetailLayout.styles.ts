@@ -54,6 +54,12 @@ const HeaderContent = styled.div`
   left: 0;
 `;
 
+const ShowNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const ShowName = styled.h2<ShowNameProps>`
   ${({ theme }) => theme.typo.h1};
   margin: 12px 0 8px;
@@ -131,6 +137,7 @@ export default {
   TopObserver,
   HeaderObserver,
   HeaderContent,
+  ShowNameWrapper,
   ShowName,
   TabContainer,
   Tab,
