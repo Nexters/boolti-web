@@ -33,7 +33,11 @@ const GiftInformation = () => {
           <Styled.PosterImage src={showImageUrl} alt="포스터 이미지" draggable={false} />
           <Styled.ShowInformation>
             <Styled.ShowTitle>{showName}</Styled.ShowTitle>
-            <Styled.ShowDetailLink onClick={() => (window.location.href = showDetailLink)}>
+            <Styled.ShowDetailLink
+              onClick={() => {
+                window.open(showDetailLink, '_blank');
+              }}
+            >
               공연 자세히 보기
               <ChevronRightIcon />
             </Styled.ShowDetailLink>
@@ -60,7 +64,7 @@ const GiftInformation = () => {
               },
             );
             if (result) {
-              window.location.href = giftRegisterLink;
+              window.open(giftRegisterLink, '_blank');
             }
           }}
         >
