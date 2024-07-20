@@ -22,6 +22,8 @@ import useShowSettlementInfo from './useShowSettlementInfo';
 import useShowSettlementStatement from './useShowSettlementStatement';
 import useUserAccountInfo from './useUserAccountInfo';
 import useUserSummary from './useUserSummary';
+import useHostList from './useHostList';
+import useMyHostInfo from './useMyHostInfo';
 
 export {
   useAdminSettlementEvent,
@@ -48,4 +50,6 @@ export {
   useShowSettlementStatement,
   useUserAccountInfo,
   useUserSummary,
+  useHostList,
+  useMyHostInfo,
 };

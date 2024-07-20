@@ -34,6 +34,7 @@ import {
   SettlementAccountInfoResponse,
   UserProfileSummaryResponse,
 } from './types/users';
+import { HostListItem, HostListResponse } from './types/host';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -222,9 +223,21 @@ export const userQueryKeys = createQueryKeys('user', {
   },
 });
 
+export const hostQueryKeys = createQueryKeys('host', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListResponse>(`web/v1/show/${showId}/hosts`),
+  }),
+  me: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListItem>(`web/v1/show/${showId}/hosts/me`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
+  hostQueryKeys,
 );
