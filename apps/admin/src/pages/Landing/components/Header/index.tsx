@@ -72,7 +72,7 @@ const Header = () => {
             to="#"
             onClick={() => {
               if (isMobile) {
-                return window.open(LINK.DYNAMIC_LINK, '_blank');
+                return window.open(LINK.APP_QR, '_blank');
               }
               navigate(PATH.QR);
             }}
@@ -116,7 +116,7 @@ const Header = () => {
           to="#"
           onClick={() => {
             if (isMobile) {
-              return window.open(LINK.DYNAMIC_LINK, '_blank');
+              return window.open(LINK.APP_QR, '_blank');
             }
             navigate(PATH.QR);
           }}

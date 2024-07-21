@@ -34,6 +34,7 @@ import {
   SettlementAccountInfoResponse,
   UserProfileSummaryResponse,
 } from './types/users';
+import { GiftInfoResponse } from './types/gift';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -222,9 +223,17 @@ export const userQueryKeys = createQueryKeys('user', {
   },
 });
 
+export const giftQueryKeys = createQueryKeys('gift', {
+  info: (giftId: string) => ({
+    queryKey: [giftId],
+    queryFn: () => fetcher.get<GiftInfoResponse>(`web/papi/v1/gift/${giftId}`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
+  giftQueryKeys,
 );
