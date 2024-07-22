@@ -255,7 +255,7 @@ const TextAreaContainer = styled.div`
 
 const TextArea = styled.textarea<TextAreaProps>`
   width: 100%;
-  margin-top: 8px;
+  margin-top: 16px;
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
@@ -278,6 +278,10 @@ const TextArea = styled.textarea<TextAreaProps>`
     background: ${({ theme }) => theme.palette.grey.g10};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g40};
+  }
+
+  ${mq_lg} {
+    margin-top: 8px;
   }
 `;
 

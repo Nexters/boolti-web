@@ -90,7 +90,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>대표 연락처</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>대표자 연락처</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
