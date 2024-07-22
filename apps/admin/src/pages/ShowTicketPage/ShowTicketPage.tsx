@@ -28,15 +28,12 @@ const ShowTicketPage = () => {
 
   const showTicketForm = useForm<ShowTicketFormInputs>();
 
-  const { data: show } = useShowDetail(Number(params!.showId));
-  const { data: showSalesInfo, refetch: refetchSalesTicketInfo } = useShowSalesInfo(
-    Number(params!.showId),
-  );
-  const { data: salesTicketList, refetch: refetchSalesTicketList } = useSalesTicketList(
-    Number(params!.showId),
-  );
+  const showId = Number(params!.showId);
+  const { data: show } = useShowDetail(showId);
+  const { data: showSalesInfo, refetch: refetchSalesTicketInfo } = useShowSalesInfo(showId);
+  const { data: salesTicketList, refetch: refetchSalesTicketList } = useSalesTicketList(showId);
   const { data: invitationTicketList, refetch: refetchInvitationTicketList } =
-    useInvitationTicketList(Number(params!.showId));
+    useInvitationTicketList(showId);
   const editSalesTicketInfoMutation = useEditSalesTicketInfo();
   const createSalesTicketMutation = useCreateSalesTicket();
   const createInvitationTicketMutation = useCreateInvitationTicket();

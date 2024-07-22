@@ -32,8 +32,9 @@ const ShowInfoPage = () => {
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
   const showInfoForm = useForm<ShowInfoFormInputs>();
 
-  const { data: show } = useShowDetail(Number(params!.showId));
-  const { data: showSalesInfo } = useShowSalesInfo(Number(params!.showId));
+  const showId = Number(params!.showId);
+  const { data: show } = useShowDetail(showId);
+  const { data: showSalesInfo } = useShowSalesInfo(showId);
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();

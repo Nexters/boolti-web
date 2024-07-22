@@ -47,27 +47,24 @@ const ShowSettlementPage = () => {
   const settlementDialog = useDialog();
   const toast = useToast();
 
-  const { data: show } = useShowDetail(Number(params!.showId));
-  const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(
-    Number(params!.showId),
-  );
+  const showId = Number(params!.showId);
+  const { data: show } = useShowDetail(showId);
+  const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(showId);
   const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
   const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } =
-    useShowLastSettlementEvent(Number(params!.showId));
-  const { data: settlementStatementBlob } = useShowSettlementStatement(Number(params!.showId), {
+    useShowLastSettlementEvent(showId);
+  const { data: settlementStatementBlob } = useShowSettlementStatement(showId, {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
   const { data: settlementBanners } = useSettlementBanners();
 
-  const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(
-    Number(params!.showId),
-  );
-  const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(Number(params!.showId));
-  const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(Number(params!.showId));
-  const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(Number(params!.showId));
-  const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(Number(params!.showId));
+  const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(showId);
+  const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(showId);
+  const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(showId);
+  const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(showId);
+  const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(showId);
   const addBankAccountMutation = useAddBankAccount();
-  const requestSettlementMutation = useRequestSettlement(Number(params!.showId));
+  const requestSettlementMutation = useRequestSettlement(showId);
   const readSettlementBanner = useReadSettlementBanner();
 
   const settlementStatementFile = useMemo(() => {

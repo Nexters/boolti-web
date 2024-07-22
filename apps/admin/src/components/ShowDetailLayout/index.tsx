@@ -12,7 +12,7 @@ import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
-import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent/index.tsx';
+import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -46,9 +46,10 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
   const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
   const authoritySettingDialog = useDialog();
+  const showId = Number(params!.showId);
 
-  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
-  const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
+  const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
+  const { data: settlementInfo } = useShowSettlementInfo(showId);
   const logoutMutation = useLogout({
     onSuccess: () => {
       removeToken();
@@ -141,7 +142,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     authoritySettingDialog.open({
                       title: '권한 설정',
                       width: '600px',
-                      content: <AuthoritySettingDialogContent />,
+                      content: <AuthoritySettingDialogContent showId={showId} />,
                     });
                   }}
                 >
