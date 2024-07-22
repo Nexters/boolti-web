@@ -234,11 +234,11 @@ export const giftQueryKeys = createQueryKeys('gift', {
 export const hostQueryKeys = createQueryKeys('host', {
   list: (showId: number) => ({
     queryKey: [showId],
-    queryFn: () => fetcher.get<HostListResponse>(`web/v1/show/${showId}/hosts`),
+    queryFn: () => fetcher.get<HostListResponse>(`web/v1/shows/${showId}/hosts`),
   }),
   me: (showId: number) => ({
     queryKey: [showId],
-    queryFn: () => fetcher.get<HostListItem>(`web/v1/show/${showId}/hosts/me`),
+    queryFn: () => fetcher.get<HostListItem>(`web/v1/shows/${showId}/hosts/me`),
   }),
 });
 
