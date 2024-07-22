@@ -4,6 +4,11 @@ export const enum HostType {
   SUPPORTER = 'SUPPORTER',
 }
 
+export interface HostTypeInfo {
+  type: HostType;
+  label: string;
+}
+
 export interface HostListItem {
   /** 호스트 pk */
   hostId: number;
@@ -15,6 +20,8 @@ export interface HostListItem {
   self: boolean;
   /** 호스트 타입 */
   type: HostType;
+  /** 호스트 썸네일 */
+  imagePath: string;
 }
 
 export type HostListResponse = HostListItem[];

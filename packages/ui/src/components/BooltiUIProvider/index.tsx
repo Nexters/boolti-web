@@ -11,9 +11,9 @@ interface BooltiUIProviderProps {
 const BooltiUIProvider = ({ children }: BooltiUIProviderProps) => {
   return (
     <ThemeProvider>
-      <DialogProvider>
-        <ConfirmProvider>{children}</ConfirmProvider>
-      </DialogProvider>
+      <ConfirmProvider>
+        <DialogProvider>{children}</DialogProvider>
+      </ConfirmProvider>
     </ThemeProvider>
   );
 };

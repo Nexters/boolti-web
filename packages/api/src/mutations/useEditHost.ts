@@ -9,7 +9,7 @@ interface PutHostRequest {
 }
 
 const putHost = (showId: number, hostId: number, body: PutHostRequest) =>
-  fetcher.put(`web/v1/shows/${showId}/hosts/${hostId}`, {
+  fetcher.put(`web/v1/shows/${showId}/hosts/${hostId}/type`, {
     json: body,
   });
 
