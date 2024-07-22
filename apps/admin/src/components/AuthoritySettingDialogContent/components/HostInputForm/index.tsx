@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button, useDropdown, useToast } from '@boolti/ui';
 import { useAddHost } from '@boolti/api';
-import { CheckIcon, UsersIcon } from '@boolti/icon';
+import { CheckIcon } from '@boolti/icon';
+import { UserAdd } from '@boolti/icon/src/components/UserAdd';
 import { HostType, HostTypeInfo } from '@boolti/api/src/types/host';
 import Styled from './HostInputForm.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
@@ -94,8 +95,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
         )}
       </Styled.InputWrapper>
       <Button disabled={!memberId || isLoading} size="bold" colorTheme="netural">
-        {/* 아이콘 변경 필요 */}
-        {isMobile ? <UsersIcon /> : '초대하기'}
+        {isMobile ? <UserAdd /> : '초대하기'}
       </Button>
     </Styled.Form>
   );

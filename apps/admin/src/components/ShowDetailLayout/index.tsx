@@ -1,5 +1,6 @@
 import { useLogout, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
-import { ArrowLeftIcon, ChevronDownIcon } from '@boolti/icon';
+import { ArrowLeftIcon } from '@boolti/icon';
+import { Setting } from '@boolti/icon/src/components/Setting.tsx';
 import { TextButton, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
@@ -146,8 +147,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     });
                   }}
                 >
-                  <ChevronDownIcon />
-                  권한 설정
+                  <Setting />
+                  <span style={{ paddingLeft: '8px' }}>권한 설정</span>
                 </Styled.AuthorSettingButton>
               </Styled.ShowNameWrapper>
               <Styled.TabContainer>

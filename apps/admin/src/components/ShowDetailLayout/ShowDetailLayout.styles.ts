@@ -137,10 +137,18 @@ const AuthorSettingButton = styled(Button)`
   border: none;
   margin-right: 6px;
 
+  path {
+    stroke: ${({ theme }) => theme.palette.grey.g90};
+  }
+
   ${mq_lg} {
     margin-right: 0;
     background-color: ${({ theme }) => theme.palette.grey.g90};
     color: ${({ theme }) => theme.palette.grey.w};
+
+    path {
+      stroke: ${({ theme }) => theme.palette.grey.w};
+    }
   }
 `;
 
