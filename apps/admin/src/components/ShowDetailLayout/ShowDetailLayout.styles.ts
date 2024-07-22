@@ -1,4 +1,4 @@
-import { mq_lg } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface TabItemProps {
@@ -130,6 +130,20 @@ const TabItem = styled.div<TabItemProps>`
   }
 `;
 
+const AuthorSettingButton = styled(Button)`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: none;
+  margin-right: 6px;
+
+  ${mq_lg} {
+    margin-right: 0;
+    background-color: ${({ theme }) => theme.palette.grey.g90};
+    color: ${({ theme }) => theme.palette.grey.w};
+  }
+`;
+
 export default {
   HeaderLeft,
   BackButton,
@@ -142,4 +156,5 @@ export default {
   TabContainer,
   Tab,
   TabItem,
+  AuthorSettingButton,
 };

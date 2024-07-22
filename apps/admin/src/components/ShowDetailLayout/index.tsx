@@ -1,6 +1,6 @@
 import { useLogout, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
 import { ArrowLeftIcon, ChevronDownIcon } from '@boolti/icon';
-import { Button, TextButton, useDialog } from '@boolti/ui';
+import { TextButton, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -134,7 +134,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
             <Styled.HeaderContent>
               <Styled.ShowNameWrapper>
                 <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
-                <Button
+                <Styled.AuthorSettingButton
                   type="button"
                   colorTheme="netural"
                   size="small"
@@ -148,7 +148,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                 >
                   <ChevronDownIcon />
                   권한 설정
-                </Button>
+                </Styled.AuthorSettingButton>
               </Styled.ShowNameWrapper>
               <Styled.TabContainer>
                 <Styled.Tab>

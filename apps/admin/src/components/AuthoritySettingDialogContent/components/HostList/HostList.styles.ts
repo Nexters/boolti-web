@@ -1,10 +1,17 @@
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface DropdownListItemProps {
   isDelete?: boolean;
 }
 
-const HostListWrapper = styled.div``;
+const HostListWrapper = styled.div`
+  height: calc(100vh - 144px);
+
+  ${mq_lg} {
+    height: auto;
+  }
+`;
 
 const HostListTitle = styled.h3`
   ${({ theme }) => theme.typo.b3};

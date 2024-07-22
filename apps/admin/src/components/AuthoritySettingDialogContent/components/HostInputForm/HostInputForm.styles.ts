@@ -1,3 +1,4 @@
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface InputWrapperProps {
@@ -8,6 +9,11 @@ const Form = styled.form`
   display: flex;
   align-items: center;
   margin-bottom: 28px;
+  margin-top: 20px;
+
+  ${mq_lg} {
+    margin-top: 0;
+  }
 `;
 
 const InputWrapper = styled.div<InputWrapperProps>`

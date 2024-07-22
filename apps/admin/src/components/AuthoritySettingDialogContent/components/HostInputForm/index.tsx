@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Button, useDropdown, useToast } from '@boolti/ui';
 import { useAddHost } from '@boolti/api';
-import { CheckIcon } from '@boolti/icon';
+import { CheckIcon, UsersIcon } from '@boolti/icon';
 import { HostType, HostTypeInfo } from '@boolti/api/src/types/host';
 import Styled from './HostInputForm.styles';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { useTheme } from '@emotion/react';
 
 interface HostInputFormProps {
   showId: number;
@@ -29,6 +31,10 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
   const toast = useToast();
 
   const addHostMutation = useAddHost(showId);
+
+  const deviceWidth = useDeviceWidth();
+  const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -88,7 +94,8 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
         )}
       </Styled.InputWrapper>
       <Button disabled={!memberId || isLoading} size="bold" colorTheme="netural">
-        초대하기
+        {/* 아이콘 변경 필요 */}
+        {isMobile ? <UsersIcon /> : '초대하기'}
       </Button>
     </Styled.Form>
   );
