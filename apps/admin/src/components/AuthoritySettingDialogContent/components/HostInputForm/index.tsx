@@ -43,7 +43,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
       setIsLoading(true);
       await addHostMutation.mutateAsync({
         body: {
-          email: '',
+          userCode: memberId,
           type: hostItem.type,
         },
       });
