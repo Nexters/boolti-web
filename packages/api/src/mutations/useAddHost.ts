@@ -5,14 +5,12 @@ import { HostType } from '../types/host';
 import { queryKeys } from '../queryKey';
 
 interface PostHostRequest {
-  email: string;
+  userCode: string;
   type: HostType;
 }
 
 const postHost = (showId: number, body: PostHostRequest) =>
-  fetcher.post(`web/v1/shows/${showId}/hosts`, {
-    json: body,
-  });
+  fetcher.post(`web/v1/shows/${showId}/hosts`, { json: body });
 
 const useAddHost = (showId: number) => {
   const queryClient = new QueryClient();
