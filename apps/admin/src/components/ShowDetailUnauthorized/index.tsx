@@ -17,12 +17,14 @@ const ShowDetailUnauthorized = ({ pageName, name, type }: ShowDetailUnauthorized
   return (
     <Styled.Container>
       <BooltiGreyIcon />
-      <Styled.Title>{`${pageName} 페이지에 대한 접근 권한이 없어요`}</Styled.Title>
+      <Styled.Title>
+        {pageName} 페이지에 대한{'\n'}접근 권한이 없어요
+      </Styled.Title>
       <Styled.DescriptionBox>
         현재 {name} 님의 권한은 <strong>{hostTypeName}</strong> 입니다.
-        <br />
+        {'\n'}
         {pageName}는 {descriptionText}
-        <br />
+        {'\n'}
         {isSupporter && '이 페이지를 보시려면 주최자에게 권한을 요청해 주세요.'}
       </Styled.DescriptionBox>
     </Styled.Container>
