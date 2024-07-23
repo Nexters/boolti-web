@@ -14,7 +14,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ShowDeleteForm from '~/components/ShowDeleteForm';
-import ShowDetailLayout from '~/components/ShowDetailLayout';
+import ShowDetailLayout, { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
@@ -22,10 +22,14 @@ import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
+import { useAtom } from 'jotai';
+import { HostType } from '@boolti/api/src/types/host';
+import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
   const navigate = useNavigate();
+  const [myHostInfo] = useAtom(myHostInfoAtom);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
@@ -130,145 +134,153 @@ const ShowInfoPage = () => {
 
   return (
     <ShowDetailLayout showName={show.name} onClickMiddleware={confirmSaveShowInfo}>
-      <Styled.ShowInfoPage>
-        <Styled.ShowInfoForm onSubmit={showInfoForm.handleSubmit(onSubmit)}>
-          <Styled.ShowInfoFormContent>
-            <ShowBasicInfoFormContent
-              form={showInfoForm}
-              imageFiles={imageFiles}
-              disabled={show.isEnded}
-              onDropImage={(acceptedFiles) => {
-                setImageFiles((prevImageFiles) => [
-                  ...prevImageFiles,
-                  ...acceptedFiles.map((file) => ({
-                    ...file,
-                    preview: URL.createObjectURL(file),
-                  })),
-                ]);
-              }}
-              onDeleteImage={(file) => {
-                setImageFiles((prevImageFiles) =>
-                  prevImageFiles.filter((prevFile) => prevFile !== file),
-                );
-                setShowImages((prevShowImages) =>
-                  prevShowImages.filter((prevImage) => prevImage.thumbnailPath !== file.preview),
-                );
-              }}
-            />
-          </Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormDivider />
-          <Styled.ShowInfoFormContent>
-            <ShowDetailInfoFormContent form={showInfoForm} disabled={show.isEnded} />
-          </Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormFooter>
-            <Styled.SaveButton>
-              <Button
-                size="bold"
-                colorTheme="primary"
-                type="button"
-                disabled={
-                  !showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
-                }
-                onClick={() => {
-                  setPreviewDrawerOpen(true);
+      {myHostInfo?.type === HostType.SUPPORTER ? (
+        <ShowDetailUnauthorized
+          pageName={'공연 기본 정보'}
+          name={myHostInfo?.hostName as string}
+          type={myHostInfo?.type as HostType}
+        />
+      ) : (
+        <Styled.ShowInfoPage>
+          <Styled.ShowInfoForm onSubmit={showInfoForm.handleSubmit(onSubmit)}>
+            <Styled.ShowInfoFormContent>
+              <ShowBasicInfoFormContent
+                form={showInfoForm}
+                imageFiles={imageFiles}
+                disabled={show.isEnded}
+                onDropImage={(acceptedFiles) => {
+                  setImageFiles((prevImageFiles) => [
+                    ...prevImageFiles,
+                    ...acceptedFiles.map((file) => ({
+                      ...file,
+                      preview: URL.createObjectURL(file),
+                    })),
+                  ]);
                 }}
-              >
-                저장하기
-              </Button>
-            </Styled.SaveButton>
-            <Styled.DeleteButton>
-              <Button
-                size="bold"
-                colorTheme="line"
-                type="button"
-                disabled={salesStarted && !show.isEnded}
-                onClick={() => {
-                  deleteShowDialog.open({
-                    title: '공연 삭제하기',
-                    content: (
-                      <ShowDeleteForm
-                        showName={show.name}
-                        onSubmit={async () => {
-                          await deleteShowMutation.mutateAsync(show.id);
-
-                          deleteShowDialog.close();
-                          navigate(PATH.HOME);
-                          toast.success('공연을 삭제했습니다.');
-                        }}
-                      />
-                    ),
-                  });
+                onDeleteImage={(file) => {
+                  setImageFiles((prevImageFiles) =>
+                    prevImageFiles.filter((prevFile) => prevFile !== file),
+                  );
+                  setShowImages((prevShowImages) =>
+                    prevShowImages.filter((prevImage) => prevImage.thumbnailPath !== file.preview),
+                  );
                 }}
-              >
-                공연 삭제하기
-              </Button>
-            </Styled.DeleteButton>
-          </Styled.ShowInfoFormFooter>
-          <Drawer
-            open={previewDrawerOpen}
-            title="공연 상세 미리보기"
-            onClose={() => {
-              setPreviewDrawerOpen(false);
-            }}
-          >
-            <Styled.ShowInfoPreviewContainer>
-              <Styled.ShowInfoPreview>
-                <Styled.ShowInfoPreviewFrameContainer>
-                  <Styled.ShowInfoPreviewFrame>
-                    <PreviewFrame />
-                  </Styled.ShowInfoPreviewFrame>
-                  <Styled.ShowPreviewContainer>
-                    <Styled.ShowPreview>
-                      <ShowPreview
-                        show={{
-                          images: imageFiles.map((file) => file.preview),
-                          name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
-                          date: showInfoForm.watch('date')
-                            ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                            : '',
-                          startTime: showInfoForm.watch('startTime'),
-                          runningTime: showInfoForm.watch('runningTime'),
-                          salesStartTime: showSalesInfo
-                            ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                            : '',
-                          salesEndTime: showSalesInfo
-                            ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                            : '',
-                          placeName: showInfoForm.watch('placeName'),
-                          placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
-                          placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
-                          notice: showInfoForm.watch('notice'),
-                          hostName: showInfoForm.watch('hostName'),
-                          hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
-                        }}
-                        hasNoticePage
-                      />
-                    </Styled.ShowPreview>
-                  </Styled.ShowPreviewContainer>
-                </Styled.ShowInfoPreviewFrameContainer>
-              </Styled.ShowInfoPreview>
-              <Styled.ShowInfoPreviewFooter>
-                <Styled.ShowInfoPreviewCloseButton
+              />
+            </Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormDivider />
+            <Styled.ShowInfoFormContent>
+              <ShowDetailInfoFormContent form={showInfoForm} disabled={show.isEnded} />
+            </Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormFooter>
+              <Styled.SaveButton>
+                <Button
+                  size="bold"
+                  colorTheme="primary"
                   type="button"
+                  disabled={
+                    !showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
+                  }
                   onClick={() => {
-                    setPreviewDrawerOpen(false);
-                  }}
-                >
-                  닫기
-                </Styled.ShowInfoPreviewCloseButton>
-                <Styled.ShowInfoPreviewSubmitButton
-                  type="button"
-                  onClick={() => {
-                    showInfoForm.handleSubmit(onSubmit)();
+                    setPreviewDrawerOpen(true);
                   }}
                 >
                   저장하기
-                </Styled.ShowInfoPreviewSubmitButton>
-              </Styled.ShowInfoPreviewFooter>
-            </Styled.ShowInfoPreviewContainer>
-          </Drawer>
-        </Styled.ShowInfoForm>
-      </Styled.ShowInfoPage>
+                </Button>
+              </Styled.SaveButton>
+              <Styled.DeleteButton>
+                <Button
+                  size="bold"
+                  colorTheme="line"
+                  type="button"
+                  disabled={salesStarted && !show.isEnded}
+                  onClick={() => {
+                    deleteShowDialog.open({
+                      title: '공연 삭제하기',
+                      content: (
+                        <ShowDeleteForm
+                          showName={show.name}
+                          onSubmit={async () => {
+                            await deleteShowMutation.mutateAsync(show.id);
+
+                            deleteShowDialog.close();
+                            navigate(PATH.HOME);
+                            toast.success('공연을 삭제했습니다.');
+                          }}
+                        />
+                      ),
+                    });
+                  }}
+                >
+                  공연 삭제하기
+                </Button>
+              </Styled.DeleteButton>
+            </Styled.ShowInfoFormFooter>
+            <Drawer
+              open={previewDrawerOpen}
+              title="공연 상세 미리보기"
+              onClose={() => {
+                setPreviewDrawerOpen(false);
+              }}
+            >
+              <Styled.ShowInfoPreviewContainer>
+                <Styled.ShowInfoPreview>
+                  <Styled.ShowInfoPreviewFrameContainer>
+                    <Styled.ShowInfoPreviewFrame>
+                      <PreviewFrame />
+                    </Styled.ShowInfoPreviewFrame>
+                    <Styled.ShowPreviewContainer>
+                      <Styled.ShowPreview>
+                        <ShowPreview
+                          show={{
+                            images: imageFiles.map((file) => file.preview),
+                            name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                            date: showInfoForm.watch('date')
+                              ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                              : '',
+                            startTime: showInfoForm.watch('startTime'),
+                            runningTime: showInfoForm.watch('runningTime'),
+                            salesStartTime: showSalesInfo
+                              ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                              : '',
+                            salesEndTime: showSalesInfo
+                              ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                              : '',
+                            placeName: showInfoForm.watch('placeName'),
+                            placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                            placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                            notice: showInfoForm.watch('notice'),
+                            hostName: showInfoForm.watch('hostName'),
+                            hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                          }}
+                          hasNoticePage
+                        />
+                      </Styled.ShowPreview>
+                    </Styled.ShowPreviewContainer>
+                  </Styled.ShowInfoPreviewFrameContainer>
+                </Styled.ShowInfoPreview>
+                <Styled.ShowInfoPreviewFooter>
+                  <Styled.ShowInfoPreviewCloseButton
+                    type="button"
+                    onClick={() => {
+                      setPreviewDrawerOpen(false);
+                    }}
+                  >
+                    닫기
+                  </Styled.ShowInfoPreviewCloseButton>
+                  <Styled.ShowInfoPreviewSubmitButton
+                    type="button"
+                    onClick={() => {
+                      showInfoForm.handleSubmit(onSubmit)();
+                    }}
+                  >
+                    저장하기
+                  </Styled.ShowInfoPreviewSubmitButton>
+                </Styled.ShowInfoPreviewFooter>
+              </Styled.ShowInfoPreviewContainer>
+            </Drawer>
+          </Styled.ShowInfoForm>
+        </Styled.ShowInfoPage>
+      )}
     </ShowDetailLayout>
   );
 };
