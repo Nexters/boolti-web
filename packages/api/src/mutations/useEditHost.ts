@@ -1,4 +1,4 @@
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { fetcher } from '../fetcher';
 import { HostType } from '../types/host';
@@ -14,7 +14,7 @@ const putHost = (showId: number, hostId: number, body: PutHostRequest) =>
   });
 
 const useEditHost = (showId: number) => {
-  const queryCleint = new QueryClient();
+  const queryCleint = useQueryClient();
   return useMutation(
     ({ hostId, body }: { hostId: number; body: PutHostRequest }) => putHost(showId, hostId, body),
     {

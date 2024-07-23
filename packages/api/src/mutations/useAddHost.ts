@@ -1,4 +1,4 @@
-import { QueryClient, useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { fetcher } from '../fetcher';
 import { HostType } from '../types/host';
@@ -13,7 +13,7 @@ const postHost = (showId: number, body: PostHostRequest) =>
   fetcher.post(`web/v1/shows/${showId}/hosts`, { json: body });
 
 const useAddHost = (showId: number) => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
   return useMutation(({ body }: { body: PostHostRequest }) => postHost(showId, body), {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.host.list(showId).queryKey });
