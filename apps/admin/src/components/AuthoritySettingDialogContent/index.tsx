@@ -4,7 +4,7 @@ import HostInputForm from './components/HostInputForm';
 import HostList from './components/HostList';
 
 const AuthoritySettingDialogContent = ({ showId }: { showId: number }) => {
-  const { data: hosts, isLoading, error } = useHostList(showId);
+  const { data: hosts } = useHostList(showId);
 
   return (
     <Styled.Container>
