@@ -3,12 +3,16 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 0 20px;
-  margin: 40px 0 68px;
+  margin: 40px 0 32px;
+
+  ${mq_lg} {
+    margin: 40px 0 68px;
+  }
 `;
 
 const Empty = styled.div`
   margin: 0 auto;
-  width: 1080px;
+  max-width: 1080px;
   height: 770px;
   display: flex;
   justify-content: center;
@@ -144,7 +148,7 @@ const InputContainer = styled.div`
 
 const Input = styled.input`
   display: flex;
-  width: 100%;
+  width: 180px;
   max-width: 262px;
   padding: 8px 72px 8px 16px;
   justify-content: space-between;
@@ -161,6 +165,9 @@ const Input = styled.input`
   }
   &:placeholder-shown {
     color: ${({ theme }) => theme.palette.grey.g30};
+  }
+  ${mq_lg} {
+    width: 100%;
   }
 `;
 

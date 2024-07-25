@@ -92,13 +92,11 @@ const PreviewImageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 88px);
   gap: 8px;
-  height: 124px;
   margin-top: 16px;
 
   ${mq_lg} {
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
-    height: 256px;
   }
 `;
 
@@ -117,6 +115,7 @@ const PreviewImage = styled.div<{ isFirstImage: boolean }>`
 
 const PreviewImageWrap = styled.div`
   position: relative;
+  height: 100%;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
@@ -512,7 +511,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-          disabled ? theme.palette.grey.g70 : theme.palette.grey.g90};
+          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }
