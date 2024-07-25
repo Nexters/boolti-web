@@ -23,7 +23,7 @@ const ShowAddCompletePage = () => {
             >
               <ArrowLeftIcon />
             </Styled.BackButton>
-            <Styled.HeaderText>주최자 홈</Styled.HeaderText>
+            <Styled.HeaderText>홈</Styled.HeaderText>
           </Styled.Header>
         </Styled.HeaderContainer>
         <Styled.CardContainer>

@@ -8,7 +8,7 @@ const Container = styled.div`
 
 const Empty = styled.div`
   margin: 0 auto;
-  width: 1080px;
+  max-width: 1080px;
   height: 770px;
   display: flex;
   justify-content: center;
@@ -184,7 +184,7 @@ const InputContainer = styled.div`
 
 const Input = styled.input`
   display: flex;
-  width: 100%;
+  width: 180px;
   max-width: 262px;
   padding: 8px 72px 8px 16px;
   justify-content: space-between;
@@ -201,6 +201,10 @@ const Input = styled.input`
   }
   &:placeholder-shown {
     color: ${({ theme }) => theme.palette.grey.g30};
+  }
+
+  ${mq_lg} {
+    width: 100%;
   }
 `;
 

@@ -75,6 +75,9 @@ const TabContainer = styled.div`
   overflow-x: auto;
   display: flex;
   flex-wrap: nowrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   ${mq_lg} {
     padding: 0;
@@ -98,7 +101,10 @@ const TabItem = styled.div<TabItemProps>`
   justify-content: center;
   align-items: center;
   height: 48px;
-  ${({ active }) => active && `font-weight: 600;`};
+  ${({ active, theme }) =>
+    active
+      ? `font-weight: 600; color: ${theme.palette.grey.g90};`
+      : `color: ${theme.palette.grey.g70};`};
   cursor: pointer;
 
   &::after {

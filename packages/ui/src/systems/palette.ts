@@ -28,8 +28,8 @@ const palette = {
     sub: '#FFCFBA',
   },
   grey: {
-    main: '#87909B',
-    sub: '#EAECEF',
+    main: '#888D9D',
+    sub: '#F3F5F9',
     w: '#FFFFFF',
     g00: '#F3F5F9',
     g10: '#E7EAF2',

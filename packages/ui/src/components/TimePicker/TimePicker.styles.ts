@@ -14,16 +14,23 @@ const Text = styled(TextField)`
   pointer-events: none;
 `;
 
-const Control = styled.div`
+const Dimmed = styled.div`
   position: fixed;
+  z-index: 1;
+  bottom: 0;
+  left: 0;
+  width: 100vw !important;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.25);
+`;
+
+const Control = styled.div`
+  position: absolute;
   width: 100vw !important;
   left: 0;
   bottom: 0;
-  z-index: 1;
   border-radius: 12px 12px 0px 0px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background: ${({ theme }) => theme.palette.grey.w};
-  box-shadow: 0px 8px 15px 0px ${({ theme }) => theme.palette.shadow};
   display: flex;
   flex-direction: column;
   ${mq_lg} {
@@ -107,4 +114,5 @@ export default {
   Item,
   Title,
   CloseButton,
+  Dimmed,
 };

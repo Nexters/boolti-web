@@ -105,7 +105,7 @@ const ShowInvitationTicketFormContent = ({
                         재고 {ticket.quantity}/{ticket.totalForSale}
                       </Badge>
                     </Styled.TicketTitle>
-                    <Styled.TicketDescription>1인당 1매</Styled.TicketDescription>
+                    <Styled.TicketDescription>1인 1매</Styled.TicketDescription>
                   </Styled.TicketInfo>
                   <Styled.TicketAction>
                     <Button
