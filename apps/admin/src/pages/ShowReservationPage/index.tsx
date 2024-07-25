@@ -15,6 +15,8 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowReservationPage.styles';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { useTheme } from '@emotion/react';
 
 const emptyLabel: Record<TicketStatus, string> = {
   COMPLETE: '발권 왼료된 티켓이 없어요.',
@@ -32,6 +34,11 @@ const ShowReservationPage = () => {
 
   const showId = Number(params!.showId);
   const [currentPage, setCurrentPage] = useState(0);
+
+  const deviceWidth = useDeviceWidth();
+  const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
   const { data: reservationData, isLoading: isReservationPagesLoading } = useShowReservations(
@@ -136,7 +143,7 @@ const ShowReservationPage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder="방문자 이름, 연락처 검색"
+                  placeholder={isMobile ? '이름, 연락처 검색' : '방문자 이름, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (

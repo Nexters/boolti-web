@@ -17,6 +17,8 @@ import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowEnterancePage.styles';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { useTheme } from '@emotion/react';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
@@ -41,6 +43,10 @@ const ShowEnterancePage = () => {
     selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
     debouncedSearchText,
   );
+
+  const deviceWidth = useDeviceWidth();
+  const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
   const totalPages = enteranceData?.totalPages ?? 0;
   const reservations = (enteranceData?.content ?? []).filter(
@@ -143,7 +149,7 @@ const ShowEnterancePage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder="방문자 이름, 연락처 검색"
+                  placeholder={isMobile ? '이름, 연락처 검색' : '방문자 이름, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (
