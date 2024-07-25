@@ -150,7 +150,7 @@ const Input = styled.input`
   display: flex;
   width: 180px;
   max-width: 262px;
-  padding: 8px 72px 8px 16px;
+  padding: 8px 32px 8px 16px;
   justify-content: space-between;
   align-items: center;
   border-radius: 100px;
@@ -166,8 +166,10 @@ const Input = styled.input`
   &:placeholder-shown {
     color: ${({ theme }) => theme.palette.grey.g30};
   }
+
   ${mq_lg} {
     width: 100%;
+    padding: 8px 72px 8px 16px;
   }
 `;
 
