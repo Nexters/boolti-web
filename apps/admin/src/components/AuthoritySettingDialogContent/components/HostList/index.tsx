@@ -9,6 +9,7 @@ import { useConfirm, useToast } from '@boolti/ui';
 import { useDeleteHost, useEditHost } from '@boolti/api';
 import { HREF, PATH } from '~/constants/routes';
 import { useNavigate } from 'react-router-dom';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface HostListProps {
   hosts: HostListResponse;
@@ -21,6 +22,8 @@ const HostList = ({ hosts, showId }: HostListProps) => {
   const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();
+
+  useBodyScrollLock();
 
   const onDelete = async ({ hostName: name, self, hostId }: IHostListItem) => {
     const hostName = self ? `${name} 님(나)` : `${name} 님`;
