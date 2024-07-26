@@ -92,30 +92,32 @@ const PreviewImageContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 88px);
   gap: 8px;
+  height: 124px;
   margin-top: 16px;
 
   ${mq_lg} {
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
+    height: 256px;
   }
 `;
 
 const PreviewImage = styled.div<{ isFirstImage: boolean }>`
   max-width: 100%;
-  height: ${({ isFirstImage }) => (isFirstImage ? `calc(100% - 16px)` : '100%')};
+  height: ${({ isFirstImage }) => (isFirstImage ? 'calc(124px - 16px)' : '124px')};
+  width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   aspect-ratio: 182 / 256;
 
   ${mq_lg} {
-    height: ${({ isFirstImage }) => (isFirstImage ? `calc(100% - 32px)` : '100%')};
+    height: ${({ isFirstImage }) => (isFirstImage ? 'calc(256px - 32px)' : '100%')};
   }
 `;
 
-const PreviewImageWrap = styled.div`
+const PreviewImageWrap = styled.div<{ isFirstImage: boolean }>`
   position: relative;
-  height: 100%;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;

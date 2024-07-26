@@ -60,12 +60,11 @@ const ShowBasicInfoFormContent = ({
           </Styled.ShowInfoFormDescription>
           <Styled.PreviewImageContainer>
             {imageFiles.map((file, index) => (
-              <Styled.PreviewImageWrap>
+              <Styled.PreviewImageWrap key={file.preview} isFirstImage={index === 0}>
                 <Styled.PreviewImage
-                  key={file.preview}
-                  style={{ backgroundImage: `url(${file.preview})` }}
                   isFirstImage={index === 0}
-                ></Styled.PreviewImage>
+                  style={{ backgroundImage: `url(${file.preview})` }}
+                />
                 {!disabled && (
                   <Styled.PreviewImageDeleteButton
                     type="button"
