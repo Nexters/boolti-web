@@ -24,14 +24,13 @@ const dropdownItems: HostTypeInfo[] = [
 ];
 
 const HostInputForm = ({ showId }: HostInputFormProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [memberId, setMemberId] = useState<string>('');
 
   const [hostItem, setHostItem] = useState<HostTypeInfo>(dropdownItems[0]);
   const { toggleDropdown, isOpen } = useDropdown();
   const toast = useToast();
 
-  const addHostMutation = useAddHost(showId);
+  const { mutateAsync, isLoading } = useAddHost(showId);
 
   const deviceWidth = useDeviceWidth();
   const theme = useTheme();
@@ -40,8 +39,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setIsLoading(true);
-      await addHostMutation.mutateAsync({
+      await mutateAsync({
         body: {
           userCode: memberId,
           type: hostItem.type,
@@ -53,8 +51,6 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
       toast.error(
         '불티에 회원으로 등록된 식별 코드로만 초대가 가능합니다. 식별 코드를 확인 후 다시 시도해 주세요.',
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -27,7 +27,7 @@ const HostList = ({ hosts, showId }: HostListProps) => {
       confirm: '삭제하기',
     });
     if (!result) return;
-    await deleteHostMutation.mutateAsync({
+    deleteHostMutation.mutate({
       hostId,
     });
 
@@ -48,7 +48,7 @@ const HostList = ({ hosts, showId }: HostListProps) => {
       confirm: '수정하기',
     });
     if (!result) return;
-    await editHostMutation.mutateAsync({
+    editHostMutation.mutate({
       hostId,
       body: {
         type,
