@@ -9,6 +9,7 @@ import {
   createBrowserRouter,
   Navigate,
   Outlet,
+  RouteObject,
   RouterProvider,
   ScrollRestoration,
 } from 'react-router-dom';
@@ -128,16 +129,23 @@ const privateRoutes = [
   },
 ];
 
-const router = createBrowserRouter([...publicRoutes, ...privateRoutes]);
+const routes: RouteObject[] = [
+  {
+    element: (
+      <QueryClientProvider>
+        <BooltiUIProvider>
+          <Outlet />
+        </BooltiUIProvider>
+      </QueryClientProvider>
+    ),
+    children: [...publicRoutes, ...privateRoutes],
+  },
+];
+
+const router = createBrowserRouter(routes);
 
 const App = () => {
-  return (
-    <QueryClientProvider>
-      <BooltiUIProvider>
-        <RouterProvider router={router} />
-      </BooltiUIProvider>
-    </QueryClientProvider>
-  );
+  return <RouterProvider router={router} />;
 };
 
 export default App;

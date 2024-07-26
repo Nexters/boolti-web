@@ -16,6 +16,9 @@ const HostListTitle = styled.h3`
 `;
 
 const HostList = styled.ul`
+  &::-webkit-scrollbar {
+    display: none;
+  }
   max-height: 242px;
   overflow-y: scroll;
 `;

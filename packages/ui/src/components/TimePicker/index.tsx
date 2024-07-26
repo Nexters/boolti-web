@@ -89,7 +89,7 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
           />
         </Styled.TextContainer>
         {open && (
-          <Styled.Dimmed>
+          <>
             <Styled.Control ref={ref}>
               <Styled.Title>
                 시간 선택하기
@@ -157,7 +157,8 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
                 </Styled.List>
               </Styled.ListContainer>
             </Styled.Control>
-          </Styled.Dimmed>
+            <Styled.Dimmed />
+          </>
         )}
       </Styled.Container>
     </>

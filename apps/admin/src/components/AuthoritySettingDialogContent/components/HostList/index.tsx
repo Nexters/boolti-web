@@ -8,6 +8,8 @@ import HostListItem from '../HostListItem';
 import { useConfirm, useToast } from '@boolti/ui';
 import { useDeleteHost, useEditHost } from '@boolti/api';
 import { HREF, PATH } from '~/constants/routes';
+import { useNavigate } from 'react-router-dom';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface HostListProps {
   hosts: HostListResponse;
@@ -17,8 +19,11 @@ interface HostListProps {
 const HostList = ({ hosts, showId }: HostListProps) => {
   const editHostMutation = useEditHost(showId);
   const deleteHostMutation = useDeleteHost(showId);
+  const navigate = useNavigate();
   const confirm = useConfirm();
   const toast = useToast();
+
+  useBodyScrollLock();
 
   const onDelete = async ({ hostName: name, self, hostId }: IHostListItem) => {
     const hostName = self ? `${name} 님(나)` : `${name} 님`;
@@ -33,7 +38,7 @@ const HostList = ({ hosts, showId }: HostListProps) => {
 
     toast.success('권한을 삭제했습니다.');
     if (self) {
-      window.location.href = PATH.HOME;
+      navigate(PATH.HOME, { replace: true });
     }
   };
 
@@ -57,7 +62,7 @@ const HostList = ({ hosts, showId }: HostListProps) => {
     toast.success('권한을 수정했습니다.');
 
     if (self && type === HostType.SUPPORTER) {
-      window.location.href = HREF.SHOW_RESERVATION(showId);
+      navigate(HREF.SHOW_RESERVATION(showId), { replace: true });
     }
   };
 

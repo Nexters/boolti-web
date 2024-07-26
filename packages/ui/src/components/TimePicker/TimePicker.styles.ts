@@ -22,11 +22,15 @@ const Dimmed = styled.div`
   width: 100vw !important;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.25);
+  ${mq_lg} {
+    display: none;
+  }
 `;
 
 const Control = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100vw !important;
+  z-index: 2;
   left: 0;
   bottom: 0;
   border-radius: 12px 12px 0px 0px;
@@ -34,10 +38,11 @@ const Control = styled.div`
   display: flex;
   flex-direction: column;
   ${mq_lg} {
-    width: auto !important;
     position: absolute;
+    width: auto !important;
     border-radius: 4px;
     transform: translateY(calc(100% + 4px));
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   }
 `;
 
