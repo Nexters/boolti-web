@@ -19,6 +19,7 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
           open={!!dialogList.find(({ id }) => dialog.id === id)}
           title={dialog.title}
           isAuto={dialog.isAuto}
+          width={dialog.width}
           onClose={() => {
             dialog.onClose?.();
             setDialogList((prev) => prev.filter(({ id }) => dialog.id !== id));

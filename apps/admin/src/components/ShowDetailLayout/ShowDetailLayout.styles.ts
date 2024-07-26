@@ -1,4 +1,4 @@
-import { mq_lg } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface TabItemProps {
@@ -52,6 +52,12 @@ const HeaderContent = styled.div`
   position: sticky;
   top: 0;
   left: 0;
+`;
+
+const ShowNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const ShowName = styled.h2<ShowNameProps>`
@@ -130,6 +136,28 @@ const TabItem = styled.div<TabItemProps>`
   }
 `;
 
+const AuthorSettingButton = styled(Button)`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: none;
+  margin-right: 6px;
+
+  path {
+    stroke: ${({ theme }) => theme.palette.grey.g90};
+  }
+
+  ${mq_lg} {
+    margin-right: 0;
+    background-color: ${({ theme }) => theme.palette.grey.g90};
+    color: ${({ theme }) => theme.palette.grey.w};
+
+    path {
+      stroke: ${({ theme }) => theme.palette.grey.w};
+    }
+  }
+`;
+
 export default {
   HeaderLeft,
   BackButton,
@@ -137,8 +165,10 @@ export default {
   TopObserver,
   HeaderObserver,
   HeaderContent,
+  ShowNameWrapper,
   ShowName,
   TabContainer,
   Tab,
   TabItem,
+  AuthorSettingButton,
 };

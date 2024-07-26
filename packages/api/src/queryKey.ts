@@ -35,6 +35,7 @@ import {
   UserProfileSummaryResponse,
 } from './types/users';
 import { GiftInfoResponse } from './types/gift';
+import { HostListItem, HostListResponse } from './types/host';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -230,10 +231,22 @@ export const giftQueryKeys = createQueryKeys('gift', {
   }),
 });
 
+export const hostQueryKeys = createQueryKeys('host', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListResponse>(`web/v1/shows/${showId}/hosts`),
+  }),
+  me: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListItem>(`web/v1/shows/${showId}/hosts/me`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
   giftQueryKeys,
+  hostQueryKeys,
 );
