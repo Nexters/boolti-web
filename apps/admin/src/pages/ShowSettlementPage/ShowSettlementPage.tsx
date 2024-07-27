@@ -3,11 +3,8 @@ import 'react-pdf/dist/Page/TextLayer.css';
 
 import {
   ShowSettlementEventResponse,
-  useAddBankAccount,
-  useBankAccountList,
   useDeleteBankAccountCopyPhoto,
   useDeleteIDCardPhotoFile,
-  usePutShowSettlementBankAccount,
   useReadSettlementBanner,
   useRequestSettlement,
   useSettlementBanners,
@@ -18,15 +15,14 @@ import {
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
-import { DownloadIcon, PlusIcon } from '@boolti/icon';
-import { AgreeCheck, Button, Select, TextButton, useDialog, useToast } from '@boolti/ui';
+import { DownloadIcon } from '@boolti/icon';
+import { AgreeCheck, Button, TextButton, useToast } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
 
 import FileInput from '~/components/FileInput/FileInput';
-import SettlementDialogContent from '~/components/SettlementDialogContent';
 import ShowDetailLayout, { myHostInfoAtom } from '~/components/ShowDetailLayout';
 
 import Styled from './ShowSettlementPage.styles';
@@ -44,17 +40,14 @@ const ShowSettlementPage = () => {
   const params = useParams<{ showId: string }>();
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
-  const [account, setAccount] = useState<string | null>(null);
   const [agreeChecked, setAgreeChecked] = useState<boolean>(false);
   const [numPages, setNumPages] = useState<number>(0);
 
-  const settlementDialog = useDialog();
   const toast = useToast();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: settlementInfo, refetch: refetchSettlementInfo } = useShowSettlementInfo(showId);
-  const { data: bankAccountList, refetch: refetchBankAccountList } = useBankAccountList();
   const { data: lastSettlementEvent, refetch: refetchLastSettlementEvent } =
     useShowLastSettlementEvent(showId);
   const { data: settlementStatementBlob } = useShowSettlementStatement(showId, {
@@ -62,12 +55,10 @@ const ShowSettlementPage = () => {
   });
   const { data: settlementBanners } = useSettlementBanners();
 
-  const putShowSettlementBankAccountMutation = usePutShowSettlementBankAccount(showId);
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(showId);
   const uploadBankAccountCopyPhotoMutation = useUploadBankAccountCopyPhoto(showId);
   const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(showId);
   const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(showId);
-  const addBankAccountMutation = useAddBankAccount();
   const requestSettlementMutation = useRequestSettlement(showId);
   const readSettlementBanner = useReadSettlementBanner();
 
@@ -78,18 +69,6 @@ const ShowSettlementPage = () => {
 
     return null;
   }, [settlementStatementBlob]);
-
-  const bankAccountOptions =
-    bankAccountList?.map((bankAccount) => ({
-      value: `${bankAccount.bankAccountId}`,
-      label: `${bankAccount.bankName} ${bankAccount.bankAccountNumber} ${bankAccount.bankAccountHolder}`,
-    })) ?? [];
-
-  useEffect(() => {
-    if (settlementInfo?.bankAccount?.bankAccountId) {
-      setAccount(`${settlementInfo.bankAccount.bankAccountId}`);
-    }
-  }, [settlementInfo?.bankAccount?.bankAccountId]);
 
   useEffect(() => {
     const targetSettlementBanner = settlementBanners?.find(
@@ -165,57 +144,6 @@ const ShowSettlementPage = () => {
                   </Styled.FormGroup>
                   <Styled.FormGroup>
                     <Styled.FormGroupLabel>
-                      <Styled.FormGroupLabelText>정산 계좌</Styled.FormGroupLabelText>
-                    </Styled.FormGroupLabel>
-                    <Styled.SelectContainer>
-                      <Select
-                        value={account}
-                        options={bankAccountOptions}
-                        placeholder="계좌 선택"
-                        disabled={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
-                        additionalButton={
-                          <Styled.AccountAddButton>
-                            계좌 추가 <PlusIcon />
-                          </Styled.AccountAddButton>
-                        }
-                        onSelect={async (option) => {
-                          setAccount(option.value);
-                          await putShowSettlementBankAccountMutation.mutateAsync(
-                            Number(option.value),
-                          );
-                          refetchSettlementInfo();
-                        }}
-                        onAdditionalButtonClick={() => {
-                          settlementDialog.open({
-                            title: '정산 계좌 입력하기',
-                            content: (
-                              <SettlementDialogContent
-                                onClose={settlementDialog.close}
-                                onSubmit={async (data) => {
-                                  if (addBankAccountMutation.isLoading) return;
-
-                                  try {
-                                    await addBankAccountMutation.mutateAsync({
-                                      bankCode: data.bankCode,
-                                      accountHolder: data.accountHolder,
-                                      accountNumber: data.accountNumber,
-                                    });
-                                    toast.success('정산 계좌를 추가했습니다.');
-                                    refetchBankAccountList();
-                                    settlementDialog.close();
-                                  } catch (error) {
-                                    toast.error('잠시 후에 다시 시도하세요.');
-                                  }
-                                }}
-                              />
-                            ),
-                          });
-                        }}
-                      />
-                    </Styled.SelectContainer>
-                  </Styled.FormGroup>
-                  <Styled.FormGroup>
-                    <Styled.FormGroupLabel>
                       <Styled.FormGroupLabelText>통장 사본</Styled.FormGroupLabelText>
                     </Styled.FormGroupLabel>
                     <FileInput
@@ -226,7 +154,8 @@ const ShowSettlementPage = () => {
                       readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                       onChange={async (event) => {
                         if (event.target.files?.[0]) {
-                          uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
+                          await uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
+                          await refetchSettlementInfo();
                         }
                       }}
                       onClear={async () => {
