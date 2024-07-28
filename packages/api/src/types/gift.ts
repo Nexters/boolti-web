@@ -47,7 +47,7 @@ export interface GiftInfoResponse {
    */
   showName: string;
   /**
-   * 공연 날짜
+   * 선물 만료일
    */
-  showDate: string;
+  giftExpireDate: string;
 }

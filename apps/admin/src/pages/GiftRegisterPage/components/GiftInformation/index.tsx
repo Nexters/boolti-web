@@ -17,8 +17,16 @@ const GiftInformation = () => {
 
   const { data } = useGift(giftId);
 
-  const { recipientName, message, showId, status, giftImageUrl, showImageUrl, showDate, showName } =
-    data ?? {};
+  const {
+    recipientName,
+    message,
+    showId,
+    status,
+    giftImageUrl,
+    showImageUrl,
+    giftExpireDate,
+    showName,
+  } = data ?? {};
 
   const isRegistered = status === GiftStatus.REGISTERED;
   const isCancelled = status === GiftStatus.CANCELLED;
@@ -75,7 +83,7 @@ const GiftInformation = () => {
         {isRegistrable && (
           <Styled.RegisterDescription>
             <Styled.ExpireDate>
-              {format(showDate ?? new Date(), 'yyyy년 M월 d일')}
+              {format(giftExpireDate ?? new Date(), 'yyyy년 M월 d일')}
             </Styled.ExpireDate>
             까지 선물을 등록해 주세요
           </Styled.RegisterDescription>
