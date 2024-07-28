@@ -6,7 +6,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(#121215, #434753);
+  background-color: ${({ theme }) => theme.palette.grey.w};
   margin: 0 auto;
 `;
 
