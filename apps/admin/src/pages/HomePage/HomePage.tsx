@@ -9,7 +9,6 @@ import { BooltiLogo, ChevronRightIcon } from '@boolti/icon';
 import { Footer, TextButton, useConfirm } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
-import AccountInfo from '~/components/AccountInfo';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ShowList from '~/components/ShowList';
@@ -94,11 +93,6 @@ const HomePage = () => {
         {!isLoading && (
           <>
             <UserProfile profileImage={imagePath} username={nickname} email={email} />
-            <AccountInfo
-              bankAccountHolder={bankAccountHolder}
-              bankAccountNumber={bankAccountNumber}
-              bankName={bankName}
-            />
             <ShowList shows={showList} />
           </>
         )}
