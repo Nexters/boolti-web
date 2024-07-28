@@ -5,10 +5,16 @@ import { useParams } from 'react-router-dom';
 import { useGift } from '@boolti/api';
 import { format } from 'date-fns/format';
 import { GiftStatus } from '@boolti/api/src/types/gift';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { useTheme } from '@emotion/react';
 
 const GiftInformation = () => {
-  const confirm = useConfirm();
   const { giftId = '' } = useParams<{ giftId: string }>();
+  const confirm = useConfirm();
+  const deviceWidth = useDeviceWidth();
+  const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+
   const { data } = useGift(giftId);
 
   const { recipientName, message, showId, status, giftImageUrl, showImageUrl, showDate, showName } =
@@ -20,6 +26,27 @@ const GiftInformation = () => {
   const isRegistrable = status === GiftStatus.REGISTRABLE;
   const showDetailLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
   const giftRegisterLink = `https://boolti.page.link/?link=https://app.boolti.in/gift/${giftId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+
+  const handleRegister = async () => {
+    const confirmMessage = isMobile
+      ? `불티 앱에서만 이용이 가능합니다.${'\n'}스토어로 이동하시겠습니까?`
+      : '불티 앱에서만 이용이 가능합니다. 모바일로 접근해 주세요.';
+
+    const result = await confirm(
+      confirmMessage,
+      {
+        cancel: isMobile ? '취소하기' : '',
+        confirm: isMobile ? '이동하기' : '확인',
+      },
+      {
+        type: isMobile ? 'confirm' : 'alert',
+      },
+    );
+
+    if (result && isMobile) {
+      window.open(giftRegisterLink, '_blank');
+    }
+  };
 
   return (
     <>
@@ -53,21 +80,7 @@ const GiftInformation = () => {
             까지 선물을 등록해 주세요
           </Styled.RegisterDescription>
         )}
-        <Styled.Button
-          disabled={!isRegistrable}
-          onClick={async () => {
-            const result = await confirm(
-              `불티 앱에서만 이용이 가능합니다.${'\n'}스토어로 이동하시겠습니까?`,
-              {
-                cancel: '취소하기',
-                confirm: '이동하기',
-              },
-            );
-            if (result) {
-              window.open(giftRegisterLink, '_blank');
-            }
-          }}
-        >
+        <Styled.Button disabled={!isRegistrable} onClick={handleRegister}>
           {isRegistered && '등록한 선물'}
           {(isCancelled || isRejected) && (
             <>

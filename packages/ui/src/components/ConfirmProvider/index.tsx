@@ -26,6 +26,7 @@ const ConfirmProvider = ({ children }: ConfirmProviderProps) => {
             currentConfirm.resolve(true);
             setCurrentConfirm(null);
           }}
+          type={currentConfirm.options?.type}
         >
           {currentConfirm.message}
         </Confirm>

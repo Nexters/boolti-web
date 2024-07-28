@@ -2,6 +2,7 @@ import { createContext } from 'react';
 
 export interface ConfirmOptions {
   confirmButtonColorTheme?: 'primary' | 'neutral';
+  type: 'alert' | 'confirm';
 }
 
 export interface ConfirmButtonText {
