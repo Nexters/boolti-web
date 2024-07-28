@@ -29,11 +29,7 @@ import {
   SuperAdminShowStatus,
   TicketSalesInfoResponse,
 } from './types/adminShow';
-import {
-  BankAccountListResponse,
-  SettlementAccountInfoResponse,
-  UserProfileSummaryResponse,
-} from './types/users';
+import { BankAccountListResponse, UserProfileSummaryResponse } from './types/users';
 import { GiftInfoResponse } from './types/gift';
 import { HostListItem, HostListResponse } from './types/host';
 
@@ -209,11 +205,6 @@ export const showQueryKeys = createQueryKeys('show', {
 });
 
 export const userQueryKeys = createQueryKeys('user', {
-  accountInfo: {
-    queryKey: null,
-    queryFn: () =>
-      fetcher.get<SettlementAccountInfoResponse>(`web/v1/host/users/me/settlement-account-infos`),
-  },
   summary: {
     queryKey: null,
     queryFn: () => fetcher.get<UserProfileSummaryResponse>(`web/v1/host/users/me/summaries`),
