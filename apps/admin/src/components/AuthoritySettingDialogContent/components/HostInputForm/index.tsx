@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Button, useDropdown, useToast } from '@boolti/ui';
+import { useDropdown, useToast } from '@boolti/ui';
 import { useAddHost } from '@boolti/api';
-import { CheckIcon } from '@boolti/icon';
+import { CheckIcon, ChevronDownIcon } from '@boolti/icon';
 import { UserAdd } from '@boolti/icon/src/components/UserAdd';
 import { HostType, HostTypeInfo } from '@boolti/api/src/types/host';
 import Styled from './HostInputForm.styles';
@@ -75,7 +75,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
         {memberId && (
           <Styled.Dropdown>
             <Styled.Chip onClick={toggleDropdown}>
-              {hostItem.label} <CheckIcon />
+              {hostItem.label} <ChevronDownIcon />
             </Styled.Chip>
             {isOpen && (
               <Styled.DropdownList>
@@ -90,9 +90,9 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
           </Styled.Dropdown>
         )}
       </Styled.InputWrapper>
-      <Button disabled={!memberId || isLoading} size="bold" colorTheme="netural">
+      <Styled.InviteButton disabled={!memberId || isLoading} size="bold" colorTheme="netural">
         {isMobile ? <UserAdd /> : '초대하기'}
-      </Button>
+      </Styled.InviteButton>
     </Styled.Form>
   );
 };

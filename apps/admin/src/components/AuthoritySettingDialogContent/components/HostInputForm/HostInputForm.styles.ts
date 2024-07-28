@@ -1,8 +1,12 @@
-import { mq_lg } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface InputWrapperProps {
   text: string;
+}
+
+interface InputProps {
+  value: string;
 }
 
 const Form = styled.form`
@@ -25,10 +29,14 @@ const InputWrapper = styled.div<InputWrapperProps>`
   margin-right: 8px;
   flex: auto;
   position: relative;
+  display: flex;
+  align-items: center;
 `;
 
-const Input = styled.input`
-  width: 100%;
+const Input = styled.input<InputProps>`
+  width: ${({ value }) => (value ? 'calc(100% - 70px)' : '100%')};
+  line-height: 24px;
+
   &::placeholder {
     color: ${({ theme }) => theme.palette.grey.g30};
   }
@@ -43,13 +51,16 @@ const Dropdown = styled.div`
 const Chip = styled.div`
   display: flex;
   align-items: center;
-  padding: 3px 6px;
+  justify-content: center;
+  padding: 0 0 0 6px;
   ${({ theme }) => theme.typo.c1};
+  border: none;
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.g10};
   color: ${({ theme }) => theme.palette.grey.g60};
   cursor: pointer;
   width: 64px;
+  height: 24px;
   margin-left: auto;
 `;
 
@@ -58,6 +69,7 @@ const DropdownList = styled.ul`
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
   margin-top: 4px;
+  box-shadow: 0px 8px 14px 0px #acabab21;
 `;
 
 const DropdownListItem = styled.li`
@@ -84,6 +96,21 @@ const DropdownListItem = styled.li`
     border-bottom-left-radius: 6px;
     border-bottom-right-radius: 6px;
   }
+
+  svg {
+    color: ${({ theme }) => theme.palette.grey.g90};
+  }
+`;
+
+const InviteButton = styled(Button)`
+  width: 48px;
+  height: 48px;
+  padding: 14px;
+
+  ${mq_lg} {
+    width: auto;
+    padding: 13px 20px;
+  }
 `;
 
 export default {
@@ -94,4 +121,5 @@ export default {
   DropdownList,
   DropdownListItem,
   Chip,
+  InviteButton,
 };
