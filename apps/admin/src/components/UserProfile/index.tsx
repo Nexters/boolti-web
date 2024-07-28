@@ -3,10 +3,10 @@ import Styled from './UserProfile.styles';
 interface Props {
   profileImage?: string;
   username: string;
-  email?: string;
+  userCode?: string;
 }
 
-const UserProfile = ({ profileImage, username, email }: Props) => {
+const UserProfile = ({ profileImage, username, userCode }: Props) => {
   return (
     <Styled.Container>
       {profileImage ? (
@@ -16,7 +16,9 @@ const UserProfile = ({ profileImage, username, email }: Props) => {
       )}
       <Styled.TextContainer>
         <Styled.Username>{username}</Styled.Username>
-        <Styled.Email>{email ?? '이메일 정보를 알 수 없습니다.'}</Styled.Email>
+        <Styled.UserCode>
+          {userCode ? `#${userCode}` : '사용자 코드를 알 수 없습니다.'}
+        </Styled.UserCode>
       </Styled.TextContainer>
     </Styled.Container>
   );

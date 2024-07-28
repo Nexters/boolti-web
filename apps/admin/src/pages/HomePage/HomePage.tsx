@@ -1,15 +1,8 @@
-import {
-  useLogout,
-  useSettlementBanners,
-  useShowList,
-  useUserAccountInfo,
-  useUserSummary,
-} from '@boolti/api';
+import { useLogout, useSettlementBanners, useShowList, useUserSummary } from '@boolti/api';
 import { BooltiLogo, ChevronRightIcon } from '@boolti/icon';
 import { Footer, TextButton, useConfirm } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom';
 
-import AccountInfo from '~/components/AccountInfo';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ShowList from '~/components/ShowList';
@@ -34,16 +27,13 @@ const HomePage = () => {
   });
   const confirm = useConfirm();
 
-  const { data: userAccountInfoData, isLoading: isUserAccountInfoLoading } = useUserAccountInfo();
   const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
   const { data: settlementBanners } = useSettlementBanners();
 
-  const { imagePath, email, nickname = '' } = userSummaryData ?? {};
-  const { bankAccount } = userAccountInfoData ?? {};
-  const { bankName, bankAccountNumber, bankAccountHolder } = bankAccount ?? {};
+  const { imagePath, nickname = '', userCode } = userSummaryData ?? {};
 
-  const isLoading = isUserAccountInfoLoading || isUserSummaryLoading || isShowListLoading;
+  const isLoading = isUserSummaryLoading || isShowListLoading;
 
   return (
     <Layout
@@ -93,12 +83,7 @@ const HomePage = () => {
       <Styled.Container>
         {!isLoading && (
           <>
-            <UserProfile profileImage={imagePath} username={nickname} email={email} />
-            <AccountInfo
-              bankAccountHolder={bankAccountHolder}
-              bankAccountNumber={bankAccountNumber}
-              bankName={bankName}
-            />
+            <UserProfile profileImage={imagePath} username={nickname} userCode={userCode} />
             <ShowList shows={showList} />
           </>
         )}
