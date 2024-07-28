@@ -57,7 +57,7 @@ const GiftInformation = () => {
           disabled={!isRegistrable}
           onClick={async () => {
             const result = await confirm(
-              '불티 앱에서만 이용이 가능합니다.스토어로 이동하시겠습니까?',
+              `불티 앱에서만 이용이 가능합니다.${'\n'}스토어로 이동하시겠습니까?`,
               {
                 cancel: '취소하기',
                 confirm: '이동하기',
