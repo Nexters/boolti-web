@@ -1,4 +1,4 @@
-import { useConfirm } from '@boolti/ui';
+import { useAlert, useConfirm } from '@boolti/ui';
 import Styled from './GiftInformation.styles';
 import { ChevronRightIcon } from '@boolti/icon';
 import { useParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { useTheme } from '@emotion/react';
 const GiftInformation = () => {
   const { giftId = '' } = useParams<{ giftId: string }>();
   const confirm = useConfirm();
+  const alert = useAlert();
   const deviceWidth = useDeviceWidth();
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
@@ -36,22 +37,18 @@ const GiftInformation = () => {
   const giftRegisterLink = `https://boolti.page.link/?link=https://app.boolti.in/gift/${giftId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
 
   const handleRegister = async () => {
-    const confirmMessage = isMobile
-      ? `불티 앱에서만 이용이 가능합니다.${'\n'}스토어로 이동하시겠습니까?`
-      : '불티 앱에서만 이용이 가능합니다. 모바일로 접근해 주세요.';
-
+    if (!isMobile) {
+      return await alert('불티 앱에서만 이용이 가능합니다. 모바일로 접근해 주세요.');
+    }
     const result = await confirm(
-      confirmMessage,
+      `선물 등록을 위해 불티앱으로 이동할까요?${'\n'}앱이 설치되지 않은 경우 스토어로 이동합니다.`,
       {
-        cancel: isMobile ? '취소하기' : '',
-        confirm: isMobile ? '이동하기' : '확인',
-      },
-      {
-        type: isMobile ? 'confirm' : 'alert',
+        cancel: '취소하기',
+        confirm: '이동하기',
       },
     );
 
-    if (result && isMobile) {
+    if (result) {
       window.open(giftRegisterLink, '_blank');
     }
   };
