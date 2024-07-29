@@ -1,4 +1,5 @@
 import { PageResponse, ReservationStatus, TicketStatus, TicketType } from './common';
+import { HostType } from './host';
 
 export interface ShowImage {
   sequence: number;
@@ -41,6 +42,8 @@ export type ShowSummaryResponse = Array<{
   hostUserId: number;
   /** 공연 대표 호스트 이름 */
   hostName: string;
+  /** 나의 호스트 타입 */
+  myHostType: HostType;
   /** 공연 판매 시작 날짜, 시간.ISO8601 */
   salesStartTime: string;
   /**공연 판매 종료 날짜, 시간.ISO8601 */
