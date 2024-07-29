@@ -2,8 +2,8 @@ import styled from '@emotion/styled';
 
 import { mq_lg } from '../../systems';
 
-const CONFIRM_WIDTH = '450px';
-const CONFIRM_MOBILE_WIDTH = '264px';
+const ALERT_WIDTH = '450px';
+const ALERT_MOBILE_WIDTH = '264px';
 
 interface ConfirmButtonProps {
   colorTheme?: 'primary' | 'neutral';
@@ -19,19 +19,19 @@ const DimmedArea = styled.div`
   z-index: 999;
 `;
 
-const Confirm = styled.div`
-  width: ${CONFIRM_MOBILE_WIDTH};
+const Alert = styled.div`
+  width: ${ALERT_MOBILE_WIDTH};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   padding: 20px;
 
   ${mq_lg} {
-    width: ${CONFIRM_WIDTH};
+    width: ${ALERT_WIDTH};
     padding: 32px;
   }
 `;
 
-const ConfirmMessage = styled.div`
+const AlertMessage = styled.div`
   word-break: keep-all;
   text-align: center;
   ${({ theme }) => theme.typo.b2};
@@ -52,25 +52,6 @@ const ConfirmButtonContainer = styled.div`
 
   ${mq_lg} {
     justify-content: flex-end;
-  }
-`;
-
-const CancelButton = styled.button`
-  flex: 1;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  height: 48px;
-  padding: 0 20px;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.sh1};
-  cursor: pointer;
-
-  ${mq_lg} {
-    flex: initial;
   }
 `;
 
@@ -98,9 +79,8 @@ const ConfirmButton = styled.button<ConfirmButtonProps>`
 
 export default {
   DimmedArea,
-  Confirm,
-  ConfirmMessage,
+  Alert,
+  AlertMessage,
   ConfirmButtonContainer,
-  CancelButton,
   ConfirmButton,
 };

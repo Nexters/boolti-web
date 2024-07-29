@@ -2,6 +2,8 @@ import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
 const Container = styled.div`
+  width: 100%;
+  max-width: ${({ theme }) => theme.breakpoint.mobile};
   background-color: ${({ theme }) => theme.palette.grey.g10};
 `;
 
