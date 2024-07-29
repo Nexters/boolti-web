@@ -57,6 +57,9 @@ const HostListItem = ({ host, onEdit, onDelete }: HostListItemProps) => {
   };
 
   const handleEdit = async (host: IHostListItem, type: HostType) => {
+    if (host.type === type) {
+      return;
+    }
     try {
       onEdit(host, type);
       toggleDropdown();

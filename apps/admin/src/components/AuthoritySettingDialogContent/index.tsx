@@ -3,13 +3,18 @@ import { useHostList } from '@boolti/api';
 import HostInputForm from './components/HostInputForm';
 import HostList from './components/HostList';
 
-const AuthoritySettingDialogContent = ({ showId }: { showId: number }) => {
+interface AuthoritySettingDialogContentProps {
+  showId: number;
+  onClose: () => void;
+}
+
+const AuthoritySettingDialogContent = ({ showId, onClose }: AuthoritySettingDialogContentProps) => {
   const { data: hosts } = useHostList(showId);
 
   return (
     <Styled.Container>
       <HostInputForm showId={showId} />
-      <HostList hosts={hosts!} showId={showId} />
+      <HostList hosts={hosts!} showId={showId} onCloseDialog={onClose} />
     </Styled.Container>
   );
 };

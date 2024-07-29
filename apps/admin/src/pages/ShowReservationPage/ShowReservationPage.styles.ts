@@ -10,17 +10,29 @@ const Container = styled.div`
   }
 `;
 
-const Empty = styled.div`
-  margin: 0 auto;
-  max-width: 1080px;
-  height: 770px;
+const EmptyContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  white-space: pre-wrap;
+  padding: 60px 0;
+
+  ${mq_lg} {
+    padding: 100px 0;
+  }
+`;
+
+const EmptyTitle = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  margin-top: 16px;
   text-align: center;
-  ${({ theme }) => theme.typo.b4};
-  color: ${({ theme }) => theme.palette.grey.g40};
+  width: 200px;
+  white-space: pre-wrap;
+
+  ${mq_lg} {
+    width: auto;
+    ${({ theme }) => theme.typo.b4};
+  }
 `;
 
 const TicketSummaryContainer = styled.div`
@@ -219,5 +231,6 @@ export default {
   InputButton,
   ButtonContainer,
   FilterContainer,
-  Empty,
+  EmptyContainer,
+  EmptyTitle,
 };

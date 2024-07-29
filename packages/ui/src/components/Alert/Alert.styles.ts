@@ -40,6 +40,7 @@ const AlertMessage = styled.div`
 
   ${mq_lg} {
     word-break: break-all;
+    white-space: pre-wrap;
     text-align: left;
     ${({ theme }) => theme.typo.b3};
     margin-bottom: 32px;

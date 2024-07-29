@@ -7,6 +7,7 @@ import { PATH } from '~/constants/routes';
 import EntranceConfirmDialogContent from '../EntranceConfirmDialogContent';
 import ShowListItem from '../ShowListItem';
 import Styled from './ShowList.styles';
+import { HostType } from '@boolti/api/src/types/host';
 
 interface Props {
   shows: React.ComponentProps<typeof ShowListItem>[];
@@ -68,6 +69,7 @@ const ShowList = ({ shows }: Props) => {
           title=""
           date=""
           hostName=""
+          myHostType={HostType.SUPPORTER}
           salesStartTime=""
           salesEndTime=""
         />

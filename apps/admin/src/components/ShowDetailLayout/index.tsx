@@ -19,7 +19,7 @@ import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
 import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
-import { HostListItem } from '@boolti/api/src/types/host.ts';
+import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 
@@ -153,21 +153,28 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
             <Styled.HeaderContent>
               <Styled.ShowNameWrapper>
                 <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
-                <Styled.AuthorSettingButton
-                  type="button"
-                  colorTheme="netural"
-                  size="small"
-                  onClick={() => {
-                    authoritySettingDialog.open({
-                      title: '권한 설정',
-                      width: '600px',
-                      content: <AuthoritySettingDialogContent showId={showId} />,
-                    });
-                  }}
-                >
-                  <Setting />
-                  <span style={{ paddingLeft: '8px' }}>권한 설정</span>
-                </Styled.AuthorSettingButton>
+                {myHostInfoData?.type !== HostType.SUPPORTER && (
+                  <Styled.AuthorSettingButton
+                    type="button"
+                    colorTheme="netural"
+                    size="small"
+                    onClick={() => {
+                      authoritySettingDialog.open({
+                        title: '권한 설정',
+                        width: '600px',
+                        content: (
+                          <AuthoritySettingDialogContent
+                            showId={showId}
+                            onClose={authoritySettingDialog.close}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <Setting />
+                    <span style={{ paddingLeft: '8px' }}>권한 설정</span>
+                  </Styled.AuthorSettingButton>
+                )}
               </Styled.ShowNameWrapper>
               <Styled.TabContainer>
                 <Styled.Tab>

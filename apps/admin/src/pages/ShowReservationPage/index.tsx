@@ -17,6 +17,7 @@ import TicketTypeSelect from '~/components/TicketTypeSelect';
 import Styled from './ShowReservationPage.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
+import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 
 const emptyLabel: Record<TicketStatus, string> = {
   COMPLETE: '발권 왼료된 티켓이 없어요.',
@@ -85,10 +86,13 @@ const ShowReservationPage = () => {
   return (
     <ShowDetailLayout showName={show.name}>
       {totalSoldCount === 0 ? (
-        <Styled.Empty>
-          아직 판매한 티켓이 없어요.{'\n'}
-          티켓을 판매하고 방문자 명단을 관리해 보세요.
-        </Styled.Empty>
+        <Styled.EmptyContainer>
+          <BooltiGreyIcon />
+          <Styled.EmptyTitle>
+            아직 판매한 티켓이 없어요.{'\n'}
+            티켓을 판매하고 방문자 명단을 관리해 보세요.
+          </Styled.EmptyTitle>
+        </Styled.EmptyContainer>
       ) : (
         <Styled.Container>
           <Styled.TicketSummaryContainer>
