@@ -110,6 +110,10 @@ const InviteButton = styled(Button)`
   ${mq_lg} {
     width: auto;
     padding: 13px 20px;
+
+    &:disabled {
+      color: ${({ theme }) => theme.palette.grey.g40};
+    }
   }
 `;
 
