@@ -162,7 +162,12 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       authoritySettingDialog.open({
                         title: '권한 설정',
                         width: '600px',
-                        content: <AuthoritySettingDialogContent showId={showId} />,
+                        content: (
+                          <AuthoritySettingDialogContent
+                            showId={showId}
+                            onClose={authoritySettingDialog.close}
+                          />
+                        ),
                       });
                     }}
                   >

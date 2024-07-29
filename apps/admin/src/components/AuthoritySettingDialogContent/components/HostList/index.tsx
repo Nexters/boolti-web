@@ -14,9 +14,10 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 interface HostListProps {
   hosts: HostListResponse;
   showId: number;
+  onCloseDialog: () => void;
 }
 
-const HostList = ({ hosts, showId }: HostListProps) => {
+const HostList = ({ hosts, showId, onCloseDialog }: HostListProps) => {
   const editHostMutation = useEditHost(showId);
   const deleteHostMutation = useDeleteHost(showId);
   const navigate = useNavigate();
@@ -46,8 +47,8 @@ const HostList = ({ hosts, showId }: HostListProps) => {
     const hostName = self ? `${name} 님(나)` : `${name} 님`;
     const confirmText =
       type === HostType.MANAGER
-        ? `${hostName}의 권한을 관리자로 수정하시겠어요? 관리자는 권한 편집이 가능하며, 정산 관리 페이지 이외의 모든 페이지 접근이 가능합니다.`
-        : `${hostName}의 권한을 도우미로 수정하시겠어요? 도우미는 권한 편집이 불가하며, 방문자/입장 관리 페이지만 접근이 가능합니다.`;
+        ? `${hostName}의 권한을 관리자로 수정하시겠어요?${'\n'}관리자는 권한 편집이 가능하며, 정산 관리 페이지 이외의 모든 페이지 접근이 가능합니다.`
+        : `${hostName}의 권한을 도우미로 수정하시겠어요?${'\n'}도우미는 권한 편집이 불가하며, 방문자/입장 관리 페이지만 접근이 가능합니다.`;
     const result = await confirm(confirmText, {
       cancel: '취소하기',
       confirm: '수정하기',
@@ -62,6 +63,7 @@ const HostList = ({ hosts, showId }: HostListProps) => {
     toast.success('권한을 수정했습니다.');
 
     if (self && type === HostType.SUPPORTER) {
+      onCloseDialog();
       navigate(HREF.SHOW_RESERVATION(showId), { replace: true });
     }
   };
