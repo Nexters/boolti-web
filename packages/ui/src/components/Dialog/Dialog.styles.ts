@@ -66,6 +66,7 @@ const DialogCloseButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: ${({ theme }) => theme.palette.grey.g70};
 
   ${mq_lg} {
     top: 17px;
