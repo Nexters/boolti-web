@@ -39,6 +39,7 @@ const HostList = ({ hosts, showId, onCloseDialog }: HostListProps) => {
 
     toast.success('권한을 삭제했습니다.');
     if (self) {
+      onCloseDialog();
       navigate(PATH.HOME, { replace: true });
     }
   };

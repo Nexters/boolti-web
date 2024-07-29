@@ -10,7 +10,7 @@ const useDeleteHost = (showId: number) => {
   const queryClient = useQueryClient();
   return useMutation(({ hostId }: { hostId: number }) => deleteHost(showId, hostId), {
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.host.list(showId).queryKey });
+      queryClient.invalidateQueries({ queryKey: queryKeys.show.list.queryKey });
     },
   });
 };
