@@ -2,7 +2,7 @@ import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const HostListWrapper = styled.div`
-  height: calc(100vh - 144px);
+  height: calc(100vh - 215px);
 
   ${mq_lg} {
     height: auto;
