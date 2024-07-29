@@ -4,10 +4,10 @@ import { useAddHost } from '@boolti/api';
 import { CheckIcon, ChevronDownIcon } from '@boolti/icon';
 import { UserAdd } from '@boolti/icon/src/components/UserAdd';
 import { HostType, HostTypeInfo } from '@boolti/api/src/types/host';
+import { CustomError } from '@boolti/api/src/types/error';
 import Styled from './HostInputForm.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
-
 interface HostInputFormProps {
   showId: number;
 }
@@ -47,10 +47,15 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
       });
       toast.success('초대를 완료했습니다.');
       setMemberId('');
-    } catch (error) {
-      toast.error(
-        '불티에 회원으로 등록된 식별 코드로만 초대가 가능합니다. 식별 코드를 확인 후 다시 시도해 주세요.',
-      );
+    } catch (err: unknown) {
+      const error = err as CustomError;
+      if (error.type === 'USER_ALREADY_IN_SHOW_GROUP') {
+        toast.error('이미 초대된 회원입니다.');
+      } else {
+        toast.error(
+          '불티에 회원으로 등록된 식별 코드로만 초대가 가능합니다. 식별 코드를 확인 후 다시 시도해 주세요.',
+        );
+      }
     }
   };
 
@@ -67,6 +72,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
   return (
     <Styled.Form onSubmit={onSubmit}>
       <Styled.InputWrapper text={memberId}>
+        {memberId && <Styled.HashTag>#</Styled.HashTag>}
         <Styled.Input
           placeholder="초대할 팀원의 식별 코드를 입력해 주세요"
           value={memberId}
