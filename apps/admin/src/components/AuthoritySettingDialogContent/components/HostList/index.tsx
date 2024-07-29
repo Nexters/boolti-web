@@ -35,6 +35,7 @@ const HostList = ({ hosts, showId, onCloseDialog }: HostListProps) => {
     if (!result) return;
     deleteHostMutation.mutate({
       hostId,
+      self,
     });
 
     toast.success('권한을 삭제했습니다.');
