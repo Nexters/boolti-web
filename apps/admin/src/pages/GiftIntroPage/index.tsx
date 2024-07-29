@@ -19,7 +19,7 @@ const GiftIntroPage = () => {
               '유효하지 않은 선물이에요.'
             ) : (
               <>
-                <strong>{data?.recipientName}</strong>님이 선물을 보냈어요.{'\n'}터치해서 확인해
+                <strong>{data?.senderName}</strong>님이 선물을 보냈어요.{'\n'}터치해서 확인해
                 보세요!
               </>
             )}

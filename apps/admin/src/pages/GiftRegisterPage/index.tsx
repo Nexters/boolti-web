@@ -11,8 +11,8 @@ const GiftRegisterPage = () => {
           <GiftInformation />
         </Styled.GiftWrapper>
         <GiftGuide />
+        <GiftTerms />
       </Styled.Container>
-      <GiftTerms />
     </>
   );
 };
