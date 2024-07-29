@@ -8,7 +8,6 @@ interface ConfirmProps {
   confirmButtonColorTheme?: 'primary' | 'neutral';
   onCancel?: () => void;
   onConfirm?: () => void;
-  type?: 'confirm' | 'alert';
 }
 
 const Confirm = ({
@@ -18,7 +17,6 @@ const Confirm = ({
   confirmButtonColorTheme,
   onCancel,
   onConfirm,
-  type = 'confirm',
 }: ConfirmProps) => {
   return (
     <Portal>
@@ -26,11 +24,9 @@ const Confirm = ({
         <Styled.Confirm>
           <Styled.ConfirmMessage>{children}</Styled.ConfirmMessage>
           <Styled.ConfirmButtonContainer>
-            {type === 'confirm' && (
-              <Styled.CancelButton type="button" onClick={onCancel}>
-                {cancelText ?? '취소'}
-              </Styled.CancelButton>
-            )}
+            <Styled.CancelButton type="button" onClick={onCancel}>
+              {cancelText ?? '취소'}
+            </Styled.CancelButton>
             <Styled.ConfirmButton
               type="button"
               colorTheme={confirmButtonColorTheme}
