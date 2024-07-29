@@ -51,6 +51,12 @@ const NameButton = styled.button`
   max-width: 68px;
   display: flex;
   align-items: center;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    stroke: ${({ theme }) => theme.palette.grey.g60};
+  }
 `;
 
 const Name = styled.span`
@@ -78,6 +84,7 @@ const DropdownListItem = styled.li<DropdownListItemProps>`
     isDelete ? theme.palette.status.error : theme.palette.grey.g70};
   background-color: ${({ theme }) => theme.palette.grey.w};
   cursor: pointer;
+  margin-top: ${({ isDelete }) => (isDelete ? '4px' : '0')};
 
   &:hover {
     background-color: ${({ theme }) => theme.palette.grey.g10};
