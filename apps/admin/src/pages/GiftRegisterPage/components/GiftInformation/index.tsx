@@ -7,6 +7,7 @@ import { format } from 'date-fns/format';
 import { GiftStatus } from '@boolti/api/src/types/gift';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
+import { LINK } from '~/constants/link';
 
 const GiftInformation = () => {
   const { giftId = '' } = useParams<{ giftId: string }>();
@@ -33,8 +34,8 @@ const GiftInformation = () => {
   const isCancelled = status === GiftStatus.CANCELLED;
   const isRejected = status === GiftStatus.REJECTED;
   const isRegistrable = status === GiftStatus.REGISTRABLE;
-  const showDetailLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
-  const giftRegisterLink = `https://boolti.page.link/?link=https://app.boolti.in/gift/${giftId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+  const showDetailLink = LINK.SHOW_DETAIL(showId);
+  const giftRegisterLink = LINK.GIFT_REGISTER_LINK(giftId);
 
   const handleRegister = async () => {
     if (!isMobile) {
