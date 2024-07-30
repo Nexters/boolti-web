@@ -19,6 +19,7 @@ import TicketTypeSelect from '~/components/TicketTypeSelect';
 import Styled from './ShowEnterancePage.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
+import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
@@ -83,10 +84,13 @@ const ShowEnterancePage = () => {
   return (
     <ShowDetailLayout showName={show.name}>
       {totalTicketCount === 0 ? (
-        <Styled.Empty>
-          아직 판매한 티켓이 없어요.{'\n'}
-          티켓을 판매하고 관객 입장을 관리해 보세요.
-        </Styled.Empty>
+        <Styled.EmptyContainer>
+          <BooltiGreyIcon />
+          <Styled.EmptyTitle>
+            아직 판매한 티켓이 없어요.{'\n'}
+            티켓을 판매하고 관객 입장을 관리해 보세요.
+          </Styled.EmptyTitle>
+        </Styled.EmptyContainer>
       ) : (
         <Styled.Container>
           <Styled.InfoContainer>
