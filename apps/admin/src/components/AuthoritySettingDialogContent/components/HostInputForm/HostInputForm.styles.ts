@@ -68,6 +68,10 @@ const Chip = styled.div`
   width: 64px;
   height: 24px;
   margin-left: auto;
+
+  svg {
+    color: ${({ theme }) => theme.palette.grey.g50};
+  }
 `;
 
 const DropdownList = styled.ul`

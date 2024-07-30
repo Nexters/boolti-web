@@ -68,6 +68,11 @@ const DialogCloseButton = styled.button`
   cursor: pointer;
   color: ${({ theme }) => theme.palette.grey.g70};
 
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
   ${mq_lg} {
     top: 17px;
     right: 32px;
