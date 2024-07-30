@@ -22,6 +22,7 @@ import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
 import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -59,7 +60,8 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const authoritySettingDialog = useDialog();
   const showId = Number(params!.showId);
   const [, setMyHostInfo] = useAtom(myHostInfoAtom);
-
+  const deviceWidth = useDeviceWidth();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
   const { data: myHostInfoData } = useMyHostInfo(showId);
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
   const { data: settlementInfo } = useShowSettlementInfo(showId);
@@ -172,7 +174,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     }}
                   >
                     <Setting />
-                    <span style={{ paddingLeft: '8px' }}>권한 설정</span>
+                    {!isMobile && <span style={{ paddingLeft: '8px' }}>권한 설정</span>}
                   </Styled.AuthorSettingButton>
                 )}
               </Styled.ShowNameWrapper>

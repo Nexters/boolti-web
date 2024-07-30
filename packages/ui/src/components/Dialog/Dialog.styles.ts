@@ -22,25 +22,35 @@ const DimmedArea = styled.div`
   }
 `;
 
-const Dialog = styled.div<{ isAuto: boolean; width?: string; mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
+const Dialog = styled.div<{
+  isAuto: boolean;
+  width?: string;
+  mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup';
+}>`
   background-color: ${({ theme }) => theme.palette.grey.w};
   width: 100%;
   border-radius: 8px;
 
-  ${({ mobileType }) => mobileType === 'bottomSheet' && `
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
     position: fixed;
     bottom: 0;
     left: 0;
   `}
 
-  ${({ mobileType }) => mobileType === 'fullPage' && `
+  ${({ mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
     border-radius: 0;
     position: fixed;
     top: 0;
     left: 0;
   `}
 
-  ${({ mobileType }) => mobileType === 'centerPopup' && `
+  ${({ mobileType }) =>
+    mobileType === 'centerPopup' &&
+    `
     position: fixed;
     left: 50%;
     top: 50%;
@@ -65,12 +75,16 @@ const DialogHeader = styled.div<{ mobileType: 'bottomSheet' | 'fullPage' | 'cent
   display: flex;
   align-items: center;
 
-  ${({ mobileType }) => mobileType === 'bottomSheet' && `
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
     padding: 16px 24px 8px;
     justify-content: space-between;
   `}
 
-  ${({ theme, mobileType }) => mobileType === 'fullPage' && `
+  ${({ theme, mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
     height: 64px;
     justify-content: center;
     border-bottom: 1px solid ${theme.palette.grey.g10};
@@ -106,12 +120,16 @@ const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage'
     height: 24px;
   }
 
-  ${({ mobileType }) => mobileType === 'bottomSheet' && `
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
     top: 16px;
     right: 24px;
   `}
 
-  ${({ mobileType }) => mobileType === 'fullPage' && `
+  ${({ mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
     top: 20px;
     left: 20px;
   `}
