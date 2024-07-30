@@ -106,9 +106,7 @@ const ShowSalesTicketFormContent = ({
                         재고 {ticket.quantity}/{ticket.totalForSale}
                       </Badge>
                     </Styled.TicketTitle>
-                    <Styled.TicketDescription>
-                      {ticket.price}원
-                    </Styled.TicketDescription>
+                    <Styled.TicketDescription>{ticket.price}원</Styled.TicketDescription>
                   </Styled.TicketInfo>
                   <Styled.TicketAction>
                     <Button

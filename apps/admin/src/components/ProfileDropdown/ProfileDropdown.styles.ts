@@ -1,18 +1,24 @@
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const DropdownContainer = styled.div`
-  width: 66px;
   height: 36px;
   display: flex;
   align-items: center;
   cursor: pointer;
   position: relative;
+  user-select: none;
 `;
 
 const UserProfileImageWrapper = styled.div`
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   margin-right: 6px;
+
+  ${mq_lg} {
+    width: 36px;
+    height: 36px;
+  }
 `;
 
 const UserProfileImage = styled.img`
@@ -26,15 +32,30 @@ const DropdownMenuWrapper = styled.div`
   position: absolute;
   top: 42px;
   right: 0;
-  width: 96px;
-  height: 48px;
+  width: 112px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px #8b8b8b26;
-  border-radius: 4px;
-  border: 1px solid transparent;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1;
+`;
+
+const DropdownMenuItemButton = styled.button`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  height: 36px;
+  padding: 0 12px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.grey.g10};
+  }
 `;
 
 export default {
@@ -42,4 +63,5 @@ export default {
   UserProfileImageWrapper,
   UserProfileImage,
   DropdownMenuWrapper,
+  DropdownMenuItemButton,
 };

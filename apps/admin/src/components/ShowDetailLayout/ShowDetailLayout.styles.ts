@@ -147,6 +147,7 @@ const AuthorSettingButton = styled(Button)`
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: none;
   margin-right: 6px;
+  min-width: 116px;
 
   path {
     stroke: ${({ theme }) => theme.palette.grey.g90};

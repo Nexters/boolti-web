@@ -91,7 +91,7 @@ const ShowTicketInfoFormContent = ({
                       placeholder={value}
                       min={format(
                         watch('startDate') ||
-                        (salesStartTime ? new Date(salesStartTime) : new Date()),
+                          (salesStartTime ? new Date(salesStartTime) : new Date()),
                         'yyyy-MM-dd',
                       )}
                       max={format(

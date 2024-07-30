@@ -14,12 +14,16 @@ const useDialog = () => {
       title,
       isAuto,
       width,
+      contentPadding,
+      mobileType,
       onClose,
     }: {
       content: React.ReactNode;
       title?: string;
       isAuto?: boolean;
       width?: string;
+      contentPadding?: string;
+      mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
       onClose?: () => void;
     }) => {
       const newDialog: IDialog = {
@@ -28,6 +32,8 @@ const useDialog = () => {
         title,
         isAuto,
         width,
+        contentPadding,
+        mobileType,
         onClose,
       };
 
