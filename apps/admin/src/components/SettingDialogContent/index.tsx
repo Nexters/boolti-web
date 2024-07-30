@@ -1,7 +1,8 @@
 import { BooltiLightGrey } from '@boolti/icon'
 import Styled from './SettingDialogContent.styles'
 import { Button, TextField, useDialog } from '@boolti/ui'
-import AccountDeleteForm, { AccountDeleteFormInputs } from '../AccountDeleteForm'
+import AccountDeleteForm from '../AccountDeleteForm'
+import { useUserSummary } from '@boolti/api'
 
 const KakaoIcon = () => {
   return (
@@ -24,10 +25,7 @@ const AppleIcon = () => {
 const SettingDialogContent = () => {
   const accountDeleteDialog = useDialog();
 
-  const accountDeleteFormSubmitHandler = (data: AccountDeleteFormInputs) => {
-    console.log(data)
-    accountDeleteDialog.close();
-  }
+  const { data: userSummary } = useUserSummary();
 
   return (
     <Styled.SettingDialogContent>
@@ -43,19 +41,23 @@ const SettingDialogContent = () => {
         <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
         <Styled.SettingContentFormControl>
           <Styled.Label htmlFor="code">식별 코드</Styled.Label>
-          <TextField inputType="text" size="big" id="code" width="100%" value="AAAA" onChange={(event) => {
+          <TextField inputType="text" size="big" id="code" width="100%" value={userSummary?.userCode} onChange={(event) => {
             event.preventDefault();
           }} />
         </Styled.SettingContentFormControl>
         <Styled.SettingContentFormControl>
           <Styled.Label htmlFor="code">연결 서비스</Styled.Label>
           <Styled.ConnectedServiceList>
-            <Styled.ConnectedServiceChip>
-              <KakaoIcon /> 카카오톡
-            </Styled.ConnectedServiceChip>
-            <Styled.ConnectedServiceChip>
-              <AppleIcon /> Apple
-            </Styled.ConnectedServiceChip>
+            {userSummary?.oauthType === 'KAKAO' && (
+              <Styled.ConnectedServiceChip>
+                <KakaoIcon /> 카카오톡
+              </Styled.ConnectedServiceChip>
+            )}
+            {userSummary?.oauthType === 'APPLE' && (
+              <Styled.ConnectedServiceChip>
+                <AppleIcon /> Apple
+              </Styled.ConnectedServiceChip>
+            )}
           </Styled.ConnectedServiceList>
         </Styled.SettingContentFormControl>
         <Styled.Divider />
@@ -75,7 +77,7 @@ const SettingDialogContent = () => {
         </Styled.SettingDescriptionList>
         <Button colorTheme="primary" size="x-small" onClick={() => {
           accountDeleteDialog.open({
-            content: <AccountDeleteForm onSubmit={accountDeleteFormSubmitHandler} onClose={accountDeleteDialog.close} />,
+            content: <AccountDeleteForm oauthType={userSummary?.oauthType} onClose={accountDeleteDialog.close} />,
             mobileType: 'centerPopup'
           })
         }}>삭제하기</Button>

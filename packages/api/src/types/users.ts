@@ -16,10 +16,12 @@ export interface UserProfileSummaryResponse {
   nickname: string;
   /** 사용자 이메일 */
   email?: string;
+  /** 사용자 식별 코드 */
+  userCode: string;
   /** 사용자 프로필 이미지 경로 */
   imagePath?: string;
-  /** 유저코드 */
-  userCode: string;
+  /** 사용자 연결 서비스 */
+  oauthType: 'KAKAO' | 'APPLE';
 }
 
 export type BankAccountListResponse = BankAccount[];

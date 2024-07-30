@@ -1,24 +1,53 @@
 import { Button } from '@boolti/ui';
 import Styled from './AccountDeleteForm.styles'
 import { useForm } from 'react-hook-form';
+import { useDeleteMe, useLogout } from '@boolti/api';
+import { useAuthAtom } from '~/atoms/useAuthAtom';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '~/constants/routes';
 
 export interface AccountDeleteFormInputs {
   reason: string;
 }
 
 interface AccountDeleteFormProps {
-  onSubmit: (data: AccountDeleteFormInputs) => void;
+  oauthType?: 'KAKAO' | 'APPLE';
   onClose: () => void;
 }
 
-const AccountDeleteForm = ({ onSubmit, onClose }: AccountDeleteFormProps) => {
+const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
+  const navigate = useNavigate();
+
+  const deleteMeMutation = useDeleteMe();
+  const { removeToken } = useAuthAtom();
+  const logoutMutation = useLogout({
+    onSuccess: () => {
+      removeToken();
+    },
+  });
   const { register, handleSubmit, reset, formState: {
     isValid
   } } = useForm<AccountDeleteFormInputs>();
 
-  const submitHandler = (data: AccountDeleteFormInputs) => {
-    onSubmit(data);
-    reset();
+  const submitHandler = async (data: AccountDeleteFormInputs) => {
+    let appleIdAuthorizationCode: string | undefined = undefined
+
+    // TODO: 애플 로그인 시 탈퇴 로직 작성
+    if (oauthType === 'APPLE') {
+      const appleAuthData = await window.AppleID?.auth.signIn();
+
+      appleIdAuthorizationCode = appleAuthData?.authorization.code
+    }
+
+
+    await deleteMeMutation.mutateAsync({
+      reason: data.reason,
+      appleIdAuthorizationCode
+    });
+    await logoutMutation.mutateAsync();
+
+    onClose();
+    navigate(PATH.INDEX);
   }
 
   return (

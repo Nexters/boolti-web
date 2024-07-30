@@ -30,6 +30,7 @@ import useRejectGift from './useRejectGift';
 import useAddHost from './useAddHost';
 import useEditHost from './useEditHost';
 import useDeleteHost from './useDeleteHost';
+import useDeleteMe from './useDeleteMe';
 
 export {
   useAddBankAccount,
@@ -64,6 +65,7 @@ export {
   useAddHost,
   useEditHost,
   useDeleteHost,
+  useDeleteMe,
 };
 
 export type { ImageFile };
