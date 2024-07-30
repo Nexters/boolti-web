@@ -1,7 +1,11 @@
-import { useLogout, useSettlementBanners, useShowList, useUserSummary } from '@boolti/api';
-import { BooltiLogo, ChevronRightIcon } from '@boolti/icon';
-import { Footer, TextButton, useConfirm } from '@boolti/ui';
-import { useNavigate } from 'react-router-dom';
+import {
+  useLogout,
+  useSettlementBanners,
+  useShowList,
+  useUserSummary,
+} from '@boolti/api';
+import { BooltiLogo, ChevronRightIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
+import { Footer, useConfirm, useDialog } from '@boolti/ui';
 
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
@@ -10,7 +14,11 @@ import UserProfile from '~/components/UserProfile';
 import { HREF, PATH } from '~/constants/routes';
 
 import Styled from './HomePage.styles';
+import ProfileDropdown from '~/components/ProfileDropdown';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
+import SettingDialogContent from '~/components/SettingDialogContent';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const bannerDescription = {
   REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
@@ -19,13 +27,18 @@ const bannerDescription = {
 
 const HomePage = () => {
   const { removeToken } = useAuthAtom();
-  const navigate = useNavigate();
-  const logout = useLogout({
+  const logoutMutation = useLogout({
     onSuccess: () => {
       removeToken();
     },
   });
+
+  const settingDialog = useDialog();
   const confirm = useConfirm();
+
+  const navigate = useNavigate();
+
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
   const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
@@ -45,24 +58,55 @@ const HomePage = () => {
             </Styled.Logo>
           }
           right={
-            <TextButton
-              colorTheme="netural"
-              size="regular"
-              onClick={async () => {
-                const result = await confirm('로그아웃 할까요?', {
-                  cancel: '취소하기',
-                  confirm: '로그아웃',
-                });
-                if (result) {
-                  await logout.mutateAsync();
-                  navigate(PATH.LOGIN, { replace: true });
-                }
-              }}
-            >
-              로그아웃
-            </TextButton>
+            <>
+              <Styled.ProfileDropdown>
+                <ProfileDropdown image={userSummaryData?.imagePath} />
+              </Styled.ProfileDropdown>
+              <Styled.ProfileDropdownMobile>
+                <ProfileDropdown image={userSummaryData?.imagePath} open={profileDropdownOpen} disabledDropdown onClick={() => {
+                  setProfileDropdownOpen(prev => !prev);
+                }} />
+              </Styled.ProfileDropdownMobile>
+            </>
           }
         />
+      }
+      headerMenu={
+        <>
+          {profileDropdownOpen && (
+            <Styled.HeaderMenu>
+              <Styled.HeaderMenuItemButton
+                type="button"
+                onClick={() => {
+                  settingDialog.open({
+                    title: '설정',
+                    content: <SettingDialogContent />,
+                    isAuto: true,
+                    contentPadding: '0',
+                    mobileType: 'fullPage',
+                  })
+                }}
+              >
+                <SettingIcon /> 설정
+              </Styled.HeaderMenuItemButton>
+              <Styled.HeaderMenuItemButton
+                type="button"
+                onClick={async () => {
+                  const result = await confirm('로그아웃 할까요?', {
+                    cancel: '취소하기',
+                    confirm: '로그아웃',
+                  });
+                  if (result) {
+                    await logoutMutation.mutateAsync();
+                    navigate(PATH.INDEX, { replace: true });
+                  }
+                }}
+              >
+                <LogoutIcon /> 로그아웃
+              </Styled.HeaderMenuItemButton>
+            </Styled.HeaderMenu>
+          )}
+        </>
       }
       banner={
         settlementBanners &&

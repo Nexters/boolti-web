@@ -6,6 +6,8 @@ export interface IDialog {
   isAuto?: boolean;
   title?: string;
   width?: string;
+  contentPadding?: string;
+  mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
   onClose?: () => void;
 }
 

@@ -7,6 +7,7 @@ import { BoA } from './BoA';
 import { Boolti } from './Boolti';
 import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
+import { BooltiLightGrey } from './BooltiLightGrey'
 import { BooltiSmall } from './BooltiSmall';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
@@ -61,6 +62,8 @@ import { UserProfile } from './UserProfile';
 import { Users } from './Users';
 import { Wallet } from './Wallet';
 import { Woori } from './Woori';
+import { Setting } from './Setting';
+import { Logout } from './Logout';
 
 export {
   Apple as AppleIcon,
@@ -71,6 +74,7 @@ export {
   BoA,
   BooltiDark,
   BooltiGrey,
+  BooltiLightGrey,
   Boolti as BooltiLogo,
   BooltiSmall as BooltiSmallLogo,
   Calendar as CalendarIcon,
@@ -126,4 +130,6 @@ export {
   Users as UsersIcon,
   Wallet as WalletIcon,
   Woori,
+  Setting as SettingIcon,
+  Logout as LogoutIcon,
 };

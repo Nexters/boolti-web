@@ -252,7 +252,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       <Tooltip
                         content={
                           settlementTooltipText[
-                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                          lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
                           ]
                         }
                         anchorSelect="#settlement-page-tooltip"

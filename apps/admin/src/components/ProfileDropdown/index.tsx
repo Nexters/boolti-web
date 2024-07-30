@@ -1,16 +1,19 @@
 import { useLogout } from '@boolti/api';
-import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
-import { TextButton } from '@boolti/ui';
-import { useDropdown } from '@boolti/ui/src/hooks';
+import { ChevronDownIcon, ChevronUpIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
+import { useConfirm, useDialog, useDropdown } from '@boolti/ui/src/hooks';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
 import Styled from './ProfileDropdown.styles';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
+import SettingDialogContent from '../SettingDialogContent';
 
 interface ProfileDropdownProps {
   image?: string;
+  open?: boolean;
+  disabledDropdown?: boolean;
+  onClick?: () => void;
 }
 
 // TODO: UserProfile svg 공통화
@@ -33,7 +36,7 @@ const ProfileSVG = () => (
   </svg>
 );
 
-const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
+const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDropdownProps) => {
   const { isOpen, toggleDropdown } = useDropdown();
   const { removeToken } = useAuthAtom();
   const logoutMutation = useLogout({
@@ -42,26 +45,54 @@ const ProfileDropdown = ({ image }: ProfileDropdownProps) => {
     },
   });
   const navigate = useNavigate();
+  const confirm = useConfirm();
+  const settingDialog = useDialog();
+
+  const dropdownOpen = open ?? isOpen;
 
   return (
-    <Styled.DropdownContainer onClick={() => toggleDropdown()}>
+    <Styled.DropdownContainer onClick={() => {
+      onClick?.()
+
+      if (disabledDropdown) return;
+
+      toggleDropdown()
+    }}>
       <Styled.UserProfileImageWrapper>
         {image ? <Styled.UserProfileImage src={image} alt="유저 프로필 이미지" /> : <ProfileSVG />}
       </Styled.UserProfileImageWrapper>
-      {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-      {isOpen && (
+      {dropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+      {dropdownOpen && !disabledDropdown && (
         <Styled.DropdownMenuWrapper>
-          <TextButton
+          <Styled.DropdownMenuItemButton
             type="button"
-            size="regular"
-            colorTheme="netural"
-            onClick={async () => {
-              await logoutMutation.mutateAsync();
-              navigate(PATH.INDEX, { replace: true });
+            onClick={() => {
+              settingDialog.open({
+                title: '설정',
+                content: <SettingDialogContent />,
+                isAuto: true,
+                contentPadding: '0',
+                mobileType: 'fullPage',
+              })
             }}
           >
-            로그아웃
-          </TextButton>
+            <SettingIcon /> 설정
+          </Styled.DropdownMenuItemButton>
+          <Styled.DropdownMenuItemButton
+            type="button"
+            onClick={async () => {
+              const result = await confirm('로그아웃 할까요?', {
+                cancel: '취소하기',
+                confirm: '로그아웃',
+              });
+              if (result) {
+                await logoutMutation.mutateAsync();
+                navigate(PATH.INDEX, { replace: true });
+              }
+            }}
+          >
+            <LogoutIcon /> 로그아웃
+          </Styled.DropdownMenuItemButton>
         </Styled.DropdownMenuWrapper>
       )}
     </Styled.DropdownContainer>

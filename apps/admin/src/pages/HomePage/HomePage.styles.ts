@@ -25,6 +25,29 @@ const LogoutLink = styled(Link)`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
+const ProfileDropdown = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+  }
+`
+
+const ProfileDropdownMobile = styled.div`
+  ${mq_lg} {
+    display: none;
+  }
+`
+
+const Container = styled.main`
+  min-height: calc(100vh - 64px - 274px);
+  padding: 20px 20px 0;
+
+  ${mq_lg} {
+    padding: 60px 20px 0;
+  }
+`;
+
 const Banner = styled.div`
   padding: 16px 0;
   display: flex;
@@ -50,21 +73,44 @@ const BannerLink = styled(Link)`
   align-items: center;
 `;
 
-const Container = styled.main`
-  min-height: calc(100vh - 64px - 274px);
-  padding: 20px 20px 0;
-
+const HeaderMenu = styled.div`
+  position: absolute;
+  top: 68px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  box-shadow: 0 4px 4px 0 ${({ theme }) => theme.palette.shadow};
+  z-index: 1;
+  
   ${mq_lg} {
-    padding: 60px 20px 0;
+    display: none;
   }
 `;
+
+const HeaderMenuItemButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  cursor: pointer;
+`
 
 export default {
   Logo,
   LogoutLink,
+  ProfileDropdown,
+  ProfileDropdownMobile,
   Container,
   Banner,
   BannerShowTitle,
   BannerDescription,
   BannerLink,
+  HeaderMenu,
+  HeaderMenuItemButton,
 };
