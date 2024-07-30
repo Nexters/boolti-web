@@ -117,13 +117,13 @@ const InviteButton = styled(Button)`
   height: 48px;
   padding: 14px;
 
+  &:disabled {
+    color: ${({ theme }) => theme.palette.grey.g40};
+  }
+
   ${mq_lg} {
     width: auto;
     padding: 13px 20px;
-
-    &:disabled {
-      color: ${({ theme }) => theme.palette.grey.g40};
-    }
   }
 `;
 
