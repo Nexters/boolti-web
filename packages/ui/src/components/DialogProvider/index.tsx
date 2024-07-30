@@ -20,6 +20,8 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
           title={dialog.title}
           isAuto={dialog.isAuto}
           width={dialog.width}
+          contentPadding={dialog.contentPadding}
+          mobileType={dialog.mobileType}
           onClose={() => {
             dialog.onClose?.();
             setDialogList((prev) => prev.filter(({ id }) => dialog.id !== id));

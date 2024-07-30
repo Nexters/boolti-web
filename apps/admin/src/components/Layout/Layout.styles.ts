@@ -11,6 +11,7 @@ const HeaderContainer = styled.div`
 `;
 
 const Header = styled.header`
+  background-color: ${({ theme }) => theme.palette.grey.w};
   max-width: ${({ theme }) => theme.breakpoint.desktop};
   margin: 0 auto;
 
