@@ -102,48 +102,50 @@ const PreviewImageContainer = styled.div`
   }
 `;
 
-const PreviewImage = styled.div`
-  position: relative;
-  display: block;
+const PreviewImage = styled.div<{ isFirstImage: boolean }>`
   max-width: 100%;
-  height: 100%;
-  border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  background-size: contain;
+  height: ${({ isFirstImage }) => (isFirstImage ? 'calc(124px - 16px)' : '124px')};
+  width: 100%;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   aspect-ratio: 182 / 256;
 
-  &:first-of-type::after {
-    content: '대표 사진';
-    font-size: 8px;
-    font-weight: 600;
-    line-height: 8px;
-    background-color: ${({ theme }) => theme.palette.primary.o1};
-    color: ${({ theme }) => theme.palette.grey.w};
-    width: 100%;
-    height: 16px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    left: 0;
+  ${mq_lg} {
+    height: ${({ isFirstImage }) => (isFirstImage ? 'calc(256px - 32px)' : '100%')};
   }
+`;
+
+const PreviewImageWrap = styled.div<{ isFirstImage: boolean }>`
+  position: relative;
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+`;
+
+const FirstImageText = styled.span`
+  font-size: 8px;
+  font-weight: 600;
+  line-height: 8px;
+  background-color: ${({ theme }) => theme.palette.primary.o1};
+  color: ${({ theme }) => theme.palette.grey.w};
+  width: 100%;
+  height: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
 
   ${mq_lg} {
-    &:first-of-type::after {
-      font-size: 14px;
-      line-height: 18px;
-      height: 32px;
-    }
+    font-size: 14px;
+    line-height: 18px;
+    height: 32px;
   }
 `;
 
 const PreviewImageDeleteButton = styled.button`
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: -6px;
+  right: -6px;
   background-color: ${({ theme }) => theme.palette.grey.g90};
   opacity: 0.8;
   border: none;
@@ -255,7 +257,7 @@ const TextAreaContainer = styled.div`
 
 const TextArea = styled.textarea<TextAreaProps>`
   width: 100%;
-  margin-top: 8px;
+  margin-top: 16px;
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
@@ -278,6 +280,10 @@ const TextArea = styled.textarea<TextAreaProps>`
     background: ${({ theme }) => theme.palette.grey.g10};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g40};
+  }
+
+  ${mq_lg} {
+    margin-top: 8px;
   }
 `;
 
@@ -507,7 +513,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-          disabled ? theme.palette.grey.g70 : theme.palette.grey.g90};
+          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }
@@ -527,6 +533,8 @@ export default {
   ShowInfoFormButtonContainer,
   ShowInfoFormButton,
   PreviewImageContainer,
+  PreviewImageWrap,
+  FirstImageText,
   PreviewImage,
   PreviewImageDeleteButton,
   FileUploadArea,

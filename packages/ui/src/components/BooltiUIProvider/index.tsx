@@ -1,4 +1,5 @@
 import '../../index.css';
+import AlertProvider from '../AlertProvider';
 
 import ConfirmProvider from '../ConfirmProvider';
 import DialogProvider from '../DialogProvider';
@@ -11,9 +12,11 @@ interface BooltiUIProviderProps {
 const BooltiUIProvider = ({ children }: BooltiUIProviderProps) => {
   return (
     <ThemeProvider>
-      <DialogProvider>
-        <ConfirmProvider>{children}</ConfirmProvider>
-      </DialogProvider>
+      <AlertProvider>
+        <ConfirmProvider>
+          <DialogProvider>{children}</DialogProvider>
+        </ConfirmProvider>
+      </AlertProvider>
     </ThemeProvider>
   );
 };

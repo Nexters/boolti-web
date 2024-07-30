@@ -371,7 +371,11 @@ const MobileShowAddPage = styled.div`
 `;
 
 const MobileHeader = styled.header`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -395,6 +399,7 @@ const MobileHeaderText = styled.div`
 `;
 
 const MobileContent = styled.div`
+  margin-top: 52px;
   padding: 32px 20px;
 `;
 

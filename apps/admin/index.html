@@ -45,13 +45,15 @@
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KKHNG1QPW4"></script>
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
+      if (window.location.origin === 'https://boolti.in') {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
 
-      gtag('config', 'G-KKHNG1QPW4');
+        gtag('config', 'G-KKHNG1QPW4');
+      }
     </script>
     <meta name="appleid-signin-client-id" content="%VITE_APPLE_CLIENT_ID%" />
     <meta name="appleid-signin-scope" content="name email" />

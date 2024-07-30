@@ -7,6 +7,7 @@ import { generatePath, useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowListItem.styles';
+import { HostType } from '@boolti/api/src/types/host';
 
 interface Props {
   isEmpty?: boolean;
@@ -14,6 +15,7 @@ interface Props {
   title: string;
   date: string;
   hostName: string;
+  myHostType: HostType;
   thumbnailPath: string;
   salesStartTime: string;
   salesEndTime: string;
@@ -62,6 +64,7 @@ const ShowListItem = ({
   title,
   date,
   hostName,
+  myHostType,
   salesStartTime,
   salesEndTime,
 }: Props) => {
@@ -73,6 +76,10 @@ const ShowListItem = ({
       ) : (
         <Styled.Button
           onClick={() => {
+            if (myHostType === HostType.SUPPORTER) {
+              navigate(generatePath(PATH.SHOW_RESERVATION, { showId: id.toString() }));
+              return;
+            }
             navigate(generatePath(PATH.SHOW_INFO, { showId: id.toString() }));
           }}
         >

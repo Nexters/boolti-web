@@ -1,4 +1,4 @@
-import { mq_lg } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface TabItemProps {
@@ -54,6 +54,12 @@ const HeaderContent = styled.div`
   left: 0;
 `;
 
+const ShowNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const ShowName = styled.h2<ShowNameProps>`
   ${({ theme }) => theme.typo.h1};
   margin: 12px 0 8px;
@@ -61,6 +67,11 @@ const ShowName = styled.h2<ShowNameProps>`
   transition:
     font-size 0.1s ease-in-out,
     margin 0.1s ease-in-out;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${mq_lg} {
     padding: 0;
@@ -75,6 +86,9 @@ const TabContainer = styled.div`
   overflow-x: auto;
   display: flex;
   flex-wrap: nowrap;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   ${mq_lg} {
     padding: 0;
@@ -98,7 +112,10 @@ const TabItem = styled.div<TabItemProps>`
   justify-content: center;
   align-items: center;
   height: 48px;
-  ${({ active }) => active && `font-weight: 600;`};
+  ${({ active, theme }) =>
+    active
+      ? `font-weight: 600; color: ${theme.palette.grey.g90};`
+      : `color: ${theme.palette.grey.g70};`};
   cursor: pointer;
 
   &::after {
@@ -124,6 +141,28 @@ const TabItem = styled.div<TabItemProps>`
   }
 `;
 
+const AuthorSettingButton = styled(Button)`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: none;
+  margin-right: 6px;
+
+  path {
+    stroke: ${({ theme }) => theme.palette.grey.g90};
+  }
+
+  ${mq_lg} {
+    margin-right: 0;
+    background-color: ${({ theme }) => theme.palette.grey.g90};
+    color: ${({ theme }) => theme.palette.grey.w};
+
+    path {
+      stroke: ${({ theme }) => theme.palette.grey.w};
+    }
+  }
+`;
+
 export default {
   HeaderLeft,
   BackButton,
@@ -131,8 +170,10 @@ export default {
   TopObserver,
   HeaderObserver,
   HeaderContent,
+  ShowNameWrapper,
   ShowName,
   TabContainer,
   Tab,
   TabItem,
+  AuthorSettingButton,
 };

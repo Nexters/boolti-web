@@ -9,12 +9,6 @@ export interface BankAccount {
   bankAccountHolder: string;
 }
 
-export interface SettlementAccountInfoResponse {
-  /** 은행 계좌 정보가 등록되어 있는지 여부 */
-  hasSettlementAccount: boolean;
-  bankAccount?: BankAccount;
-}
-
 export interface UserProfileSummaryResponse {
   /** 사용자 pk */
   id: number;
@@ -22,8 +16,12 @@ export interface UserProfileSummaryResponse {
   nickname: string;
   /** 사용자 이메일 */
   email?: string;
+  /** 사용자 식별 코드 */
+  userCode: string;
   /** 사용자 프로필 이미지 경로 */
   imagePath?: string;
+  /** 사용자 연결 서비스 */
+  oauthType: 'KAKAO' | 'APPLE';
 }
 
 export type BankAccountListResponse = BankAccount[];

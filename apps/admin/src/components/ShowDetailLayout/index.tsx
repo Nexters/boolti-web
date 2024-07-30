@@ -1,6 +1,12 @@
-import { useLogout, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
+import {
+  useLogout,
+  useMyHostInfo,
+  useShowLastSettlementEvent,
+  useShowSettlementInfo,
+} from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { TextButton } from '@boolti/ui';
+import { Setting } from '@boolti/icon/src/components/Setting.tsx';
+import { TextButton, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -12,6 +18,11 @@ import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
+import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
+import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
+import { atom, useAtom } from 'jotai';
+import { useEffect } from 'react';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -25,6 +36,8 @@ interface ShowDetailLayoutProps {
   children?: React.ReactNode;
   onClickMiddleware?: () => Promise<boolean>;
 }
+
+export const myHostInfoAtom = atom<HostListItem | null>(null);
 
 const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailLayoutProps) => {
   const { ref: topObserverRef, inView: topInView } = useInView({
@@ -44,9 +57,14 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const matchReservationTab = useMatch(PATH.SHOW_RESERVATION);
   const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
   const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
-
-  const { data: lastSettlementEvent } = useShowLastSettlementEvent(Number(params!.showId));
-  const { data: settlementInfo } = useShowSettlementInfo(Number(params!.showId));
+  const authoritySettingDialog = useDialog();
+  const showId = Number(params!.showId);
+  const [, setMyHostInfo] = useAtom(myHostInfoAtom);
+  const deviceWidth = useDeviceWidth();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+  const { data: myHostInfoData } = useMyHostInfo(showId);
+  const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
+  const { data: settlementInfo } = useShowSettlementInfo(showId);
   const logoutMutation = useLogout({
     onSuccess: () => {
       removeToken();
@@ -87,6 +105,12 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     return false;
   })();
 
+  useEffect(() => {
+    if (myHostInfoData) {
+      setMyHostInfo({ ...myHostInfoData });
+    }
+  }, [myHostInfoData, setMyHostInfo]);
+
   return (
     <>
       <Styled.TopObserver ref={topObserverRef} />
@@ -107,7 +131,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                     }}
                   >
                     <ArrowLeftIcon />
-                    <Styled.HeaderText>주최자 홈</Styled.HeaderText>
+                    <Styled.HeaderText>홈</Styled.HeaderText>
                   </Styled.BackButton>
                 </Styled.HeaderLeft>
               }
@@ -129,7 +153,31 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
               }
             />
             <Styled.HeaderContent>
-              <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
+              <Styled.ShowNameWrapper>
+                <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
+                {myHostInfoData?.type !== HostType.SUPPORTER && (
+                  <Styled.AuthorSettingButton
+                    type="button"
+                    colorTheme="netural"
+                    size="small"
+                    onClick={() => {
+                      authoritySettingDialog.open({
+                        title: '권한 설정',
+                        width: '600px',
+                        content: (
+                          <AuthoritySettingDialogContent
+                            showId={showId}
+                            onClose={authoritySettingDialog.close}
+                          />
+                        ),
+                      });
+                    }}
+                  >
+                    <Setting />
+                    {!isMobile && <span style={{ paddingLeft: '8px' }}>권한 설정</span>}
+                  </Styled.AuthorSettingButton>
+                )}
+              </Styled.ShowNameWrapper>
               <Styled.TabContainer>
                 <Styled.Tab>
                   <Styled.TabItem

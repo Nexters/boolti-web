@@ -89,73 +89,76 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
           />
         </Styled.TextContainer>
         {open && (
-          <Styled.Control ref={ref}>
-            <Styled.Title>
-              시간 선택하기
-              <Styled.CloseButton
-                onClick={() => {
-                  onBlur?.();
-                  setIsOpen(false);
-                }}
-              >
-                <CloseIcon />
-              </Styled.CloseButton>
-            </Styled.Title>
-            <Styled.ListContainer>
-              <Styled.List>
-                <Styled.Item
-                  type="button"
-                  isActive={isAM}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsAM(true);
+          <>
+            <Styled.Control ref={ref}>
+              <Styled.Title>
+                시간 선택하기
+                <Styled.CloseButton
+                  onClick={() => {
+                    onBlur?.();
+                    setIsOpen(false);
                   }}
                 >
-                  오전
-                </Styled.Item>
-                <Styled.Item
-                  type="button"
-                  isActive={!isAM}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setIsAM(false);
-                  }}
-                >
-                  오후
-                </Styled.Item>
-              </Styled.List>
-              <Styled.List hasPadding ref={hourRef}>
-                {hours.map((hour, index) => (
+                  <CloseIcon />
+                </Styled.CloseButton>
+              </Styled.Title>
+              <Styled.ListContainer>
+                <Styled.List>
                   <Styled.Item
                     type="button"
-                    key={hour}
-                    isActive={currentHour === index + 1}
+                    isActive={isAM}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentHour(index + 1);
+                      setIsAM(true);
                     }}
                   >
-                    {hour}
+                    오전
                   </Styled.Item>
-                ))}
-              </Styled.List>
-              <Styled.List hasPadding ref={minuteRef}>
-                {minutes.map((minute) => (
                   <Styled.Item
                     type="button"
-                    key={minute}
-                    isActive={currentMinute === Number(minute)}
+                    isActive={!isAM}
                     onClick={(e) => {
                       e.stopPropagation();
-                      setCurrentMinute(Number(minute));
+                      setIsAM(false);
                     }}
                   >
-                    {minute}
+                    오후
                   </Styled.Item>
-                ))}
-              </Styled.List>
-            </Styled.ListContainer>
-          </Styled.Control>
+                </Styled.List>
+                <Styled.List hasPadding ref={hourRef}>
+                  {hours.map((hour, index) => (
+                    <Styled.Item
+                      type="button"
+                      key={hour}
+                      isActive={currentHour === index + 1}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentHour(index + 1);
+                      }}
+                    >
+                      {hour}
+                    </Styled.Item>
+                  ))}
+                </Styled.List>
+                <Styled.List hasPadding ref={minuteRef}>
+                  {minutes.map((minute) => (
+                    <Styled.Item
+                      type="button"
+                      key={minute}
+                      isActive={currentMinute === Number(minute)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setCurrentMinute(Number(minute));
+                      }}
+                    >
+                      {minute}
+                    </Styled.Item>
+                  ))}
+                </Styled.List>
+              </Styled.ListContainer>
+            </Styled.Control>
+            <Styled.Dimmed />
+          </>
         )}
       </Styled.Container>
     </>

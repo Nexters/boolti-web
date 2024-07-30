@@ -14,6 +14,7 @@ const Recipient = styled.p`
   background-color: ${({ theme }) => theme.palette.primary.o3};
   color: ${({ theme }) => theme.palette.grey.w};
   margin-bottom: 12px;
+  font-weight: 600;
 `;
 
 const Wrapper = styled.div`
@@ -21,7 +22,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 20px;
+  padding: 32px 20px 0 20px;
   border-radius: 8px 8px 0px 0px;
   position: relative;
 
@@ -52,6 +53,8 @@ const InvitationDescription = styled.p`
   ${({ theme }) => theme.typo.sh2}
   color: ${({ theme }) => theme.palette.grey.w};
   text-align: center;
+  height: 80px;
+  max-height: 80px;
 `;
 
 const InvitationImage = styled.img`
@@ -78,8 +81,8 @@ const PosterImage = styled.img`
 const ShowInformation = styled.div``;
 
 const ShowTitle = styled.h3`
-  word-break: keep-all
-  ${({ theme }) => theme.typo.point.p1}
+  word-break: keep-all;
+  ${({ theme }) => theme.typo.point.p1};
   color: ${({ theme }) => theme.palette.grey.g100};
 `;
 
@@ -92,7 +95,7 @@ const ShowDetailLink = styled.button`
 `;
 
 const Footer = styled.div`
-  width: calc(100% - 40px);
+  width: 100%;
   margin: 64px auto 28px;
   text-align: center;
 `;

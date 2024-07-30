@@ -7,6 +7,11 @@ export enum GiftStatus {
 
 export interface GiftInfoResponse {
   /**
+   * example: 임꺽정
+   * 선물 주는사람 이름
+   */
+  senderName: string;
+  /**
    * example: 홍길동
    * 선물 받는사람 이름
    */
@@ -42,7 +47,7 @@ export interface GiftInfoResponse {
    */
   showName: string;
   /**
-   * 공연 날짜
+   * 선물 만료일
    */
-  showDate: string;
+  giftExpireDate: string;
 }

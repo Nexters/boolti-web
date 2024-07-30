@@ -59,11 +59,12 @@ const ShowBasicInfoFormContent = ({
             {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)
           </Styled.ShowInfoFormDescription>
           <Styled.PreviewImageContainer>
-            {imageFiles.map((file) => (
-              <Styled.PreviewImage
-                key={file.preview}
-                style={{ backgroundImage: `url(${file.preview})` }}
-              >
+            {imageFiles.map((file, index) => (
+              <Styled.PreviewImageWrap key={file.preview} isFirstImage={index === 0}>
+                <Styled.PreviewImage
+                  isFirstImage={index === 0}
+                  style={{ backgroundImage: `url(${file.preview})` }}
+                />
                 {!disabled && (
                   <Styled.PreviewImageDeleteButton
                     type="button"
@@ -72,7 +73,8 @@ const ShowBasicInfoFormContent = ({
                     <CloseIcon />
                   </Styled.PreviewImageDeleteButton>
                 )}
-              </Styled.PreviewImage>
+                {index === 0 && <Styled.FirstImageText>대표 사진</Styled.FirstImageText>}
+              </Styled.PreviewImageWrap>
             ))}
             {imageFiles.length < MAX_IMAGE_COUNT && !disabled && (
               <Styled.FileUploadArea {...getRootProps()} imageCount={imageFiles.length}>

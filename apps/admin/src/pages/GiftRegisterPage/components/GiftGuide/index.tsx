@@ -34,7 +34,7 @@ const GiftGuide = () => {
             <Styled.RejectButton
               onClick={async () => {
                 const result = await confirm(
-                  '선물 거절 시 보낸 분께 알림이 발송되며 결제가 자동 취소됩니다.거절하시겠습니까?',
+                  `선물 거절 시 보낸 분께 알림이 발송되며 결제가 자동 취소됩니다. 거절하시겠습니까?`,
                   {
                     cancel: '취소하기',
                     confirm: '거절하기',

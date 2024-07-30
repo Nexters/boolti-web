@@ -36,7 +36,7 @@ const Username = styled.p`
   }
 `;
 
-const Email = styled.span`
+const UserCode = styled.span`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
@@ -50,6 +50,6 @@ export default {
   ProfileImage,
   TextContainer,
   Username,
-  Email,
+  UserCode,
   DefaultProfileImage,
 };

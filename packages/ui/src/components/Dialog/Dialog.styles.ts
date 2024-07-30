@@ -2,6 +2,10 @@ import styled from '@emotion/styled';
 
 import { mq_lg } from '../../systems';
 
+interface DialogContentProps {
+  padding?: string;
+}
+
 const DIALOG_WIDTH = '450px';
 
 const DimmedArea = styled.div`
@@ -18,28 +22,73 @@ const DimmedArea = styled.div`
   }
 `;
 
-const Dialog = styled.div<{ isAuto: boolean; width?: string }>`
+const Dialog = styled.div<{
+  isAuto: boolean;
+  width?: string;
+  mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup';
+}>`
+  background-color: ${({ theme }) => theme.palette.grey.w};
   width: 100%;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  position: fixed;
-  bottom: 0;
-  left: 0;
+
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  `}
+
+  ${({ mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
+    border-radius: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+  `}
+
+  ${({ mobileType }) =>
+    mobileType === 'centerPopup' &&
+    `
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+  `}
 
   ${mq_lg} {
+    border-radius: 8px;
     width: ${({ isAuto, width }) => (isAuto ? 'auto' : width ?? DIALOG_WIDTH)};
     position: initial;
+    top: auto;
+    right: auto;
     bottom: auto;
     left: auto;
+    transform: none;
   }
 `;
 
-const DialogHeader = styled.div`
-  padding: 16px 24px 8px;
+const DialogHeader = styled.div<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
   position: relative;
   display: flex;
-  justify-content: space-between;
   align-items: center;
+
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
+    padding: 16px 24px 8px;
+    justify-content: space-between;
+  `}
+
+  ${({ theme, mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
+    height: 64px;
+    justify-content: center;
+    border-bottom: 1px solid ${theme.palette.grey.g10};
+  `}
 
   ${mq_lg} {
     padding: 16px 32px;
@@ -56,16 +105,34 @@ const DialogTitle = styled.h2`
   }
 `;
 
-const DialogCloseButton = styled.button`
+const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
   position: absolute;
-  top: 16px;
-  right: 24px;
   width: 24px;
   height: 24px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  color: ${({ theme }) => theme.palette.grey.g70};
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
+    top: 16px;
+    right: 24px;
+  `}
+
+  ${({ mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
+    top: 20px;
+    left: 20px;
+  `}
 
   ${mq_lg} {
     top: 17px;
@@ -73,12 +140,12 @@ const DialogCloseButton = styled.button`
   }
 `;
 
-const DialogContent = styled.div`
+const DialogContent = styled.div<DialogContentProps>`
   padding: 0 24px;
   overflow-y: auto;
 
   ${mq_lg} {
-    padding: 32px;
+    padding: ${({ padding }) => padding ?? '32px'};
   }
 `;
 

@@ -6,17 +6,29 @@ const Container = styled.div`
   margin: 40px 0 68px;
 `;
 
-const Empty = styled.div`
-  margin: 0 auto;
-  width: 1080px;
-  height: 770px;
+const EmptyContainer = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  white-space: pre-wrap;
+  padding: 60px 0;
+
+  ${mq_lg} {
+    padding: 100px 0;
+  }
+`;
+
+const EmptyTitle = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  margin-top: 16px;
   text-align: center;
-  ${({ theme }) => theme.typo.b4};
-  color: ${({ theme }) => theme.palette.grey.g40};
+  width: 200px;
+  white-space: pre-wrap;
+
+  ${mq_lg} {
+    width: auto;
+    ${({ theme }) => theme.typo.b4};
+  }
 `;
 
 const InfoContainer = styled.div`
@@ -184,9 +196,9 @@ const InputContainer = styled.div`
 
 const Input = styled.input`
   display: flex;
-  width: 100%;
+  width: 180px;
   max-width: 262px;
-  padding: 8px 72px 8px 16px;
+  padding: 8px 32px 8px 16px;
   justify-content: space-between;
   align-items: center;
   border-radius: 100px;
@@ -201,6 +213,11 @@ const Input = styled.input`
   }
   &:placeholder-shown {
     color: ${({ theme }) => theme.palette.grey.g30};
+  }
+
+  ${mq_lg} {
+    width: 100%;
+    padding: 8px 72px 8px 16px;
   }
 `;
 
@@ -252,6 +269,7 @@ export default {
   ButtonContainer,
   FilterContainer,
   SummaryButtonContainer,
-  Empty,
+  EmptyContainer,
+  EmptyTitle,
   TableContainer,
 };

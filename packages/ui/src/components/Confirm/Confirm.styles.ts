@@ -32,12 +32,16 @@ const Confirm = styled.div`
 `;
 
 const ConfirmMessage = styled.div`
+  word-break: keep-all;
   text-align: center;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 24px;
 
   ${mq_lg} {
+    word-break: break-all;
+    white-space: pre-wrap;
+    text-align: left;
     ${({ theme }) => theme.typo.b3};
     margin-bottom: 32px;
   }

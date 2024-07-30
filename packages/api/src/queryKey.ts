@@ -29,12 +29,9 @@ import {
   SuperAdminShowStatus,
   TicketSalesInfoResponse,
 } from './types/adminShow';
-import {
-  BankAccountListResponse,
-  SettlementAccountInfoResponse,
-  UserProfileSummaryResponse,
-} from './types/users';
+import { BankAccountListResponse, UserProfileSummaryResponse } from './types/users';
 import { GiftInfoResponse } from './types/gift';
+import { HostListItem, HostListResponse } from './types/host';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -208,11 +205,6 @@ export const showQueryKeys = createQueryKeys('show', {
 });
 
 export const userQueryKeys = createQueryKeys('user', {
-  accountInfo: {
-    queryKey: null,
-    queryFn: () =>
-      fetcher.get<SettlementAccountInfoResponse>(`web/v1/host/users/me/settlement-account-infos`),
-  },
   summary: {
     queryKey: null,
     queryFn: () => fetcher.get<UserProfileSummaryResponse>(`web/v1/host/users/me/summaries`),
@@ -230,10 +222,22 @@ export const giftQueryKeys = createQueryKeys('gift', {
   }),
 });
 
+export const hostQueryKeys = createQueryKeys('host', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListResponse>(`web/v1/shows/${showId}/hosts`),
+  }),
+  me: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<HostListItem>(`web/v1/shows/${showId}/hosts/me`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
   giftQueryKeys,
+  hostQueryKeys,
 );

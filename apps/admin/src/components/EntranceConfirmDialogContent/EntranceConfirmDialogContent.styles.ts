@@ -2,7 +2,9 @@ import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
+  position: relative;
   height: 100vh;
+  width: 100%;
   padding: 40px 0 60px 0;
   overflow-y: auto;
   &::-webkit-scrollbar {
@@ -11,12 +13,13 @@ const Container = styled.div`
 
   ${mq_lg} {
     padding: 0;
+    width: auto;
     height: 60vh;
   }
 `;
 
 const MobileHeader = styled.div`
-  position: absolute;
+  position: fixed;
   background: ${({ theme }) => theme.palette.grey.w};
   top: 0;
   left: 0;
@@ -55,7 +58,10 @@ const CloseButton = styled.button`
 const Title = styled.h2`
   ${({ theme }) => theme.typo.h1};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 2px;
+  margin: 52px 0 2px;
+  ${mq_lg} {
+    margin-top: 0;
+  }
 `;
 
 const Description = styled.h2`
