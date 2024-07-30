@@ -55,7 +55,7 @@ const NameButton = styled.button`
   svg {
     width: 24px;
     height: 24px;
-    stroke: ${({ theme }) => theme.palette.grey.g60};
+    color: ${({ theme }) => theme.palette.grey.g60};
   }
 `;
 
