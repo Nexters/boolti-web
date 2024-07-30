@@ -67,6 +67,11 @@ const ShowName = styled.h2<ShowNameProps>`
   transition:
     font-size 0.1s ease-in-out,
     margin 0.1s ease-in-out;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   ${mq_lg} {
     padding: 0;
@@ -142,6 +147,7 @@ const AuthorSettingButton = styled(Button)`
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: none;
   margin-right: 6px;
+  min-width: 116px;
 
   path {
     stroke: ${({ theme }) => theme.palette.grey.g90};
