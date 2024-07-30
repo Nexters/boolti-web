@@ -56,7 +56,7 @@ const DropdownMenuItemButton = styled.button`
   &:hover {
     background-color: ${({ theme }) => theme.palette.grey.g10};
   }
-`
+`;
 
 export default {
   DropdownContainer,

@@ -154,7 +154,9 @@ const ShowSettlementPage = () => {
                       readOnly={isSettlementStarted(lastSettlementEvent?.settlementEventType)}
                       onChange={async (event) => {
                         if (event.target.files?.[0]) {
-                          await uploadBankAccountCopyPhotoMutation.mutateAsync(event.target.files[0]);
+                          await uploadBankAccountCopyPhotoMutation.mutateAsync(
+                            event.target.files[0],
+                          );
                           await refetchSettlementInfo();
                         }
                       }}

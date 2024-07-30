@@ -9,7 +9,14 @@ interface LayoutProps {
   headerContainerStyle?: React.CSSProperties;
 }
 
-const Layout = ({ children, header, headerMenu, banner, layoutStyle, headerContainerStyle }: LayoutProps) => {
+const Layout = ({
+  children,
+  header,
+  headerMenu,
+  banner,
+  layoutStyle,
+  headerContainerStyle,
+}: LayoutProps) => {
   return (
     <Styled.Layout style={layoutStyle}>
       {header && (

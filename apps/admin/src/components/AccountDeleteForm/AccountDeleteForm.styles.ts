@@ -1,5 +1,5 @@
-import { mq_lg } from '@boolti/ui'
-import styled from '@emotion/styled'
+import { mq_lg } from '@boolti/ui';
+import styled from '@emotion/styled';
 
 const AccountDeleteForm = styled.form`
   padding: 24px 0;
@@ -7,14 +7,14 @@ const AccountDeleteForm = styled.form`
   ${mq_lg} {
     padding: 0;
   }
-`
+`;
 
 const AccountDeleteFormDescription = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 12px;
   line-height: 24px;
-`
+`;
 
 const AccountDeleteFormTextArea = styled.textarea`
   width: 100%;
@@ -43,18 +43,18 @@ const AccountDeleteFormTextArea = styled.textarea`
   &::placeholder {
     color: ${({ theme }) => theme.palette.grey.g30};
   }
-`
+`;
 
 const AccountDeleteFormButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   margin-top: 32px;
-`
+`;
 
 export default {
   AccountDeleteForm,
   AccountDeleteFormDescription,
   AccountDeleteFormTextArea,
   AccountDeleteFormButtonWrapper,
-}
+};

@@ -31,13 +31,13 @@ const ProfileDropdown = styled.div`
   ${mq_lg} {
     display: block;
   }
-`
+`;
 
 const ProfileDropdownMobile = styled.div`
   ${mq_lg} {
     display: none;
   }
-`
+`;
 
 const Container = styled.main`
   min-height: calc(100vh - 64px - 274px);
@@ -84,7 +84,7 @@ const HeaderMenu = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
   box-shadow: 0 4px 4px 0 ${({ theme }) => theme.palette.shadow};
   z-index: 1;
-  
+
   ${mq_lg} {
     display: none;
   }
@@ -99,7 +99,7 @@ const HeaderMenuItemButton = styled.button`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
   cursor: pointer;
-`
+`;
 
 export default {
   Logo,

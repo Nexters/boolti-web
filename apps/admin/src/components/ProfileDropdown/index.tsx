@@ -51,13 +51,15 @@ const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDrop
   const dropdownOpen = open ?? isOpen;
 
   return (
-    <Styled.DropdownContainer onClick={() => {
-      onClick?.()
+    <Styled.DropdownContainer
+      onClick={() => {
+        onClick?.();
 
-      if (disabledDropdown) return;
+        if (disabledDropdown) return;
 
-      toggleDropdown()
-    }}>
+        toggleDropdown();
+      }}
+    >
       <Styled.UserProfileImageWrapper>
         {image ? <Styled.UserProfileImage src={image} alt="유저 프로필 이미지" /> : <ProfileSVG />}
       </Styled.UserProfileImageWrapper>
@@ -73,7 +75,7 @@ const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDrop
                 isAuto: true,
                 contentPadding: '0',
                 mobileType: 'fullPage',
-              })
+              });
             }}
           >
             <SettingIcon /> 설정

@@ -1,9 +1,4 @@
-import {
-  useLogout,
-  useSettlementBanners,
-  useShowList,
-  useUserSummary,
-} from '@boolti/api';
+import { useLogout, useSettlementBanners, useShowList, useUserSummary } from '@boolti/api';
 import { BooltiLogo, ChevronRightIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
 import { Footer, useConfirm, useDialog } from '@boolti/ui';
 
@@ -63,9 +58,14 @@ const HomePage = () => {
                 <ProfileDropdown image={userSummaryData?.imagePath} />
               </Styled.ProfileDropdown>
               <Styled.ProfileDropdownMobile>
-                <ProfileDropdown image={userSummaryData?.imagePath} open={profileDropdownOpen} disabledDropdown onClick={() => {
-                  setProfileDropdownOpen(prev => !prev);
-                }} />
+                <ProfileDropdown
+                  image={userSummaryData?.imagePath}
+                  open={profileDropdownOpen}
+                  disabledDropdown
+                  onClick={() => {
+                    setProfileDropdownOpen((prev) => !prev);
+                  }}
+                />
               </Styled.ProfileDropdownMobile>
             </>
           }
@@ -84,7 +84,7 @@ const HomePage = () => {
                     isAuto: true,
                     contentPadding: '0',
                     mobileType: 'fullPage',
-                  })
+                  });
                 }}
               >
                 <SettingIcon /> 설정
