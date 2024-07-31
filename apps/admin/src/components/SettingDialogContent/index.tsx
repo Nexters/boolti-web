@@ -29,7 +29,11 @@ const AppleIcon = () => {
   );
 };
 
-const SettingDialogContent = () => {
+interface SettingDialogContentProps {
+  onDeleteAccount?: () => void;
+}
+
+const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) => {
   const theme = useTheme();
 
   const accountDeleteDialog = useDialog();
@@ -101,7 +105,10 @@ const SettingDialogContent = () => {
               content: (
                 <AccountDeleteForm
                   oauthType={userSummary?.oauthType}
-                  onClose={accountDeleteDialog.close}
+                  onClose={() => {
+                    onDeleteAccount?.();
+                    accountDeleteDialog.close();
+                  }}
                 />
               ),
               mobileType: 'centerPopup',
