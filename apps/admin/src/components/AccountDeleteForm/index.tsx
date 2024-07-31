@@ -35,7 +35,6 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
   const submitHandler = async (data: AccountDeleteFormInputs) => {
     let appleIdAuthorizationCode: string | undefined = undefined;
 
-    // TODO: 애플 로그인 시 탈퇴 로직 작성
     if (oauthType === 'APPLE') {
       const appleAuthData = await window.AppleID?.auth.signIn();
 
