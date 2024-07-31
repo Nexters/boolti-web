@@ -14,6 +14,11 @@ const AccountDeleteFormDescription = styled.p`
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 12px;
   line-height: 24px;
+  text-align: center;
+
+  ${mq_lg} {
+    text-align: left;
+  }
 `;
 
 const AccountDeleteFormTextArea = styled.textarea`
@@ -50,6 +55,16 @@ const AccountDeleteFormButtonWrapper = styled.div`
   justify-content: flex-end;
   gap: 8px;
   margin-top: 32px;
+
+  button {
+    flex: 1;
+  }
+
+  ${mq_lg} {
+    button {
+      flex: initial;
+    }
+  }
 `;
 
 export default {

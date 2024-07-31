@@ -67,7 +67,7 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
         <Button
           type="button"
           colorTheme="line"
-          size="medium"
+          size="bold"
           onClick={() => {
             onClose();
             reset();
@@ -75,7 +75,7 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
         >
           취소하기
         </Button>
-        <Button type="submit" colorTheme="primary" size="medium" disabled={!isValid}>
+        <Button type="submit" colorTheme="primary" size="bold" disabled={!isValid}>
           삭제하기
         </Button>
       </Styled.AccountDeleteFormButtonWrapper>

@@ -3,6 +3,7 @@ import Styled from './SettingDialogContent.styles';
 import { Button, TextField, useDialog } from '@boolti/ui';
 import AccountDeleteForm from '../AccountDeleteForm';
 import { useUserSummary } from '@boolti/api';
+import { useTheme } from '@emotion/react';
 
 const KakaoIcon = () => {
   return (
@@ -29,6 +30,8 @@ const AppleIcon = () => {
 };
 
 const SettingDialogContent = () => {
+  const theme = useTheme();
+
   const accountDeleteDialog = useDialog();
 
   const { data: userSummary } = useUserSummary();
@@ -54,10 +57,11 @@ const SettingDialogContent = () => {
             size="big"
             id="code"
             width="100%"
-            value={userSummary?.userCode}
+            value={`#${userSummary?.userCode}`}
             onChange={(event) => {
               event.preventDefault();
             }}
+            style={{ caretColor: 'transparent' }}
           />
         </Styled.SettingContentFormControl>
         <Styled.SettingContentFormControl>
@@ -65,7 +69,7 @@ const SettingDialogContent = () => {
           <Styled.ConnectedServiceList>
             {userSummary?.oauthType === 'KAKAO' && (
               <Styled.ConnectedServiceChip>
-                <KakaoIcon /> 카카오톡
+                <KakaoIcon /> 카카오
               </Styled.ConnectedServiceChip>
             )}
             {userSummary?.oauthType === 'APPLE' && (
@@ -89,6 +93,7 @@ const SettingDialogContent = () => {
           </Styled.SettingDescriptionItem>
         </Styled.SettingDescriptionList>
         <Button
+          style={{ background: theme.palette.status.error }}
           colorTheme="primary"
           size="x-small"
           onClick={() => {
