@@ -71,7 +71,7 @@ const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDrop
             onClick={() => {
               settingDialog.open({
                 title: '설정',
-                content: <SettingDialogContent />,
+                content: <SettingDialogContent onDeleteAccount={settingDialog.close} />,
                 isAuto: true,
                 contentPadding: '0',
                 mobileType: 'fullPage',

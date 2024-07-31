@@ -83,6 +83,7 @@ const HeaderMenu = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.w};
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
   box-shadow: 0 4px 4px 0 ${({ theme }) => theme.palette.shadow};
+  padding-bottom: 8px;
   z-index: 1;
 
   ${mq_lg} {

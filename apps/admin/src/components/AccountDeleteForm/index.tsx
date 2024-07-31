@@ -35,7 +35,6 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
   const submitHandler = async (data: AccountDeleteFormInputs) => {
     let appleIdAuthorizationCode: string | undefined = undefined;
 
-    // TODO: 애플 로그인 시 탈퇴 로직 작성
     if (oauthType === 'APPLE') {
       const appleAuthData = await window.AppleID?.auth.signIn();
 
@@ -67,7 +66,7 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
         <Button
           type="button"
           colorTheme="line"
-          size="medium"
+          size="bold"
           onClick={() => {
             onClose();
             reset();
@@ -75,7 +74,7 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
         >
           취소하기
         </Button>
-        <Button type="submit" colorTheme="primary" size="medium" disabled={!isValid}>
+        <Button type="submit" colorTheme="primary" size="bold" disabled={!isValid}>
           삭제하기
         </Button>
       </Styled.AccountDeleteFormButtonWrapper>

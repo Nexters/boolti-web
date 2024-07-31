@@ -93,6 +93,8 @@ const DialogHeader = styled.div<{ mobileType: 'bottomSheet' | 'fullPage' | 'cent
   ${mq_lg} {
     padding: 16px 32px;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g30};
+    justify-content: initial;
+    height: auto;
   }
 `;
 
@@ -137,6 +139,7 @@ const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage'
   ${mq_lg} {
     top: 17px;
     right: 32px;
+    left: initial;
   }
 `;
 
