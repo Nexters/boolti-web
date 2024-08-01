@@ -4,6 +4,7 @@ import { Button, TextField, useDialog } from '@boolti/ui';
 import AccountDeleteForm from '../AccountDeleteForm';
 import { useUserSummary } from '@boolti/api';
 import { useTheme } from '@emotion/react';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const KakaoIcon = () => {
   return (
@@ -39,6 +40,8 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
   const accountDeleteDialog = useDialog();
 
   const { data: userSummary } = useUserSummary();
+
+  useBodyScrollLock();
 
   return (
     <Styled.SettingDialogContent>
