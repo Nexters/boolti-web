@@ -94,7 +94,7 @@ const ShowEnterancePage = () => {
       ) : (
         <Styled.Container>
           <Styled.InfoContainer>
-            <Styled.InfoText>입장코드 : {managerCode}</Styled.InfoText>
+            <Styled.InfoText>입장 코드 : {managerCode}</Styled.InfoText>
             <Styled.QuestionTextButton
               onClick={() => {
                 open({
@@ -104,7 +104,7 @@ const ShowEnterancePage = () => {
                 });
               }}
             >
-              인증 코드는 어떻게 사용할 수 있나요?
+              입장 코드는 어떻게 사용할 수 있나요?
             </Styled.QuestionTextButton>
           </Styled.InfoContainer>
           <Styled.SummaryContainer>
