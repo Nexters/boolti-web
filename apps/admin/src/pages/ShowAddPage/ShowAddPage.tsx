@@ -67,7 +67,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       },
       salesStartTime: `${showTicketForm.getValues('startDate')}T00:00:00.000Z`,
       salesEndTime: `${showTicketForm.getValues('endDate')}T23:59:59.000Z`,
-      ticketNotice: `${showTicketForm.getValues('ticketNotice')}`,
+      ticketNotice: `${showTicketForm.getValues('ticketNotice') ?? ''}`,
       salesTickets: salesTicketList.map((ticket) => ({
         ticketName: ticket.name,
         price: ticket.price,

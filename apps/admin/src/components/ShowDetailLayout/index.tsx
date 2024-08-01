@@ -1,12 +1,11 @@
 import {
-  useLogout,
   useMyHostInfo,
   useShowLastSettlementEvent,
   useShowSettlementInfo,
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Setting } from '@boolti/icon/src/components/Setting.tsx';
-import { TextButton, useDialog } from '@boolti/ui';
+import { useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -17,12 +16,12 @@ import { HREF, PATH } from '~/constants/routes';
 import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
-import { useAuthAtom } from '~/atoms/useAuthAtom.ts';
 import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
 import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
+import ProfileDropdown from '../ProfileDropdown/index.tsx';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -49,7 +48,6 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     initialInView: true,
   });
   const theme = useTheme();
-  const { removeToken } = useAuthAtom();
   const navigate = useNavigate();
   const params = useParams<{ showId: string }>();
   const matchInfoTab = useMatch(PATH.SHOW_INFO);
@@ -65,11 +63,6 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
   const { data: myHostInfoData } = useMyHostInfo(showId);
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
   const { data: settlementInfo } = useShowSettlementInfo(showId);
-  const logoutMutation = useLogout({
-    onSuccess: () => {
-      removeToken();
-    },
-  });
 
   const tooltipStyle = {
     color: theme.palette.grey.w,
@@ -135,22 +128,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                   </Styled.BackButton>
                 </Styled.HeaderLeft>
               }
-              right={
-                <TextButton
-                  size="regular"
-                  colorTheme="netural"
-                  onClick={async () => {
-                    if (onClickMiddleware && !(await onClickMiddleware())) {
-                      return;
-                    }
-
-                    await logoutMutation.mutateAsync();
-                    navigate(PATH.LOGIN);
-                  }}
-                >
-                  로그아웃
-                </TextButton>
-              }
+              right={<ProfileDropdown image={myHostInfoData?.imagePath} />}
             />
             <Styled.HeaderContent>
               <Styled.ShowNameWrapper>
@@ -254,7 +232,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                       <Tooltip
                         content={
                           settlementTooltipText[
-                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
+                          lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
                           ]
                         }
                         anchorSelect="#settlement-page-tooltip"
