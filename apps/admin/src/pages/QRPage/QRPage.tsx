@@ -27,7 +27,6 @@ const QRPage = () => {
           backgroundColor: theme.palette.grey.g00,
         }}
         headerContainerStyle={{
-          backgroundColor: theme.palette.grey.g00,
           borderColor: theme.palette.grey.g20,
         }}
         header={
