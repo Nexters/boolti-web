@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { animated } from '@react-spring/web';
+import { mq_lg } from '../../systems';
 
 interface DrawerProps {
   width?: string;
@@ -9,13 +10,17 @@ const DimmedArea = styled(animated.div)`
   position: fixed;
   inset: 0;
   background-color: ${({ theme }) => theme.palette.dim.dialog};
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   z-index: 999;
+
+  ${mq_lg} {
+    display: flex;
+  }
 `;
 
-const Drawer = styled(animated.div)<DrawerProps>`
+const Drawer = styled(animated.div) <DrawerProps>`
   position: fixed;
   top: 0;
   right: 0;
@@ -24,6 +29,11 @@ const Drawer = styled(animated.div)<DrawerProps>`
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: -12px 0px 20px 0px ${({ theme }) => theme.palette.shadow};
   z-index: 1000;
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+  }
 `;
 
 const DrawerHeader = styled.div`
