@@ -43,7 +43,7 @@ export const instance = ky.create({
     afterResponse: [
       async (request, options, response) => {
         // access token이 만료되었을 때, refresh token으로 새로운 access token을 발급받는다.
-        if (!response.ok && response.status === 401) {
+        if (!response.ok && response.status === 401 && !request.url.includes('logout')) {
           try {
             const { accessToken, refreshToken } = await postRefreshToken();
 

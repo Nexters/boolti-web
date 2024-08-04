@@ -1,4 +1,4 @@
-import { useLogout, useUserSummary } from '@boolti/api';
+import { queryKeys, useLogout, useQueryClient, useUserSummary } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
 import { useTheme } from '@emotion/react';
 import { useAtomValue } from 'jotai';
@@ -26,12 +26,9 @@ const Header = () => {
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
-  const logout = useLogout({
-    onSuccess: () => {
-      removeToken();
-    },
-  });
+  const logoutMutation = useLogout();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const [isExpanded, setIsExpanded] = useState(false);
   const { data } = useUserSummary({ enabled: isLogin() });
@@ -39,7 +36,11 @@ const Header = () => {
 
   const onClickAuthButton = async () => {
     if (isLogin()) {
-      await logout.mutateAsync();
+      await logoutMutation.mutateAsync();
+
+      removeToken();
+      queryClient.removeQueries({ ...queryKeys.user.summary });
+
       return;
     }
 
