@@ -116,11 +116,18 @@ export interface ReservationSummaryResponse {
 }
 
 export type ShowSalesTicketResponse = {
+  /** 판매 티켓 ID */
   id: number;
+  /** 티켓 이름 */
   ticketName: string;
+  /** 티켓 가격(장당) */
   price: number;
+  /** 남은 티켓 수량. 재고 */
   quantity: number;
+  /** 총 티켓 수량 */
   totalForSale: number;
+  /** 최소 한번 이상 판매된 티켓이 있는지 여부 */
+  soldAtLeastOnce: boolean;
 }[];
 
 export type ShowInvitationTicketResponse = {
