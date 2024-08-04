@@ -21,6 +21,12 @@ const UserProfileImageWrapper = styled.div`
   }
 `;
 
+const UserProfileIconWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const UserProfileImage = styled.img`
   border-radius: 50%;
   width: 100%;
@@ -63,6 +69,7 @@ const DropdownMenuItemButton = styled.button`
 `;
 
 export default {
+  UserProfileIconWrapper,
   DropdownContainer,
   UserProfileImageWrapper,
   UserProfileImage,

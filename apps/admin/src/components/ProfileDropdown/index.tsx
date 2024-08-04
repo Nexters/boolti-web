@@ -63,7 +63,9 @@ const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDrop
       <Styled.UserProfileImageWrapper>
         {image ? <Styled.UserProfileImage src={image} alt="유저 프로필 이미지" /> : <ProfileSVG />}
       </Styled.UserProfileImageWrapper>
-      {dropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+      <Styled.UserProfileIconWrapper className="icon-wrapper">
+        {dropdownOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+      </Styled.UserProfileIconWrapper>
       {dropdownOpen && !disabledDropdown && (
         <Styled.DropdownMenuWrapper>
           <Styled.DropdownMenuItemButton

@@ -106,7 +106,7 @@ const InternalLink = styled(Link)`
 const DropDownContainer = styled.div`
   margin-left: auto;
 
-  svg {
+  .icon-wrapper > svg {
     color: ${({ theme }) => theme.palette.grey.w};
   }
 `;
