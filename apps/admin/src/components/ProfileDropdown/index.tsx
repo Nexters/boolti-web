@@ -1,4 +1,4 @@
-import { useLogout } from '@boolti/api';
+import { queryKeys, useLogout, useQueryClient } from '@boolti/api';
 import { ChevronDownIcon, ChevronUpIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
 import { useConfirm, useDialog, useDropdown } from '@boolti/ui/src/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -39,11 +39,8 @@ const ProfileSVG = () => (
 const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDropdownProps) => {
   const { isOpen, toggleDropdown } = useDropdown();
   const { removeToken } = useAuthAtom();
-  const logoutMutation = useLogout({
-    onSuccess: () => {
-      removeToken();
-    },
-  });
+  const queryClient = useQueryClient();
+  const logoutMutation = useLogout();
   const navigate = useNavigate();
   const confirm = useConfirm();
   const settingDialog = useDialog();
@@ -91,6 +88,10 @@ const ProfileDropdown = ({ image, open, disabledDropdown, onClick }: ProfileDrop
               });
               if (result) {
                 await logoutMutation.mutateAsync();
+
+                removeToken();
+                queryClient.removeQueries({ ...queryKeys.user.summary });
+
                 navigate(PATH.INDEX, { replace: true });
               }
             }}

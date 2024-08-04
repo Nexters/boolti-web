@@ -35,6 +35,8 @@ const postKakaoToken = ({ code }: PostKakaoTokenRequest) => {
 };
 
 const useKakaoToken = () =>
-  useMutation(({ code }: PostKakaoTokenRequest) => postKakaoToken({ code }), { retry: false });
+  useMutation(({ code }: PostKakaoTokenRequest) => postKakaoToken({ code }), {
+    retry: false,
+  });
 
 export default useKakaoToken;

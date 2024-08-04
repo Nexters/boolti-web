@@ -1,6 +1,5 @@
 import { LOCAL_STORAGE } from '@boolti/api';
-import { useAtom } from 'jotai';
-import { atomWithStorage, RESET } from 'jotai/utils';
+import { atom, useAtom } from 'jotai';
 
 const storageMethod = {
   getItem: (key: string, initialValue: string | null) => {
@@ -13,15 +12,11 @@ const storageMethod = {
     window.localStorage.removeItem(key);
   },
 };
-const accessTokenAtom = atomWithStorage<string | null>(
-  LOCAL_STORAGE.ACCESS_TOKEN,
-  window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN),
-  storageMethod,
+const accessTokenAtom = atom<string | null>(
+  storageMethod.getItem(LOCAL_STORAGE.ACCESS_TOKEN, null),
 );
-const refreshTokenAtom = atomWithStorage<string | null>(
-  LOCAL_STORAGE.REFRESH_TOKEN,
-  window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
-  storageMethod,
+const refreshTokenAtom = atom<string | null>(
+  storageMethod.getItem(LOCAL_STORAGE.REFRESH_TOKEN, null),
 );
 
 export const useAuthAtom = () => {
@@ -29,13 +24,17 @@ export const useAuthAtom = () => {
   const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
 
   const setToken = (accessToken: string, refreshToken: string) => {
+    storageMethod.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
+    storageMethod.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
     setAccessToken(accessToken);
     setRefreshToken(refreshToken);
   };
 
   const removeToken = () => {
-    setAccessToken(RESET);
-    setRefreshToken(RESET);
+    storageMethod.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+    storageMethod.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
+    setAccessToken(null);
+    setRefreshToken(null);
   };
 
   const isLogin = () => !!accessToken && !!refreshToken;
