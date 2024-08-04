@@ -1,4 +1,11 @@
-import { useLogout, useSettlementBanners, useShowList, useUserSummary } from '@boolti/api';
+import {
+  queryKeys,
+  useLogout,
+  useQueryClient,
+  useSettlementBanners,
+  useShowList,
+  useUserSummary,
+} from '@boolti/api';
 import { BooltiLogo, ChevronRightIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
 import { Footer, useConfirm, useDialog } from '@boolti/ui';
 
@@ -22,11 +29,8 @@ const bannerDescription = {
 
 const HomePage = () => {
   const { removeToken } = useAuthAtom();
-  const logoutMutation = useLogout({
-    onSuccess: () => {
-      removeToken();
-    },
-  });
+  const logoutMutation = useLogout();
+  const queryClient = useQueryClient();
 
   const settingDialog = useDialog();
   const confirm = useConfirm();
@@ -98,6 +102,10 @@ const HomePage = () => {
                   });
                   if (result) {
                     await logoutMutation.mutateAsync();
+
+                    removeToken();
+                    queryClient.removeQueries({ ...queryKeys.user.summary });
+
                     navigate(PATH.INDEX, { replace: true });
                   }
                 }}

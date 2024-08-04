@@ -1,7 +1,7 @@
 import { Button } from '@boolti/ui';
 import Styled from './AccountDeleteForm.styles';
 import { useForm } from 'react-hook-form';
-import { useDeleteMe, useLogout } from '@boolti/api';
+import { queryKeys, useDeleteMe, useLogout, useQueryClient } from '@boolti/api';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
@@ -20,11 +20,8 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
 
   const deleteMeMutation = useDeleteMe();
   const { removeToken } = useAuthAtom();
-  const logoutMutation = useLogout({
-    onSuccess: () => {
-      removeToken();
-    },
-  });
+  const queryClient = useQueryClient();
+  const logoutMutation = useLogout();
   const {
     register,
     handleSubmit,
@@ -41,11 +38,15 @@ const AccountDeleteForm = ({ oauthType, onClose }: AccountDeleteFormProps) => {
       appleIdAuthorizationCode = appleAuthData?.authorization.code;
     }
 
-    await deleteMeMutation.mutateAsync({
+    deleteMeMutation.mutate({
       reason: data.reason,
       appleIdAuthorizationCode,
     });
+
     await logoutMutation.mutateAsync();
+
+    removeToken();
+    queryClient.removeQueries({ ...queryKeys.user.summary });
 
     onClose();
     navigate(PATH.INDEX);

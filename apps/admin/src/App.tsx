@@ -34,6 +34,7 @@ import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
 import GiftRegisterPage from './pages/GiftRegisterPage';
 import GiftIntroPage from './pages/GiftIntroPage';
 import { useAuthAtom } from './atoms/useAuthAtom';
+import GlobalErrorBoundary from './components/ErrorBoundary/GlobalErrorBoundary';
 
 setDefaultOptions({ locale: ko });
 
@@ -138,6 +139,7 @@ const routes: RouteObject[] = [
         </BooltiUIProvider>
       </QueryClientProvider>
     ),
+    errorElement: <GlobalErrorBoundary />,
     children: [...publicRoutes, ...privateRoutes],
   },
 ];
