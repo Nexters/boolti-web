@@ -54,7 +54,7 @@ export const instance = ky.create({
 
             return ky(request);
           } catch (error) {
-            // throw new BooltiHTTPError(response, request, options);
+            throw new BooltiHTTPError(response, request, options);
           }
         }
 
