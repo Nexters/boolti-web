@@ -65,6 +65,28 @@ const ShowInfoPreview = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow-y: auto;
+
+  ${mq_lg} {
+    overflow-y: initial;
+  }
+`;
+
+const ShowInfoPreviewMobile = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  z-index: 999;
+  padding-bottom: 84px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
+
+  ${mq_lg} {
+    padding-bottom: 0;
+    display: none;
+  }
 `;
 
 const ShowInfoPreviewFrameContainer = styled.div`
@@ -102,12 +124,31 @@ const ShowPreview = styled.div`
 `;
 
 const ShowInfoPreviewFooter = styled.div`
-  height: 52px;
+  height: 84px;
   display: flex;
+  padding: 20px 16px;
+  gap: 8px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+
+  ${mq_lg} {
+    height: 52px;
+    padding: 0;
+    gap: 0;
+    background-color: none;
+
+    position: initial;
+    bottom: initial;
+    left: initial;
+    width: initial;
+  }
 `;
 
 const ShowInfoPreviewCloseButton = styled.button`
-  width: 220px;
+  flex: 1;
   height: 100%;
   background-color: ${({ theme }) => theme.palette.grey.g90};
   color: ${({ theme }) => theme.palette.grey.w};
@@ -116,6 +157,13 @@ const ShowInfoPreviewCloseButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border-radius: 4px;
+
+  ${mq_lg} {
+    width: 220px;
+    flex: initial;
+    border-radius: none;
+  }
 `;
 
 const ShowInfoPreviewSubmitButton = styled.button`
@@ -128,6 +176,11 @@ const ShowInfoPreviewSubmitButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  border-radius: 4px;
+
+  ${mq_lg} {
+    border-radius: none;
+  }
 `;
 
 export default {
@@ -140,6 +193,7 @@ export default {
   DeleteButton,
   ShowInfoPreviewContainer,
   ShowInfoPreview,
+  ShowInfoPreviewMobile,
   ShowInfoPreviewFrameContainer,
   ShowInfoPreviewFrame,
   ShowPreviewContainer,
