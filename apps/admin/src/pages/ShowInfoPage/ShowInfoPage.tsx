@@ -25,6 +25,7 @@ import Styled from './ShowInfoPage.styles';
 import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
+import Portal from '@boolti/ui/src/components/Portal';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
@@ -278,6 +279,56 @@ const ShowInfoPage = () => {
                 </Styled.ShowInfoPreviewFooter>
               </Styled.ShowInfoPreviewContainer>
             </Drawer>
+            {previewDrawerOpen && (
+              <Portal>
+                <Styled.ShowInfoPreviewMobile>
+                  <Styled.ShowInfoPreview>
+                    <ShowPreview
+                      show={{
+                        images: imageFiles.map((file) => file.preview),
+                        name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                        date: showInfoForm.watch('date')
+                          ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                          : '',
+                        startTime: showInfoForm.watch('startTime'),
+                        runningTime: showInfoForm.watch('runningTime'),
+                        salesStartTime: showSalesInfo
+                          ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                          : '',
+                        salesEndTime: showSalesInfo
+                          ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                          : '',
+                        placeName: showInfoForm.watch('placeName'),
+                        placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                        placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                        notice: showInfoForm.watch('notice'),
+                        hostName: showInfoForm.watch('hostName'),
+                        hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                      }}
+                      hasNoticePage
+                    />
+                  </Styled.ShowInfoPreview>
+                  <Styled.ShowInfoPreviewFooter>
+                    <Styled.ShowInfoPreviewCloseButton
+                      type="button"
+                      onClick={() => {
+                        setPreviewDrawerOpen(false);
+                      }}
+                    >
+                      닫기
+                    </Styled.ShowInfoPreviewCloseButton>
+                    <Styled.ShowInfoPreviewSubmitButton
+                      type="button"
+                      onClick={() => {
+                        showInfoForm.handleSubmit(onSubmit)();
+                      }}
+                    >
+                      저장하기
+                    </Styled.ShowInfoPreviewSubmitButton>
+                  </Styled.ShowInfoPreviewFooter>
+                </Styled.ShowInfoPreviewMobile>
+              </Portal>
+            )}
           </Styled.ShowInfoForm>
         </Styled.ShowInfoPage>
       )}
