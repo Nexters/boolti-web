@@ -15,6 +15,10 @@ import LoginPage from './pages/LoginPage';
 import SettlementPage from './pages/SettlementPage';
 import SideNavigation from './components/SideNavigation/SideNavigation';
 import Layout from './components/Layout/Layout';
+import InfoPage from './pages/InfoPage';
+import TicketPage from './pages/TicketPage';
+import PaymentPage from './pages/PatmentPage';
+import EntrancePage from './pages/EntrancePage';
 
 setDefaultOptions({ locale: ko });
 
@@ -68,6 +72,22 @@ const privateRoutes = [
       {
         path: PATH.INDEX,
         element: <HomePage />,
+      },
+      {
+        path: PATH.INFO,
+        element: <InfoPage />,
+      },
+      {
+        path: PATH.TICKET,
+        element: <TicketPage />,
+      },
+      {
+        path: PATH.PAYMENT,
+        element: <PaymentPage />,
+      },
+      {
+        path: PATH.ENTRANCE,
+        element: <EntrancePage />,
       },
       {
         path: PATH.SETTLEMENT,
