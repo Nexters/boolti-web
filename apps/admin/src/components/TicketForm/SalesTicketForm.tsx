@@ -28,11 +28,27 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
     totalForSale: false,
   });
 
+  const validatePrice = (price: string) => {
+    const parsedPrice = Number(price);
+    return parsedPrice >= 200 || parsedPrice === 0;
+  };
+
+  const handlePriceErrorMessage = (hasBlurred: boolean, price: string) => {
+    if (hasBlurred && (!price || !validatePrice(price))) {
+      return '0원 또는 200원 이상을 입력해 주세요.';
+    }
+    return '';
+  };
+
   return (
     <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
-      <Styled.TicketFormRow>
+      <Styled.TicketFormDescription>
         <Styled.Description>만들고 싶은 티켓 정보를 입력해 주세요.</Styled.Description>
-      </Styled.TicketFormRow>
+        <Styled.SubDescription>
+          * 퀵계좌이체 지원을 위해 유료 티켓은 200원 이상 입력이 필요합니다.{'\n'}* 무료 티켓 생성을
+          원하시면 0원을 입력해 주세요.
+        </Styled.SubDescription>
+      </Styled.TicketFormDescription>
       <Styled.TicketFormRow>
         <Styled.TicketFormContent>
           <Styled.TicketFormLabel>티켓 이름</Styled.TicketFormLabel>
@@ -65,15 +81,23 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
               placeholder="0"
               min={0}
               {...register('price', { required: true })}
+              onChange={(event) => {
+                register('price', {
+                  required: true,
+                  validate: validatePrice,
+                }).onChange(event);
+              }}
               onBlur={(event) => {
                 register('price', { required: true }).onBlur(event);
                 setHasBlurred((prev) => ({ ...prev, price: true }));
               }}
-              errorMessage={hasBlurred.price && !getValues('price') ? '필수 입력사항입니다.' : ''}
+              errorMessage={handlePriceErrorMessage(hasBlurred.price, getValues('price'))}
             />
             <Styled.TextFieldSuffix>원</Styled.TextFieldSuffix>
           </Styled.TextField>
         </Styled.TicketFormContent>
+      </Styled.TicketFormRow>
+      <Styled.TicketFormRow>
         <Styled.TicketFormContent>
           <Styled.TicketFormLabel>수량</Styled.TicketFormLabel>
           <Styled.TextField>
@@ -94,6 +118,7 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
           </Styled.TextField>
         </Styled.TicketFormContent>
       </Styled.TicketFormRow>
+
       <Styled.TicketFormButton>
         <Button type="submit" size="bold" colorTheme="primary" disabled={!isDirty || !isValid}>
           생성하기
