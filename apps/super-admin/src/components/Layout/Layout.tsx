@@ -1,7 +1,9 @@
+import { useLocation } from 'react-router-dom';
 import Styled from './Layout.styles';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  return <Styled.Container>{children}</Styled.Container>;
+  const { pathname } = useLocation();
+  return <Styled.Container path={pathname}>{children}</Styled.Container>;
 };
 
 export default Layout;

@@ -1,12 +1,16 @@
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
+import { PATH } from '~/constants/routes';
 
-const Container = styled.aside`
+interface SideNavigationContainerProps {
+  path: string;
+}
+const Container = styled.aside<SideNavigationContainerProps>`
   width: 220px;
   height: 100vh;
   background-color: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 0px 18px 0px #888d9d59;
-  display: flex;
+  display: ${({ path }) => (path === PATH.INDEX ? 'none' : 'flex')};
   flex-direction: column;
   position: fixed;
   top: 0;

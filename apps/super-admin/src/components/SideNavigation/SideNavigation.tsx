@@ -1,7 +1,9 @@
 import { ArrowLeftIcon } from '@boolti/icon';
 import Styled from './SideNavigation.styles';
+import { useLocation } from 'react-router-dom';
 
 const SideNavigation = () => {
+  const { pathname } = useLocation();
   const navigationItems = [
     {
       title: '공연 정보 관리',
@@ -24,7 +26,7 @@ const SideNavigation = () => {
   ];
 
   return (
-    <Styled.Container>
+    <Styled.Container path={pathname}>
       <Styled.Header>
         <Styled.ShowId>#C1DF3H</Styled.ShowId>
         <Styled.ShowTitle>
