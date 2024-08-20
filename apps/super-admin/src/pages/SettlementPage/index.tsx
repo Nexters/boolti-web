@@ -14,6 +14,7 @@ import { useParams } from 'react-router-dom';
 import SettlementStatementFormDialog from '~/components/SettlementStatement/SettlementStatementFormDialog';
 
 import Styled from './SettlementPage.styles';
+import PageLayout from '~/components/PageLayout/PageLayout';
 
 const SettlementPage = () => {
   const params = useParams<{ showId: string }>();
@@ -32,16 +33,11 @@ const SettlementPage = () => {
   const settlementDoneMutation = useAdminSettlementDone();
 
   return (
-    <Styled.SettlementPage>
-      <Styled.Breadcrumb>정산 관리 / 정산 내역서</Styled.Breadcrumb>
-      <Styled.PageHeader>
-        <Styled.PageTitle>정산 내역서</Styled.PageTitle>
-        <Styled.PageDescription>
-          공연 종료 후 수익이 있을 때만 생성하는 내역서 입니다.
-          <br />
-          신분증과 정산 계좌 정보, 통장 사본을 꼼꼼히 확인한 후 발송을 진행해 주세요.
-        </Styled.PageDescription>
-      </Styled.PageHeader>
+    <PageLayout
+      breadscrumb="정산 관리 / 정산 내역서"
+      title="정산 내역서"
+      description={`공연 종료 후 수익이 있을 때만 생성하는 내역서 입니다.\n신분증과 정산 계좌 정보, 통장 사본을 꼼꼼히 확인한 후 발송을 진행해 주세요.`}
+    >
       {adminSettlementEvent &&
         (adminSettlementEvent?.SEND !== null ||
           adminSettlementEvent?.REQUEST !== null ||
@@ -345,7 +341,7 @@ const SettlementPage = () => {
             </Button>
           </Styled.Section>
         )}
-    </Styled.SettlementPage>
+    </PageLayout>
   );
 };
 
