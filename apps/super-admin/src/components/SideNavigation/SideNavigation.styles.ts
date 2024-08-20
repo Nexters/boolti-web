@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
 
 interface SideNavigationContainerProps {
@@ -21,9 +21,10 @@ const Header = styled.header`
   padding: 16px 17px 16px 20px;
 `;
 
-const ShowId = styled.span`
+const ShowId = styled.p`
   ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  padding-bottom: 7px;
 `;
 
 const ShowTitle = styled.h1`
@@ -58,11 +59,20 @@ const MenuItemList = styled.ul`
 
 const MenuItem = styled.li``;
 
-const MenuLink = styled(Link)`
+const MenuLink = styled(NavLink)`
   display: block;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g60};
   padding: 4px 20px;
+
+  &:hover {
+    color: ${({ theme }) => theme.palette.primary.o1};
+  }
+
+  &.active {
+    ${({ theme }) => theme.typo.sh0};
+    color: ${({ theme }) => theme.palette.primary.o1};
+  }
 `;
 
 const Footer = styled.footer`

@@ -1,32 +1,35 @@
 import { ArrowLeftIcon } from '@boolti/icon';
+import { useLocation, useParams } from 'react-router-dom';
+import { HREF } from '~/constants/routes';
 import Styled from './SideNavigation.styles';
-import { useLocation } from 'react-router-dom';
 
 const SideNavigation = () => {
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const { showId = '' } = useParams();
+
   const navigationItems = [
     {
       title: '공연 정보 관리',
       children: [
-        { label: '공연 정보', link: '/' },
-        { label: '티켓 관리', link: '/' },
+        { label: '공연 정보', link: HREF.INFO(showId) },
+        { label: '티켓 관리', link: HREF.TICKET(showId) },
       ],
     },
     {
       title: '방문자 관리',
       children: [
-        { label: '결제 관리', link: '/' },
-        { label: '입장 관리', link: '/' },
+        { label: '결제 관리', link: HREF.PAYMENT(showId) },
+        { label: '입장 관리', link: HREF.ENTRANCE(showId) },
       ],
     },
     {
       title: '정산 관리',
-      children: [{ label: '정산 내역서', link: '/' }],
+      children: [{ label: '정산 내역서', link: HREF.SETTLEMENT(showId) }],
     },
   ];
 
   return (
-    <Styled.Container path={pathname}>
+    <Styled.Container path={location.pathname}>
       <Styled.Header>
         <Styled.ShowId>#C1DF3H</Styled.ShowId>
         <Styled.ShowTitle>
