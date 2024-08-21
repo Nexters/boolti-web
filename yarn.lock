@@ -12932,6 +12932,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.4"
     react-router-dom: "npm:^6.21.3"
+    react-select: "npm:^5.8.0"
     the-new-css-reset: "npm:^1.11.2"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.0.8"
