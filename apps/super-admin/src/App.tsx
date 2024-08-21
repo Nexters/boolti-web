@@ -17,7 +17,7 @@ import SideNavigation from './components/SideNavigation/SideNavigation';
 import Layout from './components/Layout/Layout';
 import InfoPage from './pages/InfoPage';
 import TicketPage from './pages/TicketPage';
-import PaymentPage from './pages/PatmentPage';
+import PaymentPage from './pages/PaymentPage';
 import EntrancePage from './pages/EntrancePage';
 
 setDefaultOptions({ locale: ko });
