@@ -5366,6 +5366,7 @@ __metadata:
     lodash.debounce: "npm:^4.0.8"
     qrcode.react: "npm:^3.1.0"
     react: "npm:^18.2.0"
+    react-daum-postcode: "npm:^3.1.3"
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"
     react-hook-form: "npm:^7.50.0"
@@ -11542,6 +11543,15 @@ __metadata:
   peerDependencies:
     react: ^16.3.0 || ^17.0.1 || ^18.0.0
   checksum: 10c0/5b4eb23eef564695f6db1d25b294ed31d5fa21ff4092c6a38e641f85cd10e3e0b50014366e3ac0f7cf772e73faaecd14614e5b11a5531336fa769dda8068ab59
+  languageName: node
+  linkType: hard
+
+"react-daum-postcode@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "react-daum-postcode@npm:3.1.3"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/72f05078e25df34d9196d573105c799bb85c7fd36f397af1f9edeec9b2aa1babd8ce90163f79b38fdcc7194d1b73b5df999fd3921fa8cc498fa7a05be755e955
   languageName: node
   linkType: hard
 
