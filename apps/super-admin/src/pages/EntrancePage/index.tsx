@@ -5,15 +5,22 @@ import { SearchIcon } from '@boolti/icon';
 import EntranceTable from '~/components/EntranceTable/EntranceTable';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import Styled from './EntrancePage.styles';
+import { useAdminEntranceSummary } from '@boolti/api';
 
 const EntrancePage = () => {
   const params = useParams<{ showId: string }>();
+  const showId = Number(params!.showId);
   const [searchText, setSearchText] = useState('');
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
   const [selectedTicketType, setSelectedTicketType] = useState<
     React.ComponentProps<typeof TicketTypeSelect>['value']
   >({ value: 'ALL', label: '티켓 전체' });
-
+  const { data: entranceSummary } = useAdminEntranceSummary(showId);
+  const {
+    notEnteredTicketCount = 0,
+    enteredTicketCount = 0,
+    totalTicketCount = 0,
+  } = entranceSummary ?? {};
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -23,7 +30,9 @@ const EntrancePage = () => {
     setSearchText('');
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(entranceSummary);
+  }, [entranceSummary]);
 
   return (
     <PageLayout
@@ -35,15 +44,15 @@ const EntrancePage = () => {
       <Styled.SummaryContainer>
         <Styled.Summary>
           <Styled.SummaryLabel>미입장 관객</Styled.SummaryLabel>
-          <Styled.SummaryValue>20명</Styled.SummaryValue>
+          <Styled.SummaryValue>{notEnteredTicketCount.toLocaleString()}명</Styled.SummaryValue>
         </Styled.Summary>
         <Styled.Summary>
           <Styled.SummaryLabel>입장 관객</Styled.SummaryLabel>
-          <Styled.SummaryValue>100명</Styled.SummaryValue>
+          <Styled.SummaryValue>{enteredTicketCount.toLocaleString()}명</Styled.SummaryValue>
         </Styled.Summary>
         <Styled.Summary>
           <Styled.SummaryLabel>방문 예정 관객</Styled.SummaryLabel>
-          <Styled.SummaryValue>120명</Styled.SummaryValue>
+          <Styled.SummaryValue>{totalTicketCount.toLocaleString()}명</Styled.SummaryValue>
         </Styled.Summary>
       </Styled.SummaryContainer>
       <Styled.Filter>

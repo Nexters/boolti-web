@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
@@ -99,10 +99,6 @@ const HomePage = () => {
     navigate(`?showNameOrHostName=${value}`);
   };
 
-  useEffect(() => {
-    console.log(showNameOrHostName);
-  }, [showNameOrHostName]);
-
   return (
     <Layout>
       <Header
@@ -182,8 +178,6 @@ const HomePage = () => {
                   <Search
                     style={{
                       width: 260,
-                      // borderRadius: 40,
-                      // border: `1px solid ${theme.palette.grey.g20}`,
                     }}
                     value={searchText}
                     size="large"
@@ -209,10 +203,11 @@ const HomePage = () => {
                       );
                       return (
                         <Card
+                          key={id}
                           style={{ width: 'calc(50% - 8px)', cursor: 'pointer' }}
                           onClick={() => {
                             navigate({
-                              pathname: generatePath(PATH.SETTLEMENT, { showId: id.toString() }),
+                              pathname: generatePath(PATH.INFO, { showId: id.toString() }),
                             });
                           }}
                         >

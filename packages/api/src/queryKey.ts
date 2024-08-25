@@ -114,6 +114,11 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     queryKey: [showId],
     queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
   }),
+  entranceSummary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<EntranceSummaryResponse>(`sa-api/v1/shows/${showId}/entrance-summaries`),
+  }),
 });
 
 export const showQueryKeys = createQueryKeys('show', {
