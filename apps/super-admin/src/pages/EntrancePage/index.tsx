@@ -5,7 +5,7 @@ import { SearchIcon } from '@boolti/icon';
 import EntranceTable from '~/components/EntranceTable/EntranceTable';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import Styled from './EntrancePage.styles';
-import { useAdminEntranceSummary } from '@boolti/api';
+import { useAdminEntranceInfo, useAdminEntranceSummary } from '@boolti/api';
 
 const EntrancePage = () => {
   const params = useParams<{ showId: string }>();
@@ -21,6 +21,8 @@ const EntrancePage = () => {
     enteredTicketCount = 0,
     totalTicketCount = 0,
   } = entranceSummary ?? {};
+  const { data: entranceInfo } = useAdminEntranceInfo(showId);
+
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
   };
@@ -40,7 +42,7 @@ const EntrancePage = () => {
       title="입장 관리"
       description={`수정 시 웹 / 앱에 실시간으로 적용됩니다. 주최자가 직접 정보를 컨트롤 할 수 없는\n'티켓 판매 중, 공연 종료 이후'에 요청이 있는 경우에만 활용해 주세요.`}
     >
-      <Styled.EntranceCode>입장 코드 : 00122</Styled.EntranceCode>
+      <Styled.EntranceCode>입장 코드 : {entranceInfo?.managerCode}</Styled.EntranceCode>
       <Styled.SummaryContainer>
         <Styled.Summary>
           <Styled.SummaryLabel>미입장 관객</Styled.SummaryLabel>

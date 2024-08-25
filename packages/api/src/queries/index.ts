@@ -25,6 +25,7 @@ import useGift from './useGift';
 import useHostList from './useHostList';
 import useMyHostInfo from './useMyHostInfo';
 import useAdminEntranceSummary from './useAdminEntranceSummary';
+import useAdminEntranceInfo from './useAdminEntranceInfo';
 
 export {
   useAdminSettlementEvent,
@@ -54,4 +55,5 @@ export {
   useHostList,
   useMyHostInfo,
   useAdminEntranceSummary,
+  useAdminEntranceInfo,
 };

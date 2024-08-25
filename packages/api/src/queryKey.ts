@@ -22,6 +22,8 @@ import {
   TicketType,
 } from './types';
 import {
+  AdminEntranceInfoResponse,
+  AdminEntranceSummaryResponse,
   AdminShowDetailResponse,
   AdminShowResponse,
   SettlementEventResponse,
@@ -117,7 +119,12 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   entranceSummary: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<EntranceSummaryResponse>(`sa-api/v1/shows/${showId}/entrance-summaries`),
+      fetcher.get<AdminEntranceSummaryResponse>(`sa-api/v1/shows/${showId}/entrance-summaries`),
+  }),
+  entranceInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminEntranceInfoResponse>(`sa-api/v1/shows/${showId}/entrance-infos`),
   }),
 });
 

@@ -66,3 +66,14 @@ export type TicketSalesInfo = {
 export type TicketSalesInfoResponse = TicketSalesInfo;
 
 export type AdminShowDetailResponse = ShowResponse;
+
+export interface AdminEntranceSummaryResponse {
+  notEnteredTicketCount: number;
+  enteredTicketCount: number;
+  totalTicketCount: number;
+}
+
+export interface AdminEntranceInfoResponse {
+  /** 관리자 입장 코드 */
+  managerCode: string;
+}
