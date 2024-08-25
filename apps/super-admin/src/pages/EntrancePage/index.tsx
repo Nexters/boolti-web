@@ -5,7 +5,8 @@ import { SearchIcon } from '@boolti/icon';
 import EntranceTable from '~/components/EntranceTable/EntranceTable';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import Styled from './EntrancePage.styles';
-import { useAdminEntranceInfo, useAdminEntranceSummary } from '@boolti/api';
+import { useAdminEntranceInfo, useAdminEntranceSummary, useAdminEntrances } from '@boolti/api';
+import { Pagination } from 'antd';
 
 const EntrancePage = () => {
   const params = useParams<{ showId: string }>();
@@ -15,13 +16,29 @@ const EntrancePage = () => {
   const [selectedTicketType, setSelectedTicketType] = useState<
     React.ComponentProps<typeof TicketTypeSelect>['value']
   >({ value: 'ALL', label: '티켓 전체' });
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const { data: entranceInfo } = useAdminEntranceInfo(showId);
   const { data: entranceSummary } = useAdminEntranceSummary(showId);
   const {
     notEnteredTicketCount = 0,
     enteredTicketCount = 0,
     totalTicketCount = 0,
   } = entranceSummary ?? {};
-  const { data: entranceInfo } = useAdminEntranceInfo(showId);
+  const { data: entranceData } = useAdminEntrances(
+    showId,
+    currentPage,
+    isEnteredTicket,
+    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+  );
+
+  const { totalElements = 0 } = entranceData ?? {};
+  const totalPages = entranceData?.totalPages ?? 0;
+  const reservations = (entranceData?.content ?? []).filter(
+    ({ entered, ticketType }) =>
+      entered === isEnteredTicket &&
+      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+  );
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -33,8 +50,8 @@ const EntrancePage = () => {
   };
 
   useEffect(() => {
-    console.log(entranceSummary);
-  }, [entranceSummary]);
+    console.log(entranceData);
+  }, [entranceData]);
 
   return (
     <PageLayout
@@ -66,7 +83,7 @@ const EntrancePage = () => {
             }}
             isSelected={!isEnteredTicket}
           >
-            미입장 <span>{4}</span>
+            미입장 <span>{notEnteredTicketCount}</span>
           </Styled.EntranceSummaryButton>
           <Styled.EntranceSummaryButton
             onClick={() => {
@@ -75,7 +92,7 @@ const EntrancePage = () => {
             }}
             isSelected={isEnteredTicket}
           >
-            입장 확인 <span>{10}</span>
+            입장 확인 <span>{enteredTicketCount}</span>
           </Styled.EntranceSummaryButton>
         </Styled.FilterCol>
         <Styled.FilterCol>
@@ -95,17 +112,17 @@ const EntrancePage = () => {
           </Styled.SearchForm>
         </Styled.FilterCol>
       </Styled.Filter>
-      <EntranceTable />
-      {/* {totalPages > 0 && (
-         <Pagination
-          style={{ marginTop: 'auto' }}
+      <EntranceTable data={reservations} isEnteredTicket={isEnteredTicket} />
+      {totalPages > 0 && (
+        <Pagination
+          style={{ marginTop: 16 }}
           current={currentPage}
           total={totalElements}
           onChange={(page) => {
             setCurrentPage(page);
           }}
         />
-      )} */}
+      )}
     </PageLayout>
   );
 };

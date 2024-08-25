@@ -22,8 +22,6 @@ import {
   TicketType,
 } from './types';
 import {
-  AdminEntranceInfoResponse,
-  AdminEntranceSummaryResponse,
   AdminShowDetailResponse,
   AdminShowResponse,
   SettlementEventResponse,
@@ -34,6 +32,11 @@ import {
 import { BankAccountListResponse, UserProfileSummaryResponse } from './types/users';
 import { GiftInfoResponse } from './types/gift';
 import { HostListItem, HostListResponse } from './types/host';
+import {
+  AdminEntranceInfoResponse,
+  AdminEntranceSummaryResponse,
+  PageAdminEntranceResponse,
+} from './types/adminEntrance';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -116,15 +119,42 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     queryKey: [showId],
     queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
   }),
-  entranceSummary: (showId: number) => ({
+});
+
+export const adminEntranceKeys = createQueryKeys('adminEntrance', {
+  summary: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
       fetcher.get<AdminEntranceSummaryResponse>(`sa-api/v1/shows/${showId}/entrance-summaries`),
   }),
-  entranceInfo: (showId: number) => ({
+  info: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
       fetcher.get<AdminEntranceInfoResponse>(`sa-api/v1/shows/${showId}/entrance-infos`),
+  }),
+  list: (
+    showId: number,
+    page: number,
+    isEntered: boolean,
+    ticketType?: TicketType,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, page, ticketType, isEntered, reservationNameOrPhoneNumber],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        isEntered,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageAdminEntranceResponse>(`sa-api/v1/shows/${showId}/entrances`, {
+        searchParams,
+      });
+    },
   }),
 });
 
@@ -247,6 +277,7 @@ export const hostQueryKeys = createQueryKeys('host', {
 
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
+  adminEntranceKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,

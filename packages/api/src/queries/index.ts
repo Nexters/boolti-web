@@ -26,6 +26,7 @@ import useHostList from './useHostList';
 import useMyHostInfo from './useMyHostInfo';
 import useAdminEntranceSummary from './useAdminEntranceSummary';
 import useAdminEntranceInfo from './useAdminEntranceInfo';
+import useAdminEntrances from './useAdminEntrances';
 
 export {
   useAdminSettlementEvent,
@@ -56,4 +57,5 @@ export {
   useMyHostInfo,
   useAdminEntranceSummary,
   useAdminEntranceInfo,
+  useAdminEntrances,
 };

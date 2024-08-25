@@ -1,9 +1,12 @@
 import { Button, useConfirm } from '@boolti/ui';
 import Styled from './EntranceTable.styles';
+import { AdminEntranceResponse } from '@boolti/api/src/types/adminEntrance';
+interface EntranceTableProps {
+  data: AdminEntranceResponse[];
+  isEnteredTicket: boolean;
+}
 
-interface EntranceTableInterface {}
-
-const EntranceTable = () => {
+const EntranceTable = ({ data, isEnteredTicket }: EntranceTableProps) => {
   const confirm = useConfirm();
 
   const handleEntrance = async (isEntered: boolean) => {
@@ -43,6 +46,7 @@ const EntranceTable = () => {
     );
     return confirmTextNode;
   };
+
   return (
     <Styled.TableContainer>
       <Styled.Table>
@@ -54,27 +58,33 @@ const EntranceTable = () => {
             <Styled.TableHeaderItem>티켓 이름</Styled.TableHeaderItem>
             <Styled.TableHeaderItem>예매자 이름</Styled.TableHeaderItem>
             <Styled.TableHeaderItem>예매자 연락처</Styled.TableHeaderItem>
-            <Styled.TableHeaderItem>입장 일시</Styled.TableHeaderItem>
+            {isEnteredTicket && <Styled.TableHeaderItem>입장 일시</Styled.TableHeaderItem>}
             <Styled.TableHeaderItem></Styled.TableHeaderItem>
           </Styled.TableHeader>
         </Styled.TableHead>
         <Styled.TableBody>
-          <Styled.TableRow>
-            <Styled.TableItem>
-              <Styled.EntranceStateText complete>입장 완료</Styled.EntranceStateText>
-            </Styled.TableItem>
-            <Styled.TableItem>BO0001010</Styled.TableItem>
-            <Styled.TableItem>초청 티켓</Styled.TableItem>
-            <Styled.TableItem>넥스터즈 초청 티켓</Styled.TableItem>
-            <Styled.TableItem>박영호</Styled.TableItem>
-            <Styled.TableItem>010-0000-0000</Styled.TableItem>
-            <Styled.TableItem>2024.01.21 00:00</Styled.TableItem>
-            <Styled.TableItem>
-              <Button size="x-small" colorTheme="netural" onClick={() => handleEntrance(false)}>
-                미입장 처리
-              </Button>
-            </Styled.TableItem>
-          </Styled.TableRow>
+          {data.map((item) => (
+            <Styled.TableRow key={item.ticketId}>
+              <Styled.TableItem>
+                <Styled.EntranceStateText complete={item.entered}>
+                  {item.entered ? '입장 완료' : '미입장'}
+                </Styled.EntranceStateText>
+              </Styled.TableItem>
+              <Styled.TableItem>{item.csTicketId}</Styled.TableItem>
+              <Styled.TableItem>
+                {item.ticketType === 'INVITE' ? '초청' : '일반'} 티켓
+              </Styled.TableItem>
+              <Styled.TableItem>{item.ticketName}</Styled.TableItem>
+              <Styled.TableItem>{item.reservationName}</Styled.TableItem>
+              <Styled.TableItem>{item.reservationPhoneNumber}</Styled.TableItem>
+              {isEnteredTicket && <Styled.TableItem>{item.enteredAt}</Styled.TableItem>}
+              <Styled.TableItem>
+                <Button size="x-small" colorTheme="netural" onClick={() => handleEntrance(false)}>
+                  {item.entered ? '미입장' : '입장'} 처리
+                </Button>
+              </Styled.TableItem>
+            </Styled.TableRow>
+          ))}
         </Styled.TableBody>
       </Styled.Table>
     </Styled.TableContainer>

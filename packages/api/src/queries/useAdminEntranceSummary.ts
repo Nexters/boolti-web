@@ -3,6 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 import { queryKeys } from '../queryKey';
 
 const useAdminEntranceSummary = (showId: number) =>
-  useQuery(queryKeys.adminShow.entranceSummary(showId));
+  useQuery(queryKeys.adminEntrance.summary(showId));
 
 export default useAdminEntranceSummary;
