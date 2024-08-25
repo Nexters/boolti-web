@@ -1,7 +1,7 @@
 import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdminLogout, useAdminShowList } from '@boolti/api';
 import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
-import { BooltiSmallLogo } from '@boolti/icon';
+import { useTheme } from '@emotion/react';
 import {
   Badge,
   Button,
@@ -33,17 +33,8 @@ const headerItems: React.ComponentProps<typeof Menu>['items'] = [
   },
 ];
 
-const selectItems: Array<{ key: SuperAdminShowStatus | 'ALL'; label: string; color: string }> = [
-  { key: 'ALL', label: '전체', color: 'blue' },
-  { key: 'SALES_BEFORE', label: '판매 전', color: 'purple' },
-  { key: 'SALES_IN_PROGRESS', label: '판매 중', color: 'cyan' },
-  { key: 'SALES_END', label: '판매 종료', color: 'green' },
-  { key: 'SETTLEMENT_REQUIRED', label: '정산 필요', color: 'yellow' },
-  { key: 'SETTLEMENT_IN_PROGRESS', label: '정산 중', color: 'red' },
-  { key: 'SETTLEMENT_DONE', label: '정산 완료', color: 'gold' },
-];
-
 const HomePage = () => {
+  const theme = useTheme();
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
@@ -53,14 +44,61 @@ const HomePage = () => {
     selectedItem === 'ALL' ? undefined : selectedItem,
   );
   const { content = [], totalElements = 0, totalPages = 0 } = data ?? {};
+
+  const selectItems: Array<{
+    key: SuperAdminShowStatus | 'ALL';
+    label: string;
+    color: string;
+    itemColor?: string;
+  }> = [
+    { key: 'ALL', label: '전체', color: 'blue', itemColor: theme.palette.purple.main },
+    {
+      key: 'SALES_BEFORE',
+      label: '판매 전',
+      color: theme.palette.purple.sub,
+    },
+    {
+      key: 'SALES_IN_PROGRESS',
+      label: '판매 중',
+      color: theme.palette.blue.sub,
+      itemColor: theme.palette.blue.main,
+    },
+    {
+      key: 'SALES_END',
+      label: '판매 종료',
+      color: theme.palette.green.sub,
+      itemColor: theme.palette.green.main,
+    },
+    {
+      key: 'SETTLEMENT_REQUIRED',
+      label: '정산 필요',
+      color: theme.palette.yellow.sub,
+      itemColor: theme.palette.yellow.main,
+    },
+    {
+      key: 'SETTLEMENT_IN_PROGRESS',
+      label: '정산 중',
+      color: theme.palette.red.sub,
+      itemColor: theme.palette.status.error,
+    },
+    {
+      key: 'SETTLEMENT_DONE',
+      label: '정산 완료',
+      color: theme.palette.grey.g20,
+      itemColor: theme.palette.grey.g60,
+    },
+  ];
+
   return (
     <Layout>
-      <Header style={{ display: 'flex', alignItems: 'center' }}>
-        <BooltiSmallLogo />
+      <Header
+        style={{ display: 'flex', alignItems: 'center', backgroundColor: theme.palette.grey.w }}
+      >
+        홈
         <Menu
-          style={{ flex: 1, minWidth: 0 }}
+          style={{ flex: 1, minWidth: 0, border: 'none' }}
           selectable={false}
-          theme="dark"
+          theme="light"
           mode="horizontal"
           items={headerItems}
           onClick={async (e) => {
@@ -87,6 +125,7 @@ const HomePage = () => {
             overflow: 'initial',
             display: 'flex',
             flexDirection: 'column',
+            backgroundColor: theme.palette.grey.w,
           }}
         >
           {!isLoading && (
@@ -171,7 +210,15 @@ const HomePage = () => {
                                 >
                                   {showName}
                                   <Badge
-                                    style={{ marginLeft: 8 }}
+                                    style={{
+                                      marginLeft: 8,
+                                      padding: '3px 8px',
+                                      borderRadius: '4px',
+                                      height: '28px',
+                                      color: currentStatus?.itemColor,
+                                      lineHeight: '22px',
+                                      fontSize: '14px',
+                                    }}
                                     count={currentStatus?.label}
                                     color={currentStatus?.color}
                                   />
