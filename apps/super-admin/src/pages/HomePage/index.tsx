@@ -9,6 +9,7 @@ import {
   Divider,
   Dropdown,
   Flex,
+  Input,
   Layout,
   Menu,
   Pagination,
@@ -17,8 +18,8 @@ import {
 } from 'antd';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { useState } from 'react';
-import { generatePath, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
@@ -34,14 +35,19 @@ const headerItems: React.ComponentProps<typeof Menu>['items'] = [
 ];
 
 const HomePage = () => {
+  const { Search } = Input;
   const theme = useTheme();
   const { mutateAsync } = useAdminLogout();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const showNameOrHostName = searchParams.get('showNameOrHostName');
   const [selectedItem, setSelectedItem] = useState<SuperAdminShowStatus | 'ALL'>('ALL');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchText, setSearchText] = useState('');
   const { isLoading, data } = useAdminShowList(
     currentPage - 1,
     selectedItem === 'ALL' ? undefined : selectedItem,
+    showNameOrHostName ?? undefined,
   );
   const { content = [], totalElements = 0, totalPages = 0 } = data ?? {};
 
@@ -49,9 +55,9 @@ const HomePage = () => {
     key: SuperAdminShowStatus | 'ALL';
     label: string;
     color: string;
-    itemColor?: string;
+    fontColor?: string;
   }> = [
-    { key: 'ALL', label: '전체', color: 'blue', itemColor: theme.palette.purple.main },
+    { key: 'ALL', label: '전체', color: 'blue', fontColor: theme.palette.purple.main },
     {
       key: 'SALES_BEFORE',
       label: '판매 전',
@@ -61,33 +67,41 @@ const HomePage = () => {
       key: 'SALES_IN_PROGRESS',
       label: '판매 중',
       color: theme.palette.blue.sub,
-      itemColor: theme.palette.blue.main,
+      fontColor: theme.palette.blue.main,
     },
     {
       key: 'SALES_END',
       label: '판매 종료',
       color: theme.palette.green.sub,
-      itemColor: theme.palette.green.main,
+      fontColor: theme.palette.green.main,
     },
     {
       key: 'SETTLEMENT_REQUIRED',
       label: '정산 필요',
       color: theme.palette.yellow.sub,
-      itemColor: theme.palette.yellow.main,
+      fontColor: theme.palette.yellow.main,
     },
     {
       key: 'SETTLEMENT_IN_PROGRESS',
       label: '정산 중',
       color: theme.palette.red.sub,
-      itemColor: theme.palette.status.error,
+      fontColor: theme.palette.status.error,
     },
     {
       key: 'SETTLEMENT_DONE',
       label: '정산 완료',
       color: theme.palette.grey.g20,
-      itemColor: theme.palette.grey.g60,
+      fontColor: theme.palette.grey.g60,
     },
   ];
+
+  const onSearch = (value: string) => {
+    navigate(`?showNameOrHostName=${value}`);
+  };
+
+  useEffect(() => {
+    console.log(showNameOrHostName);
+  }, [showNameOrHostName]);
 
   return (
     <Layout>
@@ -135,26 +149,49 @@ const HomePage = () => {
                   공연목록
                 </Typography.Title>
 
-                <Dropdown
-                  trigger={['click']}
-                  menu={{
-                    items: selectItems,
-                    selectable: true,
-                    defaultSelectedKeys: ['ALL'],
-                    onClick: (e) => {
-                      setSelectedItem(e.key as SuperAdminShowStatus | 'ALL');
-                    },
+                <Flex
+                  justify="space-between"
+                  style={{
+                    marginBottom: 20,
                   }}
                 >
-                  <Button
-                    style={{ marginBottom: 24, width: 130, textAlign: 'left', marginLeft: 'auto' }}
+                  <Dropdown
+                    trigger={['click']}
+                    menu={{
+                      items: selectItems,
+                      selectable: true,
+                      defaultSelectedKeys: ['ALL'],
+                      onClick: (e) => {
+                        setSelectedItem(e.key as SuperAdminShowStatus | 'ALL');
+                      },
+                    }}
                   >
-                    <Flex align="center" justify="space-between">
-                      {selectItems.find(({ key }) => key === selectedItem)?.label}
-                      <DownOutlined />
-                    </Flex>
-                  </Button>
-                </Dropdown>
+                    <Button
+                      style={{
+                        width: 130,
+                        height: 40,
+                        textAlign: 'left',
+                      }}
+                    >
+                      <Flex align="center" justify="space-between">
+                        {selectItems.find(({ key }) => key === selectedItem)?.label}
+                        <DownOutlined />
+                      </Flex>
+                    </Button>
+                  </Dropdown>
+                  <Search
+                    style={{
+                      width: 260,
+                      // borderRadius: 40,
+                      // border: `1px solid ${theme.palette.grey.g20}`,
+                    }}
+                    value={searchText}
+                    size="large"
+                    onChange={(e) => setSearchText(e.target.value)}
+                    onSearch={onSearch}
+                    placeholder="공연명, 주최자 이름"
+                  />
+                </Flex>
                 <Flex gap="middle" wrap="wrap" style={{ marginBottom: 20 }}>
                   {content.map(
                     ({
@@ -215,9 +252,9 @@ const HomePage = () => {
                                       padding: '3px 8px',
                                       borderRadius: '4px',
                                       height: '28px',
-                                      color: currentStatus?.itemColor,
                                       lineHeight: '22px',
                                       fontSize: '14px',
+                                      color: currentStatus?.fontColor,
                                     }}
                                     count={currentStatus?.label}
                                     color={currentStatus?.color}
