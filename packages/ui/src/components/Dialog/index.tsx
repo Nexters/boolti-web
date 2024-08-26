@@ -14,7 +14,16 @@ interface DialogProps {
   onClose?: () => void;
 }
 
-const Dialog = ({ open, children, isAuto = false, width, title, contentPadding, mobileType = 'bottomSheet', onClose }: DialogProps) => {
+const Dialog = ({
+  open,
+  children,
+  isAuto = false,
+  width,
+  title,
+  contentPadding,
+  mobileType = 'bottomSheet',
+  onClose,
+}: DialogProps) => {
   if (!open) return null;
 
   return (
@@ -29,7 +38,9 @@ const Dialog = ({ open, children, isAuto = false, width, title, contentPadding, 
               </Styled.DialogCloseButton>
             </Styled.DialogHeader>
           )}
-          <Styled.DialogContent className="dialog__content" padding={contentPadding}>{children}</Styled.DialogContent>
+          <Styled.DialogContent className="dialog__content" padding={contentPadding}>
+            {children}
+          </Styled.DialogContent>
         </Styled.Dialog>
       </Styled.DimmedArea>
     </Portal>

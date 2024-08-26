@@ -223,7 +223,7 @@ const FileUploadAreaText = styled.span`
 const TextField = styled.div<TextFieldProps>`
   margin-top: 8px;
   display: flex;
-  align-items: center;
+  align-items: start;
   gap: 8px;
   flex: ${({ flex }) => flex};
 
@@ -237,16 +237,6 @@ const TextFieldSuffix = styled.span`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g50};
   flex: 0;
-`;
-
-const TextFieldRow = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  ${mq_lg} {
-    flex-direction: row;
-    gap: 8px;
-  }
 `;
 
 const TextAreaContainer = styled.div`
@@ -541,7 +531,6 @@ export default {
   FileUploadAreaText,
   TextField,
   TextFieldSuffix,
-  TextFieldRow,
   TextAreaContainer,
   TextArea,
   TextAreaErrorMessage,
