@@ -192,8 +192,9 @@ const HomePage = () => {
                           key={id}
                           style={{ width: 'calc(50% - 12px)', cursor: 'pointer' }}
                           onClick={() => {
+                            // TODO: 추후에 공연 기본 정보로 이동
                             navigate({
-                              pathname: generatePath(PATH.INFO, { showId: id.toString() }),
+                              pathname: generatePath(PATH.PAYMENT, { showId: id.toString() }),
                             });
                           }}
                         >
