@@ -23,6 +23,7 @@ import {
 } from './types';
 import {
   AdminShowDetailResponse,
+  AdminShowInfoResponse,
   AdminShowResponse,
   SettlementEventResponse,
   SettlementInfoResponse,
@@ -118,6 +119,11 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   showDetail: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
+  }),
+  info: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminShowInfoResponse>(`sa-api/v1/shows/${showId}/super-admin-infos`),
   }),
 });
 

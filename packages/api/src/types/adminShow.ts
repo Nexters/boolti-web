@@ -9,7 +9,7 @@ export type SuperAdminShowStatus =
   | 'SETTLEMENT_IN_PROGRESS'
   | 'SETTLEMENT_DONE';
 
-export type AdminShowResponse = PageResponse<{
+export interface AdminShowInfoResponse {
   /** 공연 ID */
   id: number;
   /** 공연 이름 */
@@ -28,7 +28,9 @@ export type AdminShowResponse = PageResponse<{
   salesStartTime?: string;
   /** 공연 판매 종료 날짜, 시간.ISO8601.optional */
   salesEndTime?: string;
-}>;
+}
+
+export type AdminShowResponse = PageResponse<AdminShowInfoResponse>;
 
 export interface SettlementInfoResponse {
   idCardPhotoFile: {

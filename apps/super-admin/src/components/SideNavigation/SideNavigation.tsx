@@ -2,10 +2,15 @@ import { ArrowLeftIcon } from '@boolti/icon';
 import { useLocation, useParams } from 'react-router-dom';
 import { HREF } from '~/constants/routes';
 import Styled from './SideNavigation.styles';
+import { useAdminShowInfo } from '@boolti/api';
+import StatusBadge from '../StatusBadge/StatusBadge';
 
 const SideNavigation = () => {
   const location = useLocation();
-  const { showId = '' } = useParams();
+  const params = useParams<{ showId: string }>();
+  const showId = Number(params.showId);
+  const { data: showInfo } = useAdminShowInfo(showId);
+  const { id = 0, showName = '', superAdminShowStatus = 'SALES_BEFORE' } = showInfo ?? {};
 
   const navigationItems = [
     {
@@ -31,10 +36,9 @@ const SideNavigation = () => {
   return (
     <Styled.Container path={location.pathname}>
       <Styled.Header>
-        <Styled.ShowId>#C1DF3H</Styled.ShowId>
-        <Styled.ShowTitle>
-          이렇게나 이름이 긴 쇼가 있다면 어떻게 노출되나 한 번 보자 ㅋㅋ
-        </Styled.ShowTitle>
+        <Styled.ShowId>{id}</Styled.ShowId>
+        <Styled.ShowTitle style={{ marginBottom: 7 }}>{showName}</Styled.ShowTitle>
+        <StatusBadge status={superAdminShowStatus} />
       </Styled.Header>
       <Styled.Navigation>
         {navigationItems.map((item) => (

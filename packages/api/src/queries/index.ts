@@ -27,6 +27,7 @@ import useMyHostInfo from './useMyHostInfo';
 import useAdminEntranceSummary from './useAdminEntranceSummary';
 import useAdminEntranceInfo from './useAdminEntranceInfo';
 import useAdminEntrances from './useAdminEntrances';
+import useAdminShowInfo from './useAdminShowInfo';
 
 export {
   useAdminSettlementEvent,
@@ -58,4 +59,5 @@ export {
   useAdminEntranceSummary,
   useAdminEntranceInfo,
   useAdminEntrances,
+  useAdminShowInfo,
 };
