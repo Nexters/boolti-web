@@ -57,11 +57,12 @@ const HomePage = () => {
     color: string;
     fontColor?: string;
   }> = [
-    { key: 'ALL', label: '전체', color: 'blue', fontColor: theme.palette.purple.main },
+    { key: 'ALL', label: '전체', color: 'blue' },
     {
       key: 'SALES_BEFORE',
       label: '판매 전',
       color: theme.palette.purple.sub,
+      fontColor: theme.palette.purple.main,
     },
     {
       key: 'SALES_IN_PROGRESS',
@@ -186,7 +187,7 @@ const HomePage = () => {
                     placeholder="공연명, 주최자 이름"
                   />
                 </Flex>
-                <Flex gap="middle" wrap="wrap" style={{ marginBottom: 20 }}>
+                <Flex gap="large" wrap="wrap" style={{ marginBottom: 20 }}>
                   {content.map(
                     ({
                       id,
@@ -204,7 +205,7 @@ const HomePage = () => {
                       return (
                         <Card
                           key={id}
-                          style={{ width: 'calc(50% - 8px)', cursor: 'pointer' }}
+                          style={{ width: 'calc(50% - 12px)', cursor: 'pointer' }}
                           onClick={() => {
                             navigate({
                               pathname: generatePath(PATH.INFO, { showId: id.toString() }),
@@ -214,8 +215,8 @@ const HomePage = () => {
                           <Flex>
                             <div
                               style={{
-                                width: 120,
-                                height: 160,
+                                width: 86,
+                                height: 120,
                                 flexShrink: 0,
                                 borderRadius: 8,
                                 backgroundImage: `url(${thumbnailPath})`,
@@ -227,7 +228,7 @@ const HomePage = () => {
                             <Flex
                               vertical
                               justify="space-between"
-                              style={{ marginLeft: 12, flex: 1, overflow: 'hidden' }}
+                              style={{ marginLeft: 16, flex: 1, overflow: 'hidden' }}
                             >
                               <Flex vertical>
                                 <Typography>{id}</Typography>
@@ -256,19 +257,30 @@ const HomePage = () => {
                                   />
                                 </Typography.Title>
                               </Flex>
-                              <Flex vertical style={{ width: '100%' }}>
-                                <Space split={<Divider type="vertical" />}>
-                                  <Typography style={{ width: 60 }}>주최자</Typography>
+                              <Flex vertical style={{ width: '100%', marginTop: 12 }}>
+                                <Space size="middle">
+                                  <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
+                                    주최자
+                                  </Typography>
                                   <Typography.Text ellipsis>{hostName}</Typography.Text>
                                 </Space>
-                                <Space split={<Divider type="vertical" />}>
-                                  <Typography style={{ width: 60 }}>공연일시</Typography>
+                                <Space size="middle">
+                                  <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
+                                    공연일시
+                                  </Typography>
                                   <Typography.Text ellipsis>
                                     {format(date, 'yyyy.MM.dd (E)', { locale: ko })}
                                   </Typography.Text>
                                 </Space>
-                                <Space split={<Divider type="vertical" />}>
-                                  <Typography style={{ width: 60 }}>판매 기간</Typography>
+                                <Space size="middle">
+                                  <Typography
+                                    style={{
+                                      width: 60,
+                                      color: theme.palette.grey.g60,
+                                    }}
+                                  >
+                                    판매 기간
+                                  </Typography>
                                   <Typography.Text ellipsis>
                                     {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}~
                                     {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
