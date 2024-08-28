@@ -13,7 +13,6 @@ import { PATH } from './constants/routes';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SettlementPage from './pages/SettlementPage';
-import SideNavigation from './components/SideNavigation/SideNavigation';
 import Layout from './components/Layout/Layout';
 import InfoPage from './pages/InfoPage';
 import TicketPage from './pages/TicketPage';
@@ -62,7 +61,6 @@ const privateRoutes = [
   {
     element: (
       <AuthErrorBoundary>
-        <SideNavigation />
         <Layout>
           <PrivateRoute />
         </Layout>
