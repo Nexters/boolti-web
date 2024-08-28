@@ -1,20 +1,22 @@
 import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
-import { TextField, TimePicker } from '@boolti/ui';
+import { Button, TextField, TimePicker, useDialog } from '@boolti/ui';
 import { add, format } from 'date-fns';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowInfoFormInputs } from './types';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
 
 type ShowBasicInfoFormInputs = Omit<ShowInfoFormInputs, 'notice' | 'hostName' | 'hostPhoneNumber'>;
 
 interface ShowBasicInfoFormContentProps {
-  form: UseFormReturn<ShowInfoFormInputs>;
+  form: UseFormReturn<ShowInfoFormInputs, unknown, ShowInfoFormInputs>;
   imageFiles: ImageFile[];
   disabled?: boolean;
   onDropImage: (acceptedFiles: File[]) => void;
@@ -28,7 +30,10 @@ const ShowBasicInfoFormContent = ({
   onDropImage,
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
-  const { watch, control } = form;
+  const { open, close, isOpen } = useDialog();
+  const detailAdressInputRef = useRef<HTMLInputElement>(null);
+
+  const { watch, control, setValue } = form;
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -47,6 +52,29 @@ const ShowBasicInfoFormContent = ({
     placeStreetAddress: false,
     placeDetailAddress: false,
   });
+
+  const openDaumPostCodeWithDialog: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    open({
+      title: '주소 찾기',
+      content: (
+        <DaumPostcode
+          style={{ maxWidth: 426, height: 470 }}
+          onComplete={(address) => {
+            setValue('placeStreetAddress', address.roadAddress);
+            detailAdressInputRef.current?.focus();
+          }}
+          onClose={() => {
+            setHasBlurred((prev) => ({ ...prev, placeStreetAddress: true }));
+            close();
+          }}
+        />
+      ),
+      onClose: close,
+    });
+  };
+
+  useBodyScrollLock(isOpen);
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -220,14 +248,14 @@ const ShowBasicInfoFormContent = ({
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>공연 장소</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>공연장명</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
+              render={({ field: { value, onChange, onBlur } }) => (
                 <TextField
                   inputType="text"
                   size="big"
@@ -246,62 +274,66 @@ const ShowBasicInfoFormContent = ({
               name="placeName"
             />
           </Styled.TextField>
-          <Styled.TextFieldRow>
-            <Styled.TextField flex={2}>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
+        </Styled.ShowInfoFormContent>
+      </Styled.ShowInfoFormRow>
+      <Styled.ShowInfoFormRow>
+        <Styled.ShowInfoFormContent>
+          <Styled.ShowInfoFormLabel required>공연장 주소</Styled.ShowInfoFormLabel>
+          <Styled.TextField>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { value } }) => (
+                <>
                   <TextField
                     inputType="text"
                     size="big"
-                    placeholder="도로명 주소를 입력해 주세요"
+                    placeholder="-"
                     required
-                    disabled={disabled}
-                    onChange={onChange}
-                    onBlur={() => {
-                      onBlur();
-                      setHasBlurred((prev) => ({ ...prev, placeStreetAddress: true }));
-                    }}
+                    disabled
                     value={value ?? ''}
                     errorMessage={
                       hasBlurred.placeStreetAddress && !value ? '필수 입력사항입니다.' : undefined
                     }
                   />
-                )}
-                name="placeStreetAddress"
-              />
-            </Styled.TextField>
-            <Styled.TextField flex={1}>
-              <Controller
-                control={control}
-                rules={{
-                  required: true,
-                }}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextField
-                    inputType="text"
-                    size="big"
-                    placeholder="상세 주소를 입력해 주세요"
-                    required
-                    disabled={disabled}
-                    onChange={onChange}
-                    onBlur={() => {
-                      onBlur();
-                      setHasBlurred((prev) => ({ ...prev, placeDetailAddress: true }));
-                    }}
-                    value={value ?? ''}
-                    errorMessage={
-                      hasBlurred.placeDetailAddress && !value ? '필수 입력사항입니다.' : undefined
-                    }
-                  />
-                )}
-                name="placeDetailAddress"
-              />
-            </Styled.TextField>
-          </Styled.TextFieldRow>
+                  <Button colorTheme="netural" size="bold" onClick={openDaumPostCodeWithDialog}>
+                    주소 찾기
+                  </Button>
+                </>
+              )}
+              name="placeStreetAddress"
+            />
+          </Styled.TextField>
+          <Styled.TextField>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  ref={detailAdressInputRef}
+                  inputType="text"
+                  size="big"
+                  placeholder="상세 주소를 입력해 주세요"
+                  required
+                  disabled={disabled}
+                  onChange={onChange}
+                  onBlur={() => {
+                    onBlur();
+                    setHasBlurred((prev) => ({ ...prev, placeDetailAddress: true }));
+                  }}
+                  value={value ?? ''}
+                  errorMessage={
+                    hasBlurred.placeDetailAddress && !value ? '필수 입력사항입니다.' : undefined
+                  }
+                />
+              )}
+              name="placeDetailAddress"
+            />
+          </Styled.TextField>
         </Styled.ShowInfoFormContent>
       </Styled.ShowInfoFormRow>
     </Styled.ShowInfoFormGroup>
