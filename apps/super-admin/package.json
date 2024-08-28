@@ -24,7 +24,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.4",
     "react-router-dom": "^6.21.3",
-    "react-select": "^5.8.0",
     "the-new-css-reset": "^1.11.2"
   },
   "devDependencies": {
