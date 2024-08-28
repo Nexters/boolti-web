@@ -3,7 +3,6 @@ import { LOCAL_STORAGE, useAdminLogout, useAdminShowList } from '@boolti/api';
 import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
 import { useTheme } from '@emotion/react';
 import {
-  Badge,
   Button,
   Card,
   Dropdown,
@@ -19,6 +18,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useState } from 'react';
 import { generatePath, useNavigate, useSearchParams } from 'react-router-dom';
+import StatusBadge from '~/components/StatusBadge/StatusBadge';
 
 import { PATH } from '~/constants/routes';
 
@@ -53,45 +53,31 @@ const HomePage = () => {
   const selectItems: Array<{
     key: SuperAdminShowStatus | 'ALL';
     label: string;
-    color: string;
-    fontColor?: string;
   }> = [
-    { key: 'ALL', label: '전체', color: 'blue' },
+    { key: 'ALL', label: '전체' },
     {
       key: 'SALES_BEFORE',
       label: '판매 전',
-      color: theme.palette.purple.sub,
-      fontColor: theme.palette.purple.main,
     },
     {
       key: 'SALES_IN_PROGRESS',
       label: '판매 중',
-      color: theme.palette.blue.sub,
-      fontColor: theme.palette.blue.main,
     },
     {
       key: 'SALES_END',
       label: '판매 종료',
-      color: theme.palette.green.sub,
-      fontColor: theme.palette.green.main,
     },
     {
       key: 'SETTLEMENT_REQUIRED',
       label: '정산 필요',
-      color: theme.palette.yellow.sub,
-      fontColor: theme.palette.yellow.main,
     },
     {
       key: 'SETTLEMENT_IN_PROGRESS',
       label: '정산 중',
-      color: theme.palette.red.sub,
-      fontColor: theme.palette.status.error,
     },
     {
       key: 'SETTLEMENT_DONE',
       label: '정산 완료',
-      color: theme.palette.grey.g20,
-      fontColor: theme.palette.grey.g60,
     },
   ];
 
@@ -238,22 +224,11 @@ const HomePage = () => {
                                     display: 'flex',
                                     justifyContent: 'start',
                                     alignItems: 'center',
+                                    gap: 8,
                                   }}
                                 >
                                   {showName}
-                                  <Badge
-                                    style={{
-                                      marginLeft: 8,
-                                      padding: '3px 8px',
-                                      borderRadius: '4px',
-                                      height: '28px',
-                                      lineHeight: '22px',
-                                      fontSize: '14px',
-                                      color: currentStatus?.fontColor,
-                                    }}
-                                    count={currentStatus?.label}
-                                    color={currentStatus?.color}
-                                  />
+                                  <StatusBadge status={currentStatus?.key ?? 'SALES_BEFORE'} />
                                 </Typography.Title>
                               </Flex>
                               <Flex vertical style={{ width: '100%', marginTop: 12 }}>
