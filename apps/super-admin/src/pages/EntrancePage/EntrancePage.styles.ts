@@ -92,30 +92,6 @@ const EntranceSummaryButton = styled.button<{ isSelected?: boolean }>`
       isSelected ? theme.palette.grey.g90 : theme.palette.grey.g50};
   }
 `;
-
-const SearchForm = styled.form`
-  margin-left: 8px;
-  padding: 8px 12px 8px 16px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-`;
-
-const SearchInput = styled.input`
-  ${({ theme }) => theme.typo.b2};
-
-  &::placeholder {
-    color: ${({ theme }) => theme.palette.grey.g30};
-  }
-`;
-
-const SearchButton = styled.button`
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-`;
-
 export default {
   EntranceCode,
   SummaryContainer,
@@ -126,7 +102,4 @@ export default {
   FilterCol,
   SummaryButtonContainer,
   EntranceSummaryButton,
-  SearchForm,
-  SearchInput,
-  SearchButton,
 };

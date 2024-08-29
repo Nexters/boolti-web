@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 import PageLayout from '~/components/PageLayout/PageLayout';
 import { useParams } from 'react-router-dom';
-import { SearchIcon } from '@boolti/icon';
 import EntranceTable from '~/components/EntranceTable/EntranceTable';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import Styled from './EntrancePage.styles';
 import { useAdminEntranceInfo, useAdminEntranceSummary, useAdminEntrances } from '@boolti/api';
-import { Pagination } from 'antd';
+import { Input, Pagination } from 'antd';
 
 const EntrancePage = () => {
   const params = useParams<{ showId: string }>();
   const showId = Number(params!.showId);
   const [searchText, setSearchText] = useState('');
+  const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
   const [selectedTicketType, setSelectedTicketType] = useState<
     React.ComponentProps<typeof TicketTypeSelect>['value']
   >({ value: 'ALL', label: '티켓 전체' });
   const [currentPage, setCurrentPage] = useState(0);
 
+  const { Search } = Input;
   const { data: entranceInfo } = useAdminEntranceInfo(showId);
   const { data: entranceSummary } = useAdminEntranceSummary(showId);
   const {
@@ -30,6 +31,7 @@ const EntrancePage = () => {
     currentPage,
     isEnteredTicket,
     selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+    debouncedSearchText,
   );
 
   const { totalElements = 0 } = entranceData ?? {};
@@ -40,18 +42,21 @@ const EntrancePage = () => {
       (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
   );
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
   const onClickReset = () => {
     setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
     setSearchText('');
   };
 
   useEffect(() => {
-    console.log(entranceData);
-  }, [entranceData]);
+    const timerId = setTimeout(() => {
+      setDebouncedSearchText(searchText);
+    }, 500);
+    return () => clearTimeout(timerId);
+  }, [searchText]);
+
+  useEffect(() => {
+    setCurrentPage(0);
+  }, [selectedTicketType, isEnteredTicket, debouncedSearchText]);
 
   return (
     <PageLayout
@@ -100,16 +105,12 @@ const EntrancePage = () => {
             value={selectedTicketType}
             onChange={(value) => setSelectedTicketType(value)}
           />
-          <Styled.SearchForm onSubmit={onSubmit}>
-            <Styled.SearchInput
-              placeholder="검색"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <Styled.SearchButton>
-              <SearchIcon />
-            </Styled.SearchButton>
-          </Styled.SearchForm>
+
+          <Search
+            value={searchText}
+            placeholder="방문자 이름, 연락처 검색"
+            onChange={(e) => setSearchText(e.target.value)}
+          />
         </Styled.FilterCol>
       </Styled.Filter>
       <EntranceTable data={reservations} isEnteredTicket={isEnteredTicket} />
