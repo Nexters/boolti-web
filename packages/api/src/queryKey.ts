@@ -38,6 +38,10 @@ import {
   AdminEntranceSummaryResponse,
   PageAdminEntranceResponse,
 } from './types/adminEntrance';
+import {
+  AdminReservationSummaryResponse,
+  PageAdminReservationResponse,
+} from './types/adminReservation';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -127,7 +131,7 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   }),
 });
 
-export const adminEntranceKeys = createQueryKeys('adminEntrance', {
+export const adminEntranceQueryKeys = createQueryKeys('adminEntrance', {
   summary: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
@@ -161,6 +165,42 @@ export const adminEntranceKeys = createQueryKeys('adminEntrance', {
         searchParams,
       });
     },
+  }),
+});
+
+export const adminReservationQueryKeys = createQueryKeys('adminReservation', {
+  list: (
+    showId: number,
+    page: number,
+    ticketType: TicketType | undefined = undefined,
+    ticketStatus: TicketStatus | undefined = undefined,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (ticketStatus) {
+        searchParams.ticketStatus = ticketStatus;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageAdminReservationResponse>(`sa-api/v1/shows/${showId}/reservations`, {
+        searchParams,
+      });
+    },
+  }),
+  summary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminReservationSummaryResponse>(
+        `sa-api/v1/shows/${showId}/reservation-summaries`,
+      ),
   }),
 });
 
@@ -283,7 +323,8 @@ export const hostQueryKeys = createQueryKeys('host', {
 
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
-  adminEntranceKeys,
+  adminEntranceQueryKeys,
+  adminReservationQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,

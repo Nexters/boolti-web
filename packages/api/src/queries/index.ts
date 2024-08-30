@@ -28,6 +28,8 @@ import useAdminEntranceSummary from './useAdminEntranceSummary';
 import useAdminEntranceInfo from './useAdminEntranceInfo';
 import useAdminEntrances from './useAdminEntrances';
 import useAdminShowInfo from './useAdminShowInfo';
+import useAdminReservations from './useAdminReservations';
+import useAdminReservationSummary from './useAdminReservationSummary';
 
 export {
   useAdminSettlementEvent,
@@ -60,4 +62,6 @@ export {
   useAdminEntranceInfo,
   useAdminEntrances,
   useAdminShowInfo,
+  useAdminReservations,
+  useAdminReservationSummary,
 };
