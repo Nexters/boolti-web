@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 interface TableItemProps {
   align?: 'left' | 'center' | 'right';
-  minWidth?: number;
+  width?: number;
 }
 
 interface EntranceStateTextProps {
@@ -21,40 +21,47 @@ const Table = styled.div`
   max-height: 567px;
 `;
 
-const TableHead = styled.div``;
-
-const TableBody = styled.div``;
-
 const TableHeader = styled.div`
   display: flex;
   align-items: center;
   background-color: ${({ theme }) => theme.palette.grey.g00};
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  padding-left: 8px;
 `;
 
 const TableHeaderItem = styled.div<TableItemProps>`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
-  padding: 12px 20px;
+  padding: 12px;
   text-align: ${({ align }) => align ?? 'left'};
-  white-space: nowrap;
-  min-width: ${({ minWidth }) => minWidth ?? 0}px;
+  width: ${({ width }) => width ?? 0}px;
+  flex: 0 0 auto;
+
+  &:not(:last-of-type) {
+    margin-right: 12px;
+  }
 `;
 
 const TableRow = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  padding-left: 8px;
 `;
 
 const TableItem = styled.div<TableItemProps>`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
-  padding: 14px 20px;
+  padding: 14px 12px;
   text-align: ${({ align }) => align ?? 'left'};
-  white-space: nowrap;
-  min-width: ${({ minWidth }) => minWidth ?? 0}px;
+  width: ${({ width }) => width ?? 0}px;
+  flex: 0 0 auto;
+
+  &:not(:last-of-type) {
+    margin-right: 12px;
+  }
 `;
 
 const EntranceStateText = styled.p<EntranceStateTextProps>`
@@ -78,8 +85,6 @@ const Empty = styled.div`
 export default {
   TableContainer,
   Table,
-  TableHead,
-  TableBody,
   TableHeader,
   TableHeaderItem,
   TableRow,

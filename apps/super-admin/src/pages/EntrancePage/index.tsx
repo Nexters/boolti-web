@@ -10,6 +10,7 @@ import { Input, Pagination } from 'antd';
 const EntrancePage = () => {
   const params = useParams<{ showId: string }>();
   const showId = Number(params!.showId);
+
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
