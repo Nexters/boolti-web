@@ -48,6 +48,7 @@ import { NFCF } from './NFCF';
 import { NFF } from './NFF';
 import { NH } from './NH';
 import { Plus } from './Plus';
+import { Photo } from './Photo';
 import { SB } from './SB';
 import { SBI } from './SBI';
 import { SC } from './SC';
@@ -116,6 +117,7 @@ export {
   NFF,
   NH,
   Plus as PlusIcon,
+  Photo as PhotoIcon,
   SB,
   SBI,
   SC,
