@@ -17,8 +17,8 @@ const EntranceTable = ({ data, isEnteredTicket }: EntranceTableProps) => {
             티켓 종류
           </Styled.TableHeaderItem>
           <Styled.TableHeaderItem width={180}>티켓 이름</Styled.TableHeaderItem>
-          <Styled.TableHeaderItem width={100}>예매자 이름</Styled.TableHeaderItem>
-          <Styled.TableHeaderItem width={140}>예매자 연락처</Styled.TableHeaderItem>
+          <Styled.TableHeaderItem width={100}>방문자 이름</Styled.TableHeaderItem>
+          <Styled.TableHeaderItem width={140}>방문자 연락처</Styled.TableHeaderItem>
           {isEnteredTicket && (
             <Styled.TableHeaderItem width={148}>입장 일시</Styled.TableHeaderItem>
           )}

@@ -4,7 +4,12 @@ import { useParams } from 'react-router-dom';
 import EntranceTable from '~/components/EntranceTable/EntranceTable';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import Styled from './EntrancePage.styles';
-import { useAdminEntranceInfo, useAdminEntranceSummary, useAdminEntrances } from '@boolti/api';
+import {
+  TicketType,
+  useAdminEntranceInfo,
+  useAdminEntranceSummary,
+  useAdminEntrances,
+} from '@boolti/api';
 import { Input, Pagination } from 'antd';
 
 const EntrancePage = () => {
@@ -14,9 +19,7 @@ const EntrancePage = () => {
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [isEnteredTicket, setIsEnteredTicket] = useState(false);
-  const [selectedTicketType, setSelectedTicketType] = useState<
-    React.ComponentProps<typeof TicketTypeSelect>['value']
-  >({ value: 'ALL', label: '티켓 전체' });
+  const [selectedTicketType, setSelectedTicketType] = useState<'ALL' | TicketType>('ALL');
   const [currentPage, setCurrentPage] = useState(0);
 
   const { Search } = Input;
@@ -31,7 +34,7 @@ const EntrancePage = () => {
     showId,
     currentPage,
     isEnteredTicket,
-    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     debouncedSearchText,
   );
 
@@ -40,11 +43,11 @@ const EntrancePage = () => {
   const reservations = (entranceData?.content ?? []).filter(
     ({ entered, ticketType }) =>
       entered === isEnteredTicket &&
-      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
   );
 
   const onClickReset = () => {
-    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
+    setSelectedTicketType('ALL');
     setSearchText('');
   };
 
@@ -56,6 +59,7 @@ const EntrancePage = () => {
   }, [searchText]);
 
   useEffect(() => {
+    console.log(selectedTicketType);
     setCurrentPage(0);
   }, [selectedTicketType, isEnteredTicket, debouncedSearchText]);
 
@@ -103,8 +107,10 @@ const EntrancePage = () => {
         </Styled.FilterCol>
         <Styled.FilterCol>
           <TicketTypeSelect
-            value={selectedTicketType}
-            onChange={(value) => setSelectedTicketType(value)}
+            ticketType={selectedTicketType}
+            onChange={(value) => {
+              setSelectedTicketType(value);
+            }}
           />
 
           <Search
