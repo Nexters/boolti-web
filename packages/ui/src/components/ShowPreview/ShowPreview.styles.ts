@@ -151,6 +151,7 @@ const ShowInfoSubtitle = styled.h4`
 const ShowInfoDescription = styled.p<ShowInfoDescriptionProps>`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  word-break: break-word;
 
   ${({ isFullContent }) =>
     isFullContent &&
