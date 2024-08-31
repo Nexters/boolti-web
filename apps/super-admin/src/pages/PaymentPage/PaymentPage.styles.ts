@@ -38,7 +38,7 @@ const Summary = styled.div<SummaryProps>`
   border-right: 1px solid ${({ theme }) => theme.palette.grey.g30};
   margin-right: 40px;
 
-  &:nth-child(3) {
+  &:nth-of-type(3) {
     margin-right: 0;
   }
 

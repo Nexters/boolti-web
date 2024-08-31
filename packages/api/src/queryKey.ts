@@ -176,7 +176,7 @@ export const adminReservationQueryKeys = createQueryKeys('adminReservation', {
     ticketStatus: TicketStatus | undefined = undefined,
     reservationNameOrPhoneNumber?: string,
   ) => ({
-    queryKey: [showId],
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, ticketStatus],
     queryFn: () => {
       const searchParams: SearchParamsOption = {
         page,

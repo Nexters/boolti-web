@@ -4,7 +4,13 @@ import Styled from './PaymentPage.styles';
 import { useEffect, useState } from 'react';
 import TicketTypeSelect from '~/components/TicketTypeSelect/TicketTypeSelect';
 import { Input, Pagination } from 'antd';
-import { TicketStatus, useAdminReservationSummary, useAdminReservations } from '@boolti/api';
+import {
+  TicketStatus,
+  TicketType,
+  useAdminReservationSummary,
+  useAdminReservations,
+} from '@boolti/api';
+import PaymentTable from '~/components/PaymentTable/PaymentTable';
 
 const PaymentPage = () => {
   const params = useParams<{ showId: string }>();
@@ -13,9 +19,7 @@ const PaymentPage = () => {
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [selectedTicketStatus, setSelectedTicketStatus] = useState<TicketStatus>('COMPLETE');
-  const [selectedTicketType, setSelectedTicketType] = useState<
-    React.ComponentProps<typeof TicketTypeSelect>['value']
-  >({ value: 'ALL', label: '티켓 전체' });
+  const [selectedTicketType, setSelectedTicketType] = useState<'ALL' | TicketType>('ALL');
   const [currentPage, setCurrentPage] = useState(0);
 
   const { Search } = Input;
@@ -32,7 +36,7 @@ const PaymentPage = () => {
   const { data: reservationData } = useAdminReservations(
     showId,
     currentPage,
-    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+    selectedTicketType === 'ALL' ? undefined : selectedTicketType,
     selectedTicketStatus,
     debouncedSearchText,
   );
@@ -42,11 +46,11 @@ const PaymentPage = () => {
   const reservations = (reservationData?.content ?? []).filter(
     ({ ticketStatus, ticketType }) =>
       ticketStatus === selectedTicketStatus &&
-      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+      (selectedTicketType === 'ALL' || ticketType === selectedTicketType),
   );
 
   const onClickReset = () => {
-    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
+    setSelectedTicketType('ALL');
     setSearchText('');
   };
 
@@ -120,7 +124,7 @@ const PaymentPage = () => {
         </Styled.FilterCol>
         <Styled.FilterCol>
           <TicketTypeSelect
-            value={selectedTicketType}
+            ticketType={selectedTicketType}
             onChange={(value) => setSelectedTicketType(value)}
           />
           <Search
@@ -130,6 +134,7 @@ const PaymentPage = () => {
           />
         </Styled.FilterCol>
       </Styled.Filter>
+      <PaymentTable data={reservations} ticketStatus={selectedTicketStatus} />
       {totalPages > 0 && (
         <Pagination
           style={{ marginTop: 16 }}

@@ -59,7 +59,6 @@ const EntrancePage = () => {
   }, [searchText]);
 
   useEffect(() => {
-    console.log(selectedTicketType);
     setCurrentPage(0);
   }, [selectedTicketType, isEnteredTicket, debouncedSearchText]);
 
