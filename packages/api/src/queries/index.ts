@@ -24,6 +24,7 @@ import useUserSummary from './useUserSummary';
 import useGift from './useGift';
 import useHostList from './useHostList';
 import useMyHostInfo from './useMyHostInfo';
+import useUserProfile from './useUserProfile';
 
 export {
   useAdminSettlementEvent,
@@ -52,4 +53,5 @@ export {
   useUserSummary,
   useHostList,
   useMyHostInfo,
+  useUserProfile,
 };

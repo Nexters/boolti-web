@@ -31,6 +31,8 @@ import useAddHost from './useAddHost';
 import useEditHost from './useEditHost';
 import useDeleteHost from './useDeleteHost';
 import useDeleteMe from './useDeleteMe';
+import useEditUserProfile from './useEditUserProfile';
+import useUploadProfileImage from './useUploadProfileImage';
 
 export {
   useAddBankAccount,
@@ -66,6 +68,8 @@ export {
   useEditHost,
   useDeleteHost,
   useDeleteMe,
+  useEditUserProfile,
+  useUploadProfileImage,
 };
 
 export type { ImageFile };

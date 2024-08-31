@@ -6,6 +6,14 @@ interface SettingMenuItemButtonProps {
   active?: boolean;
 }
 
+interface LabelProps {
+  required?: boolean;
+}
+
+interface TextAreaProps {
+  hasError?: boolean;
+}
+
 const SettingDialogContent = styled.div`
   height: calc(100vh - 48px);
   display: flex;
@@ -17,7 +25,7 @@ const SettingDialogContent = styled.div`
 `;
 
 const SettingMenuWrapper = styled.aside`
-  width: 150px;
+  flex-basis: 150px;
   flex-shrink: 0;
   display: none;
   flex-direction: column;
@@ -69,37 +77,129 @@ const SettingMenuBottomLogo = styled.div`
 const SettingContent = styled.div`
   flex: 1;
   padding: 16px 0;
+  min-width: 0;
+  overflow-y: auto;
 
   ${mq_lg} {
     padding: 24px 32px;
   }
 `;
 
-const SettingContentTitle = styled.h3`
+const SettingContentHeader = styled.div`
   display: none;
+  margin-bottom: 24px;
+
+  ${mq_lg} {
+    display: flex;
+    justify-content: space-between;
+  }
+`
+
+const SettingContentTitle = styled.h3`
   ${({ theme }) => theme.typo.h1};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 24px;
 
   ${mq_lg} {
     display: block;
   }
 `;
 
+const SettingContentForm = styled.form``
+
 const SettingContentFormControl = styled.div`
   margin-bottom: 24px;
 
-  div {
+  & > div {
     width: 100%;
   }
 `;
 
-const Label = styled.label`
+const ProfileImageWrapper = styled.div`
+  position: relative;
+`
+
+const ProfileImage = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 100px;
+  object-fit: cover;
+`
+
+const ProfileImageEditButton = styled.label`
+  width: 42px;
+  height: 42px;
+  border-radius: 42px;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g10};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  box-shadow: 0 4px 4px 0 ${({ theme }) => theme.palette.shadow};
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 0;
+  left: calc(100px - 42px + 8px);
+  cursor: pointer;
+`
+
+const Label = styled.label<LabelProps>`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 8px;
-  display: block;
+  display: flex;
+  position: relative;
+
+  &::after {
+    content: ${({ required }) => (required ? "'*'" : "none")};
+    color: ${({ theme }) => theme.palette.status.error};
+    ${({ theme }) => theme.typo.b1};
+    line-height: 22px;
+    margin-left: 2px;
+  }
 `;
+
+const SNSLinkList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+`;
+
+const SNSLinkItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+`
+
+const SNSLinkInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+`
+
+const SNSLinkTitle = styled.p`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`
+
+const SNSLinkDescription = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`
+
+const SNSLinkEditButton = styled.button`
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`
 
 const ConnectedServiceList = styled.div`
   display: flex;
@@ -150,6 +250,65 @@ const SettingDescriptionList = styled.ul`
 
 const SettingDescriptionItem = styled.li``;
 
+const TextAreaWrapper = styled.div`
+  position: relative;
+  height: 122px;
+`
+
+const TextAreaBox = styled.div<TextAreaProps>`
+  border: 1px solid
+    ${({ theme, hasError }) =>
+    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+
+  textarea:placeholder-shown + & {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  }
+
+  textarea:focus + & {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  }
+
+  textarea:disabled + & {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+    background: ${({ theme }) => theme.palette.grey.g10};
+  }
+`
+
+const TextArea = styled.textarea`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 12px - 12px); 
+  height: 72px;
+  margin: 12px 12px 38px;
+  color: ${({ theme }) => theme.palette.grey.g90};
+  ${({ theme }) => theme.typo.b3};
+  line-height: 24px;
+  z-index: 2;
+  word-break: break-all;
+
+  &:placeholder-shown {
+    color: ${({ theme }) => theme.palette.grey.g30};
+  }
+`;
+
+const TextAreaCount = styled.span`
+  ${({ theme }) => theme.typo.c1};
+  color: ${({ theme }) => theme.palette.grey.g30};
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  z-index: 3;
+`
+
 export default {
   SettingDialogContent,
   SettingMenuWrapper,
@@ -157,13 +316,28 @@ export default {
   SettingMenuItemButton,
   SettingMenuBottomLogo,
   SettingContent,
+  SettingContentHeader,
   SettingContentTitle,
+  SettingContentForm,
   SettingContentFormControl,
+  ProfileImageWrapper,
+  ProfileImage,
+  ProfileImageEditButton,
   Label,
+  SNSLinkList,
+  SNSLinkItem,
+  SNSLinkInfo,
+  SNSLinkTitle,
+  SNSLinkDescription,
+  SNSLinkEditButton,
   ConnectedServiceList,
   ConnectedServiceChip,
   Divider,
   SettingSubtitle,
   SettingDescriptionList,
   SettingDescriptionItem,
+  TextAreaWrapper,
+  TextAreaBox,
+  TextArea,
+  TextAreaCount,
 };
