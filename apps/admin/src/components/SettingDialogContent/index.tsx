@@ -159,9 +159,11 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
           <Styled.SettingContentForm onSubmit={handleSubmit(submitHandler)}>
             <Styled.SettingContentHeader>
               <Styled.SettingContentTitle>프로필</Styled.SettingContentTitle>
-              <TextButton type="submit" size="small" colorTheme="primary">
-                저장하기
-              </TextButton>
+              <Styled.SettingContentSubmitWrapper>
+                <TextButton type="submit" size="small" colorTheme="primary">
+                  저장하기
+                </TextButton>
+              </Styled.SettingContentSubmitWrapper>
             </Styled.SettingContentHeader>
             <Styled.SettingContentFormControl>
               {(profileImagePreview ?? userProfile?.imgPath) && (
@@ -237,20 +239,20 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                         linkDialog.close();
                       }}
                     />
-                  ),
+                  )
                 })
               }}>
                 링크 추가
               </Button>
-              <Styled.SNSLinkList>
+              <Styled.LinkList>
                 {links.map((link) => {
                   return (
-                    <Styled.SNSLinkItem key={`${link.title}_${link.link}`}>
-                      <Styled.SNSLinkInfo>
-                        <Styled.SNSLinkTitle>{link.title}</Styled.SNSLinkTitle>
-                        <Styled.SNSLinkDescription>{link.link}</Styled.SNSLinkDescription>
-                      </Styled.SNSLinkInfo>
-                      <Styled.SNSLinkEditButton type="button" onClick={() => {
+                    <Styled.LinkItem key={`${link.title}_${link.link}`}>
+                      <Styled.LinkInfo>
+                        <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
+                        <Styled.LinkDescription>{link.link}</Styled.LinkDescription>
+                      </Styled.LinkInfo>
+                      <Styled.LinkEditButton type="button" onClick={() => {
                         linkDialog.open({
                           title: '링크 편집',
                           content: (
@@ -275,20 +277,24 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                         })
                       }}>
                         <EditIcon />
-                      </Styled.SNSLinkEditButton>
-                    </Styled.SNSLinkItem>
+                      </Styled.LinkEditButton>
+                    </Styled.LinkItem>
                   );
                 })}
-              </Styled.SNSLinkList>
+              </Styled.LinkList>
             </Styled.SettingContentFormControl>
+            <Styled.SettingContentSubmitWrapperMobile>
+              <Button size="bold" colorTheme="primary" type="submit">저장하기</Button>
+            </Styled.SettingContentSubmitWrapperMobile>
           </Styled.SettingContentForm>
         </Styled.SettingContent>
-      )
-      }
+      )}
       {
         currentMenu === 'account' && (
           <Styled.SettingContent>
-            <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
+            <Styled.SettingContentHeader>
+              <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
+            </Styled.SettingContentHeader>
             <Styled.SettingContentFormControl>
               <Styled.Label htmlFor="code">식별 코드</Styled.Label>
               <TextField

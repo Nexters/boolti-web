@@ -46,7 +46,7 @@ const LinkFormDialogContent = ({ defaultValues, onSubmit, onDelete }: LinkFormDi
           {...linkForm.register('link', { required: true })}
         />
       </Styled.LinkFormControl>
-      <Styled.LinkFormButtonWrapper>
+      <Styled.LinkFormButtonWrapper isEditMode={isEditMode}>
         <Button size="bold" colorTheme="primary" type="submit" disabled={!linkForm.formState.isValid}>
           저장하기
         </Button>

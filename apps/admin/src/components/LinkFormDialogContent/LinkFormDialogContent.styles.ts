@@ -1,12 +1,22 @@
 import styled from '@emotion/styled'
+import { mq_lg } from '@boolti/ui'
 
 interface LabelProps {
   required?: boolean;
 }
 
+interface LinkFormButtonWrapperProps {
+  isEditMode?: boolean;
+}
+
 const LinkForm = styled.form`
   display: flex;
   flex-direction: column;
+  padding: 20px 0 16px;
+
+  ${mq_lg} {
+    padding: 0;
+  }
 `
 
 const LinkFormControl = styled.div`
@@ -17,12 +27,22 @@ const LinkFormControl = styled.div`
   }
 `
 
-const LinkFormButtonWrapper = styled.div`
+const LinkFormButtonWrapper = styled.div<LinkFormButtonWrapperProps>`
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: row-reverse;
   margin-top: 4px;
+
+  button {
+    width: ${({ isEditMode }) => isEditMode ? 'auto' : '100%'};
+  }
+
+  ${mq_lg} {
+    button {
+      width: auto;
+    }
+  }
 `
 
 const Label = styled.label<LabelProps>`

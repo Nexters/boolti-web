@@ -17,31 +17,42 @@ interface TextAreaProps {
 const SettingDialogContent = styled.div`
   height: calc(100vh - 48px);
   display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
 
   ${mq_lg} {
+    flex-direction: row;
     width: 600px;
     height: 542px;
+    padding-bottom: 0;
   }
 `;
 
 const SettingMenuWrapper = styled.aside`
-  flex-basis: 150px;
-  flex-shrink: 0;
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid ${({ theme }) => theme.palette.grey.g30};
-  padding: 24px 20px 28px;
+  display: flex;
+  margin: 16px 0;
 
   ${mq_lg} {
+    flex-basis: 150px;
+    flex-shrink: 0;
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-right: 1px solid ${({ theme }) => theme.palette.grey.g30};
+    padding: 24px 20px 28px;
+    margin: 0;
   }
 `;
 
 const SettingMenu = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
+  flex: 1;
+
+  ${mq_lg} {
+    flex-direction: column;
+  }
 `;
 
 const SettingMenuItemButton = styled.button<SettingMenuItemButtonProps>`
@@ -61,17 +72,28 @@ const SettingMenuItemButton = styled.button<SettingMenuItemButtonProps>`
   padding: 0 12px;
   border-radius: 4px;
   cursor: pointer;
+  flex: 1;
+  text-align: center;
 
   &:hover {
     ${({ theme }) => theme.typo.sh1};
     background-color: ${({ theme }) => theme.palette.grey.g10};
     color: ${({ theme }) => theme.palette.grey.g90};
   }
+
+  ${mq_lg} {
+    flex: initial;
+    text-align: left;
+  }
 `;
 
 const SettingMenuBottomLogo = styled.div`
-  display: flex;
-  justify-content: center;
+  display: none;
+
+  ${mq_lg} {
+    display: flex;
+    justify-content: center;
+  }
 `;
 
 const SettingContent = styled.div`
@@ -98,11 +120,40 @@ const SettingContentHeader = styled.div`
 const SettingContentTitle = styled.h3`
   ${({ theme }) => theme.typo.h1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  display: none;
 
   ${mq_lg} {
     display: block;
   }
 `;
+
+const SettingContentSubmitWrapper = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+  }
+`
+
+const SettingContentSubmitWrapperMobile = styled.div`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 80px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+
+  button {
+    width: calc(100% - 24px - 24px);
+  }
+
+  ${mq_lg} {
+    display: none;
+  }
+`
 
 const SettingContentForm = styled.form``
 
@@ -157,14 +208,14 @@ const Label = styled.label<LabelProps>`
   }
 `;
 
-const SNSLinkList = styled.div`
+const LinkList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
   margin: 16px 0;
 `;
 
-const SNSLinkItem = styled.div`
+const LinkItem = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -172,19 +223,19 @@ const SNSLinkItem = styled.div`
   height: 56px;
 `
 
-const SNSLinkInfo = styled.div`
+const LinkInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
 `
 
-const SNSLinkTitle = styled.p`
+const LinkTitle = styled.p`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
 `
 
-const SNSLinkDescription = styled.p`
+const LinkDescription = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
   overflow: hidden;
@@ -192,7 +243,7 @@ const SNSLinkDescription = styled.p`
   text-overflow: ellipsis;
 `
 
-const SNSLinkEditButton = styled.button`
+const LinkEditButton = styled.button`
   width: 24px;
   height: 24px;
   display: inline-flex;
@@ -318,18 +369,20 @@ export default {
   SettingContent,
   SettingContentHeader,
   SettingContentTitle,
+  SettingContentSubmitWrapper,
+  SettingContentSubmitWrapperMobile,
   SettingContentForm,
   SettingContentFormControl,
   ProfileImageWrapper,
   ProfileImage,
   ProfileImageEditButton,
   Label,
-  SNSLinkList,
-  SNSLinkItem,
-  SNSLinkInfo,
-  SNSLinkTitle,
-  SNSLinkDescription,
-  SNSLinkEditButton,
+  LinkList,
+  LinkItem,
+  LinkInfo,
+  LinkTitle,
+  LinkDescription,
+  LinkEditButton,
   ConnectedServiceList,
   ConnectedServiceChip,
   Divider,
