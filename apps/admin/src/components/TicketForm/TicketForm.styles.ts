@@ -6,13 +6,35 @@ const TicketForm = styled.form`
   flex-direction: column;
 `;
 
+const TicketFormDescription = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+
+  ${mq_lg} {
+    margin-bottom: 28px;
+  }
+`;
+
 const Description = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
+  margin-bottom: 0;
 
   ${mq_lg} {
     ${({ theme }) => theme.typo.b3};
     color: ${({ theme }) => theme.palette.grey.g70};
+    margin-bottom: 4px;
+  }
+`;
+
+const SubDescription = styled.p`
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+    ${({ theme }) => theme.typo.b1};
+    color: ${({ theme }) => theme.palette.grey.g50};
   }
 `;
 
@@ -76,7 +98,9 @@ const TicketFormButton = styled.div`
 
 export default {
   TicketForm,
+  TicketFormDescription,
   Description,
+  SubDescription,
   TicketFormRow,
   TicketFormContent,
   TicketFormLabel,
