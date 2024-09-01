@@ -148,9 +148,10 @@ const ShowInfoSubtitle = styled.h4`
   margin-bottom: 8px;
 `;
 
-const ShowInfoDescription = styled.p<ShowInfoDescriptionProps>`
+const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  overflow-wrap: break-word;
   word-break: break-word;
 
   ${({ isFullContent }) =>
