@@ -65,6 +65,8 @@ import { Wallet } from './Wallet';
 import { Woori } from './Woori';
 import { Setting } from './Setting';
 import { Logout } from './Logout';
+import { Call } from './Call';
+import { Message } from './Message';
 
 export {
   Apple as AppleIcon,
@@ -134,4 +136,6 @@ export {
   Woori,
   Setting as SettingIcon,
   Logout as LogoutIcon,
+  Call as CallIcon,
+  Message as MessageIcon,
 };
