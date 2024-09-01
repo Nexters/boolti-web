@@ -17,11 +17,21 @@ const ShowPreviewContainer = styled.div`
 
 const Header = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   height: 44px;
   padding: 0 20px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const HeaderLogo = styled.div`
+  display: flex;
+  align-items: center;
+
+  svg {
+    width: 53px;
+    height: 24px;
+  }
 `;
 
 const ShareButton = styled.button`
@@ -30,7 +40,11 @@ const ShareButton = styled.button`
   cursor: pointer;
 `;
 
-const Footer = styled.div`
+const FooterWrapper = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.g100};
+`;
+
+const ReservationButtonWrapper = styled.div`
   position: fixed;
   bottom: 0;
   display: flex;
@@ -144,8 +158,10 @@ export default {
   ShowPreviewPage,
   ShowPreviewContainer,
   Header,
+  HeaderLogo,
   ShareButton,
-  Footer,
+  FooterWrapper,
+  ReservationButtonWrapper,
   ReservationButton,
   ReservationButtonMobile,
   DialogContainer,

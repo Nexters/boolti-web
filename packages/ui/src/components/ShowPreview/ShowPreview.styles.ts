@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { mq_lg } from '../../systems';
 
 interface ShowInfoDescriptionProps {
   isFullContent?: boolean;
@@ -46,6 +47,7 @@ const ShowImage = styled.img`
 const ShowName = styled.h2`
   ${({ theme }) => theme.typo.point.p3};
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
+  text-align: center;
 `;
 
 const ShowPreviewContent = styled.div`
@@ -54,43 +56,61 @@ const ShowPreviewContent = styled.div`
 `;
 
 const ShowPreviewTicketPeriod = styled.div`
-  border-radius: 8px;
-  height: 88px;
-  position: relative;
-  margin-bottom: 8px;
-`;
-
-const ShowPreviewTicketPeriodBackground = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 88px;
+  height: 80px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g70};
+  border-radius: 8px;
+  position: relative;
+  margin-bottom: 8px;
 
-  svg {
+  &::before, &::after {
+    content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
+    width: 20px;  
+    height: 20px;
+    border-radius: 20px;
+    background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
+  }
+
+  &::before {
+    top: 30px;
+    left: -10px;
+  }
+
+  &::after {
+    top: 30px;
+    right: -10px;
   }
 `;
 
 const ShowPreviewTicketPeriodInfo = styled.div`
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
+  gap: 12px;
   padding: 12px 0;
 `;
 
 const ShowPreviewTicketPeriodTitle = styled.h3`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.mobile.grey.g15};
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  &::before, &::after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    background-color: ${({ theme }) => theme.palette.mobile.grey.g30};
+    border-radius: 5px;
+  }
 `;
 
 const ShowPreviewTicketPeriodText = styled.p`
@@ -162,6 +182,11 @@ const ShowInfoDescription = styled.p<ShowInfoDescriptionProps>`
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 10;
     `}
+
+  a {
+    color: #46A6FF;
+    text-decoration: underline;
+  }
 `;
 
 const ShowInfoBox = styled.div`
@@ -175,6 +200,45 @@ const ShowInfoBox = styled.div`
   align-items: center;
 `;
 
+const ShowHost = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`
+
+const ShowHostName = styled.span`
+  ${({ theme }) => theme.typo.b3};
+`
+
+const ShowHostLink = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  a {
+    cursor: pointer;
+  }
+`
+
+const ShowHostLinkMobile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  ${mq_lg} {
+    display: none;
+  }
+  
+  a {
+    cursor: pointer;
+  }
+`
+
 export default {
   ShowPreview,
   ShowPreviewHeader,
@@ -182,7 +246,6 @@ export default {
   ShowName,
   ShowPreviewContent,
   ShowPreviewTicketPeriod,
-  ShowPreviewTicketPeriodBackground,
   ShowPreviewTicketPeriodInfo,
   ShowPreviewTicketPeriodTitle,
   ShowPreviewTicketPeriodText,
@@ -195,4 +258,8 @@ export default {
   ShowInfoSubtitle,
   ShowInfoDescription,
   ShowInfoBox,
+  ShowHost,
+  ShowHostName,
+  ShowHostLink,
+  ShowHostLinkMobile,
 };
