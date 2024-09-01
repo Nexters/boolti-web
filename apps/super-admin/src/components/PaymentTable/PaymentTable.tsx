@@ -69,8 +69,8 @@ const PaymentTable = ({ data, ticketStatus }: PaymentTableProps) => {
                 <Styled.TableItem width={180}>{item.ticketName}</Styled.TableItem>
                 <Styled.TableItem width={100}>{item.reservationName}</Styled.TableItem>
                 <Styled.TableItem width={140}>{item.reservationPhoneNumber}</Styled.TableItem>
-                <Styled.TableItem width={100}>{item.paymentName}</Styled.TableItem>
-                <Styled.TableItem width={140}>{item.paymentPhoneNumber}</Styled.TableItem>
+                <Styled.TableItem width={100}>{item.payerName}</Styled.TableItem>
+                <Styled.TableItem width={140}>{item.payerPhoneNumber}</Styled.TableItem>
                 <Styled.TableItem width={96}>{item.csReservationId}</Styled.TableItem>
                 <Styled.TableItem align="right" width={92}>
                   {item.ticketPrice.toLocaleString()}원
@@ -87,7 +87,7 @@ const PaymentTable = ({ data, ticketStatus }: PaymentTableProps) => {
                     </Styled.TableItem>
                     <Styled.TableItem width={168}>취소 수단</Styled.TableItem>
                     <Styled.TableItem width={148}>
-                      {format(item.cancelCreatedAt, 'yyyy.MM.dd HH:mm')}
+                      {format(item.canceledAt, 'yyyy.MM.dd HH:mm')}
                     </Styled.TableItem>
                     <Styled.TableItem width={162}>{item.cancelReason}</Styled.TableItem>
                   </>
