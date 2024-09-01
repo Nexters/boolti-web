@@ -23,6 +23,7 @@ import {
 } from './types';
 import {
   AdminShowDetailResponse,
+  AdminShowInfoResponse,
   AdminShowResponse,
   SettlementEventResponse,
   SettlementInfoResponse,
@@ -32,6 +33,15 @@ import {
 import { BankAccountListResponse, UserProfileResponse, UserProfileSummaryResponse } from './types/users';
 import { GiftInfoResponse } from './types/gift';
 import { HostListItem, HostListResponse } from './types/host';
+import {
+  AdminEntranceInfoResponse,
+  AdminEntranceSummaryResponse,
+  PageAdminEntranceResponse,
+} from './types/adminEntrance';
+import {
+  AdminReservationSummaryResponse,
+  PageAdminReservationResponse,
+} from './types/adminReservation';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -113,6 +123,84 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   showDetail: (showId: number) => ({
     queryKey: [showId],
     queryFn: () => fetcher.get<AdminShowDetailResponse>(`sa-api/v1/shows/${showId}`),
+  }),
+  info: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminShowInfoResponse>(`sa-api/v1/shows/${showId}/super-admin-infos`),
+  }),
+});
+
+export const adminEntranceQueryKeys = createQueryKeys('adminEntrance', {
+  summary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminEntranceSummaryResponse>(`sa-api/v1/shows/${showId}/entrance-summaries`),
+  }),
+  info: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminEntranceInfoResponse>(`sa-api/v1/shows/${showId}/entrance-infos`),
+  }),
+  list: (
+    showId: number,
+    page: number,
+    isEntered: boolean,
+    ticketType?: TicketType,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, page, ticketType, isEntered, reservationNameOrPhoneNumber],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        isEntered,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageAdminEntranceResponse>(`sa-api/v1/shows/${showId}/entrances`, {
+        searchParams,
+      });
+    },
+  }),
+});
+
+export const adminReservationQueryKeys = createQueryKeys('adminReservation', {
+  list: (
+    showId: number,
+    page: number,
+    ticketType: TicketType | undefined = undefined,
+    ticketStatus: TicketStatus | undefined = undefined,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, ticketStatus],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (ticketStatus) {
+        searchParams.ticketStatus = ticketStatus;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageAdminReservationResponse>(`sa-api/v1/shows/${showId}/reservations`, {
+        searchParams,
+      });
+    },
+  }),
+  summary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminReservationSummaryResponse>(
+        `sa-api/v1/shows/${showId}/reservation-summaries`,
+      ),
   }),
 });
 
@@ -239,6 +327,8 @@ export const hostQueryKeys = createQueryKeys('host', {
 
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
+  adminEntranceQueryKeys,
+  adminReservationQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
