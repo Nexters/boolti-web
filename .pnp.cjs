@@ -2993,6 +2993,8 @@ const RAW_RUNTIME_STATE =
           ["@react-spring/web", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:9.7.3"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
+          ["linkify-react", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:4.1.3"],\
+          ["linkifyjs", "npm:4.1.3"],\
           ["nanoid", "npm:5.0.4"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
@@ -13233,6 +13235,41 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "../../.yarn/berry/cache/lines-and-columns-npm-1.2.4-d6c7cc5799-10c0.zip/node_modules/lines-and-columns/",\
         "packageDependencies": [\
           ["lines-and-columns", "npm:1.2.4"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["linkify-react", [\
+      ["npm:4.1.3", {\
+        "packageLocation": "../../.yarn/berry/cache/linkify-react-npm-4.1.3-98d267481d-10c0.zip/node_modules/linkify-react/",\
+        "packageDependencies": [\
+          ["linkify-react", "npm:4.1.3"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:4.1.3", {\
+        "packageLocation": "./.yarn/__virtual__/linkify-react-virtual-ca18aece5f/3/.yarn/berry/cache/linkify-react-npm-4.1.3-98d267481d-10c0.zip/node_modules/linkify-react/",\
+        "packageDependencies": [\
+          ["linkify-react", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:4.1.3"],\
+          ["@types/linkifyjs", null],\
+          ["@types/react", "npm:18.2.48"],\
+          ["linkifyjs", "npm:4.1.3"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/linkifyjs",\
+          "@types/react",\
+          "linkifyjs",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["linkifyjs", [\
+      ["npm:4.1.3", {\
+        "packageLocation": "../../.yarn/berry/cache/linkifyjs-npm-4.1.3-f9dd269a83-10c0.zip/node_modules/linkifyjs/",\
+        "packageDependencies": [\
+          ["linkifyjs", "npm:4.1.3"]\
         ],\
         "linkType": "HARD"\
       }]\

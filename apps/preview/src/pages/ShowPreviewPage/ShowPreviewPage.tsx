@@ -1,6 +1,6 @@
 import { useShowPreview } from '@boolti/api';
-import { ShareIcon } from '@boolti/icon';
-import { ShowPreview, useDialog } from '@boolti/ui';
+import { BooltiDark, ShareIcon } from '@boolti/icon';
+import { Footer, ShowPreview, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
@@ -140,6 +140,9 @@ const ShowPreviewPage = () => {
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
           <Styled.Header>
+            <Styled.HeaderLogo>
+              <BooltiDark />
+            </Styled.HeaderLogo>
             <Styled.ShareButton type="button" onClick={shareButtonClickHandler}>
               <ShareIcon />
             </Styled.ShareButton>
@@ -164,18 +167,22 @@ const ShowPreviewPage = () => {
               hostName: data?.hostName ?? '',
               hostPhoneNumber: data?.hostPhoneNumber ?? '',
             }}
+            onShowQRCode={reservationButtonClickHandler}
           />
-          <Styled.Footer>
+          <Styled.FooterWrapper>
+            <Footer />
+          </Styled.FooterWrapper>
+          <Styled.ReservationButtonWrapper>
             <Styled.ReservationButton type="button" onClick={reservationButtonClickHandler}>
-              예매하기
+              앱에서 예매하기
             </Styled.ReservationButton>
             <Styled.ReservationButtonMobile
               type="button"
               onClick={reservationButtonMobileClickHandler}
             >
-              예매하기
+              앱에서 예매하기
             </Styled.ReservationButtonMobile>
-          </Styled.Footer>
+          </Styled.ReservationButtonWrapper>
         </Styled.ShowPreviewContainer>
       </Styled.ShowPreviewPage>
     </>

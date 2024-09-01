@@ -1,4 +1,4 @@
-import { KakaotalkIcon } from '@boolti/icon';
+import { InstagramIcon, KakaotalkIcon } from '@boolti/icon';
 
 import Styled from './Footer.styles';
 
@@ -73,10 +73,14 @@ const Footer = () => {
           </Styled.LinkTextGroup>
         </Styled.TextGroup>
         <Styled.IconGroup>
-          {/* <Styled.IconLink>
+          <Styled.IconLink
+            href="https://www.instagram.com/boolti.official"
+            target="_blank"
+            rel="noreferrer noopener nofollow"
+          >
             <InstagramIcon />
           </Styled.IconLink>
-          <Styled.IconLink>
+          {/* <Styled.IconLink>
             <GithubIcon />
           </Styled.IconLink> */}
           <Styled.IconLink

@@ -48,6 +48,7 @@ import { NFCF } from './NFCF';
 import { NFF } from './NFF';
 import { NH } from './NH';
 import { Plus } from './Plus';
+import { Photo } from './Photo';
 import { SB } from './SB';
 import { SBI } from './SBI';
 import { SC } from './SC';
@@ -64,6 +65,8 @@ import { Wallet } from './Wallet';
 import { Woori } from './Woori';
 import { Setting } from './Setting';
 import { Logout } from './Logout';
+import { Call } from './Call';
+import { Message } from './Message';
 
 export {
   Apple as AppleIcon,
@@ -116,6 +119,7 @@ export {
   NFF,
   NH,
   Plus as PlusIcon,
+  Photo as PhotoIcon,
   SB,
   SBI,
   SC,
@@ -132,4 +136,6 @@ export {
   Woori,
   Setting as SettingIcon,
   Logout as LogoutIcon,
+  Call as CallIcon,
+  Message as MessageIcon,
 };
