@@ -1,5 +1,5 @@
 import PageLayout from '~/components/PageLayout/PageLayout';
-import Styled from './TicketPage.styles';
+// import Styled from './TicketPage.styles';
 
 const TicketPage = () => {
   return (

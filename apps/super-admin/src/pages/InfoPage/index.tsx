@@ -1,5 +1,5 @@
 import PageLayout from '~/components/PageLayout/PageLayout';
-import Styled from './InfoPage.styles';
+// import Styled from './InfoPage.styles';
 
 const InfoPage = () => {
   return (
