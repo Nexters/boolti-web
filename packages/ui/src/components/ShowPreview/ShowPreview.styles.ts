@@ -41,7 +41,7 @@ const ShowPreviewHeader = styled.div`
 const ShowImage = styled.img`
   width: 299px;
   height: 419px;
-  object-fit: contain;
+  object-fit: cover;
 `;
 
 const ShowName = styled.h2`

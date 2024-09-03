@@ -27,10 +27,11 @@ interface ShowPreviewProps {
     hostPhoneNumber: string;
   };
   hasNoticePage?: boolean;
-  onShowQRCode?: () => void;
+  onClickLink?: () => void;
+  onClickLinkMobile?: () => void;
 }
 
-const ShowPreview = ({ show, hasNoticePage, onShowQRCode }: ShowPreviewProps) => {
+const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: ShowPreviewProps) => {
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const {
     images,
@@ -45,7 +46,6 @@ const ShowPreview = ({ show, hasNoticePage, onShowQRCode }: ShowPreviewProps) =>
     placeDetailAddress,
     notice,
     hostName,
-    hostPhoneNumber,
   } = show;
 
   if (noticeOpen) {
@@ -63,7 +63,7 @@ const ShowPreview = ({ show, hasNoticePage, onShowQRCode }: ShowPreviewProps) =>
     <Styled.ShowPreview>
       <Styled.ShowPreviewHeader>
         <Swiper
-          style={{ width: '100%', height: '419px' }}
+          style={{ width: '244px', height: '342px', borderRadius: '8px' }}
           spaceBetween={0}
           slidesPerView={1}
           pagination={{
@@ -179,18 +179,18 @@ const ShowPreview = ({ show, hasNoticePage, onShowQRCode }: ShowPreviewProps) =>
             <Styled.ShowHost>
               <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
               <Styled.ShowHostLink>
-                <a onClick={onShowQRCode}>
+                <a onClick={onClickLink}>
                   <CallIcon />
                 </a>
-                <a onClick={onShowQRCode}>
+                <a onClick={onClickLink}>
                   <MessageIcon />
                 </a>
               </Styled.ShowHostLink>
               <Styled.ShowHostLinkMobile>
-                <a href={`tel:${hostPhoneNumber}`}>
+                <a onClick={onClickLinkMobile}>
                   <CallIcon />
                 </a>
-                <a href={`sms:${hostPhoneNumber}`}>
+                <a onClick={onClickLinkMobile}>
                   <MessageIcon />
                 </a>
               </Styled.ShowHostLinkMobile>
