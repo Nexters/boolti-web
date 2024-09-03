@@ -63,7 +63,7 @@ const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: Sh
     <Styled.ShowPreview>
       <Styled.ShowPreviewHeader>
         <Swiper
-          style={{ width: '100%', height: '419px' }}
+          style={{ width: '244px', height: '342px', borderRadius: '8px' }}
           spaceBetween={0}
           slidesPerView={1}
           pagination={{
