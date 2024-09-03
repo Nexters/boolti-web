@@ -24,6 +24,12 @@ import useUserSummary from './useUserSummary';
 import useGift from './useGift';
 import useHostList from './useHostList';
 import useMyHostInfo from './useMyHostInfo';
+import useAdminEntranceSummary from './useAdminEntranceSummary';
+import useAdminEntranceInfo from './useAdminEntranceInfo';
+import useAdminEntrances from './useAdminEntrances';
+import useAdminShowInfo from './useAdminShowInfo';
+import useAdminReservations from './useAdminReservations';
+import useAdminReservationSummary from './useAdminReservationSummary';
 import useUserProfile from './useUserProfile';
 
 export {
@@ -53,5 +59,11 @@ export {
   useUserSummary,
   useHostList,
   useMyHostInfo,
+  useAdminEntranceSummary,
+  useAdminEntranceInfo,
+  useAdminEntrances,
+  useAdminShowInfo,
+  useAdminReservations,
+  useAdminReservationSummary,
   useUserProfile,
 };

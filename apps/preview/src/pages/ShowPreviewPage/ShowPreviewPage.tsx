@@ -167,7 +167,8 @@ const ShowPreviewPage = () => {
               hostName: data?.hostName ?? '',
               hostPhoneNumber: data?.hostPhoneNumber ?? '',
             }}
-            onShowQRCode={reservationButtonClickHandler}
+            onClickLink={reservationButtonClickHandler}
+            onClickLinkMobile={reservationButtonMobileClickHandler}
           />
           <Styled.FooterWrapper>
             <Footer />

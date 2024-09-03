@@ -27,6 +27,10 @@ const palette = {
     main: '#FF5A14',
     sub: '#FFCFBA',
   },
+  yellow: {
+    main: '#E09500',
+    sub: '#FFE2A9',
+  },
   grey: {
     main: '#888D9D',
     sub: '#F3F5F9',

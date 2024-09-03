@@ -13,6 +13,11 @@ import { PATH } from './constants/routes';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SettlementPage from './pages/SettlementPage';
+import Layout from './components/Layout/Layout';
+import InfoPage from './pages/InfoPage';
+import TicketPage from './pages/TicketPage';
+import PaymentPage from './pages/PaymentPage';
+import EntrancePage from './pages/EntrancePage';
 
 setDefaultOptions({ locale: ko });
 
@@ -56,13 +61,31 @@ const privateRoutes = [
   {
     element: (
       <AuthErrorBoundary>
-        <PrivateRoute />
+        <Layout>
+          <PrivateRoute />
+        </Layout>
       </AuthErrorBoundary>
     ),
     children: [
       {
         path: PATH.INDEX,
         element: <HomePage />,
+      },
+      {
+        path: PATH.INFO,
+        element: <InfoPage />,
+      },
+      {
+        path: PATH.TICKET,
+        element: <TicketPage />,
+      },
+      {
+        path: PATH.PAYMENT,
+        element: <PaymentPage />,
+      },
+      {
+        path: PATH.ENTRANCE,
+        element: <EntrancePage />,
       },
       {
         path: PATH.SETTLEMENT,
