@@ -140,9 +140,9 @@ const ShowPreviewPage = () => {
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
           <Styled.Header>
-            <Styled.HeaderLogo>
+            <Styled.HeaderLogoLink href="https://boolti.in">
               <BooltiDark />
-            </Styled.HeaderLogo>
+            </Styled.HeaderLogoLink>
             <Styled.ShareButton type="button" onClick={shareButtonClickHandler}>
               <ShareIcon />
             </Styled.ShareButton>
