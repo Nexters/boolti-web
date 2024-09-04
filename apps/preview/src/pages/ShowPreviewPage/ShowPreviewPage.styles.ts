@@ -24,7 +24,7 @@ const Header = styled.div`
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
 `;
 
-const HeaderLogo = styled.div`
+const HeaderLogoLink = styled.a`
   display: flex;
   align-items: center;
 
@@ -55,6 +55,7 @@ const ReservationButtonWrapper = styled.div`
   height: 64px;
   padding: 0 20px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
+  z-index: 99;
 
   &::before {
     content: '';
@@ -158,7 +159,7 @@ export default {
   ShowPreviewPage,
   ShowPreviewContainer,
   Header,
-  HeaderLogo,
+  HeaderLogoLink,
   ShareButton,
   FooterWrapper,
   ReservationButtonWrapper,

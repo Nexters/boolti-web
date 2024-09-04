@@ -39,8 +39,9 @@ const ShowPreviewHeader = styled.div`
 `;
 
 const ShowImage = styled.img`
-  width: 299px;
-  height: 419px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 299 / 419;
   object-fit: cover;
 `;
 
@@ -51,7 +52,7 @@ const ShowName = styled.h2`
 `;
 
 const ShowPreviewContent = styled.div`
-  padding: 36px 20px;
+  padding: 40px 20px 0;
   position: relative;
 `;
 
