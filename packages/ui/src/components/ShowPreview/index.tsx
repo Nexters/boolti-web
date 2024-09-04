@@ -63,7 +63,7 @@ const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: Sh
     <Styled.ShowPreview>
       <Styled.ShowPreviewHeader>
         <Swiper
-          style={{ width: '244px', height: '342px', borderRadius: '8px' }}
+          style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
           spaceBetween={0}
           slidesPerView={1}
           pagination={{
@@ -174,7 +174,7 @@ const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: Sh
           </Styled.ShowInfoGroup>
           <Styled.ShowInfoGroup>
             <Styled.ShowInfoTitleContainer>
-              <Styled.ShowInfoTitle>주최자</Styled.ShowInfoTitle>
+              <Styled.ShowInfoTitle>공연 관리 문의</Styled.ShowInfoTitle>
             </Styled.ShowInfoTitleContainer>
             <Styled.ShowHost>
               <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
