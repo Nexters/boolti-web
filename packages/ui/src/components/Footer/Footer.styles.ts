@@ -1,6 +1,10 @@
 import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
+interface BoldTextProps {
+  darkMode?: boolean;
+}
+
 const Container = styled.footer`
   padding: 48px 20px 28px 20px;
   max-width: ${({ theme }) => theme.breakpoint.desktop};
@@ -42,12 +46,12 @@ const Text = styled.span`
   color: ${({ theme }) => theme.palette.grey.g50};
 `;
 
-const BoldTtext = styled.span`
+const BoldText = styled.span<BoldTextProps>`
   display: block;
   white-space: pre-line;
   margin-bottom: 8px;
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.g70};
+  color: ${({ theme, darkMode }) => darkMode ? theme.palette.grey.g40 : theme.palette.grey.g70};
 `;
 
 const LinkTextGroup = styled.div`
@@ -91,7 +95,7 @@ export default {
   Content,
   Text,
   Link,
-  BoldTtext,
+  BoldText,
   TextGroup,
   IconGroup,
   LinkTextGroup,
