@@ -45,10 +45,9 @@ const SaveButton = styled.div`
 `;
 
 const DeleteButton = styled.div`
-  display: none;
+  width: 96px;
 
   ${mq_lg} {
-    display: block;
     width: 128px;
   }
 `;

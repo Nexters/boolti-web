@@ -20,7 +20,8 @@ import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 
 const emptyLabel: Record<TicketStatus, string> = {
-  COMPLETE: '발권 왼료된 티켓이 없어요.',
+  COMPLETE: '발권 완료된 티켓이 없어요.',
+  WAIT: '발권 대기 중인 티켓이 없어요.',
   CANCEL: '발권 취소된 티켓이 없어요.',
 };
 
@@ -80,6 +81,7 @@ const ShowReservationPage = () => {
     invitationTicketSoldCount,
     totalSoldCount,
     completeCount,
+    waitCount,
     cancelCount,
   } = reservationSummary;
 
@@ -125,6 +127,15 @@ const ShowReservationPage = () => {
                 isSelected={selectedTicketStatus === 'COMPLETE'}
               >
                 발권 완료 <span>{completeCount}</span>
+              </Styled.TicketReservationSummaryButton>
+              <Styled.TicketReservationSummaryButton
+                onClick={() => {
+                  setSelectedTicketStatus('WAIT');
+                  onClickReset();
+                }}
+                isSelected={selectedTicketStatus === 'WAIT'}
+              >
+                발권 대기 <span>{waitCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
