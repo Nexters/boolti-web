@@ -1,4 +1,4 @@
-import { queryKeys, useLogout, useQueryClient, useUserSummary } from '@boolti/api';
+import { queryKeys, useLogout, useQueryClient, useUserProfile } from '@boolti/api';
 import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
 import { useTheme } from '@emotion/react';
 import { useAtomValue } from 'jotai';
@@ -31,8 +31,8 @@ const Header = () => {
   const queryClient = useQueryClient();
 
   const [isExpanded, setIsExpanded] = useState(false);
-  const { data } = useUserSummary({ enabled: isLogin() });
-  const { imagePath } = data ?? {};
+  const { data } = useUserProfile({ enabled: isLogin() });
+  const { imgPath } = data ?? {};
 
   const onClickAuthButton = async () => {
     if (isLogin()) {
@@ -83,7 +83,7 @@ const Header = () => {
           <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
           {isLogin() ? (
             <Styled.DropDownContainer>
-              <ProfileDropdown image={imagePath} />
+              <ProfileDropdown image={imgPath} />
             </Styled.DropDownContainer>
           ) : (
             <Styled.AuthButton onClick={onClickAuthButton}>로그인</Styled.AuthButton>

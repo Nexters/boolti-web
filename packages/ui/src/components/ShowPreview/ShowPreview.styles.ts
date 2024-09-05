@@ -39,9 +39,14 @@ const ShowPreviewHeader = styled.div`
 `;
 
 const ShowImage = styled.img`
+<<<<<<< HEAD
   width: 100%;
   height: auto;
   aspect-ratio: 299 / 419;
+=======
+  width: 299px;
+  height: 419px;
+>>>>>>> 42aea1e (feat: 공연 상세 미리보기 포스터 이미지 노출 방식 수정 (#155))
   object-fit: cover;
 `;
 
@@ -67,10 +72,18 @@ const ShowPreviewTicketPeriod = styled.div`
   position: relative;
   margin-bottom: 8px;
 
+<<<<<<< HEAD
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+=======
   &::before, &::after {
     content: '';
     position: absolute;
     width: 20px;  
+>>>>>>> 66ec343 (feat: 공연 프리뷰 화면 고도화 작업 반영 (#153))
     height: 20px;
     border-radius: 20px;
     background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
@@ -105,7 +118,12 @@ const ShowPreviewTicketPeriodTitle = styled.h3`
   align-items: center;
   gap: 12px;
 
+<<<<<<< HEAD
+  &::before,
+  &::after {
+=======
   &::before, &::after {
+>>>>>>> 66ec343 (feat: 공연 프리뷰 화면 고도화 작업 반영 (#153))
     content: '';
     width: 5px;
     height: 5px;
@@ -186,7 +204,7 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     `}
 
   a {
-    color: #46A6FF;
+    color: #46a6ff;
     text-decoration: underline;
   }
 `;
@@ -207,11 +225,11 @@ const ShowHost = styled.div`
   justify-content: space-between;
   align-items: center;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-`
+`;
 
 const ShowHostName = styled.span`
   ${({ theme }) => theme.typo.b3};
-`
+`;
 
 const ShowHostLink = styled.div`
   display: none;
@@ -225,7 +243,7 @@ const ShowHostLink = styled.div`
   a {
     cursor: pointer;
   }
-`
+`;
 
 const ShowHostLinkMobile = styled.div`
   display: flex;
@@ -235,11 +253,11 @@ const ShowHostLinkMobile = styled.div`
   ${mq_lg} {
     display: none;
   }
-  
+
   a {
     cursor: pointer;
   }
-`
+`;
 
 export default {
   ShowPreview,

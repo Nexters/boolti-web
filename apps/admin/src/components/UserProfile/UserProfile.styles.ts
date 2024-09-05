@@ -11,6 +11,7 @@ const ProfileImage = styled.img`
   border-radius: 100%;
   width: 52px;
   height: 52px;
+  object-fit: cover;
 
   ${mq_lg} {
     width: 68px;

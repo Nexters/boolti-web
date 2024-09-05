@@ -20,7 +20,6 @@ import useShowReservationSummary from './useShowReservationSummary';
 import useShowSalesInfo from './useShowSalesInfo';
 import useShowSettlementInfo from './useShowSettlementInfo';
 import useShowSettlementStatement from './useShowSettlementStatement';
-import useUserSummary from './useUserSummary';
 import useGift from './useGift';
 import useHostList from './useHostList';
 import useMyHostInfo from './useMyHostInfo';
@@ -56,7 +55,6 @@ export {
   useShowSalesInfo,
   useShowSettlementInfo,
   useShowSettlementStatement,
-  useUserSummary,
   useHostList,
   useMyHostInfo,
   useAdminEntranceSummary,

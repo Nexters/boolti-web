@@ -123,10 +123,10 @@ const EntrancePage = () => {
       {totalPages > 0 && (
         <Pagination
           style={{ marginTop: 16 }}
-          current={currentPage}
+          current={currentPage + 1}
           total={totalElements}
           onChange={(page) => {
-            setCurrentPage(page);
+            setCurrentPage(page - 1);
           }}
         />
       )}
