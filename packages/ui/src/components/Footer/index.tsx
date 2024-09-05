@@ -2,14 +2,18 @@ import { InstagramIcon, KakaotalkIcon } from '@boolti/icon';
 
 import Styled from './Footer.styles';
 
-const Footer = () => {
+interface FooterProps {
+  darkMode?: boolean;
+}
+
+const Footer = ({ darkMode }: FooterProps) => {
   return (
     <Styled.Container>
       <Styled.Content>
         <Styled.MobileTextGroup>
-          <Styled.BoldTtext>
+          <Styled.BoldText darkMode={darkMode}>
             {'불티' + '\n' + 'Copyright ⓒ Boolti. All Rights Reserved'}
-          </Styled.BoldTtext>
+          </Styled.BoldText>
           <Styled.Text>
             {'사업자 등록번호 : 202-43-63442' +
               '\n' +
@@ -42,9 +46,9 @@ const Footer = () => {
           </Styled.LinkTextGroup>
         </Styled.MobileTextGroup>
         <Styled.TextGroup>
-          <Styled.BoldTtext>
+          <Styled.BoldText darkMode={darkMode}>
             {'불티' + '\n' + 'Copyright ⓒ Boolti. All Rights Reserved'}
-          </Styled.BoldTtext>
+          </Styled.BoldText>
           <Styled.Text>
             {'사업자 등록번호 : 202-43-63442 | 대표 : 김혜선' +
               '\n' +
