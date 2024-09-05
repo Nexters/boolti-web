@@ -171,7 +171,7 @@ const ShowPreviewPage = () => {
             onClickLinkMobile={reservationButtonMobileClickHandler}
           />
           <Styled.FooterWrapper>
-            <Footer />
+            <Footer darkMode />
           </Styled.FooterWrapper>
           <Styled.ReservationButtonWrapper>
             <Styled.ReservationButton type="button" onClick={reservationButtonClickHandler}>
