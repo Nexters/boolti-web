@@ -12,7 +12,7 @@ const ShowPreview = styled.div`
 
 const ShowPreviewHeader = styled.div`
   padding: 0 38px;
-  padding-top: 60px;
+  padding-top: 16px;
   padding-bottom: 30px;
   display: flex;
   flex-direction: column;
