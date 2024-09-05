@@ -193,7 +193,7 @@ const ShowInfoPage = () => {
                   size="bold"
                   colorTheme="line"
                   type="button"
-                  disabled={salesStarted && !show.isEnded}
+                  disabled={salesStarted || show.isEnded}
                   onClick={() => {
                     deleteShowDialog.open({
                       title: '공연 삭제하기',
@@ -212,7 +212,7 @@ const ShowInfoPage = () => {
                     });
                   }}
                 >
-                  공연 삭제하기
+                  삭제하기
                 </Button>
               </Styled.DeleteButton>
             </Styled.ShowInfoFormFooter>

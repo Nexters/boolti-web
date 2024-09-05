@@ -9,7 +9,7 @@ export type ReservationStatus =
   | 'WAITING_FOR_REFUND'
   | 'REFUND_COMPLETED';
 
-export type TicketStatus = 'COMPLETE' | 'CANCEL';
+export type TicketStatus = 'COMPLETE' | 'WAIT' | 'CANCEL';
 
 export interface PageResponse<T> {
   totalPages: number;
