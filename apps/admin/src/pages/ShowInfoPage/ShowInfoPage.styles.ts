@@ -117,6 +117,8 @@ const ShowPreview = styled.div`
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  padding-top: 30px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
 
   ::-webkit-scrollbar {
     display: none;
