@@ -103,12 +103,16 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
       nextProfileImageUrl = url;
     }
 
-    await editProfileMutation.mutateAsync({
-      nickname: data.nickname.trim(),
-      introduction: data.introduction.trim(),
-      profileImagePath: nextProfileImageUrl,
-      link: links,
-    });
+    try {
+      await editProfileMutation.mutateAsync({
+        nickname: data.nickname.trim(),
+        introduction: data.introduction.trim(),
+        profileImagePath: nextProfileImageUrl,
+        link: links,
+      });
+    } catch (error) {
+      toast.error('프로필 정보를 저장하는 중 문제가 발생했습니다.');
+    }
 
     toast.success('프로필 정보를 저장했습니다.');
     await refetchUserProfile();
