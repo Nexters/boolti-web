@@ -98,22 +98,22 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
         profileImagePath: nextProfileImageUrl,
         link: links,
       });
+
+      toast.success('프로필 정보를 저장했습니다.');
+      await refetchUserProfile();
+
+      setProfileImageFile(null);
+      setProfileImagePreview(null);
     } catch (error) {
       toast.error('프로필 정보를 저장하는 중 문제가 발생했습니다.');
     }
-
-    toast.success('프로필 정보를 저장했습니다.');
-    await refetchUserProfile();
-
-    setProfileImageFile(null);
-    setProfileImagePreview(null);
   }
 
   useEffect(() => {
     if (!userProfile) return;
 
-    setValue('nickname', userProfile.nickname);
-    setValue('introduction', userProfile.introduction);
+    setValue('nickname', userProfile.nickname ?? '');
+    setValue('introduction', userProfile.introduction ?? '');
 
     setLinks(userProfile.link);
   }, [setValue, userProfile])
@@ -158,15 +158,18 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
               </Styled.SettingContentSubmitWrapper>
             </Styled.SettingContentHeader>
             <Styled.SettingContentFormControl>
-              {(profileImagePreview ?? userProfile?.imgPath) && (
-                <Styled.ProfileImageWrapper>
-                  <Styled.ProfileImage src={profileImagePreview ?? userProfile?.imgPath} alt="profile" />
-                  <Styled.ProfileImageEditButton>
-                    <PhotoIcon />
-                    <input type="file" accept="image/*" style={{ width: 0, height: 0 }} onChange={profileImageChangeHandler} />
-                  </Styled.ProfileImageEditButton>
-                </Styled.ProfileImageWrapper>
-              )}
+              <Styled.ProfileImageWrapper>
+                {profileImagePreview ?? userProfile?.imgPath ? (
+                  <Styled.ProfileImage src={profileImagePreview ?? userProfile?.imgPath} alt="프로필 이미지" />
+                ) : (
+                  <Styled.DefaultProfileImage />
+                )}
+
+                <Styled.ProfileImageEditButton>
+                  <PhotoIcon />
+                  <input type="file" accept="image/*" style={{ width: 0, height: 0 }} onChange={profileImageChangeHandler} />
+                </Styled.ProfileImageEditButton>
+              </Styled.ProfileImageWrapper>
             </Styled.SettingContentFormControl>
             <Styled.SettingContentFormControl>
               <Styled.Label htmlFor="nickname" required>닉네임</Styled.Label>
