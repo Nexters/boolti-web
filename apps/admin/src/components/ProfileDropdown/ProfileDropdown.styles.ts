@@ -31,7 +31,7 @@ const UserProfileImage = styled.img`
   border-radius: 50%;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const DropdownMenuWrapper = styled.div`

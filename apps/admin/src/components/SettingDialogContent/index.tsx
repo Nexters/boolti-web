@@ -64,7 +64,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
   const uploadProfileImageMutation = useUploadProfileImage();
   const editProfileMutation = useEditUserProfile();
 
-  const { register, handleSubmit, setValue, watch, setError, formState } = useForm<ProfileFormInputs>();
+  const { register, handleSubmit, setValue, watch, setError, clearErrors, formState } = useForm<ProfileFormInputs>();
 
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
@@ -83,18 +83,6 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
   const submitHandler = async (data: ProfileFormInputs) => {
     if (editProfileMutation.isLoading) return;
 
-    if (data.nickname.trim().length === 0) {
-      setError('nickname', { type: 'minLength', message: NICKNAME_ERROR_MESSAGE.minLength });
-
-      return
-    }
-
-    if (data.nickname.trim().length > MAX_NICKNAME_LENGTH) {
-      setError('nickname', { type: 'maxLength', message: NICKNAME_ERROR_MESSAGE.maxLength });
-
-      return
-    }
-
     let nextProfileImageUrl = userProfile?.imgPath;
 
     if (profileImageFile) {
@@ -103,25 +91,29 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
       nextProfileImageUrl = url;
     }
 
-    await editProfileMutation.mutateAsync({
-      nickname: data.nickname.trim(),
-      introduction: data.introduction.trim(),
-      profileImagePath: nextProfileImageUrl,
-      link: links,
-    });
+    try {
+      await editProfileMutation.mutateAsync({
+        nickname: data.nickname.trim(),
+        introduction: data.introduction.trim(),
+        profileImagePath: nextProfileImageUrl,
+        link: links,
+      });
 
-    toast.success('프로필 정보를 저장했습니다.');
-    await refetchUserProfile();
+      toast.success('프로필 정보를 저장했습니다.');
+      await refetchUserProfile();
 
-    setProfileImageFile(null);
-    setProfileImagePreview(null);
+      setProfileImageFile(null);
+      setProfileImagePreview(null);
+    } catch (error) {
+      toast.error('프로필 정보를 저장하는 중 문제가 발생했습니다.');
+    }
   }
 
   useEffect(() => {
     if (!userProfile) return;
 
-    setValue('nickname', userProfile.nickname);
-    setValue('introduction', userProfile.introduction);
+    setValue('nickname', userProfile.nickname ?? '');
+    setValue('introduction', userProfile.introduction ?? '');
 
     setLinks(userProfile.link);
   }, [setValue, userProfile])
@@ -166,15 +158,18 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
               </Styled.SettingContentSubmitWrapper>
             </Styled.SettingContentHeader>
             <Styled.SettingContentFormControl>
-              {(profileImagePreview ?? userProfile?.imgPath) && (
-                <Styled.ProfileImageWrapper>
-                  <Styled.ProfileImage src={profileImagePreview ?? userProfile?.imgPath} alt="profile" />
-                  <Styled.ProfileImageEditButton>
-                    <PhotoIcon />
-                    <input type="file" accept="image/*" style={{ width: 0, height: 0 }} onChange={profileImageChangeHandler} />
-                  </Styled.ProfileImageEditButton>
-                </Styled.ProfileImageWrapper>
-              )}
+              <Styled.ProfileImageWrapper>
+                {profileImagePreview ?? userProfile?.imgPath ? (
+                  <Styled.ProfileImage src={profileImagePreview ?? userProfile?.imgPath} alt="프로필 이미지" />
+                ) : (
+                  <Styled.DefaultProfileImage />
+                )}
+
+                <Styled.ProfileImageEditButton>
+                  <PhotoIcon />
+                  <input type="file" accept="image/*" style={{ width: 0, height: 0 }} onChange={profileImageChangeHandler} />
+                </Styled.ProfileImageEditButton>
+              </Styled.ProfileImageWrapper>
             </Styled.SettingContentFormControl>
             <Styled.SettingContentFormControl>
               <Styled.Label htmlFor="nickname" required>닉네임</Styled.Label>
@@ -191,6 +186,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                     message: NICKNAME_ERROR_MESSAGE.required,
                   },
                   onChange: (event) => {
+                    // 문자열의 앞뒤 공백 입력 방지
                     if (event.target.value.at(-1) === ' ') {
                       event.target.value = event.target.value.trim();
                     }
@@ -199,6 +195,23 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                       event.target.value = event.target.value.trim();
                       event.target.setSelectionRange(0, 0);
                     }
+
+                    // 문자열이 0자일 때 에러 메시지 출력
+                    if (event.target.value.trim().length === 0) {
+                      setError('nickname', { type: 'minLength', message: NICKNAME_ERROR_MESSAGE.minLength });
+
+                      return
+                    }
+
+                    // 문자열 20자 초과 시 에러 메시지 출력
+                    if (event.target.value.trim().length > MAX_NICKNAME_LENGTH) {
+                      setError('nickname', { type: 'maxLength', message: NICKNAME_ERROR_MESSAGE.maxLength });
+
+                      return
+                    }
+
+                    // 이외의 경우에는 에러 메시지 미출력
+                    clearErrors('nickname')
                   }
                 })}
               />

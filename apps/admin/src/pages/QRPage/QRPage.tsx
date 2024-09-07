@@ -1,4 +1,4 @@
-import { useUserSummary } from '@boolti/api';
+import { useUserProfile } from '@boolti/api';
 import { BooltiGrey, BooltiLogo } from '@boolti/icon';
 import { Footer, TextButton } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
@@ -17,7 +17,7 @@ import { useAuthAtom } from '~/atoms/useAuthAtom';
 const QRPage = () => {
   const { isLogin } = useAuthAtom();
   const theme = useTheme();
-  const { data: userAccountInfoData } = useUserSummary({ enabled: isLogin() });
+  const { data: userAccountInfoData } = useUserProfile({ enabled: isLogin() });
   const navigate = useNavigate();
 
   return (
@@ -41,7 +41,7 @@ const QRPage = () => {
             }
             right={
               isLogin() ? (
-                <ProfileDropdown image={userAccountInfoData?.imagePath} />
+                <ProfileDropdown image={userAccountInfoData?.imgPath} />
               ) : (
                 <TextButton
                   colorTheme="netural"

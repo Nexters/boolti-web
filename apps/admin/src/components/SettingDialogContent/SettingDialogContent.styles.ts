@@ -1,4 +1,5 @@
 import { mq_lg } from '@boolti/ui';
+import { UserProfile as DefaultUserProfileIcon } from '@boolti/icon';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
@@ -167,6 +168,11 @@ const SettingContentFormControl = styled.div`
 
 const ProfileImageWrapper = styled.div`
   position: relative;
+
+  & > svg {
+    width: 100px;
+    height: 100px;
+  }
 `
 
 const ProfileImage = styled.img`
@@ -175,6 +181,10 @@ const ProfileImage = styled.img`
   border-radius: 100px;
   object-fit: cover;
 `
+
+const DefaultProfileImage = styled(DefaultUserProfileIcon)`
+  border-radius: 100px;
+`;
 
 const ProfileImageEditButton = styled.label`
   width: 42px;
@@ -375,6 +385,7 @@ export default {
   SettingContentFormControl,
   ProfileImageWrapper,
   ProfileImage,
+  DefaultProfileImage,
   ProfileImageEditButton,
   Label,
   LinkList,
