@@ -64,7 +64,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
   const uploadProfileImageMutation = useUploadProfileImage();
   const editProfileMutation = useEditUserProfile();
 
-  const { register, handleSubmit, setValue, watch, setError, formState } = useForm<ProfileFormInputs>();
+  const { register, handleSubmit, setValue, watch, setError, clearErrors, formState } = useForm<ProfileFormInputs>();
 
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
@@ -82,18 +82,6 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
 
   const submitHandler = async (data: ProfileFormInputs) => {
     if (editProfileMutation.isLoading) return;
-
-    if (data.nickname.trim().length === 0) {
-      setError('nickname', { type: 'minLength', message: NICKNAME_ERROR_MESSAGE.minLength });
-
-      return
-    }
-
-    if (data.nickname.trim().length > MAX_NICKNAME_LENGTH) {
-      setError('nickname', { type: 'maxLength', message: NICKNAME_ERROR_MESSAGE.maxLength });
-
-      return
-    }
 
     let nextProfileImageUrl = userProfile?.imgPath;
 
@@ -195,6 +183,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                     message: NICKNAME_ERROR_MESSAGE.required,
                   },
                   onChange: (event) => {
+                    // 문자열의 앞뒤 공백 입력 방지
                     if (event.target.value.at(-1) === ' ') {
                       event.target.value = event.target.value.trim();
                     }
@@ -203,6 +192,23 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                       event.target.value = event.target.value.trim();
                       event.target.setSelectionRange(0, 0);
                     }
+
+                    // 문자열이 0자일 때 에러 메시지 출력
+                    if (event.target.value.trim().length === 0) {
+                      setError('nickname', { type: 'minLength', message: NICKNAME_ERROR_MESSAGE.minLength });
+
+                      return
+                    }
+
+                    // 문자열 20자 초과 시 에러 메시지 출력
+                    if (event.target.value.trim().length > MAX_NICKNAME_LENGTH) {
+                      setError('nickname', { type: 'maxLength', message: NICKNAME_ERROR_MESSAGE.maxLength });
+
+                      return
+                    }
+
+                    // 이외의 경우에는 에러 메시지 미출력
+                    clearErrors('nickname')
                   }
                 })}
               />
