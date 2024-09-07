@@ -4,7 +4,7 @@ import {
   useQueryClient,
   useSettlementBanners,
   useShowList,
-  useUserSummary,
+  useUserProfile,
 } from '@boolti/api';
 import { BooltiLogo, ChevronRightIcon, LogoutIcon, SettingIcon } from '@boolti/icon';
 import { Footer, useConfirm, useDialog } from '@boolti/ui';
@@ -39,13 +39,13 @@ const HomePage = () => {
 
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-  const { data: userSummaryData, isLoading: isUserSummaryLoading } = useUserSummary();
+  const { data: userProfileData, isLoading: isUserProfileLoading } = useUserProfile();
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
   const { data: settlementBanners } = useSettlementBanners();
 
-  const { imagePath, nickname = '', userCode } = userSummaryData ?? {};
+  const { imgPath, nickname = '', userCode } = userProfileData ?? {};
 
-  const isLoading = isUserSummaryLoading || isShowListLoading;
+  const isLoading = isUserProfileLoading || isShowListLoading;
 
   return (
     <Layout
@@ -59,11 +59,11 @@ const HomePage = () => {
           right={
             <>
               <Styled.ProfileDropdown>
-                <ProfileDropdown image={userSummaryData?.imagePath} />
+                <ProfileDropdown image={userProfileData?.imgPath} />
               </Styled.ProfileDropdown>
               <Styled.ProfileDropdownMobile>
                 <ProfileDropdown
-                  image={userSummaryData?.imagePath}
+                  image={userProfileData?.imgPath}
                   open={profileDropdownOpen}
                   disabledDropdown
                   onClick={() => {
@@ -135,7 +135,7 @@ const HomePage = () => {
       <Styled.Container>
         {!isLoading && (
           <>
-            <UserProfile profileImage={imagePath} username={nickname} userCode={userCode} />
+            <UserProfile profileImage={imgPath} username={nickname} userCode={userCode} />
             <ShowList shows={showList} />
           </>
         )}

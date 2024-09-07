@@ -1,4 +1,4 @@
-import { useUserSummary } from '@boolti/api';
+import { useUserProfile } from '@boolti/api';
 import { useNavigate } from 'react-router-dom';
 
 import { LINK } from '~/constants/link';
@@ -9,9 +9,9 @@ import Styled from './SignUpCompletePage.styles';
 const SignUpCompletePage = () => {
   const navigate = useNavigate();
 
-  const { data: userSummary } = useUserSummary();
+  const { data: userProfile } = useUserProfile();
 
-  if (userSummary === undefined) return null;
+  if (userProfile === undefined) return null;
 
   return (
     <Styled.SignUpCompletePage>
@@ -29,7 +29,7 @@ const SignUpCompletePage = () => {
             >
               img
             </div> */}
-            <Styled.CardContentTitle>어서오세요 {userSummary.nickname}님!</Styled.CardContentTitle>
+            <Styled.CardContentTitle>어서오세요 {userProfile.nickname}님!</Styled.CardContentTitle>
             <Styled.CardContentDescription>
               원활한 이용을 위해{' '}
               <Styled.CardContentLink to={LINK.TERMS} target="_blank">
