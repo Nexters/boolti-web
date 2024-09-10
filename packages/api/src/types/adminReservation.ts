@@ -8,7 +8,9 @@ export type AdminReservationResponse = ReservationResponse & {
   /** 결제자 연락처 */
   payerPhoneNumber: string;
   /** 결제 수단 */
-  paymentMeans: string;
+  means: string;
+  /** 선물 예매 여부 */
+  giftReceived: boolean;
   /** 취소 일시 */
   canceledAt: string;
   /** 취소 사유 */
