@@ -41,13 +41,12 @@ const PaymentTable = ({ data, ticketStatus }: PaymentTableProps) => {
           </Styled.TableHeaderItem>
           <Styled.TableHeaderItem width={168}>결제 수단</Styled.TableHeaderItem>
           <Styled.TableHeaderItem width={148}>결제 일시</Styled.TableHeaderItem>
-          <Styled.TableHeaderItem width={100}>결제 방법</Styled.TableHeaderItem>
+          <Styled.TableHeaderItem width={100}>예매 방법</Styled.TableHeaderItem>
           {ticketStatus === 'CANCEL' && (
             <>
               <Styled.TableHeaderItem width={92} align="right">
                 취소 금액
               </Styled.TableHeaderItem>
-              <Styled.TableHeaderItem width={168}>취소 수단</Styled.TableHeaderItem>
               <Styled.TableHeaderItem width={148}>취소 일시</Styled.TableHeaderItem>
               <Styled.TableHeaderItem width={162}>취소 사유</Styled.TableHeaderItem>
             </>
@@ -75,17 +74,18 @@ const PaymentTable = ({ data, ticketStatus }: PaymentTableProps) => {
                 <Styled.TableItem align="right" width={92}>
                   {item.ticketPrice.toLocaleString()}원
                 </Styled.TableItem>
-                <Styled.TableItem width={168}>결제 수단</Styled.TableItem>
+                <Styled.TableItem width={168}>{getPaymentMeans(item.means)}</Styled.TableItem>
                 <Styled.TableItem width={148}>
                   {format(item.ticketCreatedAt, 'yyyy.MM.dd HH:mm')}
                 </Styled.TableItem>
-                <Styled.TableItem width={100}>{getPaymentMeans(item.means)}</Styled.TableItem>
+                <Styled.TableItem width={100}>
+                  {item.giftReceived ? '선물 예매' : '직접 예매'}
+                </Styled.TableItem>
                 {ticketStatus === 'CANCEL' && (
                   <>
                     <Styled.TableItem width={92} align="right">
                       {item.ticketPrice.toLocaleString()}원
                     </Styled.TableItem>
-                    <Styled.TableItem width={168}>취소 수단</Styled.TableItem>
                     <Styled.TableItem width={148}>
                       {format(item.canceledAt, 'yyyy.MM.dd HH:mm')}
                     </Styled.TableItem>
