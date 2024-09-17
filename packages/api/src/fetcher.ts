@@ -3,7 +3,6 @@ import ky from 'ky';
 
 import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
-import { KyOptions } from 'ky/distribution/types/options';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 const IS_SUPER_ADMIN = import.meta.env.IS_SUPER_ADMIN === 'true';
@@ -30,7 +29,7 @@ const postRefreshToken = async () => {
   }
 };
 
-const defaultOption: KyOptions = {
+const defaultOption: Options = {
   retry: 0,
   timeout: 30_000,
 };
