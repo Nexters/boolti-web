@@ -13,16 +13,25 @@ interface PostRefreshTokenResponse {
 }
 
 const postRefreshToken = async () => {
-  const response = await ky.post(
-    `${API_URL}/${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/papi/v1/login/refresh`,
-    {
-      json: {
-        refreshToken: window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
-      },
-    },
-  );
+  const refreshToken = window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
 
-  return await response.json<PostRefreshTokenResponse>();
+  if (refreshToken) {
+    const response = await ky.post(
+      `${API_URL}/${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/papi/v1/login/refresh`,
+      {
+        json: {
+          refreshToken,
+        },
+      },
+    );
+
+    return await response.json<PostRefreshTokenResponse>();
+  }
+};
+
+const defaultOption: Options = {
+  retry: 0,
+  timeout: 30_000,
 };
 
 export const instance = ky.create({
@@ -45,14 +54,16 @@ export const instance = ky.create({
         // access token이 만료되었을 때, refresh token으로 새로운 access token을 발급받는다.
         if (!response.ok && response.status === 401 && !request.url.includes('logout')) {
           try {
-            const { accessToken, refreshToken } = await postRefreshToken();
+            const { accessToken, refreshToken } = (await postRefreshToken()) ?? {};
 
-            window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-            window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
+            if (accessToken && refreshToken) {
+              window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
+              window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
 
-            request.headers.set('Authorization', `Bearer ${accessToken}`);
+              request.headers.set('Authorization', `Bearer ${accessToken}`);
 
-            return ky(request);
+              return ky(request, options);
+            }
           } catch (error) {
             throw new BooltiHTTPError(response, request, options);
           }
@@ -74,8 +85,7 @@ export const instance = ky.create({
       },
     ],
   },
-  retry: 0,
-  timeout: 30_000,
+  ...defaultOption,
 });
 
 export async function resultify<T>(response: ResponsePromise) {
