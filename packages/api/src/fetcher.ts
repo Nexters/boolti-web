@@ -3,6 +3,7 @@ import ky from 'ky';
 
 import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
+import { KyOptions } from 'ky/distribution/types/options';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 const IS_SUPER_ADMIN = import.meta.env.IS_SUPER_ADMIN === 'true';
@@ -23,6 +24,11 @@ const postRefreshToken = async () => {
   );
 
   return await response.json<PostRefreshTokenResponse>();
+};
+
+const defaultOption: KyOptions = {
+  retry: 0,
+  timeout: 30_000,
 };
 
 export const instance = ky.create({
@@ -52,7 +58,7 @@ export const instance = ky.create({
 
             request.headers.set('Authorization', `Bearer ${accessToken}`);
 
-            return ky(request);
+            return ky(request, options);
           } catch (error) {
             throw new BooltiHTTPError(response, request, options);
           }
@@ -74,8 +80,7 @@ export const instance = ky.create({
       },
     ],
   },
-  retry: 0,
-  timeout: 30_000,
+  ...defaultOption,
 });
 
 export async function resultify<T>(response: ResponsePromise) {
