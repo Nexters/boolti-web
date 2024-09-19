@@ -9,6 +9,10 @@
     "lint": "TIMING=1 eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme.css": "./src/theme.css"
+  },
   "dependencies": {
     "@boolti/icon": "*",
     "@emotion/react": "^11.11.3",
