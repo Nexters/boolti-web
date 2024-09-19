@@ -1,0 +1,137 @@
+:root {
+    --color-primary-o0: #FFCFBA;
+    --color-primary-o1: #FF5A14;
+    --color-primary-o2: #E94600;
+    --color-primary-o3: #C93E02;
+
+    --color-status-error: #FF4D4F;
+    --color-status-warning: #FAAD14;
+    --color-status-success: #52C41A;
+    --color-status-link: #1890FF;
+
+    --color-purple-main: #B150FF;
+    --color-purple-sub: #E6C8FE;
+
+    --color-blue-main: #2B7BE9;
+    --color-blue-sub: #C8E7FE;
+
+    --color-green-main: #52C41A;
+    --color-green-sub: #CCF3BA;
+
+    --color-red-main: #FF5A14;
+    --color-red-sub: #FFCFBA;
+
+    --color-yellow-main: #E09500;
+    --color-yellow-sub: #FFE2A9;
+
+    --color-grey-main: #888D9D;
+    --color-grey-sub: #F3F5F9;
+    --color-grey-w: #FFFFFF;
+    --color-grey-g00: #F3F5F9;
+    --color-grey-g10: #E7EAF2;
+    --color-grey-g20: #D8DBE5;
+    --color-grey-g30: #C8CCDC;
+    --color-grey-g40: #A2A5B4;
+    --color-grey-g50: #888D9D;
+    --color-grey-g60: #6F7485;
+    --color-grey-g70: #595D6D;
+    --color-grey-g80: #434753;
+    --color-grey-g90: #282B33;
+    --color-grey-g100: #121215;
+    --color-grey-b: #000000;
+
+    --color-dim-dialog: rgba(86, 86, 86, 0.25);
+
+    --color-shadow: rgba(136, 141, 157, 0.15);
+
+    --color-mobile-primary-o1: #FF6827;
+
+    --color-mobile-status-error: #FF4D4F;
+    --color-mobile-status-success: #52C41A;
+
+    --color-mobile-grey-w: #FFFFFF;
+    --color-mobile-grey-g05: #F6F7FF;
+    --color-mobile-grey-g10: #E7EAF2;
+    --color-mobile-grey-g15: #D8DBE5;
+    --color-mobile-grey-g20: #BEC1CE;
+    --color-mobile-grey-g30: #A2A5B4;
+    --color-mobile-grey-g40: #888D9D;
+    --color-mobile-grey-g50: #6F7485;
+    --color-mobile-grey-g60: #595D6D;
+    --color-mobile-grey-g70: #434753;
+    --color-mobile-grey-g80: #2E303A;
+    --color-mobile-grey-g85: #1B1D23;
+    --color-mobile-grey-g90: #121318;
+    --color-mobile-grey-g95: #090A0B;
+    --color-mobile-grey-b: #000000;
+}
+
+@media(prefers-color-scheme: dark) {
+    :root {
+        --color-primary-o0: #FFCFBA;
+        --color-primary-o1: #FF5A14;
+        --color-primary-o2: #E94600;
+        --color-primary-o3: #C93E02;
+
+        --color-status-error: #FF4D4F;
+        --color-status-warning: #FAAD14;
+        --color-status-success: #52C41A;
+        --color-status-link: #1890FF;
+
+        --color-purple-main: #B150FF;
+        --color-purple-sub: #E6C8FE;
+
+        --color-blue-main: #2B7BE9;
+        --color-blue-sub: #C8E7FE;
+
+        --color-green-main: #52C41A;
+        --color-green-sub: #CCF3BA;
+
+        --color-red-main: #FF5A14;
+        --color-red-sub: #FFCFBA;
+
+        --color-yellow-main: #E09500;
+        --color-yellow-sub: #FFE2A9;
+
+        --color-grey-main: #777262;
+        --color-grey-sub: #0C0A06;
+        --color-grey-w: #000000;
+        --color-grey-g00: #0C0A06;
+        --color-grey-g10: #18150D;
+        --color-grey-g20: #27241A;
+        --color-grey-g30: #373333;
+        --color-grey-g40: #5D5A4B;
+        --color-grey-g50: #777262;
+        --color-grey-g60: #908B7A;
+        --color-grey-g70: #A6A19F;
+        --color-grey-g80: #BEBACD;
+        --color-grey-g90: #D7D4CC;
+        --color-grey-g100: #ECECED;
+        --color-grey-b: #FFFFFF;
+
+        --color-dim-dialog: rgba(86, 86, 86, 0.25);
+
+        --color-shadow: rgba(136, 141, 157, 0.15);
+
+        --color-mobile-primary-o1: #FF6827;
+
+        --color-mobile-status-error: #FF4D4F;
+        --color-mobile-status-success: #52C41A;
+
+        --color-mobile-grey-w: #FFFFFF;
+        --color-mobile-grey-g05: #F6F7FF;
+        --color-mobile-grey-g10: #E7EAF2;
+        --color-mobile-grey-g15: #D8DBE5;
+        --color-mobile-grey-g20: #BEC1CE;
+        --color-mobile-grey-g30: #A2A5B4;
+        --color-mobile-grey-g40: #888D9D;
+        --color-mobile-grey-g50: #6F7485;
+        --color-mobile-grey-g60: #595D6D;
+        --color-mobile-grey-g70: #434753;
+        --color-mobile-grey-g80: #2E303A;
+        --color-mobile-grey-g85: #1B1D23;
+        --color-mobile-grey-g90: #121318;
+        --color-mobile-grey-g95: #090A0B;
+        --color-mobile-grey-b: #000000;
+    }
+}

@@ -1,5 +1,6 @@
-import '../styles/index.css';
 import 'the-new-css-reset/css/reset.css';
+import '../styles/index.css';
+import '@boolti/ui/src/theme.css'
 
 import { themes } from '@storybook/theming';
 import { BooltiUIProvider } from '@boolti/ui';
