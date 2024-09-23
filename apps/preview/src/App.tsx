@@ -4,6 +4,7 @@ import 'the-new-css-reset/css/reset.css';
 import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
 import ShowPreviewPage from './pages/ShowPreviewPage/ShowPreviewPage';
 
@@ -18,7 +19,9 @@ const App = () => {
   return (
     <QueryClientProvider>
       <BooltiUIProvider>
-        <RouterProvider router={router} />
+        <HelmetProvider>
+          <RouterProvider router={router} />
+        </HelmetProvider>
       </BooltiUIProvider>
     </QueryClientProvider>
   );
