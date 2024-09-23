@@ -130,7 +130,7 @@ const ShowPreviewPage = () => {
         <meta name="description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
 
         <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} data-react-helmet="true" />
+        <meta property="og:title" content={title} />
         <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
         <meta property="og:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta property="og:url" content={`https://preview.boolti.in/show/${params.showId}`} />
@@ -141,7 +141,7 @@ const ShowPreviewPage = () => {
         <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="preview.boolti.in" />
         <meta property="twitter:url" content={`https://preview.boolti.in/show/${params.showId}`} />
-        <meta property="twitter:title" content={title} data-react-helmet="true" />
+        <meta property="twitter:title" content={title} />
         <meta
           property="twitter:description"
           content="지금 불티에서 핫한 공연 정보를 확인해 보세요."
