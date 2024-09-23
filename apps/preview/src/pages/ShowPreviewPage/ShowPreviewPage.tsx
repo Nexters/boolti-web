@@ -116,7 +116,7 @@ const ShowPreviewPage = () => {
         <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
         <meta name="og:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta property="og:url" content="https://boolti.in/" />
-        <meta property="og:image" content="https://boolti.in/thumbnail.png" />
+        <meta property="og:image" content="https://preview.boolti.in/thumbnail.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />
         <meta name="twitter:card" content="summary_large_image" />
