@@ -4,7 +4,7 @@ import { Footer, ShowPreview, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router-dom';
 
 import Styled from './ShowPreviewPage.styles';
@@ -50,20 +50,26 @@ const BooltiGrayLogo = () => (
 
 const ShowPreviewPage = () => {
   const params = useParams<{ showId: string }>();
-  const { data } = useShowPreview(Number(params.showId));
+  const { isLoading, data } = useShowPreview(Number(params.showId));
   const dialog = useDialog();
 
   const dynamicLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${params.showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
 
-  if (params === undefined || Number.isNaN(Number(params.showId))) {
+  if (isLoading) {
+    return null;
+  }
+
+  if (params === undefined || Number.isNaN(Number(params.showId)) || !data) {
     return <Navigate to="https://boolti.in" replace />;
   }
+
+  const { name: title, notice: text } = data;
 
   const shareButtonClickHandler = async () => {
     try {
       await navigator.share({
-        title: data?.name ?? '',
-        text: data?.notice ?? '',
+        title,
+        text,
         url: dynamicLink,
       });
     } catch (error) {
@@ -104,20 +110,11 @@ const ShowPreviewPage = () => {
   return (
     <>
       <Helmet>
-        <meta
-          name="description"
-          content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
-        />
-        <meta
-          property="og:title"
-          content={data?.name ? `${data.name} - 불티` : '손쉬운 예매 빠른 입장은 불티'}
-        />
+        <meta name="description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
+        <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
-        <meta
-          name="og:description"
-          content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
-        />
+        <meta name="og:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta property="og:url" content="https://boolti.in/" />
         <meta property="og:image" content="https://boolti.in/thumbnail.png" />
         <meta property="og:image:width" content="1200" />
@@ -125,17 +122,11 @@ const ShowPreviewPage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="boolti.in" />
         <meta property="twitter:url" content="https://boolti.in/" />
-        <meta
-          name="twitter:title"
-          content={data?.name ? `${data.name} - 불티` : '손쉬운 예매 빠른 입장은 불티'}
-        />
-        <meta
-          name="twitter:description"
-          content="핫한 공연 예매의 시작, 불티 지금 티켓을 구매하고 공연을 즐겨보세요."
-        />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta name="twitter:image" content="/thumbnail.png" />
         <link rel="canonical" href="https://boolti.in/" />
-        <title>{data?.name ? `${data.name} - 불티` : '손쉬운 예매 빠른 입장은 불티'}</title>
+        <title>{title}</title>
       </Helmet>
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
@@ -149,23 +140,23 @@ const ShowPreviewPage = () => {
           </Styled.Header>
           <ShowPreview
             show={{
-              images: data?.showImg.map((file) => file.path) ?? [],
-              name: data?.name ?? '',
-              date: data?.date ? format(new Date(data.date), 'yyyy.MM.dd (E)') : '',
-              startTime: data?.date ? format(new Date(data.date), 'HH:mm') : '',
-              runningTime: data?.runningTime ? `${data.runningTime}` : '',
-              salesStartTime: data?.salesStartTime
+              images: data.showImg.map((file) => file.path) ?? [],
+              name: data.name ?? '',
+              date: data.date ? format(new Date(data.date), 'yyyy.MM.dd (E)') : '',
+              startTime: data.date ? format(new Date(data.date), 'HH:mm') : '',
+              runningTime: data.runningTime ? `${data.runningTime}` : '',
+              salesStartTime: data.salesStartTime
                 ? format(new Date(data.salesStartTime), 'yyyy.MM.dd (E)')
                 : '',
-              salesEndTime: data?.salesEndTime
+              salesEndTime: data.salesEndTime
                 ? format(new Date(data.salesEndTime), 'yyyy.MM.dd (E)')
                 : '',
-              placeName: data?.placeName ?? '',
-              placeStreetAddress: data?.streetAddress ?? '',
-              placeDetailAddress: data?.detailAddress ?? '',
-              notice: data?.notice ?? '',
-              hostName: data?.hostName ?? '',
-              hostPhoneNumber: data?.hostPhoneNumber ?? '',
+              placeName: data.placeName ?? '',
+              placeStreetAddress: data.streetAddress ?? '',
+              placeDetailAddress: data.detailAddress ?? '',
+              notice: data.notice ?? '',
+              hostName: data.hostName ?? '',
+              hostPhoneNumber: data.hostPhoneNumber ?? '',
             }}
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}

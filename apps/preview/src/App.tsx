@@ -6,6 +6,7 @@ import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ShowPreviewPage from './pages/ShowPreviewPage/ShowPreviewPage';
+import { HelmetProvider } from 'react-helmet-async';
 
 const router = createBrowserRouter([
   {
@@ -16,11 +17,13 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <QueryClientProvider>
-      <BooltiUIProvider>
-        <RouterProvider router={router} />
-      </BooltiUIProvider>
-    </QueryClientProvider>
+    <HelmetProvider>
+      <QueryClientProvider>
+        <BooltiUIProvider>
+          <RouterProvider router={router} />
+        </BooltiUIProvider>
+      </QueryClientProvider>
+    </HelmetProvider>
   );
 };
 

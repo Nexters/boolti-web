@@ -14739,7 +14739,7 @@ const RAW_RUNTIME_STATE =
           ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
-          ["react-helmet", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.1.0"],\
+          ["react-helmet-async", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:2.0.5"],\
           ["react-router-dom", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.22.3"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
@@ -16261,24 +16261,23 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
-    ["react-helmet", [\
-      ["npm:6.1.0", {\
-        "packageLocation": "./.yarn/cache/react-helmet-npm-6.1.0-20fd5447ff-1d2831d9c3.zip/node_modules/react-helmet/",\
+    ["react-helmet-async", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/react-helmet-async-npm-2.0.5-f913a66ef6-f390ea8bf1.zip/node_modules/react-helmet-async/",\
         "packageDependencies": [\
-          ["react-helmet", "npm:6.1.0"]\
+          ["react-helmet-async", "npm:2.0.5"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.1.0", {\
-        "packageLocation": "./.yarn/__virtual__/react-helmet-virtual-5233b4a808/0/cache/react-helmet-npm-6.1.0-20fd5447ff-1d2831d9c3.zip/node_modules/react-helmet/",\
+      ["virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:2.0.5", {\
+        "packageLocation": "./.yarn/__virtual__/react-helmet-async-virtual-9d616b1d06/0/cache/react-helmet-async-npm-2.0.5-f913a66ef6-f390ea8bf1.zip/node_modules/react-helmet-async/",\
         "packageDependencies": [\
-          ["react-helmet", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.1.0"],\
+          ["react-helmet-async", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:2.0.5"],\
           ["@types/react", "npm:18.2.48"],\
-          ["object-assign", "npm:4.1.1"],\
-          ["prop-types", "npm:15.8.1"],\
+          ["invariant", "npm:2.2.4"],\
           ["react", "npm:18.2.0"],\
           ["react-fast-compare", "npm:3.2.2"],\
-          ["react-side-effect", "virtual:5233b4a80839c2bceacd9cc42605007a041a89142e30bcb9bb5cf2097b240babc42f53cc8e7d902d8a2ac2d92982cc604cbd7d839c75ebc84e4fdada46f9aaa4#npm:2.1.2"]\
+          ["shallowequal", "npm:1.1.0"]\
         ],\
         "packagePeers": [\
           "@types/react",\
@@ -16674,28 +16673,6 @@ const RAW_RUNTIME_STATE =
           "@types/react-dom",\
           "@types/react",\
           "react-dom",\
-          "react"\
-        ],\
-        "linkType": "HARD"\
-      }]\
-    ]],\
-    ["react-side-effect", [\
-      ["npm:2.1.2", {\
-        "packageLocation": "./.yarn/cache/react-side-effect-npm-2.1.2-c18e5fd8bd-5d934cae43.zip/node_modules/react-side-effect/",\
-        "packageDependencies": [\
-          ["react-side-effect", "npm:2.1.2"]\
-        ],\
-        "linkType": "SOFT"\
-      }],\
-      ["virtual:5233b4a80839c2bceacd9cc42605007a041a89142e30bcb9bb5cf2097b240babc42f53cc8e7d902d8a2ac2d92982cc604cbd7d839c75ebc84e4fdada46f9aaa4#npm:2.1.2", {\
-        "packageLocation": "./.yarn/__virtual__/react-side-effect-virtual-b1d41bc895/0/cache/react-side-effect-npm-2.1.2-c18e5fd8bd-5d934cae43.zip/node_modules/react-side-effect/",\
-        "packageDependencies": [\
-          ["react-side-effect", "virtual:5233b4a80839c2bceacd9cc42605007a041a89142e30bcb9bb5cf2097b240babc42f53cc8e7d902d8a2ac2d92982cc604cbd7d839c75ebc84e4fdada46f9aaa4#npm:2.1.2"],\
-          ["@types/react", "npm:18.2.48"],\
-          ["react", "npm:18.2.0"]\
-        ],\
-        "packagePeers": [\
-          "@types/react",\
           "react"\
         ],\
         "linkType": "HARD"\
@@ -17327,6 +17304,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["shallow-clone", "npm:3.0.1"],\
           ["kind-of", "npm:6.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["shallowequal", [\
+      ["npm:1.1.0", {\
+        "packageLocation": "./.yarn/cache/shallowequal-npm-1.1.0-6688d419cb-b926efb51c.zip/node_modules/shallowequal/",\
+        "packageDependencies": [\
+          ["shallowequal", "npm:1.1.0"]\
         ],\
         "linkType": "HARD"\
       }]\
