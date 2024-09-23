@@ -140,23 +140,23 @@ const ShowPreviewPage = () => {
           </Styled.Header>
           <ShowPreview
             show={{
-              images: data?.showImg.map((file) => file.path) ?? [],
-              name: data?.name ?? '',
-              date: data?.date ? format(new Date(data.date), 'yyyy.MM.dd (E)') : '',
-              startTime: data?.date ? format(new Date(data.date), 'HH:mm') : '',
-              runningTime: data?.runningTime ? `${data.runningTime}` : '',
-              salesStartTime: data?.salesStartTime
+              images: data.showImg.map((file) => file.path) ?? [],
+              name: data.name ?? '',
+              date: data.date ? format(new Date(data.date), 'yyyy.MM.dd (E)') : '',
+              startTime: data.date ? format(new Date(data.date), 'HH:mm') : '',
+              runningTime: data.runningTime ? `${data.runningTime}` : '',
+              salesStartTime: data.salesStartTime
                 ? format(new Date(data.salesStartTime), 'yyyy.MM.dd (E)')
                 : '',
-              salesEndTime: data?.salesEndTime
+              salesEndTime: data.salesEndTime
                 ? format(new Date(data.salesEndTime), 'yyyy.MM.dd (E)')
                 : '',
-              placeName: data?.placeName ?? '',
-              placeStreetAddress: data?.streetAddress ?? '',
-              placeDetailAddress: data?.detailAddress ?? '',
-              notice: data?.notice ?? '',
-              hostName: data?.hostName ?? '',
-              hostPhoneNumber: data?.hostPhoneNumber ?? '',
+              placeName: data.placeName ?? '',
+              placeStreetAddress: data.streetAddress ?? '',
+              placeDetailAddress: data.detailAddress ?? '',
+              notice: data.notice ?? '',
+              hostName: data.hostName ?? '',
+              hostPhoneNumber: data.hostPhoneNumber ?? '',
             }}
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
