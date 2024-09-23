@@ -63,7 +63,20 @@ const ShowPreviewPage = () => {
     return <Navigate to="https://boolti.in" replace />;
   }
 
-  const { name: title, notice: text } = data;
+  const {
+    name: title,
+    notice: text,
+    date,
+    showImg,
+    runningTime,
+    salesEndTime,
+    salesStartTime,
+    placeName,
+    streetAddress,
+    detailAddress,
+    hostName,
+    hostPhoneNumber,
+  } = data;
 
   const shareButtonClickHandler = async () => {
     try {
@@ -111,8 +124,9 @@ const ShowPreviewPage = () => {
     <>
       <Helmet>
         <meta name="description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
-        <meta property="og:title" content={title} />
+        <meta property="og:title" content={title} data-react-helmet="true" />
         <meta property="og:type" content="website" />
+        <link rel="shortcut icon" href="https://preview.boolti.in/favicon.png" />
         <meta property="og:site_name" content="손쉬운 예매 빠른 입장은 불티" />
         <meta name="og:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta property="og:url" content="https://boolti.in/" />
@@ -122,7 +136,7 @@ const ShowPreviewPage = () => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="boolti.in" />
         <meta property="twitter:url" content="https://boolti.in/" />
-        <meta name="twitter:title" content={title} />
+        <meta name="twitter:title" content={title} data-react-helmet="true" />
         <meta name="twitter:description" content="지금 불티에서 핫한 공연 정보를 확인해 보세요." />
         <meta name="twitter:image" content="/thumbnail.png" />
         <link rel="canonical" href="https://boolti.in/" />
@@ -140,23 +154,19 @@ const ShowPreviewPage = () => {
           </Styled.Header>
           <ShowPreview
             show={{
-              images: data.showImg.map((file) => file.path) ?? [],
-              name: data.name ?? '',
-              date: data.date ? format(new Date(data.date), 'yyyy.MM.dd (E)') : '',
-              startTime: data.date ? format(new Date(data.date), 'HH:mm') : '',
-              runningTime: data.runningTime ? `${data.runningTime}` : '',
-              salesStartTime: data.salesStartTime
-                ? format(new Date(data.salesStartTime), 'yyyy.MM.dd (E)')
-                : '',
-              salesEndTime: data.salesEndTime
-                ? format(new Date(data.salesEndTime), 'yyyy.MM.dd (E)')
-                : '',
-              placeName: data.placeName ?? '',
-              placeStreetAddress: data.streetAddress ?? '',
-              placeDetailAddress: data.detailAddress ?? '',
-              notice: data.notice ?? '',
-              hostName: data.hostName ?? '',
-              hostPhoneNumber: data.hostPhoneNumber ?? '',
+              images: showImg.map((file) => file.path),
+              name: title,
+              date: format(new Date(date), 'yyyy.MM.dd (E)'),
+              startTime: format(new Date(date), 'HH:mm'),
+              runningTime: runningTime.toString(),
+              salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
+              salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
+              placeName: placeName,
+              placeStreetAddress: streetAddress,
+              placeDetailAddress: detailAddress,
+              notice: text,
+              hostName: hostName,
+              hostPhoneNumber: hostPhoneNumber,
             }}
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
