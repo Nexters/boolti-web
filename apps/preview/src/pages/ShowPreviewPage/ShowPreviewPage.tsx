@@ -5,7 +5,7 @@ import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
 import { Helmet } from 'react-helmet-async';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Styled from './ShowPreviewPage.styles';
 
@@ -60,7 +60,8 @@ const ShowPreviewPage = () => {
   }
 
   if (params === undefined || Number.isNaN(Number(params.showId)) || !data) {
-    return <Navigate to="https://boolti.in" replace />;
+    window.location.href = 'https://boolti.in';
+    return;
   }
 
   const {
