@@ -4,7 +4,7 @@ import { Footer, ShowPreview, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
-import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router-dom';
 
 import Styled from './ShowPreviewPage.styles';
