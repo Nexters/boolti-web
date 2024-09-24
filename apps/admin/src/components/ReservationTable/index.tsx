@@ -75,13 +75,18 @@ const columns = [
       }
     },
   }),
-  columnHelper.accessor('ticketIssuedAt', {
-    header: (props) =>
-      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
-        ? '환불일시'
-        : '발권일시',
-    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
-  }),
+  columnHelper.accessor(
+    (props) =>
+      props.ticketStatus === 'CANCEL' && props.canceledAt ? props.canceledAt : props.ticketIssuedAt,
+    {
+      id: 'at',
+      header: (props) =>
+        (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
+          ? '환불일시'
+          : '발권일시',
+      cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
+    },
+  ),
 ];
 
 interface Props {

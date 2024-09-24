@@ -90,6 +90,12 @@ export interface ReservationResponse {
   ticketIssuedAt: string;
   /** 티켓 생성일시.아마 예매일과 동일 */
   ticketCreatedAt: string;
+  /** 티켓 취소일시 */
+  canceledAt?: string;
+  /** 티켓 취소 사유 */
+  cancelReason?: string;
+  /** 선물 여부 */
+  giftReceived: true;
   /** CS용(유저용) 예매 ID */
   csReservationId: string;
   /** CS용(유저용) 티켓 ID */
