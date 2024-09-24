@@ -35,7 +35,7 @@ const HeaderItem = styled.span`
     width: 80px;
   }
   &:nth-of-type(3) {
-    width: 180px;
+    min-width: 100px;
   }
   &:nth-of-type(4) {
     width: 100px;
@@ -82,7 +82,7 @@ const Item = styled.span`
     width: 80px;
   }
   &:nth-of-type(3) {
-    width: 180px;
+    min-width: 100px;
   }
   &:nth-of-type(4) {
     width: 100px;
