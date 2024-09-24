@@ -8,6 +8,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import ShowPreviewPage from './pages/ShowPreviewPage';
 import { fetcher } from '@boolti/api/src/fetcher';
+import NotFound from './components/NotFound';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,7 @@ const router = createBrowserRouter([
         return response;
       }
     },
+    errorElement: <NotFound />,
   },
 ]);
 
