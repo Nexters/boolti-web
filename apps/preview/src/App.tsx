@@ -1,17 +1,26 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
 
-import { QueryClientProvider } from '@boolti/api';
+import { QueryClientProvider, ShowPreviewResponse } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 import ShowPreviewPage from './pages/ShowPreviewPage/ShowPreviewPage';
+import { fetcher } from '@boolti/api/src/fetcher';
 
 const router = createBrowserRouter([
   {
     path: '/show/:showId',
     element: <ShowPreviewPage />,
+    loader: async ({ params }) => {
+      const showId = params.showId;
+
+      if (showId) {
+        const response = await fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`);
+        return response;
+      }
+    },
   },
 ]);
 
