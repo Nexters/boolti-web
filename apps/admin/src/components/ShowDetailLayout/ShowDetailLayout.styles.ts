@@ -58,7 +58,11 @@ const ShowNameWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: 48px;
+
+  ${mq_lg} {
+    height: 80px;
+  }
 `;
 
 const ShowName = styled.h2<ShowNameProps>`
