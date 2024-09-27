@@ -58,7 +58,7 @@ export const useAuthAtom = () => {
     return () => {
       window.removeEventListener('storage', handler);
     };
-  }, []);
+  }, [setAccessToken, setRefreshToken]);
 
   return {
     setToken,
