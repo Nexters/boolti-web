@@ -1,7 +1,7 @@
 import type { Options, ResponsePromise } from 'ky';
-import ky from 'ky';
+import ky, { HTTPError } from 'ky';
 
-import BooltiHTTPError, { isBooltiHTTPError } from './BooltiHTTPError';
+import { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
@@ -24,7 +24,6 @@ const postRefreshToken = async () => {
         },
       },
     );
-
     return await response.json<PostRefreshTokenResponse>();
   }
 };
@@ -55,7 +54,6 @@ export const instance = ky.create({
         if (!response.ok && response.status === 401 && !request.url.includes('logout')) {
           try {
             const { accessToken, refreshToken } = (await postRefreshToken()) ?? {};
-
             if (accessToken && refreshToken) {
               window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
               window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
@@ -64,24 +62,26 @@ export const instance = ky.create({
 
               return ky(request, options);
             }
-          } catch (error) {
-            throw new BooltiHTTPError(response, request, options);
+          } catch (e) {
+            if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
+              window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+              window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
+              window.dispatchEvent(
+                new StorageEvent('storage', {
+                  key: LOCAL_STORAGE.REFRESH_TOKEN,
+                  newValue: undefined,
+                }),
+              );
+              window.dispatchEvent(
+                new StorageEvent('storage', {
+                  key: LOCAL_STORAGE.ACCESS_TOKEN,
+                  newValue: undefined,
+                }),
+              );
+            }
           }
         }
-
-        if (!response.ok) {
-          const body = await response.json();
-
-          if (body) {
-            throw new BooltiHTTPError(response, request, options, {
-              errorTraceId: body.errorTraceId,
-              type: body.type,
-              detail: body.detail,
-            });
-          }
-
-          throw new BooltiHTTPError(response, request, options);
-        }
+        return response;
       },
     ],
   },

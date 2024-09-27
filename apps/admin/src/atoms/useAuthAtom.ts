@@ -1,5 +1,6 @@
 import { LOCAL_STORAGE } from '@boolti/api';
 import { atom, useAtom } from 'jotai';
+import { useEffect } from 'react';
 
 const storageMethod = {
   getItem: (key: string, initialValue: string | null) => {
@@ -38,6 +39,26 @@ export const useAuthAtom = () => {
   };
 
   const isLogin = () => !!accessToken && !!refreshToken;
+
+  useEffect(() => {
+    const handler = (e: StorageEvent) => {
+      switch (e.key) {
+        case LOCAL_STORAGE.ACCESS_TOKEN: {
+          setAccessToken(e.newValue);
+          return;
+        }
+        case LOCAL_STORAGE.REFRESH_TOKEN: {
+          setRefreshToken(e.newValue);
+          return;
+        }
+      }
+    };
+    window.addEventListener('storage', handler);
+
+    return () => {
+      window.removeEventListener('storage', handler);
+    };
+  }, [setAccessToken, setRefreshToken]);
 
   return {
     setToken,
