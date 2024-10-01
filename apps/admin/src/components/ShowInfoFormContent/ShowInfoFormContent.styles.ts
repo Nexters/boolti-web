@@ -31,15 +31,36 @@ interface MobileTicketActionProps {
 
 const ShowInfoFormGroup = styled.div``;
 
+const ShowInfoFormGroupHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const ShowInfoFormGroupInfo = styled.div`
+  flex: 1;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`
+
 const ShowInfoFormTitle = styled.h3`
   ${({ theme }) => theme.typo.sh2};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 16px;
 
   ${mq_lg} {
     ${({ theme }) => theme.typo.h1};
   }
 `;
+
+const ShowInfoFormSubtitle = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+
+  strong {
+    font-weight: 600;
+  }
+`
 
 const ShowInfoFormRow = styled.div`
   margin-bottom: 28px;
@@ -84,7 +105,7 @@ const ShowInfoFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowInfoFormButton = styled(Button)<ShowInfoFormButtonProps>`
+const ShowInfoFormButton = styled(Button) <ShowInfoFormButtonProps>`
   width: ${({ width }) => width};
 `;
 
@@ -251,7 +272,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
-      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -503,7 +524,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
+    disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }
@@ -515,7 +536,10 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
 
 export default {
   ShowInfoFormGroup,
+  ShowInfoFormGroupHeader,
+  ShowInfoFormGroupInfo,
   ShowInfoFormTitle,
+  ShowInfoFormSubtitle,
   ShowInfoFormRow,
   ShowInfoFormContent,
   ShowInfoFormLabel,

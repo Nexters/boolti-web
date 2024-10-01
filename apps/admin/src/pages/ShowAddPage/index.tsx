@@ -18,6 +18,7 @@ import { ShowInfoFormInputs, ShowTicketFormInputs } from '~/components/ShowInfoF
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
+import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -144,6 +145,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
                       <ShowDetailInfoFormContent form={showInfoForm} />
+                    </Styled.ShowInfoFormContent>
+                    <Styled.ShowInfoFormContent>
+                      <ShowCastInfoFormContent />
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"
