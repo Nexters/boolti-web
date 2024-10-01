@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import { LOCAL_STORAGE } from '@boolti/api';
+import { LOCAL_STORAGE, COOKIES } from '@boolti/api';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
 
@@ -17,7 +17,7 @@ const storageMethod = {
 
 const accessTokenAtom = atom<string | null>(
   (() => {
-    const accessTokenFromCookie = Cookies.get('x-access-token');
+    const accessTokenFromCookie = Cookies.get(COOKIES.ACCESS_TOKEN);
     const accessTokenFromStorage = storageMethod.getItem(LOCAL_STORAGE.ACCESS_TOKEN, null);
 
     if (accessTokenFromCookie) {
@@ -35,7 +35,7 @@ const accessTokenAtom = atom<string | null>(
 
 const refreshTokenAtom = atom<string | null>(
   (() => {
-    const refreshTokenFromCookie = Cookies.get('x-access-token');
+    const refreshTokenFromCookie = Cookies.get(COOKIES.ACCESS_TOKEN);
     const refreshTokenFromStorage = storageMethod.getItem(LOCAL_STORAGE.REFRESH_TOKEN, null);
 
     if (refreshTokenFromCookie) {
@@ -65,6 +65,8 @@ export const useAuthAtom = () => {
   const removeToken = () => {
     storageMethod.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
     storageMethod.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
+    Cookies.remove(COOKIES.ACCESS_TOKEN);
+    Cookies.remove(COOKIES.REFRESH_TOKEN);
     setAccessToken(null);
     setRefreshToken(null);
   };
@@ -72,14 +74,20 @@ export const useAuthAtom = () => {
   const isLogin = () => !!accessToken && !!refreshToken;
 
   useEffect(() => {
-    const handler = (e: StorageEvent) => {
-      switch (e.key) {
+    const handler = ({ key, newValue }: StorageEvent) => {
+      switch (key) {
         case LOCAL_STORAGE.ACCESS_TOKEN: {
-          setAccessToken(e.newValue);
+          setAccessToken(newValue);
+          newValue
+            ? Cookies.set(COOKIES.ACCESS_TOKEN, newValue)
+            : Cookies.remove(COOKIES.ACCESS_TOKEN);
           return;
         }
         case LOCAL_STORAGE.REFRESH_TOKEN: {
-          setRefreshToken(e.newValue);
+          setRefreshToken(newValue);
+          newValue
+            ? Cookies.set(COOKIES.REFRESH_TOKEN, newValue)
+            : Cookies.remove(COOKIES.REFRESH_TOKEN);
           return;
         }
       }
