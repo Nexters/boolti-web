@@ -16,25 +16,28 @@ import {
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
 import { PATH } from './constants/routes';
-import HomePage from './pages/HomePage/HomePage';
-import LandingPage from './pages/Landing/LandingPage';
-import LoginPage from './pages/Login/LoginPage';
-import OAuthApplePage from './pages/OAuth/OAuthApplePage';
-import OAuthKakaoPage from './pages/OAuth/OAuthKakaoPage';
-import QRPage from './pages/QRPage/QRPage';
-import ShowAddCompletePage from './pages/ShowAddCompletePage/ShowAddCompletePage';
-import ShowAddPage from './pages/ShowAddPage/ShowAddPage';
-import ShowEnterancePage from './pages/ShowEnterancePage';
-import ShowInfoPage from './pages/ShowInfoPage/ShowInfoPage';
-import ShowReservationPage from './pages/ShowReservationPage';
-import ShowSettlementPage from './pages/ShowSettlementPage/ShowSettlementPage';
-import ShowTicketPage from './pages/ShowTicketPage/ShowTicketPage';
-import SignUpCompletePage from './pages/SignUpComplete/SignUpCompletePage';
-import SitePolicyPage from './pages/SitePolicyPage/SitePolicyPage';
-import GiftRegisterPage from './pages/GiftRegisterPage';
-import GiftIntroPage from './pages/GiftIntroPage';
 import { useAuthAtom } from './atoms/useAuthAtom';
 import GlobalErrorBoundary from './components/ErrorBoundary/GlobalErrorBoundary';
+import {
+  LandingPage,
+  LoginPage,
+  QRPage,
+  OAuthKakaoPage,
+  HomePage,
+  ShowAddCompletePage,
+  ShowEnterancePage,
+  ShowInfoPage,
+  ShowReservationPage,
+  ShowSettlementPage,
+  ShowTicketPage,
+  SignUpCompletePage,
+  SitePolicyPage,
+  GiftRegisterPage,
+  GiftIntroPage,
+  OAuthApplePage,
+} from './pages';
+import ShowAddPage from './pages/ShowAddPage';
+import { Suspense } from 'react';
 
 setDefaultOptions({ locale: ko });
 
@@ -43,7 +46,9 @@ const publicRoutes = [
     element: (
       <>
         <ScrollRestoration />
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </>
     ),
     children: [
@@ -97,7 +102,9 @@ const PrivateRoute = () => {
   return (
     <>
       <ScrollRestoration />
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };
