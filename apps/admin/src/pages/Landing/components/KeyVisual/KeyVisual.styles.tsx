@@ -11,7 +11,7 @@ const Container = styled.section`
   margin-top: -49px;
   padding-top: 49px;
   height: 740px;
-  background-image: url('${keyVisualImg}');
+  background: #070708 url('${keyVisualImg}');
   background-position: bottom center;
   background-repeat: no-repeat;
   background-size: cover;
