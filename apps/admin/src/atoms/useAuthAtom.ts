@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { LOCAL_STORAGE } from '@boolti/api';
 import { atom, useAtom } from 'jotai';
 import { useEffect } from 'react';
@@ -13,11 +14,41 @@ const storageMethod = {
     window.localStorage.removeItem(key);
   },
 };
+
 const accessTokenAtom = atom<string | null>(
-  storageMethod.getItem(LOCAL_STORAGE.ACCESS_TOKEN, null),
+  (() => {
+    const accessTokenFromCookie = Cookies.get('x-access-token');
+    const accessTokenFromStorage = storageMethod.getItem(LOCAL_STORAGE.ACCESS_TOKEN, null);
+
+    if (accessTokenFromStorage) {
+      return accessTokenFromStorage;
+    }
+
+    if (accessTokenFromCookie) {
+      localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessTokenFromCookie);
+      return accessTokenFromCookie;
+    }
+
+    return null;
+  })(),
 );
+
 const refreshTokenAtom = atom<string | null>(
-  storageMethod.getItem(LOCAL_STORAGE.REFRESH_TOKEN, null),
+  (() => {
+    const refreshTokenFromCookie = Cookies.get('x-access-token');
+    const refreshTokenFromStorage = storageMethod.getItem(LOCAL_STORAGE.REFRESH_TOKEN, null);
+
+    if (refreshTokenFromStorage) {
+      return refreshTokenFromStorage;
+    }
+
+    if (refreshTokenFromCookie) {
+      localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshTokenFromCookie);
+      return refreshTokenFromCookie;
+    }
+
+    return null;
+  })(),
 );
 
 export const useAuthAtom = () => {
