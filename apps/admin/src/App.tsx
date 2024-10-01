@@ -37,6 +37,7 @@ import {
   OAuthApplePage,
 } from './pages';
 import ShowAddPage from './pages/ShowAddPage';
+import { Suspense } from 'react';
 
 setDefaultOptions({ locale: ko });
 
@@ -45,7 +46,9 @@ const publicRoutes = [
     element: (
       <>
         <ScrollRestoration />
-        <Outlet />
+        <Suspense fallback={null}>
+          <Outlet />
+        </Suspense>
       </>
     ),
     children: [
@@ -99,7 +102,9 @@ const PrivateRoute = () => {
   return (
     <>
       <ScrollRestoration />
-      <Outlet />
+      <Suspense fallback={null}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };
