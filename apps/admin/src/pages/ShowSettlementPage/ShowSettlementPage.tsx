@@ -105,7 +105,7 @@ const ShowSettlementPage = () => {
               개인정보 처리방침
             </Styled.Link>
             <br />
-            업로드 시 불티의 개인정보 처리방침에 동의한 것으로 간주하며, 정보는 정산 및 세금계산서
+            업로드 시 불티의 개인정보 처리방침에 동의한 것으로 간주하며, 정보는 정산 및 현금영수증
             발급에 사용됩니다.
           </Styled.Notice>
           {settlementInfo && (
