@@ -142,7 +142,7 @@ const SettlementStatementPreview = ({
       <div className="notice-section">
         <h3>※ 안내사항</h3>
         <div>
-          정산액은 전체 판매 금액에서 수수료를 제외한 금액이며, 전체 수수료에 대하여 세금계산서를
+          정산액은 전체 판매 금액에서 수수료를 제외한 금액이며, 전체 수수료에 대하여 현금영수증을
           발행합니다.
         </div>
         <div>
