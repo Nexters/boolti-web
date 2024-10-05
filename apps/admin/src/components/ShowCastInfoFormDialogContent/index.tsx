@@ -8,9 +8,8 @@ import { PlusIcon, TrashIcon } from '@boolti/icon';
 type ShowCastInfoFormInputs = {
   name: string;
   members?: Array<{
-    id?: number;
     userCode?: string;
-    roleName: string;
+    roleName?: string;
   }>;
 };
 
@@ -18,7 +17,7 @@ const ShowCastInfoFormDialogContent = () => {
   const { control, register } = useForm<ShowCastInfoFormInputs>({
     defaultValues: { members: [{}] },
   });
-  const { fields } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'members',
   });
@@ -57,58 +56,68 @@ const ShowCastInfoFormDialogContent = () => {
         name="name"
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
-      {fields.map((field, index) => (
-        <Styled.Row>
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Styled.InputWrapper text={value ?? ''}>
-                <Styled.HashTag>#</Styled.HashTag>
-                <Styled.Input
-                  placeholder="식별 코드"
-                  required
-                  onChange={onChange}
-                  onBlur={() => {
-                    onBlur();
-                  }}
-                  value={value ?? ''}
-                />
-              </Styled.InputWrapper>
-            )}
-            name={`members.${index}.userCode`}
-          />
-          <Controller
-            control={control}
-            rules={{
-              required: true,
-            }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Styled.InputWrapper text={value ?? ''}>
-                <Styled.Input
-                  placeholder="역할"
-                  required
-                  onChange={onChange}
-                  onBlur={() => {
-                    onBlur();
-                  }}
-                  value={value ?? ''}
-                />
-              </Styled.InputWrapper>
-            )}
-            name={`members.${index}.roleName`}
-          />
-          <Styled.TrashCanButton>
-            <TrashIcon />
-          </Styled.TrashCanButton>
-        </Styled.Row>
-      ))}
-      <Styled.MemberAddButton>
-        <PlusIcon />
-        팀원 추가
-      </Styled.MemberAddButton>
+      <Styled.MemberList>
+        {fields.map((field, index) => (
+          <Styled.Row key={field.id}>
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Styled.InputWrapper text={value ?? ''}>
+                  <Styled.HashTag>#</Styled.HashTag>
+                  <Styled.Input
+                    placeholder="식별 코드"
+                    required
+                    onChange={onChange}
+                    onBlur={() => {
+                      onBlur();
+                    }}
+                    value={value ?? ''}
+                  />
+                </Styled.InputWrapper>
+              )}
+              name={`members.${index}.userCode`}
+            />
+            <Controller
+              control={control}
+              rules={{
+                required: true,
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Styled.InputWrapper text={value ?? ''}>
+                  <Styled.Input
+                    placeholder="역할"
+                    required
+                    onChange={onChange}
+                    onBlur={() => {
+                      onBlur();
+                    }}
+                    value={value ?? ''}
+                  />
+                </Styled.InputWrapper>
+              )}
+              name={`members.${index}.roleName`}
+            />
+            <Styled.TrashCanButton
+              onClick={() => {
+                remove(index);
+              }}
+            >
+              <TrashIcon />
+            </Styled.TrashCanButton>
+          </Styled.Row>
+        ))}
+        <Styled.MemberAddButton
+          onClick={() => {
+            append({});
+          }}
+        >
+          <PlusIcon />
+          팀원 추가
+        </Styled.MemberAddButton>
+      </Styled.MemberList>
       <Styled.RegisterButton type="button" colorTheme="primary" size="bold" disabled>
         등록하기
       </Styled.RegisterButton>

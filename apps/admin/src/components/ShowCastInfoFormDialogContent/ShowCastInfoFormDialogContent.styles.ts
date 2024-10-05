@@ -28,12 +28,21 @@ const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
   }
 `;
 
+const MemberList = styled.div`
+  max-height: 364px;
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const InputWrapper = styled.div<InputWrapperProps>`
   ${({ theme }) => theme.typo.b3};
   border: 1px solid ${({ text, theme }) => (text ? theme.palette.grey.g90 : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  padding: 12px;
+  padding: 8px 12px;
+  height: 48px;
   margin-right: 8px;
   flex: auto;
   position: relative;
@@ -79,6 +88,7 @@ const MemberAddButton = styled.button`
   background: var(--W-White, #fff);
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g40};
+  width: 536px;
 
   & > svg {
     margin-right: 8px;
@@ -98,4 +108,5 @@ export default {
   TrashCanButton,
   MemberAddButton,
   RegisterButton,
+  MemberList,
 };
