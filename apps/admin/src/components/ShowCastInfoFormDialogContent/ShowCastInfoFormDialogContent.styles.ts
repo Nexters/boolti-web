@@ -9,7 +9,7 @@ interface InputWrapperProps {
   text: string;
 }
 
-const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
+const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   display: block;
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};

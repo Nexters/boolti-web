@@ -14,13 +14,15 @@ type ShowCastInfoFormInputs = {
 };
 
 const ShowCastInfoFormDialogContent = () => {
-  const { control, register } = useForm<ShowCastInfoFormInputs>({
+  const { control, getValues } = useForm<ShowCastInfoFormInputs>({
     defaultValues: { members: [{}] },
   });
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'members',
   });
+
+  const disabled = !getValues('name');
 
   useBodyScrollLock(true);
 
@@ -118,7 +120,7 @@ const ShowCastInfoFormDialogContent = () => {
           팀원 추가
         </Styled.MemberAddButton>
       </Styled.MemberList>
-      <Styled.RegisterButton type="button" colorTheme="primary" size="bold" disabled>
+      <Styled.RegisterButton type="button" colorTheme="primary" size="bold" disabled={disabled}>
         등록하기
       </Styled.RegisterButton>
     </>
