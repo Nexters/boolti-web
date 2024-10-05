@@ -51,7 +51,7 @@ const BoldText = styled.span<BoldTextProps>`
   white-space: pre-line;
   margin-bottom: 8px;
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme, darkMode }) => darkMode ? theme.palette.grey.g40 : theme.palette.grey.g70};
+  color: ${({ theme, darkMode }) => (darkMode ? theme.palette.grey.g40 : theme.palette.grey.g70)};
 `;
 
 const LinkTextGroup = styled.div`

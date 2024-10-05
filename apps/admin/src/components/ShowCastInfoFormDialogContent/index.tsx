@@ -6,8 +6,9 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
 import { queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
+import { ShowCastInfoFormInput } from './types';
 
-type ShowCastInfoFormInputs = {
+interface TempShowCastInfoFormInput {
   name: string;
   members?: Array<{
     imgPath?: string;
@@ -15,11 +16,16 @@ type ShowCastInfoFormInputs = {
     userCode?: string;
     roleName?: string;
   }>;
-};
+}
 
-const ShowCastInfoFormDialogContent = () => {
+interface Props {
+  setValue: (value: ShowCastInfoFormInput) => void;
+}
+
+const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
   const queryClient = useQueryClient();
-  const { control, getValues, watch } = useForm<ShowCastInfoFormInputs>({
+
+  const { control, getValues, watch } = useForm<TempShowCastInfoFormInput>({
     defaultValues: { members: [{}] },
   });
   const { fields, append, remove, update } = useFieldArray({
@@ -39,7 +45,7 @@ const ShowCastInfoFormDialogContent = () => {
   useBodyScrollLock(true);
 
   const [hasBlurred, setHasBlurred] = useState<
-    Record<keyof ShowCastInfoFormInputs, boolean | boolean[]>
+    Record<keyof ShowCastInfoFormInput, boolean | boolean[]>
   >({
     name: false,
     members: [],
@@ -163,7 +169,22 @@ const ShowCastInfoFormDialogContent = () => {
           팀원 추가
         </Styled.MemberAddButton>
       </Styled.MemberList>
-      <Styled.RegisterButton type="button" colorTheme="primary" size="bold" disabled={disabled}>
+      <Styled.RegisterButton
+        type="button"
+        colorTheme="primary"
+        size="bold"
+        disabled={disabled}
+        onClick={(e) => {
+          e.preventDefault();
+
+          const name = getValues('name');
+          const members = (getValues('members') ?? []).filter((member) =>
+            Object.values(member).every(Boolean),
+          ) as ShowCastInfoFormInput['members'];
+
+          setValue({ name, members });
+        }}
+      >
         등록하기
       </Styled.RegisterButton>
     </>

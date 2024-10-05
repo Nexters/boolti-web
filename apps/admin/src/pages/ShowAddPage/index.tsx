@@ -1,6 +1,6 @@
 import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { Button, useToast } from '@boolti/ui';
+import { Button, useDialog, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
+import { ShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent/types';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -26,6 +27,7 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
+  const dialog = useDialog();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -33,6 +35,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
+  const [showCastInfo, setShowCastInfo] = useState<ShowCastInfoFormInput[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
@@ -147,7 +150,11 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                       <ShowDetailInfoFormContent form={showInfoForm} />
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
-                      <ShowCastInfoFormContent />
+                      <ShowCastInfoFormContent
+                        setValue={(showCastInfoFormInput: ShowCastInfoFormInput) => {
+                          setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                        }}
+                      />
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"

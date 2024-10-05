@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { mq_lg } from '@boolti/ui'
+import styled from '@emotion/styled';
+import { mq_lg } from '@boolti/ui';
 
 interface LabelProps {
   required?: boolean;
@@ -17,7 +17,7 @@ const LinkForm = styled.form`
   ${mq_lg} {
     padding: 0;
   }
-`
+`;
 
 const LinkFormControl = styled.div`
   margin-bottom: 28px;
@@ -25,7 +25,7 @@ const LinkFormControl = styled.div`
   & > div {
     width: 100%;
   }
-`
+`;
 
 const LinkFormButtonWrapper = styled.div<LinkFormButtonWrapperProps>`
   display: flex;
@@ -35,7 +35,7 @@ const LinkFormButtonWrapper = styled.div<LinkFormButtonWrapperProps>`
   margin-top: 4px;
 
   button {
-    width: ${({ isEditMode }) => isEditMode ? 'auto' : '100%'};
+    width: ${({ isEditMode }) => (isEditMode ? 'auto' : '100%')};
   }
 
   ${mq_lg} {
@@ -43,7 +43,7 @@ const LinkFormButtonWrapper = styled.div<LinkFormButtonWrapperProps>`
       width: auto;
     }
   }
-`
+`;
 
 const Label = styled.label<LabelProps>`
   ${({ theme }) => theme.typo.b3};
@@ -53,7 +53,7 @@ const Label = styled.label<LabelProps>`
   position: relative;
 
   &::after {
-    content: ${({ required }) => (required ? "'*'" : "none")};
+    content: ${({ required }) => (required ? "'*'" : 'none')};
     color: ${({ theme }) => theme.palette.status.error};
     ${({ theme }) => theme.typo.b1};
     line-height: 22px;
@@ -66,12 +66,12 @@ const LinkDeleteButton = styled.button`
   line-height: 22px;
   text-decoration: underline;
   cursor: pointer;
-`
+`;
 
 export default {
   LinkForm,
   LinkFormControl,
   LinkFormButtonWrapper,
   Label,
-  LinkDeleteButton
-}
+  LinkDeleteButton,
+};

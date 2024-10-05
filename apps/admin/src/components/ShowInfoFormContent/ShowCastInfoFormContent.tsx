@@ -3,8 +3,13 @@ import { Button, useDialog } from '@boolti/ui';
 import Styled from './ShowInfoFormContent.styles';
 import { PlusIcon } from '@boolti/icon';
 import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
+import { ShowCastInfoFormInput } from '../ShowCastInfoFormDialogContent/types';
 
-const ShowCastInfoFormContent = () => {
+interface Props {
+  setValue: (value: ShowCastInfoFormInput) => void;
+}
+
+const ShowCastInfoFormContent = ({ setValue }: Props) => {
   const dialog = useDialog();
 
   return (
@@ -27,7 +32,14 @@ const ShowCastInfoFormContent = () => {
             dialog.open({
               isAuto: true,
               title: '출연진 정보 등록',
-              content: <ShowCastInfoFormDialogContent />,
+              content: (
+                <ShowCastInfoFormDialogContent
+                  setValue={(value) => {
+                    setValue(value);
+                    dialog.close();
+                  }}
+                />
+              ),
             });
           }}
         >

@@ -34,7 +34,7 @@ const ShowInfoFormGroup = styled.div``;
 const ShowInfoFormGroupHeader = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const ShowInfoFormGroupInfo = styled.div`
   flex: 1;
@@ -42,7 +42,7 @@ const ShowInfoFormGroupInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
-`
+`;
 
 const ShowInfoFormTitle = styled.h3`
   ${({ theme }) => theme.typo.sh2};
@@ -60,7 +60,7 @@ const ShowInfoFormSubtitle = styled.p`
   strong {
     font-weight: 600;
   }
-`
+`;
 
 const ShowInfoFormRow = styled.div`
   margin-bottom: 28px;
@@ -105,7 +105,7 @@ const ShowInfoFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowInfoFormButton = styled(Button) <ShowInfoFormButtonProps>`
+const ShowInfoFormButton = styled(Button)<ShowInfoFormButtonProps>`
   width: ${({ width }) => width};
 `;
 
@@ -272,7 +272,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
-    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -524,7 +524,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-    disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
+          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }

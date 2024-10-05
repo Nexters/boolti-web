@@ -30,13 +30,13 @@ export interface UserProfileLink {
 }
 
 export interface UserProfileResponse {
-  id: number
-  nickname: string
-  email: string
-  userCode: string
-  imgPath: string
-  introduction: string
-  link: UserProfileLink[]
+  id: number;
+  nickname: string;
+  email: string;
+  userCode: string;
+  imgPath: string;
+  introduction: string;
+  link: UserProfileLink[];
   oauthType: 'KAKAO' | 'APPLE';
 }
 
