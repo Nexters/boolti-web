@@ -1,9 +1,9 @@
-import { Button, TextButton, TextField } from '@boolti/ui';
+import { TextField } from '@boolti/ui';
 import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { ClearIcon, CloseIcon, PlusIcon, TrashIcon } from '@boolti/icon';
+import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
 import { queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 
@@ -19,7 +19,7 @@ type ShowCastInfoFormInputs = {
 
 const ShowCastInfoFormDialogContent = () => {
   const queryClient = useQueryClient();
-  const { control, getValues, setValue, watch } = useForm<ShowCastInfoFormInputs>({
+  const { control, getValues, watch } = useForm<ShowCastInfoFormInputs>({
     defaultValues: { members: [{}] },
   });
   const { fields, append, remove, update } = useFieldArray({
@@ -54,19 +54,21 @@ const ShowCastInfoFormDialogContent = () => {
           required: true,
         }}
         render={({ field: { onChange, onBlur, value } }) => (
-          <TextField
-            inputType="text"
-            size="big"
-            placeholder="팀명을 입력해 주세요 (30자 이내)"
-            required
-            onChange={onChange}
-            onBlur={() => {
-              onBlur();
-              setHasBlurred((prev) => ({ ...prev, name: true }));
-            }}
-            value={value ?? ''}
-            errorMessage={hasBlurred.name && !value ? '필수 입력사항입니다.' : undefined}
-          />
+          <Styled.TextFieldWrap>
+            <TextField
+              inputType="text"
+              size="big"
+              placeholder="팀명을 입력해 주세요 (30자 이내)"
+              required
+              onChange={onChange}
+              onBlur={() => {
+                onBlur();
+                setHasBlurred((prev) => ({ ...prev, name: true }));
+              }}
+              value={value ?? ''}
+              errorMessage={hasBlurred.name && !value ? '필수 입력사항입니다.' : undefined}
+            />
+          </Styled.TextFieldWrap>
         )}
         name="name"
       />

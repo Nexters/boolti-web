@@ -22,10 +22,6 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
-
-  &:not(:first-of-type) {
-    margin-top: 28px;
-  }
 `;
 
 const MemberList = styled.div`
@@ -50,7 +46,13 @@ const InputWrapper = styled.div<InputWrapperProps>`
   align-items: center;
 `;
 
-const TextFieldWrap = styled.div``;
+const TextFieldWrap = styled.div`
+  margin-bottom: 28px;
+
+  & > div {
+    width: auto;
+  }
+`;
 
 const HashTag = styled.span`
   color: ${({ theme }) => theme.palette.grey.g90};
