@@ -14,7 +14,7 @@ interface Props {
 const ShowCastInfo = ({ showCastInfo, setValue, deleteCastInfo }: Props) => {
   const memberLength = showCastInfo.members?.length ?? 0;
   const dialog = useDialog();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen((prev) => !prev);
 

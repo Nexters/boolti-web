@@ -10,7 +10,7 @@ const Toast = () => {
       }}
     >
       {(toast) => (
-        <ToastBar toast={toast} style={{ padding: '0' }}>
+        <ToastBar toast={toast} style={{ padding: '0', maxWidth: 'none' }}>
           {({ icon, message }) => (
             <Styled.Toast>
               <Styled.Icon>{icon}</Styled.Icon>
