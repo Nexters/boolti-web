@@ -1,17 +1,19 @@
 import { useDialog } from '@boolti/ui';
-import { ShowCastInfoFormInput } from '../ShowCastInfoFormDialogContent/types';
+
 import Styled from './ShowCastInfo.styles';
 import { EditIcon, ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { useState } from 'react';
 import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
+import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
 
 interface Props {
-  showCastInfo: ShowCastInfoFormInput;
-  setValue: (value: ShowCastInfoFormInput) => void;
-  deleteCastInfo: VoidFunction;
+  showCastInfo: ShowCastTeamCreateOrUpdateRequest;
+  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
+  onSave?: VoidFunction;
+  onDelete?: VoidFunction;
 }
 
-const ShowCastInfo = ({ showCastInfo, setValue, deleteCastInfo }: Props) => {
+const ShowCastInfo = ({ showCastInfo, setValue, onSave, onDelete }: Props) => {
   const memberLength = showCastInfo.members?.length ?? 0;
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
@@ -37,8 +39,9 @@ const ShowCastInfo = ({ showCastInfo, setValue, deleteCastInfo }: Props) => {
                     dialog.close();
                   }}
                   prevShowCastInfo={showCastInfo}
-                  deleteCastInfo={() => {
-                    deleteCastInfo();
+                  onSave={onSave}
+                  onDelete={() => {
+                    onDelete?.();
                     dialog.close();
                   }}
                 />

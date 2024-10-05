@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import Styled from './LinkFormDialogContent.styles';
 import { Button, TextField } from '@boolti/ui';
-import { UserProfileLink } from '@boolti/api';
+import { UserLink } from '@boolti/api';
 
-export type LinkFormInputs = UserProfileLink;
+export type LinkFormInputs = UserLink;
 
 interface LinkFormDialogContentProps {
   defaultValues?: LinkFormInputs;

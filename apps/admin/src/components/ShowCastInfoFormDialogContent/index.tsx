@@ -4,9 +4,8 @@ import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
-import { queryKeys, useQueryClient } from '@boolti/api';
+import { ShowCastTeamCreateOrUpdateRequest, queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
-import { ShowCastInfoFormInput } from './types';
 
 interface TempShowCastInfoFormInput {
   name: string;
@@ -19,12 +18,13 @@ interface TempShowCastInfoFormInput {
 }
 
 interface Props {
-  prevShowCastInfo?: ShowCastInfoFormInput;
-  deleteCastInfo?: VoidFunction;
-  setValue: (value: ShowCastInfoFormInput) => void;
+  prevShowCastInfo?: ShowCastTeamCreateOrUpdateRequest;
+  onSave?: VoidFunction;
+  onDelete?: VoidFunction;
+  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
 }
 
-const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setValue }: Props) => {
+const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave, setValue }: Props) => {
   const queryClient = useQueryClient();
 
   const previousShowCastInfoMemberLength = prevShowCastInfo?.members?.length ?? 0;
@@ -55,7 +55,7 @@ const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setVa
   useBodyScrollLock(true);
 
   const [hasBlurred, setHasBlurred] = useState<
-    Record<keyof ShowCastInfoFormInput, boolean | boolean[]>
+    Record<keyof ShowCastTeamCreateOrUpdateRequest, boolean | boolean[]>
   >({
     name: false,
     members: [],
@@ -196,7 +196,7 @@ const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setVa
         </Styled.MemberAddButton>
       </Styled.MemberList>
       <Styled.ButtonWrap>
-        {deleteCastInfo && (
+        {onDelete && (
           <Styled.DeleteButton
             onClick={async () => {
               const isConfirm = await confirm('팀 정보를 삭제하시겠어요?', {
@@ -205,8 +205,8 @@ const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setVa
               });
 
               if (isConfirm) {
+                onDelete();
                 toast.success('팀 정보를 삭제했습니다.');
-                deleteCastInfo();
               }
             }}
           >
@@ -224,11 +224,11 @@ const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setVa
             const name = getValues('name');
             const members = (getValues('members') ?? []).filter(
               (member) => member.imgPath && member.nickname && member.roleName && member.userCode,
-            ) as ShowCastInfoFormInput['members'];
+            ) as ShowCastTeamCreateOrUpdateRequest['members'];
 
-            toast.success(
-              deleteCastInfo ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.',
-            );
+            onSave?.();
+
+            toast.success(onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.');
 
             setValue({ name, members });
           }}

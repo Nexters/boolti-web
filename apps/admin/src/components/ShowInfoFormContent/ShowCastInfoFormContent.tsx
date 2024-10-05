@@ -3,10 +3,10 @@ import { Button, useDialog } from '@boolti/ui';
 import Styled from './ShowInfoFormContent.styles';
 import { PlusIcon } from '@boolti/icon';
 import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
-import { ShowCastInfoFormInput } from '../ShowCastInfoFormDialogContent/types';
+import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
 
 interface Props {
-  setValue: (value: ShowCastInfoFormInput) => void;
+  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
 }
 
 const ShowCastInfoFormContent = ({ setValue }: Props) => {

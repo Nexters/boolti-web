@@ -9,6 +9,7 @@ import {
   PageReservationResponse,
   ReservationSummaryResponse,
   SettlementBannersResponse,
+  ShowCastTeamReadResponse,
   ShowInvitationCodeListResponse,
   ShowInvitationTicketResponse,
   ShowPreviewResponse,
@@ -333,6 +334,14 @@ export const hostQueryKeys = createQueryKeys('host', {
   }),
 });
 
+export const castTeamQueryKeys = createQueryKeys('castTeams', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -342,4 +351,5 @@ export const queryKeys = mergeQueryKeys(
   entranceQueryKeys,
   giftQueryKeys,
   hostQueryKeys,
+  castTeamQueryKeys,
 );

@@ -1,6 +1,8 @@
 import {
   ImageFile,
+  ShowCastTeamCreateOrUpdateRequest,
   ShowImage,
+  useCastTeamList,
   useDeleteShow,
   useEditShowInfo,
   useShowDetail,
@@ -26,6 +28,8 @@ import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
+import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
+import ShowCastInfo from '~/components/ShowCastInfo';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
@@ -34,12 +38,14 @@ const ShowInfoPage = () => {
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
+  const [showCastInfo, setShowCastInfo] = useState<ShowCastTeamCreateOrUpdateRequest[]>([]);
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
   const showInfoForm = useForm<ShowInfoFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
+  const { data: castTeamList, isLoading: isCastTeamListLoading } = useCastTeamList(showId);
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
@@ -129,7 +135,15 @@ const ShowInfoPage = () => {
     setShowImages(show.images);
   }, [show, showInfoForm]);
 
-  if (!show || !showSalesInfo) return null;
+  useEffect(() => {
+    if (!isCastTeamListLoading && castTeamList) {
+      setShowCastInfo(castTeamList);
+    }
+  }, [isCastTeamListLoading, castTeamList]);
+
+  if (!show || !showSalesInfo || !castTeamList) {
+    return null;
+  }
 
   const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
 
@@ -188,6 +202,34 @@ const ShowInfoPage = () => {
                   저장하기
                 </Button>
               </Styled.SaveButton>
+            </Styled.ShowInfoFormFooter>
+            <Styled.ShowInfoFormDivider />
+            <Styled.ShowInfoFormContent>
+              <ShowCastInfoFormContent
+                setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                  setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                }}
+              />
+              {showCastInfo.map((info, index) => (
+                <ShowCastInfo
+                  key={index}
+                  showCastInfo={info}
+                  setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                    setShowCastInfo((prev) =>
+                      prev.map((prevCastInfo, currentIndex) =>
+                        index === currentIndex ? showCastInfoFormInput : prevCastInfo,
+                      ),
+                    );
+                  }}
+                  onDelete={() => {
+                    setShowCastInfo((prev) =>
+                      prev.filter((_, currentIndex) => index !== currentIndex),
+                    );
+                  }}
+                />
+              ))}
+            </Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormFooter>
               <Styled.DeleteButton>
                 <Button
                   size="bold"

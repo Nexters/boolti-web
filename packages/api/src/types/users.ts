@@ -24,19 +24,27 @@ export interface UserProfileSummaryResponse {
   oauthType: 'KAKAO' | 'APPLE';
 }
 
-export interface UserProfileLink {
+export interface UserLink {
   title: string;
   link: string;
 }
 
 export interface UserProfileResponse {
+  /** 유저 ID */
   id: number;
+  /** 유저 닉네임 */
   nickname: string;
+  /** 유저 이메일 */
   email: string;
+  /** 유저코드 (권한 부여 시) */
   userCode: string;
+  /** 유저 프로필 이미지 경로 */
   imgPath: string;
+  /** 유저 소개 */
   introduction: string;
-  link: UserProfileLink[];
+  /** 유저 링크 */
+  link: UserLink[];
+  /** 가입 시 사용한 oauth 제공자 */
   oauthType: 'KAKAO' | 'APPLE';
 }
 

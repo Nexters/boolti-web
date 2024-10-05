@@ -1,6 +1,11 @@
-import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
+import {
+  ImageFile,
+  ShowCastTeamCreateOrUpdateRequest,
+  useAddShow,
+  useUploadShowImage,
+} from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { Button, useDialog, useToast } from '@boolti/ui';
+import { Button, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -19,7 +24,6 @@ import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
-import { ShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent/types';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { LazyMotion, domAnimation } from 'framer-motion';
 
@@ -36,7 +40,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
-  const [showCastInfo, setShowCastInfo] = useState<ShowCastInfoFormInput[]>([]);
+  const [showCastInfo, setShowCastInfo] = useState<ShowCastTeamCreateOrUpdateRequest[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
@@ -156,7 +160,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
                       <ShowCastInfoFormContent
-                        setValue={(showCastInfoFormInput: ShowCastInfoFormInput) => {
+                        setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
                         }}
                       />
@@ -164,14 +168,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                         <ShowCastInfo
                           key={index}
                           showCastInfo={info}
-                          setValue={(showCastInfoFormInput: ShowCastInfoFormInput) => {
+                          setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
                             setShowCastInfo((prev) =>
                               prev.map((prevCastInfo, currentIndex) =>
                                 index === currentIndex ? showCastInfoFormInput : prevCastInfo,
                               ),
                             );
                           }}
-                          deleteCastInfo={() => {
+                          onDelete={() => {
                             setShowCastInfo((prev) =>
                               prev.filter((_, currentIndex) => index !== currentIndex),
                             );

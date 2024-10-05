@@ -6,11 +6,15 @@ export interface ShowCastTeamReadResponse {
   /** 출연진 팀 멤버 목록 */
   members?: Array<{
     /** 공연 출연진 팀원 ID */
-    id: number;
+    id?: number;
     /** 유저 식별 코드 */
     userCode: string;
     /** 역할 이름 (1~100자. 빈 문자열 불가) */
     roleName: string;
+    /** 유저 닉네임 */
+    nickname: string;
+    /** 유저 프로필 이미지 경로 */
+    imgPath: string;
   }>;
   /** 팀 생성 일시 */
   createdAt: string;
@@ -18,16 +22,9 @@ export interface ShowCastTeamReadResponse {
   modifiedAt: string;
 }
 
-export interface ShowCastTeamUpdateRequest {
+export interface ShowCastTeamCreateOrUpdateRequest {
   /** 팀 이름 */
   name: ShowCastTeamReadResponse['name'];
   /** 팀원 목록 */
-  members: ShowCastTeamReadResponse['members'];
-}
-
-export interface ShowCastTeamCreateRequest {
-  /** 팀 이름 */
-  name: ShowCastTeamReadResponse['name'];
-  /** 팀원 목록 */
-  members: ShowCastTeamReadResponse['members'];
+  members?: ShowCastTeamReadResponse['members'];
 }
