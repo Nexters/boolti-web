@@ -6,10 +6,10 @@ import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
 import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
 
 interface Props {
-  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
+  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
 }
 
-const ShowCastInfoFormContent = ({ setValue }: Props) => {
+const ShowCastInfoFormContent = ({ onSave }: Props) => {
   const dialog = useDialog();
 
   return (
@@ -34,8 +34,8 @@ const ShowCastInfoFormContent = ({ setValue }: Props) => {
               title: '출연진 정보 등록',
               content: (
                 <ShowCastInfoFormDialogContent
-                  setValue={(value) => {
-                    setValue(value);
+                  onSave={(value) => {
+                    onSave(value);
                     dialog.close();
                   }}
                 />

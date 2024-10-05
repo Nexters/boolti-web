@@ -8,12 +8,11 @@ import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
 
 interface Props {
   showCastInfo: ShowCastTeamCreateOrUpdateRequest;
-  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
-  onSave?: VoidFunction;
+  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
   onDelete?: VoidFunction;
 }
 
-const ShowCastInfo = ({ showCastInfo, setValue, onSave, onDelete }: Props) => {
+const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const memberLength = showCastInfo.members?.length ?? 0;
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
@@ -34,12 +33,11 @@ const ShowCastInfo = ({ showCastInfo, setValue, onSave, onDelete }: Props) => {
               isAuto: true,
               content: (
                 <ShowCastInfoFormDialogContent
-                  setValue={(castInfo) => {
-                    setValue(castInfo);
+                  onSave={(castInfo) => {
+                    onSave(castInfo);
                     dialog.close();
                   }}
                   prevShowCastInfo={showCastInfo}
-                  onSave={onSave}
                   onDelete={() => {
                     onDelete?.();
                     dialog.close();

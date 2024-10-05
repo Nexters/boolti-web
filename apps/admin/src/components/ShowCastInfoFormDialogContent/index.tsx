@@ -19,12 +19,11 @@ interface TempShowCastInfoFormInput {
 
 interface Props {
   prevShowCastInfo?: ShowCastTeamCreateOrUpdateRequest;
-  onSave?: VoidFunction;
   onDelete?: VoidFunction;
-  setValue: (value: ShowCastTeamCreateOrUpdateRequest) => void;
+  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
 }
 
-const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave, setValue }: Props) => {
+const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: Props) => {
   const queryClient = useQueryClient();
 
   const previousShowCastInfoMemberLength = prevShowCastInfo?.members?.length ?? 0;
@@ -226,11 +225,9 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave, set
               (member) => member.imgPath && member.nickname && member.roleName && member.userCode,
             ) as ShowCastTeamCreateOrUpdateRequest['members'];
 
-            onSave?.();
+            onSave({ name, members });
 
             toast.success(onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.');
-
-            setValue({ name, members });
           }}
         >
           등록하기

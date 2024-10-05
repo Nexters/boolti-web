@@ -1,4 +1,4 @@
-import { Button, mq_lg } from '@boolti/ui';
+import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface ShowInfoFormLabelProps {

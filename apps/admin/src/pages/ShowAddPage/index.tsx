@@ -160,7 +160,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
                       <ShowCastInfoFormContent
-                        setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                        onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
                         }}
                       />
@@ -168,7 +168,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                         <ShowCastInfo
                           key={index}
                           showCastInfo={info}
-                          setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                          onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
                             setShowCastInfo((prev) =>
                               prev.map((prevCastInfo, currentIndex) =>
                                 index === currentIndex ? showCastInfoFormInput : prevCastInfo,

@@ -2,9 +2,14 @@ import {
   ImageFile,
   ShowCastTeamCreateOrUpdateRequest,
   ShowImage,
+  queryKeys,
   useCastTeamList,
+  useDeleteCastTeams,
   useDeleteShow,
   useEditShowInfo,
+  usePostCastTeams,
+  usePutCastTeams,
+  useQueryClient,
   useShowDetail,
   useShowSalesInfo,
   useUploadShowImage,
@@ -32,24 +37,27 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import ShowCastInfo from '~/components/ShowCastInfo';
 
 const ShowInfoPage = () => {
+  const queryClient = useQueryClient();
   const params = useParams<{ showId: string }>();
   const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
-  const [showCastInfo, setShowCastInfo] = useState<ShowCastTeamCreateOrUpdateRequest[]>([]);
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
   const showInfoForm = useForm<ShowInfoFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
-  const { data: castTeamList, isLoading: isCastTeamListLoading } = useCastTeamList(showId);
+  const { data: castTeamList } = useCastTeamList(showId);
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
   const deleteShowMutation = useDeleteShow();
+  const putCastTeams = usePutCastTeams();
+  const postCastTeams = usePostCastTeams();
+  const deleteCastTeams = useDeleteCastTeams();
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -135,12 +143,6 @@ const ShowInfoPage = () => {
     setShowImages(show.images);
   }, [show, showInfoForm]);
 
-  useEffect(() => {
-    if (!isCastTeamListLoading && castTeamList) {
-      setShowCastInfo(castTeamList);
-    }
-  }, [isCastTeamListLoading, castTeamList]);
-
   if (!show || !showSalesInfo || !castTeamList) {
     return null;
   }
@@ -206,25 +208,43 @@ const ShowInfoPage = () => {
             <Styled.ShowInfoFormDivider />
             <Styled.ShowInfoFormContent>
               <ShowCastInfoFormContent
-                setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
-                  setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                  postCastTeams.mutate(
+                    {
+                      showId,
+                      ...showCastInfoFormInput,
+                    },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                      },
+                    },
+                  );
                 }}
               />
-              {showCastInfo.map((info, index) => (
+              {castTeamList.map((info, index) => (
                 <ShowCastInfo
                   key={index}
                   showCastInfo={info}
-                  setValue={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
-                    setShowCastInfo((prev) =>
-                      prev.map((prevCastInfo, currentIndex) =>
-                        index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                      ),
+                  onSave={async (showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                    putCastTeams.mutate(
+                      {
+                        ...showCastInfoFormInput,
+                        castTeamId: info.id,
+                      },
+                      {
+                        onSuccess: () => {
+                          queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                        },
+                      },
                     );
                   }}
                   onDelete={() => {
-                    setShowCastInfo((prev) =>
-                      prev.filter((_, currentIndex) => index !== currentIndex),
-                    );
+                    deleteCastTeams.mutate(info.id, {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                      },
+                    });
                   }}
                 />
               ))}
