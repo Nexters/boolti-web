@@ -24,7 +24,7 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   }
 
   &:not(:first-of-type) {
-    margin-top: 20px;
+    margin-top: 28px;
   }
 `;
 
@@ -49,6 +49,8 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
 `;
+
+const TextFieldWrap = styled.div``;
 
 const HashTag = styled.span`
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -136,4 +138,5 @@ export default {
   UsrImage,
   Username,
   RemoveButton,
+  TextFieldWrap,
 };
