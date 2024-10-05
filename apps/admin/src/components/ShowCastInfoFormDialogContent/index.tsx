@@ -10,6 +10,7 @@ import { replaceUserCode } from '~/utils/replace';
 interface TempShowCastInfoFormInput {
   name: string;
   members?: Array<{
+    id?: number;
     imgPath?: string;
     nickname?: string;
     userCode?: string;
