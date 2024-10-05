@@ -44,6 +44,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   position: relative;
   display: flex;
   align-items: center;
+  width: calc(50% - 32px);
 `;
 
 const TextFieldWrap = styled.div`
@@ -100,7 +101,7 @@ const MemberAddButton = styled.button`
 `;
 
 const RegisterButton = styled(Button)`
-  margin: 32px 0 0 auto;
+  margin-left: auto;
 `;
 
 const UserImage = styled.div`
@@ -127,6 +128,19 @@ const RemoveButton = styled.button`
   cursor: pointer;
 `;
 
+const DeleteButton = styled.button`
+  cursor: pointer;
+  ${({ theme }) => theme.typo.sh1};
+  text-decoration: underline;
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 32px;
+`;
+
 export default {
   ShowInfoFormLabel,
   InputWrapper,
@@ -141,4 +155,6 @@ export default {
   Username,
   RemoveButton,
   TextFieldWrap,
+  ButtonWrap,
+  DeleteButton,
 };

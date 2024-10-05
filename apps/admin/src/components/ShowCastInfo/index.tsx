@@ -1,15 +1,19 @@
+import { useDialog } from '@boolti/ui';
 import { ShowCastInfoFormInput } from '../ShowCastInfoFormDialogContent/types';
 import Styled from './ShowCastInfo.styles';
 import { EditIcon, ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { useState } from 'react';
+import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
 
 interface Props {
   showCastInfo: ShowCastInfoFormInput;
   setValue: (value: ShowCastInfoFormInput) => void;
+  deleteCastInfo: VoidFunction;
 }
 
-const ShowCastInfo = ({ showCastInfo }: Props) => {
+const ShowCastInfo = ({ showCastInfo, setValue, deleteCastInfo }: Props) => {
   const memberLength = showCastInfo.members?.length ?? 0;
+  const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(true);
 
   const toggle = () => setIsOpen((prev) => !prev);
@@ -17,8 +21,31 @@ const ShowCastInfo = ({ showCastInfo }: Props) => {
   return (
     <Styled.Container>
       <Styled.Header>
-        Salty&Sweet
-        <Styled.EditButton colorTheme="line" size="bold">
+        {showCastInfo.name}
+        <Styled.EditButton
+          colorTheme="line"
+          size="bold"
+          onClick={(e) => {
+            e.preventDefault();
+            dialog.open({
+              title: '출연진 정보 편집',
+              isAuto: true,
+              content: (
+                <ShowCastInfoFormDialogContent
+                  setValue={(castInfo) => {
+                    setValue(castInfo);
+                    dialog.close();
+                  }}
+                  prevShowCastInfo={showCastInfo}
+                  deleteCastInfo={() => {
+                    deleteCastInfo();
+                    dialog.close();
+                  }}
+                />
+              ),
+            });
+          }}
+        >
           <EditIcon />
           편집하기
         </Styled.EditButton>

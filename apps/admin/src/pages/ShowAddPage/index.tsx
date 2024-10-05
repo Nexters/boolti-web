@@ -156,8 +156,22 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
                         }}
                       />
-                      {showCastInfo.map((info) => (
-                        <ShowCastInfo showCastInfo={info} setValue={() => {}} />
+                      {showCastInfo.map((info, index) => (
+                        <ShowCastInfo
+                          showCastInfo={info}
+                          setValue={(showCastInfoFormInput: ShowCastInfoFormInput) => {
+                            setShowCastInfo((prev) =>
+                              prev.map((prevCastInfo, currentIndex) =>
+                                index === currentIndex ? showCastInfoFormInput : prevCastInfo,
+                              ),
+                            );
+                          }}
+                          deleteCastInfo={() => {
+                            setShowCastInfo((prev) =>
+                              prev.filter((_, currentIndex) => index !== currentIndex),
+                            );
+                          }}
+                        />
                       ))}
                     </Styled.ShowInfoFormContent>
                     <Button

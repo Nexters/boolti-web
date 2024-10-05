@@ -37,18 +37,28 @@ const Cast = styled(m.div)`
   border-top: none;
   border-bottom: none;
   overflow: hidden;
+  max-height: 574px;
+  overflow: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const CastItem = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 18px 28px 14px;
+  padding: 14px 28px;
   flex: 1 0 50%;
   max-width: 50%;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+
+  &:first-of-type,
+  &:nth-of-type(2) {
+    padding-top: 18px;
+  }
 `;
 
 const UserImage = styled.div`

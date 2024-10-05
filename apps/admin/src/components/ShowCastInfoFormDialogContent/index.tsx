@@ -19,14 +19,21 @@ interface TempShowCastInfoFormInput {
 }
 
 interface Props {
+  prevShowCastInfo?: ShowCastInfoFormInput;
+  deleteCastInfo?: VoidFunction;
   setValue: (value: ShowCastInfoFormInput) => void;
 }
 
-const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
+const ShowCastInfoFormDialogContent = ({ deleteCastInfo, prevShowCastInfo, setValue }: Props) => {
   const queryClient = useQueryClient();
 
+  const previousShowCastInfoMemberLength = prevShowCastInfo?.members?.length ?? 0;
+  const defaultValues = {
+    name: prevShowCastInfo?.name,
+    members: previousShowCastInfoMemberLength > 0 ? prevShowCastInfo?.members : [{}],
+  };
   const { control, getValues, watch } = useForm<TempShowCastInfoFormInput>({
-    defaultValues: { members: [{}] },
+    defaultValues,
   });
   const { fields, append, remove, update } = useFieldArray({
     control,
@@ -87,8 +94,8 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Styled.InputWrapper text={value ?? ''}>
+              render={({ field: { onChange, onBlur } }) => (
+                <Styled.InputWrapper text={field.userCode ?? ''}>
                   {field.imgPath && field.nickname ? (
                     <>
                       <Styled.UserImage
@@ -123,7 +130,7 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
                             update(index, { ...field, imgPath, nickname });
                           }
                         }}
-                        value={value ?? ''}
+                        value={field.userCode ?? ''}
                       />
                     </>
                   )}
@@ -136,8 +143,8 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Styled.InputWrapper text={value ?? ''}>
+              render={({ field: { onChange, onBlur } }) => (
+                <Styled.InputWrapper text={field.roleName ?? ''}>
                   <Styled.Input
                     placeholder="역할"
                     required
@@ -145,7 +152,7 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
                     onBlur={() => {
                       onBlur();
                     }}
-                    value={value ?? ''}
+                    value={field.roleName ?? ''}
                   />
                 </Styled.InputWrapper>
               )}
@@ -169,24 +176,29 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
           팀원 추가
         </Styled.MemberAddButton>
       </Styled.MemberList>
-      <Styled.RegisterButton
-        type="button"
-        colorTheme="primary"
-        size="bold"
-        disabled={disabled}
-        onClick={(e) => {
-          e.preventDefault();
+      <Styled.ButtonWrap>
+        {deleteCastInfo && (
+          <Styled.DeleteButton onClick={deleteCastInfo}>팀 삭제</Styled.DeleteButton>
+        )}
+        <Styled.RegisterButton
+          type="button"
+          colorTheme="primary"
+          size="bold"
+          disabled={disabled}
+          onClick={(e) => {
+            e.preventDefault();
 
-          const name = getValues('name');
-          const members = (getValues('members') ?? []).filter((member) =>
-            Object.values(member).every(Boolean),
-          ) as ShowCastInfoFormInput['members'];
+            const name = getValues('name');
+            const members = (getValues('members') ?? []).filter(
+              (member) => member.imgPath && member.nickname && member.roleName && member.userCode,
+            ) as ShowCastInfoFormInput['members'];
 
-          setValue({ name, members });
-        }}
-      >
-        등록하기
-      </Styled.RegisterButton>
+            setValue({ name, members });
+          }}
+        >
+          등록하기
+        </Styled.RegisterButton>
+      </Styled.ButtonWrap>
     </>
   );
 };
