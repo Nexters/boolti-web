@@ -82,6 +82,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
+      castTeams: showCastInfo.map(({ name, members }) => ({
+        name,
+        members: members?.map(({ id, userCode, roleName }) => ({ id, userCode, roleName })),
+      })),
     });
 
     navigate(PATH.SHOW_ADD_COMPLETE);
@@ -158,6 +162,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                       />
                       {showCastInfo.map((info, index) => (
                         <ShowCastInfo
+                          key={index}
                           showCastInfo={info}
                           setValue={(showCastInfoFormInput: ShowCastInfoFormInput) => {
                             setShowCastInfo((prev) =>
