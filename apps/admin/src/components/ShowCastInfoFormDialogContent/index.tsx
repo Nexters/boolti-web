@@ -91,7 +91,7 @@ const ShowCastInfoFormDialogContent = ({ setValue }: Props) => {
                 <Styled.InputWrapper text={value ?? ''}>
                   {field.imgPath && field.nickname ? (
                     <>
-                      <Styled.UsrImage
+                      <Styled.UserImage
                         style={{ '--imgPath': `url(${field.imgPath})` } as React.CSSProperties}
                       />
                       <Styled.Username>{field.nickname}</Styled.Username>

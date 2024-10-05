@@ -20,6 +20,8 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { ShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent/types';
+import ShowCastInfo from '~/components/ShowCastInfo';
+import { LazyMotion, domAnimation } from 'framer-motion';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -27,7 +29,6 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
-  const dialog = useDialog();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -87,7 +88,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   return (
-    <>
+    <LazyMotion features={domAnimation}>
       <Styled.ShowAddPage>
         <Styled.HeaderContainer>
           <Styled.Header>
@@ -155,6 +156,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
                         }}
                       />
+                      {showCastInfo.map((info) => (
+                        <ShowCastInfo showCastInfo={info} setValue={() => {}} />
+                      ))}
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"
@@ -455,7 +459,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           </Styled.MobileContent>
         )}
       </Styled.MobileShowAddPage>
-    </>
+    </LazyMotion>
   );
 };
 

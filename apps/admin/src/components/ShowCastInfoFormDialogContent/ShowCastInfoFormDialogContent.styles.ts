@@ -103,7 +103,7 @@ const RegisterButton = styled(Button)`
   margin: 32px 0 0 auto;
 `;
 
-const UsrImage = styled.div`
+const UserImage = styled.div`
   box-sizing: border-box;
   width: 32px;
   height: 32px;
@@ -137,7 +137,7 @@ export default {
   MemberAddButton,
   RegisterButton,
   MemberList,
-  UsrImage,
+  UserImage,
   Username,
   RemoveButton,
   TextFieldWrap,
