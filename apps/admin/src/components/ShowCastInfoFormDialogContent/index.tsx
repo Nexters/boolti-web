@@ -3,23 +3,35 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { PlusIcon, TrashIcon } from '@boolti/icon';
+import { ClearIcon, CloseIcon, PlusIcon, TrashIcon } from '@boolti/icon';
+import { queryKeys, useQueryClient } from '@boolti/api';
+import { replaceUserCode } from '~/utils/replace';
 
 type ShowCastInfoFormInputs = {
   name: string;
   members?: Array<{
+    imgPath?: string;
+    nickname?: string;
     userCode?: string;
     roleName?: string;
   }>;
 };
 
 const ShowCastInfoFormDialogContent = () => {
-  const { control, getValues } = useForm<ShowCastInfoFormInputs>({
+  const queryClient = useQueryClient();
+  const { control, getValues, setValue, watch } = useForm<ShowCastInfoFormInputs>({
     defaultValues: { members: [{}] },
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'members',
+  });
+  const watchMemberFields = watch('members') ?? [];
+  const controlledFields = fields.map((field, index) => {
+    return {
+      ...field,
+      ...watchMemberFields[index],
+    };
   });
 
   const disabled = !getValues('name');
@@ -59,7 +71,7 @@ const ShowCastInfoFormDialogContent = () => {
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        {fields.map((field, index) => (
+        {controlledFields.map((field, index) => (
           <Styled.Row key={field.id}>
             <Controller
               control={control}
@@ -68,16 +80,44 @@ const ShowCastInfoFormDialogContent = () => {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Styled.InputWrapper text={value ?? ''}>
-                  <Styled.HashTag>#</Styled.HashTag>
-                  <Styled.Input
-                    placeholder="식별 코드"
-                    required
-                    onChange={onChange}
-                    onBlur={() => {
-                      onBlur();
-                    }}
-                    value={value ?? ''}
-                  />
+                  {field.imgPath && field.nickname ? (
+                    <>
+                      <Styled.UsrImage
+                        style={{ '--imgPath': `url(${field.imgPath})` } as React.CSSProperties}
+                      />
+                      <Styled.Username>{field.nickname}</Styled.Username>
+                      <Styled.RemoveButton
+                        onClick={() => {
+                          update(index, { roleName: field.roleName });
+                        }}
+                      >
+                        <ClearIcon />
+                      </Styled.RemoveButton>
+                    </>
+                  ) : (
+                    <>
+                      <Styled.HashTag>#</Styled.HashTag>
+                      <Styled.Input
+                        placeholder="식별 코드"
+                        required
+                        onChange={(e) => {
+                          const nextValue = replaceUserCode(e.target.value);
+                          onChange(nextValue);
+                        }}
+                        onBlur={async (event) => {
+                          onBlur();
+                          const userCode = event.target.value;
+                          if (userCode !== '') {
+                            const { imgPath, nickname } = await queryClient.fetchQuery(
+                              queryKeys.user.userCode(event.target.value),
+                            );
+                            update(index, { ...field, imgPath, nickname });
+                          }
+                        }}
+                        value={value ?? ''}
+                      />
+                    </>
+                  )}
                 </Styled.InputWrapper>
               )}
               name={`members.${index}.userCode`}

@@ -30,8 +30,10 @@ import useAdminShowInfo from './useAdminShowInfo';
 import useAdminReservations from './useAdminReservations';
 import useAdminReservationSummary from './useAdminReservationSummary';
 import useUserProfile from './useUserProfile';
+import useUserByUserCode from './useUserByUserCode';
 
 export {
+  useUserByUserCode,
   useAdminSettlementEvent,
   useAdminSettlementInfo,
   useGift,

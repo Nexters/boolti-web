@@ -84,7 +84,7 @@ const MemberAddButton = styled.button`
   width: 100%;
   border-radius: 4px;
   padding: 11px 0;
-  border: 1px dashed var(--W-G20, #d8dbe5);
+  border: 1px dashed ${({ theme }) => theme.palette.grey.g20};
   background: var(--W-White, #fff);
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g40};
@@ -99,6 +99,30 @@ const RegisterButton = styled(Button)`
   margin: 32px 0 0 auto;
 `;
 
+const UsrImage = styled.div`
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  border-radius: 32px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-image: var(--imgPath);
+`;
+
+const Username = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin: 0 8px;
+  flex: 1 1 auto;
+`;
+
+const RemoveButton = styled.button`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+`;
+
 export default {
   ShowInfoFormLabel,
   InputWrapper,
@@ -109,4 +133,7 @@ export default {
   MemberAddButton,
   RegisterButton,
   MemberList,
+  UsrImage,
+  Username,
+  RemoveButton,
 };
