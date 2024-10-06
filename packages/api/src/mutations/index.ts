@@ -37,6 +37,7 @@ import useSuperAdminDeleteSalesTicket from './useSuperAdminDeleteSalesTicket';
 import useSuperAdminDeleteInvitationTicket from './useSuperAdminDeleteInvitationTicket';
 import useSuperAdminCreateSalesTicket from './useSuperAdminCreateSalesTicket';
 import useSuperAdminCreateInvitationTicket from './useSuperAdminCreateInvitationTicket';
+import useSuperAdminEditSalesInfo from './useSuperAdminEditSalesInfo';
 
 export {
   useAddBankAccount,
@@ -78,6 +79,7 @@ export {
   useSuperAdminDeleteInvitationTicket,
   useSuperAdminCreateSalesTicket,
   useSuperAdminCreateInvitationTicket,
+  useSuperAdminEditSalesInfo,
 };
 
 export type { ImageFile };

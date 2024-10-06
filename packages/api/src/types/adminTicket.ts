@@ -59,3 +59,10 @@ export interface SuperAdminCreateInvitationTicketRequest {
   ticketName: string;
   totalForSale: number;
 }
+
+export interface SuperAdminEditSalesInfoRequest {
+  showId: number;
+  salesStartTime: string;
+  salesEndTime: string;
+  ticketNotice: string;
+}
