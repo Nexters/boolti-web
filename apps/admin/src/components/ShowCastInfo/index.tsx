@@ -3,13 +3,14 @@ import { useDialog } from '@boolti/ui';
 import Styled from './ShowCastInfo.styles';
 import { EditIcon, ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { useState } from 'react';
-import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
-import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
+import ShowCastInfoFormDialogContent, {
+  TempShowCastInfoFormInput,
+} from '../ShowCastInfoFormDialogContent';
 
 interface Props {
-  showCastInfo: ShowCastTeamCreateOrUpdateRequest;
-  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
-  onDelete?: VoidFunction;
+  showCastInfo: TempShowCastInfoFormInput;
+  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
+  onDelete?: () => Promise<void>;
 }
 
 const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
@@ -19,7 +20,7 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen((prev) => !prev);
-  console.log(showCastInfo);
+
   return (
     <Styled.Container>
       <Styled.Header>
@@ -34,14 +35,22 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
               isAuto: true,
               content: (
                 <ShowCastInfoFormDialogContent
-                  onSave={(castInfo) => {
-                    onSave(castInfo);
-                    dialog.close();
+                  onSave={async (castInfo) => {
+                    try {
+                      await onSave(castInfo);
+                      dialog.close();
+                    } catch {
+                      return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
+                    }
                   }}
                   prevShowCastInfo={showCastInfo}
-                  onDelete={() => {
-                    onDelete?.();
-                    dialog.close();
+                  onDelete={async () => {
+                    try {
+                      await onDelete?.();
+                      dialog.close();
+                    } catch {
+                      return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
+                    }
                   }}
                 />
               ),

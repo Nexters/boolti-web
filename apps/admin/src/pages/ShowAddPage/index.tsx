@@ -25,6 +25,7 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
+import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -39,7 +40,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
-  const [showCastInfo, setShowCastInfo] = useState<ShowCastTeamCreateOrUpdateRequest[]>([]);
+  const [showCastInfo, setShowCastInfo] = useState<TempShowCastInfoFormInput[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
@@ -87,8 +88,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       })),
       castTeams: showCastInfo.map(({ name, members }) => ({
         name,
-        members: members?.map(({ id, userCode, roleName }) => ({ id, userCode, roleName })),
-      })),
+        members: members
+          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+          .map(({ id, userCode, roleName }) => ({
+            id,
+            userCode,
+            roleName,
+          })),
+      })) as ShowCastTeamCreateOrUpdateRequest[],
     });
 
     navigate(PATH.SHOW_ADD_COMPLETE);
@@ -159,7 +166,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
                       <ShowCastInfoFormContent
-                        onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                        onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
                         }}
                       />
@@ -167,7 +174,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                         <ShowCastInfo
                           key={index}
                           showCastInfo={info}
-                          onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
+                          onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
                             setShowCastInfo((prev) =>
                               prev.map((prevCastInfo, currentIndex) =>
                                 index === currentIndex ? showCastInfoFormInput : prevCastInfo,

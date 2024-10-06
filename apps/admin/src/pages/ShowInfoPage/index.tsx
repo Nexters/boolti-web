@@ -35,6 +35,7 @@ import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
+import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
@@ -208,11 +209,18 @@ const ShowInfoPage = () => {
             <Styled.ShowInfoFormDivider />
             <Styled.ShowInfoFormContent>
               <ShowCastInfoFormContent
-                onSave={(showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
-                  postCastTeams.mutate(
+                onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                  await postCastTeams.mutateAsync(
                     {
                       showId,
-                      ...showCastInfoFormInput,
+                      name,
+                      members: members
+                        ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                        .map(({ id, userCode, roleName }) => ({
+                          id,
+                          userCode,
+                          roleName,
+                        })) as ShowCastTeamCreateOrUpdateRequest['members'],
                     },
                     {
                       onSuccess: () => {
@@ -226,10 +234,17 @@ const ShowInfoPage = () => {
                 <ShowCastInfo
                   key={index}
                   showCastInfo={info}
-                  onSave={async (showCastInfoFormInput: ShowCastTeamCreateOrUpdateRequest) => {
-                    putCastTeams.mutate(
+                  onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                    await putCastTeams.mutateAsync(
                       {
-                        ...showCastInfoFormInput,
+                        name,
+                        members: members
+                          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                          .map(({ id, userCode, roleName }) => ({
+                            id,
+                            userCode,
+                            roleName,
+                          })) as ShowCastTeamCreateOrUpdateRequest['members'],
                         castTeamId: info.id,
                       },
                       {
@@ -239,8 +254,8 @@ const ShowInfoPage = () => {
                       },
                     );
                   }}
-                  onDelete={() => {
-                    deleteCastTeams.mutate(info.id, {
+                  onDelete={async () => {
+                    await deleteCastTeams.mutateAsync(info.id, {
                       onSuccess: () => {
                         queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
                       },

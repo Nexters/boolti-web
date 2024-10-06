@@ -2,11 +2,12 @@ import { Button, useDialog } from '@boolti/ui';
 
 import Styled from './ShowInfoFormContent.styles';
 import { PlusIcon } from '@boolti/icon';
-import ShowCastInfoFormDialogContent from '../ShowCastInfoFormDialogContent';
-import { ShowCastTeamCreateOrUpdateRequest } from '@boolti/api';
+import ShowCastInfoFormDialogContent, {
+  TempShowCastInfoFormInput,
+} from '../ShowCastInfoFormDialogContent';
 
 interface Props {
-  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
+  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
 }
 
 const ShowCastInfoFormContent = ({ onSave }: Props) => {
@@ -34,9 +35,13 @@ const ShowCastInfoFormContent = ({ onSave }: Props) => {
               title: '출연진 정보 등록',
               content: (
                 <ShowCastInfoFormDialogContent
-                  onSave={(value) => {
-                    onSave(value);
-                    dialog.close();
+                  onSave={async (value) => {
+                    try {
+                      await onSave(value);
+                      dialog.close();
+                    } catch {
+                      return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
+                    }
                   }}
                 />
               ),

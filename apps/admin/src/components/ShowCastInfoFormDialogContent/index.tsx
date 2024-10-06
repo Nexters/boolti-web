@@ -4,24 +4,18 @@ import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
-import { ShowCastTeamCreateOrUpdateRequest, queryKeys, useQueryClient } from '@boolti/api';
+import { Member, ShowCastTeamCreateOrUpdateRequest, queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 
-interface TempShowCastInfoFormInput {
+export interface TempShowCastInfoFormInput {
   name: string;
-  members?: Array<{
-    id?: number;
-    imgPath?: string;
-    nickname?: string;
-    userCode?: string;
-    roleName?: string;
-  }>;
+  members?: Array<Partial<Member>>;
 }
 
 interface Props {
-  prevShowCastInfo?: ShowCastTeamCreateOrUpdateRequest;
-  onDelete?: VoidFunction;
-  onSave: (value: ShowCastTeamCreateOrUpdateRequest) => void;
+  prevShowCastInfo?: TempShowCastInfoFormInput;
+  onDelete?: () => Promise<void>;
+  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
 }
 
 const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: Props) => {
@@ -90,24 +84,26 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        {controlledFields.map((field, index) => (
-          <Styled.Row key={field.id}>
+        {controlledFields.map((controlledField, index) => (
+          <Styled.Row key={controlledField.id}>
             <Controller
               control={control}
-              rules={{
-                required: true,
-              }}
+              defaultValue={controlledField.userCode}
               render={({ field: { onChange, onBlur } }) => (
-                <Styled.InputWrapper text={field.userCode ?? ''}>
-                  {field.imgPath && field.nickname ? (
+                <Styled.InputWrapper text={controlledField.userCode ?? ''}>
+                  {controlledField.userImgPath && controlledField.userNickname ? (
                     <>
                       <Styled.UserImage
-                        style={{ '--imgPath': `url(${field.imgPath})` } as React.CSSProperties}
+                        style={
+                          {
+                            '--imgPath': `url(${controlledField.userImgPath})`,
+                          } as React.CSSProperties
+                        }
                       />
-                      <Styled.Username>{field.nickname}</Styled.Username>
+                      <Styled.Username>{controlledField.userNickname}</Styled.Username>
                       <Styled.RemoveButton
                         onClick={() => {
-                          update(index, { roleName: field.roleName });
+                          update(index, { roleName: controlledField.roleName });
                         }}
                       >
                         <ClearIcon />
@@ -131,7 +127,11 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                               const { imgPath, nickname } = await queryClient.fetchQuery(
                                 queryKeys.user.userCode(event.target.value),
                               );
-                              update(index, { ...field, imgPath, nickname });
+                              update(index, {
+                                ...controlledField,
+                                userImgPath: imgPath,
+                                userNickname: nickname,
+                              });
                             } catch {
                               toast.error(
                                 '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
@@ -141,7 +141,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                             }
                           }
                         }}
-                        value={field.userCode ?? ''}
+                        value={controlledField.userCode ?? ''}
                       />
                     </>
                   )}
@@ -155,7 +155,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                 required: true,
               }}
               render={({ field: { onChange, onBlur } }) => (
-                <Styled.InputWrapper text={field.roleName ?? ''}>
+                <Styled.InputWrapper text={controlledField.roleName ?? ''}>
                   <Styled.Input
                     placeholder="역할"
                     required
@@ -163,7 +163,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                     onBlur={() => {
                       onBlur();
                     }}
-                    value={field.roleName ?? ''}
+                    value={controlledField.roleName ?? ''}
                   />
                 </Styled.InputWrapper>
               )}
@@ -205,8 +205,12 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               });
 
               if (isConfirm) {
-                onDelete();
-                toast.success('팀 정보를 삭제했습니다.');
+                try {
+                  onDelete();
+                  toast.success('팀 정보를 삭제했습니다.');
+                } catch {
+                  toast.error('알 수 없는 오류가 발생했습니다.');
+                }
               }
             }}
           >
@@ -218,17 +222,23 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
           colorTheme="primary"
           size="bold"
           disabled={disabled}
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
 
             const name = getValues('name');
             const members = (getValues('members') ?? []).filter(
-              (member) => member.imgPath && member.nickname && member.roleName && member.userCode,
-            ) as ShowCastTeamCreateOrUpdateRequest['members'];
+              (member) =>
+                member.userImgPath && member.userNickname && member.roleName && member.userCode,
+            );
 
-            onSave({ name, members });
-
-            toast.success(onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.');
+            try {
+              await onSave({ name, members });
+              toast.success(
+                onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.',
+              );
+            } catch {
+              toast.error('알 수 없는 오류가 발생했습니다.');
+            }
           }}
         >
           등록하기

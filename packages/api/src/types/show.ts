@@ -261,15 +261,5 @@ export interface ShowCreateRequest {
     totalForSale: number;
   }[];
   /** 출연진 팀 */
-  castTeams?: Array<{
-    /** 팀 이름 */
-    name: ShowCastTeamCreateOrUpdateRequest['name'];
-    /** 팀원 목록 */
-    members?: Array<
-      Pick<
-        Exclude<ShowCastTeamCreateOrUpdateRequest['members'], undefined>[number],
-        'id' | 'roleName' | 'userCode'
-      >
-    >;
-  }>;
+  castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
 }
