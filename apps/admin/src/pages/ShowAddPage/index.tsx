@@ -25,7 +25,6 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
-import { LazyMotion, domAnimation } from 'framer-motion';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -96,7 +95,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   return (
-    <LazyMotion features={domAnimation}>
+    <>
       <Styled.ShowAddPage>
         <Styled.HeaderContainer>
           <Styled.Header>
@@ -482,7 +481,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           </Styled.MobileContent>
         )}
       </Styled.MobileShowAddPage>
-    </LazyMotion>
+    </>
   );
 };
 

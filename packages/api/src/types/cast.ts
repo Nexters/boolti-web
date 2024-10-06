@@ -12,9 +12,13 @@ export interface ShowCastTeamReadResponse {
     /** 역할 이름 (1~100자. 빈 문자열 불가) */
     roleName: string;
     /** 유저 닉네임 */
-    nickname: string;
+    userNickname: string;
     /** 유저 프로필 이미지 경로 */
-    imgPath: string;
+    userImgPath: string;
+    /** 유저 생성 일시 */
+    createdAt: string;
+    /** 유저 수정 일시 */
+    modifedAt: string;
   }>;
   /** 팀 생성 일시 */
   createdAt: string;

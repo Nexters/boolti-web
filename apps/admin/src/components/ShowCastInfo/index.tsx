@@ -13,12 +13,13 @@ interface Props {
 }
 
 const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
-  const memberLength = showCastInfo.members?.length ?? 0;
+  const { members = [] } = showCastInfo;
+  const memberLength = members.length ?? 0;
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen((prev) => !prev);
-
+  console.log(showCastInfo);
   return (
     <Styled.Container>
       <Styled.Header>
@@ -57,12 +58,12 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
         initial={{ height: 0, opacity: 1 }}
         exit={{ height: 0, opacity: 1 }}
       >
-        {showCastInfo.members?.map((member) => (
+        {members.map((member) => (
           <Styled.CastItem key={member.id}>
             <Styled.UserImage
-              style={{ '--imgPath': `url(${member.imgPath})` } as React.CSSProperties}
+              style={{ '--imgPath': `url(${member.userImgPath})` } as React.CSSProperties}
             />
-            <Styled.Username>{member.nickname}</Styled.Username>
+            <Styled.Username>{member.userNickname}</Styled.Username>
             <Styled.Rolename>({member.roleName})</Styled.Rolename>
           </Styled.CastItem>
         ))}
