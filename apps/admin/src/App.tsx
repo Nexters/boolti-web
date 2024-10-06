@@ -38,6 +38,7 @@ import {
 } from './pages';
 import ShowAddPage from './pages/ShowAddPage';
 import { Suspense } from 'react';
+import { domAnimation, LazyMotion } from 'framer-motion';
 
 setDefaultOptions({ locale: ko });
 
@@ -142,7 +143,9 @@ const routes: RouteObject[] = [
     element: (
       <QueryClientProvider>
         <BooltiUIProvider>
-          <Outlet />
+          <LazyMotion features={domAnimation}>
+            <Outlet />
+          </LazyMotion>
         </BooltiUIProvider>
       </QueryClientProvider>
     ),

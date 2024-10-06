@@ -78,7 +78,11 @@ const ShowBasicInfoFormContent = ({
 
   return (
     <Styled.ShowInfoFormGroup>
-      <Styled.ShowInfoFormTitle>기본 정보</Styled.ShowInfoFormTitle>
+      <Styled.ShowInfoFormGroupHeader>
+        <Styled.ShowInfoFormGroupInfo>
+          <Styled.ShowInfoFormTitle>기본 정보</Styled.ShowInfoFormTitle>
+        </Styled.ShowInfoFormGroupInfo>
+      </Styled.ShowInfoFormGroupHeader>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 포스터</Styled.ShowInfoFormLabel>

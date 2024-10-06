@@ -1,20 +1,29 @@
+import { ShowCastTeamCreateOrUpdateRequest } from './cast';
 import { PageResponse, ReservationStatus, TicketStatus, TicketType } from './common';
 import { HostType } from './host';
 
 export interface ShowImage {
+  /** 공연 포스터 이미지 순서. 1부터 시작. 최대 3개까지 가능. */
   sequence: number;
+  /** 공연 포스터 이미지 썸네일 url */
   thumbnailPath: string;
+  /** 공연 포스터 이미지 원본 url */
   path: string;
 }
 
-export interface ShowPlace {
+export interface Place {
+  /** 장소 이름 */
   name: string;
+  /** 장소 도로명 주소 */
   streetAddress: string;
+  /** 장소 상세 주소 */
   detailAddress: string;
 }
 
-export interface ShowHost {
+export interface Host {
+  /** 호스트 이름 */
   name: string;
+  /** 호스트 전화번호 (하이픈 없음) */
   phoneNumber: string;
 }
 
@@ -24,9 +33,9 @@ export interface ShowResponse {
   images: ShowImage[];
   date: string;
   runningTime: number;
-  place: ShowPlace;
+  place: Place;
   notice: string;
-  host: ShowHost;
+  host: Host;
   isEnded: boolean;
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
 }
@@ -213,3 +222,44 @@ export type SettlementBannersResponse = {
   showName: string;
   bannerType: 'REQUIRED' | 'DONE';
 }[];
+
+export interface ShowCreateRequest {
+  /** 공연 이름 */
+  name: string;
+  /** 공연 포스터 이미지 목록 */
+  images: ShowImage[];
+  /** 공연 시작 날짜, 시간. ISO8601. */
+  date: string;
+  /** 러닝 타임. 분 */
+  runningTime: number;
+  /** 장소 정보 */
+  place: Place;
+  /** 공지사항 (공연 상세) */
+  notice: string;
+  /** 호스트 정보 */
+  host: Host;
+  /** 판매 시작 시간. required. 시간은 0시 0분 0초 */
+  salesStartTime: string;
+  /** 판매 종료 시간. required. 시간은 23시 59분 59초 */
+  salesEndTime: string;
+  /** 티켓 구매시 안내사항. optional. */
+  ticketNotice?: string;
+  /** 생성할 판매 티켓 목록, invitationTickets 와 둘 중 1개는 필수 */
+  salesTickets: {
+    /** 티켓 이름. required. 20자 이내 */
+    ticketName: string;
+    /** 티켓 가격(장당), required. 1 이상 */
+    price: number;
+    /** 티켓 수량, required. 1 이상 */
+    totalForSale: number;
+  }[];
+  /** 생성할 초대 티켓 목록, salesTickets 와 둘 중 1개는 필수 */
+  invitationTickets: {
+    /** 티켓 이름. required. 20자 이내 */
+    ticketName: string;
+    /** 티켓 수량, required. 1 이상 */
+    totalForSale: number;
+  }[];
+  /** 출연진 팀 */
+  castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
+}

@@ -16,3 +16,12 @@ export interface ShowTicketFormInputs {
   endDate: string;
   ticketNotice: string;
 }
+
+export interface ShowTeamFromInputs {
+  name: string;
+  members?: Array<{
+    id?: number;
+    userCode: string;
+    roleName: string;
+  }>;
+}

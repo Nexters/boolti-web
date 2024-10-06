@@ -116,7 +116,7 @@ const SettingContentHeader = styled.div`
     display: flex;
     justify-content: space-between;
   }
-`
+`;
 
 const SettingContentTitle = styled.h3`
   ${({ theme }) => theme.typo.h1};
@@ -134,7 +134,7 @@ const SettingContentSubmitWrapper = styled.div`
   ${mq_lg} {
     display: block;
   }
-`
+`;
 
 const SettingContentSubmitWrapperMobile = styled.div`
   position: fixed;
@@ -154,9 +154,9 @@ const SettingContentSubmitWrapperMobile = styled.div`
   ${mq_lg} {
     display: none;
   }
-`
+`;
 
-const SettingContentForm = styled.form``
+const SettingContentForm = styled.form``;
 
 const SettingContentFormControl = styled.div`
   margin-bottom: 24px;
@@ -173,14 +173,14 @@ const ProfileImageWrapper = styled.div`
     width: 100px;
     height: 100px;
   }
-`
+`;
 
 const ProfileImage = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 100px;
   object-fit: cover;
-`
+`;
 
 const DefaultProfileImage = styled(DefaultUserProfileIcon)`
   border-radius: 100px;
@@ -200,7 +200,7 @@ const ProfileImageEditButton = styled.label`
   bottom: 0;
   left: calc(100px - 42px + 8px);
   cursor: pointer;
-`
+`;
 
 const Label = styled.label<LabelProps>`
   ${({ theme }) => theme.typo.b3};
@@ -210,7 +210,7 @@ const Label = styled.label<LabelProps>`
   position: relative;
 
   &::after {
-    content: ${({ required }) => (required ? "'*'" : "none")};
+    content: ${({ required }) => (required ? "'*'" : 'none')};
     color: ${({ theme }) => theme.palette.status.error};
     ${({ theme }) => theme.typo.b1};
     line-height: 22px;
@@ -231,19 +231,19 @@ const LinkItem = styled.div`
   align-items: center;
   gap: 16px;
   height: 56px;
-`
+`;
 
 const LinkInfo = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2px;
   min-width: 0;
-`
+`;
 
 const LinkTitle = styled.p`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
-`
+`;
 
 const LinkDescription = styled.p`
   ${({ theme }) => theme.typo.b1};
@@ -251,7 +251,7 @@ const LinkDescription = styled.p`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-`
+`;
 
 const LinkEditButton = styled.button`
   width: 24px;
@@ -260,7 +260,7 @@ const LinkEditButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-`
+`;
 
 const ConnectedServiceList = styled.div`
   display: flex;
@@ -314,12 +314,12 @@ const SettingDescriptionItem = styled.li``;
 const TextAreaWrapper = styled.div`
   position: relative;
   height: 122px;
-`
+`;
 
 const TextAreaBox = styled.div<TextAreaProps>`
   border: 1px solid
     ${({ theme, hasError }) =>
-    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   position: absolute;
@@ -341,13 +341,13 @@ const TextAreaBox = styled.div<TextAreaProps>`
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     background: ${({ theme }) => theme.palette.grey.g10};
   }
-`
+`;
 
 const TextArea = styled.textarea`
   position: absolute;
   top: 0;
   left: 0;
-  width: calc(100% - 12px - 12px); 
+  width: calc(100% - 12px - 12px);
   height: 72px;
   margin: 12px 12px 38px;
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -368,7 +368,7 @@ const TextAreaCount = styled.span`
   bottom: 12px;
   right: 12px;
   z-index: 3;
-`
+`;
 
 export default {
   SettingDialogContent,

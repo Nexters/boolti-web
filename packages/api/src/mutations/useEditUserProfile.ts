@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { fetcher } from '../fetcher';
-import { UserProfileLink } from '../types';
+import { UserLink } from '../types';
 
 interface PutUserProfileRequestBody {
   nickname: string;
   profileImagePath?: string;
   introduction?: string;
-  link?: UserProfileLink[];
+  link?: UserLink[];
 }
 
 const putUserProfile = (body: PutUserProfileRequestBody) =>
