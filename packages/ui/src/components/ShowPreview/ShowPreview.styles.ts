@@ -67,10 +67,11 @@ const ShowPreviewTicketPeriod = styled.div`
   position: relative;
   margin-bottom: 8px;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
-    width: 20px;  
+    width: 20px;
     height: 20px;
     border-radius: 20px;
     background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
@@ -105,7 +106,8 @@ const ShowPreviewTicketPeriodTitle = styled.h3`
   align-items: center;
   gap: 12px;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     width: 5px;
     height: 5px;
@@ -186,7 +188,7 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     `}
 
   a {
-    color: #46A6FF;
+    color: #46a6ff;
     text-decoration: underline;
   }
 `;
@@ -207,11 +209,11 @@ const ShowHost = styled.div`
   justify-content: space-between;
   align-items: center;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-`
+`;
 
 const ShowHostName = styled.span`
   ${({ theme }) => theme.typo.b3};
-`
+`;
 
 const ShowHostLink = styled.div`
   display: none;
@@ -225,7 +227,7 @@ const ShowHostLink = styled.div`
   a {
     cursor: pointer;
   }
-`
+`;
 
 const ShowHostLinkMobile = styled.div`
   display: flex;
@@ -235,11 +237,11 @@ const ShowHostLinkMobile = styled.div`
   ${mq_lg} {
     display: none;
   }
-  
+
   a {
     cursor: pointer;
   }
-`
+`;
 
 export default {
   ShowPreview,

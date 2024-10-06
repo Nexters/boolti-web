@@ -31,13 +31,34 @@ interface MobileTicketActionProps {
 
 const ShowInfoFormGroup = styled.div``;
 
+const ShowInfoFormGroupHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ShowInfoFormGroupInfo = styled.div`
+  flex: 1;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+`;
+
 const ShowInfoFormTitle = styled.h3`
   ${({ theme }) => theme.typo.sh2};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 16px;
 
   ${mq_lg} {
     ${({ theme }) => theme.typo.h1};
+  }
+`;
+
+const ShowInfoFormSubtitle = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+
+  strong {
+    font-weight: 600;
   }
 `;
 
@@ -515,7 +536,10 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
 
 export default {
   ShowInfoFormGroup,
+  ShowInfoFormGroupHeader,
+  ShowInfoFormGroupInfo,
   ShowInfoFormTitle,
+  ShowInfoFormSubtitle,
   ShowInfoFormRow,
   ShowInfoFormContent,
   ShowInfoFormLabel,

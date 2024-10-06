@@ -23,7 +23,11 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
 
   return (
     <Styled.ShowInfoFormGroup>
-      <Styled.ShowInfoFormTitle>상세 정보</Styled.ShowInfoFormTitle>
+      <Styled.ShowInfoFormGroupHeader>
+        <Styled.ShowInfoFormGroupInfo>
+          <Styled.ShowInfoFormTitle>상세 정보</Styled.ShowInfoFormTitle>
+        </Styled.ShowInfoFormGroupInfo>
+      </Styled.ShowInfoFormGroupHeader>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 내용</Styled.ShowInfoFormLabel>

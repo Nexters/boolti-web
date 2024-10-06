@@ -1,8 +1,15 @@
 import {
   ImageFile,
+  ShowCastTeamCreateOrUpdateRequest,
   ShowImage,
+  queryKeys,
+  useCastTeamList,
+  useDeleteCastTeams,
   useDeleteShow,
   useEditShowInfo,
+  usePostCastTeams,
+  usePutCastTeams,
+  useQueryClient,
   useShowDetail,
   useShowSalesInfo,
   useUploadShowImage,
@@ -26,8 +33,12 @@ import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
+import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
+import ShowCastInfo from '~/components/ShowCastInfo';
+import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 
 const ShowInfoPage = () => {
+  const queryClient = useQueryClient();
   const params = useParams<{ showId: string }>();
   const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
@@ -40,10 +51,14 @@ const ShowInfoPage = () => {
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
+  const { data: castTeamList } = useCastTeamList(showId);
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
   const deleteShowMutation = useDeleteShow();
+  const putCastTeams = usePutCastTeams();
+  const postCastTeams = usePostCastTeams();
+  const deleteCastTeams = useDeleteCastTeams();
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -129,7 +144,9 @@ const ShowInfoPage = () => {
     setShowImages(show.images);
   }, [show, showInfoForm]);
 
-  if (!show || !showSalesInfo) return null;
+  if (!show || !showSalesInfo || !castTeamList) {
+    return null;
+  }
 
   const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
 
@@ -188,6 +205,66 @@ const ShowInfoPage = () => {
                   저장하기
                 </Button>
               </Styled.SaveButton>
+            </Styled.ShowInfoFormFooter>
+            <Styled.ShowInfoFormDivider />
+            <Styled.ShowInfoFormContent>
+              <ShowCastInfoFormContent
+                onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                  await postCastTeams.mutateAsync(
+                    {
+                      showId,
+                      name,
+                      members: members
+                        ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                        .map(({ id, userCode, roleName }) => ({
+                          id,
+                          userCode,
+                          roleName,
+                        })) as ShowCastTeamCreateOrUpdateRequest['members'],
+                    },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                      },
+                    },
+                  );
+                }}
+              />
+              {castTeamList.map((info, index) => (
+                <ShowCastInfo
+                  key={index}
+                  showCastInfo={info}
+                  onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                    await putCastTeams.mutateAsync(
+                      {
+                        name,
+                        members: members
+                          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                          .map(({ id, userCode, roleName }) => ({
+                            id,
+                            userCode,
+                            roleName,
+                          })) as ShowCastTeamCreateOrUpdateRequest['members'],
+                        castTeamId: info.id,
+                      },
+                      {
+                        onSuccess: () => {
+                          queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                        },
+                      },
+                    );
+                  }}
+                  onDelete={async () => {
+                    await deleteCastTeams.mutateAsync(info.id, {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                      },
+                    });
+                  }}
+                />
+              ))}
+            </Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormFooter>
               <Styled.DeleteButton>
                 <Button
                   size="bold"
