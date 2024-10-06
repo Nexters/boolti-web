@@ -5,7 +5,7 @@ import { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
-const IS_SUPER_ADMIN = import.meta.env.IS_SUPER_ADMIN === 'true';
+const IS_SUPER_ADMIN = import.meta.env.VITE_IS_SUPER_ADMIN === 'true';
 
 interface PostRefreshTokenResponse {
   accessToken: string;
