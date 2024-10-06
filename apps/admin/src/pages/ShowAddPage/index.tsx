@@ -168,6 +168,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                       <ShowCastInfoFormContent
                         onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
                           setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                          return new Promise((reslve) => reslve());
                         }}
                       />
                       {showCastInfo.map((info, index) => (
@@ -180,11 +181,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                                 index === currentIndex ? showCastInfoFormInput : prevCastInfo,
                               ),
                             );
+                            return new Promise((reslve) => reslve());
                           }}
                           onDelete={() => {
                             setShowCastInfo((prev) =>
                               prev.filter((_, currentIndex) => index !== currentIndex),
                             );
+                            return new Promise((reslve) => reslve());
                           }}
                         />
                       ))}
