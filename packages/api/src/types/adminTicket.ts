@@ -46,3 +46,16 @@ interface SuperAdminInvitationCodeListItem {
 }
 
 export type SuperAdminInvitationCodeListResponse = Array<SuperAdminInvitationCodeListItem>;
+
+export interface SuperAdminCreateSalesTicketRequest {
+  showId: number;
+  ticketName: string;
+  price: number;
+  totalForSale: number;
+}
+
+export interface SuperAdminCreateInvitationTicketRequest {
+  showId: number;
+  ticketName: string;
+  totalForSale: number;
+}
