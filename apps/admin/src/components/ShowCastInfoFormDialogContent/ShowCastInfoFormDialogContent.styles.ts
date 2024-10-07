@@ -74,7 +74,7 @@ const HashTag = styled.span`
 `;
 
 const Input = styled.input`
-  width: ${({ value }) => (value ? 'calc(100% - 80px)' : '100%')};
+  width: 100%;
   line-height: 24px;
 
   &::placeholder {

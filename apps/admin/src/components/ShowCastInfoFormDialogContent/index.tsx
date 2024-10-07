@@ -32,6 +32,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
   const { fields, append, remove, update } = useFieldArray({
     control,
     name: 'members',
+    keyName: '_id',
   });
   const watchMemberFields = watch('members') ?? [];
   const controlledFields = fields.map((field, index) => {
@@ -86,33 +87,33 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        {controlledFields.map((controlledField, index) => (
-          <Styled.Row key={controlledField.id}>
+        {fields.map((field, index) => (
+          <Styled.Row key={field._id}>
             <Controller
               control={control}
-              defaultValue={controlledField.userCode}
-              render={({ field: { onChange, onBlur } }) => {
+              defaultValue={field.userCode}
+              render={({ field: { onChange, onBlur, value } }) => {
                 const isError = Boolean(
                   isMemberFieldBlurred[index].userCode &&
-                    controlledField.userCode &&
-                    (!controlledField.userImgPath || !controlledField.userNickname),
+                    value &&
+                    (!field.userImgPath || !field.userNickname),
                 );
                 return (
                   <Styled.FieldWrap>
-                    <Styled.InputWrapper text={controlledField.userCode ?? ''} isError={isError}>
-                      {controlledField.userImgPath && controlledField.userNickname ? (
+                    <Styled.InputWrapper text={value ?? ''} isError={isError}>
+                      {field.userImgPath && field.userNickname ? (
                         <>
                           <Styled.UserImage
                             style={
                               {
-                                '--imgPath': `url(${controlledField.userImgPath})`,
+                                '--imgPath': `url(${field.userImgPath})`,
                               } as React.CSSProperties
                             }
                           />
-                          <Styled.Username>{controlledField.userNickname}</Styled.Username>
+                          <Styled.Username>{field.userNickname}</Styled.Username>
                           <Styled.RemoveButton
                             onClick={() => {
-                              update(index, { roleName: controlledField.roleName });
+                              update(index, { roleName: field.roleName });
                             }}
                           >
                             <ClearIcon />
@@ -130,11 +131,6 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                             }}
                             onBlur={async (event) => {
                               onBlur();
-                              setIsMemberFieldBlurred((prev) => {
-                                const nextMemberFieldBlurred = [...prev];
-                                nextMemberFieldBlurred[index].userCode = true;
-                                return nextMemberFieldBlurred;
-                              });
                               const userCode = event.target.value;
                               if (userCode !== '') {
                                 try {
@@ -142,7 +138,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                                     queryKeys.user.userCode(event.target.value),
                                   );
                                   update(index, {
-                                    ...controlledField,
+                                    ...controlledFields[index],
                                     userImgPath: imgPath,
                                     userNickname: nickname,
                                   });
@@ -152,10 +148,16 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                                       '\n' +
                                       '식별 코드를 확인 후 다시 시도해 주세요.',
                                   );
+                                } finally {
+                                  setIsMemberFieldBlurred((prev) => {
+                                    const nextMemberFieldBlurred = [...prev];
+                                    nextMemberFieldBlurred[index].userCode = true;
+                                    return nextMemberFieldBlurred;
+                                  });
                                 }
                               }
                             }}
-                            value={controlledField.userCode ?? ''}
+                            value={value ?? ''}
                           />
                         </>
                       )}
@@ -171,13 +173,13 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur } }) => {
-                const isError = isMemberFieldBlurred[index].roleName && !controlledField.roleName;
+              render={({ field: { onChange, onBlur, value } }) => {
+                const isError = isMemberFieldBlurred[index].roleName && !value;
                 return (
                   <Styled.FieldWrap>
                     <Styled.InputWrapper
-                      text={controlledField.roleName ?? ''}
-                      isError={isMemberFieldBlurred[index].roleName && !controlledField.roleName}
+                      text={value ?? ''}
+                      isError={isMemberFieldBlurred[index].roleName && !value}
                     >
                       <Styled.Input
                         placeholder="역할"
@@ -191,7 +193,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                             return nextMemberFieldBlurred;
                           });
                         }}
-                        value={controlledField.roleName ?? ''}
+                        value={value ?? ''}
                       />
                     </Styled.InputWrapper>
                     {isError && <Styled.ErrorMessage>필수 입력사항입니다.</Styled.ErrorMessage>}
