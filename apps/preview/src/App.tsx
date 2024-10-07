@@ -1,7 +1,7 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
 
-import { ShowPreviewResponse } from '@boolti/api';
+import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -17,7 +17,10 @@ const router = createBrowserRouter([
     loader: async ({ params }) => {
       const showId = params.showId;
       if (showId) {
-        const response = await fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`);
+        const response = await Promise.all([
+          fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
+          fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
+        ]);
         return response;
       }
     },

@@ -27,12 +27,26 @@ interface ShowPreviewProps {
     hostName: string;
     hostPhoneNumber: string;
   };
+  showCastTeams?: Array<{
+    name: string;
+    members?: {
+      roleName: string;
+      userNickname: string;
+      userImgPath: string;
+    }[];
+  }>;
   hasNoticePage?: boolean;
   onClickLink?: () => void;
   onClickLinkMobile?: () => void;
 }
 
-const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: ShowPreviewProps) => {
+const ShowPreview = ({
+  show,
+  hasNoticePage,
+  onClickLink,
+  onClickLinkMobile,
+  showCastTeams,
+}: ShowPreviewProps) => {
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const {
     images,
@@ -209,7 +223,38 @@ const ShowPreview = ({ show, hasNoticePage, onClickLink, onClickLinkMobile }: Sh
             },
             {
               title: '출연진',
-              content: <Styled.ShowInfoTitle>공연 관리 문의</Styled.ShowInfoTitle>,
+              content: (
+                <Styled.ShowInfo>
+                  {showCastTeams ? (
+                    showCastTeams.map((team, teamIndex) => (
+                      <Styled.ShowInfoGroup key={teamIndex}>
+                        <Styled.ShowInfoTitleContainer>
+                          <Styled.ShowInfoTitle>{team.name}</Styled.ShowInfoTitle>
+                        </Styled.ShowInfoTitleContainer>
+                        <Styled.ShowCastList>
+                          {team.members?.map((member, memberIndex) => (
+                            <Styled.ShowCastListItem key={memberIndex}>
+                              <Styled.UserImage
+                                style={
+                                  {
+                                    '--imgPath': `url(${member.userImgPath})`,
+                                  } as React.CSSProperties
+                                }
+                              />
+                              <Styled.UserInfoWrap>
+                                <Styled.UserNickname>{member.userNickname}</Styled.UserNickname>
+                                <Styled.UserRoleName>{member.roleName}</Styled.UserRoleName>
+                              </Styled.UserInfoWrap>
+                            </Styled.ShowCastListItem>
+                          ))}
+                        </Styled.ShowCastList>
+                      </Styled.ShowInfoGroup>
+                    ))
+                  ) : (
+                    <></>
+                  )}
+                </Styled.ShowInfo>
+              ),
             },
           ]}
         />

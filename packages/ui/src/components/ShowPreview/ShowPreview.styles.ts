@@ -246,6 +246,61 @@ const ShowHostLinkMobile = styled.div`
   }
 `;
 
+const ShowCastList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 0;
+`;
+
+const ShowCastListItem = styled.li`
+  display: flex;
+  width: calc(50% - 8px);
+  overflow: hidden;
+
+  &:nth-child(2n + 1) {
+    margin-right: 8px;
+  }
+
+  &:nth-child(2n) {
+    margin-left: 8px;
+  }
+`;
+
+const UserImage = styled.div`
+  box-sizing: border-box;
+  width: 46px;
+  height: 46px;
+  border-radius: 46px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-image: var(--imgPath);
+  margin-right: 8px;
+  flex: 0 0 auto;
+`;
+
+const UserInfoWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const UserNickname = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const UserRoleName = styled.span`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
 export default {
   ShowPreview,
   ShowPreviewHeader,
@@ -269,4 +324,10 @@ export default {
   ShowHostName,
   ShowHostLink,
   ShowHostLinkMobile,
+  ShowCastList,
+  ShowCastListItem,
+  UserImage,
+  UserInfoWrap,
+  UserNickname,
+  UserRoleName,
 };
