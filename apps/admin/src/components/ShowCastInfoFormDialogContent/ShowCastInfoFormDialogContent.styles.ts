@@ -7,6 +7,7 @@ interface ShowInfoFormLabelProps {
 
 interface InputWrapperProps {
   text: string;
+  isError?: boolean;
 }
 
 const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
@@ -32,19 +33,30 @@ const MemberList = styled.div`
   }
 `;
 
+const FieldWrap = styled.div`
+  flex: 1;
+  margin-right: 8px;
+  width: calc(50% - 32px);
+`;
+
 const InputWrapper = styled.div<InputWrapperProps>`
   ${({ theme }) => theme.typo.b3};
-  border: 1px solid ${({ text, theme }) => (text ? theme.palette.grey.g90 : theme.palette.grey.g20)};
+  border: 1px solid
+    ${({ text, theme, isError }) =>
+      isError
+        ? theme.palette.status.error
+        : text
+          ? theme.palette.grey.g90
+          : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   padding: 8px 12px;
   height: 48px;
-  margin-right: 8px;
   flex: auto;
   position: relative;
   display: flex;
   align-items: center;
-  width: calc(50% - 32px);
+  width: 100%;
 `;
 
 const TextFieldWrap = styled.div`
@@ -73,16 +85,18 @@ const Input = styled.input`
 const Row = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 20px;
 `;
 
 const TrashCanButton = styled.button`
+  margin-top: 10px;
   cursor: pointer;
   height: 100%;
 `;
 
 const MemberAddButton = styled.button`
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -141,6 +155,11 @@ const ButtonWrap = styled.div`
   margin-top: 32px;
 `;
 
+const ErrorMessage = styled.span`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.status.error};
+`;
+
 export default {
   ShowInfoFormLabel,
   InputWrapper,
@@ -157,4 +176,6 @@ export default {
   TextFieldWrap,
   ButtonWrap,
   DeleteButton,
+  ErrorMessage,
+  FieldWrap,
 };

@@ -4,7 +4,7 @@ import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
-import { Member, ShowCastTeamCreateOrUpdateRequest, queryKeys, useQueryClient } from '@boolti/api';
+import { Member, queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 
 export interface TempShowCastInfoFormInput {
@@ -48,12 +48,14 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
 
   useBodyScrollLock(true);
 
-  const [hasBlurred, setHasBlurred] = useState<
-    Record<keyof ShowCastTeamCreateOrUpdateRequest, boolean | boolean[]>
-  >({
-    name: false,
-    members: [],
-  });
+  const [isNameFieldBlurred, setIsNameFieldBlurred] = useState(false);
+  const [isMemberFieldBlurred, setIsMemberFieldBlurred] = useState<
+    Array<{ userCode: boolean; roleName: boolean }>
+  >(
+    prevShowCastInfo?.members
+      ? prevShowCastInfo.members.map(() => ({ userCode: false, roleName: false }))
+      : [{ userCode: false, roleName: false }],
+  );
 
   return (
     <>
@@ -73,10 +75,10 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               onChange={onChange}
               onBlur={() => {
                 onBlur();
-                setHasBlurred((prev) => ({ ...prev, name: true }));
+                setIsNameFieldBlurred(true);
               }}
               value={value ?? ''}
-              errorMessage={hasBlurred.name && !value ? '필수 입력사항입니다.' : undefined}
+              errorMessage={isNameFieldBlurred && !value ? '필수 입력사항입니다.' : undefined}
             />
           </Styled.TextFieldWrap>
         )}
@@ -89,64 +91,78 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
             <Controller
               control={control}
               defaultValue={controlledField.userCode}
-              render={({ field: { onChange, onBlur } }) => (
-                <Styled.InputWrapper text={controlledField.userCode ?? ''}>
-                  {controlledField.userImgPath && controlledField.userNickname ? (
-                    <>
-                      <Styled.UserImage
-                        style={
-                          {
-                            '--imgPath': `url(${controlledField.userImgPath})`,
-                          } as React.CSSProperties
-                        }
-                      />
-                      <Styled.Username>{controlledField.userNickname}</Styled.Username>
-                      <Styled.RemoveButton
-                        onClick={() => {
-                          update(index, { roleName: controlledField.roleName });
-                        }}
-                      >
-                        <ClearIcon />
-                      </Styled.RemoveButton>
-                    </>
-                  ) : (
-                    <>
-                      <Styled.HashTag>#</Styled.HashTag>
-                      <Styled.Input
-                        placeholder="식별 코드"
-                        required
-                        onChange={(e) => {
-                          const nextValue = replaceUserCode(e.target.value);
-                          onChange(nextValue);
-                        }}
-                        onBlur={async (event) => {
-                          onBlur();
-                          const userCode = event.target.value;
-                          if (userCode !== '') {
-                            try {
-                              const { imgPath, nickname } = await queryClient.fetchQuery(
-                                queryKeys.user.userCode(event.target.value),
-                              );
-                              update(index, {
-                                ...controlledField,
-                                userImgPath: imgPath,
-                                userNickname: nickname,
-                              });
-                            } catch {
-                              toast.error(
-                                '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
-                                  '\n' +
-                                  '식별 코드를 확인 후 다시 시도해 주세요.',
-                              );
+              render={({ field: { onChange, onBlur } }) => {
+                const isError = Boolean(
+                  (isMemberFieldBlurred[index].userCode && !controlledField.userImgPath) ||
+                    !controlledField.userNickname,
+                );
+                return (
+                  <Styled.FieldWrap>
+                    <Styled.InputWrapper text={controlledField.userCode ?? ''} isError={isError}>
+                      {controlledField.userImgPath && controlledField.userNickname ? (
+                        <>
+                          <Styled.UserImage
+                            style={
+                              {
+                                '--imgPath': `url(${controlledField.userImgPath})`,
+                              } as React.CSSProperties
                             }
-                          }
-                        }}
-                        value={controlledField.userCode ?? ''}
-                      />
-                    </>
-                  )}
-                </Styled.InputWrapper>
-              )}
+                          />
+                          <Styled.Username>{controlledField.userNickname}</Styled.Username>
+                          <Styled.RemoveButton
+                            onClick={() => {
+                              update(index, { roleName: controlledField.roleName });
+                            }}
+                          >
+                            <ClearIcon />
+                          </Styled.RemoveButton>
+                        </>
+                      ) : (
+                        <>
+                          <Styled.HashTag>#</Styled.HashTag>
+                          <Styled.Input
+                            placeholder="식별 코드"
+                            required
+                            onChange={(e) => {
+                              const nextValue = replaceUserCode(e.target.value);
+                              onChange(nextValue);
+                            }}
+                            onBlur={async (event) => {
+                              onBlur();
+                              setIsMemberFieldBlurred((prev) => {
+                                const nextMemberFieldBlurred = [...prev];
+                                nextMemberFieldBlurred[index].userCode = true;
+                                return nextMemberFieldBlurred;
+                              });
+                              const userCode = event.target.value;
+                              if (userCode !== '') {
+                                try {
+                                  const { imgPath, nickname } = await queryClient.fetchQuery(
+                                    queryKeys.user.userCode(event.target.value),
+                                  );
+                                  update(index, {
+                                    ...controlledField,
+                                    userImgPath: imgPath,
+                                    userNickname: nickname,
+                                  });
+                                } catch {
+                                  toast.error(
+                                    '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
+                                      '\n' +
+                                      '식별 코드를 확인 후 다시 시도해 주세요.',
+                                  );
+                                }
+                              }
+                            }}
+                            value={controlledField.userCode ?? ''}
+                          />
+                        </>
+                      )}
+                    </Styled.InputWrapper>
+                    {isError && <Styled.ErrorMessage>필수 입력사항입니다.</Styled.ErrorMessage>}
+                  </Styled.FieldWrap>
+                );
+              }}
               name={`members.${index}.userCode`}
             />
             <Controller
@@ -154,19 +170,33 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur } }) => (
-                <Styled.InputWrapper text={controlledField.roleName ?? ''}>
-                  <Styled.Input
-                    placeholder="역할"
-                    required
-                    onChange={onChange}
-                    onBlur={() => {
-                      onBlur();
-                    }}
-                    value={controlledField.roleName ?? ''}
-                  />
-                </Styled.InputWrapper>
-              )}
+              render={({ field: { onChange, onBlur } }) => {
+                const isError = isMemberFieldBlurred[index].roleName && !controlledField.roleName;
+                return (
+                  <Styled.FieldWrap>
+                    <Styled.InputWrapper
+                      text={controlledField.roleName ?? ''}
+                      isError={isMemberFieldBlurred[index].roleName && !controlledField.roleName}
+                    >
+                      <Styled.Input
+                        placeholder="역할"
+                        required
+                        onChange={onChange}
+                        onBlur={() => {
+                          onBlur();
+                          setIsMemberFieldBlurred((prev) => {
+                            const nextMemberFieldBlurred = [...prev];
+                            nextMemberFieldBlurred[index].roleName = true;
+                            return nextMemberFieldBlurred;
+                          });
+                        }}
+                        value={controlledField.roleName ?? ''}
+                      />
+                    </Styled.InputWrapper>
+                    {isError && <Styled.ErrorMessage>필수 입력사항입니다.</Styled.ErrorMessage>}
+                  </Styled.FieldWrap>
+                );
+              }}
               name={`members.${index}.roleName`}
             />
             <Styled.TrashCanButton
@@ -178,6 +208,9 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
 
                 if (isConfirm) {
                   toast.success('팀원 정보를 삭제했습니다.');
+                  setIsMemberFieldBlurred((prev) =>
+                    prev.filter((_, blurredIndex) => blurredIndex !== index),
+                  );
                   remove(index);
                 }
               }}
@@ -221,7 +254,13 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
           type="button"
           colorTheme="primary"
           size="bold"
-          disabled={disabled}
+          disabled={
+            disabled ||
+            controlledFields.some(
+              ({ userImgPath, userNickname, roleName }) =>
+                !userImgPath || !userNickname || !roleName,
+            )
+          }
           onClick={async (e) => {
             e.preventDefault();
 
