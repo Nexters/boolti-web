@@ -27,7 +27,7 @@ interface ShowPreviewProps {
     hostName: string;
     hostPhoneNumber: string;
   };
-  showCastTeams?: Array<{
+  showCastTeams: Array<{
     name: string;
     members?: {
       roleName: string;
@@ -225,7 +225,7 @@ const ShowPreview = ({
               title: '출연진',
               content: (
                 <Styled.ShowInfo>
-                  {showCastTeams ? (
+                  {showCastTeams.length > 0 ? (
                     showCastTeams.map((team, teamIndex) => (
                       <Styled.ShowInfoGroup key={teamIndex}>
                         <Styled.ShowInfoTitleContainer>
@@ -251,7 +251,12 @@ const ShowPreview = ({
                       </Styled.ShowInfoGroup>
                     ))
                   ) : (
-                    <></>
+                    <Styled.EmptryCastTeam>
+                      <Styled.EmptyCastTeamTitle>COMMING SOON</Styled.EmptyCastTeamTitle>
+                      <Styled.EmptyCastTeamDescription>
+                        조금만 기다려주세요!
+                      </Styled.EmptyCastTeamDescription>
+                    </Styled.EmptryCastTeam>
                   )}
                 </Styled.ShowInfo>
               ),

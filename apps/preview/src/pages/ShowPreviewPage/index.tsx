@@ -20,11 +20,11 @@ const ShowPreviewPage = () => {
   const dialog = useDialog();
 
   if (!loaderData) {
-    // window.location.href = 'https://boolti.in';
+    window.location.href = 'https://boolti.in';
     return;
   }
 
-  const [previewData, showCastTeams] = loaderData;
+  const [previewData, showCastTeams = []] = loaderData;
   const {
     id,
     name: title,

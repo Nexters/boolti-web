@@ -30,7 +30,7 @@ const Tab = ({ tabItems }: Props) => {
         ))}
       </Styled.Tab>
       <Swiper
-        autoHeight
+        style={{ width: '100%', height: 'auto' }}
         ref={swiperRef}
         spaceBetween={0}
         slidesPerView={1}

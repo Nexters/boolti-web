@@ -301,6 +301,25 @@ const UserRoleName = styled.span`
   overflow: hidden;
 `;
 
+const EmptryCastTeam = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 100%;
+`;
+
+const EmptyCastTeamTitle = styled.h3`
+  ${({ theme }) => theme.typo.point.p2};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
+
+const EmptyCastTeamDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
+
 export default {
   ShowPreview,
   ShowPreviewHeader,
@@ -330,4 +349,7 @@ export default {
   UserInfoWrap,
   UserNickname,
   UserRoleName,
+  EmptryCastTeam,
+  EmptyCastTeamTitle,
+  EmptyCastTeamDescription,
 };
