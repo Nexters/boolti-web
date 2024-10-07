@@ -93,8 +93,9 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               defaultValue={controlledField.userCode}
               render={({ field: { onChange, onBlur } }) => {
                 const isError = Boolean(
-                  (isMemberFieldBlurred[index].userCode && !controlledField.userImgPath) ||
-                    !controlledField.userNickname,
+                  isMemberFieldBlurred[index].userCode &&
+                    controlledField.userCode &&
+                    (!controlledField.userImgPath || !controlledField.userNickname),
                 );
                 return (
                   <Styled.FieldWrap>
@@ -222,6 +223,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
         <Styled.MemberAddButton
           onClick={() => {
             append({});
+            setIsMemberFieldBlurred((prev) => [...prev, { userCode: false, roleName: false }]);
           }}
         >
           <PlusIcon />
