@@ -330,6 +330,7 @@ const ShowInfoPage = () => {
                             hostName: showInfoForm.watch('hostName'),
                             hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
                           }}
+                          showCastTeams={castTeamList}
                           hasNoticePage
                         />
                       </Styled.ShowPreview>
@@ -382,6 +383,7 @@ const ShowInfoPage = () => {
                         hostName: showInfoForm.watch('hostName'),
                         hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
                       }}
+                      showCastTeams={castTeamList}
                       hasNoticePage
                     />
                   </Styled.ShowInfoPreview>
