@@ -10819,6 +10819,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-helmet-async: "npm:^2.0.5"
     react-router-dom: "npm:^6.22.3"
+    swiper: "npm:^11.1.14"
     the-new-css-reset: "npm:^1.11.2"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.0.8"
@@ -13025,6 +13026,13 @@ __metadata:
   version: 11.0.7
   resolution: "swiper@npm:11.0.7"
   checksum: 10c0/d27b8c3b5deccde730317c2fe868350fad039e9776c8c6dfd11a89d9e732a66c1292292ca635141a7e0bbb363fcac1291c9fd716bf7a8e3b85d320e58ff94eba
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^11.1.14":
+  version: 11.1.14
+  resolution: "swiper@npm:11.1.14"
+  checksum: 10c0/a1075cbd2254aedd22b411ea03cbd7a91ba1cc79d7c2dc41f215e987811e449a2915a26b39fdfc1d7c08250fa2cfbe51d28476f834e75033c73ea357a4ac9f8d
   languageName: node
   linkType: hard
 

@@ -14761,6 +14761,7 @@ const RAW_RUNTIME_STATE =
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-helmet-async", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:2.0.5"],\
           ["react-router-dom", "virtual:0d9620f91cc1220bb659f4fc4375454dc3f511d634580e77befd72fe2f8a7c5971f905c99a7ff5b46030c3be1a39ff23ffff46b1a61faf7cc00e24d40b49b38f#npm:6.22.3"],\
+          ["swiper", "npm:11.1.14"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
           ["vite", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.0.11"]\
@@ -17935,6 +17936,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/swiper-npm-11.0.7-d14c0a02a9-d27b8c3b5d.zip/node_modules/swiper/",\
         "packageDependencies": [\
           ["swiper", "npm:11.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:11.1.14", {\
+        "packageLocation": "./.yarn/cache/swiper-npm-11.1.14-8126fa478a-a1075cbd22.zip/node_modules/swiper/",\
+        "packageDependencies": [\
+          ["swiper", "npm:11.1.14"]\
         ],\
         "linkType": "HARD"\
       }]\
