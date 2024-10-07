@@ -215,7 +215,7 @@ const ShowInfoPage = () => {
                       showId,
                       name,
                       members: members
-                        ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                        ?.filter(({ userCode, roleName }) => userCode && roleName)
                         .map(({ id, userCode, roleName }) => ({
                           id,
                           userCode,
@@ -239,7 +239,7 @@ const ShowInfoPage = () => {
                       {
                         name,
                         members: members
-                          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+                          ?.filter(({ userCode, roleName }) => userCode && roleName)
                           .map(({ id, userCode, roleName }) => ({
                             id,
                             userCode,

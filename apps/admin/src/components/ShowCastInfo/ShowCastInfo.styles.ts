@@ -91,6 +91,7 @@ const Rolename = styled.span`
   text-overflow: ellipsis;
   overflow: hidden;
   flex: 0 1 auto;
+  max-width: 100px;
 `;
 
 const CollapseButton = styled.button`
