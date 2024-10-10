@@ -122,8 +122,12 @@ const ShowPreviewTicketPeriodText = styled.p`
 
 const ShowInfo = styled.div``;
 
-const ShowInfoGroup = styled.div`
-  padding: 32px 0;
+const CastInfo = styled.div`
+  padding-bottom: 16px;
+`;
+
+const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
+  padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
 
   &:first-of-type {
@@ -139,7 +143,10 @@ const ShowInfoTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
 const ShowInfoTitle = styled.h3`
@@ -330,6 +337,7 @@ export default {
   ShowPreviewTicketPeriodInfo,
   ShowPreviewTicketPeriodTitle,
   ShowPreviewTicketPeriodText,
+  CastInfo,
   ShowInfo,
   ShowInfoGroup,
   ShowInfoTitleContainer,
