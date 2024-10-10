@@ -61,11 +61,8 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
     (getFieldState('members').isTouched &&
       controlledFields.some(
         ({ userImgPath, userNickname, roleName }, index) =>
-          !userImgPath ||
-          !userNickname ||
-          !roleName ||
-          isMemberFieldBlurred[index].roleName ||
-          isMemberFieldBlurred[index].userCode,
+          (isMemberFieldBlurred[index].roleName || isMemberFieldBlurred[index].userCode) &&
+          (!userImgPath || !userNickname || !roleName),
       ));
 
   return (
