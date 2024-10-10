@@ -13,30 +13,32 @@ interface Props {
 
 const ShowCastInfo = ({ showCastTeams }: Props) => {
   return (
-    <Styled.ShowInfo>
+    <Styled.CastInfo>
       {showCastTeams.length > 0 ? (
         showCastTeams.map((team, teamIndex) => (
-          <Styled.ShowInfoGroup key={teamIndex}>
+          <Styled.ShowInfoGroup key={teamIndex} type="small">
             <Styled.ShowInfoTitleContainer>
               <Styled.ShowInfoTitle>{team.name}</Styled.ShowInfoTitle>
             </Styled.ShowInfoTitleContainer>
-            <Styled.ShowCastList>
-              {team.members?.map((member, memberIndex) => (
-                <Styled.ShowCastListItem key={memberIndex}>
-                  <Styled.UserImage
-                    style={
-                      {
-                        '--imgPath': `url(${member.userImgPath})`,
-                      } as React.CSSProperties
-                    }
-                  />
-                  <Styled.UserInfoWrap>
-                    <Styled.UserNickname>{member.userNickname}</Styled.UserNickname>
-                    <Styled.UserRoleName>{member.roleName}</Styled.UserRoleName>
-                  </Styled.UserInfoWrap>
-                </Styled.ShowCastListItem>
-              ))}
-            </Styled.ShowCastList>
+            {team.members && team.members.length > 0 && (
+              <Styled.ShowCastList>
+                {team.members.map((member, memberIndex) => (
+                  <Styled.ShowCastListItem key={memberIndex}>
+                    <Styled.UserImage
+                      style={
+                        {
+                          '--imgPath': `url(${member.userImgPath})`,
+                        } as React.CSSProperties
+                      }
+                    />
+                    <Styled.UserInfoWrap>
+                      <Styled.UserNickname>{member.userNickname}</Styled.UserNickname>
+                      <Styled.UserRoleName>{member.roleName}</Styled.UserRoleName>
+                    </Styled.UserInfoWrap>
+                  </Styled.ShowCastListItem>
+                ))}
+              </Styled.ShowCastList>
+            )}
           </Styled.ShowInfoGroup>
         ))
       ) : (
@@ -45,7 +47,7 @@ const ShowCastInfo = ({ showCastTeams }: Props) => {
           <Styled.EmptyCastTeamDescription>조금만 기다려주세요!</Styled.EmptyCastTeamDescription>
         </Styled.EmptryCastTeam>
       )}
-    </Styled.ShowInfo>
+    </Styled.CastInfo>
   );
 };
 

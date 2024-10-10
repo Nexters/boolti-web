@@ -26,7 +26,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
     name: prevShowCastInfo?.name,
     members: previousShowCastInfoMemberLength > 0 ? prevShowCastInfo?.members : [{}],
   };
-  const { control, getValues, watch } = useForm<TempShowCastInfoFormInput>({
+  const { control, getValues, watch, getFieldState } = useForm<TempShowCastInfoFormInput>({
     defaultValues,
   });
   const { fields, append, remove, update } = useFieldArray({
@@ -42,8 +42,6 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
     };
   });
 
-  const disabled = !getValues('name');
-
   const toast = useToast();
   const confirm = useConfirm();
 
@@ -53,10 +51,22 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
   const [isMemberFieldBlurred, setIsMemberFieldBlurred] = useState<
     Array<{ userCode: boolean; roleName: boolean }>
   >(
-    prevShowCastInfo?.members
+    prevShowCastInfo?.members && previousShowCastInfoMemberLength > 0
       ? prevShowCastInfo.members.map(() => ({ userCode: false, roleName: false }))
       : [{ userCode: false, roleName: false }],
   );
+
+  const disabled =
+    !getValues('name') ||
+    (getFieldState('members').isTouched &&
+      controlledFields.some(
+        ({ userImgPath, userNickname, roleName }, index) =>
+          !userImgPath ||
+          !userNickname ||
+          !roleName ||
+          isMemberFieldBlurred[index].roleName ||
+          isMemberFieldBlurred[index].userCode,
+      ));
 
   return (
     <>
@@ -258,13 +268,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
           type="button"
           colorTheme="primary"
           size="bold"
-          disabled={
-            disabled ||
-            controlledFields.some(
-              ({ userImgPath, userNickname, roleName }) =>
-                !userImgPath || !userNickname || !roleName,
-            )
-          }
+          disabled={disabled}
           onClick={async (e) => {
             e.preventDefault();
 

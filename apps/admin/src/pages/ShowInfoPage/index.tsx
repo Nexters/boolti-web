@@ -36,6 +36,7 @@ import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
@@ -65,6 +66,8 @@ const ShowInfoPage = () => {
   const deleteShowDialog = useDialog();
 
   const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(false);
+
+  useBodyScrollLock(previewDrawerOpen);
 
   const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
     if (!show) return;
