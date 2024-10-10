@@ -553,7 +553,7 @@ const MobileCastInfoRegisterButton = styled.button`
 const DesktopCastInfoRegisterButton = styled(Button)`
   display: none;
   ${mq_lg} {
-    display: block;
+    display: flex;
   }
 `;
 
