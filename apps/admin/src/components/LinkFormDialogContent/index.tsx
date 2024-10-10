@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import Styled from './LinkFormDialogContent.styles';
 import { Button, TextField } from '@boolti/ui';
-import { UserProfileLink } from '@boolti/api';
+import { UserLink } from '@boolti/api';
 
-export type LinkFormInputs = UserProfileLink;
+export type LinkFormInputs = UserLink;
 
 interface LinkFormDialogContentProps {
   defaultValues?: LinkFormInputs;
@@ -11,9 +11,13 @@ interface LinkFormDialogContentProps {
   onDelete?: () => void;
 }
 
-const LinkFormDialogContent = ({ defaultValues, onSubmit, onDelete }: LinkFormDialogContentProps) => {
+const LinkFormDialogContent = ({
+  defaultValues,
+  onSubmit,
+  onDelete,
+}: LinkFormDialogContentProps) => {
   const linkForm = useForm<LinkFormInputs>({
-    defaultValues
+    defaultValues,
   });
 
   const isEditMode = !!defaultValues;
@@ -23,7 +27,7 @@ const LinkFormDialogContent = ({ defaultValues, onSubmit, onDelete }: LinkFormDi
       title: data.title.trim(),
       link: data.link.trim(),
     });
-  }
+  };
 
   return (
     <Styled.LinkForm onSubmit={linkForm.handleSubmit(submitHandler)}>
@@ -47,7 +51,12 @@ const LinkFormDialogContent = ({ defaultValues, onSubmit, onDelete }: LinkFormDi
         />
       </Styled.LinkFormControl>
       <Styled.LinkFormButtonWrapper isEditMode={isEditMode}>
-        <Button size="bold" colorTheme="primary" type="submit" disabled={!linkForm.formState.isValid}>
+        <Button
+          size="bold"
+          colorTheme="primary"
+          type="submit"
+          disabled={!linkForm.formState.isValid}
+        >
           저장하기
         </Button>
         {isEditMode && onDelete && (
@@ -57,7 +66,7 @@ const LinkFormDialogContent = ({ defaultValues, onSubmit, onDelete }: LinkFormDi
         )}
       </Styled.LinkFormButtonWrapper>
     </Styled.LinkForm>
-  )
-}
+  );
+};
 
 export default LinkFormDialogContent;

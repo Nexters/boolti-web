@@ -7,7 +7,7 @@ import { BoA } from './BoA';
 import { Boolti } from './Boolti';
 import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
-import { BooltiLightGrey } from './BooltiLightGrey'
+import { BooltiLightGrey } from './BooltiLightGrey';
 import { BooltiSmall } from './BooltiSmall';
 import { Calendar } from './Calendar';
 import { CB } from './CB';

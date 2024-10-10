@@ -9,6 +9,7 @@ import {
   PageReservationResponse,
   ReservationSummaryResponse,
   SettlementBannersResponse,
+  ShowCastTeamReadResponse,
   ShowInvitationCodeListResponse,
   ShowInvitationTicketResponse,
   ShowPreviewResponse,
@@ -30,7 +31,11 @@ import {
   SuperAdminShowStatus,
   TicketSalesInfoResponse,
 } from './types/adminShow';
-import { BankAccountListResponse, UserProfileResponse, UserProfileSummaryResponse } from './types/users';
+import {
+  BankAccountListResponse,
+  UserProfileResponse,
+  UserProfileSummaryResponse,
+} from './types/users';
 import { GiftInfoResponse } from './types/gift';
 import { HostListItem, HostListResponse } from './types/host';
 import {
@@ -42,6 +47,12 @@ import {
   AdminReservationSummaryResponse,
   PageAdminReservationResponse,
 } from './types/adminReservation';
+import {
+  AdminTicketSalesInfoResponse,
+  SuperAdminInvitationCodeListResponse,
+  SuperAdminInvitationTicketListResponse,
+  SuperAdminSalesTicketListResponse,
+} from './types/adminTicket';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -204,6 +215,33 @@ export const adminReservationQueryKeys = createQueryKeys('adminReservation', {
   }),
 });
 
+export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
+  salesInfo: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<AdminTicketSalesInfoResponse>(`sa-api/v1/shows/${showId}/sales-infos`),
+  }),
+  salesTickets: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SuperAdminSalesTicketListResponse>(`sa-api/v1/shows/${showId}/sales-tickets`),
+  }),
+  invitationTickets: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SuperAdminInvitationTicketListResponse>(
+        `sa-api/v1/shows/${showId}/invitation-tickets`,
+      ),
+  }),
+  invitationTicketCodes: (ticketId: number) => ({
+    queryKey: [ticketId],
+    queryFn: () =>
+      fetcher.get<SuperAdminInvitationCodeListResponse>(
+        `sa-api/v1/invitation-tickets/${ticketId}/invitation-codes`,
+      ),
+  }),
+});
+
 export const showQueryKeys = createQueryKeys('show', {
   detail: (showId: number) => ({
     queryKey: [showId],
@@ -295,7 +333,7 @@ export const showQueryKeys = createQueryKeys('show', {
 export const userQueryKeys = createQueryKeys('user', {
   profile: {
     queryKey: null,
-    queryFn: () => fetcher.get<UserProfileResponse>('web/v1/users/me')
+    queryFn: () => fetcher.get<UserProfileResponse>('web/v1/users/me'),
   },
   summary: {
     queryKey: null,
@@ -305,6 +343,10 @@ export const userQueryKeys = createQueryKeys('user', {
     queryKey: null,
     queryFn: () => fetcher.get<BankAccountListResponse>(`web/v1/host/users/me/bank-accounts`),
   },
+  userCode: (userCode: string) => ({
+    queryKey: [userCode],
+    queryFn: () => fetcher.get<UserProfileResponse>(`web/papi/v1/users/${userCode}`),
+  }),
 });
 
 export const giftQueryKeys = createQueryKeys('gift', {
@@ -325,13 +367,23 @@ export const hostQueryKeys = createQueryKeys('host', {
   }),
 });
 
+export const castTeamQueryKeys = createQueryKeys('castTeams', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
   adminReservationQueryKeys,
+  adminTicketQueryKeys,
   showQueryKeys,
   userQueryKeys,
   entranceQueryKeys,
   giftQueryKeys,
   hostQueryKeys,
+  castTeamQueryKeys,
 );

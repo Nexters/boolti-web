@@ -65,12 +65,12 @@ const ShowPreviewTicketPeriod = styled.div`
   background-color: ${({ theme }) => theme.palette.mobile.grey.g70};
   border-radius: 8px;
   position: relative;
-  margin-bottom: 8px;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     position: absolute;
-    width: 20px;  
+    width: 20px;
     height: 20px;
     border-radius: 20px;
     background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
@@ -105,7 +105,8 @@ const ShowPreviewTicketPeriodTitle = styled.h3`
   align-items: center;
   gap: 12px;
 
-  &::before, &::after {
+  &::before,
+  &::after {
     content: '';
     width: 5px;
     height: 5px;
@@ -121,9 +122,17 @@ const ShowPreviewTicketPeriodText = styled.p`
 
 const ShowInfo = styled.div``;
 
-const ShowInfoGroup = styled.div`
-  padding: 32px 0;
+const CastInfo = styled.div`
+  padding-bottom: 16px;
+`;
+
+const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
+  padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
+
+  &:first-of-type {
+    padding-top: 0;
+  }
 
   &:last-of-type {
     border-bottom: none;
@@ -134,7 +143,10 @@ const ShowInfoTitleContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+
+  &:not(:last-child) {
+    margin-bottom: 16px;
+  }
 `;
 
 const ShowInfoTitle = styled.h3`
@@ -186,7 +198,7 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     `}
 
   a {
-    color: #46A6FF;
+    color: #46a6ff;
     text-decoration: underline;
   }
 `;
@@ -207,11 +219,11 @@ const ShowHost = styled.div`
   justify-content: space-between;
   align-items: center;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-`
+`;
 
 const ShowHostName = styled.span`
   ${({ theme }) => theme.typo.b3};
-`
+`;
 
 const ShowHostLink = styled.div`
   display: none;
@@ -225,7 +237,7 @@ const ShowHostLink = styled.div`
   a {
     cursor: pointer;
   }
-`
+`;
 
 const ShowHostLinkMobile = styled.div`
   display: flex;
@@ -235,11 +247,85 @@ const ShowHostLinkMobile = styled.div`
   ${mq_lg} {
     display: none;
   }
-  
+
   a {
     cursor: pointer;
   }
-`
+`;
+
+const ShowCastList = styled.ul`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px 0;
+`;
+
+const ShowCastListItem = styled.li`
+  display: flex;
+  width: calc(50% - 8px);
+  overflow: hidden;
+
+  &:nth-child(2n + 1) {
+    margin-right: 8px;
+  }
+
+  &:nth-child(2n) {
+    margin-left: 8px;
+  }
+`;
+
+const UserImage = styled.div`
+  box-sizing: border-box;
+  width: 46px;
+  height: 46px;
+  border-radius: 46px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-image: var(--imgPath);
+  margin-right: 8px;
+  flex: 0 0 auto;
+`;
+
+const UserInfoWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const UserNickname = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const UserRoleName = styled.span`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+`;
+
+const EmptryCastTeam = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 100%;
+`;
+
+const EmptyCastTeamTitle = styled.h3`
+  ${({ theme }) => theme.typo.point.p2};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
+
+const EmptyCastTeamDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
 
 export default {
   ShowPreview,
@@ -251,6 +337,7 @@ export default {
   ShowPreviewTicketPeriodInfo,
   ShowPreviewTicketPeriodTitle,
   ShowPreviewTicketPeriodText,
+  CastInfo,
   ShowInfo,
   ShowInfoGroup,
   ShowInfoTitleContainer,
@@ -264,4 +351,13 @@ export default {
   ShowHostName,
   ShowHostLink,
   ShowHostLinkMobile,
+  ShowCastList,
+  ShowCastListItem,
+  UserImage,
+  UserInfoWrap,
+  UserNickname,
+  UserRoleName,
+  EmptryCastTeam,
+  EmptyCastTeamTitle,
+  EmptyCastTeamDescription,
 };

@@ -1563,6 +1563,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.24.7":
+  version: 7.25.7
+  resolution: "@babel/runtime@npm:7.25.7"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/86b7829d2fc9343714a9afe92757cf96c4dc799006ca61d73cda62f4b9e29bfa1ce36794955bc6cb4c188f5b10db832c949339895e1bbe81a69022d9d578ce29
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -10819,6 +10828,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-helmet-async: "npm:^2.0.5"
     react-router-dom: "npm:^6.22.3"
+    swiper: "npm:^11.1.14"
     the-new-css-reset: "npm:^1.11.2"
     typescript: "npm:^5.2.2"
     vite: "npm:^5.0.8"
@@ -11273,6 +11283,36 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rc-picker@npm:^4.6.15":
+  version: 4.6.15
+  resolution: "rc-picker@npm:4.6.15"
+  dependencies:
+    "@babel/runtime": "npm:^7.24.7"
+    "@rc-component/trigger": "npm:^2.0.0"
+    classnames: "npm:^2.2.1"
+    rc-overflow: "npm:^1.3.2"
+    rc-resize-observer: "npm:^1.4.0"
+    rc-util: "npm:^5.43.0"
+  peerDependencies:
+    date-fns: ">= 2.x"
+    dayjs: ">= 1.x"
+    luxon: ">= 3.x"
+    moment: ">= 2.x"
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  peerDependenciesMeta:
+    date-fns:
+      optional: true
+    dayjs:
+      optional: true
+    luxon:
+      optional: true
+    moment:
+      optional: true
+  checksum: 10c0/ade0ed6e0ebce771c9faa885a67ffd303cdca77e6d3c2329ceab13fc342ebd48d72c0579f0e6046f6528f721e052ea2c575a77af47f16fe09d83a5c64b71b3a0
+  languageName: node
+  linkType: hard
+
 "rc-picker@npm:~4.4.2":
   version: 4.4.2
   resolution: "rc-picker@npm:4.4.2"
@@ -11542,6 +11582,19 @@ __metadata:
     react: ">=16.9.0"
     react-dom: ">=16.9.0"
   checksum: 10c0/95fac4642664a49dc334ebafbdea9ec73e12cefadca2247a001d3f54d18ab91bb9381d0035dc55dbfcc67dbbb5de26c420a20c03d650da6065645c54d73b6c83
+  languageName: node
+  linkType: hard
+
+"rc-util@npm:^5.43.0":
+  version: 5.43.0
+  resolution: "rc-util@npm:5.43.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.18.3"
+    react-is: "npm:^18.2.0"
+  peerDependencies:
+    react: ">=16.9.0"
+    react-dom: ">=16.9.0"
+  checksum: 10c0/39f7904c9851f2b0a2dace5ac578f42000498412d7da5ef2063fd547db91d158dcb376bcbacf49fb7790d2721727bd38ea3483294ef51eb6099a793b2e17e9db
   languageName: node
   linkType: hard
 
@@ -12970,6 +13023,7 @@ __metadata:
     "@vitejs/plugin-react": "npm:^4.2.1"
     antd: "npm:^5.16.5"
     date-fns: "npm:^3.6.0"
+    rc-picker: "npm:^4.6.15"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.4"
@@ -13025,6 +13079,13 @@ __metadata:
   version: 11.0.7
   resolution: "swiper@npm:11.0.7"
   checksum: 10c0/d27b8c3b5deccde730317c2fe868350fad039e9776c8c6dfd11a89d9e732a66c1292292ca635141a7e0bbb363fcac1291c9fd716bf7a8e3b85d320e58ff94eba
+  languageName: node
+  linkType: hard
+
+"swiper@npm:^11.1.14":
+  version: 11.1.14
+  resolution: "swiper@npm:11.1.14"
+  checksum: 10c0/a1075cbd2254aedd22b411ea03cbd7a91ba1cc79d7c2dc41f215e987811e449a2915a26b39fdfc1d7c08250fa2cfbe51d28476f834e75033c73ea357a4ac9f8d
   languageName: node
   linkType: hard
 

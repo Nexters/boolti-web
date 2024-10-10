@@ -18,3 +18,9 @@
     'Segoe UI Symbol',
     sans-serif;
 }
+
+body {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

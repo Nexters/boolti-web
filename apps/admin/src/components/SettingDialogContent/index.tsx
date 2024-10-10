@@ -36,7 +36,7 @@ const AppleIcon = () => {
 type ProfileFormInputs = {
   nickname: string;
   introduction: string;
-}
+};
 
 interface SettingDialogContentProps {
   onDeleteAccount?: () => void;
@@ -51,7 +51,7 @@ const NICKNAME_ERROR_MESSAGE = {
   required: '1자 이상 입력해 주세요.',
   minLength: '1자 이상 입력해 주세요.',
   maxLength: `${MAX_NICKNAME_LENGTH}자 이내로 입력해 주세요.`,
-}
+};
 
 const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) => {
   const theme = useTheme();
@@ -64,7 +64,8 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
   const uploadProfileImageMutation = useUploadProfileImage();
   const editProfileMutation = useEditUserProfile();
 
-  const { register, handleSubmit, setValue, watch, setError, clearErrors, formState } = useForm<ProfileFormInputs>();
+  const { register, handleSubmit, setValue, watch, setError, clearErrors, formState } =
+    useForm<ProfileFormInputs>();
 
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
@@ -78,7 +79,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
     if (files && files.length > 0) {
       setProfileImageFile(files[0]);
     }
-  }
+  };
 
   const submitHandler = async (data: ProfileFormInputs) => {
     if (editProfileMutation.isLoading) return;
@@ -107,7 +108,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
     } catch (error) {
       toast.error('프로필 정보를 저장하는 중 문제가 발생했습니다.');
     }
-  }
+  };
 
   useEffect(() => {
     if (!userProfile) return;
@@ -116,29 +117,37 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
     setValue('introduction', userProfile.introduction ?? '');
 
     setLinks(userProfile.link);
-  }, [setValue, userProfile])
+  }, [setValue, userProfile]);
 
   useEffect(() => {
-    if (!profileImageFile) return
+    if (!profileImageFile) return;
 
-    const url = URL.createObjectURL(profileImageFile)
-    setProfileImagePreview(url)
+    const url = URL.createObjectURL(profileImageFile);
+    setProfileImagePreview(url);
 
-    return () => URL.revokeObjectURL(url)
-  }, [profileImageFile])
+    return () => URL.revokeObjectURL(url);
+  }, [profileImageFile]);
 
   return (
     <Styled.SettingDialogContent>
       <Styled.SettingMenuWrapper>
         <Styled.SettingMenu>
-          <Styled.SettingMenuItemButton type="button" active={currentMenu === 'profile'} onClick={() => {
-            setCurrentMenu('profile');
-          }}>
+          <Styled.SettingMenuItemButton
+            type="button"
+            active={currentMenu === 'profile'}
+            onClick={() => {
+              setCurrentMenu('profile');
+            }}
+          >
             프로필
           </Styled.SettingMenuItemButton>
-          <Styled.SettingMenuItemButton type="button" active={currentMenu === 'account'} onClick={() => {
-            setCurrentMenu('account');
-          }}>
+          <Styled.SettingMenuItemButton
+            type="button"
+            active={currentMenu === 'account'}
+            onClick={() => {
+              setCurrentMenu('account');
+            }}
+          >
             계정
           </Styled.SettingMenuItemButton>
         </Styled.SettingMenu>
@@ -160,19 +169,29 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
             <Styled.SettingContentFormControl>
               <Styled.ProfileImageWrapper>
                 {profileImagePreview ?? userProfile?.imgPath ? (
-                  <Styled.ProfileImage src={profileImagePreview ?? userProfile?.imgPath} alt="프로필 이미지" />
+                  <Styled.ProfileImage
+                    src={profileImagePreview ?? userProfile?.imgPath}
+                    alt="프로필 이미지"
+                  />
                 ) : (
                   <Styled.DefaultProfileImage />
                 )}
 
                 <Styled.ProfileImageEditButton>
                   <PhotoIcon />
-                  <input type="file" accept="image/*" style={{ width: 0, height: 0 }} onChange={profileImageChangeHandler} />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    style={{ width: 0, height: 0 }}
+                    onChange={profileImageChangeHandler}
+                  />
                 </Styled.ProfileImageEditButton>
               </Styled.ProfileImageWrapper>
             </Styled.SettingContentFormControl>
             <Styled.SettingContentFormControl>
-              <Styled.Label htmlFor="nickname" required>닉네임</Styled.Label>
+              <Styled.Label htmlFor="nickname" required>
+                닉네임
+              </Styled.Label>
               <TextField
                 inputType="text"
                 size="big"
@@ -198,21 +217,27 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
 
                     // 문자열이 0자일 때 에러 메시지 출력
                     if (event.target.value.trim().length === 0) {
-                      setError('nickname', { type: 'minLength', message: NICKNAME_ERROR_MESSAGE.minLength });
+                      setError('nickname', {
+                        type: 'minLength',
+                        message: NICKNAME_ERROR_MESSAGE.minLength,
+                      });
 
-                      return
+                      return;
                     }
 
                     // 문자열 20자 초과 시 에러 메시지 출력
                     if (event.target.value.trim().length > MAX_NICKNAME_LENGTH) {
-                      setError('nickname', { type: 'maxLength', message: NICKNAME_ERROR_MESSAGE.maxLength });
+                      setError('nickname', {
+                        type: 'maxLength',
+                        message: NICKNAME_ERROR_MESSAGE.maxLength,
+                      });
 
-                      return
+                      return;
                     }
 
                     // 이외의 경우에는 에러 메시지 미출력
-                    clearErrors('nickname')
-                  }
+                    clearErrors('nickname');
+                  },
                 })}
               />
             </Styled.SettingContentFormControl>
@@ -225,7 +250,8 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                   placeholder="예) 재즈와 펑크락을 좋아해요"
                   maxLength={MAX_INTRODUCTION_LENGTH}
                   {...register('introduction', {
-                    maxLength: MAX_INTRODUCTION_LENGTH, onChange(event) {
+                    maxLength: MAX_INTRODUCTION_LENGTH,
+                    onChange(event) {
                       if (event.target.value.length > MAX_INTRODUCTION_LENGTH) {
                         event.target.value = event.target.value.slice(0, MAX_INTRODUCTION_LENGTH);
                       }
@@ -242,19 +268,25 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
             </Styled.SettingContentFormControl>
             <Styled.SettingContentFormControl>
               <Styled.Label>SNS 링크</Styled.Label>
-              <Button size="regular" colorTheme="line" icon={<PlusIcon />} type="button" onClick={() => {
-                linkDialog.open({
-                  title: '링크 추가',
-                  content: (
-                    <LinkFormDialogContent
-                      onSubmit={(data) => {
-                        setLinks((prev) => [...prev, { title: data.title, link: data.link }]);
-                        linkDialog.close();
-                      }}
-                    />
-                  )
-                })
-              }}>
+              <Button
+                size="regular"
+                colorTheme="line"
+                icon={<PlusIcon />}
+                type="button"
+                onClick={() => {
+                  linkDialog.open({
+                    title: '링크 추가',
+                    content: (
+                      <LinkFormDialogContent
+                        onSubmit={(data) => {
+                          setLinks((prev) => [...prev, { title: data.title, link: data.link }]);
+                          linkDialog.close();
+                        }}
+                      />
+                    ),
+                  });
+                }}
+              >
                 링크 추가
               </Button>
               <Styled.LinkList>
@@ -265,30 +297,40 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
                         <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
                         <Styled.LinkDescription>{link.link}</Styled.LinkDescription>
                       </Styled.LinkInfo>
-                      <Styled.LinkEditButton type="button" onClick={() => {
-                        linkDialog.open({
-                          title: '링크 편집',
-                          content: (
-                            <LinkFormDialogContent
-                              defaultValues={link}
-                              onSubmit={(data) => {
-                                setLinks((prev) => prev.map((item) => {
-                                  if (item.title === link.title && item.link === link.link) {
-                                    return { title: data.title, link: data.link };
-                                  }
+                      <Styled.LinkEditButton
+                        type="button"
+                        onClick={() => {
+                          linkDialog.open({
+                            title: '링크 편집',
+                            content: (
+                              <LinkFormDialogContent
+                                defaultValues={link}
+                                onSubmit={(data) => {
+                                  setLinks((prev) =>
+                                    prev.map((item) => {
+                                      if (item.title === link.title && item.link === link.link) {
+                                        return { title: data.title, link: data.link };
+                                      }
 
-                                  return item;
-                                }));
-                                linkDialog.close();
-                              }}
-                              onDelete={() => {
-                                setLinks((prev) => prev.filter((item) => item.title !== link.title && item.link !== link.link));
-                                linkDialog.close();
-                              }}
-                            />
-                          ),
-                        })
-                      }}>
+                                      return item;
+                                    }),
+                                  );
+                                  linkDialog.close();
+                                }}
+                                onDelete={() => {
+                                  setLinks((prev) =>
+                                    prev.filter(
+                                      (item) =>
+                                        item.title !== link.title && item.link !== link.link,
+                                    ),
+                                  );
+                                  linkDialog.close();
+                                }}
+                              />
+                            ),
+                          });
+                        }}
+                      >
                         <EditIcon />
                       </Styled.LinkEditButton>
                     </Styled.LinkItem>
@@ -297,85 +339,84 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
               </Styled.LinkList>
             </Styled.SettingContentFormControl>
             <Styled.SettingContentSubmitWrapperMobile>
-              <Button size="bold" colorTheme="primary" type="submit">저장하기</Button>
+              <Button size="bold" colorTheme="primary" type="submit">
+                저장하기
+              </Button>
             </Styled.SettingContentSubmitWrapperMobile>
           </Styled.SettingContentForm>
         </Styled.SettingContent>
       )}
-      {
-        currentMenu === 'account' && (
-          <Styled.SettingContent>
-            <Styled.SettingContentHeader>
-              <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
-            </Styled.SettingContentHeader>
-            <Styled.SettingContentFormControl>
-              <Styled.Label htmlFor="code">식별 코드</Styled.Label>
-              <TextField
-                inputType="text"
-                size="big"
-                id="code"
-                width="100%"
-                value={`#${userProfile?.userCode}`}
-                onChange={(event) => {
-                  event.preventDefault();
-                }}
-                style={{ caretColor: 'transparent' }}
-              />
-            </Styled.SettingContentFormControl>
-            <Styled.SettingContentFormControl>
-              <Styled.Label htmlFor="code">연결 서비스</Styled.Label>
-              <Styled.ConnectedServiceList>
-                {userProfile?.oauthType === 'KAKAO' && (
-                  <Styled.ConnectedServiceChip>
-                    <KakaoIcon /> 카카오
-                  </Styled.ConnectedServiceChip>
-                )}
-                {userProfile?.oauthType === 'APPLE' && (
-                  <Styled.ConnectedServiceChip>
-                    <AppleIcon /> Apple
-                  </Styled.ConnectedServiceChip>
-                )}
-              </Styled.ConnectedServiceList>
-            </Styled.SettingContentFormControl>
-            <Styled.Divider />
-            <Styled.SettingSubtitle>계정 삭제</Styled.SettingSubtitle>
-            <Styled.SettingDescriptionList>
-              <Styled.SettingDescriptionItem>
-                주최한 공연 정보는 사라지지 않아요.
-              </Styled.SettingDescriptionItem>
-              <Styled.SettingDescriptionItem>
-                예매한 티켓은 전부 사라지며 복구할 수 없어요.
-              </Styled.SettingDescriptionItem>
-              <Styled.SettingDescriptionItem>
-                삭제일로 부터 30일 이내 재 로그인 시 삭제를 취소할 수 있어요.
-              </Styled.SettingDescriptionItem>
-            </Styled.SettingDescriptionList>
-            <Button
-              style={{ background: theme.palette.status.error }}
-              colorTheme="primary"
-              size="x-small"
-              onClick={() => {
-                accountDeleteDialog.open({
-                  content: (
-                    <AccountDeleteForm
-                      oauthType={userProfile?.oauthType}
-                      onClose={() => {
-                        onDeleteAccount?.();
-                        accountDeleteDialog.close();
-                      }}
-                    />
-                  ),
-                  mobileType: 'centerPopup',
-                });
+      {currentMenu === 'account' && (
+        <Styled.SettingContent>
+          <Styled.SettingContentHeader>
+            <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
+          </Styled.SettingContentHeader>
+          <Styled.SettingContentFormControl>
+            <Styled.Label htmlFor="code">식별 코드</Styled.Label>
+            <TextField
+              inputType="text"
+              size="big"
+              id="code"
+              width="100%"
+              value={`#${userProfile?.userCode}`}
+              onChange={(event) => {
+                event.preventDefault();
               }}
-            >
-              삭제하기
-            </Button>
-          </Styled.SettingContent>
-        )
-      }
-
-    </Styled.SettingDialogContent >
+              style={{ caretColor: 'transparent' }}
+            />
+          </Styled.SettingContentFormControl>
+          <Styled.SettingContentFormControl>
+            <Styled.Label htmlFor="code">연결 서비스</Styled.Label>
+            <Styled.ConnectedServiceList>
+              {userProfile?.oauthType === 'KAKAO' && (
+                <Styled.ConnectedServiceChip>
+                  <KakaoIcon /> 카카오
+                </Styled.ConnectedServiceChip>
+              )}
+              {userProfile?.oauthType === 'APPLE' && (
+                <Styled.ConnectedServiceChip>
+                  <AppleIcon /> Apple
+                </Styled.ConnectedServiceChip>
+              )}
+            </Styled.ConnectedServiceList>
+          </Styled.SettingContentFormControl>
+          <Styled.Divider />
+          <Styled.SettingSubtitle>계정 삭제</Styled.SettingSubtitle>
+          <Styled.SettingDescriptionList>
+            <Styled.SettingDescriptionItem>
+              주최한 공연 정보는 사라지지 않아요.
+            </Styled.SettingDescriptionItem>
+            <Styled.SettingDescriptionItem>
+              예매한 티켓은 전부 사라지며 복구할 수 없어요.
+            </Styled.SettingDescriptionItem>
+            <Styled.SettingDescriptionItem>
+              삭제일로 부터 30일 이내 재 로그인 시 삭제를 취소할 수 있어요.
+            </Styled.SettingDescriptionItem>
+          </Styled.SettingDescriptionList>
+          <Button
+            style={{ background: theme.palette.status.error }}
+            colorTheme="primary"
+            size="x-small"
+            onClick={() => {
+              accountDeleteDialog.open({
+                content: (
+                  <AccountDeleteForm
+                    oauthType={userProfile?.oauthType}
+                    onClose={() => {
+                      onDeleteAccount?.();
+                      accountDeleteDialog.close();
+                    }}
+                  />
+                ),
+                mobileType: 'centerPopup',
+              });
+            }}
+          >
+            삭제하기
+          </Button>
+        </Styled.SettingContent>
+      )}
+    </Styled.SettingDialogContent>
   );
 };
 
