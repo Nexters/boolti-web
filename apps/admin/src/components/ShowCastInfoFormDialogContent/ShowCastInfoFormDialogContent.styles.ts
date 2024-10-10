@@ -1,4 +1,4 @@
-import { Button } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 interface ShowInfoFormLabelProps {
@@ -107,10 +107,13 @@ const MemberAddButton = styled.button`
   background: var(--W-White, #fff);
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g40};
-  width: 536px;
 
   & > svg {
     margin-right: 8px;
+  }
+
+  ${mq_lg} {
+    width: 536px;
   }
 `;
 
@@ -153,6 +156,10 @@ const ButtonWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-top: 32px;
+  padding-bottom: 16px;
+  ${mq_lg} {
+    padding-bottom: 0;
+  }
 `;
 
 const ErrorMessage = styled.span`
