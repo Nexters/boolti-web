@@ -45,6 +45,9 @@ const ShowInfoFormGroupInfo = styled.div`
 `;
 
 const ShowInfoFormTitle = styled.h3`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   ${({ theme }) => theme.typo.sh2};
   color: ${({ theme }) => theme.palette.grey.g90};
 
@@ -534,6 +537,26 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
   }
 `;
 
+const MobileCastInfoRegisterButton = styled.button`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  cursor: pointer;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
+const DesktopCastInfoRegisterButton = styled(Button)`
+  display: none;
+  ${mq_lg} {
+    display: block;
+  }
+`;
+
 export default {
   ShowInfoFormGroup,
   ShowInfoFormGroupHeader,
@@ -583,4 +606,6 @@ export default {
   MobileTicketGroupHeader,
   MobileTicketGroupInfo,
   MobileTicketAction,
+  DesktopCastInfoRegisterButton,
+  MobileCastInfoRegisterButton,
 };

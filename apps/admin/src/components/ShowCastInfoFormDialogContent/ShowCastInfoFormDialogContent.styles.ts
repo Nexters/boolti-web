@@ -23,6 +23,10 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
+
+  &:first-child {
+    padding-top: 8px;
+  }
 `;
 
 const MemberList = styled.div`
