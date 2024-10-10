@@ -1,4 +1,4 @@
-import { ShowPreviewResponse } from '@boolti/api';
+import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { BooltiDark, ShareIcon } from '@boolti/icon';
 import { Footer, ShowPreview, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
@@ -13,14 +13,18 @@ import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 setDefaultOptions({ locale: ko });
 
 const ShowPreviewPage = () => {
-  const previewData = useLoaderData() as ShowPreviewResponse | undefined;
+  const loaderData = useLoaderData() as
+    | [ShowPreviewResponse, ShowCastTeamReadResponse[]]
+    | undefined;
+
   const dialog = useDialog();
 
-  if (!previewData) {
+  if (!loaderData) {
     window.location.href = 'https://boolti.in';
     return;
   }
 
+  const [previewData, showCastTeams = []] = loaderData;
   const {
     id,
     name: title,
@@ -110,6 +114,14 @@ const ShowPreviewPage = () => {
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,
             }}
+            showCastTeams={showCastTeams.map(({ name, members }) => ({
+              name,
+              members: members?.map(({ roleName, userNickname, userImgPath }) => ({
+                roleName,
+                userNickname,
+                userImgPath,
+              })),
+            }))}
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
           />

@@ -1,4 +1,9 @@
-import { ImageFile, useAddShow, useUploadShowImage } from '@boolti/api';
+import {
+  ImageFile,
+  ShowCastTeamCreateOrUpdateRequest,
+  useAddShow,
+  useUploadShowImage,
+} from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Button, useToast } from '@boolti/ui';
 import { useState } from 'react';
@@ -18,6 +23,9 @@ import { ShowInfoFormInputs, ShowTicketFormInputs } from '~/components/ShowInfoF
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
+import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
+import ShowCastInfo from '~/components/ShowCastInfo';
+import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -32,6 +40,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
+  const [showCastInfo, setShowCastInfo] = useState<TempShowCastInfoFormInput[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
@@ -77,6 +86,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
+      castTeams: showCastInfo.map(({ name, members }) => ({
+        name,
+        members: members
+          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
+          .map(({ id, userCode, roleName }) => ({
+            id,
+            userCode,
+            roleName,
+          })),
+      })) as ShowCastTeamCreateOrUpdateRequest[],
     });
 
     navigate(PATH.SHOW_ADD_COMPLETE);
@@ -144,6 +163,34 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     </Styled.ShowInfoFormContent>
                     <Styled.ShowInfoFormContent>
                       <ShowDetailInfoFormContent form={showInfoForm} />
+                    </Styled.ShowInfoFormContent>
+                    <Styled.ShowInfoFormContent>
+                      <ShowCastInfoFormContent
+                        onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                          setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                          return new Promise((reslve) => reslve());
+                        }}
+                      />
+                      {showCastInfo.map((info, index) => (
+                        <ShowCastInfo
+                          key={index}
+                          showCastInfo={info}
+                          onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                            setShowCastInfo((prev) =>
+                              prev.map((prevCastInfo, currentIndex) =>
+                                index === currentIndex ? showCastInfoFormInput : prevCastInfo,
+                              ),
+                            );
+                            return new Promise((reslve) => reslve());
+                          }}
+                          onDelete={() => {
+                            setShowCastInfo((prev) =>
+                              prev.filter((_, currentIndex) => index !== currentIndex),
+                            );
+                            return new Promise((reslve) => reslve());
+                          }}
+                        />
+                      ))}
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"
