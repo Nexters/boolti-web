@@ -24,7 +24,7 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
     margin-left: 2px;
   }
 
-  &:first-child {
+  &:first-of-type {
     padding-top: 8px;
   }
 `;
