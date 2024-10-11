@@ -56,9 +56,10 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
       : [{ userCode: false, roleName: false }],
   );
 
+  const memberFieldState = getFieldState('members');
   const disabled =
     !getValues('name') ||
-    (getFieldState('members').isTouched &&
+    ((memberFieldState.isDirty || memberFieldState.isTouched) &&
       controlledFields.some(
         ({ userImgPath, userNickname, roleName }, index) =>
           (isMemberFieldBlurred[index].roleName || isMemberFieldBlurred[index].userCode) &&
@@ -94,16 +95,17 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        {fields.map((field, index) => (
+        {controlledFields.map((field, index) => (
           <Styled.Row key={field._id}>
             <Controller
               control={control}
               defaultValue={field.userCode}
-              render={({ field: { onChange, onBlur, value } }) => {
+              render={({ field: { onChange, onBlur } }) => {
+                const value = field.userCode;
                 const isError = Boolean(
-                  isMemberFieldBlurred[index].userCode &&
-                    value &&
-                    (!field.userImgPath || !field.userNickname),
+                  isMemberFieldBlurred[index].userCode
+                    ? !value || !field.userImgPath || !field.userNickname
+                    : false,
                 );
                 return (
                   <Styled.FieldWrap>
@@ -120,10 +122,13 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                           <Styled.Username>{field.userNickname}</Styled.Username>
                           <Styled.RemoveButton
                             onClick={() => {
+                              onChange(undefined);
+                              setIsMemberFieldBlurred((prev) => {
+                                const nextMemberFieldBlurred = [...prev];
+                                nextMemberFieldBlurred[index].userCode = true;
+                                return nextMemberFieldBlurred;
+                              });
                               update(index, {
-                                userImgPath: undefined,
-                                userNickname: undefined,
-                                userCode: undefined,
                                 roleName: field.roleName,
                               });
                             }}
@@ -185,7 +190,8 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               rules={{
                 required: true,
               }}
-              render={({ field: { onChange, onBlur, value } }) => {
+              render={({ field: { onChange, onBlur } }) => {
+                const value = field.roleName;
                 const isError = isMemberFieldBlurred[index].roleName && !value;
                 return (
                   <Styled.FieldWrap>
