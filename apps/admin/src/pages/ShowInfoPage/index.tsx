@@ -16,12 +16,12 @@ import {
 } from '@boolti/api';
 import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import ShowDeleteForm from '~/components/ShowDeleteForm';
-import ShowDetailLayout, { myHostInfoAtom } from '~/components/ShowDetailLayout';
+import { middlewareAtom, myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
@@ -29,7 +29,7 @@ import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
-import { useAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
@@ -65,49 +65,54 @@ const ShowInfoPage = () => {
   const confirm = useConfirm();
   const deleteShowDialog = useDialog();
 
+  const setMiddleware = useSetAtom(middlewareAtom);
+
   const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(false);
 
   useBodyScrollLock(previewDrawerOpen);
 
-  const onSubmit: SubmitHandler<ShowInfoFormInputs> = async (data) => {
-    if (!show) return;
+  const onSubmit: SubmitHandler<ShowInfoFormInputs> = useCallback(
+    async (data) => {
+      if (!show) return;
 
-    const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
-    const newShowImages = await (async () => {
-      if (newImageFiles.length === 0) return [];
+      const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
+      const newShowImages = await (async () => {
+        if (newImageFiles.length === 0) return [];
 
-      return await uploadShowImageMutation.mutateAsync(newImageFiles);
-    })();
+        return await uploadShowImageMutation.mutateAsync(newImageFiles);
+      })();
 
-    await editShowInfoMutation.mutateAsync({
-      showId: show.id,
-      body: {
-        name: data.name,
-        images: [...showImages, ...newShowImages].map((image, index) => ({
-          sequence: index + 1,
-          thumbnailPath: image.thumbnailPath,
-          path: image.path,
-        })),
-        date: `${data.date}T${data.startTime}:00.000Z`,
-        runningTime: Number(data.runningTime),
-        place: {
-          name: data.placeName,
-          streetAddress: data.placeStreetAddress,
-          detailAddress: data.placeDetailAddress,
+      await editShowInfoMutation.mutateAsync({
+        showId: show.id,
+        body: {
+          name: data.name,
+          images: [...showImages, ...newShowImages].map((image, index) => ({
+            sequence: index + 1,
+            thumbnailPath: image.thumbnailPath,
+            path: image.path,
+          })),
+          date: `${data.date}T${data.startTime}:00.000Z`,
+          runningTime: Number(data.runningTime),
+          place: {
+            name: data.placeName,
+            streetAddress: data.placeStreetAddress,
+            detailAddress: data.placeDetailAddress,
+          },
+          notice: data.notice,
+          host: {
+            name: data.hostName,
+            phoneNumber: data.hostPhoneNumber,
+          },
         },
-        notice: data.notice,
-        host: {
-          name: data.hostName,
-          phoneNumber: data.hostPhoneNumber,
-        },
-      },
-    });
+      });
 
-    toast.success('공연 정보를 저장했습니다.');
-    setPreviewDrawerOpen(false);
-  };
+      toast.success('공연 정보를 저장했습니다.');
+      setPreviewDrawerOpen(false);
+    },
+    [editShowInfoMutation, imageFiles, show, showImages, uploadShowImageMutation],
+  );
 
-  const confirmSaveShowInfo = async () => {
+  const confirmSaveShowInfo = useCallback(async () => {
     if (!showInfoForm.formState.isDirty && !isImageFilesDirty) {
       return true;
     }
@@ -125,7 +130,7 @@ const ShowInfoPage = () => {
     }
 
     return true;
-  };
+  }, [isImageFilesDirty, onSubmit, showInfoForm]);
 
   useEffect(() => {
     if (!show) return;
@@ -147,6 +152,13 @@ const ShowInfoPage = () => {
     setShowImages(show.images);
   }, [show, showInfoForm]);
 
+  useEffect(() => {
+    setMiddleware(() => confirmSaveShowInfo);
+    return () => {
+      setMiddleware(undefined);
+    };
+  }, [confirmSaveShowInfo, setMiddleware]);
+
   if (!show || !showSalesInfo || !castTeamList) {
     return null;
   }
@@ -154,7 +166,7 @@ const ShowInfoPage = () => {
   const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
 
   return (
-    <ShowDetailLayout showName={show.name} onClickMiddleware={confirmSaveShowInfo}>
+    <>
       {myHostInfo?.type === HostType.SUPPORTER ? (
         <ShowDetailUnauthorized
           pageName={'공연 기본 정보'}
@@ -415,7 +427,7 @@ const ShowInfoPage = () => {
           </Styled.ShowInfoForm>
         </Styled.ShowInfoPage>
       )}
-    </ShowDetailLayout>
+    </>
   );
 };
 
