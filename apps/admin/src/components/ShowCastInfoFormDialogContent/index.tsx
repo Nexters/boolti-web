@@ -120,7 +120,12 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                           <Styled.Username>{field.userNickname}</Styled.Username>
                           <Styled.RemoveButton
                             onClick={() => {
-                              update(index, { roleName: field.roleName });
+                              update(index, {
+                                userImgPath: undefined,
+                                userNickname: undefined,
+                                userCode: undefined,
+                                roleName: field.roleName,
+                              });
                             }}
                           >
                             <ClearIcon />
