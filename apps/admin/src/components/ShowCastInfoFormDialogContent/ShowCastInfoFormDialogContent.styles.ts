@@ -6,7 +6,6 @@ interface ShowInfoFormLabelProps {
 }
 
 interface InputWrapperProps {
-  text: string;
   isError?: boolean;
 }
 
@@ -46,12 +45,7 @@ const FieldWrap = styled.div`
 const InputWrapper = styled.div<InputWrapperProps>`
   ${({ theme }) => theme.typo.b3};
   border: 1px solid
-    ${({ text, theme, isError }) =>
-      isError
-        ? theme.palette.status.error
-        : text
-          ? theme.palette.grey.g90
-          : theme.palette.grey.g20};
+    ${({ theme, isError }) => (isError ? theme.palette.status.error : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   padding: 8px 12px;
@@ -61,6 +55,12 @@ const InputWrapper = styled.div<InputWrapperProps>`
   display: flex;
   align-items: center;
   width: 100%;
+  transition: border-color 0.2s ease-in-out;
+
+  &:focus-within {
+    border-color: ${({ theme, isError }) =>
+      isError ? theme.palette.status.error : theme.palette.grey.g70};
+  }
 `;
 
 const TextFieldWrap = styled.div`

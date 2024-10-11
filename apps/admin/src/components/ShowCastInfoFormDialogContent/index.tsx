@@ -109,7 +109,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                 );
                 return (
                   <Styled.FieldWrap>
-                    <Styled.InputWrapper text={value ?? ''} isError={isError}>
+                    <Styled.InputWrapper isError={isError}>
                       {field.userImgPath && field.userNickname ? (
                         <>
                           <Styled.UserImage
@@ -195,10 +195,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                 const isError = isMemberFieldBlurred[index].roleName && !value;
                 return (
                   <Styled.FieldWrap>
-                    <Styled.InputWrapper
-                      text={value ?? ''}
-                      isError={isMemberFieldBlurred[index].roleName && !value}
-                    >
+                    <Styled.InputWrapper isError={isMemberFieldBlurred[index].roleName && !value}>
                       <Styled.Input
                         placeholder="역할"
                         required
