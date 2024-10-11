@@ -109,7 +109,7 @@ const ShowInfoPage = () => {
       toast.success('공연 정보를 저장했습니다.');
       setPreviewDrawerOpen(false);
     },
-    [editShowInfoMutation, imageFiles, show, showImages, uploadShowImageMutation],
+    [editShowInfoMutation, imageFiles, show, showImages, toast, uploadShowImageMutation],
   );
 
   const confirmSaveShowInfo = useCallback(async () => {
@@ -130,7 +130,7 @@ const ShowInfoPage = () => {
     }
 
     return true;
-  }, [isImageFilesDirty, onSubmit, showInfoForm]);
+  }, [confirm, isImageFilesDirty, onSubmit, showInfoForm]);
 
   useEffect(() => {
     if (!show) return;
