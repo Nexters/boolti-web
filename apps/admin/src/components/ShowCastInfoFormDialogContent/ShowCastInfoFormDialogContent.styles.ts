@@ -6,7 +6,6 @@ interface ShowInfoFormLabelProps {
 }
 
 interface InputWrapperProps {
-  text: string;
   isError?: boolean;
 }
 
