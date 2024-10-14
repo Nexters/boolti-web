@@ -1,5 +1,9 @@
 import styled from '@emotion/styled';
 
+interface WrapperProps {
+  backgroundImage: string;
+}
+
 const Container = styled.div`
   max-width: 330px;
   border-radius: 8px;
@@ -17,14 +21,17 @@ const Recipient = styled.p`
   font-weight: 600;
 `;
 
-const Wrapper = styled.div`
-  background: linear-gradient(#ff5a14, #ffa883);
+const Wrapper = styled.div<WrapperProps>`
+  background-image: ${({ backgroundImage }) => `url(${backgroundImage})`};
+  background-position: center center;
+  background-size: contain;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 32px 20px 0 20px;
   border-radius: 8px 8px 0px 0px;
   position: relative;
+  height: 394px;
 
   &::before {
     content: '';
@@ -55,12 +62,6 @@ const InvitationDescription = styled.p`
   text-align: center;
   height: 80px;
   max-height: 80px;
-`;
-
-const InvitationImage = styled.img`
-  width: 100%;
-  max-width: 270;
-  margin-top: 28px;
 `;
 
 const ShowContainer = styled.div`
@@ -138,7 +139,6 @@ export default {
   Recipient,
   Wrapper,
   InvitationDescription,
-  InvitationImage,
   ShowContainer,
   PosterImage,
   ShowInformation,

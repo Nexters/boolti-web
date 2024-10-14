@@ -57,10 +57,9 @@ const GiftInformation = () => {
   return (
     <>
       <Styled.Container>
-        <Styled.Wrapper>
+        <Styled.Wrapper backgroundImage={giftImageUrl || ''}>
           <Styled.Recipient>TO. {recipientName}</Styled.Recipient>
           <Styled.InvitationDescription>{message}</Styled.InvitationDescription>
-          <Styled.InvitationImage src={giftImageUrl} alt="초대장 이미지" draggable={false} />
         </Styled.Wrapper>
         <Styled.ShowContainer>
           <Styled.PosterImage src={showImageUrl} alt="포스터 이미지" draggable={false} />
