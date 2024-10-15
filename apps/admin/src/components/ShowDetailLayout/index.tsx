@@ -1,7 +1,12 @@
-import { useMyHostInfo, useShowLastSettlementEvent, useShowSettlementInfo } from '@boolti/api';
+import {
+  useMyHostInfo,
+  useShowDetail,
+  useShowLastSettlementEvent,
+  useShowSettlementInfo,
+} from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Setting } from '@boolti/icon/src/components/Setting.tsx';
-import { useDialog } from '@boolti/ui';
+import { palette, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -14,7 +19,7 @@ import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
 import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
 import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
-import { atom, useAtom } from 'jotai';
+import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
 import ProfileDropdown from '../ProfileDropdown/index.tsx';
@@ -27,51 +32,64 @@ const settlementTooltipText = {
 };
 
 interface ShowDetailLayoutProps {
-  showName: string;
   children?: React.ReactNode;
-  onClickMiddleware?: () => Promise<boolean>;
 }
 
 export const myHostInfoAtom = atom<HostListItem | null>(null);
 
-const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailLayoutProps) => {
-  const { ref: topObserverRef, inView: topInView } = useInView({
-    threshold: 1,
-    initialInView: true,
-  });
-  const { ref: headerObserverRef, inView: headerInView } = useInView({
-    threshold: 0.01,
-    initialInView: true,
-  });
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const params = useParams<{ showId: string }>();
-  const matchInfoTab = useMatch(PATH.SHOW_INFO);
-  const matchTicketTab = useMatch(PATH.SHOW_TICKET);
-  const matchReservationTab = useMatch(PATH.SHOW_RESERVATION);
-  const matchEntryTab = useMatch(PATH.SHOW_ENTRANCE);
-  const matchSettlementTab = useMatch(PATH.SHOW_SETTLEMENT);
-  const authoritySettingDialog = useDialog();
-  const showId = Number(params!.showId);
-  const [, setMyHostInfo] = useAtom(myHostInfoAtom);
-  const deviceWidth = useDeviceWidth();
-  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
-  const { data: myHostInfoData } = useMyHostInfo(showId);
-  const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
-  const { data: settlementInfo } = useShowSettlementInfo(showId);
+export const middlewareAtom = atom<(() => Promise<boolean>) | undefined>(undefined);
 
-  const tooltipStyle = {
-    color: theme.palette.grey.w,
-    padding: '6px 8px',
-    backgroundColor: theme.palette.grey.g90,
-    borderRadius: '4px',
-    boxShadow: `0px 4px 10px 0px ${theme.palette.shadow}`,
-    fontWeight: '400',
-    fontStyle: 'normal',
-    lineHeight: '18px',
-    fontDisplay: 'auto',
-    fontSize: '12px',
-  };
+interface TabItemProps {
+  type: 'INFO' | 'TICKET' | 'RESERVATION' | 'ENTRANCE' | 'SETTLEMENT';
+}
+
+const matchTargets: Record<TabItemProps['type'], string> = {
+  INFO: PATH.SHOW_INFO,
+  TICKET: PATH.SHOW_TICKET,
+  RESERVATION: PATH.SHOW_RESERVATION,
+  ENTRANCE: PATH.SHOW_ENTRANCE,
+  SETTLEMENT: PATH.SHOW_SETTLEMENT,
+};
+
+const toTargets = {
+  INFO: HREF.SHOW_INFO,
+  TICKET: HREF.SHOW_TICKET,
+  RESERVATION: HREF.SHOW_RESERVATION,
+  ENTRANCE: HREF.SHOW_ENTRANCE,
+  SETTLEMENT: HREF.SHOW_SETTLEMENT,
+} as const;
+
+const label = {
+  INFO: '공연 기본 정보',
+  TICKET: '티켓 관리',
+  RESERVATION: '방문자 관리',
+  ENTRANCE: '입장 관리',
+  SETTLEMENT: '정산 관리',
+};
+
+const tooltipStyle = {
+  color: palette.grey.w,
+  padding: '6px 8px',
+  backgroundColor: palette.grey.g90,
+  borderRadius: '4px',
+  boxShadow: `0px 4px 10px 0px ${palette.shadow}`,
+  fontWeight: '400',
+  fontStyle: 'normal',
+  lineHeight: '18px',
+  fontDisplay: 'auto',
+  fontSize: '12px',
+};
+
+const TabItem = ({ type }: TabItemProps) => {
+  const params = useParams<{ showId: string }>();
+  const showId = Number(params!.showId);
+
+  const { data: settlementInfo } = useShowSettlementInfo(showId);
+  const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
+
+  const match = useMatch(matchTargets[type]);
+  const navigate = useNavigate();
+  const middleware = useAtomValue(middlewareAtom);
 
   const isSettlementInfoEmpty =
     settlementInfo?.bankAccount === null ||
@@ -94,11 +112,73 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
     return false;
   })();
 
+  return (
+    <Styled.TabItem
+      active={match !== null}
+      id={type === 'SETTLEMENT' ? 'settlement-page-tooltip' : undefined}
+      onClick={async () => {
+        if (!params.showId) return;
+
+        if (middleware && !(await middleware())) {
+          return;
+        }
+
+        navigate(toTargets[type](params.showId));
+      }}
+    >
+      {label[type]}
+      {isTooltipVisible && (
+        <Tooltip
+          content={settlementTooltipText[lastSettlementEvent?.settlementEventType ?? 'DEFAULT']}
+          anchorSelect="#settlement-page-tooltip"
+          isOpen
+          style={tooltipStyle}
+          className="tooltip"
+          place="top"
+          positionStrategy="fixed"
+          offset={0}
+          opacity={0.85}
+        />
+      )}
+    </Styled.TabItem>
+  );
+};
+
+const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
+  const { ref: topObserverRef, inView: topInView } = useInView({
+    threshold: 1,
+    initialInView: true,
+  });
+  const { ref: headerObserverRef, inView: headerInView } = useInView({
+    threshold: 0.01,
+    initialInView: true,
+  });
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const params = useParams<{ showId: string }>();
+
+  const authoritySettingDialog = useDialog();
+  const showId = Number(params!.showId);
+
+  const [, setMyHostInfo] = useAtom(myHostInfoAtom);
+
+  const deviceWidth = useDeviceWidth();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+
+  const { data: show } = useShowDetail(showId);
+  const { data: myHostInfoData } = useMyHostInfo(showId);
+
+  const middleware = useAtomValue(middlewareAtom);
+
   useEffect(() => {
     if (myHostInfoData) {
       setMyHostInfo({ ...myHostInfoData });
     }
   }, [myHostInfoData, setMyHostInfo]);
+
+  if (!show || !myHostInfoData) {
+    return null;
+  }
 
   return (
     <>
@@ -112,7 +192,7 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
                   <Styled.BackButton
                     type="button"
                     onClick={async () => {
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
+                      if (middleware && !(await middleware())) {
                         return;
                       }
 
@@ -128,7 +208,9 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
             />
             <Styled.HeaderContent>
               <Styled.ShowNameWrapper>
-                <Styled.ShowName size={headerInView ? 'big' : 'small'}>{showName}</Styled.ShowName>
+                <Styled.ShowName size={headerInView ? 'big' : 'small'}>
+                  {show?.name}
+                </Styled.ShowName>
                 {myHostInfoData?.type !== HostType.SUPPORTER && (
                   <Styled.AuthorSettingButton
                     type="button"
@@ -154,94 +236,11 @@ const ShowDetailLayout = ({ showName, children, onClickMiddleware }: ShowDetailL
               </Styled.ShowNameWrapper>
               <Styled.TabContainer>
                 <Styled.Tab>
-                  <Styled.TabItem
-                    active={matchInfoTab !== null}
-                    onClick={async () => {
-                      if (!params.showId) return;
-
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
-                        return;
-                      }
-
-                      navigate(HREF.SHOW_INFO(params.showId));
-                    }}
-                  >
-                    공연 기본 정보
-                  </Styled.TabItem>
-                  <Styled.TabItem
-                    active={matchTicketTab !== null}
-                    onClick={async () => {
-                      if (!params.showId) return;
-
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
-                        return;
-                      }
-
-                      navigate(HREF.SHOW_TICKET(params.showId));
-                    }}
-                  >
-                    티켓 관리
-                  </Styled.TabItem>
-                  <Styled.TabItem
-                    active={matchReservationTab !== null}
-                    onClick={async () => {
-                      if (!params.showId) return;
-
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
-                        return;
-                      }
-
-                      navigate(HREF.SHOW_RESERVATION(params.showId));
-                    }}
-                  >
-                    방문자 관리
-                  </Styled.TabItem>
-                  <Styled.TabItem
-                    active={matchEntryTab !== null}
-                    onClick={async () => {
-                      if (!params.showId) return;
-
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
-                        return;
-                      }
-
-                      navigate(HREF.SHOW_ENTRANCE(params.showId));
-                    }}
-                  >
-                    입장 관리
-                  </Styled.TabItem>
-                  <Styled.TabItem
-                    active={matchSettlementTab !== null}
-                    onClick={async () => {
-                      if (!params.showId) return;
-
-                      if (onClickMiddleware && !(await onClickMiddleware())) {
-                        return;
-                      }
-
-                      navigate(HREF.SHOW_SETTLEMENT(params.showId));
-                    }}
-                    id="settlement-page-tooltip"
-                  >
-                    정산 관리
-                    {isTooltipVisible && (
-                      <Tooltip
-                        content={
-                          settlementTooltipText[
-                            lastSettlementEvent?.settlementEventType ?? 'DEFAULT'
-                          ]
-                        }
-                        anchorSelect="#settlement-page-tooltip"
-                        isOpen
-                        style={tooltipStyle}
-                        className="tooltip"
-                        place="top"
-                        positionStrategy="fixed"
-                        offset={0}
-                        opacity={0.85}
-                      />
-                    )}
-                  </Styled.TabItem>
+                  <TabItem type="INFO" />
+                  <TabItem type="TICKET" />
+                  <TabItem type="RESERVATION" />
+                  <TabItem type="ENTRANCE" />
+                  <TabItem type="SETTLEMENT" />
                 </Styled.Tab>
               </Styled.TabContainer>
             </Styled.HeaderContent>

@@ -15,7 +15,7 @@ import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 
-import ShowDetailLayout, { myHostInfoAtom } from '~/components/ShowDetailLayout';
+import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
 import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
@@ -74,7 +74,7 @@ const ShowTicketPage = () => {
   if (!show || !showSalesInfo) return null;
 
   return (
-    <ShowDetailLayout showName={show.name}>
+    <>
       {myHostInfo?.type === HostType.SUPPORTER ? (
         <ShowDetailUnauthorized
           pageName={'티켓 관리'}
@@ -194,7 +194,7 @@ const ShowTicketPage = () => {
           </Styled.ShowTicketFormContent>
         </Styled.ShowTicketPage>
       )}
-    </ShowDetailLayout>
+    </>
   );
 };
 

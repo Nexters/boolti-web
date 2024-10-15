@@ -28,6 +28,7 @@ const GiftInformation = () => {
     showImageUrl,
     giftExpireDate,
     showName,
+    chipColorCode,
   } = data ?? {};
 
   const isRegistered = status === GiftStatus.REGISTERED;
@@ -57,10 +58,11 @@ const GiftInformation = () => {
   return (
     <>
       <Styled.Container>
-        <Styled.Wrapper>
-          <Styled.Recipient>TO. {recipientName}</Styled.Recipient>
+        <Styled.Wrapper backgroundImage={giftImageUrl || ''}>
+          <Styled.Recipient backgroundColor={chipColorCode || ''}>
+            TO. {recipientName}
+          </Styled.Recipient>
           <Styled.InvitationDescription>{message}</Styled.InvitationDescription>
-          <Styled.InvitationImage src={giftImageUrl} alt="초대장 이미지" draggable={false} />
         </Styled.Wrapper>
         <Styled.ShowContainer>
           <Styled.PosterImage src={showImageUrl} alt="포스터 이미지" draggable={false} />

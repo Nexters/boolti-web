@@ -23,7 +23,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import { useParams } from 'react-router-dom';
 
 import FileInput from '~/components/FileInput/FileInput';
-import ShowDetailLayout, { myHostInfoAtom } from '~/components/ShowDetailLayout';
+import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 
 import Styled from './ShowSettlementPage.styles';
 import { useAtom } from 'jotai';
@@ -86,7 +86,7 @@ const ShowSettlementPage = () => {
   if (!show) return null;
 
   return (
-    <ShowDetailLayout showName={show.name}>
+    <>
       {myHostInfo?.type !== HostType.MAIN ? (
         <ShowDetailUnauthorized
           pageName={'정산 관리'}
@@ -266,7 +266,7 @@ const ShowSettlementPage = () => {
           )}
         </Styled.ShowSettlementPage>
       )}
-    </ShowDetailLayout>
+    </>
   );
 };
 

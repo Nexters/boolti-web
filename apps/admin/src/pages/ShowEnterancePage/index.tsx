@@ -13,7 +13,6 @@ import EnteranceTable from '~/components/EnteranceTable';
 import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
 import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
-import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowEnterancePage.styles';
@@ -82,7 +81,7 @@ const ShowEnterancePage = () => {
   const { managerCode } = enteranceInfo ?? {};
 
   return (
-    <ShowDetailLayout showName={show.name}>
+    <>
       {totalTicketCount === 0 ? (
         <Styled.EmptyContainer>
           <BooltiGreyIcon />
@@ -203,7 +202,7 @@ const ShowEnterancePage = () => {
           )}
         </Styled.Container>
       )}
-    </ShowDetailLayout>
+    </>
   );
 };
 

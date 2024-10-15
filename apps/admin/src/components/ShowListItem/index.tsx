@@ -8,6 +8,7 @@ import { PATH } from '~/constants/routes';
 
 import Styled from './ShowListItem.styles';
 import { HostType } from '@boolti/api/src/types/host';
+import { queryKeys, useQueryClient } from '@boolti/api';
 
 interface Props {
   isEmpty?: boolean;
@@ -68,6 +69,7 @@ const ShowListItem = ({
   salesStartTime,
   salesEndTime,
 }: Props) => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   return (
     <Styled.Container as={isEmpty ? 'div' : 'li'}>
@@ -75,6 +77,12 @@ const ShowListItem = ({
         <Styled.EmptyText>아직 등록한 공연이 없어요.</Styled.EmptyText>
       ) : (
         <Styled.Button
+          onMouseDown={() => {
+            queryClient.prefetchQuery(queryKeys.show.detail(id));
+            queryClient.prefetchQuery(queryKeys.host.me(id));
+            queryClient.prefetchQuery(queryKeys.show.lastSettlementEvent(id));
+            queryClient.prefetchQuery(queryKeys.show.settlementInfo(id));
+          }}
           onClick={() => {
             if (myHostType === HostType.SUPPORTER) {
               navigate(generatePath(PATH.SHOW_RESERVATION, { showId: id.toString() }));

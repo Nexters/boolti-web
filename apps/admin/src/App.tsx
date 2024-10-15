@@ -25,11 +25,6 @@ import {
   OAuthKakaoPage,
   HomePage,
   ShowAddCompletePage,
-  ShowEnterancePage,
-  ShowInfoPage,
-  ShowReservationPage,
-  ShowSettlementPage,
-  ShowTicketPage,
   SignUpCompletePage,
   SitePolicyPage,
   GiftRegisterPage,
@@ -39,6 +34,12 @@ import {
 import ShowAddPage from './pages/ShowAddPage';
 import { Suspense } from 'react';
 import { domAnimation, LazyMotion } from 'framer-motion';
+import ShowDetailLayout from './components/ShowDetailLayout';
+import ShowInfoPage from './pages/ShowInfoPage';
+import ShowTicketPage from './pages/ShowTicketPage';
+import ShowReservationPage from './pages/ShowReservationPage';
+import ShowSettlementPage from './pages/ShowSettlementPage';
+import ShowEnterancePage from './pages/ShowEnterancePage';
 
 setDefaultOptions({ locale: ko });
 
@@ -125,14 +126,24 @@ const privateRoutes = [
       { path: PATH.HOME, element: <HomePage /> },
       { path: PATH.SHOW_ADD, element: <ShowAddPage step="info" /> },
       { path: PATH.SHOW_ADD_TICKET, element: <ShowAddPage step="ticket" /> },
-      { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
-      { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
-      { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
-      { path: PATH.SHOW_ENTRANCE, element: <ShowEnterancePage /> },
-      { path: PATH.SHOW_SETTLEMENT, element: <ShowSettlementPage /> },
       {
         path: PATH.SHOW_ADD_COMPLETE,
         element: <ShowAddCompletePage />,
+      },
+      {
+        path: '/',
+        element: (
+          <ShowDetailLayout>
+            <Outlet />
+          </ShowDetailLayout>
+        ),
+        children: [
+          { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
+          { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
+          { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
+          { path: PATH.SHOW_ENTRANCE, element: <ShowEnterancePage /> },
+          { path: PATH.SHOW_SETTLEMENT, element: <ShowSettlementPage /> },
+        ],
       },
     ],
   },
