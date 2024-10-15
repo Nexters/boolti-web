@@ -4,6 +4,10 @@ interface WrapperProps {
   backgroundImage: string;
 }
 
+interface RecipientProps {
+  backgroundColor: string;
+}
+
 const Container = styled.div`
   max-width: 330px;
   border-radius: 8px;
@@ -11,11 +15,11 @@ const Container = styled.div`
   padding-top: 68px;
 `;
 
-const Recipient = styled.p`
+const Recipient = styled.p<RecipientProps>`
   padding: 6px 12px;
   border-radius: 100px;
   ${({ theme }) => theme.typo.c1};
-  background-color: ${({ theme }) => theme.palette.primary.o3};
+  background-color: ${({ backgroundColor }) => backgroundColor};
   color: ${({ theme }) => theme.palette.grey.w};
   margin-bottom: 12px;
   font-weight: 600;
