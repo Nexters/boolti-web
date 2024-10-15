@@ -99,7 +99,6 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
           <Styled.Row key={field._id}>
             <Controller
               control={control}
-              defaultValue={field.userCode}
               render={({ field: { onChange, onBlur } }) => {
                 const value = field.userCode;
                 const isError = Boolean(
