@@ -21,6 +21,10 @@ const Header = styled.div`
   color: ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.sh2};
   padding: 24px 28px;
+
+  &:last-child {
+    border-radius: 8px;
+  }
 `;
 
 const EditButton = styled(Button)`
