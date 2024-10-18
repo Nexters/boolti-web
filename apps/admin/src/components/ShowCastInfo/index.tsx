@@ -61,32 +61,34 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           편집하기
         </Styled.EditButton>
       </Styled.Header>
-      <Styled.Cast
-        animate={{ transition: { type: 'tween' }, height: isOpen ? 'auto' : 0 }}
-        transition={{ duration: 0.4 }}
-        initial={{ height: 0, opacity: 1 }}
-        exit={{ height: 0, opacity: 1 }}
-      >
-        {members.map((member) => (
-          <Styled.CastItem key={member.id}>
-            <Styled.UserImage
-              style={{ '--imgPath': `url(${member.userImgPath})` } as React.CSSProperties}
-            />
-            <Styled.Username>{member.userNickname}</Styled.Username>
-            <Styled.Rolename>({member.roleName})</Styled.Rolename>
-          </Styled.CastItem>
-        ))}
-      </Styled.Cast>
       {memberLength > 0 && (
-        <Styled.CollapseButton
-          onClick={(e) => {
-            e.preventDefault();
-            toggle();
-          }}
-        >
-          {isOpen ? '팀원 리스트 접기' : '팀원 리스트 펼쳐보기'}
-          {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
-        </Styled.CollapseButton>
+        <>
+          <Styled.Cast
+            animate={{ transition: { type: 'tween' }, height: isOpen ? 'auto' : 0 }}
+            transition={{ duration: 0.4 }}
+            initial={{ height: 0, opacity: 1 }}
+            exit={{ height: 0, opacity: 1 }}
+          >
+            {members.map((member) => (
+              <Styled.CastItem key={member.id}>
+                <Styled.UserImage
+                  style={{ '--imgPath': `url(${member.userImgPath})` } as React.CSSProperties}
+                />
+                <Styled.Username>{member.userNickname}</Styled.Username>
+                <Styled.Rolename>({member.roleName})</Styled.Rolename>
+              </Styled.CastItem>
+            ))}
+          </Styled.Cast>
+          <Styled.CollapseButton
+            onClick={(e) => {
+              e.preventDefault();
+              toggle();
+            }}
+          >
+            {isOpen ? '팀원 리스트 접기' : '팀원 리스트 펼쳐보기'}
+            {isOpen ? <ChevronUpIcon /> : <ChevronDownIcon />}
+          </Styled.CollapseButton>
+        </>
       )}
     </Styled.Container>
   );

@@ -59,7 +59,6 @@ const ShowTicketInfoFormContent = ({
                         sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
                         'yyyy-MM-dd',
                       )}
-                      defaultValue={watch('startDate') || ''}
                       required
                       disabled={disabled}
                       errorMessage={
@@ -98,7 +97,6 @@ const ShowTicketInfoFormContent = ({
                         sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
                         'yyyy-MM-dd',
                       )}
-                      defaultValue={watch('endDate') || ''}
                       required
                       disabled={disabled}
                       errorMessage={

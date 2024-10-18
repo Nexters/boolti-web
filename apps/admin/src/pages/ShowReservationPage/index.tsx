@@ -11,7 +11,6 @@ import { useParams } from 'react-router-dom';
 import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
 import ReservationTable from '~/components/ReservationTable';
-import ShowDetailLayout from '~/components/ShowDetailLayout';
 import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowReservationPage.styles';
@@ -86,7 +85,7 @@ const ShowReservationPage = () => {
   } = reservationSummary;
 
   return (
-    <ShowDetailLayout showName={show.name}>
+    <>
       {totalSoldCount === 0 ? (
         <Styled.EmptyContainer>
           <BooltiGreyIcon />
@@ -208,7 +207,7 @@ const ShowReservationPage = () => {
           )}
         </Styled.Container>
       )}
-    </ShowDetailLayout>
+    </>
   );
 };
 

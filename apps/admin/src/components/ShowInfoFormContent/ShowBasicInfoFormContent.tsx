@@ -33,7 +33,7 @@ const ShowBasicInfoFormContent = ({
   const { open, close, isOpen } = useDialog();
   const detailAdressInputRef = useRef<HTMLInputElement>(null);
 
-  const { watch, control, setValue } = form;
+  const { control, setValue } = form;
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -176,7 +176,6 @@ const ShowBasicInfoFormContent = ({
                     setHasBlurred((prev) => ({ ...prev, date: true }));
                   }}
                   placeholder={value}
-                  defaultValue={watch('date')}
                   min={format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')}
                   required
                   disabled={disabled}

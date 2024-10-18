@@ -50,4 +50,8 @@ export interface GiftInfoResponse {
    * 선물 만료일
    */
   giftExpireDate: string;
+  /**
+   * 칩 컬러 헥스코드
+   */
+  chipColorCode: string;
 }
