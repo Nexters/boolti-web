@@ -66,6 +66,7 @@ const InvitationDescription = styled.p`
   text-align: center;
   height: 80px;
   max-height: 80px;
+  white-space: break-spaces;
 `;
 
 const ShowContainer = styled.div`
@@ -78,9 +79,11 @@ const ShowContainer = styled.div`
 
 const PosterImage = styled.img`
   width: 54px;
+  height: 76px;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g10};
   margin-right: 16px;
+  object-fit: cover;
 `;
 
 const ShowInformation = styled.div``;
