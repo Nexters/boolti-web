@@ -10,7 +10,7 @@ import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowTicketPeriod from './ShowTicketPeriod';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowPreviewProps {
@@ -38,26 +38,34 @@ interface ShowPreviewProps {
     }[];
   }>;
   hasNoticePage?: boolean;
+  containerRef?: React.RefObject<HTMLDivElement>;
   onClickLink?: () => void;
   onClickLinkMobile?: () => void;
 }
 
 const ShowPreview = ({
   show,
+  showCastTeams,
   hasNoticePage,
+  containerRef,
   onClickLink,
   onClickLinkMobile,
-  showCastTeams,
 }: ShowPreviewProps) => {
   const { images, name, salesStartTime, salesEndTime } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
+  const containerScrollTop = useRef<number | null>(null);
 
   if (noticeOpen) {
     return (
       <ShowPreviewNotice
         notice={show.notice}
         onClickBackButton={() => {
+          if (containerScrollTop.current !== null) {
+            containerRef?.current?.scrollTo(0, containerScrollTop.current);
+            containerScrollTop.current = null;
+          }
+
           setNoticeOpen(false);
         }}
       />
@@ -100,6 +108,8 @@ const ShowPreview = ({
                   onClickLink={onClickLink}
                   onClickLinkMobile={onClickLinkMobile}
                   onClickViewNotice={() => {
+                    containerScrollTop.current = containerRef?.current?.scrollTop ?? null
+                    containerRef?.current?.scrollTo(0, 0);
                     setNoticeOpen(true);
                   }}
                 />
