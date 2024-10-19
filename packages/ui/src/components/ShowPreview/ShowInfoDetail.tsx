@@ -134,7 +134,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 관리 문의</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>공연 관련 문의</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
