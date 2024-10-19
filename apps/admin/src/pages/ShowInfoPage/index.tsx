@@ -16,7 +16,7 @@ import {
 } from '@boolti/api';
 import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -43,6 +43,7 @@ const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
   const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
+  const showPreviewRef = useRef<HTMLDivElement>(null);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
@@ -323,7 +324,7 @@ const ShowInfoPage = () => {
                       <PreviewFrame />
                     </Styled.ShowInfoPreviewFrame>
                     <Styled.ShowPreviewContainer>
-                      <Styled.ShowPreview>
+                      <Styled.ShowPreview ref={showPreviewRef}>
                         <ShowPreview
                           show={{
                             images: imageFiles.map((file) => file.preview),
@@ -348,6 +349,7 @@ const ShowInfoPage = () => {
                           }}
                           showCastTeams={castTeamList}
                           hasNoticePage
+                          containerRef={showPreviewRef}
                         />
                       </Styled.ShowPreview>
                     </Styled.ShowPreviewContainer>
