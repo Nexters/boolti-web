@@ -10,6 +10,8 @@ import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowTicketPeriod from './ShowTicketPeriod';
+import { useState } from 'react';
+import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowPreviewProps {
   show: {
@@ -49,6 +51,19 @@ const ShowPreview = ({
 }: ShowPreviewProps) => {
   const { images, name, salesStartTime, salesEndTime } = show;
 
+  const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
+
+  if (noticeOpen) {
+    return (
+      <ShowPreviewNotice
+        notice={show.notice}
+        onClickBackButton={() => {
+          setNoticeOpen(false);
+        }}
+      />
+    );
+  }
+
   return (
     <Styled.ShowPreview>
       <Styled.ShowPreviewHeader>
@@ -84,6 +99,9 @@ const ShowPreview = ({
                   hasNoticePage={hasNoticePage}
                   onClickLink={onClickLink}
                   onClickLinkMobile={onClickLinkMobile}
+                  onClickViewNotice={() => {
+                    setNoticeOpen(true);
+                  }}
                 />
               ),
             },

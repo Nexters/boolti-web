@@ -1,8 +1,6 @@
 import Linkify from 'linkify-react';
 import Styled from './ShowPreview.styles';
 import { CallIcon, MessageIcon } from '@boolti/icon';
-import { useState } from 'react';
-import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface Props {
   show: {
@@ -23,6 +21,7 @@ interface Props {
   hasNoticePage?: boolean;
   onClickLink?: () => void;
   onClickLinkMobile?: () => void;
+  onClickViewNotice?: () => void;
 }
 
 const ShowInfoDetail = ({
@@ -39,19 +38,8 @@ const ShowInfoDetail = ({
   hasNoticePage,
   onClickLink,
   onClickLinkMobile,
+  onClickViewNotice,
 }: Props) => {
-  const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
-  if (noticeOpen) {
-    return (
-      <ShowPreviewNotice
-        notice={notice}
-        onClickBackButton={() => {
-          setNoticeOpen(false);
-        }}
-      />
-    );
-  }
-
   return (
     <Styled.ShowInfo>
       <Styled.ShowInfoGroup>
@@ -115,9 +103,7 @@ const ShowInfoDetail = ({
           {hasNoticePage && (
             <Styled.ShowInfoTitleTextButton
               type="button"
-              onClick={() => {
-                setNoticeOpen(true);
-              }}
+              onClick={onClickViewNotice}
             >
               전체보기
             </Styled.ShowInfoTitleTextButton>
@@ -134,7 +120,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 관리 문의</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>공연 관련 문의</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
