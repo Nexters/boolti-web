@@ -11,7 +11,7 @@ const ShowPreviewContainer = styled.div`
   position: relative;
   max-width: ${PREVIEW_MAX_WIDTH};
   margin: 0 auto;
-  padding-bottom: 56px;
+  padding-bottom: 76px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
 `;
 
@@ -49,18 +49,17 @@ const ReservationButtonWrapper = styled.div`
   bottom: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
   width: 100%;
   max-width: ${PREVIEW_MAX_WIDTH};
-  height: 64px;
-  padding: 0 20px;
+  height: 76px;
+  padding: 12px 20px 16px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
   z-index: 99;
 
   &::before {
     content: '';
     position: absolute;
-    bottom: 64px;
+    bottom: 76px;
     left: 0;
     width: 100%;
     height: 16px;
