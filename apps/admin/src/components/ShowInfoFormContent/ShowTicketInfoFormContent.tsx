@@ -23,6 +23,7 @@ const ShowTicketInfoFormContent = ({
 }: ShowTicketInfoFormContentProps) => {
   const { watch, control } = form;
 
+  // TODO: react-hook-form의 에러 기능을 사용하도록 수정
   const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowTicketFormRequiredInputs, boolean>>(
     {
       startDate: false,

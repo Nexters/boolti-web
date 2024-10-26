@@ -21,6 +21,7 @@ const InvitationTicketForm = ({ onSubmit }: InvitationTicketFormProps) => {
     formState: { isDirty, isValid },
   } = useForm<InvitationTicketFormInputs>();
 
+  // TODO: react-hook-form의 에러 기능을 사용하도록 수정
   const [hasBlurred, setHasBlurred] = useState<Record<keyof InvitationTicketFormInputs, boolean>>({
     name: false,
     totalForSale: false,
