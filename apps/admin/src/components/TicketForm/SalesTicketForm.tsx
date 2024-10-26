@@ -22,6 +22,7 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
     formState: { isDirty, isValid },
   } = useForm<SalesTicketFormInputs>();
 
+  // TODO: react-hook-form의 에러 기능을 사용하도록 수정
   const [hasBlurred, setHasBlurred] = useState<Record<keyof SalesTicketFormInputs, boolean>>({
     name: false,
     price: false,

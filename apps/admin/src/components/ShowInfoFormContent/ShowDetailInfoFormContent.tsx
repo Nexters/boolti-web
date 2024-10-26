@@ -1,25 +1,18 @@
 import { TextField } from '@boolti/ui';
-import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowInfoFormInputs } from './types';
-
-type ShowBasicInfoFormInputs = Pick<ShowInfoFormInputs, 'notice' | 'hostName' | 'hostPhoneNumber'>;
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs>;
   disabled?: boolean;
 }
 
-const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
-  const { control } = form;
+const phoneNumberRegExp = /^\d{3}-\d{3,4}-\d{4}$/
 
-  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowBasicInfoFormInputs, boolean>>({
-    notice: false,
-    hostName: false,
-    hostPhoneNumber: false,
-  });
+const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
+  const { control, formState: { errors }, setError, clearErrors } = form;
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -45,16 +38,22 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
                   rows={10}
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('notice');
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, notice: true }));
+
+                    if (!value) {
+                      setError('notice', { type: 'required', message: '필수 입력사항입니다.' });
+                    }
                   }}
                   value={value ?? ''}
-                  hasError={hasBlurred.notice && !value}
+                  hasError={!!errors.notice?.message}
                 />
-                {hasBlurred.notice && !value && (
-                  <Styled.TextAreaErrorMessage>필수 입력사항입니다.</Styled.TextAreaErrorMessage>
+                {errors.notice?.message && (
+                  <Styled.TextAreaErrorMessage>{errors.notice.message}</Styled.TextAreaErrorMessage>
                 )}
               </Styled.TextAreaContainer>
             )}
@@ -62,37 +61,45 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
           />
         </Styled.ShowInfoFormContent>
       </Styled.ShowInfoFormRow>
-      <Styled.ShowInfoFormRow>
-        <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>대표자 이름</Styled.ShowInfoFormLabel>
+      <Styled.ShowInfoFormResponsiveRowColumn>
+        <Styled.ShowInfoFormContent style={{ flex: 0.58, minWidth: '216px' }}>
+          <Styled.ShowInfoFormLabel required>대표자명</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
               rules={{
                 required: true,
+                validate: (fieldValue) => {
+                  if (!fieldValue) return '필수 입력사항입니다.'
+
+                  return true
+                }
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
                   inputType="text"
                   size="big"
-                  placeholder="대표자 이름을 입력해 주세요"
+                  placeholder="대표자명을 입력해 주세요"
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('hostName')
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, hostName: true }));
+                    if (!value) {
+                      setError('hostName', { type: 'required', message: '필수 입력사항입니다.' });
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={hasBlurred.hostName && !value ? '필수 입력사항입니다.' : undefined}
+                  errorMessage={errors.hostName?.message}
                 />
               )}
               name="hostName"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
-      </Styled.ShowInfoFormRow>
-      <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>대표자 연락처</Styled.ShowInfoFormLabel>
           <Styled.TextField>
@@ -100,6 +107,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
               control={control}
               rules={{
                 required: true,
+                pattern: phoneNumberRegExp,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
@@ -108,22 +116,32 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   placeholder="대표자 연락처를 입력해 주세요"
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('hostPhoneNumber')
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, hostPhoneNumber: true }));
+
+                    if (!value) {
+                      setError('hostPhoneNumber', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
+
+                    if (!phoneNumberRegExp.test(value)) {
+                      setError('hostPhoneNumber', { type: 'pattern', message: '유효한 전화번호 형식이 아닙니다.' });
+                      return
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={
-                    hasBlurred.hostPhoneNumber && !value ? '필수 입력사항입니다.' : undefined
-                  }
+                  errorMessage={errors.hostPhoneNumber?.message}
                 />
               )}
               name="hostPhoneNumber"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
-      </Styled.ShowInfoFormRow>
+      </Styled.ShowInfoFormResponsiveRowColumn>
     </Styled.ShowInfoFormGroup>
   );
 };

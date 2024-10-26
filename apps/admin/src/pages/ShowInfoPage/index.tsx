@@ -225,7 +225,6 @@ const ShowInfoPage = () => {
             <Styled.ShowInfoFormDivider />
             <Styled.ShowInfoFormContent>
               <ShowCastInfoFormContent
-                hasPreviousCastInfo={castTeamList.length > 0}
                 onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
                   await postCastTeams.mutateAsync(
                     {

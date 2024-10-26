@@ -75,6 +75,22 @@ const ShowInfoFormRow = styled.div`
   }
 `;
 
+const ShowInfoFormResponsiveRowColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-bottom: 28px;
+
+  ${mq_lg} {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+`
+
 const ShowInfoFormContent = styled.div`
   flex: 1;
 `;
@@ -108,7 +124,7 @@ const ShowInfoFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowInfoFormButton = styled(Button)<ShowInfoFormButtonProps>`
+const ShowInfoFormButton = styled(Button) <ShowInfoFormButtonProps>`
   width: ${({ width }) => width};
 `;
 
@@ -275,7 +291,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
-      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -527,7 +543,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
+    disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }
@@ -541,6 +557,7 @@ const MobileCastInfoRegisterButton = styled.button`
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: 4px;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
   cursor: pointer;
@@ -564,6 +581,7 @@ export default {
   ShowInfoFormTitle,
   ShowInfoFormSubtitle,
   ShowInfoFormRow,
+  ShowInfoFormResponsiveRowColumn,
   ShowInfoFormContent,
   ShowInfoFormLabel,
   ShowInfoFormDescription,

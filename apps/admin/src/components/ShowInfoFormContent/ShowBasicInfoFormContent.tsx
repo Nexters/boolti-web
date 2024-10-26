@@ -2,7 +2,7 @@ import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { Button, TextField, TimePicker, useDialog } from '@boolti/ui';
 import { add, format } from 'date-fns';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
@@ -12,8 +12,7 @@ import { ShowInfoFormInputs } from './types';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
-
-type ShowBasicInfoFormInputs = Omit<ShowInfoFormInputs, 'notice' | 'hostName' | 'hostPhoneNumber'>;
+const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')
 
 interface ShowBasicInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs, unknown, ShowInfoFormInputs>;
@@ -31,9 +30,9 @@ const ShowBasicInfoFormContent = ({
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
   const { open, close, isOpen } = useDialog();
-  const detailAdressInputRef = useRef<HTMLInputElement>(null);
+  const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
-  const { control, setValue } = form;
+  const { control, setValue, formState: { errors }, setError, clearErrors } = form;
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -41,16 +40,6 @@ const ShowBasicInfoFormContent = ({
     },
     maxFiles: MAX_IMAGE_COUNT,
     onDrop: onDropImage,
-  });
-
-  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowBasicInfoFormInputs, boolean>>({
-    name: false,
-    date: false,
-    startTime: false,
-    runningTime: false,
-    placeName: false,
-    placeStreetAddress: false,
-    placeDetailAddress: false,
   });
 
   const openDaumPostCodeWithDialog: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -62,10 +51,9 @@ const ShowBasicInfoFormContent = ({
           style={{ maxWidth: 426, height: 470 }}
           onComplete={(address) => {
             setValue('placeStreetAddress', address.roadAddress);
-            detailAdressInputRef.current?.focus();
+            detailAddressInputRef.current?.focus();
           }}
           onClose={() => {
-            setHasBlurred((prev) => ({ ...prev, placeStreetAddress: true }));
             close();
           }}
         />
@@ -87,8 +75,8 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 포스터</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            원하시는 <strong>노출 순서대로</strong> 이미지를 업로드해주세요. (최소 1장, 최대{' '}
-            {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)
+            원하시는 노출 순서대로 이미지를 업로드해주세요. 표준 종이규격(A, B)의 이미지를 권장합니다.<br />
+            (최소 1장, 최대 {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)
           </Styled.ShowInfoFormDescription>
           <Styled.PreviewImageContainer>
             {imageFiles.map((file, index) => (
@@ -143,13 +131,20 @@ const ShowBasicInfoFormContent = ({
                   placeholder="공연명을 입력해 주세요 (띄어쓰기 포함 최대 40자)"
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('name');
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, name: true }));
+
+                    if (!value) {
+                      setError('name', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={hasBlurred.name && !value ? '필수 입력사항입니다.' : undefined}
+                  errorMessage={errors.name?.message}
                 />
               )}
               name="name"
@@ -164,23 +159,36 @@ const ShowBasicInfoFormContent = ({
             <Controller
               control={control}
               rules={{
+                min: MIN_DATE,
                 required: true,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
                   inputType="date"
                   size="big"
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('date');
+
+                    if (new Date(event.target.value) < new Date(MIN_DATE)) {
+                      setError('date', { type: 'min', message: '오늘 이후의 날짜를 선택해 주세요.' });
+                      return
+                    }
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, date: true }));
+
+                    if (!value) {
+                      setError('date', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
                   }}
                   placeholder={value}
-                  min={format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')}
+                  min={MIN_DATE}
                   required
                   disabled={disabled}
                   value={value ?? ''}
-                  errorMessage={hasBlurred.date && !value ? '필수 입력사항입니다.' : undefined}
+                  errorMessage={errors.date?.message}
                 />
               )}
               name="date"
@@ -190,7 +198,7 @@ const ShowBasicInfoFormContent = ({
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>공연 시작 시간</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>시작 시간</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
@@ -201,15 +209,20 @@ const ShowBasicInfoFormContent = ({
                 return (
                   <TimePicker
                     disabled={disabled}
-                    onChange={onChange}
+                    onChange={(event) => {
+                      onChange(event);
+                      clearErrors('startTime');
+                    }}
                     onBlur={() => {
                       onBlur();
-                      setHasBlurred((prev) => ({ ...prev, startTime: true }));
+
+                      if (!value) {
+                        setError('startTime', { type: 'required', message: '필수 입력사항입니다.' });
+                        return
+                      }
                     }}
                     value={value}
-                    errorMessage={
-                      hasBlurred.startTime && !value ? '필수 입력사항입니다.' : undefined
-                    }
+                    errorMessage={errors.startTime?.message}
                   />
                 );
               }}
@@ -232,15 +245,20 @@ const ShowBasicInfoFormContent = ({
                   min={0}
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('runningTime');
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, runningTime: true }));
+
+                    if (!value) {
+                      setError('runningTime', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={
-                    hasBlurred.runningTime && !value ? '필수 입력사항입니다.' : undefined
-                  }
+                  errorMessage={errors.runningTime?.message}
                 />
               )}
               name="runningTime"
@@ -265,13 +283,20 @@ const ShowBasicInfoFormContent = ({
                   placeholder="공연장명을 입력해 주세요"
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('placeName');
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, placeName: true }));
+
+                    if (!value) {
+                      setError('placeName', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={hasBlurred.placeName && !value ? '필수 입력사항입니다.' : undefined}
+                  errorMessage={errors.placeName?.message}
                 />
               )}
               name="placeName"
@@ -297,9 +322,7 @@ const ShowBasicInfoFormContent = ({
                     required
                     disabled
                     value={value ?? ''}
-                    errorMessage={
-                      hasBlurred.placeStreetAddress && !value ? '필수 입력사항입니다.' : undefined
-                    }
+                    errorMessage={errors.placeStreetAddress?.message}
                   />
                   <Button colorTheme="netural" size="bold" onClick={openDaumPostCodeWithDialog}>
                     주소 찾기
@@ -317,21 +340,26 @@ const ShowBasicInfoFormContent = ({
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
-                  ref={detailAdressInputRef}
+                  ref={detailAddressInputRef}
                   inputType="text"
                   size="big"
                   placeholder="상세 주소를 입력해 주세요"
                   required
                   disabled={disabled}
-                  onChange={onChange}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('placeDetailAddress');
+                  }}
                   onBlur={() => {
                     onBlur();
-                    setHasBlurred((prev) => ({ ...prev, placeDetailAddress: true }));
+
+                    if (!value) {
+                      setError('placeDetailAddress', { type: 'required', message: '필수 입력사항입니다.' });
+                      return
+                    }
                   }}
                   value={value ?? ''}
-                  errorMessage={
-                    hasBlurred.placeDetailAddress && !value ? '필수 입력사항입니다.' : undefined
-                  }
+                  errorMessage={errors.placeDetailAddress?.message}
                 />
               )}
               name="placeDetailAddress"
