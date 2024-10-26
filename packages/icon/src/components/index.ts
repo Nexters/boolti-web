@@ -67,6 +67,7 @@ import { Setting } from './Setting';
 import { Logout } from './Logout';
 import { Call } from './Call';
 import { Message } from './Message';
+import { Discord } from './Discord';
 
 export {
   Apple as AppleIcon,
@@ -138,4 +139,6 @@ export {
   Logout as LogoutIcon,
   Call as CallIcon,
   Message as MessageIcon,
+  Discord as DiscordIcon,
 };
+

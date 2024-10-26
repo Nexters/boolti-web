@@ -1,4 +1,4 @@
-import { InstagramIcon, KakaotalkIcon } from '@boolti/icon';
+import { DiscordIcon, InstagramIcon, KakaotalkIcon } from '@boolti/icon';
 
 import Styled from './Footer.styles';
 
@@ -87,6 +87,13 @@ const Footer = ({ darkMode }: FooterProps) => {
           {/* <Styled.IconLink>
             <GithubIcon />
           </Styled.IconLink> */}
+          <Styled.IconLink
+            href="https://discord.gg/GzHYbRTaP7"
+            target="_blank"
+            rel="noreferrer noopener nofollow"
+          >
+            <DiscordIcon />
+          </Styled.IconLink>
           <Styled.IconLink
             href="http://pf.kakao.com/_pVxfxaG/chat"
             target="_blank"
