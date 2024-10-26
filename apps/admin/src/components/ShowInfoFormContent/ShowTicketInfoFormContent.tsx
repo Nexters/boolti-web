@@ -32,7 +32,9 @@ const ShowTicketInfoFormContent = ({
 
   return (
     <Styled.ShowInfoFormGroup>
-      <Styled.ShowInfoFormTitle>티켓 판매 정보</Styled.ShowInfoFormTitle>
+      <Styled.ShowInfoFormGroupInfo>
+        <Styled.ShowInfoFormTitle>티켓 판매 정보</Styled.ShowInfoFormTitle>
+      </Styled.ShowInfoFormGroupInfo>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormRow>
@@ -90,7 +92,7 @@ const ShowTicketInfoFormContent = ({
                       placeholder={value}
                       min={format(
                         watch('startDate') ||
-                          (salesStartTime ? new Date(salesStartTime) : new Date()),
+                        (salesStartTime ? new Date(salesStartTime) : new Date()),
                         'yyyy-MM-dd',
                       )}
                       max={format(

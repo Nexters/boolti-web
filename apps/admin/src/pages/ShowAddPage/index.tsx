@@ -138,7 +138,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                   <Styled.CardDescription>
                     등록하려는 공연의 정보를 입력해 주세요.
                     <br />
-                    공연 정보는 공연일 하루 전까지 수정할 수 있어요.
+                    입력한 정보는 등록 후에도 수정할 수 있어요.
                   </Styled.CardDescription>
                   <Styled.ShowAddForm onSubmit={showInfoForm.handleSubmit(onSubmitInfoForm)}>
                     <Styled.ShowInfoFormContent>
@@ -348,7 +348,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             <Styled.MobileDescription>
               등록하려는 공연의 정보를 입력해 주세요.
               <br />
-              공연 정보는 공연일 하루 전까지 수정할 수 있어요.
+              입력한 정보는 등록 후에도 수정할 수 있어요.
             </Styled.MobileDescription>
             <Styled.ShowAddForm onSubmit={showInfoForm.handleSubmit(onSubmitInfoForm)}>
               <Styled.ShowInfoFormContent>
@@ -373,6 +373,34 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               </Styled.ShowInfoFormContent>
               <Styled.ShowInfoFormContent>
                 <ShowDetailInfoFormContent form={showInfoForm} />
+              </Styled.ShowInfoFormContent>
+              <Styled.ShowInfoFormContent>
+                <ShowCastInfoFormContent
+                  onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                    setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                    return new Promise((reslve) => reslve());
+                  }}
+                />
+                {showCastInfo.map((info, index) => (
+                  <ShowCastInfo
+                    key={index}
+                    showCastInfo={info}
+                    onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                      setShowCastInfo((prev) =>
+                        prev.map((prevCastInfo, currentIndex) =>
+                          index === currentIndex ? showCastInfoFormInput : prevCastInfo,
+                        ),
+                      );
+                      return new Promise((reslve) => reslve());
+                    }}
+                    onDelete={() => {
+                      setShowCastInfo((prev) =>
+                        prev.filter((_, currentIndex) => index !== currentIndex),
+                      );
+                      return new Promise((reslve) => reslve());
+                    }}
+                  />
+                ))}
               </Styled.ShowInfoFormContent>
               <Button
                 size="bold"

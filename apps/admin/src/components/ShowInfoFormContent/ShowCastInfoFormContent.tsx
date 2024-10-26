@@ -7,11 +7,10 @@ import ShowCastInfoFormDialogContent, {
 } from '../ShowCastInfoFormDialogContent';
 
 interface Props {
-  hasPreviousCastInfo?: boolean;
   onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
 }
 
-const ShowCastInfoFormContent = ({ hasPreviousCastInfo = false, onSave }: Props) => {
+const ShowCastInfoFormContent = ({ onSave }: Props) => {
   const dialog = useDialog();
 
   const onClick = () => {
@@ -46,12 +45,6 @@ const ShowCastInfoFormContent = ({ hasPreviousCastInfo = false, onSave }: Props)
           </Styled.ShowInfoFormTitle>
           <Styled.ShowInfoFormSubtitle>
             출연진 정보를 팀 단위로 등록해 주세요.
-            {!hasPreviousCastInfo && (
-              <>
-                <br />
-                정보는 공연 등록 이후에도 <strong>수정 및 추가</strong>할 수 있어요.
-              </>
-            )}
           </Styled.ShowInfoFormSubtitle>
         </Styled.ShowInfoFormGroupInfo>
         <Styled.DesktopCastInfoRegisterButton
