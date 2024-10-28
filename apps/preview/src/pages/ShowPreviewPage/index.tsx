@@ -12,6 +12,27 @@ import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 
 setDefaultOptions({ locale: ko });
 
+const getDynamicLink = (showId: number) => {
+  return `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+}
+
+const getPreviewLink = (showId: number) => {
+  return `${window.location.origin}/show/${showId}`
+}
+
+const getShareText = (show: { id: number, title: string, date: Date, placeName: string, streetAddress: string, detailAddress: string }) => {
+  return `
+공연 정보를 공유드려요! 
+
+- 공연명 : ${show.title}
+- 일시 : ${format(show.date, 'yyyy.MM.dd (E) HH:mm -', { locale: ko })}
+- 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}
+
+공연 상세 정보 ▼ 
+${getPreviewLink(show.id)}
+  `
+}
+
 const ShowPreviewPage = () => {
   const loaderData = useLoaderData() as
     | [ShowPreviewResponse, ShowCastTeamReadResponse[]]
@@ -41,17 +62,15 @@ const ShowPreviewPage = () => {
     hostPhoneNumber,
   } = previewData;
 
-  const dynamicLink = `https://boolti.page.link/?link=https://preview.boolti.in/show/${id}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
-
   const shareButtonClickHandler = async () => {
     try {
       await navigator.share({
         title,
-        text,
-        url: dynamicLink,
+        text: getShareText({ id, title, date: new Date(date), placeName, streetAddress, detailAddress }),
+        url: getPreviewLink(id),
       });
     } catch (error) {
-      navigator.clipboard.writeText(dynamicLink);
+      await navigator.clipboard.writeText(getPreviewLink(id));
 
       alert('공연 링크가 복사되었어요');
     }
@@ -64,7 +83,7 @@ const ShowPreviewPage = () => {
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={dynamicLink} size={182} level="H" />
+              <QRCodeSVG value={getPreviewLink(id)} size={182} level="H" />
             </Styled.QRCodeContainer>
             <BooltiGrayLogo />
           </Styled.DialogQRCodeContainer>
@@ -82,7 +101,7 @@ const ShowPreviewPage = () => {
   };
 
   const reservationButtonMobileClickHandler = () => {
-    window.location.href = dynamicLink;
+    window.location.href = getDynamicLink(id);
   };
 
   return (
