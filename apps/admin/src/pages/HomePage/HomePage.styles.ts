@@ -48,8 +48,14 @@ const Container = styled.main`
   }
 `;
 
+const BannerContainer = styled.div`
+  border-bottom: 1px solid #C5E1FF;
+`
+
 const Banner = styled.div`
-  padding: 16px 0;
+  max-width: ${({ theme }) => theme.breakpoint.desktop};
+  margin: 0 auto;
+  padding: 16px 20px;
   width: 100%;
   display: flex;
   align-items: center;
@@ -109,6 +115,7 @@ export default {
   ProfileDropdown,
   ProfileDropdownMobile,
   Container,
+  BannerContainer,
   Banner,
   BannerShowTitle,
   BannerDescription,

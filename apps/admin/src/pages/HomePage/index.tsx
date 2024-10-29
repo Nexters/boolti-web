@@ -120,15 +120,17 @@ const HomePage = () => {
         settlementBanners &&
         settlementBanners.length > 0 &&
         settlementBanners?.map((banner) => (
-          <Styled.Banner key={banner.showId}>
-            <Styled.BannerDescription>
-              <Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle>{' '}
-              {bannerDescription[banner.bannerType]}
-            </Styled.BannerDescription>
-            <Styled.BannerLink to={HREF.SHOW_SETTLEMENT(banner.showId)}>
-              정산 내역서 보러 가기 <ChevronRightIcon />
-            </Styled.BannerLink>
-          </Styled.Banner>
+          <Styled.BannerContainer key={banner.showId}>
+            <Styled.Banner>
+              <Styled.BannerDescription>
+                <Styled.BannerShowTitle>‘{banner.showName}’</Styled.BannerShowTitle>{' '}
+                {bannerDescription[banner.bannerType]}
+              </Styled.BannerDescription>
+              <Styled.BannerLink to={HREF.SHOW_SETTLEMENT(banner.showId)}>
+                정산 내역서 보러 가기 <ChevronRightIcon />
+              </Styled.BannerLink>
+            </Styled.Banner>
+          </Styled.BannerContainer>
         ))
       }
     >
