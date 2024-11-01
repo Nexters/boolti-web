@@ -39,7 +39,7 @@ export interface UserProfileResponse {
   /** 유저코드 (권한 부여 시) */
   userCode: string;
   /** 유저 프로필 이미지 경로 */
-  imgPath: string;
+  imgPath?: string;
   /** 유저 소개 */
   introduction: string;
   /** 유저 링크 */

@@ -9,6 +9,7 @@ import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
 import { BooltiLightGrey } from './BooltiLightGrey';
 import { BooltiSmall } from './BooltiSmall';
+import { User } from './User';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
 import { Check } from './Check';
@@ -107,6 +108,7 @@ export {
   ICBC,
   Instagram as InstagramIcon,
   JPMorgan,
+  User as UserIcon,
   K,
   KakaoBank,
   Kakaotalk as KakaotalkIcon,
@@ -141,4 +143,3 @@ export {
   Message as MessageIcon,
   Discord as DiscordIcon,
 };
-

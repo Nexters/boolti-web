@@ -3,7 +3,7 @@ import { Controller, useFieldArray, useForm } from 'react-hook-form';
 import Styled from './ShowCastInfoFormDialogContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { ClearIcon, PlusIcon, TrashIcon } from '@boolti/icon';
+import { ClearIcon, PlusIcon, TrashIcon, UserIcon } from '@boolti/icon';
 import { Member, queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 
@@ -61,9 +61,9 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
     !getValues('name') ||
     ((memberFieldState.isDirty || memberFieldState.isTouched) &&
       controlledFields.some(
-        ({ userImgPath, userNickname, roleName }, index) =>
+        ({ userNickname, roleName }, index) =>
           (isMemberFieldBlurred[index].roleName || isMemberFieldBlurred[index].userCode) &&
-          (!userImgPath || !userNickname || !roleName),
+          (!userNickname || !roleName),
       ));
 
   return (
@@ -102,22 +102,24 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
               render={({ field: { onChange, onBlur } }) => {
                 const value = field.userCode;
                 const isError = Boolean(
-                  isMemberFieldBlurred[index].userCode
-                    ? !value || !field.userImgPath || !field.userNickname
-                    : false,
+                  isMemberFieldBlurred[index].userCode ? !value || !field.userNickname : false,
                 );
                 return (
                   <Styled.FieldWrap>
                     <Styled.InputWrapper isError={isError}>
-                      {field.userImgPath && field.userNickname ? (
+                      {field.userNickname ? (
                         <>
-                          <Styled.UserImage
-                            style={
-                              {
-                                '--imgPath': `url(${field.userImgPath})`,
-                              } as React.CSSProperties
-                            }
-                          />
+                          {field.userImgPath ? (
+                            <Styled.UserImage
+                              style={
+                                {
+                                  '--imgPath': `url(${field.userImgPath})`,
+                                } as React.CSSProperties
+                              }
+                            />
+                          ) : (
+                            <UserIcon size={32} />
+                          )}
                           <Styled.Username>{field.userNickname}</Styled.Username>
                           <Styled.RemoveButton
                             onClick={() => {
@@ -278,8 +280,7 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
 
             const name = getValues('name');
             const members = (getValues('members') ?? []).filter(
-              (member) =>
-                member.userImgPath && member.userNickname && member.roleName && member.userCode,
+              (member) => member.userNickname && member.roleName && member.userCode,
             );
 
             try {
