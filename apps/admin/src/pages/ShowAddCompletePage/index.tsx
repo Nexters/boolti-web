@@ -6,26 +6,30 @@ import congratulationSvgUrl from '~/assets/svg/congratulation.svg';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddCompletePage.styles';
+import { checkIsWebView } from '~/utils/webview';
 
 const ShowAddCompletePage = () => {
   const navigate = useNavigate();
+  const isWebView = checkIsWebView(window.navigator.userAgent);
 
   return (
     <>
       <Styled.ShowAddCompletePage>
-        <Styled.HeaderContainer>
-          <Styled.Header>
-            <Styled.BackButton
-              type="button"
-              onClick={() => {
-                navigate(PATH.HOME);
-              }}
-            >
-              <ArrowLeftIcon />
-            </Styled.BackButton>
-            <Styled.HeaderText>홈</Styled.HeaderText>
-          </Styled.Header>
-        </Styled.HeaderContainer>
+        {!isWebView && (
+          <Styled.HeaderContainer>
+            <Styled.Header>
+              <Styled.BackButton
+                type="button"
+                onClick={() => {
+                  navigate(PATH.HOME);
+                }}
+              >
+                <ArrowLeftIcon />
+              </Styled.BackButton>
+              <Styled.HeaderText>홈</Styled.HeaderText>
+            </Styled.Header>
+          </Styled.HeaderContainer>
+        )}
         <Styled.CardContainer>
           <Styled.Card>
             <Styled.CardHeader>
