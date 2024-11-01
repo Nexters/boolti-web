@@ -26,6 +26,7 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
+import { checkIsWebView } from '~/utils/webview';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -33,6 +34,7 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
+  const isWebView = checkIsWebView(window.navigator.userAgent);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -104,19 +106,21 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   return (
     <>
       <Styled.ShowAddPage>
-        <Styled.HeaderContainer>
-          <Styled.Header>
-            <Styled.BackButton
-              type="button"
-              onClick={() => {
-                navigate(PATH.HOME);
-              }}
-            >
-              <ArrowLeftIcon />
-            </Styled.BackButton>
-            <Styled.HeaderText>홈</Styled.HeaderText>
-          </Styled.Header>
-        </Styled.HeaderContainer>
+        {!isWebView && (
+          <Styled.HeaderContainer>
+            <Styled.Header>
+              <Styled.BackButton
+                type="button"
+                onClick={() => {
+                  navigate(PATH.HOME);
+                }}
+              >
+                <ArrowLeftIcon />
+              </Styled.BackButton>
+              <Styled.HeaderText>홈</Styled.HeaderText>
+            </Styled.Header>
+          </Styled.HeaderContainer>
+        )}
         <Styled.CardContainer>
           <Styled.Card>
             {step === 'info' && (
