@@ -1,3 +1,4 @@
+import { UserIcon } from '@boolti/icon';
 import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
