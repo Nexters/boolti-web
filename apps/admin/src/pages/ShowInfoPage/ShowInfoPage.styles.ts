@@ -88,30 +88,6 @@ const ShowInfoPreviewMobile = styled.div`
   }
 `;
 
-const ShowInfoPreviewHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  padding: 0 20px;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
-`;
-
-const ShowInfoPreviewHeaderLogoLink = styled.div`
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 53px;
-    height: 24px;
-  }
-`;
-
-const ShareButton = styled.div`
-  width: 24px;
-  height: 24px;
-`;
-
 const ShowInfoPreviewFrameContainer = styled.div`
   width: 314px;
   height: 586px;
@@ -220,9 +196,6 @@ export default {
   ShowInfoPreviewContainer,
   ShowInfoPreview,
   ShowInfoPreviewMobile,
-  ShowInfoPreviewHeader,
-  ShowInfoPreviewHeaderLogoLink,
-  ShareButton,
   ShowInfoPreviewFrameContainer,
   ShowInfoPreviewFrame,
   ShowPreviewContainer,

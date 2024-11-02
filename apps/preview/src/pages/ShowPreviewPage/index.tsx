@@ -109,14 +109,6 @@ const ShowPreviewPage = () => {
       <Meta title={title} showId={id.toString()} />
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
-          <Styled.Header>
-            <Styled.HeaderLogoLink href="https://boolti.in">
-              <BooltiDark />
-            </Styled.HeaderLogoLink>
-            <Styled.ShareButton type="button" onClick={shareButtonClickHandler}>
-              <ShareIcon />
-            </Styled.ShareButton>
-          </Styled.Header>
           <ShowPreview
             show={{
               images: showImg.map((file) => file.path),
@@ -141,8 +133,10 @@ const ShowPreviewPage = () => {
                 userImgPath,
               })),
             }))}
+            logoLinkHref="https://boolti.in"
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
+            onClickShareButton={shareButtonClickHandler}
           />
           <Styled.FooterWrapper>
             <Footer darkMode />

@@ -11,6 +11,7 @@ import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
+import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 interface ShowPreviewProps {
   show: {
@@ -37,18 +38,22 @@ interface ShowPreviewProps {
     }[];
   }>;
   hasNoticePage?: boolean;
+  logoLinkHref?: string;
   containerRef?: React.RefObject<HTMLDivElement>;
   onClickLink?: () => void;
   onClickLinkMobile?: () => void;
+  onClickShareButton?: () => void;
 }
 
 const ShowPreview = ({
   show,
   showCastTeams,
   hasNoticePage,
+  logoLinkHref,
   containerRef,
   onClickLink,
   onClickLinkMobile,
+  onClickShareButton
 }: ShowPreviewProps) => {
   const { images, name } = show;
 
@@ -73,6 +78,14 @@ const ShowPreview = ({
 
   return (
     <Styled.ShowPreview>
+      <Styled.ShowPreviewNavbar>
+        <Styled.LogoLink href={logoLinkHref}>
+          <BooltiDark />
+        </Styled.LogoLink>
+        <Styled.ShareButton onClick={onClickShareButton} disabled={!onClickShareButton}>
+          <ShareIcon />
+        </Styled.ShareButton>
+      </Styled.ShowPreviewNavbar>
       <Styled.ShowPreviewHeader>
         <Swiper
           style={{ width: '100%', height: 'auto', borderRadius: '8px' }}

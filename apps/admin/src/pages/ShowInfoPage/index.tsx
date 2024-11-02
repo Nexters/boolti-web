@@ -37,7 +37,6 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
@@ -326,14 +325,6 @@ const ShowInfoPage = () => {
                     </Styled.ShowInfoPreviewFrame>
                     <Styled.ShowPreviewContainer>
                       <Styled.ShowPreview ref={showPreviewRef}>
-                        <Styled.ShowInfoPreviewHeader>
-                          <Styled.ShowInfoPreviewHeaderLogoLink>
-                            <BooltiDark />
-                          </Styled.ShowInfoPreviewHeaderLogoLink>
-                          <Styled.ShareButton>
-                            <ShareIcon />
-                          </Styled.ShareButton>
-                        </Styled.ShowInfoPreviewHeader>
                         <ShowPreview
                           show={{
                             images: imageFiles.map((file) => file.preview),
@@ -387,14 +378,6 @@ const ShowInfoPage = () => {
             {previewDrawerOpen && (
               <Portal>
                 <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
-                  <Styled.ShowInfoPreviewHeader>
-                    <Styled.ShowInfoPreviewHeaderLogoLink>
-                      <BooltiDark />
-                    </Styled.ShowInfoPreviewHeaderLogoLink>
-                    <Styled.ShareButton>
-                      <ShareIcon />
-                    </Styled.ShareButton>
-                  </Styled.ShowInfoPreviewHeader>
                   <Styled.ShowInfoPreview>
                     <ShowPreview
                       show={{

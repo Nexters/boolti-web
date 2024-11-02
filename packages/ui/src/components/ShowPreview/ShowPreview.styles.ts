@@ -38,6 +38,36 @@ const ShowPreviewHeader = styled.div`
   }
 `;
 
+const ShowPreviewNavbar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const LogoLink = styled.a`
+  display: flex;
+  align-items: center;
+  cursor: ${({ href }) => href ? 'pointer' : 'default'};
+
+  svg {
+    width: 53px;
+    height: 24px;
+  }
+`;
+
+const ShareButton = styled.button`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+`;
+
 const ShowImage = styled.img`
   width: 100%;
   height: auto;
@@ -342,6 +372,9 @@ const EmptyCastTeamDescription = styled.p`
 export default {
   ShowPreview,
   ShowPreviewHeader,
+  ShowPreviewNavbar,
+  LogoLink,
+  ShareButton,
   ShowImage,
   ShowName,
   ShowPreviewContent,
