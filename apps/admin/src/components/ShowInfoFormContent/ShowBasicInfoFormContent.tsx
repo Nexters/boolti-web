@@ -172,7 +172,7 @@ const ShowBasicInfoFormContent = ({
                     clearErrors('date');
 
                     if (new Date(event.target.value) < new Date(MIN_DATE)) {
-                      setError('date', { type: 'min', message: '오늘 이후의 날짜를 선택해 주세요.' });
+                      setError('date', { type: 'min', message: '오늘 이후부터 선택 가능합니다.' });
                       return
                     }
                   }}
