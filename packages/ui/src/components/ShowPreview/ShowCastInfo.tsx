@@ -43,7 +43,7 @@ const ShowCastInfo = ({ showCastTeams }: Props) => {
         ))
       ) : (
         <Styled.EmptryCastTeam>
-          <Styled.EmptyCastTeamTitle>COMMING SOON</Styled.EmptyCastTeamTitle>
+          <Styled.EmptyCastTeamTitle>COMING SOON</Styled.EmptyCastTeamTitle>
           <Styled.EmptyCastTeamDescription>조금만 기다려주세요!</Styled.EmptyCastTeamDescription>
         </Styled.EmptryCastTeam>
       )}
