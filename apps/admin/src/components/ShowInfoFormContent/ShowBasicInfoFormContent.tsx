@@ -188,7 +188,7 @@ const ShowBasicInfoFormContent = ({
                   min={MIN_DATE}
                   required
                   disabled={disabled}
-                  value={value ?? ''}
+                  value={value}
                   errorMessage={errors.date?.message}
                 />
               )}

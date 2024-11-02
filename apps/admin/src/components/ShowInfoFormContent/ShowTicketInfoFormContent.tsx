@@ -108,6 +108,7 @@ const ShowTicketInfoFormContent = ({
                         onBlur();
                         validateStartDate(value);
                       }}
+                      value={value}
                       placeholder={value}
                       min={minStartDate}
                       max={maxDate}
@@ -140,6 +141,7 @@ const ShowTicketInfoFormContent = ({
                         onBlur();
                         validateEndDate(value);
                       }}
+                      value={value}
                       placeholder={value}
                       min={minEndDate}
                       max={maxDate}
