@@ -46,7 +46,7 @@ const ShowTicketInfoFormContent = ({
     }
 
     if (new Date(value) < new Date(minStartDate)) {
-      const message = showCreatedAt ? `공연 등록일 이후부터 선택 가능합니다. (${format(showCreatedAt, 'yy.MM.dd')})` : '오늘부터 선택 가능합니다.';
+      const message = showCreatedAt ? `공연 등록일부터 선택 가능합니다. (${format(showCreatedAt, 'yy.MM.dd')})` : '오늘부터 선택 가능합니다.';
       setError('startDate', { type: 'min', message });
       return
     }

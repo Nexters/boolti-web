@@ -1,6 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import { useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
@@ -9,8 +10,6 @@ import Styled from './ShowPreview.styles';
 import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
-import ShowTicketPeriod from './ShowTicketPeriod';
-import { useRef, useState } from 'react';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowPreviewProps {
@@ -51,7 +50,7 @@ const ShowPreview = ({
   onClickLink,
   onClickLinkMobile,
 }: ShowPreviewProps) => {
-  const { images, name, salesStartTime, salesEndTime } = show;
+  const { images, name } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const containerScrollTop = useRef<number | null>(null);
@@ -96,7 +95,6 @@ const ShowPreview = ({
         <Styled.ShowName>{name}</Styled.ShowName>
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
-        <ShowTicketPeriod salesStartTime={salesStartTime} salesEndTime={salesEndTime} />
         <Tab
           tabItems={[
             {

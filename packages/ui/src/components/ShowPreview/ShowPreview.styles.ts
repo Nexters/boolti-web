@@ -13,7 +13,7 @@ const ShowPreview = styled.div`
 const ShowPreviewHeader = styled.div`
   padding: 0 38px;
   padding-top: 16px;
-  padding-bottom: 30px;
+  padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -52,7 +52,7 @@ const ShowName = styled.h2`
 `;
 
 const ShowPreviewContent = styled.div`
-  padding: 40px 20px 0;
+  padding: 20px 20px 0;
   position: relative;
 `;
 
@@ -129,10 +129,6 @@ const CastInfo = styled.div`
 const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
   padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
-
-  &:first-of-type {
-    padding-top: 0;
-  }
 
   &:last-of-type {
     border-bottom: none;

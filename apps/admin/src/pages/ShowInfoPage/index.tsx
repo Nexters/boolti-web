@@ -37,6 +37,7 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
+import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
@@ -44,6 +45,7 @@ const ShowInfoPage = () => {
   const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
   const showPreviewRef = useRef<HTMLDivElement>(null);
+  const showPreviewMobileRef = useRef<HTMLDivElement>(null);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
@@ -324,6 +326,14 @@ const ShowInfoPage = () => {
                     </Styled.ShowInfoPreviewFrame>
                     <Styled.ShowPreviewContainer>
                       <Styled.ShowPreview ref={showPreviewRef}>
+                        <Styled.ShowInfoPreviewHeader>
+                          <Styled.ShowInfoPreviewHeaderLogoLink>
+                            <BooltiDark />
+                          </Styled.ShowInfoPreviewHeaderLogoLink>
+                          <Styled.ShareButton>
+                            <ShareIcon />
+                          </Styled.ShareButton>
+                        </Styled.ShowInfoPreviewHeader>
                         <ShowPreview
                           show={{
                             images: imageFiles.map((file) => file.preview),
@@ -376,7 +386,15 @@ const ShowInfoPage = () => {
             </Drawer>
             {previewDrawerOpen && (
               <Portal>
-                <Styled.ShowInfoPreviewMobile>
+                <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
+                  <Styled.ShowInfoPreviewHeader>
+                    <Styled.ShowInfoPreviewHeaderLogoLink>
+                      <BooltiDark />
+                    </Styled.ShowInfoPreviewHeaderLogoLink>
+                    <Styled.ShareButton>
+                      <ShareIcon />
+                    </Styled.ShareButton>
+                  </Styled.ShowInfoPreviewHeader>
                   <Styled.ShowInfoPreview>
                     <ShowPreview
                       show={{
@@ -402,6 +420,7 @@ const ShowInfoPage = () => {
                       }}
                       showCastTeams={castTeamList}
                       hasNoticePage
+                      containerRef={showPreviewMobileRef}
                     />
                   </Styled.ShowInfoPreview>
                   <Styled.ShowInfoPreviewFooter>

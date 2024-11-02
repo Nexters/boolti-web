@@ -109,7 +109,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 내용</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
           {hasNoticePage && (
             <Styled.ShowInfoTitleTextButton
               type="button"
@@ -130,7 +130,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 관련 문의</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>주최</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
