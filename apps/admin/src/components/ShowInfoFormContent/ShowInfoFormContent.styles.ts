@@ -114,8 +114,20 @@ const ShowInfoFormDescription = styled.p`
   color: ${({ theme }) => theme.palette.grey.g60};
   margin-top: 2px;
 
+  span {
+    display: inline-block;
+    width: 100%;
+  }
+
   strong {
     font-weight: 600;
+  }
+
+  ${mq_lg} {
+    span {
+      display: inline;
+      width: auto;
+    }
   }
 `;
 
@@ -130,21 +142,21 @@ const ShowInfoFormButton = styled(Button) <ShowInfoFormButtonProps>`
 
 const PreviewImageContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 88px);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  height: 124px;
   margin-top: 16px;
+  aspect-ratio: 562 / 256;
 
   ${mq_lg} {
-    grid-template-columns: repeat(3, 1fr);
     gap: 28px;
     height: 256px;
+    aspect-ratio: initial;
   }
 `;
 
 const PreviewImage = styled.div<{ isFirstImage: boolean }>`
   max-width: 100%;
-  height: ${({ isFirstImage }) => (isFirstImage ? 'calc(124px - 16px)' : '124px')};
+  height: ${({ isFirstImage }) => (isFirstImage ? 'calc(100% - 16px)' : '100%')};
   width: 100%;
   background-size: cover;
   background-repeat: no-repeat;
@@ -160,6 +172,7 @@ const PreviewImageWrap = styled.div<{ isFirstImage: boolean }>`
   position: relative;
   border-radius: 4px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  aspect-ratio: 182 / 256;
 `;
 
 const FirstImageText = styled.span`
@@ -263,7 +276,7 @@ const FileUploadAreaText = styled.span`
 const TextField = styled.div<TextFieldProps>`
   margin-top: 8px;
   display: flex;
-  align-items: start;
+  align-items: center;
   gap: 8px;
   flex: ${({ flex }) => flex};
 

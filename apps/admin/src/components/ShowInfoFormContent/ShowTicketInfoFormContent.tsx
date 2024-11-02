@@ -1,16 +1,14 @@
 import { TextField } from '@boolti/ui';
 import { format, sub } from 'date-fns';
-import { useState } from 'react';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowTicketFormInputs } from './types';
 
-type ShowTicketFormRequiredInputs = Omit<ShowTicketFormInputs, 'ticketNotice'>;
-
 interface ShowTicketInfoFormContentProps {
   form: UseFormReturn<ShowTicketFormInputs>;
   showDate: string;
+  salesMinStartDate?: string;
   salesStartTime?: string;
   disabled?: boolean;
 }
@@ -18,29 +16,33 @@ interface ShowTicketInfoFormContentProps {
 const ShowTicketInfoFormContent = ({
   form,
   showDate,
+  salesMinStartDate,
   salesStartTime,
   disabled,
 }: ShowTicketInfoFormContentProps) => {
-  const { watch, control } = form;
+  const { watch, control, formState: { errors }, setError, clearErrors } = form;
 
-  // TODO: react-hook-form의 에러 기능을 사용하도록 수정
-  const [hasBlurred, setHasBlurred] = useState<Record<keyof ShowTicketFormRequiredInputs, boolean>>(
-    {
-      startDate: false,
-      endDate: false,
-    },
-  );
+  const minStartDate = format(salesMinStartDate ?? new Date(), 'yyyy-MM-dd')
+  const minEndDate = format(
+    watch('startDate') ||
+    (salesStartTime ? new Date(salesStartTime) : new Date()),
+    'yyyy-MM-dd',
+  )
+  const maxDate = format(
+    sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
+    'yyyy-MM-dd',
+  )
 
   return (
     <Styled.ShowInfoFormGroup>
       <Styled.ShowInfoFormGroupInfo>
-        <Styled.ShowInfoFormTitle>티켓 판매 정보</Styled.ShowInfoFormTitle>
+        <Styled.ShowInfoFormTitle>티켓 판매</Styled.ShowInfoFormTitle>
       </Styled.ShowInfoFormGroupInfo>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormRow>
+          <Styled.ShowInfoFormResponsiveRowColumn>
             <Styled.ShowInfoFormContent>
-              <Styled.ShowInfoFormLabel required>판매 시작일</Styled.ShowInfoFormLabel>
+              <Styled.ShowInfoFormLabel required>시작일</Styled.ShowInfoFormLabel>
               <Styled.TextField>
                 <Controller
                   control={control}
@@ -51,22 +53,29 @@ const ShowTicketInfoFormContent = ({
                     <TextField
                       inputType="date"
                       size="big"
-                      onChange={onChange}
+                      onChange={(event) => {
+                        onChange(event);
+                        clearErrors('startDate');
+
+                        if (new Date(event.target.value) < new Date(minStartDate)) {
+                          setError('startDate', { type: 'min', message: '공연 생성일 이후의 날짜를 선택해 주세요.' });
+                          return
+                        }
+                      }}
                       onBlur={() => {
                         onBlur();
-                        setHasBlurred((prev) => ({ ...prev, startDate: true }));
+
+                        if (!value) {
+                          setError('startDate', { type: 'required', message: '필수 입력사항입니다.' });
+                          return
+                        }
                       }}
                       placeholder={value}
-                      min={format(salesStartTime ?? new Date(), 'yyyy-MM-dd')}
-                      max={format(
-                        sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
-                        'yyyy-MM-dd',
-                      )}
+                      min={minStartDate}
+                      max={maxDate}
                       required
                       disabled={disabled}
-                      errorMessage={
-                        hasBlurred.startDate && !value ? '필수 입력사항입니다.' : undefined
-                      }
+                      errorMessage={errors.startDate?.message}
                     />
                   )}
                   name="startDate"
@@ -74,7 +83,7 @@ const ShowTicketInfoFormContent = ({
               </Styled.TextField>
             </Styled.ShowInfoFormContent>
             <Styled.ShowInfoFormContent>
-              <Styled.ShowInfoFormLabel required>판매 종료일</Styled.ShowInfoFormLabel>
+              <Styled.ShowInfoFormLabel required>종료일</Styled.ShowInfoFormLabel>
               <Styled.TextField>
                 <Controller
                   control={control}
@@ -85,33 +94,41 @@ const ShowTicketInfoFormContent = ({
                     <TextField
                       inputType="date"
                       size="big"
-                      onChange={onChange}
+                      onChange={(event) => {
+                        onChange(event);
+                        clearErrors('endDate');
+
+                        if (new Date(event.target.value) < new Date(minEndDate)) {
+                          setError('endDate', { type: 'min', message: '시작일 이후로 선택 가능합니다.' });
+                          return
+                        }
+
+                        if (new Date(event.target.value) > new Date(maxDate)) {
+                          setError('endDate', { type: 'max', message: '공연 전날까지 선택 가능합니다.' });
+                          return
+                        }
+                      }}
                       onBlur={() => {
                         onBlur();
-                        setHasBlurred((prev) => ({ ...prev, endDate: true }));
+
+                        if (!value) {
+                          setError('endDate', { type: 'required', message: '필수 입력사항입니다.' });
+                          return
+                        }
                       }}
                       placeholder={value}
-                      min={format(
-                        watch('startDate') ||
-                        (salesStartTime ? new Date(salesStartTime) : new Date()),
-                        'yyyy-MM-dd',
-                      )}
-                      max={format(
-                        sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
-                        'yyyy-MM-dd',
-                      )}
+                      min={minEndDate}
+                      max={maxDate}
                       required
                       disabled={disabled}
-                      errorMessage={
-                        hasBlurred.endDate && !value ? '필수 입력사항입니다.' : undefined
-                      }
+                      errorMessage={errors.endDate?.message}
                     />
                   )}
                   name="endDate"
                 />
               </Styled.TextField>
             </Styled.ShowInfoFormContent>
-          </Styled.ShowInfoFormRow>
+          </Styled.ShowInfoFormResponsiveRowColumn>
         </Styled.ShowInfoFormContent>
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>

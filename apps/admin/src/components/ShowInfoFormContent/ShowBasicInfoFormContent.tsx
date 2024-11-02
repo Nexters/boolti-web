@@ -36,7 +36,7 @@ const ShowBasicInfoFormContent = ({
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
-      'image/*': [],
+      'image/jpeg, image/png': [],
     },
     maxFiles: MAX_IMAGE_COUNT,
     onDrop: onDropImage,
@@ -75,8 +75,9 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 포스터</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            원하시는 노출 순서대로 이미지를 업로드해주세요. 표준 종이규격(A, B)의 이미지를 권장합니다.<br />
-            (최소 1장, 최대 {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)
+            <span>원하시는 노출 순서대로 이미지를 업로드해주세요.&nbsp;</span>
+            <span>표준 종이규격(A, B)의 이미지를 권장합니다.</span><br />
+            <span>(최소 1장, 최대 {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)</span>
           </Styled.ShowInfoFormDescription>
           <Styled.PreviewImageContainer>
             {imageFiles.map((file, index) => (
