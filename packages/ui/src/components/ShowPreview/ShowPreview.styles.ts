@@ -201,7 +201,23 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     color: #46a6ff;
     text-decoration: underline;
   }
+
+  span {
+    margin-right: 6px;
+  }
 `;
+
+const ShowInfoDescriptionBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g50};
+  ${({ theme }) => theme.typo.c1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  padding: 3px 12px;
+  border-radius: 999px;
+  position: relative;
+  top: -1.5px;
+`
 
 const ShowInfoBox = styled.div`
   height: 56px;
@@ -346,6 +362,7 @@ export default {
   ShowInfoTitleTextButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
+  ShowInfoDescriptionBadge,
   ShowInfoBox,
   ShowHost,
   ShowHostName,
