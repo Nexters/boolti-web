@@ -8,7 +8,7 @@ import { ShowTicketFormInputs } from './types';
 interface ShowTicketInfoFormContentProps {
   form: UseFormReturn<ShowTicketFormInputs>;
   showDate: string;
-  salesMinStartDate?: string;
+  showCreatedAt?: string;
   salesStartTime?: string;
   disabled?: boolean;
 }
@@ -16,13 +16,13 @@ interface ShowTicketInfoFormContentProps {
 const ShowTicketInfoFormContent = ({
   form,
   showDate,
-  salesMinStartDate,
+  showCreatedAt,
   salesStartTime,
   disabled,
 }: ShowTicketInfoFormContentProps) => {
   const { watch, control, formState: { errors }, setError, clearErrors } = form;
 
-  const minStartDate = format(salesMinStartDate ?? new Date(), 'yyyy-MM-dd')
+  const minStartDate = format(showCreatedAt ?? new Date(), 'yyyy-MM-dd')
   const minEndDate = format(
     watch('startDate') ||
     (salesStartTime ? new Date(salesStartTime) : new Date()),
@@ -58,7 +58,8 @@ const ShowTicketInfoFormContent = ({
                         clearErrors('startDate');
 
                         if (new Date(event.target.value) < new Date(minStartDate)) {
-                          setError('startDate', { type: 'min', message: '공연 생성일 이후의 날짜를 선택해 주세요.' });
+                          const message = showCreatedAt ? '공연 등록일 이후의 날짜를 선택해 주세요.' : '오늘 이후의 날짜를 선택해 주세요.';
+                          setError('startDate', { type: 'min', message });
                           return
                         }
                       }}
@@ -99,12 +100,12 @@ const ShowTicketInfoFormContent = ({
                         clearErrors('endDate');
 
                         if (new Date(event.target.value) < new Date(minEndDate)) {
-                          setError('endDate', { type: 'min', message: '시작일 이후로 선택 가능합니다.' });
+                          setError('endDate', { type: 'min', message: '시작일부터 선택 가능합니다.' });
                           return
                         }
 
                         if (new Date(event.target.value) > new Date(maxDate)) {
-                          setError('endDate', { type: 'max', message: '공연 전날까지 선택 가능합니다.' });
+                          setError('endDate', { type: 'max', message: '공연일 이전까지 선택 가능합니다.' });
                           return
                         }
                       }}
