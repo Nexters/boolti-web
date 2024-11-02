@@ -74,6 +74,8 @@ const ShowTicketInfoFormContent = ({
   }, [clearErrors, maxDate, minEndDate, setError])
 
   useEffect(() => {
+    if (!watch('startDate') || !watch('endDate')) return;
+
     validateStartDate(watch('startDate'));
     validateEndDate(watch('endDate'));
   }, [validateEndDate, validateStartDate, watch])
@@ -100,7 +102,7 @@ const ShowTicketInfoFormContent = ({
                       size="big"
                       onChange={(event) => {
                         onChange(event);
-                        validateStartDate(value);
+                        validateStartDate(event.target.value);
                       }}
                       onBlur={() => {
                         onBlur();
