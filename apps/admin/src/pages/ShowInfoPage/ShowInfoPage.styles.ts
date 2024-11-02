@@ -205,7 +205,7 @@ const ShowInfoPreviewSubmitButton = styled.button`
   border-radius: 4px;
 
   ${mq_lg} {
-    border-radius: none;
+    border-radius: 0;
   }
 `;
 
