@@ -89,7 +89,7 @@ const ShowTicketPage = () => {
                 form={showTicketForm}
                 showDate={format(show.date, 'yyyy-MM-dd')}
                 salesStartTime={format(showSalesInfo.salesStartTime, 'yyyy-MM-dd')}
-                salesMinStartDate={show.createdAt}
+                showCreatedAt={show.createdAt}
                 disabled={show.isEnded}
               />
             </Styled.ShowTicketFormContent>
