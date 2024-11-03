@@ -29,6 +29,8 @@ const ShowInfoDetail = ({
     date,
     startTime,
     runningTime,
+    salesStartTime,
+    salesEndTime,
     placeName,
     placeStreetAddress,
     placeDetailAddress,
@@ -44,10 +46,18 @@ const ShowInfoDetail = ({
     <Styled.ShowInfo>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
+          <Styled.ShowInfoTitle>티켓 판매</Styled.ShowInfoTitle>
+        </Styled.ShowInfoTitleContainer>
+        <Styled.ShowInfoDescription>
+          {salesStartTime} - {salesEndTime}
+        </Styled.ShowInfoDescription>
+      </Styled.ShowInfoGroup>
+      <Styled.ShowInfoGroup>
+        <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>일시</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowInfoDescription>
-          {date} / {startTime} ({runningTime}분)
+          <span>{date} / {startTime}</span><Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
         </Styled.ShowInfoDescription>
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
@@ -99,7 +109,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 내용</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
           {hasNoticePage && (
             <Styled.ShowInfoTitleTextButton
               type="button"
@@ -120,7 +130,7 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>공연 관련 문의</Styled.ShowInfoTitle>
+          <Styled.ShowInfoTitle>주최</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>

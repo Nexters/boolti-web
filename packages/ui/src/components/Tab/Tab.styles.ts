@@ -2,8 +2,6 @@ import styled from '@emotion/styled';
 
 const Tab = styled.div`
   display: flex;
-  padding: 0 20px;
-  margin: 40px -20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
 `;
 

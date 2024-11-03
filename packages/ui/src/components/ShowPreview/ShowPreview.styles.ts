@@ -13,7 +13,7 @@ const ShowPreview = styled.div`
 const ShowPreviewHeader = styled.div`
   padding: 0 38px;
   padding-top: 16px;
-  padding-bottom: 30px;
+  padding-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -38,6 +38,36 @@ const ShowPreviewHeader = styled.div`
   }
 `;
 
+const ShowPreviewNavbar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  padding: 0 20px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const LogoLink = styled.a`
+  display: flex;
+  align-items: center;
+  cursor: ${({ href }) => href ? 'pointer' : 'default'};
+
+  svg {
+    width: 53px;
+    height: 24px;
+  }
+`;
+
+const ShareButton = styled.button`
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+  }
+`;
+
 const ShowImage = styled.img`
   width: 100%;
   height: auto;
@@ -52,7 +82,7 @@ const ShowName = styled.h2`
 `;
 
 const ShowPreviewContent = styled.div`
-  padding: 40px 20px 0;
+  padding: 20px 20px 0;
   position: relative;
 `;
 
@@ -130,10 +160,6 @@ const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
   padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
 
-  &:first-of-type {
-    padding-top: 0;
-  }
-
   &:last-of-type {
     border-bottom: none;
   }
@@ -201,7 +227,23 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     color: #46a6ff;
     text-decoration: underline;
   }
+
+  span {
+    margin-right: 6px;
+  }
 `;
+
+const ShowInfoDescriptionBadge = styled.div`
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g50};
+  ${({ theme }) => theme.typo.c1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  padding: 3px 12px;
+  border-radius: 999px;
+  position: relative;
+  top: -1.5px;
+`
 
 const ShowInfoBox = styled.div`
   height: 56px;
@@ -330,6 +372,9 @@ const EmptyCastTeamDescription = styled.p`
 export default {
   ShowPreview,
   ShowPreviewHeader,
+  ShowPreviewNavbar,
+  LogoLink,
+  ShareButton,
   ShowImage,
   ShowName,
   ShowPreviewContent,
@@ -346,6 +391,7 @@ export default {
   ShowInfoTitleTextButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
+  ShowInfoDescriptionBadge,
   ShowInfoBox,
   ShowHost,
   ShowHostName,

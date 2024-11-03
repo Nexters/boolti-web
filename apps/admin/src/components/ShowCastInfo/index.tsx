@@ -1,7 +1,7 @@
 import { useDialog } from '@boolti/ui';
 
 import Styled from './ShowCastInfo.styles';
-import { EditIcon, ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
+import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon } from '@boolti/icon';
 import { useState } from 'react';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
@@ -71,9 +71,13 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           >
             {members.map((member) => (
               <Styled.CastItem key={member.id}>
-                <Styled.UserImage
-                  style={{ '--imgPath': `url(${member.userImgPath})` } as React.CSSProperties}
-                />
+                {member.userImgPath ? (
+                  <Styled.UserImage
+                    style={{ '--imgPath': `url(${member.userImgPath})` } as React.CSSProperties}
+                  />
+                ) : (
+                  <UserIcon size={32} />
+                )}
                 <Styled.Username>{member.userNickname}</Styled.Username>
                 <Styled.Rolename>({member.roleName})</Styled.Rolename>
               </Styled.CastItem>

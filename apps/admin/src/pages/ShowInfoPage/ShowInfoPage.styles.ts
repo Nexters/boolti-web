@@ -61,13 +61,14 @@ const ShowInfoPreviewContainer = styled.div`
 const ShowInfoPreview = styled.div`
   flex: 1;
   display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
   overflow-y: auto;
+  min-height: calc(100% - 84px);
 
   ${mq_lg} {
     overflow-y: initial;
+    justify-content: center;
+    align-items: center;
   }
 `;
 
@@ -79,7 +80,6 @@ const ShowInfoPreviewMobile = styled.div`
   height: 100%;
   overflow-y: auto;
   z-index: 999;
-  padding-bottom: 84px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
 
   ${mq_lg} {
@@ -130,10 +130,11 @@ const ShowInfoPreviewFooter = styled.div`
   padding: 20px 16px;
   gap: 8px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
-  position: fixed;
+  position: sticky;
   bottom: 0;
   left: 0;
   width: 100%;
+  z-index: 1;
 
   ${mq_lg} {
     height: 52px;
@@ -180,7 +181,7 @@ const ShowInfoPreviewSubmitButton = styled.button`
   border-radius: 4px;
 
   ${mq_lg} {
-    border-radius: none;
+    border-radius: 0;
   }
 `;
 

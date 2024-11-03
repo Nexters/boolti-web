@@ -15,31 +15,6 @@ const ShowPreviewContainer = styled.div`
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
 `;
 
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 44px;
-  padding: 0 20px;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
-`;
-
-const HeaderLogoLink = styled.a`
-  display: flex;
-  align-items: center;
-
-  svg {
-    width: 53px;
-    height: 24px;
-  }
-`;
-
-const ShareButton = styled.button`
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-`;
-
 const FooterWrapper = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.g100};
 `;
@@ -157,9 +132,6 @@ const DialogDescription = styled.p`
 export default {
   ShowPreviewPage,
   ShowPreviewContainer,
-  Header,
-  HeaderLogoLink,
-  ShareButton,
   FooterWrapper,
   ReservationButtonWrapper,
   ReservationButton,

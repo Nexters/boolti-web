@@ -26,6 +26,7 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
+import { checkIsWebView } from '~/utils/webview';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -33,6 +34,7 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
+  const isWebView = checkIsWebView(window.navigator.userAgent);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -104,19 +106,21 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   return (
     <>
       <Styled.ShowAddPage>
-        <Styled.HeaderContainer>
-          <Styled.Header>
-            <Styled.BackButton
-              type="button"
-              onClick={() => {
-                navigate(PATH.HOME);
-              }}
-            >
-              <ArrowLeftIcon />
-            </Styled.BackButton>
-            <Styled.HeaderText>홈</Styled.HeaderText>
-          </Styled.Header>
-        </Styled.HeaderContainer>
+        {!isWebView && (
+          <Styled.HeaderContainer>
+            <Styled.Header>
+              <Styled.BackButton
+                type="button"
+                onClick={() => {
+                  navigate(PATH.HOME);
+                }}
+              >
+                <ArrowLeftIcon />
+              </Styled.BackButton>
+              <Styled.HeaderText>홈</Styled.HeaderText>
+            </Styled.Header>
+          </Styled.HeaderContainer>
+        )}
         <Styled.CardContainer>
           <Styled.Card>
             {step === 'info' && (
@@ -138,7 +142,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                   <Styled.CardDescription>
                     등록하려는 공연의 정보를 입력해 주세요.
                     <br />
-                    공연 정보는 공연일 하루 전까지 수정할 수 있어요.
+                    입력한 정보는 등록 후에도 수정할 수 있어요.
                   </Styled.CardDescription>
                   <Styled.ShowAddForm onSubmit={showInfoForm.handleSubmit(onSubmitInfoForm)}>
                     <Styled.ShowInfoFormContent>
@@ -348,7 +352,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             <Styled.MobileDescription>
               등록하려는 공연의 정보를 입력해 주세요.
               <br />
-              공연 정보는 공연일 하루 전까지 수정할 수 있어요.
+              입력한 정보는 등록 후에도 수정할 수 있어요.
             </Styled.MobileDescription>
             <Styled.ShowAddForm onSubmit={showInfoForm.handleSubmit(onSubmitInfoForm)}>
               <Styled.ShowInfoFormContent>
@@ -373,6 +377,34 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               </Styled.ShowInfoFormContent>
               <Styled.ShowInfoFormContent>
                 <ShowDetailInfoFormContent form={showInfoForm} />
+              </Styled.ShowInfoFormContent>
+              <Styled.ShowInfoFormContent>
+                <ShowCastInfoFormContent
+                  onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                    setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                    return new Promise((reslve) => reslve());
+                  }}
+                />
+                {showCastInfo.map((info, index) => (
+                  <ShowCastInfo
+                    key={index}
+                    showCastInfo={info}
+                    onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                      setShowCastInfo((prev) =>
+                        prev.map((prevCastInfo, currentIndex) =>
+                          index === currentIndex ? showCastInfoFormInput : prevCastInfo,
+                        ),
+                      );
+                      return new Promise((reslve) => reslve());
+                    }}
+                    onDelete={() => {
+                      setShowCastInfo((prev) =>
+                        prev.filter((_, currentIndex) => index !== currentIndex),
+                      );
+                      return new Promise((reslve) => reslve());
+                    }}
+                  />
+                ))}
               </Styled.ShowInfoFormContent>
               <Button
                 size="bold"

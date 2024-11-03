@@ -44,6 +44,7 @@ const ShowInfoPage = () => {
   const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
   const showPreviewRef = useRef<HTMLDivElement>(null);
+  const showPreviewMobileRef = useRef<HTMLDivElement>(null);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
@@ -225,7 +226,6 @@ const ShowInfoPage = () => {
             <Styled.ShowInfoFormDivider />
             <Styled.ShowInfoFormContent>
               <ShowCastInfoFormContent
-                hasPreviousCastInfo={castTeamList.length > 0}
                 onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
                   await postCastTeams.mutateAsync(
                     {
@@ -377,7 +377,7 @@ const ShowInfoPage = () => {
             </Drawer>
             {previewDrawerOpen && (
               <Portal>
-                <Styled.ShowInfoPreviewMobile>
+                <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
                   <Styled.ShowInfoPreview>
                     <ShowPreview
                       show={{
@@ -403,6 +403,7 @@ const ShowInfoPage = () => {
                       }}
                       showCastTeams={castTeamList}
                       hasNoticePage
+                      containerRef={showPreviewMobileRef}
                     />
                   </Styled.ShowInfoPreview>
                   <Styled.ShowInfoPreviewFooter>

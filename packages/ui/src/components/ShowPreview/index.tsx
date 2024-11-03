@@ -1,16 +1,16 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import { useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 
 import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
-import ShowTicketPeriod from './ShowTicketPeriod';
-import { useRef, useState } from 'react';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowPreviewProps {
@@ -38,20 +38,24 @@ interface ShowPreviewProps {
     }[];
   }>;
   hasNoticePage?: boolean;
+  logoLinkHref?: string;
   containerRef?: React.RefObject<HTMLDivElement>;
   onClickLink?: () => void;
   onClickLinkMobile?: () => void;
+  onClickShareButton?: () => void;
 }
 
 const ShowPreview = ({
   show,
   showCastTeams,
   hasNoticePage,
+  logoLinkHref,
   containerRef,
   onClickLink,
   onClickLinkMobile,
+  onClickShareButton
 }: ShowPreviewProps) => {
-  const { images, name, salesStartTime, salesEndTime } = show;
+  const { images, name } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const containerScrollTop = useRef<number | null>(null);
@@ -74,6 +78,14 @@ const ShowPreview = ({
 
   return (
     <Styled.ShowPreview>
+      <Styled.ShowPreviewNavbar>
+        <Styled.LogoLink href={logoLinkHref}>
+          <BooltiDark />
+        </Styled.LogoLink>
+        <Styled.ShareButton onClick={onClickShareButton} disabled={!onClickShareButton}>
+          <ShareIcon />
+        </Styled.ShareButton>
+      </Styled.ShowPreviewNavbar>
       <Styled.ShowPreviewHeader>
         <Swiper
           style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
@@ -96,7 +108,6 @@ const ShowPreview = ({
         <Styled.ShowName>{name}</Styled.ShowName>
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
-        <ShowTicketPeriod salesStartTime={salesStartTime} salesEndTime={salesEndTime} />
         <Tab
           tabItems={[
             {
