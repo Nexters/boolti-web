@@ -1,5 +1,4 @@
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
-import { BooltiDark, ShareIcon } from '@boolti/icon';
 import { Footer, ShowPreview, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
