@@ -4,6 +4,7 @@ import 'swiper/css/pagination';
 import { useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 
@@ -11,7 +12,6 @@ import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
-import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 interface ShowPreviewProps {
   show: {
