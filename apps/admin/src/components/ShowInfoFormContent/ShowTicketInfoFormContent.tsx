@@ -21,64 +21,77 @@ const ShowTicketInfoFormContent = ({
   salesStartTime,
   disabled,
 }: ShowTicketInfoFormContentProps) => {
-  const { watch, control, formState: { errors }, setError, clearErrors } = form;
+  const {
+    watch,
+    control,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = form;
 
-  const minStartDate = format(showCreatedAt ?? new Date(), 'yyyy-MM-dd')
+  const minStartDate = format(showCreatedAt ?? new Date(), 'yyyy-MM-dd');
   const minEndDate = format(
-    watch('startDate') ||
-    (salesStartTime ? new Date(salesStartTime) : new Date()),
+    watch('startDate') || (salesStartTime ? new Date(salesStartTime) : new Date()),
     'yyyy-MM-dd',
-  )
+  );
   const maxDate = format(
     sub(showDate ? new Date(showDate) : new Date(), { days: 1 }),
     'yyyy-MM-dd',
-  )
+  );
 
-  const validateStartDate = useCallback((value: string) => {
-    if (!value) {
-      setError('startDate', { type: 'required', message: '필수 입력사항입니다.' });
-      return
-    }
+  const validateStartDate = useCallback(
+    (value: string) => {
+      if (!value) {
+        setError('startDate', { type: 'required', message: '필수 입력사항입니다.' });
+        return;
+      }
 
-    if (new Date(value) > new Date(maxDate)) {
-      setError('startDate', { type: 'max', message: '공연일 이전까지 선택 가능합니다.' });
-      return
-    }
+      if (new Date(value) > new Date(maxDate)) {
+        setError('startDate', { type: 'max', message: '공연일 이전까지 선택 가능합니다.' });
+        return;
+      }
 
-    if (new Date(value) < new Date(minStartDate)) {
-      const message = showCreatedAt ? `공연 등록일부터 선택 가능합니다. (${format(showCreatedAt, 'yy.MM.dd')})` : '오늘부터 선택 가능합니다.';
-      setError('startDate', { type: 'min', message });
-      return
-    }
+      if (new Date(value) < new Date(minStartDate)) {
+        const message = showCreatedAt
+          ? `공연 등록일부터 선택 가능합니다. (${format(showCreatedAt, 'yy.MM.dd')})`
+          : '오늘부터 선택 가능합니다.';
+        setError('startDate', { type: 'min', message });
+        return;
+      }
 
-    clearErrors('startDate')
-  }, [clearErrors, maxDate, minStartDate, setError, showCreatedAt])
+      clearErrors('startDate');
+    },
+    [clearErrors, maxDate, minStartDate, setError, showCreatedAt],
+  );
 
-  const validateEndDate = useCallback((value: string) => {
-    if (!value) {
-      setError('endDate', { type: 'required', message: '필수 입력사항입니다.' });
-      return
-    }
+  const validateEndDate = useCallback(
+    (value: string) => {
+      if (!value) {
+        setError('endDate', { type: 'required', message: '필수 입력사항입니다.' });
+        return;
+      }
 
-    if (new Date(value) > new Date(maxDate)) {
-      setError('endDate', { type: 'max', message: '공연일 이전까지 선택 가능합니다.' });
-      return
-    }
+      if (new Date(value) > new Date(maxDate)) {
+        setError('endDate', { type: 'max', message: '공연일 이전까지 선택 가능합니다.' });
+        return;
+      }
 
-    if (new Date(value) < new Date(minEndDate)) {
-      setError('endDate', { type: 'min', message: '시작일부터 선택 가능합니다.' });
-      return
-    }
+      if (new Date(value) < new Date(minEndDate)) {
+        setError('endDate', { type: 'min', message: '시작일부터 선택 가능합니다.' });
+        return;
+      }
 
-    clearErrors('endDate')
-  }, [clearErrors, maxDate, minEndDate, setError])
+      clearErrors('endDate');
+    },
+    [clearErrors, maxDate, minEndDate, setError],
+  );
 
   useEffect(() => {
     if (!watch('startDate') || !watch('endDate')) return;
 
     validateStartDate(watch('startDate'));
     validateEndDate(watch('endDate'));
-  }, [validateEndDate, validateStartDate, watch])
+  }, [validateEndDate, validateStartDate, watch]);
 
   return (
     <Styled.ShowInfoFormGroup>

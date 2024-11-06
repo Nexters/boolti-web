@@ -34,6 +34,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:packages/api"\
     },\
     {\
+      "name": "@boolti/bridge",\
+      "reference": "workspace:packages/birdge"\
+    },\
+    {\
       "name": "@boolti/eslint-config",\
       "reference": "workspace:packages/config-eslint"\
     },\
@@ -54,6 +58,7 @@ const RAW_RUNTIME_STATE =
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
     ["@boolti/api", ["workspace:packages/api"]],\
+    ["@boolti/bridge", ["workspace:packages/birdge"]],\
     ["@boolti/eslint-config", ["workspace:packages/config-eslint"]],\
     ["@boolti/icon", ["workspace:packages/icon"]],\
     ["@boolti/typescript-config", ["workspace:packages/config-typescript"]],\
@@ -2940,6 +2945,20 @@ const RAW_RUNTIME_STATE =
           ["ky", "npm:1.2.0"],\
           ["react", "npm:18.2.0"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
+          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["@boolti/bridge", [\
+      ["workspace:packages/birdge", {\
+        "packageLocation": "./packages/birdge/",\
+        "packageDependencies": [\
+          ["@boolti/bridge", "workspace:packages/birdge"],\
+          ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
+          ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["@types/react-dom", "npm:18.2.18"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
         ],\
         "linkType": "SOFT"\
@@ -8537,6 +8556,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["admin", "workspace:apps/admin"],\
           ["@boolti/api", "workspace:packages/api"],\
+          ["@boolti/bridge", "workspace:packages/birdge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@boolti/api": "*",
+    "@boolti/bridge": "*",
     "@boolti/icon": "*",
     "@boolti/ui": "*",
     "@emotion/react": "^11.11.3",

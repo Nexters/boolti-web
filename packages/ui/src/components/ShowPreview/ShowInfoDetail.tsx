@@ -57,7 +57,10 @@ const ShowInfoDetail = ({
           <Styled.ShowInfoTitle>일시</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowInfoDescription>
-          <span>{date} / {startTime}</span><Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
+          <span>
+            {date} / {startTime}
+          </span>
+          <Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
         </Styled.ShowInfoDescription>
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
@@ -111,10 +114,7 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
           {hasNoticePage && (
-            <Styled.ShowInfoTitleTextButton
-              type="button"
-              onClick={onClickViewNotice}
-            >
+            <Styled.ShowInfoTitleTextButton type="button" onClick={onClickViewNotice}>
               전체보기
             </Styled.ShowInfoTitleTextButton>
           )}

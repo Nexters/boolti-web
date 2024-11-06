@@ -1,12 +1,12 @@
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Button } from '@boolti/ui';
+import { checkIsWebView } from '@boolti/bridge';
 import { useNavigate } from 'react-router-dom';
 
 import congratulationSvgUrl from '~/assets/svg/congratulation.svg';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddCompletePage.styles';
-import { checkIsWebView } from '~/utils/webview';
 
 const ShowAddCompletePage = () => {
   const navigate = useNavigate();

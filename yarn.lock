@@ -1679,6 +1679,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@boolti/bridge@npm:*, @boolti/bridge@workspace:packages/birdge":
+  version: 0.0.0-use.local
+  resolution: "@boolti/bridge@workspace:packages/birdge"
+  dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
+    "@types/react": "npm:^18.2.43"
+    "@types/react-dom": "npm:^18.2.17"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@boolti/eslint-config@npm:*, @boolti/eslint-config@workspace:packages/config-eslint":
   version: 0.0.0-use.local
   resolution: "@boolti/eslint-config@workspace:packages/config-eslint"
@@ -5364,6 +5376,7 @@ __metadata:
   resolution: "admin@workspace:apps/admin"
   dependencies:
     "@boolti/api": "npm:*"
+    "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"

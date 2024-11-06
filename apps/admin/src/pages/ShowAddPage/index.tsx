@@ -26,7 +26,7 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView } from '~/utils/webview';
+import { checkIsWebView } from '@boolti/bridge';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
