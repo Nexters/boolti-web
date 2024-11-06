@@ -326,17 +326,19 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.CardContainer>
       </Styled.ShowAddPage>
       <Styled.MobileShowAddPage>
-        <Styled.MobileHeader>
-          <Styled.BackButton
-            type="button"
-            onClick={() => {
-              navigate(PATH.HOME);
-            }}
-          >
-            <ArrowLeftIcon />
-          </Styled.BackButton>
-          <Styled.MobileHeaderText>공연 등록</Styled.MobileHeaderText>
-        </Styled.MobileHeader>
+        {!isWebView && (
+          <Styled.MobileHeader>
+            <Styled.BackButton
+              type="button"
+              onClick={() => {
+                navigate(PATH.HOME);
+              }}
+            >
+              <ArrowLeftIcon />
+            </Styled.BackButton>
+            <Styled.MobileHeaderText>공연 등록</Styled.MobileHeaderText>
+          </Styled.MobileHeader>
+        )}
         {step === 'info' && (
           <Styled.MobileContent>
             <Styled.ProcessIndicator>
