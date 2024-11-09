@@ -62,8 +62,8 @@ const toTargets = {
 const label = {
   INFO: '공연 기본 정보',
   TICKET: '티켓 관리',
-  RESERVATION: '방문자 관리',
-  ENTRANCE: '입장 관리',
+  RESERVATION: '결제 관리',
+  ENTRANCE: '방문자 관리',
   SETTLEMENT: '정산 관리',
 };
 
