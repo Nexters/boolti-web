@@ -194,9 +194,15 @@ const ShowReservationPage = () => {
                   phoneNumber: reservation.paymentInfo?.payerPhoneNumber ?? '',
                   ticketName: reservation.salesTicketType?.ticketName ?? '',
                   count: reservation.tickets.length,
-                  price: (reservation.salesTicketType?.price ?? 0) * reservation.tickets.length,
-                  isCanceled: !!reservation.cancelInfo,
-                  isNotGiftRegister: !!reservation.gift && !reservation.gift?.done,
+                  type: reservation.cancelInfo
+                    ? 'LINE_THROUGH'
+                    : !!reservation.gift && !reservation.gift.done
+                      ? 'DISABLED'
+                      : 'NORMAL',
+                  status:
+                    !!reservation.gift && !reservation.gift.done
+                      ? '선물 미등록'
+                      : `${reservation.salesTicketType?.price.toLocaleString()}원`,
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={emptyLabel[selectedTicketStatus]}

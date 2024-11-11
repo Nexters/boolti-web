@@ -180,15 +180,12 @@ const ShowEnterancePage = () => {
               <MobileCardList
                 items={reservations.map((reservation) => ({
                   id: reservation.ticketId,
-                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
                   name: reservation.reservationName,
                   date: reservation.enteredAt,
                   phoneNumber: reservation.reservationPhoneNumber,
                   ticketName: reservation.ticketName,
-                  count: 1,
-                  price: 0,
-                  isCanceled: false,
-                  isNotGiftRegister: false,
+                  type: reservation.entered ? 'NORMAL' : 'DISABLED',
+                  status: reservation.entered ? reservation.enteredAt : '미방문',
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={isEnteredTicket ? '입장 관객이 없어요.' : '미입장 관객이 없어요.'}

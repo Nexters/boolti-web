@@ -8,15 +8,14 @@ import Styled from './MobileCardList.style';
 
 type Item = {
   id: number;
-  badgeText: string;
+  badgeText?: string;
   name: string;
   phoneNumber: string;
   ticketName: string;
-  price: number;
-  isCanceled: boolean;
-  isNotGiftRegister: boolean;
+  type: 'DISABLED' | 'LINE_THROUGH' | 'NORMAL';
+  status: string;
   date?: string;
-  count: number;
+  count?: number;
 };
 
 interface Props {
@@ -32,10 +31,14 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
   const Elements = items.map((item) => {
     return (
       <Styled.CardItem key={item.id}>
-        <Styled.Row>
-          <Badge colorTheme="grey">{item.badgeText}</Badge>
-          {item.date && <Styled.DateText>{format(item.date, 'yyyy/MM/dd HH:mm')}</Styled.DateText>}
-        </Styled.Row>
+        {item.badgeText && (
+          <Styled.Row>
+            <Badge colorTheme="grey">{item.badgeText}</Badge>
+            {item.date && (
+              <Styled.DateText>{format(item.date, 'yyyy/MM/dd HH:mm')}</Styled.DateText>
+            )}
+          </Styled.Row>
+        )}
         <Styled.Row>
           <Styled.UserInfoText
             dangerouslySetInnerHTML={{
@@ -44,15 +47,10 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
           ></Styled.UserInfoText>
           <Styled.TicketDetailTextWrap>
             <Styled.TicketInfoText>
-              {item.ticketName} · {item.count}매
+              {item.ticketName}
+              {item.count ? ` · ${item.count}매` : ''}
             </Styled.TicketInfoText>
-            <Styled.TicketPriceText
-              type={
-                item.isCanceled ? 'CANCELED' : item.isNotGiftRegister ? 'NOT_REGISTERED' : 'PRICE'
-              }
-            >
-              {item.isNotGiftRegister ? '선물 미등록' : `${item.price.toLocaleString()}원`}
-            </Styled.TicketPriceText>
+            <Styled.TicketStatusText type={item.type}>{item.status}</Styled.TicketStatusText>
           </Styled.TicketDetailTextWrap>
         </Styled.Row>
       </Styled.CardItem>
