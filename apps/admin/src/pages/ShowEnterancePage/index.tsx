@@ -186,6 +186,9 @@ const ShowEnterancePage = () => {
                   phoneNumber: reservation.reservationPhoneNumber,
                   ticketName: reservation.ticketName,
                   count: 1,
+                  price: 0,
+                  isCanceled: false,
+                  isNotGiftRegister: false,
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={isEnteredTicket ? '입장 관객이 없어요.' : '미입장 관객이 없어요.'}
