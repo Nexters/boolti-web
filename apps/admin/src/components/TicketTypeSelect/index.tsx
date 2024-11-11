@@ -24,7 +24,6 @@ const TicketTypeSelect = ({ onChange, value }: Props) => {
   const theme = useTheme();
   const width = useDeviceWidth();
   const isMobile = width < parseInt(theme.breakpoint.mobile, 10);
-
   const { open, close } = useDialog();
   return (
     <Select
