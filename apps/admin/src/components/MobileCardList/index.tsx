@@ -12,6 +12,7 @@ type Item = {
   name: string;
   phoneNumber: string;
   ticketName: string;
+  price: number;
   date?: string;
   count: number;
 };
@@ -39,9 +40,12 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
               __html: boldText(`${item.name} (${formatPhoneNumber(item.phoneNumber)})`, searchText),
             }}
           ></Styled.UserInfoText>
-          <Styled.TicketInfoText>
-            {item.ticketName} · {item.count}매
-          </Styled.TicketInfoText>
+          <Styled.TicketDetailTextWrap>
+            <Styled.TicketInfoText>
+              {item.ticketName} · {item.count}매
+            </Styled.TicketInfoText>
+            <Styled.TicketPriceText>{item.price.toLocaleString()}원</Styled.TicketPriceText>
+          </Styled.TicketDetailTextWrap>
         </Styled.Row>
       </Styled.CardItem>
     );

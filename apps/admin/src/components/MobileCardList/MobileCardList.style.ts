@@ -48,8 +48,17 @@ const DateText = styled.div`
 `;
 
 const UserInfoText = styled.div`
+  width: 100%;
+  text-align: left;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const TicketDetailTextWrap = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const TicketInfoText = styled.div`
@@ -57,9 +66,24 @@ const TicketInfoText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
+const TicketPriceText = styled.div`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
 const ResetButton = styled.button`
   font-weight: 600;
   text-decoration: underline;
 `;
 
-export default { Container, CardItem, Row, DateText, UserInfoText, TicketInfoText, ResetButton };
+export default {
+  Container,
+  CardItem,
+  Row,
+  DateText,
+  UserInfoText,
+  TicketInfoText,
+  ResetButton,
+  TicketDetailTextWrap,
+  TicketPriceText,
+};

@@ -1,8 +1,8 @@
 import {
   TicketStatus,
   useShowDetail,
-  useShowReservations,
   useShowReservationSummary,
+  useShowReservationWithTickets,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useEffect, useState } from 'react';
@@ -42,18 +42,20 @@ const ShowReservationPage = () => {
 
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationData, isLoading: isReservationPagesLoading } = useShowReservations(
-    showId,
-    currentPage,
-    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
-    selectedTicketStatus,
-    debouncedSearchText,
-  );
+  const { data: reservationData, isLoading: isReservationPagesLoading } =
+    useShowReservationWithTickets(
+      showId,
+      currentPage,
+      selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+      selectedTicketStatus,
+      debouncedSearchText,
+    );
   const totalPages = reservationData?.totalPages ?? 0;
   const reservations = (reservationData?.content ?? []).filter(
-    ({ ticketStatus, ticketType }) =>
-      ticketStatus === selectedTicketStatus &&
-      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+    ({ paymentManagementStatus, salesTicketType }) =>
+      paymentManagementStatus === selectedTicketStatus &&
+      (selectedTicketType.value === 'ALL' ||
+        salesTicketType?.ticketType === selectedTicketType.value),
   );
 
   const onClickReset = () => {
@@ -185,12 +187,14 @@ const ShowReservationPage = () => {
               </Styled.TableContainer>
               <MobileCardList
                 items={reservations.map((reservation) => ({
-                  id: reservation.ticketId,
-                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
-                  name: reservation.reservationName,
-                  phoneNumber: reservation.reservationPhoneNumber,
-                  ticketName: reservation.ticketName,
-                  count: 1,
+                  id: reservation.csReservationId,
+                  badgeText:
+                    reservation.salesTicketType?.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
+                  name: reservation.paymentInfo?.payerName ?? '',
+                  phoneNumber: reservation.paymentInfo?.payerPhoneNumber ?? '',
+                  ticketName: reservation.salesTicketType?.ticketName ?? '',
+                  count: reservation.tickets.length,
+                  price: (reservation.salesTicketType?.price ?? 0) * reservation.tickets.length,
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={emptyLabel[selectedTicketStatus]}

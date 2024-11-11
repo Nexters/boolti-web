@@ -1,5 +1,6 @@
-import { ReservationResponse, TicketStatus } from '@boolti/api';
+import { ReservationWithTicketsResponse, TicketStatus } from '@boolti/api';
 import {
+  ColumnDef,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
@@ -12,86 +13,95 @@ import { formatPhoneNumber } from '~/utils/format';
 
 import Styled from './ReservationTable.styles';
 
-const columnHelper = createColumnHelper<ReservationResponse>();
+const columnHelper = createColumnHelper<ReservationWithTicketsResponse>();
 
-const columns = [
-  columnHelper.accessor('csTicketId', {
-    header: '티켓 번호',
+const getColumns = (ticketStatus: TicketStatus) => [
+  columnHelper.accessor('csReservationId', {
+    header: '주문 번호',
   }),
-  columnHelper.accessor('ticketType', {
-    header: '티켓 종류',
-    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
-  }),
-  columnHelper.accessor('ticketName', {
-    header: '티켓 이름',
-  }),
-  columnHelper.accessor('reservationName', {
-    header: '방문자 이름',
+  columnHelper.accessor('paymentInfo.payerName', {
+    header: '결제자명',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
-        <span dangerouslySetInnerHTML={{ __html: boldText(props.getValue(), searchText) }}></span>
+        <span
+          dangerouslySetInnerHTML={{ __html: boldText(props.getValue() ?? '-', searchText) }}
+        ></span>
       );
     },
   }),
-  columnHelper.accessor('reservationPhoneNumber', {
+  columnHelper.accessor('paymentInfo.payerPhoneNumber', {
     header: '연락처',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
         <span
           dangerouslySetInnerHTML={{
-            __html: boldText(formatPhoneNumber(props.getValue()), searchText),
+            __html: boldText(formatPhoneNumber(props.getValue() ?? '-'), searchText),
           }}
         ></span>
       );
     },
   }),
-  columnHelper.accessor('csReservationId', {
-    header: '주문 번호',
-  }),
-  columnHelper.accessor('ticketPrice', {
-    header: (props) =>
-      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
-        ? '환불 금액'
-        : '결제 금액',
-    cell: (props) => `${props.getValue().toLocaleString()}원`,
-  }),
-  columnHelper.accessor('means', {
-    header: (props) =>
-      (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
-        ? '환불 방법'
-        : '결제 방법',
+  columnHelper.accessor('salesTicketType.ticketType', {
+    header: '티켓종류',
     cell: (props) => {
       switch (props.getValue()) {
-        case 'ACCOUNT_TRANSFER':
-          return '계좌이체';
-        case 'CARD':
-          return '카드';
-        case 'FREE':
-          return '-';
-        case 'SIMPLE_PAYMENT':
-          return '간편결제';
+        case 'INVITE':
+          return '초청 티켓';
+        case 'SALE':
+          return '일반 티켓';
       }
     },
   }),
+  columnHelper.accessor('salesTicketType.ticketName', {
+    header: '티켓명',
+  }),
+  columnHelper.accessor('tickets', {
+    header: '매수',
+    cell: (props) => `${props.getValue().length}매`,
+  }),
+  columnHelper.accessor((row) => (row.salesTicketType?.price ?? 0) * row.tickets.length, {
+    header: ticketStatus === 'CANCEL' ? '취소 금액' : '결제 금액',
+    cell: (props) => `${props.getValue().toLocaleString()}원`,
+  }),
+  ...(ticketStatus === 'COMPLETE'
+    ? [
+        columnHelper.accessor(
+          (row) =>
+            row.tickets.length > 1
+              ? `${row.tickets[0].csTicketId} 외 ${row.tickets.length - 1}개`
+              : row.tickets[0]?.csTicketId,
+          {
+            header: '티켓 번호',
+          },
+        ),
+      ]
+    : []),
   columnHelper.accessor(
-    (props) =>
-      props.ticketStatus === 'CANCEL' && props.canceledAt ? props.canceledAt : props.ticketIssuedAt,
+    (row) => {
+      if (ticketStatus === 'CANCEL') {
+        return row.cancelInfo?.canceledAt;
+      }
+
+      return row.createdAt;
+    },
     {
-      id: 'at',
-      header: (props) =>
-        (props.table.options.meta as { ticketStatus: TicketStatus }).ticketStatus === 'CANCEL'
-          ? '환불일시'
-          : '발권일시',
-      cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
+      header: ticketStatus === 'CANCEL' ? '취소 일시' : '결제 일시',
+      cell: (props) => {
+        const value = props.getValue();
+        if (value) {
+          return format(value, 'yyyy/MM/dd HH:mm');
+        }
+        return '-';
+      },
     },
   ),
 ];
 
 interface Props {
   emptyText: string;
-  data: ReservationResponse[];
+  data: ReservationWithTicketsResponse[];
   selectedTicketStatus: TicketStatus;
   searchText: string;
   onClickReset?: VoidFunction;
@@ -106,11 +116,10 @@ const ReservationTable = ({
 }: Props) => {
   const isSearchResult = searchText !== '';
   const table = useReactTable({
-    columns,
+    columns: getColumns(selectedTicketStatus),
     data,
     getCoreRowModel: getCoreRowModel(),
     meta: {
-      ticketStatus: selectedTicketStatus,
       searchText,
     },
   });
