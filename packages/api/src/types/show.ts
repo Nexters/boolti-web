@@ -117,6 +117,15 @@ export interface CancelInfoResponse {
   canceledAt: string;
 }
 
+export interface GiftResponseV2 {
+  /** 선물 ID */
+  id: number;
+  /** 선물 수신 완료 여부 */
+  done: boolean;
+  /** 선물 생성 일시 */
+  createdAt: string;
+}
+
 export interface ReservationWithTicketsResponse {
   /** 예매 ID */
   reservationId: number;
@@ -124,8 +133,8 @@ export interface ReservationWithTicketsResponse {
   csReservationId: number;
   /** 예매 결제 관리 상태 */
   paymentManagementStatus: TicketStatus;
-  /** 선물 여부 */
-  gift: boolean;
+  /** 선물 정보 선물이 아니면 null */
+  gift?: GiftResponseV2;
   /** 판매 티켓 타입 정보. 만약 삭제된 경우 null */
   salesTicketType?: SalesTicketTypeResponseV2;
   /** 티켓 정보 목록. */

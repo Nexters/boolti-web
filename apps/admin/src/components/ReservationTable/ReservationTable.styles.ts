@@ -100,6 +100,11 @@ const Item = styled.span`
   }
 `;
 
+const DisabledText = styled.span`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g30};
+`;
+
 const Empty = styled.div`
   display: flex;
   flex-direction: column;
@@ -146,6 +151,7 @@ export default {
   HeaderRow,
   Row,
   Item,
+  DisabledText,
   Empty,
   ResetButton,
   TooltipItemColumn,

@@ -102,18 +102,23 @@ const getColumns = (ticketStatus: TicketStatus) => [
     : []),
   columnHelper.accessor(
     (row) => {
-      if (ticketStatus === 'CANCEL') {
-        return row.cancelInfo?.canceledAt;
+      if (ticketStatus === 'CANCEL' && row.cancelInfo) {
+        return { type: 'date', value: row.cancelInfo.canceledAt };
       }
 
-      return row.createdAt;
+      return row.gift && !row.gift.done
+        ? { type: 'text', value: '아직 선물이 등록되지 않았습니다.' }
+        : { type: 'date', value: row.createdAt };
     },
     {
       header: ticketStatus === 'CANCEL' ? '취소 일시' : '결제 일시',
       cell: (props) => {
-        const value = props.getValue();
-        if (value) {
-          return format(value, 'yyyy/MM/dd HH:mm');
+        const { type, value } = props.getValue();
+        switch (type) {
+          case 'date':
+            return format(value, 'yyyy/MM/dd HH:mm');
+          case 'text':
+            return <Styled.DisabledText>{value}</Styled.DisabledText>;
         }
         return '-';
       },
