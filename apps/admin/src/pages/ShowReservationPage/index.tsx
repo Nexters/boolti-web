@@ -127,7 +127,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'COMPLETE'}
               >
-                결제 완료 <span>{completeCount}</span>
+                {isMobile ? '완료' : '결제 완료'} <span>{completeCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -136,7 +136,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'WAIT'}
               >
-                결제 대기 <span>{waitCount}</span>
+                {isMobile ? '대기' : '결제 대기'} <span>{waitCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -145,7 +145,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'CANCEL'}
               >
-                결제 취소 <span>{cancelCount}</span>
+                {isMobile ? '취소' : '결제 취소'} <span>{cancelCount}</span>
               </Styled.TicketReservationSummaryButton>
             </Styled.TicketReservationSummaryButtonContainer>
             <Styled.FilterContainer>
@@ -195,6 +195,8 @@ const ShowReservationPage = () => {
                   ticketName: reservation.salesTicketType?.ticketName ?? '',
                   count: reservation.tickets.length,
                   price: (reservation.salesTicketType?.price ?? 0) * reservation.tickets.length,
+                  isCanceled: !!reservation.cancelInfo,
+                  isNotGiftRegister: !!reservation.gift && !reservation.gift?.done,
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={emptyLabel[selectedTicketStatus]}

@@ -193,13 +193,13 @@ const ReservationTable = ({
       </Styled.Container>
       <Tooltip
         style={{
-          opacity: 0.85,
           backgroundColor: palette.grey.g90,
           filter: 'drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.10))',
           padding: '6px 8px',
           borderRadius: '4px',
           zIndex: 999,
         }}
+        opacity={0.85}
         anchorSelect=".ticket-tooltip"
         id="ticket-tooltip"
         place="bottom"
@@ -208,7 +208,7 @@ const ReservationTable = ({
           return (
             <Styled.TooltipItemColumn>
               {ticketIds.map((id, index) => (
-                <Styled.TooltipItemRow>
+                <Styled.TooltipItemRow key={id}>
                   <span>No.{index + 1}</span>
                   <span>{id}</span>
                 </Styled.TooltipItemRow>

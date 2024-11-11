@@ -13,6 +13,8 @@ type Item = {
   phoneNumber: string;
   ticketName: string;
   price: number;
+  isCanceled: boolean;
+  isNotGiftRegister: boolean;
   date?: string;
   count: number;
 };
@@ -44,7 +46,13 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
             <Styled.TicketInfoText>
               {item.ticketName} · {item.count}매
             </Styled.TicketInfoText>
-            <Styled.TicketPriceText>{item.price.toLocaleString()}원</Styled.TicketPriceText>
+            <Styled.TicketPriceText
+              type={
+                item.isCanceled ? 'CANCELED' : item.isNotGiftRegister ? 'NOT_REGISTERED' : 'PRICE'
+              }
+            >
+              {item.isNotGiftRegister ? '선물 미등록' : `${item.price.toLocaleString()}원`}
+            </Styled.TicketPriceText>
           </Styled.TicketDetailTextWrap>
         </Styled.Row>
       </Styled.CardItem>

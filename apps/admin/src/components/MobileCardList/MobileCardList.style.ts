@@ -66,9 +66,11 @@ const TicketInfoText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
-const TicketPriceText = styled.div`
+const TicketPriceText = styled.div<{ type: 'PRICE' | 'CANCELED' | 'NOT_REGISTERED' }>`
   ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g90};
+  color: ${({ theme, type }) =>
+    type === 'PRICE' ? theme.palette.grey.g90 : theme.palette.grey.g30};
+  text-decoration: ${({ type }) => (type === 'CANCELED' ? 'line-through' : undefined)};
 `;
 
 const ResetButton = styled.button`
