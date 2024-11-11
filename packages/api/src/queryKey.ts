@@ -287,7 +287,7 @@ export const showQueryKeys = createQueryKeys('show', {
       });
     },
   }),
-  reservationV2: (
+  reservationWithTickets: (
     showId: number,
     page: number,
     ticketType: TicketType | undefined = undefined,

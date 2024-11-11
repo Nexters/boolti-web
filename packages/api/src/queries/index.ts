@@ -35,6 +35,7 @@ import useSuperAdminSalesTicketList from './useSuperAdminSalesTicketList';
 import useSuperAdminInvitationTicketList from './useSuperAdminInvitationTicketList';
 import useSuperAdminInvitationCodeList from './useSuperAdminInvitationCodeList';
 import useUserByUserCode from './useUserByUserCode';
+import useShowReservationWithTickets from './useShowReservationWithTickets';
 import useCastTeamList from './useCastTeamList';
 
 export {
@@ -43,6 +44,7 @@ export {
   useAdminSettlementEvent,
   useAdminSettlementInfo,
   useGift,
+  useShowReservationWithTickets,
   useAdminShowDetail,
   useAdminShowList,
   useAdminTicketSalesInfo,
