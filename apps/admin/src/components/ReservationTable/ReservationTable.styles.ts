@@ -117,6 +117,29 @@ const ResetButton = styled(Button)`
   margin-top: 18px;
 `;
 
+const TooltipItemColumn = styled.ul`
+  display: block;
+`;
+
+const TooltipItemRow = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  & > span {
+    ${({ theme }) => theme.typo.c1};
+    color: ${({ theme }) => theme.palette.grey.w};
+  }
+  & > span:first-of-type {
+    margin-right: 16px;
+  }
+`;
+
+const TooltipAnchor = styled.a`
+  &:hover {
+    color: ${({ theme }) => theme.palette.grey.g50};
+  }
+`;
+
 export default {
   Container,
   HeaderItem,
@@ -125,4 +148,7 @@ export default {
   Item,
   Empty,
   ResetButton,
+  TooltipItemColumn,
+  TooltipItemRow,
+  TooltipAnchor,
 };
