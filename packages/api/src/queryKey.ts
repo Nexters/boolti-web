@@ -7,6 +7,7 @@ import {
   EntranceSummaryResponse,
   PageEntranceResponse,
   PageReservationResponse,
+  PageReservationWithTicketsResponse,
   ReservationSummaryResponse,
   SettlementBannersResponse,
   ShowCastTeamReadResponse,
@@ -284,6 +285,35 @@ export const showQueryKeys = createQueryKeys('show', {
       return fetcher.get<PageReservationResponse>(`web/v1/host/shows/${showId}/reservations`, {
         searchParams,
       });
+    },
+  }),
+  reservationV2: (
+    showId: number,
+    page: number,
+    ticketType: TicketType | undefined = undefined,
+    paymentManagementStatus: TicketStatus | undefined = undefined,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, paymentManagementStatus],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (paymentManagementStatus) {
+        searchParams.paymentManagementStatus = paymentManagementStatus;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageReservationWithTicketsResponse>(
+        `web/v2/shows/${showId}/reservations`,
+        {
+          searchParams,
+        },
+      );
     },
   }),
   salesTicketList: (showId: number) => ({
