@@ -3,6 +3,8 @@ import './index.css';
 
 import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import {
@@ -155,7 +157,9 @@ const routes: RouteObject[] = [
       <QueryClientProvider>
         <BooltiUIProvider>
           <LazyMotion features={domAnimation}>
-            <Outlet />
+            <DndProvider backend={HTML5Backend}>
+              <Outlet />
+            </DndProvider>
           </LazyMotion>
         </BooltiUIProvider>
       </QueryClientProvider>
