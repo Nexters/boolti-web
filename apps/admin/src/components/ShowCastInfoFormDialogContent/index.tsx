@@ -10,6 +10,7 @@ import { replaceUserCode } from '~/utils/replace';
 export interface TempShowCastInfoFormInput {
   name: string;
   members?: Array<Partial<Member>>;
+  order?: number;
 }
 
 interface Props {
@@ -163,8 +164,8 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
                                 } catch {
                                   toast.error(
                                     '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
-                                      '\n' +
-                                      '식별 코드를 확인 후 다시 시도해 주세요.',
+                                    '\n' +
+                                    '식별 코드를 확인 후 다시 시도해 주세요.',
                                   );
                                 } finally {
                                   setIsMemberFieldBlurred((prev) => {

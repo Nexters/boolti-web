@@ -41,6 +41,7 @@ import useSuperAdminEditSalesInfo from './useSuperAdminEditSalesInfo';
 import usePutCastTeams from './usePutCastTeams';
 import useDeleteCastTeams from './useDeleteCastTeams';
 import usePostCastTeams from './usePostCastTeams';
+import useChangeCastTeamOrder from './useChangeCastTeamOrder';
 
 export {
   usePostCastTeams,
@@ -86,6 +87,7 @@ export {
   useSuperAdminCreateSalesTicket,
   useSuperAdminCreateInvitationTicket,
   useSuperAdminEditSalesInfo,
+  useChangeCastTeamOrder
 };
 
 export type { ImageFile };

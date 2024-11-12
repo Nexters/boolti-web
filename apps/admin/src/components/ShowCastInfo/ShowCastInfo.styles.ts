@@ -18,13 +18,30 @@ const Header = styled.div`
   align-items: center;
   border-radius: 8px 8px 0px 0px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.sh2};
   padding: 24px 28px;
 
   &:last-child {
     border-radius: 8px;
   }
+`;
+
+const HeaderNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`
+
+const Handle = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.grey.g40};
+  cursor: move;
+`
+
+const Name = styled.span`
+  color: ${({ theme }) => theme.palette.grey.g90};
+  ${({ theme }) => theme.typo.sh2};
 `;
 
 const EditButton = styled(Button)`
@@ -118,6 +135,9 @@ const CollapseButton = styled.button`
 export default {
   Container,
   Header,
+  HeaderNameWrapper,
+  Handle,
+  Name,
   Cast,
   CollapseButton,
   EditButton,
