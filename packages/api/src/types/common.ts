@@ -11,6 +11,8 @@ export type ReservationStatus =
 
 export type TicketStatus = 'COMPLETE' | 'WAIT' | 'CANCEL';
 
+export type PayementMeans = 'ACCOUNT_TRANSFER' | 'CARD' | 'FREE' | 'SIMPLE_PAYMENT';
+
 export interface PageResponse<T> {
   totalPages: number;
   totalElements: number;

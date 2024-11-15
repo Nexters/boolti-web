@@ -28,7 +28,7 @@ const Dialog = ({
 
   return (
     <Portal>
-      <Styled.DimmedArea>
+      <Styled.DimmedArea onClick={onClose}>
         <Styled.Dialog className="dialog" isAuto={isAuto} width={width} mobileType={mobileType}>
           {title && onClose && (
             <Styled.DialogHeader mobileType={mobileType}>

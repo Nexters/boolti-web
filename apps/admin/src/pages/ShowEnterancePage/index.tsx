@@ -86,8 +86,7 @@ const ShowEnterancePage = () => {
         <Styled.EmptyContainer>
           <BooltiGreyIcon />
           <Styled.EmptyTitle>
-            아직 판매한 티켓이 없어요.{'\n'}
-            티켓을 판매하고 관객 입장을 관리해 보세요.
+            아직 판매한 티켓이 없어요.{'\n'}티켓을 판매하고 방문자 명단을 관리해 보세요.
           </Styled.EmptyTitle>
         </Styled.EmptyContainer>
       ) : (
@@ -129,7 +128,7 @@ const ShowEnterancePage = () => {
                 }}
                 isSelected={!isEnteredTicket}
               >
-                미입장 <span>{notEnteredTicketCount}</span>
+                미방문자 <span>{notEnteredTicketCount}</span>
               </Styled.EnteranceSummaryButton>
               <Styled.EnteranceSummaryButton
                 onClick={() => {
@@ -138,7 +137,7 @@ const ShowEnterancePage = () => {
                 }}
                 isSelected={isEnteredTicket}
               >
-                입장 확인 <span>{enteredTicketCount}</span>
+                방문자 <span>{enteredTicketCount}</span>
               </Styled.EnteranceSummaryButton>
             </Styled.SummaryButtonContainer>
             <Styled.FilterContainer>
@@ -180,15 +179,15 @@ const ShowEnterancePage = () => {
               <MobileCardList
                 items={reservations.map((reservation) => ({
                   id: reservation.ticketId,
-                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
                   name: reservation.reservationName,
                   date: reservation.enteredAt,
                   phoneNumber: reservation.reservationPhoneNumber,
                   ticketName: reservation.ticketName,
-                  count: 1,
+                  type: reservation.entered ? 'NORMAL' : 'DISABLED',
+                  status: reservation.entered ? reservation.enteredAt : '미방문',
                 }))}
                 searchText={debouncedSearchText}
-                emptyText={isEnteredTicket ? '입장 관객이 없어요.' : '미입장 관객이 없어요.'}
+                emptyText={isEnteredTicket ? '아직 방문자가 없어요.' : '미방문자가 없어요.'}
                 onClickReset={onClickReset}
               />
             </>

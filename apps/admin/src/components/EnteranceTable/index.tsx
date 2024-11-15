@@ -18,15 +18,8 @@ const columns = [
   columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
   }),
-  columnHelper.accessor('ticketType', {
-    header: '티켓 종류',
-    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
-  }),
-  columnHelper.accessor('ticketName', {
-    header: '티켓 이름',
-  }),
   columnHelper.accessor('reservationName', {
-    header: '방문자 이름',
+    header: '방문자명',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
@@ -47,13 +40,21 @@ const columns = [
       );
     },
   }),
-  columnHelper.accessor('entered', {
-    header: '상태',
-    cell: (props) => (props.getValue() ? '입장 확인' : '미입장'),
+  columnHelper.accessor('ticketType', {
+    header: '티켓 종류',
+    cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
+  }),
+  columnHelper.accessor('ticketName', {
+    header: '티켓명',
   }),
   columnHelper.accessor('enteredAt', {
-    header: '입장 일시',
-    cell: (props) => (props.getValue() ? format(props.getValue(), 'yyyy/MM/dd HH:mm') : '-'),
+    header: '방문 일시',
+    cell: (props) =>
+      props.getValue() ? (
+        format(props.getValue(), 'yyyy/MM/dd HH:mm')
+      ) : (
+        <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
+      ),
   }),
 ];
 
@@ -97,9 +98,9 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
               </Styled.ResetButton>
             </>
           ) : isEnteredTicket ? (
-            '입장 관객이 없어요.'
+            '아직 방문자가 없어요.'
           ) : (
-            '미입장 관객이 없어요.'
+            '미방문자가 없어요.'
           )}
         </Styled.Empty>
       ) : (

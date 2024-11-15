@@ -1,5 +1,5 @@
 import { ShowCastTeamCreateOrUpdateRequest } from './cast';
-import { PageResponse, ReservationStatus, TicketStatus, TicketType } from './common';
+import { PageResponse, PayementMeans, ReservationStatus, TicketStatus, TicketType } from './common';
 import { HostType } from './host';
 
 export interface ShowImage {
@@ -75,6 +75,84 @@ export interface ShowSalesInfoResponse {
   ticketNotice: string;
 }
 
+export interface SalesTicketTypeResponseV2 {
+  /** 판매 티켓 ID */
+  id: number;
+  /** 판매 티켓 타입 */
+  ticketType: TicketType;
+  /** 티켓 이름 */
+  ticketName: string;
+  /** 티켓 가격(장당) */
+  price: number;
+}
+
+export interface TicketResponse {
+  /** 티켓 ID */
+  ticketId: number;
+  /** cs용(유저용) 티켓 ID  */
+  csTicketId: string;
+  /** 판매 티켓 타입 정보. 만약 삭제된 경우 null */
+  salesTicketType?: SalesTicketTypeResponseV2;
+  /** 티켓 생성일시 */
+  createdAt: string;
+  /** 티켓 사용일시 */
+  usedAt?: string;
+}
+
+export interface PaymentInfoResponse {
+  /** 결제자 이름 초청일때는 없음 */
+  payerName?: string;
+  /** 결제자 전화번호 초청일때는 없음 */
+  payerPhoneNumber?: string;
+  /** 결제 수단 */
+  means: PayementMeans;
+}
+
+export interface CancelInfoResponse {
+  /** 취소 요청 사유 */
+  cancelReason: string;
+  /** 취소 요청 일시 */
+  cancelRequestAt: string;
+  /** 취소 완료 일시 */
+  canceledAt: string;
+}
+
+export interface GiftResponseV2 {
+  /** 선물 ID */
+  id: number;
+  /** 선물 수신 완료 여부 */
+  done: boolean;
+  /** 선물 생성 일시 */
+  createdAt: string;
+}
+
+export interface ReservationWithTicketsResponse {
+  /** 예매 ID */
+  reservationId: number;
+  /** cs용(유저용) 예매 ID */
+  csReservationId: number;
+  /** 예매 결제 관리 상태 */
+  paymentManagementStatus: TicketStatus;
+  /** 선물 정보 선물이 아니면 null */
+  gift?: GiftResponseV2;
+  /** 판매 티켓 타입 정보. 만약 삭제된 경우 null */
+  salesTicketType?: SalesTicketTypeResponseV2;
+  /** 티켓 정보 목록. */
+  tickets: TicketResponse[];
+  /** 결제 정보. 초청 티켓일 경우 없음 */
+  paymentInfo?: PaymentInfoResponse;
+  /** 환불 정보 */
+  cancelInfo?: CancelInfoResponse;
+  /** 예매 생성 일시 */
+  createdAt: string;
+  /** 예매 수정 일시 */
+  modifiedAt: string;
+}
+
+export type PageReservationWithTicketsResponse = PageResponse<ReservationWithTicketsResponse>;
+
+export type PageReservationResponse = PageResponse<ReservationResponse>;
+
 export interface ReservationResponse {
   /** 티켓 ID */
   ticketId: number;
@@ -111,8 +189,6 @@ export interface ReservationResponse {
   /** CS용(유저용) 티켓 ID */
   csTicketId: string;
 }
-
-export type PageReservationResponse = PageResponse<ReservationResponse>;
 
 export interface ReservationSummaryResponse {
   /** 판매 티켓 발권 수량 */

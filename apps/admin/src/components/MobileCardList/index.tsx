@@ -8,12 +8,14 @@ import Styled from './MobileCardList.style';
 
 type Item = {
   id: number;
-  badgeText: string;
+  badgeText?: string;
   name: string;
   phoneNumber: string;
   ticketName: string;
+  type: 'DISABLED' | 'LINE_THROUGH' | 'NORMAL';
+  status: string;
   date?: string;
-  count: number;
+  count?: number;
 };
 
 interface Props {
@@ -29,19 +31,27 @@ function MobileCardList({ searchText, items, emptyText, onClickReset }: Props) {
   const Elements = items.map((item) => {
     return (
       <Styled.CardItem key={item.id}>
-        <Styled.Row>
-          <Badge colorTheme="grey">{item.badgeText}</Badge>
-          {item.date && <Styled.DateText>{format(item.date, 'yyyy/MM/dd HH:mm')}</Styled.DateText>}
-        </Styled.Row>
+        {item.badgeText && (
+          <Styled.Row>
+            <Badge colorTheme="grey">{item.badgeText}</Badge>
+            {item.date && (
+              <Styled.DateText>{format(item.date, 'yyyy/MM/dd HH:mm')}</Styled.DateText>
+            )}
+          </Styled.Row>
+        )}
         <Styled.Row>
           <Styled.UserInfoText
             dangerouslySetInnerHTML={{
               __html: boldText(`${item.name} (${formatPhoneNumber(item.phoneNumber)})`, searchText),
             }}
           ></Styled.UserInfoText>
-          <Styled.TicketInfoText>
-            {item.ticketName} · {item.count}매
-          </Styled.TicketInfoText>
+          <Styled.TicketDetailTextWrap>
+            <Styled.TicketInfoText>
+              {item.ticketName}
+              {item.count ? ` · ${item.count}매` : ''}
+            </Styled.TicketInfoText>
+            <Styled.TicketStatusText type={item.type}>{item.status}</Styled.TicketStatusText>
+          </Styled.TicketDetailTextWrap>
         </Styled.Row>
       </Styled.CardItem>
     );
