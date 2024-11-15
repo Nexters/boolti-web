@@ -212,7 +212,6 @@ const ShowReservationPage = () => {
           )}
           {totalPages > 1 && (
             <Pagination
-              sizePerPage={isMobile ? 5 : 10}
               totalPages={totalPages}
               currentPage={currentPage}
               onClickPage={setCurrentPage}
