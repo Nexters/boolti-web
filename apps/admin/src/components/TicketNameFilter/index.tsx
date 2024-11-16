@@ -26,7 +26,7 @@ const TicketFilterOptions = ({
   );
   const ref = useRef(null);
 
-  useOnClickOutside(ref, close);
+  useOnClickOutside(ref, close, { skipWhenParentElementSame: true });
 
   return (
     <Styled.TicketOptions ref={ref}>

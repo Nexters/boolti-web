@@ -5,12 +5,18 @@ type Event = MouseEvent | TouchEvent;
 export const useOnClickOutside = <T extends HTMLElement = HTMLElement>(
   ref: RefObject<T>,
   handler: (event: Event) => void,
+  options: { skipWhenParentElementSame?: boolean } = {},
 ) => {
+  const { skipWhenParentElementSame } = options;
   useEffect(() => {
     const listener = (event: Event) => {
       const el = ref?.current;
-
-      if (!el || el.contains((event?.target as Node) || null)) {
+      const isSameParent = el?.parentElement === (event.target as Node).parentElement;
+      if (
+        !el ||
+        el.contains((event?.target as Node) || null) ||
+        (skipWhenParentElementSame && isSameParent)
+      ) {
         return;
       }
 
