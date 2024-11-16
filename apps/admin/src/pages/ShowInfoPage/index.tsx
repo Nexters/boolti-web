@@ -4,7 +4,6 @@ import {
   ShowImage,
   queryKeys,
   useCastTeamList,
-  useChangeCastTeamOrder,
   useDeleteCastTeams,
   useDeleteShow,
   useEditShowInfo,
@@ -35,9 +34,11 @@ import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
-import ShowCastInfo, { CastTeamListDraft } from '~/components/ShowCastInfo';
+import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
+import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
+
 
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
@@ -56,8 +57,7 @@ const ShowInfoPage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
   const { data: castTeamList, refetch: refetchCastTeamList } = useCastTeamList(showId);
-
-  const [castTeamListDraft, setCastTeamListDraft] = useState<CastTeamListDraft[] | null>(null);
+  const { castTeamListDraft, castTeamDropHoverHandler, castTeamDropHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
@@ -65,7 +65,6 @@ const ShowInfoPage = () => {
   const putCastTeams = usePutCastTeams();
   const postCastTeams = usePostCastTeams();
   const deleteCastTeams = useDeleteCastTeams();
-  const changeCastTeamOrder = useChangeCastTeamOrder();
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -138,39 +137,6 @@ const ShowInfoPage = () => {
     return true;
   }, [confirm, isImageFilesDirty, onSubmit, showInfoForm]);
 
-  const changeCastTeamIndex = useCallback((draggedItemId: number, targetIndex: number) => {
-    setCastTeamListDraft((prevDraft) => {
-      if (prevDraft === null) return prevDraft;
-
-      const draggedItem = prevDraft.find(({ id }) => id === draggedItemId);
-      if (!draggedItem) return prevDraft;
-
-      const nextDraft = [...prevDraft];
-
-      nextDraft.splice(nextDraft.indexOf(draggedItem), 1);
-      nextDraft.splice(targetIndex, 0, draggedItem);
-
-      return nextDraft;
-    })
-  }, [])
-
-  const castTeamDropHoverHandler = useCallback((draggedItemId: number, hoverIndex: number) => {
-    changeCastTeamIndex(draggedItemId, hoverIndex);
-  }, [changeCastTeamIndex]);
-
-  const castTeamDropHandler = useCallback(async () => {
-    if (!castTeamListDraft) return;
-
-    await changeCastTeamOrder.mutateAsync({
-      showId,
-      body: {
-        castTeamIds: castTeamListDraft.map(({ id }) => id),
-      },
-    });
-
-    refetchCastTeamList();
-  }, [castTeamListDraft, changeCastTeamOrder, refetchCastTeamList, showId])
-
   useEffect(() => {
     if (!show) return;
 
@@ -190,12 +156,6 @@ const ShowInfoPage = () => {
     setImageFiles(show.images.map((image) => ({ preview: image.thumbnailPath })));
     setShowImages(show.images);
   }, [show, showInfoForm]);
-
-  useEffect(() => {
-    if (!castTeamList) return;
-
-    setCastTeamListDraft(castTeamList);
-  }, [castTeamList])
 
   useEffect(() => {
     setMiddleware(() => confirmSaveShowInfo);
