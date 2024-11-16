@@ -14,12 +14,12 @@ import EnteranceTable from '~/components/EnteranceTable';
 import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
 import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
-import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowEnterancePage.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
+import TicketNameFilter from '~/components/TicketNameFilter';
 
 type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
@@ -27,9 +27,6 @@ const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
   const { open, close } = useDialog();
 
-  const [selectedTicketType, setSelectedTicketType] = useState<
-    React.ComponentProps<typeof TicketTypeSelect>['value']
-  >({ value: 'ALL', label: '티켓 전체' });
   const [enteranceTicketType, setEnteranceTicetType] = useState<TicketType>('ALL');
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
@@ -42,11 +39,18 @@ const ShowEnterancePage = () => {
 
   const useTicketUsedFilter =
     enteranceTicketType === 'ALL' ? undefined : enteranceTicketType === 'USED';
-  const { data: salesTicketList } = useAdminSalesTicketList(showId);
+
+  const { data: salesTicketList = [] } = useAdminSalesTicketList(showId);
+
+  const [selectedTicketId, setSelectedTicketId] = useState<string[]>([]);
+  const options = salesTicketList.map((ticket) => ({
+    value: ticket.id.toString(),
+    label: ticket.ticketName,
+  }));
   const { data: ticketList, isLoading: isTicketListLoading } = useAdminTicketList(
     showId,
     searchText,
-    [],
+    selectedTicketId,
     useTicketUsedFilter,
   );
 
@@ -56,15 +60,11 @@ const ShowEnterancePage = () => {
 
   const totalPages = ticketList?.totalPages ?? 0;
   const tickets = (ticketList?.content ?? []).filter(
-    ({ usedAt, salesTicketType }) =>
-      useTicketUsedFilter === undefined ||
-      (!!usedAt === useTicketUsedFilter &&
-        (selectedTicketType.value === 'ALL' ||
-          salesTicketType.ticketType === selectedTicketType.value)),
+    ({ usedAt }) => useTicketUsedFilter === undefined || !!usedAt === useTicketUsedFilter,
   );
-  console.log(ticketList);
+
   const onClickReset = () => {
-    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
+    setSelectedTicketId([]);
     setSearchText('');
   };
 
@@ -77,7 +77,7 @@ const ShowEnterancePage = () => {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [selectedTicketType, useTicketUsedFilter, debouncedSearchText]);
+  }, [selectedTicketId, useTicketUsedFilter, debouncedSearchText]);
 
   if (!show || !entranceSummary || !enteranceInfo || !ticketList) return null;
 
@@ -158,9 +158,10 @@ const ShowEnterancePage = () => {
               </Styled.EnteranceSummaryButton>
             </Styled.SummaryButtonContainer>
             <Styled.FilterContainer>
-              <TicketTypeSelect
-                value={selectedTicketType}
-                onChange={(value) => setSelectedTicketType(value)}
+              <TicketNameFilter
+                selectedValues={selectedTicketId}
+                updateSelectValues={setSelectedTicketId}
+                options={options}
               />
               <Styled.InputContainer>
                 <Styled.Input
