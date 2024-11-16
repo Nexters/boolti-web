@@ -1,4 +1,3 @@
-import { EntranceResponse } from '@boolti/api';
 import {
   createColumnHelper,
   flexRender,
@@ -11,14 +10,15 @@ import { boldText } from '~/utils/boldText';
 import { formatPhoneNumber } from '~/utils/format';
 
 import Styled from './EnteranceTable.styles';
+import { TicketWithReservationResponse } from '@boolti/api/src/types/adminTicket';
 
-const columnHelper = createColumnHelper<EntranceResponse>();
+const columnHelper = createColumnHelper<TicketWithReservationResponse>();
 
 const columns = [
   columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
   }),
-  columnHelper.accessor('reservationName', {
+  columnHelper.accessor('reservation.reservationHolder.name', {
     header: '방문자명',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
@@ -27,7 +27,7 @@ const columns = [
       );
     },
   }),
-  columnHelper.accessor('reservationPhoneNumber', {
+  columnHelper.accessor('reservation.reservationHolder.phoneNumber', {
     header: '연락처',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
@@ -40,27 +40,29 @@ const columns = [
       );
     },
   }),
-  columnHelper.accessor('ticketType', {
+  columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓 종류',
     cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
   }),
-  columnHelper.accessor('ticketName', {
+  columnHelper.accessor('salesTicketType.ticketName', {
     header: '티켓명',
   }),
-  columnHelper.accessor('enteredAt', {
+  columnHelper.accessor('usedAt', {
     header: '방문 일시',
-    cell: (props) =>
-      props.getValue() ? (
-        format(props.getValue(), 'yyyy/MM/dd HH:mm')
+    cell: (props) => {
+      const value = props.getValue();
+      return value ? (
+        format(value, 'yyyy/MM/dd HH:mm')
       ) : (
         <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
-      ),
+      );
+    },
   }),
 ];
 
 interface Props {
-  data: EntranceResponse[];
-  isEnteredTicket: boolean;
+  data: TicketWithReservationResponse[];
+  isEnteredTicket?: boolean;
   searchText: string;
   onClickReset?: VoidFunction;
 }

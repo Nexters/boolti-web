@@ -246,7 +246,7 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
   salesTicketList: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<SalesTicketTypeResponseV2[]>(`/web/v1/host/shows/${showId}/sales-tickets`),
+      fetcher.get<SalesTicketTypeResponseV2[]>(`web/v1/host/shows/${showId}/sales-tickets`),
   }),
   ticketList: (
     showId: number,
@@ -255,8 +255,7 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
     isUsed?: boolean,
   ) => ({
     queryKey: [showId, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
-    queryFn: () =>
-      fetcher.get<PageTicketWithReservationResponse>(`/web/v1/shows/${showId}/tickets`),
+    queryFn: () => fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`),
   }),
 });
 
