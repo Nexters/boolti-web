@@ -25,7 +25,9 @@ const TicketFilterOptions = ({
     selectedValues.length === 0 ? options.map((option) => option.value) : selectedValues,
   );
   const ref = useRef(null);
+
   useOnClickOutside(ref, close);
+
   return (
     <Styled.TicketOptions ref={ref}>
       <Styled.TicketOptionTitle>필터</Styled.TicketOptionTitle>
@@ -86,7 +88,12 @@ const TicketNameFilter = (props: Props) => {
 
   return (
     <Styled.Container>
-      <Styled.TicketFilterButton isActive={props.selectedValues.length > 1} onClick={toggle}>
+      <Styled.TicketFilterButton
+        isActive={props.selectedValues.length > 1}
+        onClick={() => {
+          toggle();
+        }}
+      >
         <FilterIcon />
         필터
       </Styled.TicketFilterButton>

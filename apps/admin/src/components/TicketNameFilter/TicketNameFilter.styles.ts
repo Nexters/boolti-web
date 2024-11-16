@@ -1,3 +1,4 @@
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -36,7 +37,10 @@ const TicketOptions = styled.div`
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   box-shadow: 0px 8px 14px 0px rgba(172, 171, 171, 0.13);
-  right: 0;
+  left: 0;
+  ${mq_lg} {
+    right: 0;
+  }
   margin-top: 4px;
   padding: 16px 20px;
 `;
