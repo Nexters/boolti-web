@@ -8,9 +8,9 @@ import { Member, queryKeys, useQueryClient } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 
 export interface TempShowCastInfoFormInput {
+  id: number;
   name: string;
   members?: Array<Partial<Member>>;
-  order?: number;
 }
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
   onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
 }
 
-const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: Props) => {
+const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: Props) => {
   const queryClient = useQueryClient();
 
   const previousShowCastInfoMemberLength = prevShowCastInfo?.members?.length ?? 0;
@@ -279,13 +279,14 @@ const ShowCastInfoFormDialogContent = ({ onDelete, prevShowCastInfo, onSave }: P
           onClick={async (e) => {
             e.preventDefault();
 
+            const id = prevShowCastInfo?.id ?? -Math.floor(Math.random() * 1000000);
             const name = getValues('name');
             const members = (getValues('members') ?? []).filter(
               (member) => member.userNickname && member.roleName && member.userCode,
             );
 
             try {
-              await onSave({ name, members });
+              await onSave({ id, name, members });
               toast.success(
                 onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.',
               );

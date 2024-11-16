@@ -27,6 +27,7 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { checkIsWebView } from '~/utils/webview';
+import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -42,10 +43,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
-  const [showCastInfo, setShowCastInfo] = useState<TempShowCastInfoFormInput[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
+  const { castTeamListDraft, setCastTeamListDraft, castTeamDropHoverHandler, castTeamDropHandler } = useCastTeamListOrder();
 
   const toast = useToast();
 
@@ -88,12 +89,11 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      castTeams: showCastInfo.map(({ name, members }) => ({
+      castTeams: castTeamListDraft.map(({ name, members }) => ({
         name,
         members: members
-          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
-          .map(({ id, userCode, roleName }) => ({
-            id,
+          ?.filter(({ userCode, roleName }) => userCode && roleName)
+          .map(({ userCode, roleName }) => ({
             userCode,
             roleName,
           })),
@@ -171,28 +171,31 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     <Styled.ShowInfoFormContent>
                       <ShowCastInfoFormContent
                         onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                          setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                          setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
                           return new Promise((reslve) => reslve());
                         }}
                       />
-                      {showCastInfo.map((info, index) => (
+                      {castTeamListDraft.map((info, index) => (
                         <ShowCastInfo
-                          key={index}
+                          key={info.id}
                           showCastInfo={info}
+                          index={index}
                           onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                            setShowCastInfo((prev) =>
+                            setCastTeamListDraft((prev) =>
                               prev.map((prevCastInfo, currentIndex) =>
                                 index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                              ),
+                              )
                             );
                             return new Promise((reslve) => reslve());
                           }}
                           onDelete={() => {
-                            setShowCastInfo((prev) =>
-                              prev.filter((_, currentIndex) => index !== currentIndex),
+                            setCastTeamListDraft((prev) =>
+                              prev.filter((_, currentIndex) => index !== currentIndex)
                             );
                             return new Promise((reslve) => reslve());
                           }}
+                          onDrop={castTeamDropHandler}
+                          onDropHover={castTeamDropHoverHandler}
                         />
                       ))}
                     </Styled.ShowInfoFormContent>
@@ -383,28 +386,31 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               <Styled.ShowInfoFormContent>
                 <ShowCastInfoFormContent
                   onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                    setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                    setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
                     return new Promise((reslve) => reslve());
                   }}
                 />
-                {showCastInfo.map((info, index) => (
+                {castTeamListDraft.map((info, index) => (
                   <ShowCastInfo
                     key={index}
                     showCastInfo={info}
+                    index={index}
                     onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                      setShowCastInfo((prev) =>
+                      setCastTeamListDraft((prev) =>
                         prev.map((prevCastInfo, currentIndex) =>
                           index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                        ),
+                        )
                       );
                       return new Promise((reslve) => reslve());
                     }}
                     onDelete={() => {
-                      setShowCastInfo((prev) =>
-                        prev.filter((_, currentIndex) => index !== currentIndex),
+                      setCastTeamListDraft((prev) =>
+                        prev.filter((_, currentIndex) => index !== currentIndex)
                       );
                       return new Promise((reslve) => reslve());
                     }}
+                    onDropHover={castTeamDropHoverHandler}
+                    onDrop={castTeamDropHandler}
                   />
                 ))}
               </Styled.ShowInfoFormContent>
