@@ -57,6 +57,7 @@ const TicketFilterOptions = ({
         <Button
           colorTheme="primary"
           size="regular"
+          disabled={tempSelectedValues.length === 0}
           onClick={() => {
             if (tempSelectedValues.length > 0) {
               updateSelectValues(tempSelectedValues);
@@ -78,7 +79,7 @@ const TicketNameFilter = (props: Props) => {
 
   return (
     <Styled.Container>
-      <Styled.TicketFilterButton onClick={toggle}>
+      <Styled.TicketFilterButton isActive={props.selectedValues.length > 1} onClick={toggle}>
         <FilterIcon />
         필터
       </Styled.TicketFilterButton>
