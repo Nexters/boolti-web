@@ -9,6 +9,7 @@ import {
   PageReservationResponse,
   PageReservationWithTicketsResponse,
   ReservationSummaryResponse,
+  SalesTicketTypeResponseV2,
   SettlementBannersResponse,
   ShowCastTeamReadResponse,
   ShowInvitationCodeListResponse,
@@ -50,6 +51,7 @@ import {
 } from './types/adminReservation';
 import {
   AdminTicketSalesInfoResponse,
+  PageTicketWithReservationResponse,
   SuperAdminInvitationCodeListResponse,
   SuperAdminInvitationTicketListResponse,
   SuperAdminSalesTicketListResponse,
@@ -240,6 +242,33 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
       fetcher.get<SuperAdminInvitationCodeListResponse>(
         `sa-api/v1/invitation-tickets/${ticketId}/invitation-codes`,
       ),
+  }),
+  salesTicketList: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SalesTicketTypeResponseV2[]>(`web/v1/host/shows/${showId}/sales-tickets`),
+  }),
+  ticketList: (
+    showId: number,
+    page: number,
+    reservationNameOrPhoneNumber: string,
+    salesTicketTypeId: string[],
+    isUsed?: boolean,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        reservationNameOrPhoneNumber,
+        salesTicketTypeId: salesTicketTypeId.join(','),
+      };
+      if (isUsed) {
+        searchParams.isUsed = isUsed;
+      }
+      return fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`, {
+        searchParams,
+      });
+    },
   }),
 });
 
