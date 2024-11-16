@@ -59,9 +59,19 @@ const InputWrapper = styled.div<InputWrapperProps>`
 
   &:focus-within {
     border-color: ${({ theme, isError }) =>
-      isError ? theme.palette.status.error : theme.palette.grey.g70};
+    isError ? theme.palette.status.error : theme.palette.grey.g70};
   }
 `;
+
+const Handle = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.grey.g40};
+  margin-top: 12px;
+  margin-right: 8px;
+  cursor: move;
+`
 
 const TextFieldWrap = styled.div`
   margin-bottom: 28px;
@@ -91,6 +101,8 @@ const Row = styled.div`
   justify-content: center;
   align-items: flex-start;
   margin-bottom: 20px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-radius: 4px;
 `;
 
 const TrashCanButton = styled.button`
@@ -174,6 +186,7 @@ const ErrorMessage = styled.span`
 export default {
   ShowInfoFormLabel,
   InputWrapper,
+  Handle,
   HashTag,
   Input,
   Row,

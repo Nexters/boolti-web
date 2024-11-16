@@ -1,6 +1,6 @@
 export interface Member {
   /** 공연 출연진 팀원 ID */
-  id?: number;
+  id: number;
   /** 유저 식별 코드 */
   userCode: string;
   /** 역할 이름 (1~100자. 빈 문자열 불가) */
