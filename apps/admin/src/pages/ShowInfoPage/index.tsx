@@ -237,7 +237,7 @@ const ShowInfoPage = () => {
                       members: members
                         ?.filter(({ userCode, roleName }) => userCode && roleName)
                         .map(({ id, userCode, roleName }) => ({
-                          id,
+                          id: id < 0 ? undefined : id,
                           userCode,
                           roleName,
                         })) as ShowCastTeamCreateOrUpdateRequest['members'],
@@ -256,13 +256,15 @@ const ShowInfoPage = () => {
                   showCastInfo={info}
                   index={index}
                   onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                    if (info.id === undefined) return;
+
                     await putCastTeams.mutateAsync(
                       {
                         name,
                         members: members
                           ?.filter(({ userCode, roleName }) => userCode && roleName)
                           .map(({ id, userCode, roleName }) => ({
-                            id,
+                            id: id < 0 ? undefined : id,
                             userCode,
                             roleName,
                           })) as ShowCastTeamCreateOrUpdateRequest['members'],
@@ -278,6 +280,8 @@ const ShowInfoPage = () => {
                   onDropHover={castTeamDropHoverHandler}
                   onDrop={castTeamDropHandler}
                   onDelete={async () => {
+                    if (info.id === undefined) return;
+
                     await deleteCastTeams.mutateAsync(info.id, {
                       onSuccess: () => {
                         queryClient.invalidateQueries(queryKeys.castTeams.list(showId));

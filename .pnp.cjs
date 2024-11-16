@@ -3005,6 +3005,8 @@ const RAW_RUNTIME_STATE =
           ["linkifyjs", "npm:4.1.3"],\
           ["nanoid", "npm:5.0.4"],\
           ["react", "npm:18.2.0"],\
+          ["react-dnd", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:16.0.1"],\
+          ["react-dnd-html5-backend", "npm:16.0.1"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-hot-toast", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:2.4.1"],\
           ["swiper", "npm:11.0.7"],\
@@ -8587,7 +8589,7 @@ const RAW_RUNTIME_STATE =
           ["qrcode.react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.0"],\
           ["react", "npm:18.2.0"],\
           ["react-daum-postcode", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:3.1.3"],\
-          ["react-dnd", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:16.0.1"],\
+          ["react-dnd", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:16.0.1"],\
           ["react-dnd-html5-backend", "npm:16.0.1"],\
           ["react-dom", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:18.2.0"],\
           ["react-dropzone", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:14.2.3"],\
@@ -16283,10 +16285,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:16.0.1", {\
-        "packageLocation": "./.yarn/__virtual__/react-dnd-virtual-4b292e52c3/0/cache/react-dnd-npm-16.0.1-974f047d7b-d069435750.zip/node_modules/react-dnd/",\
+      ["virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:16.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/react-dnd-virtual-42d9d58644/0/cache/react-dnd-npm-16.0.1-974f047d7b-d069435750.zip/node_modules/react-dnd/",\
         "packageDependencies": [\
-          ["react-dnd", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:16.0.1"],\
+          ["react-dnd", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:16.0.1"],\
           ["@react-dnd/invariant", "npm:4.0.2"],\
           ["@react-dnd/shallowequal", "npm:4.0.2"],\
           ["@types/hoist-non-react-statics", null],\
