@@ -38,11 +38,12 @@ const TicketOptions = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   box-shadow: 0px 8px 14px 0px rgba(172, 171, 171, 0.13);
   left: 0;
-  ${mq_lg} {
-    right: 0;
-  }
   margin-top: 4px;
   padding: 16px 20px;
+  ${mq_lg} {
+    left: unset;
+    right: 0;
+  }
 `;
 
 const TicketOptionTitle = styled.div`
