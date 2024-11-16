@@ -1,7 +1,8 @@
 import { FilterIcon, SquareCheckIcon } from '@boolti/icon';
 import Styled from './TicketNameFilter.styles';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, TextButton } from '@boolti/ui';
+import { useOnClickOutside } from '@boolti/ui/src/hooks/useOnClickOutside';
 
 interface Option {
   label: string;
@@ -23,8 +24,10 @@ const TicketFilterOptions = ({
   const [tempSelectedValues, setTempSelectedValues] = useState(
     selectedValues.length === 0 ? options.map((option) => option.value) : selectedValues,
   );
+  const ref = useRef(null);
+  useOnClickOutside(ref, close);
   return (
-    <Styled.TicketOptions>
+    <Styled.TicketOptions ref={ref}>
       <Styled.TicketOptionTitle>필터</Styled.TicketOptionTitle>
       <Styled.OptionList>
         {options.map((option) => (
