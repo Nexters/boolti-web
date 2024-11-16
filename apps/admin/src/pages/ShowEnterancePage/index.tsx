@@ -49,6 +49,7 @@ const ShowEnterancePage = () => {
   }));
   const { data: ticketList, isLoading: isTicketListLoading } = useAdminTicketList(
     showId,
+    currentPage,
     searchText,
     selectedTicketId,
     useTicketUsedFilter,

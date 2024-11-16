@@ -4,6 +4,7 @@ import { queryKeys } from '../queryKey';
 
 const useAdminTicketList = (
   showId: number,
+  page: number,
   reservationNameOrPhoneNumber: string,
   salesTicketTypeId: string[],
   isUsed?: boolean,
@@ -11,6 +12,7 @@ const useAdminTicketList = (
   useQuery(
     queryKeys.adminTicket.ticketList(
       showId,
+      page,
       reservationNameOrPhoneNumber,
       salesTicketTypeId,
       isUsed,

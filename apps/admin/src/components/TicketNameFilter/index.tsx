@@ -62,7 +62,11 @@ const TicketFilterOptions = ({
           size="regular"
           disabled={tempSelectedValues.length === 0}
           onClick={() => {
-            if (tempSelectedValues.length > 0) {
+            if (
+              tempSelectedValues.length > 0 &&
+              selectedValues.length === 0 &&
+              tempSelectedValues.length !== options.length
+            ) {
               updateSelectValues(tempSelectedValues);
             }
             close();

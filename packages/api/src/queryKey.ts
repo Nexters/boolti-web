@@ -250,12 +250,25 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
   }),
   ticketList: (
     showId: number,
+    page: number,
     reservationNameOrPhoneNumber: string,
     salesTicketTypeId: string[],
     isUsed?: boolean,
   ) => ({
     queryKey: [showId, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
-    queryFn: () => fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`),
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        reservationNameOrPhoneNumber,
+        salesTicketTypeId: salesTicketTypeId.join(','),
+      };
+      if (isUsed) {
+        searchParams.isUsed = isUsed;
+      }
+      return fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`, {
+        searchParams,
+      });
+    },
   }),
 });
 
