@@ -255,7 +255,7 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
     salesTicketTypeId: string[],
     isUsed?: boolean,
   ) => ({
-    queryKey: [showId, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
+    queryKey: [showId, page, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
     queryFn: () => {
       const searchParams: SearchParamsOption = {
         page,

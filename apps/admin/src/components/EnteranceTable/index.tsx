@@ -23,7 +23,9 @@ const columns = [
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
-        <span dangerouslySetInnerHTML={{ __html: boldText(props.getValue(), searchText) }}></span>
+        <Styled.SearchResult
+          dangerouslySetInnerHTML={{ __html: boldText(props.getValue(), searchText) }}
+        />
       );
     },
   }),
@@ -32,11 +34,11 @@ const columns = [
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
-        <span
+        <Styled.SearchResult
           dangerouslySetInnerHTML={{
             __html: boldText(formatPhoneNumber(props.getValue()), searchText),
           }}
-        ></span>
+        />
       );
     },
   }),

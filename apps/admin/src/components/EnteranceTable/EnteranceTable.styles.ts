@@ -64,6 +64,9 @@ const Item = styled.span`
   text-align: left;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   & strong {
     background-color: ${({ theme }) => theme.palette.primary.o0};
   }
@@ -113,6 +116,11 @@ const DisabledText = styled.span`
   color: ${({ theme }) => theme.palette.grey.g30};
 `;
 
+const SearchResult = styled.span`
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
 export default {
   Container,
   HeaderItem,
@@ -122,4 +130,5 @@ export default {
   Empty,
   ResetButton,
   DisabledText,
+  SearchResult,
 };
