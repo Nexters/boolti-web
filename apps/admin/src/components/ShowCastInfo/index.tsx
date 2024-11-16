@@ -1,19 +1,67 @@
 import { useDialog } from '@boolti/ui';
+import { useDrag, useDrop } from 'react-dnd'
 
 import Styled from './ShowCastInfo.styles';
-import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon } from '@boolti/icon';
-import { useState } from 'react';
+import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon, MenuIcon } from '@boolti/icon';
+import { useRef, useState } from 'react';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
 } from '../ShowCastInfoFormDialogContent';
 
 interface Props {
   showCastInfo: TempShowCastInfoFormInput;
+  index: number;
   onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
+  onDropHover: (draggedItemId: number, hoverIndex: number) => void;
+  onDrop?: () => void;
   onDelete?: () => Promise<void>;
 }
 
-const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
+interface DragItem {
+  id: number
+  index: number
+}
+
+const ShowCastInfo = ({ showCastInfo, index, onSave, onDropHover, onDrop, onDelete }: Props) => {
+  const ref = useRef<HTMLDivElement>(null)
+  const [{ isDragging }, drag, preview] = useDrag<DragItem, unknown, { isDragging: boolean }>(() => ({
+    type: 'castTeam',
+    previewOptions: {
+      captureDraggingState: true,
+    },
+    item: { id: showCastInfo.id, index },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging()
+    }),
+  }))
+  const [, drop] = useDrop<DragItem>({
+    accept: 'castTeam',
+    hover(item: DragItem, monitor) {
+      if (!ref.current) return;
+      if (!monitor.canDrop()) return;
+      if (item.id === showCastInfo.id) return;
+
+      const dragIndex = item.index;
+      const hoverIndex = index;
+
+      const hoverBoundingRect = ref.current.getBoundingClientRect();
+      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const clientOffset = monitor.getClientOffset();
+      if (!clientOffset) return;
+
+      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
+
+      item.index = hoverIndex;
+
+      onDropHover(item.id, index);
+    },
+    drop() {
+      onDrop?.()
+    }
+  })
+
   const { members = [] } = showCastInfo;
   const memberLength = members.length ?? 0;
   const dialog = useDialog();
@@ -21,10 +69,19 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
 
   const toggle = () => setIsOpen((prev) => !prev);
 
+  preview(drop(ref))
+
   return (
-    <Styled.Container>
+    <Styled.Container ref={ref} style={{ opacity: isDragging ? 0.4 : 1 }}>
       <Styled.Header>
-        {showCastInfo.name}
+        <Styled.HeaderNameWrapper>
+          <Styled.Handle ref={drag}>
+            <MenuIcon />
+          </Styled.Handle>
+          <Styled.Name>
+            {showCastInfo.name}
+          </Styled.Name>
+        </Styled.HeaderNameWrapper>
         <Styled.EditButton
           colorTheme="line"
           size="bold"
@@ -94,7 +151,7 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           </Styled.CollapseButton>
         </>
       )}
-    </Styled.Container>
+    </Styled.Container >
   );
 };
 

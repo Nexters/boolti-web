@@ -36,7 +36,8 @@ const ShowBasicInfoFormContent = ({
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
-      'image/jpeg, image/png': [],
+      'image/jpeg': [],
+      'image/png': [],
     },
     maxFiles: MAX_IMAGE_COUNT,
     onDrop: onDropImage,
