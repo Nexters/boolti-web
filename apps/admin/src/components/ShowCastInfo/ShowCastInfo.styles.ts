@@ -1,4 +1,4 @@
-import { Button } from '@boolti/ui';
+import { Button, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
@@ -46,8 +46,16 @@ const Name = styled.span`
 
 const EditButton = styled(Button)`
   padding: 13px 18px;
-  & > svg {
-    margin-right: 8px;
+
+  span {
+    display: none;
+    margin-left: 8px;
+  }
+
+  ${mq_lg} {
+    span {
+      display: inline;
+    }
   }
 `;
 

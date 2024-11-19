@@ -115,7 +115,7 @@ const ShowCastInfo = ({ showCastInfo, index, onSave, onDropHover, onDrop, onDele
           }}
         >
           <EditIcon />
-          편집하기
+          <span>정보 편집</span>
         </Styled.EditButton>
       </Styled.Header>
       {memberLength > 0 && (
