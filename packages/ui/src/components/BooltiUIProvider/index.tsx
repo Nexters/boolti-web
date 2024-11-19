@@ -1,11 +1,12 @@
-import { DndProvider } from 'react-dnd';
+import { DndProvider } from 'react-dnd-multi-backend'
+import { HTML5toTouch } from 'rdndmb-html5-to-touch'
+
 import '../../index.css';
 import AlertProvider from '../AlertProvider';
 
 import ConfirmProvider from '../ConfirmProvider';
 import DialogProvider from '../DialogProvider';
 import ThemeProvider from '../ThemeProvider';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 
 interface BooltiUIProviderProps {
   children: React.ReactNode;
@@ -13,7 +14,7 @@ interface BooltiUIProviderProps {
 
 const BooltiUIProvider = ({ children }: BooltiUIProviderProps) => {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider options={HTML5toTouch}>
       <ThemeProvider>
         <AlertProvider>
           <ConfirmProvider>
