@@ -74,7 +74,7 @@ const ShowCastInfoMemberRow = ({ control, field, index, isFieldBlurred, onSetUse
         opacity: isDragging ? 0.4 : 1,
       }}
     >
-      <Styled.Handle ref={drag}>
+      <Styled.Handle type="button" ref={drag} onScroll={(event) => { event.stopPropagation() }}>
         <MenuIcon />
       </Styled.Handle>
       <Controller

@@ -75,7 +75,7 @@ const ShowCastInfo = ({ showCastInfo, index, onSave, onDropHover, onDrop, onDele
     <Styled.Container ref={ref} style={{ opacity: isDragging ? 0.4 : 1 }}>
       <Styled.Header>
         <Styled.HeaderNameWrapper>
-          <Styled.Handle ref={drag}>
+          <Styled.Handle type="button" ref={drag} onScroll={(event) => { event.stopPropagation() }}>
             <MenuIcon />
           </Styled.Handle>
           <Styled.Name>

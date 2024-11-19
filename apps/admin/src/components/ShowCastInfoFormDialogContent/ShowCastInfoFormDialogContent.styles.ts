@@ -63,7 +63,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
   }
 `;
 
-const Handle = styled.div`
+const Handle = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -71,6 +71,8 @@ const Handle = styled.div`
   margin-top: 12px;
   margin-right: 8px;
   cursor: move;
+  user-select: none;
+  user-zoom: none;
 `
 
 const TextFieldWrap = styled.div`

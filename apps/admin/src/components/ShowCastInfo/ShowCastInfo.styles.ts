@@ -31,12 +31,14 @@ const HeaderNameWrapper = styled.div`
   gap: 12px;
 `
 
-const Handle = styled.div`
+const Handle = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.palette.grey.g40};
   cursor: move;
+  user-select: none;
+  user-zoom: none;
 `
 
 const Name = styled.span`
