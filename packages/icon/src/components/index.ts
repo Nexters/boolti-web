@@ -14,6 +14,7 @@ import { Calendar } from './Calendar';
 import { CB } from './CB';
 import { Check } from './Check';
 import { ChevronDown } from './ChevronDown';
+import { Filter } from './Filter';
 import { ChevronLeft } from './ChevronLeft';
 import { ChevronRight } from './ChevronRight';
 import { ChevronUp } from './ChevronUp';
@@ -34,6 +35,7 @@ import { Hana } from './Hana';
 import { HSBC } from './HSBC';
 import { IBK } from './IBK';
 import { ICBC } from './ICBC';
+import { SquareCheckIcon } from './SquareCheckIcon';
 import { Instagram } from './Instagram';
 import { JPMorgan } from './JPMorgan';
 import { K } from './K';
@@ -84,6 +86,7 @@ export {
   BooltiSmall as BooltiSmallLogo,
   Calendar as CalendarIcon,
   CB,
+  Filter as FilterIcon,
   Check as CheckIcon,
   ChevronDown as ChevronDownIcon,
   ChevronLeft as ChevronLeftIcon,
@@ -100,6 +103,7 @@ export {
   Download as DownloadIcon,
   Edit as EditIcon,
   EPost,
+  SquareCheckIcon,
   FileUp as FileUpIcon,
   Github as GithubIcon,
   Hana,

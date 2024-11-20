@@ -1,8 +1,8 @@
 import {
   TicketStatus,
   useShowDetail,
-  useShowReservations,
   useShowReservationSummary,
+  useShowReservationWithTickets,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
 import { useEffect, useState } from 'react';
@@ -19,9 +19,9 @@ import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 
 const emptyLabel: Record<TicketStatus, string> = {
-  COMPLETE: '발권 완료된 티켓이 없어요.',
-  WAIT: '발권 대기 중인 티켓이 없어요.',
-  CANCEL: '발권 취소된 티켓이 없어요.',
+  COMPLETE: '결제 완료된 티켓이 없어요.',
+  WAIT: '결제 대기 중인 티켓이 없어요.',
+  CANCEL: '결제 취소된 티켓이 없어요.',
 };
 
 const ShowReservationPage = () => {
@@ -42,18 +42,20 @@ const ShowReservationPage = () => {
 
   const { data: show } = useShowDetail(showId);
   const { data: reservationSummary } = useShowReservationSummary(showId);
-  const { data: reservationData, isLoading: isReservationPagesLoading } = useShowReservations(
-    showId,
-    currentPage,
-    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
-    selectedTicketStatus,
-    debouncedSearchText,
-  );
+  const { data: reservationData, isLoading: isReservationPagesLoading } =
+    useShowReservationWithTickets(
+      showId,
+      currentPage,
+      selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
+      selectedTicketStatus,
+      debouncedSearchText,
+    );
   const totalPages = reservationData?.totalPages ?? 0;
   const reservations = (reservationData?.content ?? []).filter(
-    ({ ticketStatus, ticketType }) =>
-      ticketStatus === selectedTicketStatus &&
-      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+    ({ paymentManagementStatus, salesTicketType }) =>
+      paymentManagementStatus === selectedTicketStatus &&
+      (selectedTicketType.value === 'ALL' ||
+        salesTicketType?.ticketType === selectedTicketType.value),
   );
 
   const onClickReset = () => {
@@ -125,7 +127,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'COMPLETE'}
               >
-                발권 완료 <span>{completeCount}</span>
+                {isMobile ? '완료' : '결제 완료'} <span>{completeCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -134,7 +136,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'WAIT'}
               >
-                발권 대기 <span>{waitCount}</span>
+                {isMobile ? '대기' : '결제 대기'} <span>{waitCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -143,7 +145,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'CANCEL'}
               >
-                발권 취소 <span>{cancelCount}</span>
+                {isMobile ? '취소' : '결제 취소'} <span>{cancelCount}</span>
               </Styled.TicketReservationSummaryButton>
             </Styled.TicketReservationSummaryButtonContainer>
             <Styled.FilterContainer>
@@ -185,12 +187,22 @@ const ShowReservationPage = () => {
               </Styled.TableContainer>
               <MobileCardList
                 items={reservations.map((reservation) => ({
-                  id: reservation.ticketId,
-                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
-                  name: reservation.reservationName,
-                  phoneNumber: reservation.reservationPhoneNumber,
-                  ticketName: reservation.ticketName,
-                  count: 1,
+                  id: reservation.csReservationId,
+                  badgeText:
+                    reservation.salesTicketType?.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
+                  name: reservation.paymentInfo?.payerName ?? '',
+                  phoneNumber: reservation.paymentInfo?.payerPhoneNumber ?? '',
+                  ticketName: reservation.salesTicketType?.ticketName ?? '',
+                  count: reservation.tickets.length,
+                  type: reservation.cancelInfo
+                    ? 'LINE_THROUGH'
+                    : !!reservation.gift && !reservation.gift.done
+                      ? 'DISABLED'
+                      : 'NORMAL',
+                  status:
+                    !!reservation.gift && !reservation.gift.done
+                      ? '선물 미등록'
+                      : `${reservation.salesTicketType?.price.toLocaleString()}원`,
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={emptyLabel[selectedTicketStatus]}

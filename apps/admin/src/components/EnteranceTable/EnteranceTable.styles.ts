@@ -30,25 +30,23 @@ const HeaderItem = styled.span`
     margin-right: 12px;
   }
   &:nth-of-type(1) {
-    width: 108px;
+    width: 120px;
   }
   &:nth-of-type(2) {
-    width: 80px;
+    width: 100px;
   }
   &:nth-of-type(3) {
-    width: 180px;
+    width: 140px;
   }
   &:nth-of-type(4) {
-    width: 100px;
+    width: 80px;
   }
   &:nth-of-type(5) {
     width: 140px;
   }
   &:nth-of-type(6) {
-    width: 80px;
-  }
-  &:nth-of-type(7) {
-    width: 148px;
+    width: 180px;
+    flex: 1 0 auto;
   }
 `;
 
@@ -66,6 +64,9 @@ const Item = styled.span`
   text-align: left;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   & strong {
     background-color: ${({ theme }) => theme.palette.primary.o0};
   }
@@ -73,25 +74,23 @@ const Item = styled.span`
     margin-right: 12px;
   }
   &:nth-of-type(1) {
-    width: 108px;
+    width: 120px;
   }
   &:nth-of-type(2) {
-    width: 80px;
+    width: 100px;
   }
   &:nth-of-type(3) {
-    width: 180px;
+    width: 140px;
   }
   &:nth-of-type(4) {
-    width: 100px;
+    width: 80px;
   }
   &:nth-of-type(5) {
     width: 140px;
   }
   &:nth-of-type(6) {
-    width: 80px;
-  }
-  &:nth-of-type(7) {
-    width: 148px;
+    width: 180px;
+    flex: 1 0 auto;
   }
 `;
 
@@ -112,6 +111,16 @@ const ResetButton = styled(Button)`
   margin-top: 18px;
 `;
 
+const DisabledText = styled.span`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g30};
+`;
+
+const SearchResult = styled.span`
+  white-space: nowrap;
+  overflow: hidden;
+`;
+
 export default {
   Container,
   HeaderItem,
@@ -120,4 +129,6 @@ export default {
   Item,
   Empty,
   ResetButton,
+  DisabledText,
+  SearchResult,
 };

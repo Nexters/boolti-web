@@ -7,7 +7,9 @@ import {
   EntranceSummaryResponse,
   PageEntranceResponse,
   PageReservationResponse,
+  PageReservationWithTicketsResponse,
   ReservationSummaryResponse,
+  SalesTicketTypeResponseV2,
   SettlementBannersResponse,
   ShowCastTeamReadResponse,
   ShowInvitationCodeListResponse,
@@ -49,6 +51,7 @@ import {
 } from './types/adminReservation';
 import {
   AdminTicketSalesInfoResponse,
+  PageTicketWithReservationResponse,
   SuperAdminInvitationCodeListResponse,
   SuperAdminInvitationTicketListResponse,
   SuperAdminSalesTicketListResponse,
@@ -240,6 +243,33 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
         `sa-api/v1/invitation-tickets/${ticketId}/invitation-codes`,
       ),
   }),
+  salesTicketList: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SalesTicketTypeResponseV2[]>(`web/v1/host/shows/${showId}/sales-tickets`),
+  }),
+  ticketList: (
+    showId: number,
+    page: number,
+    reservationNameOrPhoneNumber: string,
+    salesTicketTypeId: string[],
+    isUsed?: boolean,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, salesTicketTypeId, isUsed],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+        reservationNameOrPhoneNumber,
+        salesTicketTypeId: salesTicketTypeId.join(','),
+      };
+      if (isUsed) {
+        searchParams.isUsed = isUsed;
+      }
+      return fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`, {
+        searchParams,
+      });
+    },
+  }),
 });
 
 export const showQueryKeys = createQueryKeys('show', {
@@ -284,6 +314,35 @@ export const showQueryKeys = createQueryKeys('show', {
       return fetcher.get<PageReservationResponse>(`web/v1/host/shows/${showId}/reservations`, {
         searchParams,
       });
+    },
+  }),
+  reservationWithTickets: (
+    showId: number,
+    page: number,
+    ticketType: TicketType | undefined = undefined,
+    paymentManagementStatus: TicketStatus | undefined = undefined,
+    reservationNameOrPhoneNumber?: string,
+  ) => ({
+    queryKey: [showId, page, reservationNameOrPhoneNumber, ticketType, paymentManagementStatus],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (ticketType) {
+        searchParams.ticketType = ticketType;
+      }
+      if (paymentManagementStatus) {
+        searchParams.paymentManagementStatus = paymentManagementStatus;
+      }
+      if (reservationNameOrPhoneNumber) {
+        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      }
+      return fetcher.get<PageReservationWithTicketsResponse>(
+        `web/v2/shows/${showId}/reservations`,
+        {
+          searchParams,
+        },
+      );
     },
   }),
   salesTicketList: (showId: number) => ({
