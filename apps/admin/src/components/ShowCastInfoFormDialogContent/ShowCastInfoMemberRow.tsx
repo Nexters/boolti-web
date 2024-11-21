@@ -1,15 +1,15 @@
-import { useDrag, useDrop } from "react-dnd";
+import { useDrag, useDrop } from 'react-dnd';
 import { ClearIcon, MenuIcon, TrashIcon, UserIcon } from '@boolti/icon';
 import { Member } from '@boolti/api';
 import { replaceUserCode } from '~/utils/replace';
 import Styled from './ShowCastInfoFormDialogContent.styles';
-import { TempShowCastInfoFormInput } from ".";
-import { Control, Controller } from "react-hook-form";
-import { useRef } from "react";
+import { TempShowCastInfoFormInput } from '.';
+import { Control, Controller } from 'react-hook-form';
+import { useRef } from 'react';
 
 interface DragItem {
-  id: number
-  index: number
+  id: number;
+  index: number;
 }
 
 interface ShowCastInfoMemberRowProps {
@@ -20,23 +20,36 @@ interface ShowCastInfoMemberRowProps {
   onSetUser: (userCode: string) => void;
   onResetUser: () => void;
   onBlurRoleName: () => void;
-  onDelete: () => void
+  onDelete: () => void;
   onDropHover: (draggedItemId: number, hoverIndex: number) => void;
   onDrop?: () => void;
 }
 
-const ShowCastInfoMemberRow = ({ control, field, index, isFieldBlurred, onSetUser, onResetUser, onBlurRoleName, onDelete, onDropHover, onDrop }: ShowCastInfoMemberRowProps) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [{ isDragging }, drag, preview] = useDrag<DragItem, unknown, { isDragging: boolean }>(() => ({
-    type: 'castMember',
-    previewOptions: {
-      captureDraggingState: true,
-    },
-    item: { id: field.id, index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
+const ShowCastInfoMemberRow = ({
+  control,
+  field,
+  index,
+  isFieldBlurred,
+  onSetUser,
+  onResetUser,
+  onBlurRoleName,
+  onDelete,
+  onDropHover,
+  onDrop,
+}: ShowCastInfoMemberRowProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [{ isDragging }, drag, preview] = useDrag<DragItem, unknown, { isDragging: boolean }>(
+    () => ({
+      type: 'castMember',
+      previewOptions: {
+        captureDraggingState: true,
+      },
+      item: { id: field.id, index },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
     }),
-  }))
+  );
   const [, drop] = useDrop<DragItem>({
     accept: 'castMember',
     hover(item: DragItem, monitor) {
@@ -61,11 +74,11 @@ const ShowCastInfoMemberRow = ({ control, field, index, isFieldBlurred, onSetUse
       onDropHover(item.id, index);
     },
     drop() {
-      onDrop?.()
-    }
-  })
+      onDrop?.();
+    },
+  });
 
-  preview(drop(ref))
+  preview(drop(ref));
 
   return (
     <Styled.Row
@@ -74,16 +87,20 @@ const ShowCastInfoMemberRow = ({ control, field, index, isFieldBlurred, onSetUse
         opacity: isDragging ? 0.4 : 1,
       }}
     >
-      <Styled.Handle type="button" ref={drag} onScroll={(event) => { event.stopPropagation() }}>
+      <Styled.Handle
+        type="button"
+        ref={drag}
+        onScroll={(event) => {
+          event.stopPropagation();
+        }}
+      >
         <MenuIcon />
       </Styled.Handle>
       <Controller
         control={control}
         render={({ field: { onChange, onBlur } }) => {
           const value = field.userCode;
-          const isError = Boolean(
-            isFieldBlurred.userCode ? !value || !field.userNickname : false,
-          );
+          const isError = Boolean(isFieldBlurred.userCode ? !value || !field.userNickname : false);
           return (
             <Styled.FieldWrap>
               <Styled.InputWrapper isError={isError}>
@@ -163,13 +180,11 @@ const ShowCastInfoMemberRow = ({ control, field, index, isFieldBlurred, onSetUse
         }}
         name={`members.${index}.roleName`}
       />
-      <Styled.TrashCanButton
-        onClick={onDelete}
-      >
+      <Styled.TrashCanButton onClick={onDelete}>
         <TrashIcon />
       </Styled.TrashCanButton>
     </Styled.Row>
   );
-}
+};
 
-export default ShowCastInfoMemberRow
+export default ShowCastInfoMemberRow;

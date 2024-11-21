@@ -68,27 +68,30 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
           (!userNickname || !roleName),
       ));
 
-  const dragHoverHandler = useCallback((draggedItemId: number, hoverIndex: number) => {
-    const draggedItemIndex = controlledFields.findIndex(({ id }) => id === draggedItemId);
-    if (draggedItemIndex === -1 || hoverIndex < 0 || hoverIndex >= controlledFields.length) {
-      return;
-    }
+  const dragHoverHandler = useCallback(
+    (draggedItemId: number, hoverIndex: number) => {
+      const draggedItemIndex = controlledFields.findIndex(({ id }) => id === draggedItemId);
+      if (draggedItemIndex === -1 || hoverIndex < 0 || hoverIndex >= controlledFields.length) {
+        return;
+      }
 
-    prevControlledFields.current = { ...controlledFields };
+      prevControlledFields.current = { ...controlledFields };
 
-    const nextFields = [...fields];
-    const [draggedItem] = nextFields.splice(draggedItemIndex, 1);
-    nextFields.splice(hoverIndex, 0, draggedItem);
+      const nextFields = [...fields];
+      const [draggedItem] = nextFields.splice(draggedItemIndex, 1);
+      nextFields.splice(hoverIndex, 0, draggedItem);
 
-    replace(nextFields);
+      replace(nextFields);
 
-    setIsMemberFieldBlurred((prev) => {
-      const nextMemberFieldBlurred = [...prev];
-      nextMemberFieldBlurred.splice(draggedItemIndex, 1);
-      nextMemberFieldBlurred.splice(hoverIndex, 0, prev[draggedItemIndex]);
-      return nextMemberFieldBlurred;
-    })
-  }, [fields, controlledFields, replace])
+      setIsMemberFieldBlurred((prev) => {
+        const nextMemberFieldBlurred = [...prev];
+        nextMemberFieldBlurred.splice(draggedItemIndex, 1);
+        nextMemberFieldBlurred.splice(hoverIndex, 0, prev[draggedItemIndex]);
+        return nextMemberFieldBlurred;
+      });
+    },
+    [fields, controlledFields, replace],
+  );
 
   return (
     <>
@@ -121,7 +124,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
       <Styled.MemberList>
         {controlledFields.map((field, index) => (
           <ShowCastInfoMemberRow
-            key={field.id}
+            key={field.id ?? index}
             control={control}
             field={field}
             index={index}
@@ -140,8 +143,8 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                 } catch {
                   toast.error(
                     '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
-                    '\n' +
-                    '식별 코드를 확인 후 다시 시도해 주세요.',
+                      '\n' +
+                      '식별 코드를 확인 후 다시 시도해 주세요.',
                   );
                 } finally {
                   setIsMemberFieldBlurred((prev) => {

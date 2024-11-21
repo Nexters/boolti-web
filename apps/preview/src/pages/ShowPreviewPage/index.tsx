@@ -13,13 +13,20 @@ setDefaultOptions({ locale: ko });
 
 const getDynamicLink = (showId: number) => {
   return `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
-}
+};
 
 const getPreviewLink = (showId: number) => {
-  return `${window.location.origin}/show/${showId}`
-}
+  return `${window.location.origin}/show/${showId}`;
+};
 
-const getShareText = (show: { id: number, title: string, date: Date, placeName: string, streetAddress: string, detailAddress: string }) => {
+const getShareText = (show: {
+  id: number;
+  title: string;
+  date: Date;
+  placeName: string;
+  streetAddress: string;
+  detailAddress: string;
+}) => {
   return `
 공연 정보를 공유드려요! 
 
@@ -29,8 +36,8 @@ const getShareText = (show: { id: number, title: string, date: Date, placeName: 
 
 공연 상세 정보 ▼ 
 ${getPreviewLink(show.id)}
-  `
-}
+  `;
+};
 
 const ShowPreviewPage = () => {
   const loaderData = useLoaderData() as
@@ -65,7 +72,14 @@ const ShowPreviewPage = () => {
     try {
       await navigator.share({
         title,
-        text: getShareText({ id, title, date: new Date(date), placeName, streetAddress, detailAddress }),
+        text: getShareText({
+          id,
+          title,
+          date: new Date(date),
+          placeName,
+          streetAddress,
+          detailAddress,
+        }),
         url: getPreviewLink(id),
       });
     } catch (error) {

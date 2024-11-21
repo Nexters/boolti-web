@@ -12,7 +12,6 @@ const DimmedArea = styled.div`
   position: fixed;
   inset: 0;
   background-color: ${({ theme }) => theme.palette.dim.dialog};
-  z-index: 999;
 
   ${mq_lg} {
     padding: 0 20px;
@@ -61,12 +60,11 @@ const Dialog = styled.div<{
   ${mq_lg} {
     border-radius: 8px;
     width: ${({ isAuto, width }) => (isAuto ? 'auto' : width ?? DIALOG_WIDTH)};
-    position: initial;
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-    transform: none;
+    position: fixed;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 `;
 
