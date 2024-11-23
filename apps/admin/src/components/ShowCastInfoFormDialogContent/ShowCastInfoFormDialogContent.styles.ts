@@ -106,6 +106,8 @@ const Row = styled.div`
   justify-content: center;
   align-items: flex-start;
   border-radius: 4px;
+  position: relative;
+  z-index: 99;
 `;
 
 const TrashCanButton = styled.button`
@@ -186,27 +188,27 @@ const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.palette.status.error};
 `;
 
-const DraggableShowCastInfoMemberRow = styled.div<{ isDragging: boolean }>`
+const DraggableShowCastInfoMemberRow = styled.div`
   border-radius: 4px;
   cursor: grabbing;
+  backdrop-filter: blur(1.5px);
+  z-index: 100;
 
-  ${({ isDragging }) => isDragging && `
-    & > div > div > div {
-      background: none;
-    }
+  & > div > div > div {
+    background: none;
+  }
 
-    &::after {
-      content: '';
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: calc(100% + 20px);
-      height: calc(100% + 20px);
-      background-color: rgba(231, 234, 242, 0.5);
-      border-radius: 4px;
-      z-index: -1;
-    }
-  `};
+  &::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    background-color: rgba(231, 234, 242, 0.5);
+    border-radius: 4px;
+    z-index: -1;
+  }
 `
 
 

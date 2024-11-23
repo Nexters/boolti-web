@@ -19,9 +19,7 @@ const DraggableShowCastInfoMemberRow = ({ id, ...props }: DraggableShowCastInfoM
   const style = {
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0 : 1,
-    backdropFilter: isDragging ? 'blur(1.5px)' : undefined,
-    cursor: isDragging ? 'grabbing' : undefined,
+    opacity: isDragging ? 0 : 1
   };
   
   return (

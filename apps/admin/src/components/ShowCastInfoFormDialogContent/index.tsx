@@ -221,7 +221,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
           </SortableContext>
           <DragOverlay>
             {(draggingItemId && draggingField && draggingFieldIndex > -1) ? (
-              <Styled.DraggableShowCastInfoMemberRow isDragging={draggingItemId === draggingField._id}>
+              <Styled.DraggableShowCastInfoMemberRow>
                 <ShowCastInfoMemberRow
                   control={control}
                   field={draggingField}
