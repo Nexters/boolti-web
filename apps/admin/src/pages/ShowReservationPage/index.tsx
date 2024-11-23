@@ -79,7 +79,6 @@ const ShowReservationPage = () => {
   const {
     salesTicketSoldCount,
     totalSalesAmount,
-    invitationTicketSoldCount,
     totalSoldCount,
     completeCount,
     waitCount,
@@ -100,19 +99,15 @@ const ShowReservationPage = () => {
         <Styled.Container>
           <Styled.TicketSummaryContainer>
             <Styled.TicketSummary colorTheme="grey">
-              <Styled.TicketSumamryLabel>일반 티켓</Styled.TicketSumamryLabel>
+              <Styled.TicketSumamryLabel>결제 건수</Styled.TicketSumamryLabel>
               <Styled.TicketSumamryValue>{salesTicketSoldCount}매</Styled.TicketSumamryValue>
             </Styled.TicketSummary>
             <Styled.TicketSummary colorTheme="grey">
-              <Styled.TicketSumamryLabel>초청 티켓</Styled.TicketSumamryLabel>
-              <Styled.TicketSumamryValue>{invitationTicketSoldCount}매</Styled.TicketSumamryValue>
-            </Styled.TicketSummary>
-            <Styled.TicketSummary colorTheme="grey">
-              <Styled.TicketSumamryLabel>총 발권된 티켓</Styled.TicketSumamryLabel>
+              <Styled.TicketSumamryLabel>발권 티켓</Styled.TicketSumamryLabel>
               <Styled.TicketSumamryValue>{totalSoldCount}매</Styled.TicketSumamryValue>
             </Styled.TicketSummary>
             <Styled.TicketSummary colorTheme="red">
-              <Styled.TicketSumamryLabel>공연 수익</Styled.TicketSumamryLabel>
+              <Styled.TicketSumamryLabel>결제 금액</Styled.TicketSumamryLabel>
               <Styled.TicketSumamryValue>
                 {totalSalesAmount.toLocaleString()}원
               </Styled.TicketSumamryValue>
