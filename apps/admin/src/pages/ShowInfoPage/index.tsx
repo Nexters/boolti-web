@@ -19,8 +19,8 @@ import { compareAsc, format } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DndContext, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import ShowDeleteForm from '~/components/ShowDeleteForm';
@@ -60,7 +60,7 @@ const ShowInfoPage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
   const { data: castTeamList, refetch: refetchCastTeamList } = useCastTeamList(showId);
-  const { castTeamListDraft, castTeamDragEndHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
+  const { castTeamListDraft, sensors, castTeamDragEndHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
@@ -76,23 +76,6 @@ const ShowInfoPage = () => {
   const setMiddleware = useSetAtom(middlewareAtom);
 
   const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(false);
-
-  const sensors = useSensors(
-    useSensor(MouseSensor, {
-      activationConstraint: {
-        distance: 10,
-      },
-    }),
-    useSensor(TouchSensor, {
-      activationConstraint: {
-        delay: 0,
-        tolerance: 5,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
-  );
 
   useBodyScrollLock(previewDrawerOpen);
 

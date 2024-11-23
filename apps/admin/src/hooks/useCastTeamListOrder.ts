@@ -1,7 +1,7 @@
 import { useChangeCastTeamOrder } from "@boolti/api";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DragOverEvent } from "@dnd-kit/core";
-import { arrayMove } from "@dnd-kit/sortable";
+import { DragOverEvent, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors } from "@dnd-kit/core";
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
 
 import { TempShowCastInfoFormInput } from "~/components/ShowCastInfoFormDialogContent";
 
@@ -44,6 +44,23 @@ const useCastTeamListOrder = (params?: UseCastTeamListOrderParams) => {
     });
   }, [changeCastTeamOrder, showId]);
 
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 0,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   useEffect(() => {
     if (!castTeamList) return;
 
@@ -62,6 +79,7 @@ const useCastTeamListOrder = (params?: UseCastTeamListOrderParams) => {
 
   return {
     castTeamListDraft,
+    sensors,
     setCastTeamListDraft,
     castTeamDragEndHandler,
   }

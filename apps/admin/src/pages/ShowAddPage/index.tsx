@@ -9,6 +9,9 @@ import { Button, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
@@ -46,7 +49,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
-  const { castTeamListDraft, setCastTeamListDraft, castTeamDropHoverHandler, castTeamDropHandler } = useCastTeamListOrder();
+  const { castTeamListDraft, sensors, setCastTeamListDraft, castTeamDragEndHandler } = useCastTeamListOrder();
 
   const toast = useToast();
 
@@ -175,29 +178,30 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           return new Promise((reslve) => reslve());
                         }}
                       />
-                      {castTeamListDraft.map((info, index) => (
-                        <ShowCastInfo
-                          key={info.id}
-                          showCastInfo={info}
-                          index={index}
-                          onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                            setCastTeamListDraft((prev) =>
-                              prev.map((prevCastInfo, currentIndex) =>
-                                index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                              )
-                            );
-                            return new Promise((reslve) => reslve());
-                          }}
-                          onDelete={() => {
-                            setCastTeamListDraft((prev) =>
-                              prev.filter((_, currentIndex) => index !== currentIndex)
-                            );
-                            return new Promise((reslve) => reslve());
-                          }}
-                          onDrop={castTeamDropHandler}
-                          onDropHover={castTeamDropHoverHandler}
-                        />
-                      ))}
+                      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+                        <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                          {castTeamListDraft.map((info) => (
+                            <ShowCastInfo
+                              key={info.id}
+                              showCastInfo={info}
+                              onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.map((item) =>
+                                    item.id === info.id ? showCastInfoFormInput : item,
+                                  )
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                              onDelete={() => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.filter((item) => item.id !== info.id)
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                            />
+                          ))}
+                        </SortableContext>
+                      </DndContext>
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"
@@ -390,29 +394,30 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     return new Promise((reslve) => reslve());
                   }}
                 />
-                {castTeamListDraft.map((info, index) => (
-                  <ShowCastInfo
-                    key={index}
-                    showCastInfo={info}
-                    index={index}
-                    onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                      setCastTeamListDraft((prev) =>
-                        prev.map((prevCastInfo, currentIndex) =>
-                          index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                        )
-                      );
-                      return new Promise((reslve) => reslve());
-                    }}
-                    onDelete={() => {
-                      setCastTeamListDraft((prev) =>
-                        prev.filter((_, currentIndex) => index !== currentIndex)
-                      );
-                      return new Promise((reslve) => reslve());
-                    }}
-                    onDropHover={castTeamDropHoverHandler}
-                    onDrop={castTeamDropHandler}
-                  />
-                ))}
+                <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+                  <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                    {castTeamListDraft.map((info) => (
+                      <ShowCastInfo
+                        key={info.id}
+                        showCastInfo={info}
+                        onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                          setCastTeamListDraft((prev) =>
+                            prev.map((item) =>
+                              item.id === info.id ? showCastInfoFormInput : item,
+                            )
+                          );
+                          return new Promise((reslve) => reslve());
+                        }}
+                        onDelete={() => {
+                          setCastTeamListDraft((prev) =>
+                            prev.filter((item) => item.id !== info.id)
+                          );
+                          return new Promise((reslve) => reslve());
+                        }}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               </Styled.ShowInfoFormContent>
               <Button
                 size="bold"
