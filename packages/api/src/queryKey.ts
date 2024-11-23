@@ -262,7 +262,7 @@ export const adminTicketQueryKeys = createQueryKeys('adminTicket', {
         reservationNameOrPhoneNumber,
         salesTicketTypeId: salesTicketTypeId.join(','),
       };
-      if (isUsed) {
+      if (typeof isUsed !== 'undefined') {
         searchParams.isUsed = isUsed;
       }
       return fetcher.get<PageTicketWithReservationResponse>(`web/v1/shows/${showId}/tickets`, {
