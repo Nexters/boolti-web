@@ -1,5 +1,8 @@
 import { useChangeCastTeamOrder } from "@boolti/api";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { DragOverEvent } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
+
 import { TempShowCastInfoFormInput } from "~/components/ShowCastInfoFormDialogContent";
 
 interface UseCastTeamListOrderParams {
@@ -11,59 +14,56 @@ interface UseCastTeamListOrderParams {
 const useCastTeamListOrder = (params?: UseCastTeamListOrderParams) => {
   const showId = params?.showId;
   const castTeamList = params?.castTeamList;
-  const onChange = params?.onChange;
 
   const [castTeamListDraft, setCastTeamListDraft] = useState<TempShowCastInfoFormInput[]>([]);
+  const currentCastTeamIds = useRef<string | null>(null)
 
   const changeCastTeamOrder = useChangeCastTeamOrder();
 
-  const changeCastTeamIndex = useCallback((draggedItemId: number, targetIndex: number) => {
-    setCastTeamListDraft((prevDraft) => {
-      if (!prevDraft) return prevDraft;
+  const castTeamDragEndHandler = useCallback((event: DragOverEvent) => {
+    const { active, over } = event;
 
-      const draggedItemIndex = prevDraft.findIndex(({ id }) => id === draggedItemId);
-      if (draggedItemIndex === -1 || targetIndex < 0 || targetIndex >= prevDraft.length) {
-        return prevDraft;
-      }
-
-      const nextDraft = [...prevDraft];
-      const [draggedItem] = nextDraft.splice(draggedItemIndex, 1);
-      nextDraft.splice(targetIndex, 0, draggedItem);
-
-      return nextDraft;
-    })
-  }, [])
-
-  const castTeamDropHoverHandler = useCallback((draggedItemId: number, hoverIndex: number) => {
-    changeCastTeamIndex(draggedItemId, hoverIndex);
-  }, [changeCastTeamIndex]);
-
-  const castTeamDropHandler = useCallback(async () => {
-    if (!castTeamListDraft) return;
-
-    if (showId !== undefined) {
-      await changeCastTeamOrder.mutateAsync({
-        showId,
-        body: {
-          castTeamIds: castTeamListDraft.map(({ id }) => id),
-        },
+    if (active && over && over.id !== active.id) {
+      setCastTeamListDraft((prev) => {
+        const oldIndex = prev.findIndex(({ id }) => id === active.id);
+        const newIndex = prev.findIndex(({ id }) => id === over.id);
+        
+        return arrayMove(prev, oldIndex, newIndex);
       });
     }
+  }, []);
 
-    onChange?.();
-  }, [castTeamListDraft, changeCastTeamOrder, onChange, showId])
+  const fetchCastTeamOrder = useCallback(async (castTeamIds: number[]) => {
+    if (showId === undefined || castTeamIds.length === 0) return;
+
+    await changeCastTeamOrder.mutateAsync({
+      showId,
+      body: {
+        castTeamIds,
+      },
+    });
+  }, [changeCastTeamOrder, showId]);
 
   useEffect(() => {
     if (!castTeamList) return;
 
     setCastTeamListDraft(castTeamList);
-  }, [castTeamList])
+  }, [castTeamList]);
+
+  useEffect(() => {
+    const castTeamIds = castTeamListDraft.map(({ id }) => id)
+    const stringifiedCastTeamIds = JSON.stringify(castTeamIds);
+
+    if (stringifiedCastTeamIds === currentCastTeamIds.current) return;
+
+    currentCastTeamIds.current = stringifiedCastTeamIds;
+    fetchCastTeamOrder(castTeamIds);
+  }, [castTeamListDraft, fetchCastTeamOrder]);
 
   return {
     castTeamListDraft,
     setCastTeamListDraft,
-    castTeamDropHoverHandler,
-    castTeamDropHandler,
+    castTeamDragEndHandler,
   }
 }
 

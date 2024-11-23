@@ -29,6 +29,9 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
 `;
 
 const MemberList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   max-height: 364px;
   overflow-y: scroll;
   ::-webkit-scrollbar {
@@ -70,7 +73,7 @@ const Handle = styled.button`
   color: ${({ theme }) => theme.palette.grey.g40};
   margin-top: 12px;
   margin-right: 8px;
-  cursor: move;
+  cursor: grab;
   user-select: none;
   user-zoom: none;
 `
@@ -102,8 +105,6 @@ const Row = styled.div`
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-bottom: 20px;
-  background-color: ${({ theme }) => theme.palette.grey.w};
   border-radius: 4px;
 `;
 
@@ -185,6 +186,30 @@ const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.palette.status.error};
 `;
 
+const DraggableShowCastInfoMemberRow = styled.div<{ isDragging: boolean }>`
+  border-radius: 4px;
+  cursor: grabbing;
+
+  ${({ isDragging }) => isDragging && `
+    & > div > div > div {
+      background: none;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: calc(100% + 20px);
+      height: calc(100% + 20px);
+      background-color: rgba(231, 234, 242, 0.5);
+      border-radius: 4px;
+      z-index: -1;
+    }
+  `};
+`
+
+
 export default {
   ShowInfoFormLabel,
   InputWrapper,
@@ -204,4 +229,5 @@ export default {
   DeleteButton,
   ErrorMessage,
   FieldWrap,
+  DraggableShowCastInfoMemberRow
 };
