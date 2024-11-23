@@ -30,7 +30,7 @@ const HeaderItem = styled.span`
     margin-right: 12px;
   }
   &:nth-of-type(1) {
-    width: 120px;
+    width: 130px;
   }
   &:nth-of-type(2) {
     width: 100px;
@@ -74,7 +74,7 @@ const Item = styled.span`
     margin-right: 12px;
   }
   &:nth-of-type(1) {
-    width: 120px;
+    width: 130px;
   }
   &:nth-of-type(2) {
     width: 100px;
