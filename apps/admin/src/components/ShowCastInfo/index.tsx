@@ -1,122 +1,95 @@
-import { useDialog } from '@boolti/ui';
-import { useDrag, useDrop } from 'react-dnd'
+import { TextButton, useDialog } from '@boolti/ui';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import Styled from './ShowCastInfo.styles';
 import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon, MenuIcon } from '@boolti/icon';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
 } from '../ShowCastInfoFormDialogContent';
 
 interface Props {
   showCastInfo: TempShowCastInfoFormInput;
-  index: number;
   onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
-  onDropHover: (draggedItemId: number, hoverIndex: number) => void;
-  onDrop?: () => void;
   onDelete?: () => Promise<void>;
 }
 
-interface DragItem {
-  id: number
-  index: number
-}
-
-const ShowCastInfo = ({ showCastInfo, index, onSave, onDropHover, onDrop, onDelete }: Props) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const [{ isDragging }, drag, preview] = useDrag<DragItem, unknown, { isDragging: boolean }>(() => ({
-    type: 'castTeam',
-    previewOptions: {
-      captureDraggingState: true,
-    },
-    item: { id: showCastInfo.id, index },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging()
-    }),
-  }))
-  const [, drop] = useDrop<DragItem>({
-    accept: 'castTeam',
-    hover(item: DragItem, monitor) {
-      if (!ref.current) return;
-      if (!monitor.canDrop()) return;
-      if (item.id === showCastInfo.id) return;
-
-      const dragIndex = item.index;
-      const hoverIndex = index;
-
-      const hoverBoundingRect = ref.current.getBoundingClientRect();
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
-      const clientOffset = monitor.getClientOffset();
-      if (!clientOffset) return;
-
-      const hoverClientY = clientOffset.y - hoverBoundingRect.top;
-      if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
-      if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
-
-      item.index = hoverIndex;
-
-      onDropHover(item.id, index);
-    },
-    drop() {
-      onDrop?.()
-    }
-  })
-
+const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const { members = [] } = showCastInfo;
   const memberLength = members.length ?? 0;
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: showCastInfo.id });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    backgroundColor: isDragging ? 'rgba(231, 234, 242, 0.5)' : undefined,
+    backdropFilter: isDragging ? 'blur(3px)' : undefined,
+    zIndex: isDragging ? 100 : 99,
+    cursor: isDragging ? 'grabbing' : undefined,
+  };
+  
   const toggle = () => setIsOpen((prev) => !prev);
 
-  preview(drop(ref))
-
   return (
-    <Styled.Container ref={ref} style={{ opacity: isDragging ? 0.4 : 1 }}>
+    <Styled.Container ref={setNodeRef} style={style}>
       <Styled.Header>
         <Styled.HeaderNameWrapper>
-          <Styled.Handle type="button" ref={drag} onScroll={(event) => { event.stopPropagation() }}>
+          <Styled.Handle type="button" {...attributes} {...listeners}>
             <MenuIcon />
           </Styled.Handle>
           <Styled.Name>
             {showCastInfo.name}
           </Styled.Name>
         </Styled.HeaderNameWrapper>
-        <Styled.EditButton
-          colorTheme="line"
-          size="bold"
-          onClick={(e) => {
-            e.preventDefault();
-            dialog.open({
-              title: '출연진 정보 편집',
-              isAuto: true,
-              content: (
-                <ShowCastInfoFormDialogContent
-                  onSave={async (castInfo) => {
-                    try {
-                      await onSave(castInfo);
-                      dialog.close();
-                    } catch {
-                      return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
-                    }
-                  }}
-                  prevShowCastInfo={showCastInfo}
-                  onDelete={async () => {
-                    try {
-                      await onDelete?.();
-                      dialog.close();
-                    } catch {
-                      return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
-                    }
-                  }}
-                />
-              ),
-            });
-          }}
-        >
-          <EditIcon />
-          <span>정보 편집</span>
-        </Styled.EditButton>
+        <Styled.EditButtonWrapper>
+          <TextButton
+            type="button"
+            colorTheme="netural"
+            size="regular"
+            onClick={(e) => {
+              e.preventDefault();
+              dialog.open({
+                title: '출연진 정보 편집',
+                isAuto: true,
+                content: (
+                  <ShowCastInfoFormDialogContent
+                    onSave={async (castInfo) => {
+                      try {
+                        await onSave(castInfo);
+                        dialog.close();
+                      } catch {
+                        return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
+                      }
+                    }}
+                    prevShowCastInfo={showCastInfo}
+                    onDelete={async () => {
+                      try {
+                        await onDelete?.();
+                        dialog.close();
+                      } catch {
+                        return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
+                      }
+                    }}
+                  />
+                ),
+              });
+            }}
+          >
+            <EditIcon />
+            <span>정보 편집</span>
+          </TextButton>
+        </Styled.EditButtonWrapper>
       </Styled.Header>
       {memberLength > 0 && (
         <>
@@ -141,6 +114,7 @@ const ShowCastInfo = ({ showCastInfo, index, onSave, onDropHover, onDrop, onDele
             ))}
           </Styled.Cast>
           <Styled.CollapseButton
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               toggle();

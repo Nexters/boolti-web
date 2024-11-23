@@ -19,6 +19,9 @@ import { compareAsc, format } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import ShowDeleteForm from '~/components/ShowDeleteForm';
 import { middlewareAtom, myHostInfoAtom } from '~/components/ShowDetailLayout';
@@ -57,7 +60,7 @@ const ShowInfoPage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: showSalesInfo } = useShowSalesInfo(showId);
   const { data: castTeamList, refetch: refetchCastTeamList } = useCastTeamList(showId);
-  const { castTeamListDraft, castTeamDropHoverHandler, castTeamDropHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
+  const { castTeamListDraft, sensors, castTeamDragEndHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
@@ -226,144 +229,197 @@ const ShowInfoPage = () => {
                 </Button>
               </Styled.SaveButton>
             </Styled.ShowInfoFormFooter>
-            <Styled.ShowInfoFormDivider />
-            <Styled.ShowInfoFormContent>
-              <ShowCastInfoFormContent
-                onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
-                  await postCastTeams.mutateAsync(
-                    {
-                      showId,
-                      name,
-                      members: members
-                        ?.filter(({ userCode, roleName }) => userCode && roleName)
-                        .map(({ id, userCode, roleName }) => ({
-                          id: id < 0 ? undefined : id,
-                          userCode,
-                          roleName,
-                        })) as ShowCastTeamCreateOrUpdateRequest['members'],
+          </Styled.ShowInfoForm>
+          <Styled.ShowInfoFormDivider />
+          <Styled.ShowInfoFormContent>
+            <ShowCastInfoFormContent
+              onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                await postCastTeams.mutateAsync(
+                  {
+                    showId,
+                    name,
+                    members: members
+                      ?.filter(({ userCode, roleName }) => userCode && roleName)
+                      .map(({ id, userCode, roleName }) => ({
+                        id: id < 0 ? undefined : id,
+                        userCode,
+                        roleName,
+                      })) as ShowCastTeamCreateOrUpdateRequest['members'],
+                  },
+                  {
+                    onSuccess: () => {
+                      queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
                     },
-                    {
-                      onSuccess: () => {
-                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
-                      },
-                    },
-                  );
-                }}
-              />
-              {castTeamListDraft?.map((info, index) => (
-                <ShowCastInfo
-                  key={info.id}
-                  showCastInfo={info}
-                  index={index}
-                  onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
-                    if (info.id === undefined) return;
+                  },
+                );
+              }}
+            />
+            <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+              <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                {castTeamListDraft?.map((info) => (
+                  <ShowCastInfo
+                    key={info.id}
+                    showCastInfo={info}
+                    onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
+                      if (info.id === undefined) return;
 
-                    await putCastTeams.mutateAsync(
-                      {
-                        name,
-                        members: members
-                          ?.filter(({ userCode, roleName }) => userCode && roleName)
-                          .map(({ id, userCode, roleName }) => ({
-                            id: id < 0 ? undefined : id,
-                            userCode,
-                            roleName,
-                          })) as ShowCastTeamCreateOrUpdateRequest['members'],
-                        castTeamId: info.id,
-                      },
-                      {
+                      await putCastTeams.mutateAsync(
+                        {
+                          name,
+                          members: members
+                            ?.filter(({ userCode, roleName }) => userCode && roleName)
+                            .map(({ id, userCode, roleName }) => ({
+                              id: id < 0 ? undefined : id,
+                              userCode,
+                              roleName,
+                            })) as ShowCastTeamCreateOrUpdateRequest['members'],
+                          castTeamId: info.id,
+                        },
+                        {
+                          onSuccess: () => {
+                            queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
+                          },
+                        },
+                      );
+                    }}
+                    onDelete={async () => {
+                      if (info.id === undefined) return;
+
+                      await deleteCastTeams.mutateAsync(info.id, {
                         onSuccess: () => {
                           queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
                         },
-                      },
-                    );
-                  }}
-                  onDropHover={castTeamDropHoverHandler}
-                  onDrop={castTeamDropHandler}
-                  onDelete={async () => {
-                    if (info.id === undefined) return;
+                      });
+                    }}
+                  />
+                ))}
+              </SortableContext>
+            </DndContext>
+          </Styled.ShowInfoFormContent>
+          <Styled.ShowInfoFormFooter>
+            <Styled.DeleteButton>
+              <Button
+                size="bold"
+                colorTheme="line"
+                type="button"
+                disabled={salesStarted || show.isEnded}
+                onClick={() => {
+                  deleteShowDialog.open({
+                    title: '공연 삭제하기',
+                    content: (
+                      <ShowDeleteForm
+                        showName={show.name}
+                        onSubmit={async () => {
+                          await deleteShowMutation.mutateAsync(show.id);
 
-                    await deleteCastTeams.mutateAsync(info.id, {
-                      onSuccess: () => {
-                        queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
-                      },
-                    });
-                  }}
-                />
-              ))}
-            </Styled.ShowInfoFormContent>
-            <Styled.ShowInfoFormFooter>
-              <Styled.DeleteButton>
-                <Button
-                  size="bold"
-                  colorTheme="line"
+                          deleteShowDialog.close();
+                          navigate(PATH.HOME);
+                          toast.success('공연을 삭제했습니다.');
+                        }}
+                      />
+                    ),
+                  });
+                }}
+              >
+                삭제하기
+              </Button>
+            </Styled.DeleteButton>
+          </Styled.ShowInfoFormFooter>
+          <Drawer
+            open={previewDrawerOpen}
+            title="공연 상세 미리보기"
+            onClose={() => {
+              setPreviewDrawerOpen(false);
+            }}
+          >
+            <Styled.ShowInfoPreviewContainer>
+              <Styled.ShowInfoPreview>
+                <Styled.ShowInfoPreviewFrameContainer>
+                  <Styled.ShowInfoPreviewFrame>
+                    <PreviewFrame />
+                  </Styled.ShowInfoPreviewFrame>
+                  <Styled.ShowPreviewContainer>
+                    <Styled.ShowPreview ref={showPreviewRef}>
+                      <ShowPreview
+                        show={{
+                          images: imageFiles.map((file) => file.preview),
+                          name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                          date: showInfoForm.watch('date')
+                            ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                            : '',
+                          startTime: showInfoForm.watch('startTime'),
+                          runningTime: showInfoForm.watch('runningTime'),
+                          salesStartTime: showSalesInfo
+                            ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                            : '',
+                          salesEndTime: showSalesInfo
+                            ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                            : '',
+                          placeName: showInfoForm.watch('placeName'),
+                          placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                          placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                          notice: showInfoForm.watch('notice'),
+                          hostName: showInfoForm.watch('hostName'),
+                          hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                        }}
+                        showCastTeams={castTeamList}
+                        hasNoticePage
+                        containerRef={showPreviewRef}
+                      />
+                    </Styled.ShowPreview>
+                  </Styled.ShowPreviewContainer>
+                </Styled.ShowInfoPreviewFrameContainer>
+              </Styled.ShowInfoPreview>
+              <Styled.ShowInfoPreviewFooter>
+                <Styled.ShowInfoPreviewCloseButton
                   type="button"
-                  disabled={salesStarted || show.isEnded}
                   onClick={() => {
-                    deleteShowDialog.open({
-                      title: '공연 삭제하기',
-                      content: (
-                        <ShowDeleteForm
-                          showName={show.name}
-                          onSubmit={async () => {
-                            await deleteShowMutation.mutateAsync(show.id);
-
-                            deleteShowDialog.close();
-                            navigate(PATH.HOME);
-                            toast.success('공연을 삭제했습니다.');
-                          }}
-                        />
-                      ),
-                    });
+                    setPreviewDrawerOpen(false);
                   }}
                 >
-                  삭제하기
-                </Button>
-              </Styled.DeleteButton>
-            </Styled.ShowInfoFormFooter>
-            <Drawer
-              open={previewDrawerOpen}
-              title="공연 상세 미리보기"
-              onClose={() => {
-                setPreviewDrawerOpen(false);
-              }}
-            >
-              <Styled.ShowInfoPreviewContainer>
+                  닫기
+                </Styled.ShowInfoPreviewCloseButton>
+                <Styled.ShowInfoPreviewSubmitButton
+                  type="button"
+                  onClick={() => {
+                    showInfoForm.handleSubmit(onSubmit)();
+                  }}
+                >
+                  저장하기
+                </Styled.ShowInfoPreviewSubmitButton>
+              </Styled.ShowInfoPreviewFooter>
+            </Styled.ShowInfoPreviewContainer>
+          </Drawer>
+          {previewDrawerOpen && (
+            <Portal>
+              <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
                 <Styled.ShowInfoPreview>
-                  <Styled.ShowInfoPreviewFrameContainer>
-                    <Styled.ShowInfoPreviewFrame>
-                      <PreviewFrame />
-                    </Styled.ShowInfoPreviewFrame>
-                    <Styled.ShowPreviewContainer>
-                      <Styled.ShowPreview ref={showPreviewRef}>
-                        <ShowPreview
-                          show={{
-                            images: imageFiles.map((file) => file.preview),
-                            name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
-                            date: showInfoForm.watch('date')
-                              ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                              : '',
-                            startTime: showInfoForm.watch('startTime'),
-                            runningTime: showInfoForm.watch('runningTime'),
-                            salesStartTime: showSalesInfo
-                              ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                              : '',
-                            salesEndTime: showSalesInfo
-                              ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                              : '',
-                            placeName: showInfoForm.watch('placeName'),
-                            placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
-                            placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
-                            notice: showInfoForm.watch('notice'),
-                            hostName: showInfoForm.watch('hostName'),
-                            hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
-                          }}
-                          showCastTeams={castTeamList}
-                          hasNoticePage
-                          containerRef={showPreviewRef}
-                        />
-                      </Styled.ShowPreview>
-                    </Styled.ShowPreviewContainer>
-                  </Styled.ShowInfoPreviewFrameContainer>
+                  <ShowPreview
+                    show={{
+                      images: imageFiles.map((file) => file.preview),
+                      name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
+                      date: showInfoForm.watch('date')
+                        ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                        : '',
+                      startTime: showInfoForm.watch('startTime'),
+                      runningTime: showInfoForm.watch('runningTime'),
+                      salesStartTime: showSalesInfo
+                        ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                        : '',
+                      salesEndTime: showSalesInfo
+                        ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                        : '',
+                      placeName: showInfoForm.watch('placeName'),
+                      placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
+                      placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
+                      notice: showInfoForm.watch('notice'),
+                      hostName: showInfoForm.watch('hostName'),
+                      hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                    }}
+                    showCastTeams={castTeamList}
+                    hasNoticePage
+                    containerRef={showPreviewMobileRef}
+                  />
                 </Styled.ShowInfoPreview>
                 <Styled.ShowInfoPreviewFooter>
                   <Styled.ShowInfoPreviewCloseButton
@@ -383,61 +439,9 @@ const ShowInfoPage = () => {
                     저장하기
                   </Styled.ShowInfoPreviewSubmitButton>
                 </Styled.ShowInfoPreviewFooter>
-              </Styled.ShowInfoPreviewContainer>
-            </Drawer>
-            {previewDrawerOpen && (
-              <Portal>
-                <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
-                  <Styled.ShowInfoPreview>
-                    <ShowPreview
-                      show={{
-                        images: imageFiles.map((file) => file.preview),
-                        name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
-                        date: showInfoForm.watch('date')
-                          ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                          : '',
-                        startTime: showInfoForm.watch('startTime'),
-                        runningTime: showInfoForm.watch('runningTime'),
-                        salesStartTime: showSalesInfo
-                          ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                          : '',
-                        salesEndTime: showSalesInfo
-                          ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                          : '',
-                        placeName: showInfoForm.watch('placeName'),
-                        placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
-                        placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
-                        notice: showInfoForm.watch('notice'),
-                        hostName: showInfoForm.watch('hostName'),
-                        hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
-                      }}
-                      showCastTeams={castTeamList}
-                      hasNoticePage
-                      containerRef={showPreviewMobileRef}
-                    />
-                  </Styled.ShowInfoPreview>
-                  <Styled.ShowInfoPreviewFooter>
-                    <Styled.ShowInfoPreviewCloseButton
-                      type="button"
-                      onClick={() => {
-                        setPreviewDrawerOpen(false);
-                      }}
-                    >
-                      닫기
-                    </Styled.ShowInfoPreviewCloseButton>
-                    <Styled.ShowInfoPreviewSubmitButton
-                      type="button"
-                      onClick={() => {
-                        showInfoForm.handleSubmit(onSubmit)();
-                      }}
-                    >
-                      저장하기
-                    </Styled.ShowInfoPreviewSubmitButton>
-                  </Styled.ShowInfoPreviewFooter>
-                </Styled.ShowInfoPreviewMobile>
-              </Portal>
-            )}
-          </Styled.ShowInfoForm>
+              </Styled.ShowInfoPreviewMobile>
+            </Portal>
+          )}
         </Styled.ShowInfoPage>
       )}
     </>
