@@ -1,8 +1,9 @@
-import { Button, mq_lg } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
 const Container = styled.div`
+  position: relative;
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
@@ -36,7 +37,7 @@ const Handle = styled.button`
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.palette.grey.g40};
-  cursor: move;
+  cursor: grab;
   user-select: none;
   user-zoom: none;
 `
@@ -46,9 +47,7 @@ const Name = styled.span`
   ${({ theme }) => theme.typo.sh2};
 `;
 
-const EditButton = styled(Button)`
-  padding: 13px 18px;
-
+const EditButtonWrapper = styled.div`
   span {
     display: none;
     margin-left: 8px;
@@ -150,7 +149,7 @@ export default {
   Name,
   Cast,
   CollapseButton,
-  EditButton,
+  EditButtonWrapper,
   CastItem,
   UserImage,
   Username,
