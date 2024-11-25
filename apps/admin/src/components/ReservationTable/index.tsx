@@ -20,25 +20,32 @@ const getColumns = (ticketStatus: TicketStatus) => [
   columnHelper.accessor('csReservationId', {
     header: '주문 번호',
   }),
-  columnHelper.accessor('paymentInfo.payerName', {
+  columnHelper.accessor('paymentInfo', {
     header: '결제자명',
-    cell: (props) => {
-      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
-      return (
-        <span
-          dangerouslySetInnerHTML={{ __html: boldText(props.getValue() ?? '-', searchText) }}
-        ></span>
-      );
-    },
-  }),
-  columnHelper.accessor('paymentInfo.payerPhoneNumber', {
-    header: '연락처',
+    id: 'payerName',
     cell: (props) => {
       const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
       return (
         <span
           dangerouslySetInnerHTML={{
-            __html: boldText(formatPhoneNumber(props.getValue() ?? '-'), searchText),
+            __html: boldText(props.getValue()?.payerName ?? '-', searchText),
+          }}
+        ></span>
+      );
+    },
+  }),
+  columnHelper.accessor('paymentInfo', {
+    header: '연락처',
+    id: 'payerPhoneNumber',
+    cell: (props) => {
+      const { searchText = '' } = (props.table.options.meta ?? {}) as { searchText: string };
+      return (
+        <span
+          dangerouslySetInnerHTML={{
+            __html: boldText(
+              formatPhoneNumber(props.getValue()?.payerPhoneNumber ?? '-'),
+              searchText,
+            ),
           }}
         ></span>
       );

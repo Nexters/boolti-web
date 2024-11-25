@@ -37,11 +37,12 @@ const EmptyTitle = styled.p`
 
 const TicketSummaryContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   grid-gap: 8px;
   margin-bottom: 32px;
   ${mq_lg} {
     margin-bottom: 40px;
+    grid-template-columns: 1fr 1fr;
     display: flex;
   }
 `;
@@ -49,9 +50,9 @@ const TicketSummaryContainer = styled.div`
 const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
+  flex-direction: row;
   align-items: start;
-  padding: 16px 20px;
+  padding: 12px 16px;
   border-radius: 8px;
   ${({ colorTheme, theme }) => {
     switch (colorTheme) {
@@ -71,9 +72,9 @@ const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
     }
   }}
   ${mq_lg} {
-    flex-direction: row;
-    width: 260px;
+    flex: 1;
     align-items: center;
+    padding: 16px 20px;
     &:not(:last-child) {
       margin-right: 12px;
     }

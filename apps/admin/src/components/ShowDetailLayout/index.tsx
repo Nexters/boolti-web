@@ -238,8 +238,8 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                 <Styled.Tab>
                   <TabItem type="INFO" />
                   <TabItem type="TICKET" />
-                  <TabItem type="RESERVATION" />
                   <TabItem type="ENTRANCE" />
+                  <TabItem type="RESERVATION" />
                   <TabItem type="SETTLEMENT" />
                 </Styled.Tab>
               </Styled.TabContainer>
