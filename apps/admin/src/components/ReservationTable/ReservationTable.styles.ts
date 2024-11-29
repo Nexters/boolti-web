@@ -2,32 +2,25 @@ import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.table`
-  display: flex;
-  flex-direction: column;
+  table-layout: auto;
   margin: 16px 0;
   width: ${({ theme }) => theme.breakpoint.desktop};
   height: 547px;
 `;
 
 const HeaderRow = styled.tr`
-  display: flex;
-  flex: 0 0 auto;
-  flex-wrap: nowrap;
+  width: 100%;
   padding-left: 8px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
   border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
 
-const HeaderItem = styled.td`
-  display: inline-block;
-  flex: 0 0 auto;
+const HeaderItem = styled.th`
   padding: 12px;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
-  &:not(:last-of-type) {
-    margin-right: 12px;
-  }
+  white-space: nowrap;
 
   &.ticket-price {
     text-align: right;
@@ -35,24 +28,18 @@ const HeaderItem = styled.td`
 `;
 
 const Row = styled.tr`
-  display: flex;
-  flex-wrap: nowrap;
+  width: 100%;
   padding-left: 8px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
 
 const Item = styled.td`
-  display: block;
-  flex: 0 0 auto;
   padding: 14px 12px;
   white-space: nowrap;
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g90};
   & strong {
     background-color: ${({ theme }) => theme.palette.primary.o0};
-  }
-  &:not(:last-of-type) {
-    margin-right: 12px;
   }
   &.ticket-price {
     text-align: right;
@@ -65,7 +52,11 @@ const DisabledText = styled.span`
 `;
 
 const Empty = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
+  transform: translateX(-50%);
   flex-direction: column;
   flex: 1;
   justify-content: center;

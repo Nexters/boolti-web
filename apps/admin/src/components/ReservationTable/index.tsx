@@ -222,14 +222,7 @@ const ReservationTable = ({
             {table.getRowModel().rows.map((row) => (
               <Styled.Row key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <Styled.Item
-                    key={cell.id}
-                    style={{
-                      width: cell.column.columnDef.minSize ? 'auto' : `${cell.column.getSize()}px`,
-                      minWidth: cell.column.columnDef.minSize,
-                    }}
-                    className={cell.column.columnDef.id}
-                  >
+                  <Styled.Item key={cell.id} className={cell.column.columnDef.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Styled.Item>
                 ))}
