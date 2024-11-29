@@ -54,6 +54,18 @@ const getColumns = (ticketStatus: TicketStatus) => [
     },
     size: 140,
   }),
+  columnHelper.accessor('reservationHolderDetail', {
+    header: '방문자명',
+    id: 'reservationHolderDetailName',
+    cell: (props) => props.getValue()?.name ?? '-',
+    size: 80,
+  }),
+  columnHelper.accessor('reservationHolderDetail', {
+    header: '연락처',
+    id: 'reservationHolderDetailNamePhoneNumber',
+    cell: (props) => formatPhoneNumber(props.getValue()?.phoneNumber) ?? '-',
+    size: 140,
+  }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓종류',
     cell: (props) => {
@@ -162,6 +174,9 @@ const ReservationTable = ({
     columns: getColumns(selectedTicketStatus),
     data,
     getCoreRowModel: getCoreRowModel(),
+    defaultColumn: {
+      minSize: undefined,
+    },
     meta: {
       searchText,
     },
@@ -175,7 +190,10 @@ const ReservationTable = ({
               {headerGroup.headers.map((header) => (
                 <Styled.HeaderItem
                   key={header.id}
-                  style={{ width: `${header.getSize()}px` }}
+                  style={{
+                    width: header.column.columnDef.minSize ? 'auto' : `${header.getSize()}px`,
+                    minWidth: header.column.columnDef.minSize,
+                  }}
                   className={header.column.columnDef.id}
                 >
                   {header.isPlaceholder
@@ -206,7 +224,10 @@ const ReservationTable = ({
                 {row.getVisibleCells().map((cell) => (
                   <Styled.Item
                     key={cell.id}
-                    style={{ width: `${cell.column.getSize()}px` }}
+                    style={{
+                      width: cell.column.columnDef.minSize ? 'auto' : `${cell.column.getSize()}px`,
+                      minWidth: cell.column.columnDef.minSize,
+                    }}
                     className={cell.column.columnDef.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

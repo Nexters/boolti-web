@@ -48,6 +48,7 @@ import {
 import {
   AdminReservationSummaryResponse,
   PageAdminReservationResponse,
+  ReservationSummaryResponseV2,
 } from './types/adminReservation';
 import {
   AdminTicketSalesInfoResponse,
@@ -215,6 +216,11 @@ export const adminReservationQueryKeys = createQueryKeys('adminReservation', {
       fetcher.get<AdminReservationSummaryResponse>(
         `sa-api/v1/shows/${showId}/reservation-summaries`,
       ),
+  }),
+  summaryV2: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ReservationSummaryResponseV2>(`web/v2/shows/${showId}/reservation-summaries`),
   }),
 });
 

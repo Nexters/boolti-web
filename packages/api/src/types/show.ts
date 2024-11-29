@@ -126,6 +126,13 @@ export interface GiftResponseV2 {
   createdAt: string;
 }
 
+export interface ReservationHolderDetailResponse {
+  /** 예매자 이름 */
+  name: string;
+  /** 예매자 전화번호 */
+  phoneNumber: string;
+}
+
 export interface ReservationWithTicketsResponse {
   /** 예매 ID */
   reservationId: number;
@@ -147,6 +154,8 @@ export interface ReservationWithTicketsResponse {
   createdAt: string;
   /** 예매 수정 일시 */
   modifiedAt: string;
+  /** 예매자 정보 */
+  reservationHolderDetail: ReservationHolderDetailResponse;
 }
 
 export type PageReservationWithTicketsResponse = PageResponse<ReservationWithTicketsResponse>;
