@@ -169,21 +169,23 @@ const ReservationTable = ({
   return (
     <>
       <Styled.Container>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Styled.HeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem
-                key={header.id}
-                style={{ width: `${header.getSize()}px` }}
-                className={header.column.columnDef.id}
-              >
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </Styled.HeaderItem>
-            ))}
-          </Styled.HeaderRow>
-        ))}
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Styled.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Styled.HeaderItem
+                  key={header.id}
+                  style={{ width: `${header.getSize()}px` }}
+                  className={header.column.columnDef.id}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Styled.HeaderItem>
+              ))}
+            </Styled.HeaderRow>
+          ))}
+        </thead>
         {data.length === 0 ? (
           <Styled.Empty>
             {isSearchResult ? (
@@ -198,7 +200,7 @@ const ReservationTable = ({
             )}
           </Styled.Empty>
         ) : (
-          <>
+          <tbody>
             {table.getRowModel().rows.map((row) => (
               <Styled.Row key={row.id}>
                 {row.getVisibleCells().map((cell) => (
@@ -212,7 +214,7 @@ const ReservationTable = ({
                 ))}
               </Styled.Row>
             ))}
-          </>
+          </tbody>
         )}
       </Styled.Container>
       <Tooltip

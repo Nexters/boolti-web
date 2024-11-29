@@ -9,7 +9,7 @@ const Container = styled.table`
   height: 547px;
 `;
 
-const HeaderRow = styled.th`
+const HeaderRow = styled.tr`
   display: flex;
   flex: 0 0 auto;
   flex-wrap: nowrap;

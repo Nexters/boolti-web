@@ -87,17 +87,19 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
   });
   return (
     <Styled.Container>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <Styled.HeaderRow key={headerGroup.id}>
-          {headerGroup.headers.map((header) => (
-            <Styled.HeaderItem key={header.id} style={{ width: `${header.getSize()}px` }}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(header.column.columnDef.header, header.getContext())}
-            </Styled.HeaderItem>
-          ))}
-        </Styled.HeaderRow>
-      ))}
+      <thead>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Styled.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <Styled.HeaderItem key={header.id} style={{ width: `${header.getSize()}px` }}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </Styled.HeaderItem>
+            ))}
+          </Styled.HeaderRow>
+        ))}
+      </thead>
       {data.length === 0 ? (
         <Styled.Empty>
           {isSearchResult ? (
@@ -114,15 +116,17 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
           )}
         </Styled.Empty>
       ) : (
-        table.getRowModel().rows.map((row) => (
-          <Styled.Row key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <Styled.Item key={cell.id} style={{ width: `${cell.column.getSize()}px` }}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Styled.Item>
-            ))}
-          </Styled.Row>
-        ))
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <Styled.Row key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <Styled.Item key={cell.id} style={{ width: `${cell.column.getSize()}px` }}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Styled.Item>
+              ))}
+            </Styled.Row>
+          ))}
+        </tbody>
       )}
     </Styled.Container>
   );
