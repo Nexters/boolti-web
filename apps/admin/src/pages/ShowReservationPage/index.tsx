@@ -154,7 +154,7 @@ const ShowReservationPage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder={isMobile ? '이름, 연락처 검색' : '방문자 이름, 연락처 검색'}
+                  placeholder={isMobile ? '이름, 연락처 검색' : '결제자명, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (
