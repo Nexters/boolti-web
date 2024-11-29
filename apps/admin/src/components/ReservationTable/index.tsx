@@ -54,6 +54,18 @@ const getColumns = (ticketStatus: TicketStatus) => [
     },
     size: 140,
   }),
+  columnHelper.accessor('reservationHolderDetail', {
+    header: '방문자명',
+    id: 'reservationHolderDetailName',
+    cell: (props) => props.getValue()?.name ?? '-',
+    size: 80,
+  }),
+  columnHelper.accessor('reservationHolderDetail', {
+    header: '연락처',
+    id: 'reservationHolderDetailNamePhoneNumber',
+    cell: (props) => formatPhoneNumber(props.getValue()?.phoneNumber) ?? '-',
+    size: 140,
+  }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓종류',
     cell: (props) => {
