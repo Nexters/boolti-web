@@ -162,6 +162,9 @@ const ReservationTable = ({
     columns: getColumns(selectedTicketStatus),
     data,
     getCoreRowModel: getCoreRowModel(),
+    defaultColumn: {
+      minSize: undefined,
+    },
     meta: {
       searchText,
     },
@@ -175,7 +178,10 @@ const ReservationTable = ({
               {headerGroup.headers.map((header) => (
                 <Styled.HeaderItem
                   key={header.id}
-                  style={{ width: `${header.getSize()}px` }}
+                  style={{
+                    width: header.column.columnDef.minSize ? 'auto' : `${header.getSize()}px`,
+                    minWidth: header.column.columnDef.minSize,
+                  }}
                   className={header.column.columnDef.id}
                 >
                   {header.isPlaceholder
@@ -206,7 +212,10 @@ const ReservationTable = ({
                 {row.getVisibleCells().map((cell) => (
                   <Styled.Item
                     key={cell.id}
-                    style={{ width: `${cell.column.getSize()}px` }}
+                    style={{
+                      width: cell.column.columnDef.minSize ? 'auto' : `${cell.column.getSize()}px`,
+                      minWidth: cell.column.columnDef.minSize,
+                    }}
                     className={cell.column.columnDef.id}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

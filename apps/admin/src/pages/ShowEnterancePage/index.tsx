@@ -6,12 +6,10 @@ import {
   useShowEnteranceSummary,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
-import { useDialog } from '@boolti/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import EnteranceTable from '~/components/EnteranceTable';
-import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
 import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
 
@@ -26,7 +24,6 @@ type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
-  const { open, close } = useDialog();
 
   const [enteranceTicketType, setEnteranceTicetType] = useState<TicketType>('ALL');
   const [searchText, setSearchText] = useState('');
@@ -106,16 +103,10 @@ const ShowEnterancePage = () => {
               <Styled.SumamryLabel bold>입장 코드 : {managerCode}</Styled.SumamryLabel>
               <Styled.QuestionTextButton
                 onClick={() => {
-                  isMobile
-                    ? window.open(
-                        'https://boolti.notion.site/d83a2f0e0b3f4b83afa7cec5b0a36d45',
-                        '_blank',
-                      )
-                    : open({
-                        title: '관객 입장 확인 방법',
-                        content: <EntranceConfirmDialogContent close={close} />,
-                        isAuto: true,
-                      });
+                  window.open(
+                    'https://boolti.notion.site/d83a2f0e0b3f4b83afa7cec5b0a36d45',
+                    '_blank',
+                  );
                 }}
               >
                 사용 방법

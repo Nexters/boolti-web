@@ -81,6 +81,9 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
+    defaultColumn: {
+      minSize: undefined,
+    },
     meta: {
       searchText,
     },
@@ -91,7 +94,13 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
         {table.getHeaderGroups().map((headerGroup) => (
           <Styled.HeaderRow key={headerGroup.id}>
             {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem key={header.id} style={{ width: `${header.getSize()}px` }}>
+              <Styled.HeaderItem
+                key={header.id}
+                style={{
+                  width: header.column.columnDef.minSize ? 'auto' : `${header.getSize()}px`,
+                  minWidth: header.column.columnDef.minSize,
+                }}
+              >
                 {header.isPlaceholder
                   ? null
                   : flexRender(header.column.columnDef.header, header.getContext())}
@@ -120,7 +129,13 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
           {table.getRowModel().rows.map((row) => (
             <Styled.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <Styled.Item key={cell.id} style={{ width: `${cell.column.getSize()}px` }}>
+                <Styled.Item
+                  key={cell.id}
+                  style={{
+                    width: cell.column.columnDef.minSize ? 'auto' : `${cell.column.getSize()}px`,
+                    minWidth: cell.column.columnDef.minSize,
+                  }}
+                >
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Styled.Item>
               ))}
