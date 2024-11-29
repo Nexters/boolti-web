@@ -100,7 +100,7 @@ const ShowReservationPage = () => {
           <Styled.TicketSummaryContainer>
             <Styled.TicketSummary colorTheme="grey">
               <Styled.TicketSumamryLabel>결제 건수</Styled.TicketSumamryLabel>
-              <Styled.TicketSumamryValue>{totalReservationCount}매</Styled.TicketSumamryValue>
+              <Styled.TicketSumamryValue>{totalReservationCount}건</Styled.TicketSumamryValue>
             </Styled.TicketSummary>
             <Styled.TicketSummary colorTheme="grey">
               <Styled.TicketSumamryLabel>발권 티켓</Styled.TicketSumamryLabel>
