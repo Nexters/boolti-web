@@ -17,6 +17,7 @@ const columnHelper = createColumnHelper<TicketWithReservationResponse>();
 const columns = [
   columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
+    minSize: 120,
   }),
   columnHelper.accessor('reservation.reservationHolder.name', {
     header: '방문자명',
@@ -28,6 +29,7 @@ const columns = [
         />
       );
     },
+    size: 80,
   }),
   columnHelper.accessor('reservation.reservationHolder.phoneNumber', {
     header: '연락처',
@@ -41,13 +43,16 @@ const columns = [
         />
       );
     },
+    size: 140,
   }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓 종류',
     cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
+    size: 80,
   }),
   columnHelper.accessor('salesTicketType.ticketName', {
     header: '티켓명',
+    minSize: 80,
   }),
   columnHelper.accessor('usedAt', {
     header: '방문 일시',
@@ -59,6 +64,7 @@ const columns = [
         <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
       );
     },
+    minSize: 200,
   }),
 ];
 
@@ -84,7 +90,7 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
       {table.getHeaderGroups().map((headerGroup) => (
         <Styled.HeaderRow key={headerGroup.id}>
           {headerGroup.headers.map((header) => (
-            <Styled.HeaderItem key={header.id}>
+            <Styled.HeaderItem key={header.id} style={{ width: `${header.getSize()}px` }}>
               {header.isPlaceholder
                 ? null
                 : flexRender(header.column.columnDef.header, header.getContext())}
@@ -111,7 +117,7 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
         table.getRowModel().rows.map((row) => (
           <Styled.Row key={row.id}>
             {row.getVisibleCells().map((cell) => (
-              <Styled.Item key={cell.id}>
+              <Styled.Item key={cell.id} style={{ width: `${cell.column.getSize()}px` }}>
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </Styled.Item>
             ))}
