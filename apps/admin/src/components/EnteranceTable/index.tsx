@@ -17,6 +17,7 @@ const columnHelper = createColumnHelper<TicketWithReservationResponse>();
 const columns = [
   columnHelper.accessor('csTicketId', {
     header: '티켓 번호',
+    minSize: 120,
   }),
   columnHelper.accessor('reservation.reservationHolder.name', {
     header: '방문자명',
@@ -28,6 +29,7 @@ const columns = [
         />
       );
     },
+    size: 80,
   }),
   columnHelper.accessor('reservation.reservationHolder.phoneNumber', {
     header: '연락처',
@@ -41,24 +43,28 @@ const columns = [
         />
       );
     },
+    size: 140,
   }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓 종류',
     cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
+    size: 80,
   }),
   columnHelper.accessor('salesTicketType.ticketName', {
     header: '티켓명',
+    minSize: 80,
   }),
   columnHelper.accessor('usedAt', {
     header: '방문 일시',
     cell: (props) => {
       const value = props.getValue();
       return value ? (
-        format(value, 'yyyy/MM/dd HH:mm')
+        format(value, 'yyyy.MM.dd HH:mm')
       ) : (
         <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
       );
     },
+    minSize: 200,
   }),
 ];
 
@@ -81,17 +87,19 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
   });
   return (
     <Styled.Container>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <Styled.HeaderRow key={headerGroup.id}>
-          {headerGroup.headers.map((header) => (
-            <Styled.HeaderItem key={header.id}>
-              {header.isPlaceholder
-                ? null
-                : flexRender(header.column.columnDef.header, header.getContext())}
-            </Styled.HeaderItem>
-          ))}
-        </Styled.HeaderRow>
-      ))}
+      <thead>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <Styled.HeaderRow key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
+              <Styled.HeaderItem key={header.id} style={{ width: `${header.getSize()}px` }}>
+                {header.isPlaceholder
+                  ? null
+                  : flexRender(header.column.columnDef.header, header.getContext())}
+              </Styled.HeaderItem>
+            ))}
+          </Styled.HeaderRow>
+        ))}
+      </thead>
       {data.length === 0 ? (
         <Styled.Empty>
           {isSearchResult ? (
@@ -108,15 +116,17 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
           )}
         </Styled.Empty>
       ) : (
-        table.getRowModel().rows.map((row) => (
-          <Styled.Row key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <Styled.Item key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </Styled.Item>
-            ))}
-          </Styled.Row>
-        ))
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <Styled.Row key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <Styled.Item key={cell.id} style={{ width: `${cell.column.getSize()}px` }}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </Styled.Item>
+              ))}
+            </Styled.Row>
+          ))}
+        </tbody>
       )}
     </Styled.Container>
   );

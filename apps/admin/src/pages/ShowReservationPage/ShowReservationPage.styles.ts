@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 0 20px;
-  margin: 40px 0 32px;
+  margin: 20px 0 32px;
 
   ${mq_lg} {
     margin: 40px 0 68px;
@@ -36,24 +36,24 @@ const EmptyTitle = styled.p`
 `;
 
 const TicketSummaryContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 32px;
   ${mq_lg} {
+    gap: 12px;
     margin-bottom: 40px;
-    grid-template-columns: 1fr 1fr;
-    display: flex;
   }
 `;
 
 const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
-  align-items: start;
+  align-items: center;
   padding: 12px 16px;
+  flex: 1 0 auto;
   border-radius: 8px;
+  width: 100%;
   ${({ colorTheme, theme }) => {
     switch (colorTheme) {
       case 'grey':
@@ -72,12 +72,9 @@ const TicketSummary = styled.div<{ colorTheme: 'grey' | 'red' }>`
     }
   }}
   ${mq_lg} {
-    flex: 1;
+    flex: 1 0 0;
+    min-width: 230px;
     align-items: center;
-    padding: 16px 20px;
-    &:not(:last-child) {
-      margin-right: 12px;
-    }
   }
 `;
 
@@ -136,6 +133,11 @@ const TicketReservationSummaryButton = styled.button<{ isSelected?: boolean }>`
     isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   margin-right: 16px;
   padding: 8px 4px;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
+
   &:last-of-type {
     margin-right: auto;
   }
@@ -156,6 +158,7 @@ const TicketReservationSummaryButton = styled.button<{ isSelected?: boolean }>`
 
 const InputContainer = styled.div`
   position: relative;
+  margin-left: 8px;
   flex-shrink: 1;
 `;
 
@@ -167,7 +170,6 @@ const Input = styled.input`
   justify-content: space-between;
   align-items: center;
   border-radius: 100px;
-  margin-left: 8px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b2};

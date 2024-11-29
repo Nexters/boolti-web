@@ -1,7 +1,7 @@
 import { Button } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-const Container = styled.div`
+const Container = styled.table`
   display: flex;
   flex-direction: column;
   margin: 16px 0;
@@ -9,7 +9,7 @@ const Container = styled.div`
   height: 547px;
 `;
 
-const HeaderRow = styled.div`
+const HeaderRow = styled.tr`
   display: flex;
   flex: 0 0 auto;
   flex-wrap: nowrap;
@@ -19,7 +19,7 @@ const HeaderRow = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
 
-const HeaderItem = styled.span`
+const HeaderItem = styled.td`
   display: inline-block;
   flex: 0 0 auto;
   padding: 12px;
@@ -28,40 +28,20 @@ const HeaderItem = styled.span`
   &:not(:last-of-type) {
     margin-right: 12px;
   }
-  &:nth-of-type(1) {
-    width: 108px;
-  }
-  &:nth-of-type(2) {
-    width: 100px;
-  }
-  &:nth-of-type(3) {
-    min-width: 140px;
-  }
-  &:nth-of-type(4) {
-    width: 80px;
-  }
-  &:nth-of-type(5) {
-    width: 180px;
-  }
-  &:nth-of-type(6) {
-    width: 50px;
-  }
-  &:nth-of-type(7) {
-    width: 92px;
-  }
-  &:nth-of-type(8) {
-    width: 143px;
+
+  &.ticket-price {
+    text-align: right;
   }
 `;
 
-const Row = styled.div`
+const Row = styled.tr`
   display: flex;
   flex-wrap: nowrap;
   padding-left: 8px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
 `;
 
-const Item = styled.span`
+const Item = styled.td`
   display: block;
   flex: 0 0 auto;
   padding: 14px 12px;
@@ -74,29 +54,8 @@ const Item = styled.span`
   &:not(:last-of-type) {
     margin-right: 12px;
   }
-  &:nth-of-type(1) {
-    width: 108px;
-  }
-  &:nth-of-type(2) {
-    width: 100px;
-  }
-  &:nth-of-type(3) {
-    min-width: 140px;
-  }
-  &:nth-of-type(4) {
-    width: 80px;
-  }
-  &:nth-of-type(5) {
-    width: 180px;
-  }
-  &:nth-of-type(6) {
-    width: 50px;
-  }
-  &:nth-of-type(7) {
-    width: 92px;
-  }
-  &:nth-of-type(8) {
-    width: 143px;
+  &.ticket-price {
+    text-align: right;
   }
 `;
 
@@ -136,6 +95,10 @@ const TooltipItemRow = styled.li`
   }
   & > span:first-of-type {
     margin-right: 16px;
+  }
+  & > span:nth-child(2) {
+    min-width: 78px;
+    text-align: left;
   }
 `;
 

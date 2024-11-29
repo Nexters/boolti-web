@@ -14,6 +14,7 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
   border-radius: 4px;
   ${({ theme }) => theme.typo.b3};
   padding: 9px 16px;
+  padding-left: 0px;
 
   & > svg {
     margin-right: 8px;
@@ -28,21 +29,26 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
     }
   `
       : ''}
+
+  ${mq_lg} {
+    padding-left: 9px;
+  }
 `;
 
 const TicketOptions = styled.div`
-  position: absolute;
+  padding-top: 16px;
   white-space: nowrap;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  box-shadow: 0px 8px 14px 0px rgba(172, 171, 171, 0.13);
-  left: 0;
-  margin-top: 4px;
-  padding: 16px 20px;
   ${mq_lg} {
+    left: 0;
+    position: absolute;
     left: unset;
     right: 0;
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+    box-shadow: 0px 8px 14px 0px rgba(172, 171, 171, 0.13);
+    margin-top: 4px;
+    padding: 16px 20px;
   }
 `;
 
@@ -52,7 +58,7 @@ const TicketOptionTitle = styled.div`
 `;
 
 const OptionList = styled.div`
-  margin: 16px 0;
+  margin: 8px 0 16px;
   display: flex;
   flex-direction: column;
 `;
@@ -76,13 +82,22 @@ const ButtonWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: nowrap;
+  padding-bottom: 16px;
 
   & > button {
     flex: 1 0 auto;
 
     &:first-of-type {
+      flex: 0 0 0;
+      justify-content: flex-start;
       margin-right: 36px;
+      padding-left: 0;
+      ${({ theme }) => theme.typo.b1};
     }
+  }
+
+  ${mq_lg} {
+    padding-bottom: 0;
   }
 `;
 

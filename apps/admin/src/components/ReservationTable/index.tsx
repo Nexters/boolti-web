@@ -19,6 +19,7 @@ const columnHelper = createColumnHelper<ReservationWithTicketsResponse>();
 const getColumns = (ticketStatus: TicketStatus) => [
   columnHelper.accessor('csReservationId', {
     header: '주문 번호',
+    size: 108,
   }),
   columnHelper.accessor('paymentInfo', {
     header: '결제자명',
@@ -33,6 +34,7 @@ const getColumns = (ticketStatus: TicketStatus) => [
         ></span>
       );
     },
+    size: 80,
   }),
   columnHelper.accessor('paymentInfo', {
     header: '연락처',
@@ -50,6 +52,7 @@ const getColumns = (ticketStatus: TicketStatus) => [
         ></span>
       );
     },
+    size: 140,
   }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓종류',
@@ -61,17 +64,22 @@ const getColumns = (ticketStatus: TicketStatus) => [
           return '일반 티켓';
       }
     },
+    size: 80,
   }),
   columnHelper.accessor('salesTicketType.ticketName', {
     header: '티켓명',
+    minSize: 80,
   }),
   columnHelper.accessor('tickets', {
     header: '매수',
     cell: (props) => `${props.getValue().length}매`,
+    size: 50,
   }),
   columnHelper.accessor((row) => (row.salesTicketType?.price ?? 0) * row.tickets.length, {
     header: ticketStatus === 'CANCEL' ? '취소 금액' : '결제 금액',
     cell: (props) => `${props.getValue().toLocaleString()}원`,
+    size: 92,
+    id: 'ticket-price',
   }),
   ...(ticketStatus === 'COMPLETE'
     ? [
@@ -103,6 +111,7 @@ const getColumns = (ticketStatus: TicketStatus) => [
               }
               return props.getValue();
             },
+            minSize: 120,
           },
         ),
       ]
@@ -123,7 +132,7 @@ const getColumns = (ticketStatus: TicketStatus) => [
         const { type, value } = props.getValue();
         switch (type) {
           case 'date':
-            return format(value, 'yyyy/MM/dd HH:mm');
+            return format(value, 'yyy.MM.dd HH:mm');
           case 'text':
             return <Styled.DisabledText>{value}</Styled.DisabledText>;
         }
@@ -160,17 +169,23 @@ const ReservationTable = ({
   return (
     <>
       <Styled.Container>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <Styled.HeaderRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <Styled.HeaderItem key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </Styled.HeaderItem>
-            ))}
-          </Styled.HeaderRow>
-        ))}
+        <thead>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <Styled.HeaderRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <Styled.HeaderItem
+                  key={header.id}
+                  style={{ width: `${header.getSize()}px` }}
+                  className={header.column.columnDef.id}
+                >
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </Styled.HeaderItem>
+              ))}
+            </Styled.HeaderRow>
+          ))}
+        </thead>
         {data.length === 0 ? (
           <Styled.Empty>
             {isSearchResult ? (
@@ -185,17 +200,21 @@ const ReservationTable = ({
             )}
           </Styled.Empty>
         ) : (
-          <>
+          <tbody>
             {table.getRowModel().rows.map((row) => (
               <Styled.Row key={row.id}>
                 {row.getVisibleCells().map((cell) => (
-                  <Styled.Item key={cell.id}>
+                  <Styled.Item
+                    key={cell.id}
+                    style={{ width: `${cell.column.getSize()}px` }}
+                    className={cell.column.columnDef.id}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </Styled.Item>
                 ))}
               </Styled.Row>
             ))}
-          </>
+          </tbody>
         )}
       </Styled.Container>
       <Tooltip
