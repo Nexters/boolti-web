@@ -53,8 +53,7 @@ const TicketFilterOptions = ({
           colorTheme="netural"
           size="small"
           onClick={() => {
-            updateSelectValues([]);
-            close();
+            setTempSelectedValues(options.map((option) => option.value));
           }}
         >
           전체 선택

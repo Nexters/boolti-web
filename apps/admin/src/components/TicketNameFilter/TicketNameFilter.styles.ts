@@ -52,7 +52,7 @@ const TicketOptionTitle = styled.div`
 `;
 
 const OptionList = styled.div`
-  margin: 16px 0;
+  margin: 8px 0 16px;
   display: flex;
   flex-direction: column;
 `;
@@ -82,6 +82,8 @@ const ButtonWrap = styled.div`
 
     &:first-of-type {
       margin-right: 36px;
+      padding-left: 0;
+      ${({ theme }) => theme.typo.b1};
     }
   }
 `;
