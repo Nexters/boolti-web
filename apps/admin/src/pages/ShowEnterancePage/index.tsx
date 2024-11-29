@@ -100,32 +100,28 @@ const ShowEnterancePage = () => {
         </Styled.EmptyContainer>
       ) : (
         <Styled.Container>
-          <Styled.InfoContainer>
-            <Styled.InfoText>입장 코드 : {managerCode}</Styled.InfoText>
-            <Styled.QuestionTextButton
-              onClick={() => {
-                open({
-                  title: '관객 입장 확인 방법',
-                  content: <EntranceConfirmDialogContent close={close} />,
-                  isAuto: true,
-                });
-              }}
-            >
-              입장 코드는 어떻게 사용할 수 있나요?
-            </Styled.QuestionTextButton>
-          </Styled.InfoContainer>
           <Styled.SummaryContainer>
+            <Styled.Summary colorTheme="white">
+              <Styled.SumamryLabel bold>입장 코드 : {managerCode}</Styled.SumamryLabel>
+              <Styled.QuestionTextButton
+                onClick={() => {
+                  open({
+                    title: '관객 입장 확인 방법',
+                    content: <EntranceConfirmDialogContent close={close} />,
+                    isAuto: true,
+                  });
+                }}
+              >
+                사용 방법
+              </Styled.QuestionTextButton>
+            </Styled.Summary>
             <Styled.Summary colorTheme="grey">
-              <Styled.SumamryLabel>미입장 관객</Styled.SumamryLabel>
+              <Styled.SumamryLabel>방문 예정자</Styled.SumamryLabel>
               <Styled.SumamryValue>{notEnteredTicketCount}명</Styled.SumamryValue>
             </Styled.Summary>
             <Styled.Summary colorTheme="grey">
-              <Styled.SumamryLabel>입장 확인 관객</Styled.SumamryLabel>
+              <Styled.SumamryLabel>방문자</Styled.SumamryLabel>
               <Styled.SumamryValue>{enteredTicketCount}명</Styled.SumamryValue>
-            </Styled.Summary>
-            <Styled.Summary colorTheme="red">
-              <Styled.SumamryLabel>방문 예정 관객</Styled.SumamryLabel>
-              <Styled.SumamryValue>{totalTicketCount}명</Styled.SumamryValue>
             </Styled.Summary>
           </Styled.SummaryContainer>
           <Styled.EnteranceSummaryContainer>
