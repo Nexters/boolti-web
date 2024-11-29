@@ -1,8 +1,11 @@
 import { FilterIcon, SquareCheckIcon } from '@boolti/icon';
 import Styled from './TicketNameFilter.styles';
 import { useRef, useState } from 'react';
-import { Button, TextButton } from '@boolti/ui';
+import { Button, TextButton, useDialog } from '@boolti/ui';
 import { useOnClickOutside } from '@boolti/ui/src/hooks/useOnClickOutside';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
+import { useTheme } from '@emotion/react';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface Option {
   label: string;
@@ -27,6 +30,7 @@ const TicketFilterOptions = ({
   const ref = useRef(null);
 
   useOnClickOutside(ref, close, { skipWhenParentElementSame: true });
+  useBodyScrollLock(true);
 
   return (
     <Styled.TicketOptions ref={ref}>
@@ -77,22 +81,32 @@ const TicketFilterOptions = ({
 };
 
 const TicketNameFilter = (props: Props) => {
+  const deviceWidth = useDeviceWidth();
+  const theme = useTheme();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
   const [isOpen, setIsOpen] = useState(false);
+  const { open, close } = useDialog();
 
   const toggle = () => setIsOpen((prev) => !prev);
 
   return (
     <Styled.Container>
       <Styled.TicketFilterButton
-        isActive={props.selectedValues.length > 1}
+        isActive={props.selectedValues.length > 0}
         onClick={() => {
-          toggle();
+          if (!isMobile) {
+            toggle();
+          } else {
+            open({
+              content: <TicketFilterOptions {...props} close={close} />,
+            });
+          }
         }}
       >
         <FilterIcon />
         필터
       </Styled.TicketFilterButton>
-      {isOpen && <TicketFilterOptions {...props} close={() => setIsOpen(false)} />}
+      {isOpen && !isMobile && <TicketFilterOptions {...props} close={() => setIsOpen(false)} />}
     </Styled.Container>
   );
 };
