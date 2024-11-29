@@ -1,7 +1,7 @@
 import {
   TicketStatus,
+  useAdminReservationSummaryV2,
   useShowDetail,
-  useShowReservationSummary,
   useShowReservationWithTickets,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
@@ -41,7 +41,7 @@ const ShowReservationPage = () => {
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
   const { data: show } = useShowDetail(showId);
-  const { data: reservationSummary } = useShowReservationSummary(showId);
+  const { data: reservationSummary } = useAdminReservationSummaryV2(showId);
   const { data: reservationData, isLoading: isReservationPagesLoading } =
     useShowReservationWithTickets(
       showId,
@@ -77,17 +77,17 @@ const ShowReservationPage = () => {
   if (!show || !reservationSummary) return null;
 
   const {
-    salesTicketSoldCount,
-    totalSalesAmount,
-    totalSoldCount,
-    completeCount,
-    waitCount,
-    cancelCount,
+    totalPaymentAmount,
+    totalReservationCount,
+    totalReservedTicketCount,
+    waitedReservationCount,
+    completedReservationCount,
+    cancelledReservationCount,
   } = reservationSummary;
 
   return (
     <>
-      {totalSoldCount === 0 ? (
+      {totalReservationCount === 0 ? (
         <Styled.EmptyContainer>
           <BooltiGreyIcon />
           <Styled.EmptyTitle>
@@ -100,16 +100,16 @@ const ShowReservationPage = () => {
           <Styled.TicketSummaryContainer>
             <Styled.TicketSummary colorTheme="grey">
               <Styled.TicketSumamryLabel>결제 건수</Styled.TicketSumamryLabel>
-              <Styled.TicketSumamryValue>{salesTicketSoldCount}매</Styled.TicketSumamryValue>
+              <Styled.TicketSumamryValue>{totalReservationCount}매</Styled.TicketSumamryValue>
             </Styled.TicketSummary>
             <Styled.TicketSummary colorTheme="grey">
               <Styled.TicketSumamryLabel>발권 티켓</Styled.TicketSumamryLabel>
-              <Styled.TicketSumamryValue>{totalSoldCount}매</Styled.TicketSumamryValue>
+              <Styled.TicketSumamryValue>{totalReservedTicketCount}매</Styled.TicketSumamryValue>
             </Styled.TicketSummary>
             <Styled.TicketSummary colorTheme="red">
               <Styled.TicketSumamryLabel>결제 금액</Styled.TicketSumamryLabel>
               <Styled.TicketSumamryValue>
-                {totalSalesAmount.toLocaleString()}원
+                {totalPaymentAmount.toLocaleString()}원
               </Styled.TicketSumamryValue>
             </Styled.TicketSummary>
           </Styled.TicketSummaryContainer>
@@ -122,7 +122,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'COMPLETE'}
               >
-                {isMobile ? '완료' : '결제 완료'} <span>{completeCount}</span>
+                {isMobile ? '완료' : '결제 완료'} <span>{completedReservationCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -131,7 +131,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'WAIT'}
               >
-                {isMobile ? '대기' : '결제 대기'} <span>{waitCount}</span>
+                {isMobile ? '대기' : '결제 대기'} <span>{waitedReservationCount}</span>
               </Styled.TicketReservationSummaryButton>
               <Styled.TicketReservationSummaryButton
                 onClick={() => {
@@ -140,7 +140,7 @@ const ShowReservationPage = () => {
                 }}
                 isSelected={selectedTicketStatus === 'CANCEL'}
               >
-                {isMobile ? '취소' : '결제 취소'} <span>{cancelCount}</span>
+                {isMobile ? '취소' : '결제 취소'} <span>{cancelledReservationCount}</span>
               </Styled.TicketReservationSummaryButton>
             </Styled.TicketReservationSummaryButtonContainer>
             <Styled.FilterContainer>

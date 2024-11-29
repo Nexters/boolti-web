@@ -39,6 +39,7 @@ import useShowReservationWithTickets from './useShowReservationWithTickets';
 import useCastTeamList from './useCastTeamList';
 import useAdminTicketList from './useAdminTicketList';
 import useAdminSalesTicketList from './useAdminSalesTicketList';
+import useAdminReservationSummaryV2 from './useAdminReservationSummaryV2';
 
 export {
   useCastTeamList,
@@ -63,6 +64,7 @@ export {
   useShowEnteranceSummary,
   useShowLastSettlementEvent,
   useShowList,
+  useAdminReservationSummaryV2,
   useShowPreview,
   useShowReservations,
   useShowReservationSummary,
