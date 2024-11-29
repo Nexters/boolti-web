@@ -30,6 +30,7 @@ const columns = [
       );
     },
     size: 80,
+    maxSize: 80,
   }),
   columnHelper.accessor('reservation.reservationHolder.phoneNumber', {
     header: '연락처',
@@ -44,11 +45,13 @@ const columns = [
       );
     },
     size: 140,
+    maxSize: 140,
   }),
   columnHelper.accessor('salesTicketType.ticketType', {
     header: '티켓 종류',
     cell: (props) => `${props.getValue() === 'INVITE' ? '초청' : '일반'}티켓`,
     size: 80,
+    maxSize: 80,
   }),
   columnHelper.accessor('salesTicketType.ticketName', {
     header: '티켓명',
@@ -64,7 +67,6 @@ const columns = [
         <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
       );
     },
-    minSize: 200,
   }),
 ];
 
@@ -83,6 +85,7 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
     getCoreRowModel: getCoreRowModel(),
     defaultColumn: {
       minSize: undefined,
+      maxSize: undefined,
     },
     meta: {
       searchText,
@@ -97,8 +100,9 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
               <Styled.HeaderItem
                 key={header.id}
                 style={{
-                  width: header.column.columnDef.minSize ? 'auto' : `${header.getSize()}px`,
+                  width: header.column.columnDef.minSize ?? `${header.getSize()}px`,
                   minWidth: header.column.columnDef.minSize,
+                  maxWidth: header.column.columnDef.maxSize,
                 }}
               >
                 {header.isPlaceholder
@@ -129,13 +133,7 @@ const EnteranceTable = ({ searchText, data, isEnteredTicket, onClickReset }: Pro
           {table.getRowModel().rows.map((row) => (
             <Styled.Row key={row.id}>
               {row.getVisibleCells().map((cell) => (
-                <Styled.Item
-                  key={cell.id}
-                  style={{
-                    width: cell.column.columnDef.minSize ? 'auto' : `${cell.column.getSize()}px`,
-                    minWidth: cell.column.columnDef.minSize,
-                  }}
-                >
+                <Styled.Item key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </Styled.Item>
               ))}
