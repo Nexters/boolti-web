@@ -137,6 +137,10 @@ const TooltipItemRow = styled.li`
   & > span:first-of-type {
     margin-right: 16px;
   }
+  & > span:nth-child(2) {
+    min-width: 78px;
+    text-align: left;
+  }
 `;
 
 const TooltipAnchor = styled.a`
