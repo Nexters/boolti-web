@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 0 20px;
-  margin: 40px 0 32px;
+  margin: 20px 0 32px;
 
   ${mq_lg} {
     margin: 40px 0 68px;
@@ -136,6 +136,11 @@ const TicketReservationSummaryButton = styled.button<{ isSelected?: boolean }>`
     isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   margin-right: 16px;
   padding: 8px 4px;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
+
   &:last-of-type {
     margin-right: auto;
   }
@@ -156,6 +161,7 @@ const TicketReservationSummaryButton = styled.button<{ isSelected?: boolean }>`
 
 const InputContainer = styled.div`
   position: relative;
+  margin-left: 8px;
   flex-shrink: 1;
 `;
 
@@ -167,7 +173,6 @@ const Input = styled.input`
   justify-content: space-between;
   align-items: center;
   border-radius: 100px;
-  margin-left: 8px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.b2};

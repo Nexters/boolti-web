@@ -154,7 +154,7 @@ const ShowReservationPage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder={isMobile ? '이름, 연락처 검색' : '결제자명, 연락처 검색'}
+                  placeholder={isMobile ? '결제자명, 연락처' : '결제자명, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (
@@ -183,8 +183,6 @@ const ShowReservationPage = () => {
               <MobileCardList
                 items={reservations.map((reservation) => ({
                   id: reservation.csReservationId,
-                  badgeText:
-                    reservation.salesTicketType?.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
                   name: reservation.paymentInfo?.payerName ?? '',
                   phoneNumber: reservation.paymentInfo?.payerPhoneNumber ?? '',
                   ticketName: reservation.salesTicketType?.ticketName ?? '',
