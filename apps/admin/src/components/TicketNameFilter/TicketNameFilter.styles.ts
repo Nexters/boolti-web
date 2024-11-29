@@ -14,6 +14,7 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
   border-radius: 4px;
   ${({ theme }) => theme.typo.b3};
   padding: 9px 16px;
+  padding-left: 0px;
 
   & > svg {
     margin-right: 8px;
@@ -28,6 +29,10 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
     }
   `
       : ''}
+
+  ${mq_lg} {
+    padding-left: 9px;
+  }
 `;
 
 const TicketOptions = styled.div`

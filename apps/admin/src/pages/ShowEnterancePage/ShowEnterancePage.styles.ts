@@ -3,7 +3,11 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 0 20px;
-  margin: 40px 0 68px;
+  margin: 20px 0 68px;
+
+  ${mq_lg} {
+    margin: 40px 0 68px;
+  }
 `;
 
 const EmptyContainer = styled.div`
@@ -144,6 +148,11 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
     isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   margin-right: 16px;
   padding: 8px 4px;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
+
   &:last-of-type {
     margin-right: auto;
   }

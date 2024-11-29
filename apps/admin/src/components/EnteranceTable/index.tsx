@@ -59,7 +59,7 @@ const columns = [
     cell: (props) => {
       const value = props.getValue();
       return value ? (
-        format(value, 'yyyy/MM/dd HH:mm')
+        format(value, 'yyyy.MM.dd HH:mm')
       ) : (
         <Styled.DisabledText>아직 방문하지 않았습니다.</Styled.DisabledText>
       );

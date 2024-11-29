@@ -20,6 +20,7 @@ import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 import TicketNameFilter from '~/components/TicketNameFilter';
+import { format } from 'date-fns';
 
 type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
@@ -105,11 +106,16 @@ const ShowEnterancePage = () => {
               <Styled.SumamryLabel bold>입장 코드 : {managerCode}</Styled.SumamryLabel>
               <Styled.QuestionTextButton
                 onClick={() => {
-                  open({
-                    title: '관객 입장 확인 방법',
-                    content: <EntranceConfirmDialogContent close={close} />,
-                    isAuto: true,
-                  });
+                  isMobile
+                    ? window.open(
+                        'https://boolti.notion.site/d83a2f0e0b3f4b83afa7cec5b0a36d45',
+                        '_blank',
+                      )
+                    : open({
+                        title: '관객 입장 확인 방법',
+                        content: <EntranceConfirmDialogContent close={close} />,
+                        isAuto: true,
+                      });
                 }}
               >
                 사용 방법
@@ -142,7 +148,7 @@ const ShowEnterancePage = () => {
                 }}
                 isSelected={enteranceTicketType === 'UNUSED'}
               >
-                미방문자 <span>{notEnteredTicketCount}</span>
+                {isMobile ? '방문 예정' : '미방문자'} <span>{notEnteredTicketCount}</span>
               </Styled.EnteranceSummaryButton>
               <Styled.EnteranceSummaryButton
                 onClick={() => {
@@ -151,7 +157,7 @@ const ShowEnterancePage = () => {
                 }}
                 isSelected={enteranceTicketType === 'USED'}
               >
-                방문자 <span>{enteredTicketCount}</span>
+                {isMobile ? '방문' : '방문자'} <span>{enteredTicketCount}</span>
               </Styled.EnteranceSummaryButton>
             </Styled.SummaryButtonContainer>
             <Styled.FilterContainer>
@@ -166,7 +172,7 @@ const ShowEnterancePage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder={isMobile ? '이름, 연락처 검색' : '방문자명, 연락처 검색'}
+                  placeholder={isMobile ? '방문자명, 연락처' : '방문자명, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (
@@ -199,7 +205,7 @@ const ShowEnterancePage = () => {
                   phoneNumber: ticket.reservation.reservationHolder.phoneNumber,
                   ticketName: ticket.salesTicketType.ticketName,
                   type: ticket?.usedAt ? 'NORMAL' : 'DISABLED',
-                  status: ticket?.usedAt ? ticket.usedAt : '미방문',
+                  status: ticket?.usedAt ? format(ticket.usedAt, 'yyyy.MM.dd HH:mm') : '미방문',
                 }))}
                 searchText={debouncedSearchText}
                 emptyText={useTicketUsedFilter ? '아직 방문자가 없어요.' : '미방문자가 없어요.'}
