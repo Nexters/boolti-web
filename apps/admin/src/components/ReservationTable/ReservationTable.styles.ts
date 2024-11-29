@@ -52,7 +52,11 @@ const DisabledText = styled.span`
 `;
 
 const Empty = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
   display: flex;
+  transform: translateX(-50%);
   flex-direction: column;
   flex: 1;
   justify-content: center;
