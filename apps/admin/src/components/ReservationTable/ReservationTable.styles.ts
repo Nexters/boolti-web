@@ -3,9 +3,8 @@ import styled from '@emotion/styled';
 
 const Container = styled.table`
   table-layout: auto;
-  margin: 16px 0;
+  margin-bottom: 16px;
   width: ${({ theme }) => theme.breakpoint.desktop};
-  height: 547px;
 `;
 
 const HeaderRow = styled.tr`
@@ -56,7 +55,7 @@ const Empty = styled.div`
   top: 50%;
   left: 50%;
   display: flex;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateY(46px);
   flex-direction: column;
   flex: 1;
   justify-content: center;
