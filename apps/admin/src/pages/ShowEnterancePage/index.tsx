@@ -1,33 +1,31 @@
 import {
+  useAdminSalesTicketList,
+  useAdminTicketList,
   useShowDetail,
   useShowEnteranceInfo,
-  useShowEnterances,
   useShowEnteranceSummary,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
-import { useDialog } from '@boolti/ui';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import EnteranceTable from '~/components/EnteranceTable';
-import EntranceConfirmDialogContent from '~/components/EntranceConfirmDialogContent';
 import MobileCardList from '~/components/MobileCardList';
 import Pagination from '~/components/Pagination';
-import TicketTypeSelect from '~/components/TicketTypeSelect';
 
 import Styled from './ShowEnterancePage.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
+import TicketNameFilter from '~/components/TicketNameFilter';
+import { format } from 'date-fns';
+
+type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
-  const { open, close } = useDialog();
 
-  const [selectedTicketType, setSelectedTicketType] = useState<
-    React.ComponentProps<typeof TicketTypeSelect>['value']
-  >({ value: 'ALL', label: '티켓 전체' });
-  const [isEnteredTicket, setIsEnteredTicket] = useState(false);
+  const [enteranceTicketType, setEnteranceTicetType] = useState<TicketType>('ALL');
   const [searchText, setSearchText] = useState('');
   const [debouncedSearchText, setDebouncedSearchText] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
@@ -36,27 +34,36 @@ const ShowEnterancePage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: entranceSummary } = useShowEnteranceSummary(showId);
   const { data: enteranceInfo } = useShowEnteranceInfo(showId);
-  const { data: enteranceData, isLoading: isEntranceListLoading } = useShowEnterances(
+
+  const useTicketUsedFilter =
+    enteranceTicketType === 'ALL' ? undefined : enteranceTicketType === 'USED';
+
+  const { data: salesTicketList = [] } = useAdminSalesTicketList(showId);
+
+  const [selectedTicketId, setSelectedTicketId] = useState<string[]>([]);
+  const options = salesTicketList.map((ticket) => ({
+    value: ticket.id.toString(),
+    label: ticket.ticketName,
+  }));
+  const { data: ticketList, isLoading: isTicketListLoading } = useAdminTicketList(
     showId,
     currentPage,
-    isEnteredTicket,
-    selectedTicketType.value === 'ALL' ? undefined : selectedTicketType.value,
-    debouncedSearchText,
+    searchText,
+    selectedTicketId,
+    useTicketUsedFilter,
   );
 
   const deviceWidth = useDeviceWidth();
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
-  const totalPages = enteranceData?.totalPages ?? 0;
-  const reservations = (enteranceData?.content ?? []).filter(
-    ({ entered, ticketType }) =>
-      entered === isEnteredTicket &&
-      (selectedTicketType.value === 'ALL' || ticketType === selectedTicketType.value),
+  const totalPages = ticketList?.totalPages ?? 0;
+  const tickets = (ticketList?.content ?? []).filter(
+    ({ usedAt }) => useTicketUsedFilter === undefined || !!usedAt === useTicketUsedFilter,
   );
 
   const onClickReset = () => {
-    setSelectedTicketType({ value: 'ALL', label: '티켓 전체' });
+    setSelectedTicketId([]);
     setSearchText('');
   };
 
@@ -69,9 +76,9 @@ const ShowEnterancePage = () => {
 
   useEffect(() => {
     setCurrentPage(0);
-  }, [selectedTicketType, isEnteredTicket, debouncedSearchText]);
+  }, [selectedTicketId, useTicketUsedFilter, debouncedSearchText]);
 
-  if (!show || !entranceSummary || !enteranceInfo) return null;
+  if (!show || !entranceSummary || !enteranceInfo || !ticketList) return null;
 
   const {
     totalTicketCount = 0,
@@ -86,65 +93,69 @@ const ShowEnterancePage = () => {
         <Styled.EmptyContainer>
           <BooltiGreyIcon />
           <Styled.EmptyTitle>
-            아직 판매한 티켓이 없어요.{'\n'}
-            티켓을 판매하고 관객 입장을 관리해 보세요.
+            아직 판매한 티켓이 없어요.{'\n'}티켓을 판매하고 방문자 명단을 관리해 보세요.
           </Styled.EmptyTitle>
         </Styled.EmptyContainer>
       ) : (
         <Styled.Container>
-          <Styled.InfoContainer>
-            <Styled.InfoText>입장 코드 : {managerCode}</Styled.InfoText>
-            <Styled.QuestionTextButton
-              onClick={() => {
-                open({
-                  title: '관객 입장 확인 방법',
-                  content: <EntranceConfirmDialogContent close={close} />,
-                  isAuto: true,
-                });
-              }}
-            >
-              입장 코드는 어떻게 사용할 수 있나요?
-            </Styled.QuestionTextButton>
-          </Styled.InfoContainer>
           <Styled.SummaryContainer>
+            <Styled.Summary colorTheme="white">
+              <Styled.SumamryLabel bold>입장 코드 : {managerCode}</Styled.SumamryLabel>
+              <Styled.QuestionTextButton
+                onClick={() => {
+                  window.open(
+                    'https://boolti.notion.site/d83a2f0e0b3f4b83afa7cec5b0a36d45',
+                    '_blank',
+                  );
+                }}
+              >
+                사용 방법
+              </Styled.QuestionTextButton>
+            </Styled.Summary>
             <Styled.Summary colorTheme="grey">
-              <Styled.SumamryLabel>미입장 관객</Styled.SumamryLabel>
+              <Styled.SumamryLabel>방문 예정자</Styled.SumamryLabel>
               <Styled.SumamryValue>{notEnteredTicketCount}명</Styled.SumamryValue>
             </Styled.Summary>
             <Styled.Summary colorTheme="grey">
-              <Styled.SumamryLabel>입장 확인 관객</Styled.SumamryLabel>
+              <Styled.SumamryLabel>방문자</Styled.SumamryLabel>
               <Styled.SumamryValue>{enteredTicketCount}명</Styled.SumamryValue>
-            </Styled.Summary>
-            <Styled.Summary colorTheme="red">
-              <Styled.SumamryLabel>방문 예정 관객</Styled.SumamryLabel>
-              <Styled.SumamryValue>{totalTicketCount}명</Styled.SumamryValue>
             </Styled.Summary>
           </Styled.SummaryContainer>
           <Styled.EnteranceSummaryContainer>
             <Styled.SummaryButtonContainer>
               <Styled.EnteranceSummaryButton
                 onClick={() => {
-                  setIsEnteredTicket(false);
+                  setEnteranceTicetType('ALL');
                   onClickReset();
                 }}
-                isSelected={!isEnteredTicket}
+                isSelected={enteranceTicketType === 'ALL'}
               >
-                미입장 <span>{notEnteredTicketCount}</span>
+                전체
               </Styled.EnteranceSummaryButton>
               <Styled.EnteranceSummaryButton
                 onClick={() => {
-                  setIsEnteredTicket(true);
+                  setEnteranceTicetType('UNUSED');
                   onClickReset();
                 }}
-                isSelected={isEnteredTicket}
+                isSelected={enteranceTicketType === 'UNUSED'}
               >
-                입장 확인 <span>{enteredTicketCount}</span>
+                {isMobile ? '방문 예정' : '미방문자'} <span>{notEnteredTicketCount}</span>
+              </Styled.EnteranceSummaryButton>
+              <Styled.EnteranceSummaryButton
+                onClick={() => {
+                  setEnteranceTicetType('USED');
+                  onClickReset();
+                }}
+                isSelected={enteranceTicketType === 'USED'}
+              >
+                {isMobile ? '방문' : '방문자'} <span>{enteredTicketCount}</span>
               </Styled.EnteranceSummaryButton>
             </Styled.SummaryButtonContainer>
             <Styled.FilterContainer>
-              <TicketTypeSelect
-                value={selectedTicketType}
-                onChange={(value) => setSelectedTicketType(value)}
+              <TicketNameFilter
+                selectedValues={selectedTicketId}
+                updateSelectValues={setSelectedTicketId}
+                options={options}
               />
               <Styled.InputContainer>
                 <Styled.Input
@@ -152,7 +163,7 @@ const ShowEnterancePage = () => {
                   onChange={(event) => {
                     setSearchText(event.target.value);
                   }}
-                  placeholder={isMobile ? '이름, 연락처 검색' : '방문자 이름, 연락처 검색'}
+                  placeholder={isMobile ? '방문자명, 연락처' : '방문자명, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
                   {searchText !== '' && (
@@ -167,28 +178,28 @@ const ShowEnterancePage = () => {
               </Styled.InputContainer>
             </Styled.FilterContainer>
           </Styled.EnteranceSummaryContainer>
-          {!isEntranceListLoading && (
+          {!isTicketListLoading && (
             <>
               <Styled.TableContainer>
                 <EnteranceTable
-                  data={reservations}
-                  isEnteredTicket={isEnteredTicket}
+                  data={tickets}
+                  isEnteredTicket={useTicketUsedFilter}
                   searchText={debouncedSearchText}
                   onClickReset={onClickReset}
                 />
               </Styled.TableContainer>
               <MobileCardList
-                items={reservations.map((reservation) => ({
-                  id: reservation.ticketId,
-                  badgeText: reservation.ticketType === 'INVITE' ? '초청티켓' : '일반티켓',
-                  name: reservation.reservationName,
-                  date: reservation.enteredAt,
-                  phoneNumber: reservation.reservationPhoneNumber,
-                  ticketName: reservation.ticketName,
-                  count: 1,
+                items={tickets.map((ticket) => ({
+                  id: ticket.id,
+                  name: ticket.reservation.reservationHolder.name,
+                  date: ticket.usedAt,
+                  phoneNumber: ticket.reservation.reservationHolder.phoneNumber,
+                  ticketName: ticket.salesTicketType.ticketName,
+                  type: ticket?.usedAt ? 'NORMAL' : 'DISABLED',
+                  status: ticket?.usedAt ? format(ticket.usedAt, 'yyyy.MM.dd HH:mm') : '미방문',
                 }))}
                 searchText={debouncedSearchText}
-                emptyText={isEnteredTicket ? '입장 관객이 없어요.' : '미입장 관객이 없어요.'}
+                emptyText={useTicketUsedFilter ? '아직 방문자가 없어요.' : '미방문자가 없어요.'}
                 onClickReset={onClickReset}
               />
             </>

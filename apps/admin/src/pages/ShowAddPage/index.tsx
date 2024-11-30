@@ -9,6 +9,9 @@ import { Button, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
@@ -27,6 +30,7 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { checkIsWebView } from '~/utils/webview';
+import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 interface ShowAddPageProps {
   step: 'info' | 'ticket';
@@ -42,10 +46,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const showInfoForm = useForm<ShowInfoFormInputs>();
   const showTicketForm = useForm<ShowTicketFormInputs>();
-  const [showCastInfo, setShowCastInfo] = useState<TempShowCastInfoFormInput[]>([]);
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
+  const { castTeamListDraft, sensors, setCastTeamListDraft, castTeamDragEndHandler } = useCastTeamListOrder();
 
   const toast = useToast();
 
@@ -88,12 +92,11 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      castTeams: showCastInfo.map(({ name, members }) => ({
+      castTeams: castTeamListDraft.map(({ name, members }) => ({
         name,
         members: members
-          ?.filter(({ id, userCode, roleName }) => id && userCode && roleName)
-          .map(({ id, userCode, roleName }) => ({
-            id,
+          ?.filter(({ userCode, roleName }) => userCode && roleName)
+          .map(({ userCode, roleName }) => ({
             userCode,
             roleName,
           })),
@@ -171,30 +174,34 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     <Styled.ShowInfoFormContent>
                       <ShowCastInfoFormContent
                         onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                          setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                          setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
                           return new Promise((reslve) => reslve());
                         }}
                       />
-                      {showCastInfo.map((info, index) => (
-                        <ShowCastInfo
-                          key={index}
-                          showCastInfo={info}
-                          onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                            setShowCastInfo((prev) =>
-                              prev.map((prevCastInfo, currentIndex) =>
-                                index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                              ),
-                            );
-                            return new Promise((reslve) => reslve());
-                          }}
-                          onDelete={() => {
-                            setShowCastInfo((prev) =>
-                              prev.filter((_, currentIndex) => index !== currentIndex),
-                            );
-                            return new Promise((reslve) => reslve());
-                          }}
-                        />
-                      ))}
+                      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+                        <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                          {castTeamListDraft.map((info) => (
+                            <ShowCastInfo
+                              key={info.id}
+                              showCastInfo={info}
+                              onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.map((item) =>
+                                    item.id === info.id ? showCastInfoFormInput : item,
+                                  )
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                              onDelete={() => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.filter((item) => item.id !== info.id)
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                            />
+                          ))}
+                        </SortableContext>
+                      </DndContext>
                     </Styled.ShowInfoFormContent>
                     <Button
                       size="bold"
@@ -326,17 +333,19 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.CardContainer>
       </Styled.ShowAddPage>
       <Styled.MobileShowAddPage>
-        <Styled.MobileHeader>
-          <Styled.BackButton
-            type="button"
-            onClick={() => {
-              navigate(PATH.HOME);
-            }}
-          >
-            <ArrowLeftIcon />
-          </Styled.BackButton>
-          <Styled.MobileHeaderText>공연 등록</Styled.MobileHeaderText>
-        </Styled.MobileHeader>
+        {!isWebView && (
+          <Styled.MobileHeader>
+            <Styled.BackButton
+              type="button"
+              onClick={() => {
+                navigate(PATH.HOME);
+              }}
+            >
+              <ArrowLeftIcon />
+            </Styled.BackButton>
+            <Styled.MobileHeaderText>공연 등록</Styled.MobileHeaderText>
+          </Styled.MobileHeader>
+        )}
         {step === 'info' && (
           <Styled.MobileContent>
             <Styled.ProcessIndicator>
@@ -381,30 +390,34 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               <Styled.ShowInfoFormContent>
                 <ShowCastInfoFormContent
                   onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                    setShowCastInfo((prev) => [...prev, showCastInfoFormInput]);
+                    setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
                     return new Promise((reslve) => reslve());
                   }}
                 />
-                {showCastInfo.map((info, index) => (
-                  <ShowCastInfo
-                    key={index}
-                    showCastInfo={info}
-                    onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                      setShowCastInfo((prev) =>
-                        prev.map((prevCastInfo, currentIndex) =>
-                          index === currentIndex ? showCastInfoFormInput : prevCastInfo,
-                        ),
-                      );
-                      return new Promise((reslve) => reslve());
-                    }}
-                    onDelete={() => {
-                      setShowCastInfo((prev) =>
-                        prev.filter((_, currentIndex) => index !== currentIndex),
-                      );
-                      return new Promise((reslve) => reslve());
-                    }}
-                  />
-                ))}
+                <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+                  <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                    {castTeamListDraft.map((info) => (
+                      <ShowCastInfo
+                        key={info.id}
+                        showCastInfo={info}
+                        onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                          setCastTeamListDraft((prev) =>
+                            prev.map((item) =>
+                              item.id === info.id ? showCastInfoFormInput : item,
+                            )
+                          );
+                          return new Promise((reslve) => reslve());
+                        }}
+                        onDelete={() => {
+                          setCastTeamListDraft((prev) =>
+                            prev.filter((item) => item.id !== info.id)
+                          );
+                          return new Promise((reslve) => reslve());
+                        }}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
               </Styled.ShowInfoFormContent>
               <Button
                 size="bold"

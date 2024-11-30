@@ -1,7 +1,9 @@
-import { useDialog } from '@boolti/ui';
+import { TextButton, useDialog } from '@boolti/ui';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 import Styled from './ShowCastInfo.styles';
-import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon } from '@boolti/icon';
+import { EditIcon, ChevronDownIcon, ChevronUpIcon, UserIcon, MenuIcon } from '@boolti/icon';
 import { useState } from 'react';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
@@ -19,47 +21,75 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
 
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: showCastInfo.id });
+
+  const style = {
+    transform: CSS.Translate.toString(transform),
+    transition,
+    backgroundColor: isDragging ? 'rgba(231, 234, 242, 0.5)' : undefined,
+    backdropFilter: isDragging ? 'blur(3px)' : undefined,
+    zIndex: isDragging ? 100 : 99,
+    cursor: isDragging ? 'grabbing' : undefined,
+  };
+  
   const toggle = () => setIsOpen((prev) => !prev);
 
   return (
-    <Styled.Container>
+    <Styled.Container ref={setNodeRef} style={style}>
       <Styled.Header>
-        {showCastInfo.name}
-        <Styled.EditButton
-          colorTheme="line"
-          size="bold"
-          onClick={(e) => {
-            e.preventDefault();
-            dialog.open({
-              title: '출연진 정보 편집',
-              isAuto: true,
-              content: (
-                <ShowCastInfoFormDialogContent
-                  onSave={async (castInfo) => {
-                    try {
-                      await onSave(castInfo);
-                      dialog.close();
-                    } catch {
-                      return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
-                    }
-                  }}
-                  prevShowCastInfo={showCastInfo}
-                  onDelete={async () => {
-                    try {
-                      await onDelete?.();
-                      dialog.close();
-                    } catch {
-                      return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
-                    }
-                  }}
-                />
-              ),
-            });
-          }}
-        >
-          <EditIcon />
-          편집하기
-        </Styled.EditButton>
+        <Styled.HeaderNameWrapper>
+          <Styled.Handle type="button" {...attributes} {...listeners}>
+            <MenuIcon />
+          </Styled.Handle>
+          <Styled.Name>
+            {showCastInfo.name}
+          </Styled.Name>
+        </Styled.HeaderNameWrapper>
+        <Styled.EditButtonWrapper>
+          <TextButton
+            type="button"
+            colorTheme="netural"
+            size="regular"
+            onClick={(e) => {
+              e.preventDefault();
+              dialog.open({
+                title: '출연진 정보 편집',
+                isAuto: true,
+                content: (
+                  <ShowCastInfoFormDialogContent
+                    onSave={async (castInfo) => {
+                      try {
+                        await onSave(castInfo);
+                        dialog.close();
+                      } catch {
+                        return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
+                      }
+                    }}
+                    prevShowCastInfo={showCastInfo}
+                    onDelete={async () => {
+                      try {
+                        await onDelete?.();
+                        dialog.close();
+                      } catch {
+                        return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
+                      }
+                    }}
+                  />
+                ),
+              });
+            }}
+          >
+            <EditIcon />
+            <span>정보 편집</span>
+          </TextButton>
+        </Styled.EditButtonWrapper>
       </Styled.Header>
       {memberLength > 0 && (
         <>
@@ -84,6 +114,7 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
             ))}
           </Styled.Cast>
           <Styled.CollapseButton
+            type="button"
             onClick={(e) => {
               e.preventDefault();
               toggle();
@@ -94,7 +125,7 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           </Styled.CollapseButton>
         </>
       )}
-    </Styled.Container>
+    </Styled.Container >
   );
 };
 

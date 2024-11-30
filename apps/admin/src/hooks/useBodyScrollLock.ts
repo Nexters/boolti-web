@@ -1,6 +1,6 @@
 import { useLayoutEffect } from 'react';
 
-export const useBodyScrollLock = (enabled?: boolean) => {
+export const useBodyScrollLock = (enabled: boolean = true) => {
   useLayoutEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
     if (enabled) {

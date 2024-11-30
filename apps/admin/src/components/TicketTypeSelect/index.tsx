@@ -1,6 +1,8 @@
-import { ChevronRightIcon } from '@boolti/icon';
-import { breakpoint } from '@boolti/ui';
+import { CheckIcon, ChevronRightIcon } from '@boolti/icon';
+import { breakpoint, useDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
+import Styled from './TicketTypeSelect.styles';
+
 import Select from 'react-select';
 
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
@@ -21,17 +23,43 @@ export const options = [
 const TicketTypeSelect = ({ onChange, value }: Props) => {
   const theme = useTheme();
   const width = useDeviceWidth();
+  const isMobile = width < parseInt(theme.breakpoint.mobile, 10);
+  const { open, close } = useDialog();
   return (
     <Select
+      onMenuOpen={() => {
+        if (isMobile) {
+          open({
+            title: '필터',
+            mobileType: 'bottomSheet',
+            content: (
+              <Styled.MobileMenu>
+                {options.map((option) => {
+                  const isSelected = option.value === value.value;
+                  return (
+                    <Styled.Item
+                      key={option.value}
+                      isSelected={isSelected}
+                      onClick={() => {
+                        onChange(option);
+                        close();
+                      }}
+                    >
+                      {option.label}
+                      {isSelected && <CheckIcon />}
+                    </Styled.Item>
+                  );
+                })}
+              </Styled.MobileMenu>
+            ),
+          });
+        }
+      }}
       onChange={(newItem) => newItem && onChange(newItem as Value)}
       components={{ DropdownIndicator: ChevronRightIcon }}
       isSearchable={false}
       value={value}
-      options={[
-        { value: 'ALL', label: '티켓 전체' },
-        { value: 'SALE', label: '일반 티켓' },
-        { value: 'INVITE', label: '초청 티켓' },
-      ]}
+      options={options}
       defaultValue={{ value: 'ALL', label: '티켓 전체' }}
       styles={{
         container: (base) => ({
@@ -79,6 +107,7 @@ const TicketTypeSelect = ({ onChange, value }: Props) => {
         }),
         menu: (base) => ({
           ...base,
+          display: isMobile ? 'none' : base.display,
           margin: 0,
         }),
         menuList: () => ({}),

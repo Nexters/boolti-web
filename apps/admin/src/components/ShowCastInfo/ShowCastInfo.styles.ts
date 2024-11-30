@@ -1,8 +1,9 @@
-import { Button } from '@boolti/ui';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
 const Container = styled.div`
+  position: relative;
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.grey.w};
   box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
@@ -18,8 +19,6 @@ const Header = styled.div`
   align-items: center;
   border-radius: 8px 8px 0px 0px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.sh2};
   padding: 24px 28px;
 
   &:last-child {
@@ -27,10 +26,37 @@ const Header = styled.div`
   }
 `;
 
-const EditButton = styled(Button)`
-  padding: 13px 18px;
-  & > svg {
-    margin-right: 8px;
+const HeaderNameWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`
+
+const Handle = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.grey.g40};
+  cursor: grab;
+  user-select: none;
+  user-zoom: none;
+`
+
+const Name = styled.span`
+  color: ${({ theme }) => theme.palette.grey.g90};
+  ${({ theme }) => theme.typo.sh2};
+`;
+
+const EditButtonWrapper = styled.div`
+  span {
+    display: none;
+    margin-left: 8px;
+  }
+
+  ${mq_lg} {
+    span {
+      display: inline;
+    }
   }
 `;
 
@@ -118,9 +144,12 @@ const CollapseButton = styled.button`
 export default {
   Container,
   Header,
+  HeaderNameWrapper,
+  Handle,
+  Name,
   Cast,
   CollapseButton,
-  EditButton,
+  EditButtonWrapper,
   CastItem,
   UserImage,
   Username,

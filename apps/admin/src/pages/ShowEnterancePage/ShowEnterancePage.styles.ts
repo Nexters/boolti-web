@@ -3,7 +3,11 @@ import styled from '@emotion/styled';
 
 const Container = styled.div`
   padding: 0 20px;
-  margin: 40px 0 68px;
+  margin: 20px 0 68px;
+
+  ${mq_lg} {
+    margin: 40px 0 68px;
+  }
 `;
 
 const EmptyContainer = styled.div`
@@ -31,97 +35,70 @@ const EmptyTitle = styled.p`
   }
 `;
 
-const InfoContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 12px 16px;
-  justify-content: space-between;
-  align-items: start;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  box-shadow: 0px 8px 14px 0px ${({ theme }) => theme.palette.shadow};
-  ${mq_lg} {
-    flex-direction: row;
-    align-items: center;
-    padding: 20px 24px;
-  }
-`;
-
-const InfoText = styled.span`
-  ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.g90};
-
-  ${mq_lg} {
-    ${({ theme }) => theme.typo.sh2};
-  }
-`;
-
 const QuestionTextButton = styled.button`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g60};
   text-decoration-line: underline;
   cursor: pointer;
-  margin-top: 4px;
+  white-space: nowrap;
   ${mq_lg} {
     ${({ theme }) => theme.typo.b2};
-    margin-top: 0;
   }
 `;
 
 const SummaryContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   margin-bottom: 32px;
   ${mq_lg} {
+    gap: 12px;
     margin-bottom: 40px;
-    display: flex;
   }
 `;
 
-const Summary = styled.div<{ colorTheme: 'grey' | 'red' }>`
+const Summary = styled.div<{ colorTheme: 'grey' | 'white' }>`
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
-  align-items: start;
-  padding: 16px 20px;
+  align-items: center;
+  padding: 14px 16px;
   border-radius: 8px;
+  flex: 1 0 auto;
+  height: 50px;
+  width: 100%;
   ${({ colorTheme, theme }) => {
     switch (colorTheme) {
       case 'grey':
         return `
+          border: 1px solid ${theme.palette.grey.g00};
           background-color: ${theme.palette.grey.g00};
           color: ${theme.palette.grey.g60};
           & > b {
             color: ${theme.palette.grey.g90};
           }
         `;
-      case 'red':
+      case 'white':
         return `
-          background-color: ${theme.palette.primary.o0};
-          color: ${theme.palette.primary.o2};
+          border: 1px solid ${theme.palette.grey.g20};
+          background-color: ${theme.palette.grey.w};
+          color: ${theme.palette.grey.g90};
         `;
     }
   }}
   ${mq_lg} {
-    flex-direction: row;
-    width: 352px;
+    flex: 1 0 0;
+    min-width: 230px;
     align-items: center;
-    &:not(:last-child) {
-      margin-right: 12px;
-    }
   }
 `;
 
-const SumamryLabel = styled.span`
+const SumamryLabel = styled.span<{ bold?: boolean }>`
   ${({ theme }) => theme.typo.b1};
-  margin-bottom: 4px;
+  font-weight: ${({ bold }) => (bold ? 600 : 400)};
+  white-space: nowrap;
   ${mq_lg} {
-    margin-bottom: 0;
     ${({ theme }) => theme.typo.b2};
+    font-weight: ${({ bold }) => (bold ? 600 : 400)};
   }
 `;
 
@@ -171,6 +148,11 @@ const EnteranceSummaryButton = styled.button<{ isSelected?: boolean }>`
     isSelected ? theme.palette.grey.g90 : theme.palette.grey.g70};
   margin-right: 16px;
   padding: 8px 4px;
+
+  &:first-of-type {
+    padding-left: 0;
+  }
+
   &:last-of-type {
     margin-right: auto;
   }
@@ -245,6 +227,8 @@ const TableContainer = styled.div`
   ${mq_lg} {
     display: block;
     width: 100%;
+    margin-top: 16px;
+    height: 567px;
     overflow-x: scroll;
     &::-webkit-scrollbar {
       display: none;
@@ -254,8 +238,6 @@ const TableContainer = styled.div`
 
 export default {
   Container,
-  InfoContainer,
-  InfoText,
   QuestionTextButton,
   SummaryContainer,
   Summary,

@@ -24,7 +24,7 @@ const getShareText = (show: { id: number, title: string, date: Date, placeName: 
 공연 정보를 공유드려요! 
 
 - 공연명 : ${show.title}
-- 일시 : ${format(show.date, 'yyyy.MM.dd (E) HH:mm -', { locale: ko })}
+- 일시 : ${format(show.date, 'yyyy.MM.dd (E) / HH:mm -', { locale: ko })}
 - 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}
 
 공연 상세 정보 ▼ 
