@@ -227,6 +227,8 @@ const TableContainer = styled.div`
   ${mq_lg} {
     display: block;
     width: 100%;
+    margin-top: 16px;
+    height: 567px;
     overflow-x: scroll;
     &::-webkit-scrollbar {
       display: none;
