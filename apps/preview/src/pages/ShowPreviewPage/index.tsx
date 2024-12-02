@@ -20,16 +20,14 @@ const getPreviewLink = (showId: number) => {
 }
 
 const getShareText = (show: { id: number, title: string, date: Date, placeName: string, streetAddress: string, detailAddress: string }) => {
-  return `
-공연 정보를 공유드려요! 
+  return `공연 정보를 공유드려요!
 
 - 공연명 : ${show.title}
 - 일시 : ${format(show.date, 'yyyy.MM.dd (E) / HH:mm -', { locale: ko })}
 - 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}
 
 공연 상세 정보 ▼ 
-${getPreviewLink(show.id)}
-  `
+${getPreviewLink(show.id)}`
 }
 
 const ShowPreviewPage = () => {
@@ -64,9 +62,7 @@ const ShowPreviewPage = () => {
   const shareButtonClickHandler = async () => {
     if (navigator.share) {
       await navigator.share({
-        title,
         text: getShareText({ id, title, date: new Date(date), placeName, streetAddress, detailAddress }),
-        url: getPreviewLink(id),
       });
     } else {
       await navigator.clipboard.writeText(getPreviewLink(id));
