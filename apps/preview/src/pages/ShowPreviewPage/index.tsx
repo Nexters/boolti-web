@@ -62,13 +62,13 @@ const ShowPreviewPage = () => {
   } = previewData;
 
   const shareButtonClickHandler = async () => {
-    try {
+    if (navigator.share) {
       await navigator.share({
         title,
         text: getShareText({ id, title, date: new Date(date), placeName, streetAddress, detailAddress }),
         url: getPreviewLink(id),
       });
-    } catch (error) {
+    } else {
       await navigator.clipboard.writeText(getPreviewLink(id));
 
       alert('공연 링크가 복사되었어요');
