@@ -1,3 +1,5 @@
+import { PageResponse, TicketType } from './common';
+
 export interface AdminTicketSalesInfoResponse {
   /** 공연 ID */
   showId: number;
@@ -66,3 +68,47 @@ export interface SuperAdminEditSalesInfoRequest {
   salesEndTime: string;
   ticketNotice: string;
 }
+
+export interface SalesTicketTypeResponseV2 {
+  /** 판매 티켓 ID */
+  id: number;
+  /** 판매 티켓 타입 */
+  ticketType: TicketType;
+  /** 티켓 이름 */
+  ticketName: string;
+  /** 티켓 가격(장당) */
+  price: number;
+}
+
+export interface ReservationHolderDetailResponse {
+  /** 예매자 이름 */
+  name: string;
+  /** 예매자 전화번호 */
+  phoneNumber: string;
+}
+
+export interface ReservationResponseV2 {
+  /** 예매 ID */
+  id: number;
+  /** CS용 예매 ID */
+  csReservationId: number;
+  /** 예매자 정보 */
+  reservationHolder: ReservationHolderDetailResponse;
+}
+
+export interface TicketWithReservationResponse {
+  /** 티켓 ID */
+  id: number;
+  /** CS용 티켓 ID */
+  csTicketId: string;
+  /** 예매 정보 */
+  reservation: ReservationResponseV2;
+  /** 판매 티켓 타입 정보 */
+  salesTicketType: SalesTicketTypeResponseV2;
+  /** 입장 일시 */
+  usedAt?: string;
+  /** 티켓 생성 일시 */
+  createdAt: string;
+}
+
+export type PageTicketWithReservationResponse = PageResponse<TicketWithReservationResponse>;

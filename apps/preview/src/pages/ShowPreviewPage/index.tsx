@@ -27,16 +27,16 @@ const getShareText = (show: {
   streetAddress: string;
   detailAddress: string;
 }) => {
-  return `
-공연 정보를 공유드려요! 
-
-- 공연명 : ${show.title}
-- 일시 : ${format(show.date, 'yyyy.MM.dd (E) HH:mm -', { locale: ko })}
-- 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}
-
-공연 상세 정보 ▼ 
-${getPreviewLink(show.id)}
-  `;
+  return (
+    '공연 정보를 공유드려요!\n' +
+    '\n' +
+    `- 공연명 : ${show.title}\n` +
+    `- 일시 : ${format(show.date, 'yyyy.MM.dd (E) / HH:mm -', { locale: ko })}\n` +
+    `- 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}\n` +
+    '\n' +
+    '공연 상세 정보 ▼\n' +
+    `${getPreviewLink(show.id)}`
+  );
 };
 
 const ShowPreviewPage = () => {
@@ -69,9 +69,8 @@ const ShowPreviewPage = () => {
   } = previewData;
 
   const shareButtonClickHandler = async () => {
-    try {
+    if (navigator.share) {
       await navigator.share({
-        title,
         text: getShareText({
           id,
           title,
@@ -80,9 +79,8 @@ const ShowPreviewPage = () => {
           streetAddress,
           detailAddress,
         }),
-        url: getPreviewLink(id),
       });
-    } catch (error) {
+    } else {
       await navigator.clipboard.writeText(getPreviewLink(id));
 
       alert('공연 링크가 복사되었어요');

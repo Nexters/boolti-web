@@ -48,8 +48,17 @@ const DateText = styled.div`
 `;
 
 const UserInfoText = styled.div`
+  width: 100%;
+  text-align: left;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const TicketDetailTextWrap = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const TicketInfoText = styled.div`
@@ -57,9 +66,26 @@ const TicketInfoText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
+const TicketStatusText = styled.div<{ type: 'DISABLED' | 'LINE_THROUGH' | 'NORMAL' }>`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme, type }) =>
+    type === 'NORMAL' ? theme.palette.grey.g90 : theme.palette.grey.g30};
+  text-decoration: ${({ type }) => (type === 'LINE_THROUGH' ? 'line-through' : undefined)};
+`;
+
 const ResetButton = styled.button`
   font-weight: 600;
   text-decoration: underline;
 `;
 
-export default { Container, CardItem, Row, DateText, UserInfoText, TicketInfoText, ResetButton };
+export default {
+  Container,
+  CardItem,
+  Row,
+  DateText,
+  UserInfoText,
+  TicketInfoText,
+  ResetButton,
+  TicketDetailTextWrap,
+  TicketStatusText,
+};
