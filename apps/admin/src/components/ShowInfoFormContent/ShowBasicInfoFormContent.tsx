@@ -77,9 +77,10 @@ const ShowBasicInfoFormContent = ({
       <Button
         colorTheme="primary"
         size="medium"
-        onClick={() => {
+        onClick={async () => {
           try {
-            Bridge.navigateToShowDetail({ showId: 144 });
+            const result = await Bridge.navigateToShowDetail({ showId: 144 });
+            alert(JSON.stringify(result));
           } catch (e) {
             alert(e);
           }
