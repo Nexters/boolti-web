@@ -78,7 +78,11 @@ const ShowBasicInfoFormContent = ({
         colorTheme="primary"
         size="medium"
         onClick={() => {
-          Bridge.navigateToShowDetail({ showId: 144 });
+          try {
+            Bridge.navigateToShowDetail({ showId: 144 });
+          } catch (e) {
+            alert(e);
+          }
         }}
       >
         웹뷰 테스트

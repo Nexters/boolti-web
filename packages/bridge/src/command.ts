@@ -33,8 +33,8 @@ const navigateToShowDetail = async ({
           },
         });
       return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.navigateToShowDeatil) {
-      const result = await window.boolti.navigateToShowDeatil({
+    } else if (checkIsAndroid(userAgent) && window.boolti?.sendCommand) {
+      const result = await window.boolti.sendCommand<NavigateToShowDetailRequestData>({
         ...baseCommand,
         data: {
           showId,
@@ -56,8 +56,8 @@ const navigateBack = async (): Promise<Command> => {
     if (checkIsIOS(userAgent) && window.webkit?.messageHandlers?.boolti.postMessage) {
       const result = await window.webkit.messageHandlers.boolti.postMessage(baseCommand);
       return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.naviagteBack) {
-      const result = await window.boolti?.naviagteBack(baseCommand);
+    } else if (checkIsAndroid(userAgent) && window.boolti?.sendCommand) {
+      const result = await window.boolti?.sendCommand(baseCommand);
       return new Promise((resolve) => resolve(result));
     }
     return new Promise((_, reject) => reject(baseCommand));
@@ -77,8 +77,10 @@ const requestToken = async (): Promise<Command<RequestTokenResponseData>> => {
         RequestTokenResponseData
       >(baseCommand);
       return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.requestToken) {
-      const result = await window.boolti?.requestToken(baseCommand);
+    } else if (checkIsAndroid(userAgent) && window.boolti?.sendCommand) {
+      const result = await window.boolti?.sendCommand<undefined, RequestTokenResponseData>(
+        baseCommand,
+      );
       return new Promise((resolve) => resolve(result));
     }
     return new Promise((_, reject) => reject(baseCommand));
