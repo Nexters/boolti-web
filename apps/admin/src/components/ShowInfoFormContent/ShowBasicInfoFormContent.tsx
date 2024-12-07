@@ -79,8 +79,11 @@ const ShowBasicInfoFormContent = ({
         size="medium"
         onClick={async () => {
           try {
-            const result = await Bridge.navigateToShowDetail({ showId: 144 });
-            alert(JSON.stringify(result));
+            const [navigateToShowDetailResult, requestTokenResult] = await Promise.all([
+              Bridge.navigateToShowDetail({ showId: 144 }),
+              Bridge.requestToken(),
+            ]);
+            alert(JSON.stringify({ navigateToShowDetailResult, requestTokenResult }));
           } catch (e) {
             alert(e);
           }
