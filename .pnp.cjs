@@ -35,7 +35,7 @@ const RAW_RUNTIME_STATE =
     },\
     {\
       "name": "@boolti/bridge",\
-      "reference": "workspace:packages/birdge"\
+      "reference": "workspace:packages/bridge"\
     },\
     {\
       "name": "@boolti/eslint-config",\
@@ -58,7 +58,7 @@ const RAW_RUNTIME_STATE =
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
     ["@boolti/api", ["workspace:packages/api"]],\
-    ["@boolti/bridge", ["workspace:packages/birdge"]],\
+    ["@boolti/bridge", ["workspace:packages/bridge"]],\
     ["@boolti/eslint-config", ["workspace:packages/config-eslint"]],\
     ["@boolti/icon", ["workspace:packages/icon"]],\
     ["@boolti/typescript-config", ["workspace:packages/config-typescript"]],\
@@ -2951,15 +2951,16 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@boolti/bridge", [\
-      ["workspace:packages/birdge", {\
-        "packageLocation": "./packages/birdge/",\
+      ["workspace:packages/bridge", {\
+        "packageLocation": "./packages/bridge/",\
         "packageDependencies": [\
-          ["@boolti/bridge", "workspace:packages/birdge"],\
+          ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
-          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["uuid", "npm:11.0.3"]\
         ],\
         "linkType": "SOFT"\
       }]\
@@ -8706,7 +8707,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["admin", "workspace:apps/admin"],\
           ["@boolti/api", "workspace:packages/api"],\
-          ["@boolti/bridge", "workspace:packages/birdge"],\
+          ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
@@ -19253,6 +19254,13 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["uuid", [\
+      ["npm:11.0.3", {\
+        "packageLocation": "./.yarn/cache/uuid-npm-11.0.3-abcb5b16c0-cee762fc76.zip/node_modules/uuid/",\
+        "packageDependencies": [\
+          ["uuid", "npm:11.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["npm:9.0.1", {\
         "packageLocation": "./.yarn/cache/uuid-npm-9.0.1-39a8442bc6-1607dd32ac.zip/node_modules/uuid/",\
         "packageDependencies": [\
