@@ -10,10 +10,6 @@ export type Command<Data = undefined> = Data extends undefined
   ? BaseCommand
   : BaseCommand & { data: Data };
 
-type CommandFnToAndroid<ResponseData = undefined> = (
-  command: string,
-) => Promise<Command<ResponseData>>;
-
 type CommandFn = <RequestData = undefined, ResponseData = undefined>(
   command: Command<RequestData> | string,
 ) => Promise<Command<ResponseData>>;
@@ -33,10 +29,7 @@ declare global {
     };
 
     boolti?: {
-      sendCommand?: CommandFn;
-      navigateToShowDeatil?: CommandFnToAndroid;
-      naviagteBack?: CommandFnToAndroid;
-      requestToken?: CommandFnToAndroid<RequestTokenResponseData>;
+      postMessage?: CommandFn;
     };
   }
 }
