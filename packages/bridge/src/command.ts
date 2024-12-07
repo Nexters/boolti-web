@@ -33,8 +33,8 @@ const navigateToShowDetail = async ({
           },
         });
       return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.navigateToShowDeatil) {
-      const result = await window.boolti?.navigateToShowDeatil(
+    } else if (checkIsAndroid(userAgent) && window.boolti?.sendCommand) {
+      const result = await window.boolti?.sendCommand<NavigateToShowDetailRequestData>(
         JSON.stringify({
           ...baseCommand,
           data: {
@@ -58,8 +58,8 @@ const navigateBack = async (): Promise<Command> => {
     if (checkIsIOS(userAgent) && window.webkit?.messageHandlers?.boolti.postMessage) {
       const result = await window.webkit.messageHandlers.boolti.postMessage(baseCommand);
       return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.naviagteBack) {
-      const result = await window.boolti?.naviagteBack(JSON.stringify(baseCommand));
+    } else if (checkIsAndroid(userAgent) && window.boolti?.sendCommand) {
+      const result = await window.boolti?.sendCommand(JSON.stringify(baseCommand));
       return new Promise((resolve) => resolve(result));
     }
     return new Promise((_, reject) => reject(baseCommand));

@@ -14,8 +14,8 @@ type CommandFnToAndroid<ResponseData = undefined> = (
   command: string,
 ) => Promise<Command<ResponseData>>;
 
-type CommandFnToIoS = <RequestData = undefined, ResponseData = undefined>(
-  command: Command<RequestData>,
+type CommandFn = <RequestData = undefined, ResponseData = undefined>(
+  command: Command<RequestData> | string,
 ) => Promise<Command<ResponseData>>;
 
 export type NavigateToShowDetailRequestData = { showId: number };
@@ -27,12 +27,13 @@ declare global {
     webkit?: {
       messageHandlers?: {
         boolti: {
-          postMessage?: CommandFnToIoS;
+          postMessage?: CommandFn;
         };
       };
     };
 
     boolti?: {
+      sendCommand?: CommandFn;
       navigateToShowDeatil?: CommandFnToAndroid;
       naviagteBack?: CommandFnToAndroid;
       requestToken?: CommandFnToAndroid<RequestTokenResponseData>;
