@@ -5,6 +5,7 @@ import { add, format } from 'date-fns';
 import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import { Bridge } from '@boolti/bridge';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
@@ -73,6 +74,15 @@ const ShowBasicInfoFormContent = ({
 
   return (
     <Styled.ShowInfoFormGroup>
+      <Button
+        colorTheme="primary"
+        size="medium"
+        onClick={() => {
+          Bridge.navigateToShowDetail({ showId: 144 });
+        }}
+      >
+        웹뷰 테스트
+      </Button>
       <Styled.ShowInfoFormGroupHeader>
         <Styled.ShowInfoFormGroupInfo>
           <Styled.ShowInfoFormTitle>기본 정보</Styled.ShowInfoFormTitle>
