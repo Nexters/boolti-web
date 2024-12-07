@@ -10,7 +10,11 @@ export type Command<Data = undefined> = Data extends undefined
   ? BaseCommand
   : BaseCommand & { data: Data };
 
-type CommandFn = <RequestData = undefined, ResponseData = undefined>(
+type CommandFnToAndroid<ResponseData = undefined> = (
+  command: string,
+) => Promise<Command<ResponseData>>;
+
+type CommandFnToIoS = <RequestData = undefined, ResponseData = undefined>(
   command: Command<RequestData>,
 ) => Promise<Command<ResponseData>>;
 
@@ -23,13 +27,15 @@ declare global {
     webkit?: {
       messageHandlers?: {
         boolti: {
-          postMessage?: CommandFn;
+          postMessage?: CommandFnToIoS;
         };
       };
     };
 
     boolti?: {
-      sendCommand?: CommandFn;
+      navigateToShowDeatil?: CommandFnToAndroid;
+      naviagteBack?: CommandFnToAndroid;
+      requestToken?: CommandFnToAndroid<RequestTokenResponseData>;
     };
   }
 }
