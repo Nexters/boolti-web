@@ -1,7 +1,6 @@
+import { BRIDGE } from '../constants';
 import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
 import { getTimeStamp, getUuid } from './utils';
-
-const BRIDGE = '__boolti__webview__bridge__';
 
 const hasAndroidPostMessage = () =>
   !!(typeof window !== 'undefined' && window.boolti && window.boolti.postMessage);
