@@ -1,5 +1,4 @@
-export const WEBVIEW_REGEX = /BOOLTI\/(ANDROID|IOS)/;
-export const OS_REGEX = /(?<=BOOLTI\/).*/;
+import { OS_REGEX, WEBVIEW_REGEX } from './constants';
 
 export const getUserAgent = () => window.navigator.userAgent;
 

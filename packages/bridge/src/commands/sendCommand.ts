@@ -1,52 +1,106 @@
-import { Command } from '../types';
-import { checkIsAndroid, checkIsIOS, getUserAgent, getWebViewOS } from '../utils';
+import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
+import { getTimeStamp, getUuid } from './utils';
 
-const execute = <T>(callback: () => T) => {
-  return new Promise((resolve) => resolve(callback()));
+const BRIDGE = '__boolti__webview__bridge__';
+
+const hasAndroidPostMessage = () =>
+  !!(typeof window !== 'undefined' && window.boolti && window.boolti.postMessage);
+
+const hasWebkitPostMessage = () =>
+  !!(
+    typeof window !== 'undefined' &&
+    window.webkit &&
+    window.webkit.messageHandlers &&
+    window.webkit.messageHandlers.boolti &&
+    window.webkit.messageHandlers.boolti.postMessage
+  );
+
+export const isWebViewBridgeAvailable = () => hasAndroidPostMessage() || hasWebkitPostMessage();
+
+const getPostMessageFn = (): PostMessageFn | null => {
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
+  if (hasAndroidPostMessage()) {
+    return (jsonMessage) => {
+      window.boolti!.postMessage!(jsonMessage);
+    };
+  }
+
+  if (hasWebkitPostMessage()) {
+    return (jsonMessage) => {
+      window.webkit!.messageHandlers!.boolti!.postMessage!(jsonMessage);
+    };
+  }
+
+  return null;
 };
 
-const stringify = (object: unknown) => JSON.stringify(object, undefined, 2);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const messageListeners: Map<string, ResponseListener<any>> = new Map();
 
-export const sendCommand = async <RequestData = undefined, ResponseData = undefined>(
-  command: Command<RequestData>,
-) =>
-  execute(async () => {
-    const userAgent = getUserAgent();
-    const os = getWebViewOS(userAgent);
+const subscribe = <Data = undefined>(id: string, listener: ResponseListener<Data>) => {
+  messageListeners.set(id, listener);
+};
 
-    if (!os) {
-      console.warn(`[sendCommand.ts]: not webview, ${stringify(command)}`);
+const unsubscribe = (id: string) => {
+  messageListeners.delete(id);
+};
 
-      return command;
-    }
+export const sendCommand = <RequestData = undefined, ResponseData = undefined>(request: {
+  command: WebviewCommand;
+  data?: RequestData;
+}): Promise<Command<ResponseData>> => {
+  const postMessage = getPostMessageFn();
+  const id = getUuid();
+  const timestamp = getTimeStamp();
+  const command = {
+    id,
+    timestamp,
+    ...request,
+  };
+  const message = JSON.stringify(command, undefined, 2);
 
-    try {
-      console.log(`[sendCommand.ts]: send to ${os}, ${stringify(command)}`);
+  console.log('[sendCommand.ts] SEND:', message);
 
-      if (checkIsIOS(userAgent) && window.webkit?.messageHandlers?.boolti.postMessage) {
-        const result = await window.webkit.messageHandlers.boolti.postMessage<
-          RequestData,
-          ResponseData
-        >(command);
+  if (!postMessage) {
+    return Promise.reject(command);
+  }
 
-        console.log(`[sendCommand.ts]: recive from ios, ${stringify(result)}`);
-
-        return result;
-      } else if (checkIsAndroid(userAgent) && window.boolti?.postMessage) {
-        const result = await window.boolti?.postMessage<ResponseData>(stringify(command));
-
-        console.log(`[sendCommand.ts]: recive from aos, ${stringify(result)}`);
-
-        return result;
-      }
-    } catch (error) {
-      if (error instanceof Error) {
-        const { name, message } = error;
-        console.log(`[sendCommand.ts] catch error from ${os}, ${stringify({ name, message })}`);
-      } else {
-        console.log(`[sendCommand.ts] catch error from ${os}, not error instance`);
-      }
-
-      return command;
-    }
+  setTimeout(() => {
+    postMessage(message);
   });
+
+  return new Promise((resolve) => {
+    const listener: ResponseListener<ResponseData> = (response) => {
+      if (response.id === command.id) {
+        resolve(response);
+        unsubscribe(id);
+      }
+    };
+
+    subscribe(id, listener);
+  });
+};
+
+if (typeof window !== 'undefined') {
+  window[BRIDGE] = window[BRIDGE] || {
+    postMessage: (command: string) => {
+      console.log('[sendCommand.ts] RCVD:', command);
+
+      try {
+        const message: Command = JSON.parse(command);
+        const messageListener = messageListeners.get(message.id);
+
+        if (messageListener) {
+          messageListener(message);
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.warn(`[sendCommand.ts] NOT RCVD: ${command}`);
+        }
+      }
+    },
+  };
+}
