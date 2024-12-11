@@ -19,10 +19,13 @@ const getPostMessageFn = (): PostMessageFn | null => {
   return null;
 };
 
-export const sendCommand = <RequestData = undefined, ResponseData = undefined>(request: {
-  command: WebviewCommand;
-  data?: RequestData;
-}): Promise<Command<ResponseData>> => {
+export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
+  request: {
+    command: WebviewCommand;
+    data?: RequestData;
+  },
+  timeout: number = 1_000,
+): Promise<Command<ResponseData>> => {
   const postMessage = getPostMessageFn();
   const id = getUuid();
   const timestamp = getTimeStamp();
@@ -36,6 +39,7 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(r
   console.log('[sendCommand.ts] SEND:', message);
 
   if (!postMessage) {
+    console.warn('[sendCommand.ts] NOT WEBVIEW:', command);
     return Promise.reject(command);
   }
 
@@ -43,7 +47,7 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(r
     postMessage(message);
   });
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     const listener: ResponseListener<ResponseData> = (response) => {
       if (response.id === command.id) {
         resolve(response);
@@ -52,6 +56,14 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(r
     };
 
     subscribe(id, listener);
+
+    if (timeout) {
+      setTimeout(() => {
+        console.warn('[sendCommand.ts] TIMEOUT:', command);
+        unsubscribe(id);
+        reject(command);
+      }, timeout);
+    }
   });
 };
 
