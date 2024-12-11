@@ -10,26 +10,20 @@ export type Command<Data = undefined> = Data extends undefined
   ? BaseCommand
   : BaseCommand & { data: Data };
 
-type CommandFn = <RequestData = undefined, ResponseData = undefined>(
-  command: Command<RequestData> | string,
-) => Promise<Command<ResponseData>>;
-
-export type NavigateToShowDetailRequestData = { showId: number };
-
-export type RequestTokenResponseData = { token: string };
-
 declare global {
   interface Window {
     webkit?: {
       messageHandlers?: {
         boolti: {
-          postMessage?: CommandFn;
+          postMessage?: <RequestData = undefined, ResponseData = undefined>(
+            command: Command<RequestData> | string,
+          ) => Promise<Command<ResponseData>>;
         };
       };
     };
 
     boolti?: {
-      postMessage?: CommandFn;
+      postMessage?: <ResponseData = undefined>(command: string) => Promise<Command<ResponseData>>;
     };
   }
 }

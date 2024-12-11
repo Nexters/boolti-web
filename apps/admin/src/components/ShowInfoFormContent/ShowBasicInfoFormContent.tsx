@@ -5,7 +5,7 @@ import { add, format } from 'date-fns';
 import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { Bridge } from '@boolti/bridge';
+import { navigateToShowDetail, requestToken } from '@boolti/bridge';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
@@ -80,8 +80,8 @@ const ShowBasicInfoFormContent = ({
         onClick={async () => {
           try {
             const [navigateToShowDetailResult, requestTokenResult] = await Promise.all([
-              Bridge.navigateToShowDetail({ showId: 144 }),
-              Bridge.requestToken(),
+              navigateToShowDetail({ showId: 144 }),
+              requestToken(),
             ]);
             alert(JSON.stringify({ navigateToShowDetailResult, requestTokenResult }));
           } catch (e) {
