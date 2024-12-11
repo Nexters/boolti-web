@@ -1,26 +1,9 @@
 import { BRIDGE } from '../constants';
 import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
-import { getTimeStamp, getUuid } from './utils';
-
-const hasAndroidPostMessage = () =>
-  !!(typeof window !== 'undefined' && window.boolti && window.boolti.postMessage);
-
-const hasWebkitPostMessage = () =>
-  !!(
-    typeof window !== 'undefined' &&
-    window.webkit &&
-    window.webkit.messageHandlers &&
-    window.webkit.messageHandlers.boolti &&
-    window.webkit.messageHandlers.boolti.postMessage
-  );
-
-export const isWebViewBridgeAvailable = () => hasAndroidPostMessage() || hasWebkitPostMessage();
+import { messageListeners, subscribe, unsubscribe } from './messageListeners';
+import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } from './utils';
 
 const getPostMessageFn = (): PostMessageFn | null => {
-  if (typeof window === 'undefined') {
-    return null;
-  }
-
   if (hasAndroidPostMessage()) {
     return (jsonMessage) => {
       window.boolti!.postMessage!(jsonMessage);
@@ -34,17 +17,6 @@ const getPostMessageFn = (): PostMessageFn | null => {
   }
 
   return null;
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const messageListeners: Map<string, ResponseListener<any>> = new Map();
-
-const subscribe = <Data = undefined>(id: string, listener: ResponseListener<Data>) => {
-  messageListeners.set(id, listener);
-};
-
-const unsubscribe = (id: string) => {
-  messageListeners.delete(id);
 };
 
 export const sendCommand = <RequestData = undefined, ResponseData = undefined>(request: {
