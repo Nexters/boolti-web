@@ -1,24 +1,46 @@
 import { Command } from '../types';
-import { checkIsAndroid, checkIsIOS, getUserAgent } from '../utils';
+import { checkIsAndroid, checkIsIOS, getUserAgent, getWebViewOS } from '../utils';
+
+const execute = <T>(callback: () => T) => {
+  return new Promise((resolve) => resolve(callback()));
+};
 
 export const sendCommand = async <RequestData = undefined, ResponseData = undefined>(
   command: Command<RequestData>,
-): Promise<Command<ResponseData>> => {
-  const userAgent = getUserAgent();
+) =>
+  execute(async () => {
+    const userAgent = getUserAgent();
+    const os = getWebViewOS(userAgent);
 
-  try {
-    if (checkIsIOS(userAgent) && window.webkit?.messageHandlers?.boolti.postMessage) {
-      const result = await window.webkit.messageHandlers.boolti.postMessage<
-        RequestData,
-        ResponseData
-      >(command);
-      return new Promise((resolve) => resolve(result));
-    } else if (checkIsAndroid(userAgent) && window.boolti?.postMessage) {
-      const result = await window.boolti?.postMessage<ResponseData>(JSON.stringify(command));
-      return new Promise((resolve) => resolve(result));
+    try {
+      console.log(`[sendCommand.ts]: send to ${os}, ${JSON.stringify(command)}`);
+
+      if (checkIsIOS(userAgent) && window.webkit?.messageHandlers?.boolti.postMessage) {
+        const result = await window.webkit.messageHandlers.boolti.postMessage<
+          RequestData,
+          ResponseData
+        >(command);
+
+        console.log(`[sendCommand.ts]: recive from ios, ${JSON.stringify(result)}`);
+
+        return result;
+      } else if (checkIsAndroid(userAgent) && window.boolti?.postMessage) {
+        const result = await window.boolti?.postMessage<ResponseData>(JSON.stringify(command));
+
+        console.log(`[sendCommand.ts]: recive from aos, ${JSON.stringify(result)}`);
+
+        return result;
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        const { name, message } = error;
+        console.log(
+          `[sendCommand.ts] catch error from ${os}, ${JSON.stringify({ name, message })}`,
+        );
+      } else {
+        console.log(`[sendCommand.ts] catch error from ${os}, not error instance`);
+      }
+
+      return command;
     }
-    return new Promise((_, reject) => reject(command));
-  } catch (e) {
-    return new Promise((_, reject) => reject(command));
-  }
-};
+  });
