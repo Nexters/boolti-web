@@ -1,4 +1,3 @@
-import { BRIDGE } from '../constants';
 import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
 import { messageListeners, subscribe, unsubscribe } from './messageListeners';
 import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } from './utils';
@@ -67,7 +66,7 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
   });
 };
 
-window[BRIDGE].postMessage = (command: string) => {
+window.__boolti__webview__bridge__.postMessage = (command: string) => {
   console.log('[sendCommand.ts] RCVD:', command);
 
   try {
