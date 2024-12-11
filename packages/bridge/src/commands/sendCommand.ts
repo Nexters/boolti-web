@@ -6,13 +6,13 @@ import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } fr
 const getPostMessageFn = (): PostMessageFn | null => {
   if (hasAndroidPostMessage()) {
     return (jsonMessage) => {
-      window.boolti!.postMessage!(jsonMessage);
+      window.boolti?.postMessage?.(jsonMessage);
     };
   }
 
   if (hasWebkitPostMessage()) {
     return (jsonMessage) => {
-      window.webkit!.messageHandlers!.boolti!.postMessage!(jsonMessage);
+      window.webkit?.messageHandlers?.boolti?.postMessage?.(jsonMessage);
     };
   }
 
@@ -45,7 +45,7 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
 
   setTimeout(() => {
     postMessage(message);
-  });
+  }, 0);
 
   return new Promise((resolve, reject) => {
     const listener: ResponseListener<ResponseData> = (response) => {
@@ -67,23 +67,22 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
   });
 };
 
-if (typeof window !== 'undefined') {
-  window[BRIDGE] = window[BRIDGE] || {
-    postMessage: (command: string) => {
-      console.log('[sendCommand.ts] RCVD:', command);
+window[BRIDGE].postMessage = (command: string) => {
+  console.log('[sendCommand.ts] RCVD:', command);
 
-      try {
-        const message: Command = JSON.parse(command);
-        const messageListener = messageListeners.get(message.id);
+  try {
+    const message: Command = JSON.parse(command);
+    const messageListener = messageListeners.get(message.id);
 
-        if (messageListener) {
-          messageListener(message);
-        }
-      } catch (error) {
-        if (error instanceof Error) {
-          console.warn(`[sendCommand.ts] NOT RCVD: ${command}`);
-        }
-      }
-    },
-  };
-}
+    if (messageListener) {
+      messageListener(message);
+    }
+  } catch (error) {
+    console.warn(`[sendCommand.ts] NOT RCVD: ${command}`);
+    if (error instanceof Error) {
+      console.warn(
+        `[sendCommand.ts] NOT RCVD: ${JSON.stringify({ name: error.name, message: error.message })}`,
+      );
+    }
+  }
+};
