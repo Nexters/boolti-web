@@ -85,7 +85,10 @@ const ShowBasicInfoFormContent = ({
             ]);
             alert(JSON.stringify({ navigateToShowDetailResult, requestTokenResult }));
           } catch (e) {
-            alert(JSON.stringify(e));
+            if (e instanceof Error) {
+              console.error(JSON.stringify(e));
+            }
+            console.error(e);
           }
         }}
       >
