@@ -42,7 +42,8 @@
     "react-router-dom": "^6.21.3",
     "react-select": "^5.8.0",
     "react-tooltip": "^5.26.3",
-    "the-new-css-reset": "^1.11.2"
+    "the-new-css-reset": "^1.11.2",
+    "vconsole": "^3.15.1"
   },
   "devDependencies": {
     "@boolti/eslint-config": "*",

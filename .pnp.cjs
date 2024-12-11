@@ -2837,6 +2837,14 @@ const RAW_RUNTIME_STATE =
           ["regenerator-runtime", "npm:0.14.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.26.0", {\
+        "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.26.0-9afa3c4ef6-12c01357e0.zip/node_modules/@babel/runtime/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.26.0"],\
+          ["regenerator-runtime", "npm:0.14.1"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@babel/template", [\
@@ -8745,6 +8753,7 @@ const RAW_RUNTIME_STATE =
           ["react-tooltip", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.26.3"],\
           ["the-new-css-reset", "npm:1.11.2"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
+          ["vconsole", "npm:3.15.1"],\
           ["vite", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.0.11"]\
         ],\
         "linkType": "SOFT"\
@@ -10053,12 +10062,30 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["copy-text-to-clipboard", [\
+      ["npm:3.2.0", {\
+        "packageLocation": "./.yarn/cache/copy-text-to-clipboard-npm-3.2.0-46c47374b9-d60fdadc59.zip/node_modules/copy-text-to-clipboard/",\
+        "packageDependencies": [\
+          ["copy-text-to-clipboard", "npm:3.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["copy-to-clipboard", [\
       ["npm:3.3.3", {\
         "packageLocation": "./.yarn/cache/copy-to-clipboard-npm-3.3.3-6964e6cfad-3ebf5e8ee0.zip/node_modules/copy-to-clipboard/",\
         "packageDependencies": [\
           ["copy-to-clipboard", "npm:3.3.3"],\
           ["toggle-selection", "npm:1.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["core-js", [\
+      ["npm:3.39.0", {\
+        "packageLocation": "./.yarn/unplugged/core-js-npm-3.39.0-4c420e59a7/node_modules/core-js/",\
+        "packageDependencies": [\
+          ["core-js", "npm:3.39.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -14119,6 +14146,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/ms-npm-2.1.3-81ff3cfac1-d924b57e73.zip/node_modules/ms/",\
         "packageDependencies": [\
           ["ms", "npm:2.1.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["mutation-observer", [\
+      ["npm:1.0.3", {\
+        "packageLocation": "./.yarn/cache/mutation-observer-npm-1.0.3-fa3b236d74-2f010fdec4.zip/node_modules/mutation-observer/",\
+        "packageDependencies": [\
+          ["mutation-observer", "npm:1.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -19285,6 +19321,19 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/vary-npm-1.1.2-b49f70ae63-f15d588d79.zip/node_modules/vary/",\
         "packageDependencies": [\
           ["vary", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["vconsole", [\
+      ["npm:3.15.1", {\
+        "packageLocation": "./.yarn/cache/vconsole-npm-3.15.1-329eac4d95-1e62132b71.zip/node_modules/vconsole/",\
+        "packageDependencies": [\
+          ["vconsole", "npm:3.15.1"],\
+          ["@babel/runtime", "npm:7.26.0"],\
+          ["copy-text-to-clipboard", "npm:3.2.0"],\
+          ["core-js", "npm:3.39.0"],\
+          ["mutation-observer", "npm:1.0.3"]\
         ],\
         "linkType": "HARD"\
       }]\

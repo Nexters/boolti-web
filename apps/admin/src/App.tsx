@@ -40,8 +40,11 @@ import ShowTicketPage from './pages/ShowTicketPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
+import { initVConsole } from './utils/vConsole';
 
 setDefaultOptions({ locale: ko });
+
+initVConsole();
 
 const publicRoutes = [
   {
