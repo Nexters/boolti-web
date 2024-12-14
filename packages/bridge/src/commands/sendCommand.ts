@@ -1,7 +1,7 @@
 import { BRIDGE } from '../constants';
 import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
 import { messageListeners, subscribe, unsubscribe } from './messageListeners';
-import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } from './utils';
+import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } from '../utils';
 
 const getPostMessageFn = (): PostMessageFn | null => {
   if (hasAndroidPostMessage()) {
