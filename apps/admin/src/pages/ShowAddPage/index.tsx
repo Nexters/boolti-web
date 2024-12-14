@@ -29,7 +29,7 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView } from '@boolti/bridge';
+import { checkIsWebView, isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
 import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 interface ShowAddPageProps {
@@ -38,7 +38,7 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
-  const isWebView = checkIsWebView(window.navigator.userAgent);
+  const isWebView = checkIsWebView();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -66,7 +66,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
     // 공연 생성
-    await addShowMutation.mutateAsync({
+    const showId = await addShowMutation.mutateAsync({
       name: showInfoForm.getValues('name'),
       images: showImageInfo,
       date: `${showInfoForm.getValues('date')}T${showInfoForm.getValues('startTime')}:00.000Z`,
@@ -103,6 +103,11 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           })),
       })) as ShowCastTeamCreateOrUpdateRequest[],
     });
+
+    if (isWebView && isWebViewBridgeAvailable()) {
+      navigateToShowDetail({ showId });
+      return;
+    }
 
     navigate(PATH.SHOW_ADD_COMPLETE);
   };
