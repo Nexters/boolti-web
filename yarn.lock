@@ -1672,6 +1672,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@boolti/api@workspace:packages/api"
   dependencies:
+    "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@emotion/react": "npm:^11.11.3"
