@@ -1,3 +1,4 @@
+import { BRIDGE } from '../constants';
 import { Command, PostMessageFn, ResponseListener, WebviewCommand } from '../types';
 import { messageListeners, subscribe, unsubscribe } from './messageListeners';
 import { getTimeStamp, getUuid, hasAndroidPostMessage, hasWebkitPostMessage } from './utils';
@@ -66,22 +67,24 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
   });
 };
 
-window.__boolti__webview__bridge__.postMessage = (command: string) => {
-  console.log('[sendCommand.ts] RCVD:', command);
+window[BRIDGE] = window[BRIDGE] || {
+  postMessage: (command: string) => {
+    console.log('[sendCommand.ts] RCVD:', command);
 
-  try {
-    const message: Command = JSON.parse(command);
-    const messageListener = messageListeners.get(message.id);
+    try {
+      const message: Command = JSON.parse(command);
+      const messageListener = messageListeners.get(message.id);
 
-    if (messageListener) {
-      messageListener(message);
+      if (messageListener) {
+        messageListener(message);
+      }
+    } catch (error) {
+      console.warn(`[sendCommand.ts] NOT RCVD: ${command}`);
+      if (error instanceof Error) {
+        console.warn(
+          `[sendCommand.ts] NOT RCVD: ${JSON.stringify({ name: error.name, message: error.message })}`,
+        );
+      }
     }
-  } catch (error) {
-    console.warn(`[sendCommand.ts] NOT RCVD: ${command}`);
-    if (error instanceof Error) {
-      console.warn(
-        `[sendCommand.ts] NOT RCVD: ${JSON.stringify({ name: error.name, message: error.message })}`,
-      );
-    }
-  }
+  },
 };
