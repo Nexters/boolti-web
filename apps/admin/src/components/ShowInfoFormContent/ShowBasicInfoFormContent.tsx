@@ -5,6 +5,7 @@ import { add, format } from 'date-fns';
 import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import { navigateToShowDetail, requestToken } from '@boolti/bridge';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
@@ -12,7 +13,7 @@ import { ShowInfoFormInputs } from './types';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
-const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')
+const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd');
 
 interface ShowBasicInfoFormContentProps {
   form: UseFormReturn<ShowInfoFormInputs, unknown, ShowInfoFormInputs>;
@@ -32,7 +33,13 @@ const ShowBasicInfoFormContent = ({
   const { open, close, isOpen } = useDialog();
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
-  const { control, setValue, formState: { errors }, setError, clearErrors } = form;
+  const {
+    control,
+    setValue,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = form;
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -67,6 +74,26 @@ const ShowBasicInfoFormContent = ({
 
   return (
     <Styled.ShowInfoFormGroup>
+      <Button
+        colorTheme="primary"
+        size="medium"
+        onClick={async () => {
+          try {
+            const [navigateToShowDetailResult, requestTokenResult] = await Promise.all([
+              navigateToShowDetail({ showId: 144 }),
+              requestToken(),
+            ]);
+            alert(JSON.stringify({ navigateToShowDetailResult, requestTokenResult }));
+          } catch (e) {
+            if (e instanceof Error) {
+              console.error(JSON.stringify(e));
+            }
+            console.error(e);
+          }
+        }}
+      >
+        웹뷰 테스트
+      </Button>
       <Styled.ShowInfoFormGroupHeader>
         <Styled.ShowInfoFormGroupInfo>
           <Styled.ShowInfoFormTitle>기본 정보</Styled.ShowInfoFormTitle>
@@ -77,7 +104,8 @@ const ShowBasicInfoFormContent = ({
           <Styled.ShowInfoFormLabel required>공연 포스터</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
             <span>원하시는 노출 순서대로 이미지를 업로드해주세요.&nbsp;</span>
-            <span>표준 종이규격(A, B)의 이미지를 권장합니다.</span><br />
+            <span>표준 종이규격(A, B)의 이미지를 권장합니다.</span>
+            <br />
             <span>(최소 1장, 최대 {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)</span>
           </Styled.ShowInfoFormDescription>
           <Styled.PreviewImageContainer>
@@ -142,7 +170,7 @@ const ShowBasicInfoFormContent = ({
 
                     if (!value) {
                       setError('name', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      return;
                     }
                   }}
                   value={value ?? ''}
@@ -174,7 +202,7 @@ const ShowBasicInfoFormContent = ({
 
                     if (new Date(event.target.value) < new Date(MIN_DATE)) {
                       setError('date', { type: 'min', message: '오늘 이후부터 선택 가능합니다.' });
-                      return
+                      return;
                     }
                   }}
                   onBlur={() => {
@@ -182,7 +210,7 @@ const ShowBasicInfoFormContent = ({
 
                     if (!value) {
                       setError('date', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      return;
                     }
                   }}
                   placeholder={value}
@@ -219,8 +247,11 @@ const ShowBasicInfoFormContent = ({
                       onBlur();
 
                       if (!value) {
-                        setError('startTime', { type: 'required', message: '필수 입력사항입니다.' });
-                        return
+                        setError('startTime', {
+                          type: 'required',
+                          message: '필수 입력사항입니다.',
+                        });
+                        return;
                       }
                     }}
                     value={value}
@@ -255,8 +286,11 @@ const ShowBasicInfoFormContent = ({
                     onBlur();
 
                     if (!value) {
-                      setError('runningTime', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      setError('runningTime', {
+                        type: 'required',
+                        message: '필수 입력사항입니다.',
+                      });
+                      return;
                     }
                   }}
                   value={value ?? ''}
@@ -294,7 +328,7 @@ const ShowBasicInfoFormContent = ({
 
                     if (!value) {
                       setError('placeName', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      return;
                     }
                   }}
                   value={value ?? ''}
@@ -356,8 +390,11 @@ const ShowBasicInfoFormContent = ({
                     onBlur();
 
                     if (!value) {
-                      setError('placeDetailAddress', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      setError('placeDetailAddress', {
+                        type: 'required',
+                        message: '필수 입력사항입니다.',
+                      });
+                      return;
                     }
                   }}
                   value={value ?? ''}

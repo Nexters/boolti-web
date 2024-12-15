@@ -1,8 +1,8 @@
 import type { Options, ResponsePromise } from 'ky';
 import ky, { HTTPError } from 'ky';
 
-import { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
+import { checkIsWebView, isWebViewBridgeAvailable, requestToken } from '@boolti/bridge';
 
 const API_URL = import.meta.env.VITE_BASE_API_URL;
 const IS_SUPER_ADMIN = import.meta.env.VITE_IS_SUPER_ADMIN === 'true';
@@ -52,32 +52,35 @@ export const instance = ky.create({
       async (request, options, response) => {
         // access token이 만료되었을 때, refresh token으로 새로운 access token을 발급받는다.
         if (!response.ok && response.status === 401 && !request.url.includes('logout')) {
+          let newAccessToken: string | undefined = undefined,
+            newRefreshToken: string | undefined = undefined;
           try {
-            const { accessToken, refreshToken } = (await postRefreshToken()) ?? {};
-            if (accessToken && refreshToken) {
-              window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
-              window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
+            if (checkIsWebView() && isWebViewBridgeAvailable()) {
+              newAccessToken = (await requestToken()).data.token;
+            } else {
+              const { accessToken, refreshToken } = (await postRefreshToken()) ?? {};
+              newAccessToken = accessToken;
+              newRefreshToken = refreshToken;
+            }
 
-              request.headers.set('Authorization', `Bearer ${accessToken}`);
+            if (newAccessToken) {
+              window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, newAccessToken);
 
+              if (newRefreshToken) {
+                window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, newRefreshToken);
+              }
+
+              request.headers.set('Authorization', `Bearer ${newAccessToken}`);
               return ky(request, options);
             }
           } catch (e) {
             if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
               window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
               window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
-              window.dispatchEvent(
-                new StorageEvent('storage', {
-                  key: LOCAL_STORAGE.REFRESH_TOKEN,
-                  newValue: undefined,
-                }),
-              );
-              window.dispatchEvent(
-                new StorageEvent('storage', {
-                  key: LOCAL_STORAGE.ACCESS_TOKEN,
-                  newValue: undefined,
-                }),
-              );
+            }
+
+            if (e instanceof Error) {
+              console.warn(`[fether.ts] ${e.name} (${e.message})`);
             }
           }
         }
@@ -89,16 +92,7 @@ export const instance = ky.create({
 });
 
 export async function resultify<T>(response: ResponsePromise) {
-  try {
-    return await response.json<T>();
-  } catch (error) {
-    if (error instanceof Error && isBooltiHTTPError(error)) {
-      console.error('[BooltiHTTPError] errorTraceId:', error.errorTraceId);
-      console.error('[BooltiHTTPError] type', error.type);
-      console.error('[BooltiHTTPError] detail', error.detail);
-    }
-    throw error;
-  }
+  return await response.json<T>();
 }
 
 export const fetcher = {

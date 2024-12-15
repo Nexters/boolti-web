@@ -29,7 +29,12 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView } from '~/utils/webview';
+import {
+  checkIsWebView,
+  isWebViewBridgeAvailable,
+  navigateBack,
+  navigateToShowDetail,
+} from '@boolti/bridge';
 import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 interface ShowAddPageProps {
@@ -38,7 +43,7 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
-  const isWebView = checkIsWebView(window.navigator.userAgent);
+  const isWebView = checkIsWebView();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
@@ -49,7 +54,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
-  const { castTeamListDraft, sensors, setCastTeamListDraft, castTeamDragEndHandler } = useCastTeamListOrder();
+  const { castTeamListDraft, sensors, setCastTeamListDraft, castTeamDragEndHandler } =
+    useCastTeamListOrder();
 
   const toast = useToast();
 
@@ -65,7 +71,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
     // 공연 생성
-    await addShowMutation.mutateAsync({
+    const showId = await addShowMutation.mutateAsync({
       name: showInfoForm.getValues('name'),
       images: showImageInfo,
       date: `${showInfoForm.getValues('date')}T${showInfoForm.getValues('startTime')}:00.000Z`,
@@ -102,6 +108,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           })),
       })) as ShowCastTeamCreateOrUpdateRequest[],
     });
+
+    if (isWebView && isWebViewBridgeAvailable()) {
+      navigateBack().then(() => {
+        navigateToShowDetail({ showId });
+      });
+      return;
+    }
 
     navigate(PATH.SHOW_ADD_COMPLETE);
   };
@@ -178,8 +191,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           return new Promise((reslve) => reslve());
                         }}
                       />
-                      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-                        <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                      <DndContext
+                        sensors={sensors}
+                        modifiers={[restrictToVerticalAxis]}
+                        collisionDetection={closestCenter}
+                        onDragEnd={castTeamDragEndHandler}
+                      >
+                        <SortableContext
+                          items={castTeamListDraft.map((info) => info.id)}
+                          strategy={verticalListSortingStrategy}
+                        >
                           {castTeamListDraft.map((info) => (
                             <ShowCastInfo
                               key={info.id}
@@ -188,13 +209,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                                 setCastTeamListDraft((prev) =>
                                   prev.map((item) =>
                                     item.id === info.id ? showCastInfoFormInput : item,
-                                  )
+                                  ),
                                 );
                                 return new Promise((reslve) => reslve());
                               }}
                               onDelete={() => {
                                 setCastTeamListDraft((prev) =>
-                                  prev.filter((item) => item.id !== info.id)
+                                  prev.filter((item) => item.id !== info.id),
                                 );
                                 return new Promise((reslve) => reslve());
                               }}
@@ -394,8 +415,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     return new Promise((reslve) => reslve());
                   }}
                 />
-                <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-                  <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                <DndContext
+                  sensors={sensors}
+                  modifiers={[restrictToVerticalAxis]}
+                  collisionDetection={closestCenter}
+                  onDragEnd={castTeamDragEndHandler}
+                >
+                  <SortableContext
+                    items={castTeamListDraft.map((info) => info.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
                     {castTeamListDraft.map((info) => (
                       <ShowCastInfo
                         key={info.id}
@@ -404,13 +433,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                           setCastTeamListDraft((prev) =>
                             prev.map((item) =>
                               item.id === info.id ? showCastInfoFormInput : item,
-                            )
+                            ),
                           );
                           return new Promise((reslve) => reslve());
                         }}
                         onDelete={() => {
                           setCastTeamListDraft((prev) =>
-                            prev.filter((item) => item.id !== info.id)
+                            prev.filter((item) => item.id !== info.id),
                           );
                           return new Promise((reslve) => reslve());
                         }}

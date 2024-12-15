@@ -40,8 +40,12 @@ import ShowTicketPage from './pages/ShowTicketPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
+import { initVConsole } from './utils/vConsole';
+import { checkIsWebView } from '@boolti/bridge';
 
 setDefaultOptions({ locale: ko });
+
+initVConsole();
 
 const publicRoutes = [
   {
@@ -97,7 +101,7 @@ const publicRoutes = [
 const PrivateRoute = () => {
   const { isLogin } = useAuthAtom();
 
-  if (!isLogin()) {
+  if (!isLogin() && !checkIsWebView()) {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 

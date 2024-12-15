@@ -13,22 +13,31 @@ setDefaultOptions({ locale: ko });
 
 const getDynamicLink = (showId: number) => {
   return `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
-}
+};
 
 const getPreviewLink = (showId: number) => {
-  return `${window.location.origin}/show/${showId}`
-}
+  return `${window.location.origin}/show/${showId}`;
+};
 
-const getShareText = (show: { id: number, title: string, date: Date, placeName: string, streetAddress: string, detailAddress: string }) => {
-  return `공연 정보를 공유드려요!
-
-- 공연명 : ${show.title}
-- 일시 : ${format(show.date, 'yyyy.MM.dd (E) / HH:mm -', { locale: ko })}
-- 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}
-
-공연 상세 정보 ▼ 
-${getPreviewLink(show.id)}`
-}
+const getShareText = (show: {
+  id: number;
+  title: string;
+  date: Date;
+  placeName: string;
+  streetAddress: string;
+  detailAddress: string;
+}) => {
+  return (
+    '공연 정보를 공유드려요!\n' +
+    '\n' +
+    `- 공연명 : ${show.title}\n` +
+    `- 일시 : ${format(show.date, 'yyyy.MM.dd (E) / HH:mm -', { locale: ko })}\n` +
+    `- 장소 : ${show.placeName} / ${show.streetAddress}, ${show.detailAddress}\n` +
+    '\n' +
+    '공연 상세 정보 ▼\n' +
+    `${getPreviewLink(show.id)}`
+  );
+};
 
 const ShowPreviewPage = () => {
   const loaderData = useLoaderData() as
@@ -62,7 +71,14 @@ const ShowPreviewPage = () => {
   const shareButtonClickHandler = async () => {
     if (navigator.share) {
       await navigator.share({
-        text: getShareText({ id, title, date: new Date(date), placeName, streetAddress, detailAddress }),
+        text: getShareText({
+          id,
+          title,
+          date: new Date(date),
+          placeName,
+          streetAddress,
+          detailAddress,
+        }),
       });
     } else {
       await navigator.clipboard.writeText(getPreviewLink(id));

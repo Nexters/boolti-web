@@ -53,7 +53,7 @@ const ShowPreview = ({
   containerRef,
   onClickLink,
   onClickLinkMobile,
-  onClickShareButton
+  onClickShareButton,
 }: ShowPreviewProps) => {
   const { images, name } = show;
 
@@ -119,7 +119,7 @@ const ShowPreview = ({
                   onClickLink={onClickLink}
                   onClickLinkMobile={onClickLinkMobile}
                   onClickViewNotice={() => {
-                    containerScrollTop.current = containerRef?.current?.scrollTop ?? null
+                    containerScrollTop.current = containerRef?.current?.scrollTop ?? null;
                     containerRef?.current?.scrollTo(0, 0);
                     setNoticeOpen(true);
                   }}

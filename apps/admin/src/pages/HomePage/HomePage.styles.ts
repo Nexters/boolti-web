@@ -49,8 +49,8 @@ const Container = styled.main`
 `;
 
 const BannerContainer = styled.div`
-  border-bottom: 1px solid #C5E1FF;
-`
+  border-bottom: 1px solid #c5e1ff;
+`;
 
 const Banner = styled.div`
   max-width: ${({ theme }) => theme.breakpoint.desktop};
