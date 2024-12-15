@@ -1,6 +1,6 @@
 import {
-  BooltiHttpError,
-  BooltiHttpErrorParams,
+  CustomHttpError,
+  CustomHttpErrorParams,
   LOCAL_STORAGE,
   checkIsAuthError,
   checkIsHttpError,
@@ -28,7 +28,7 @@ const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
         }
       } else {
         if (checkIsHttpError(error)) {
-          let customOptions: BooltiHttpErrorParams['customOptions'];
+          let customOptions: CustomHttpErrorParams['customOptions'];
           try {
             const body = await error.response.json();
             customOptions = {
@@ -37,7 +37,7 @@ const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
               detail: body.detail,
             };
           } catch {
-            throw new BooltiHttpError({
+            throw new CustomHttpError({
               request: error.request,
               response: error.response,
               options: error.options,

@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-export * from './BooltiHttpError';
+export * from './CustomHttpError';
 
 export { QueryClientProvider } from './QueryClientProvider';
 export * from './constants';
