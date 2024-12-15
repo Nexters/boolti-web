@@ -50,6 +50,7 @@ const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
     };
 
     reset();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;
