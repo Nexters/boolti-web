@@ -1,48 +1,62 @@
-import { BooltiHTTPError, LOCAL_STORAGE } from '@boolti/api';
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import {
+  BooltiHttpError,
+  BooltiHttpErrorParams,
+  LOCAL_STORAGE,
+  checkIsAuthError,
+  checkIsHttpError,
+} from '@boolti/api';
+import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '../../constants/routes';
 
-interface AuthErrorBoundaryProps {
-  children?: React.ReactNode;
-}
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import { checkIsWebView, isWebViewBridgeAvailable, requestToken } from '@boolti/bridge';
+import { useEffect } from 'react';
 
-interface AuthErrorBoundaryState {
-  status: BooltiHTTPError['status'] | null;
-}
+const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
+  const navigate = useNavigate();
 
-const initialState: AuthErrorBoundaryState = {
-  status: null,
+  useEffect(() => {
+    const reset = async () => {
+      if (checkIsAuthError(error)) {
+        if (checkIsWebView() && isWebViewBridgeAvailable()) {
+          const token = (await requestToken()).data.token;
+          localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, token);
+          resetErrorBoundary();
+        } else {
+          navigate(PATH.LOGIN, { replace: true });
+        }
+      } else {
+        if (checkIsHttpError(error)) {
+          let customOptions: BooltiHttpErrorParams['customOptions'];
+          try {
+            const body = await error.response.json();
+            customOptions = {
+              errorTraceId: body.errorTraceId,
+              type: body.type,
+              detail: body.detail,
+            };
+          } catch {
+            throw new BooltiHttpError({
+              request: error.request,
+              response: error.response,
+              options: error.options,
+              customOptions,
+            });
+          }
+        }
+        navigate(PATH.HOME, { replace: true });
+      }
+    };
+
+    reset();
+  }, []);
+
+  return null;
 };
 
-class AuthErrorBoundary extends React.Component<AuthErrorBoundaryProps, AuthErrorBoundaryState> {
-  public state: AuthErrorBoundaryState = initialState;
-
-  public static getDerivedStateFromError(error: Error): AuthErrorBoundaryState {
-    if (error instanceof BooltiHTTPError) {
-      return {
-        status: error.status,
-      };
-    }
-
-    return {
-      status: null,
-    };
-  }
-
-  public render() {
-    if (this.state.status !== null) {
-      this.setState(initialState);
-
-      window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
-      window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
-
-      return <Navigate to={PATH.LOGIN} replace />;
-    }
-
-    return this.props.children;
-  }
-}
+const AuthErrorBoundary = ({ children }: React.PropsWithChildren) => {
+  return <ErrorBoundary FallbackComponent={AuthErrorFallback}>{children}</ErrorBoundary>;
+};
 
 export default AuthErrorBoundary;

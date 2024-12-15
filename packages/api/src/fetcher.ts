@@ -1,7 +1,6 @@
 import type { Options, ResponsePromise } from 'ky';
 import ky, { HTTPError } from 'ky';
 
-import { isBooltiHTTPError } from './BooltiHTTPError';
 import { LOCAL_STORAGE } from './constants';
 import { checkIsWebView, isWebViewBridgeAvailable, requestToken } from '@boolti/bridge';
 
@@ -72,25 +71,16 @@ export const instance = ky.create({
               }
 
               request.headers.set('Authorization', `Bearer ${newAccessToken}`);
-
               return ky(request, options);
             }
           } catch (e) {
             if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
               window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
               window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
-              window.dispatchEvent(
-                new StorageEvent('storage', {
-                  key: LOCAL_STORAGE.REFRESH_TOKEN,
-                  newValue: undefined,
-                }),
-              );
-              window.dispatchEvent(
-                new StorageEvent('storage', {
-                  key: LOCAL_STORAGE.ACCESS_TOKEN,
-                  newValue: undefined,
-                }),
-              );
+            }
+
+            if (e instanceof Error) {
+              console.warn(`[fether.ts] ${e.name} (${e.message})`);
             }
           }
         }
@@ -102,16 +92,7 @@ export const instance = ky.create({
 });
 
 export async function resultify<T>(response: ResponsePromise) {
-  try {
-    return await response.json<T>();
-  } catch (error) {
-    if (error instanceof Error && isBooltiHTTPError(error)) {
-      console.error('[BooltiHTTPError] errorTraceId:', error.errorTraceId);
-      console.error('[BooltiHTTPError] type', error.type);
-      console.error('[BooltiHTTPError] detail', error.detail);
-    }
-    throw error;
-  }
+  return await response.json<T>();
 }
 
 export const fetcher = {

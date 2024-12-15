@@ -5486,7 +5486,6 @@ __metadata:
     date-fns: "npm:^3.3.1"
     framer-motion: "npm:^11.2.10"
     jotai: "npm:^2.8.3"
-    js-cookie: "npm:^3.0.5"
     jwt-decode: "npm:^4.0.0"
     lodash.debounce: "npm:^4.0.8"
     qrcode.react: "npm:^3.1.0"
@@ -5494,6 +5493,7 @@ __metadata:
     react-daum-postcode: "npm:^3.1.3"
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"
+    react-error-boundary: "npm:^4.1.2"
     react-hook-form: "npm:^7.50.0"
     react-intersection-observer: "npm:^9.8.0"
     react-pdf: "npm:^9.0.0"
@@ -9406,13 +9406,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "js-cookie@npm:3.0.5"
-  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -11883,6 +11876,17 @@ __metadata:
     react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
     react-dom: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
   checksum: 10c0/0d60a0ea758529c32a706d0c69d70b69fb94de3c46442fffdee34f08f51ffceddbb5395b41dfd1565895653e9f60f98ca525835be9d5db1f16d6b22be12f4cd4
+  languageName: node
+  linkType: hard
+
+"react-error-boundary@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "react-error-boundary@npm:4.1.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.5"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10c0/0737e5259bed40ce14eb0823b3c7b152171921f2179e604f48f3913490cdc594d6c22d43d7abb4ffb1512c832850228db07aa69d3b941db324953a5e393cb399
   languageName: node
   linkType: hard
 
