@@ -52,7 +52,7 @@ const ShowSalesTicketFormContent = ({
           <Button
             type="button"
             colorTheme="netural"
-            size="bold"
+            size="small"
             icon={<PlusIcon />}
             onClick={() => {
               salesTicketDialog.open({

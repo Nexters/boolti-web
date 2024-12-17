@@ -63,7 +63,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormResponsiveRowColumn>
         <Styled.ShowInfoFormContent style={{ flex: 0.58, minWidth: '216px' }}>
-          <Styled.ShowInfoFormLabel required>대표자명</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>주최자명</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
@@ -79,7 +79,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                 <TextField
                   inputType="text"
                   size="big"
-                  placeholder="대표자명을 입력해 주세요"
+                  placeholder="주최자명을 입력해 주세요"
                   required
                   disabled={disabled}
                   onChange={(event) => {
@@ -101,7 +101,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>대표자 연락처</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>주최자 연락처</Styled.ShowInfoFormLabel>
           <Styled.TextField>
             <Controller
               control={control}
@@ -113,7 +113,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                 <TextField
                   inputType="text"
                   size="big"
-                  placeholder="대표자 연락처를 입력해 주세요"
+                  placeholder="주최자 연락처를 입력해 주세요"
                   required
                   disabled={disabled}
                   onChange={(event) => {

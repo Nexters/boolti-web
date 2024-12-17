@@ -141,118 +141,132 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               <Styled.CardHeaderText>공연 등록</Styled.CardHeaderText>
             </Styled.CardHeader>
             <Styled.CardContent>
-            <Styled.ProcessIndicator>
-              <StepProgressBar width="175px" activeKey={step} items={stepItems} />
-            </Styled.ProcessIndicator>
-            {step === 'basic' && (
-              <>
-                <Styled.CardDescription>
-                공연의 기본 정보를 입력해 주세요.
-                <br />
-                입력한 정보는 등록 후에도 수정할 수 있어요.
-                </Styled.CardDescription>
-                <Styled.ShowAddForm onSubmit={showBasicInfoForm.handleSubmit(onSubmitBasicInfoForm)}>
-                  <Styled.ShowInfoFormContent>
-                    <ShowBasicInfoFormContent
-                      form={showBasicInfoForm}
-                      imageFiles={imageFiles}
-                      onDropImage={(acceptedFiles) => {
-                        setImageFiles((prevImageFiles) => [
-                          ...prevImageFiles,
-                        ...acceptedFiles.map((file) => ({
-                          ...file,
-                          preview: URL.createObjectURL(file),
-                        })),
-                      ]);
-                    }}
-                    onDeleteImage={(file) => {
-                      setImageFiles((prevImageFiles) =>
-                        prevImageFiles.filter((prevFile) => prevFile !== file),
-                      );
-                    }}
-                  />
-                  </Styled.ShowInfoFormContent>
-                  <Button
-                    size="bold"
-                    colorTheme="primary"
-                    type="submit"
-                    disabled={
-                      !showBasicInfoForm.formState.isDirty ||
-                      !showBasicInfoForm.formState.isValid ||
-                      imageFiles.length === 0
-                    }
-                  >
-                    다음으로
-                  </Button>
-                </Styled.ShowAddForm>
-              </>
-            )}
-            {step === 'detail' && (
-              <>
-                {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) && (
-                  <Navigate to={PATH.SHOW_ADD} replace />
-                )}
-                <Styled.CardDescription>
-                  공연의 상세 정보를 입력해 주세요.
-                  <br />
-                  입력한 정보는 등록 후에도 수정할 수 있어요.
-                </Styled.CardDescription>
-                <Styled.ShowAddForm onSubmit={showDetailInfoForm.handleSubmit(onSubmitDetailInfoForm)}>
-                  <Styled.ShowInfoFormContent>
-                    <ShowDetailInfoFormContent form={showDetailInfoForm} />
-                  </Styled.ShowInfoFormContent>
-                  <Styled.ShowInfoFormContent>
-                    <ShowCastInfoFormContent
-                      onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                        setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
-                        return new Promise((reslve) => reslve());
-                      }}
-                    />
-                    <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-                      <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
-                        {castTeamListDraft.map((info) => (
-                          <ShowCastInfo
-                            key={info.id}
-                            showCastInfo={info}
-                            onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                              setCastTeamListDraft((prev) =>
-                                prev.map((item) =>
-                                  item.id === info.id ? showCastInfoFormInput : item,
-                                )
-                              );
-                              return new Promise((reslve) => reslve());
-                            }}
-                            onDelete={() => {
-                              setCastTeamListDraft((prev) =>
-                                prev.filter((item) => item.id !== info.id)
-                              );
-                              return new Promise((reslve) => reslve());
-                            }}
-                          />
-                        ))}
-                      </SortableContext>
-                    </DndContext>
-                  </Styled.ShowInfoFormContent>
-                  <Button
-                    size="bold"
-                    colorTheme="primary"
-                    type="submit"
-                    disabled={
-                      !showDetailInfoForm.formState.isDirty ||
-                      !showDetailInfoForm.formState.isValid
-                    }
-                  >
-                    다음으로
-                  </Button>
-                </Styled.ShowAddForm>
-              </>
-            )}
+              <Styled.ProcessIndicator>
+                <StepProgressBar width="175px" activeKey={step} items={stepItems} />
+              </Styled.ProcessIndicator>
+              {step === 'basic' && (
+                <>
+                  <Styled.CardDescription>
+                    공연의 기본 정보를 입력해 주세요.
+                    <br />
+                    입력한 정보는 등록 후에도 수정할 수 있어요.
+                  </Styled.CardDescription>
+                  <Styled.ShowAddForm onSubmit={showBasicInfoForm.handleSubmit(onSubmitBasicInfoForm)}>
+                    <Styled.ShowInfoFormContent>
+                      <ShowBasicInfoFormContent
+                        form={showBasicInfoForm}
+                        imageFiles={imageFiles}
+                        onDropImage={(acceptedFiles) => {
+                          setImageFiles((prevImageFiles) => [
+                            ...prevImageFiles,
+                            ...acceptedFiles.map((file) => ({
+                              ...file,
+                              preview: URL.createObjectURL(file),
+                            })),
+                          ]);
+                        }}
+                        onDeleteImage={(file) => {
+                          setImageFiles((prevImageFiles) =>
+                            prevImageFiles.filter((prevFile) => prevFile !== file),
+                          );
+                        }}
+                      />
+                    </Styled.ShowInfoFormContent>
+                    <Button
+                      size="bold"
+                      colorTheme="primary"
+                      type="submit"
+                      disabled={
+                        !showBasicInfoForm.formState.isDirty ||
+                        !showBasicInfoForm.formState.isValid ||
+                        imageFiles.length === 0
+                      }
+                    >
+                      다음으로
+                    </Button>
+                  </Styled.ShowAddForm>
+                </>
+              )}
+              {step === 'detail' && (
+                <>
+                  {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) && (
+                    <Navigate to={PATH.SHOW_ADD} replace />
+                  )}
+                  <Styled.CardDescription>
+                    공연의 상세 정보를 입력해 주세요.
+                    <br />
+                    입력한 정보는 등록 후에도 수정할 수 있어요.
+                  </Styled.CardDescription>
+                  <Styled.ShowAddForm onSubmit={showDetailInfoForm.handleSubmit(onSubmitDetailInfoForm)}>
+                    <Styled.ShowInfoFormContent>
+                      <ShowDetailInfoFormContent form={showDetailInfoForm} />
+                    </Styled.ShowInfoFormContent>
+                    <Styled.ShowInfoFormContent>
+                      <ShowCastInfoFormContent
+                        onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                          setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
+                          return new Promise((reslve) => reslve());
+                        }}
+                      />
+                      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+                        <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+                          {castTeamListDraft.map((info) => (
+                            <ShowCastInfo
+                              key={info.id}
+                              showCastInfo={info}
+                              onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.map((item) =>
+                                    item.id === info.id ? showCastInfoFormInput : item,
+                                  )
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                              onDelete={() => {
+                                setCastTeamListDraft((prev) =>
+                                  prev.filter((item) => item.id !== info.id)
+                                );
+                                return new Promise((reslve) => reslve());
+                              }}
+                            />
+                          ))}
+                        </SortableContext>
+                      </DndContext>
+                    </Styled.ShowInfoFormContent>
+                    <Styled.ShowAddFormButtonContainer>
+                      <Styled.ShowAddFormButton
+                        width="152px"
+                        type="button"
+                        colorTheme="line"
+                        size="bold"
+                        onClick={() => {
+                          navigate(-1);
+                        }}
+                      >
+                        이전으로
+                      </Styled.ShowAddFormButton>
+                      <Styled.ShowAddFormButton
+                        width="calc(100% - 152px)"
+                        type="submit"
+                        colorTheme="primary"
+                        size="bold"
+                        disabled={
+                          !showDetailInfoForm.formState.isDirty ||
+                          !showDetailInfoForm.formState.isValid
+                        }
+                      >
+                        다음으로
+                      </Styled.ShowAddFormButton>
+                    </Styled.ShowAddFormButtonContainer>
+                  </Styled.ShowAddForm>
+                </>
+              )}
               {step === 'sales' && (
                 <>
                   {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) &&
-                  (!showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid) && (
-                    <Navigate to={PATH.SHOW_ADD} replace />
-                  )}
+                    (!showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid) && (
+                      <Navigate to={PATH.SHOW_ADD} replace />
+                    )}
                   <Styled.CardDescription>
                     티켓 판매 기간을 설정하고 티켓을 생성해 주세요.
                     <br />
@@ -341,8 +355,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                       </Styled.ShowAddFormButton>
                     </Styled.ShowAddFormButtonContainer>
                   </Styled.ShowAddForm>
-              </>
-            )}
+                </>
+              )}
             </Styled.CardContent>
           </Styled.Card>
         </Styled.CardContainer>
@@ -544,7 +558,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     salesTicketList.length === 0
                   }
                 >
-                  공연 등록 완료하기
+                  공연 등록
                 </Styled.ShowAddFormButton>
               </Styled.ShowAddFormButtonContainer>
             </Styled.ShowAddForm>

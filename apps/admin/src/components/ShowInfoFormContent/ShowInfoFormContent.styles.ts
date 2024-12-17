@@ -311,6 +311,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   ${({ theme }) => theme.typo.b3};
 
   &:placeholder-shown {
+    ${({ theme }) => theme.typo.b3};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g30};
   }
@@ -370,7 +371,7 @@ const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   }
 
   ${mq_lg} {
-    ${({ theme }) => theme.typo.h1};
+    ${({ theme }) => theme.typo.b3};
     margin-bottom: 2px;
   }
 `;

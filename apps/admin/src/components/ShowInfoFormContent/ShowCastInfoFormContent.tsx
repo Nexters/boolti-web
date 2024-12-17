@@ -36,21 +36,21 @@ const ShowCastInfoFormContent = ({ onSave }: Props) => {
     <Styled.ShowInfoFormGroup>
       <Styled.ShowInfoFormGroupHeader>
         <Styled.ShowInfoFormGroupInfo>
-          <Styled.ShowInfoFormTitle>
+          <Styled.ShowInfoFormLabel>
             출연진 정보
             <Styled.MobileCastInfoRegisterButton type="button" onClick={onClick}>
               <PlusIcon />
               등록하기
             </Styled.MobileCastInfoRegisterButton>
-          </Styled.ShowInfoFormTitle>
-          <Styled.ShowInfoFormSubtitle>
+          </Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormDescription>
             출연진 정보를 팀 단위로 등록해 주세요.
-          </Styled.ShowInfoFormSubtitle>
+          </Styled.ShowInfoFormDescription>
         </Styled.ShowInfoFormGroupInfo>
         <Styled.DesktopCastInfoRegisterButton
           type="button"
           colorTheme="netural"
-          size="bold"
+          size="small"
           icon={<PlusIcon />}
           onClick={onClick}
         >
