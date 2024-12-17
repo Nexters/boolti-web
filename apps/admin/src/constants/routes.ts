@@ -9,7 +9,8 @@ export const PATH = {
   SIGNUP_COMPLETE: '/signup/complete',
 
   SHOW_ADD: '/show/add',
-  SHOW_ADD_TICKET: '/show/add/ticket',
+  SHOW_ADD_DETAIL: '/show/add/detail',
+  SHOW_ADD_SALES: '/show/add/sales',
   SHOW_ADD_COMPLETE: '/show/add/complete',
 
   SHOW_INFO: '/show/:showId/info',

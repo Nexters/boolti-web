@@ -12,6 +12,7 @@ import ShowPreview from './ShowPreview';
 import TextButton from './TextButton';
 import TextField from './TextField';
 import TimePicker from './TimePicker';
+import StepProgressBar from './StepProgressBar';
 
 export {
   AgreeCheck,
@@ -28,4 +29,5 @@ export {
   TextButton,
   TextField,
   TimePicker,
+  StepProgressBar,
 };

@@ -19,7 +19,7 @@ import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
 import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
-import { ShowTicketFormInputs } from '~/components/ShowInfoFormContent/types';
+import { ShowSalesFormInputs } from '~/components/ShowInfoFormContent/types';
 
 import Styled from './ShowTicketPage.styles';
 import { useAtom } from 'jotai';
@@ -30,7 +30,7 @@ const ShowTicketPage = () => {
   const params = useParams<{ showId: string }>();
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
-  const showTicketForm = useForm<ShowTicketFormInputs>();
+  const showTicketForm = useForm<ShowSalesFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -47,7 +47,7 @@ const ShowTicketPage = () => {
   const toast = useToast();
   const confirm = useConfirm();
 
-  const onSubmitShowTicketForm: SubmitHandler<ShowTicketFormInputs> = async (data) => {
+  const onSubmitShowTicketForm: SubmitHandler<ShowSalesFormInputs> = async (data) => {
     if (!show) return;
 
     await editSalesTicketInfoMutation.mutateAsync({

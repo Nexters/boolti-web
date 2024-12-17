@@ -17,7 +17,7 @@ import {
 import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { compareAsc, format } from 'date-fns';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
@@ -27,7 +27,7 @@ import ShowDeleteForm from '~/components/ShowDeleteForm';
 import { middlewareAtom, myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
-import { ShowInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import { ShowBasicInfoFormInputs, ShowDetailInfoFormInputs } from '~/components/ShowInfoFormContent/types';
 import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
@@ -42,7 +42,6 @@ import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogCo
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
-
 const ShowInfoPage = () => {
   const queryClient = useQueryClient();
   const params = useParams<{ showId: string }>();
@@ -54,7 +53,8 @@ const ShowInfoPage = () => {
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
-  const showInfoForm = useForm<ShowInfoFormInputs>();
+  const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
+  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -79,49 +79,57 @@ const ShowInfoPage = () => {
 
   useBodyScrollLock(previewDrawerOpen);
 
-  const onSubmit: SubmitHandler<ShowInfoFormInputs> = useCallback(
-    async (data) => {
-      if (!show) return;
+  const submitHandler = useCallback(async () => {
+    if (!show) return;
 
-      const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
-      const newShowImages = await (async () => {
-        if (newImageFiles.length === 0) return [];
+    const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
+    const newShowImages = await (async () => {
+      if (newImageFiles.length === 0) return [];
 
-        return await uploadShowImageMutation.mutateAsync(newImageFiles);
-      })();
+      return await uploadShowImageMutation.mutateAsync(newImageFiles);
+    })();
 
-      await editShowInfoMutation.mutateAsync({
-        showId: show.id,
-        body: {
-          name: data.name,
-          images: [...showImages, ...newShowImages].map((image, index) => ({
-            sequence: index + 1,
-            thumbnailPath: image.thumbnailPath,
-            path: image.path,
-          })),
-          date: `${data.date}T${data.startTime}:00.000Z`,
-          runningTime: Number(data.runningTime),
-          place: {
-            name: data.placeName,
-            streetAddress: data.placeStreetAddress,
-            detailAddress: data.placeDetailAddress,
-          },
-          notice: data.notice,
-          host: {
-            name: data.hostName,
-            phoneNumber: data.hostPhoneNumber,
-          },
+    const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
+      showBasicInfoForm.trigger(),
+      showDetailInfoForm.trigger()
+    ]);
+
+    if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
+
+    const showBasicInfoFormInputs = showBasicInfoForm.getValues();
+    const showDetailInfoFormInputs = showDetailInfoForm.getValues();
+
+    await editShowInfoMutation.mutateAsync({
+      showId,
+      body: {
+        name: showBasicInfoFormInputs.name,
+        images: [...showImages, ...newShowImages].map((image, index) => ({
+          sequence: index + 1,
+          thumbnailPath: image.thumbnailPath,
+          path: image.path,
+        })),
+        date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
+        runningTime: +showBasicInfoFormInputs.runningTime,
+        place: {
+          name: showBasicInfoFormInputs.placeName,
+          streetAddress: showBasicInfoFormInputs.placeStreetAddress,
+          detailAddress: showBasicInfoFormInputs.placeDetailAddress,
         },
-      });
+        notice: showDetailInfoFormInputs.notice,
+        host: {
+          name: showDetailInfoFormInputs.hostName,
+          phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
+        },
+      },
+    });
 
-      toast.success('공연 정보를 저장했습니다.');
-      setPreviewDrawerOpen(false);
-    },
-    [editShowInfoMutation, imageFiles, show, showImages, toast, uploadShowImageMutation],
-  );
+    toast.success('공연 정보를 저장했습니다.');
+    setPreviewDrawerOpen(false);
+  }, [editShowInfoMutation, imageFiles, show, showBasicInfoForm, showDetailInfoForm, showId, showImages, toast, uploadShowImageMutation])
+
 
   const confirmSaveShowInfo = useCallback(async () => {
-    if (!showInfoForm.formState.isDirty && !isImageFilesDirty) {
+    if (!showBasicInfoForm.formState.isDirty && !showDetailInfoForm.formState.isDirty && !isImageFilesDirty) {
       return true;
     }
 
@@ -134,16 +142,17 @@ const ShowInfoPage = () => {
     );
 
     if (result) {
-      showInfoForm.handleSubmit(onSubmit)();
+      showBasicInfoForm.handleSubmit(submitHandler)();
+      showDetailInfoForm.handleSubmit(submitHandler)();
     }
 
     return true;
-  }, [confirm, isImageFilesDirty, onSubmit, showInfoForm]);
+  }, [confirm, isImageFilesDirty, submitHandler, showBasicInfoForm, showDetailInfoForm]);
 
   useEffect(() => {
     if (!show) return;
 
-    showInfoForm.reset({
+    showBasicInfoForm.reset({
       name: show.name,
       date: format(show.date, 'yyyy-MM-dd'),
       startTime: format(show.date, 'HH:mm'),
@@ -151,6 +160,9 @@ const ShowInfoPage = () => {
       placeName: show.place.name,
       placeStreetAddress: show.place.streetAddress,
       placeDetailAddress: show.place.detailAddress,
+    });
+
+    showDetailInfoForm.reset({
       notice: show.notice,
       hostName: show.host.name,
       hostPhoneNumber: show.host.phoneNumber,
@@ -158,7 +170,7 @@ const ShowInfoPage = () => {
 
     setImageFiles(show.images.map((image) => ({ preview: image.thumbnailPath })));
     setShowImages(show.images);
-  }, [show, showInfoForm]);
+  }, [show, showBasicInfoForm, showDetailInfoForm]);
 
   useEffect(() => {
     setMiddleware(() => confirmSaveShowInfo);
@@ -183,10 +195,10 @@ const ShowInfoPage = () => {
         />
       ) : (
         <Styled.ShowInfoPage>
-          <Styled.ShowInfoForm onSubmit={showInfoForm.handleSubmit(onSubmit)}>
+          <Styled.ShowInfoForm onSubmit={submitHandler}>
             <Styled.ShowInfoFormContent>
               <ShowBasicInfoFormContent
-                form={showInfoForm}
+                form={showBasicInfoForm}
                 imageFiles={imageFiles}
                 disabled={show.isEnded}
                 onDropImage={(acceptedFiles) => {
@@ -210,7 +222,7 @@ const ShowInfoPage = () => {
             </Styled.ShowInfoFormContent>
             <Styled.ShowInfoFormDivider />
             <Styled.ShowInfoFormContent>
-              <ShowDetailInfoFormContent form={showInfoForm} disabled={show.isEnded} />
+              <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
             </Styled.ShowInfoFormContent>
             <Styled.ShowInfoFormFooter>
               <Styled.SaveButton>
@@ -219,7 +231,7 @@ const ShowInfoPage = () => {
                   colorTheme="primary"
                   type="button"
                   disabled={
-                    !showInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
+                    !showBasicInfoForm.formState.isValid || !showDetailInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
                   }
                   onClick={() => {
                     setPreviewDrawerOpen(true);
@@ -343,24 +355,24 @@ const ShowInfoPage = () => {
                       <ShowPreview
                         show={{
                           images: imageFiles.map((file) => file.preview),
-                          name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
-                          date: showInfoForm.watch('date')
-                            ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                          name: showBasicInfoForm.watch('name') ? showBasicInfoForm.watch('name') : '',
+                          date: showBasicInfoForm.watch('date')
+                            ? format(showBasicInfoForm.watch('date'), 'yyyy.MM.dd (E)')
                             : '',
-                          startTime: showInfoForm.watch('startTime'),
-                          runningTime: showInfoForm.watch('runningTime'),
+                          startTime: showBasicInfoForm.watch('startTime'),
+                          runningTime: showBasicInfoForm.watch('runningTime'),
                           salesStartTime: showSalesInfo
                             ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                             : '',
                           salesEndTime: showSalesInfo
                             ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                             : '',
-                          placeName: showInfoForm.watch('placeName'),
-                          placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
-                          placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
-                          notice: showInfoForm.watch('notice'),
-                          hostName: showInfoForm.watch('hostName'),
-                          hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                          placeName: showBasicInfoForm.watch('placeName'),
+                          placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
+                          placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                          notice: showDetailInfoForm.watch('notice'),
+                          hostName: showDetailInfoForm.watch('hostName'),
+                          hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                         }}
                         showCastTeams={castTeamList}
                         hasNoticePage
@@ -381,9 +393,7 @@ const ShowInfoPage = () => {
                 </Styled.ShowInfoPreviewCloseButton>
                 <Styled.ShowInfoPreviewSubmitButton
                   type="button"
-                  onClick={() => {
-                    showInfoForm.handleSubmit(onSubmit)();
-                  }}
+                  onClick={submitHandler}
                 >
                   저장하기
                 </Styled.ShowInfoPreviewSubmitButton>
@@ -397,24 +407,24 @@ const ShowInfoPage = () => {
                   <ShowPreview
                     show={{
                       images: imageFiles.map((file) => file.preview),
-                      name: showInfoForm.watch('name') ? showInfoForm.watch('name') : '',
-                      date: showInfoForm.watch('date')
-                        ? format(showInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                      name: showBasicInfoForm.watch('name') ? showBasicInfoForm.watch('name') : '',
+                      date: showBasicInfoForm.watch('date')
+                        ? format(showBasicInfoForm.watch('date'), 'yyyy.MM.dd (E)')
                         : '',
-                      startTime: showInfoForm.watch('startTime'),
-                      runningTime: showInfoForm.watch('runningTime'),
+                      startTime: showBasicInfoForm.watch('startTime'),
+                      runningTime: showBasicInfoForm.watch('runningTime'),
                       salesStartTime: showSalesInfo
                         ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                         : '',
                       salesEndTime: showSalesInfo
                         ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                         : '',
-                      placeName: showInfoForm.watch('placeName'),
-                      placeStreetAddress: showInfoForm.watch('placeStreetAddress'),
-                      placeDetailAddress: showInfoForm.watch('placeDetailAddress'),
-                      notice: showInfoForm.watch('notice'),
-                      hostName: showInfoForm.watch('hostName'),
-                      hostPhoneNumber: showInfoForm.watch('hostPhoneNumber'),
+                      placeName: showBasicInfoForm.watch('placeName'),
+                      placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
+                      placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                      notice: showDetailInfoForm.watch('notice'),
+                      hostName: showDetailInfoForm.watch('hostName'),
+                      hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                     }}
                     showCastTeams={castTeamList}
                     hasNoticePage
@@ -432,9 +442,7 @@ const ShowInfoPage = () => {
                   </Styled.ShowInfoPreviewCloseButton>
                   <Styled.ShowInfoPreviewSubmitButton
                     type="button"
-                    onClick={() => {
-                      showInfoForm.handleSubmit(onSubmit)();
-                    }}
+                    onClick={submitHandler}
                   >
                     저장하기
                   </Styled.ShowInfoPreviewSubmitButton>

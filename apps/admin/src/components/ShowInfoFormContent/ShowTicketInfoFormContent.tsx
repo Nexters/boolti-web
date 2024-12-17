@@ -3,11 +3,11 @@ import { format, sub } from 'date-fns';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
-import { ShowTicketFormInputs } from './types';
+import { ShowSalesInfoFormInputs } from './types';
 import { useCallback, useEffect } from 'react';
 
 interface ShowTicketInfoFormContentProps {
-  form: UseFormReturn<ShowTicketFormInputs>;
+  form: UseFormReturn<ShowSalesInfoFormInputs>;
   showDate: string;
   showCreatedAt?: string;
   salesStartTime?: string;

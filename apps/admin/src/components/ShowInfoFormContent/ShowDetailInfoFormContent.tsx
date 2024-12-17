@@ -2,10 +2,10 @@ import { TextField } from '@boolti/ui';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
-import { ShowInfoFormInputs } from './types';
+import { ShowDetailInfoFormInputs } from './types';
 
 interface ShowDetailInfoFormContentProps {
-  form: UseFormReturn<ShowInfoFormInputs>;
+  form: UseFormReturn<ShowDetailInfoFormInputs>;
   disabled?: boolean;
 }
 

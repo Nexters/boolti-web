@@ -8,14 +8,14 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
-import { ShowInfoFormInputs } from './types';
+import { ShowBasicInfoFormInputs } from './types';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
 const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd')
 
 interface ShowBasicInfoFormContentProps {
-  form: UseFormReturn<ShowInfoFormInputs, unknown, ShowInfoFormInputs>;
+  form: UseFormReturn<ShowBasicInfoFormInputs, unknown, ShowBasicInfoFormInputs>;
   imageFiles: ImageFile[];
   disabled?: boolean;
   onDropImage: (acceptedFiles: File[]) => void;
