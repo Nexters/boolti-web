@@ -96,7 +96,8 @@ const ShowInfoFormContent = styled.div`
 `;
 
 const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
-  display: block;
+  display: flex;
+  align-items: flex-end;
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 

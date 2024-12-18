@@ -13,6 +13,7 @@ import TextButton from './TextButton';
 import TextField from './TextField';
 import TimePicker from './TimePicker';
 import StepProgressBar from './StepProgressBar';
+import Checkbox from './Checkbox';
 
 export {
   AgreeCheck,
@@ -30,4 +31,5 @@ export {
   TextField,
   TimePicker,
   StepProgressBar,
+  Checkbox,
 };

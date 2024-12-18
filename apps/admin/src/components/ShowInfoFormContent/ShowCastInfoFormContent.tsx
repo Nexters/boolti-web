@@ -35,8 +35,8 @@ const ShowCastInfoFormContent = ({ onSave }: Props) => {
   return (
     <Styled.ShowInfoFormGroup>
       <Styled.ShowInfoFormGroupHeader>
-        <Styled.ShowInfoFormGroupInfo>
-          <Styled.ShowInfoFormLabel>
+        <Styled.ShowInfoFormGroupInfo style={{ marginBottom: 0 }}>
+          <Styled.ShowInfoFormLabel style={{ justifyContent: 'space-between' }}>
             출연진 정보
             <Styled.MobileCastInfoRegisterButton type="button" onClick={onClick}>
               <PlusIcon />
