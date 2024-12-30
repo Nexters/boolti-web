@@ -1,34 +1,22 @@
 import {
   ImageFile,
-  ShowCastTeamCreateOrUpdateRequest,
   ShowImage,
-  queryKeys,
   useCastTeamList,
-  useDeleteCastTeams,
-  useDeleteShow,
   useEditShowInfo,
-  usePostCastTeams,
-  usePutCastTeams,
-  useQueryClient,
   useShowDetail,
   useShowSalesInfo,
   useUploadShowImage,
 } from '@boolti/api';
-import { Button, Drawer, ShowPreview, useConfirm, useDialog, useToast } from '@boolti/ui';
-import { compareAsc, format } from 'date-fns';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Drawer, ShowPreview, useConfirm, useToast } from '@boolti/ui';
+import { format } from 'date-fns';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { useParams } from 'react-router-dom';
 
-import ShowDeleteForm from '~/components/ShowDeleteForm';
 import { middlewareAtom, myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
 import { ShowBasicInfoFormInputs, ShowDetailInfoFormInputs } from '~/components/ShowInfoFormContent/types';
-import { PATH } from '~/constants/routes';
 
 import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
@@ -37,41 +25,39 @@ import { HostType } from '@boolti/api/src/types/host';
 import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
-import ShowCastInfo from '~/components/ShowCastInfo';
-import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
+import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 
 const ShowInfoPage = () => {
-  const queryClient = useQueryClient();
   const params = useParams<{ showId: string }>();
-  const navigate = useNavigate();
   const [myHostInfo] = useAtom(myHostInfoAtom);
   const showPreviewRef = useRef<HTMLDivElement>(null);
   const showPreviewMobileRef = useRef<HTMLDivElement>(null);
+  const initialCastTeamListRef = useRef<string | null>(null);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
+  const [castTeamListDraft, setCastTeamListDraft] = useState<TempShowCastInfoFormInput[] | null>(null);
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
+  const isCastTeamListDraftDirty = initialCastTeamListRef.current !== JSON.stringify(castTeamListDraft)
   const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
   const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
 
   const showId = Number(params!.showId);
-  const { data: show } = useShowDetail(showId);
-  const { data: showSalesInfo } = useShowSalesInfo(showId);
+  const { data: show, refetch: refetchShowDetail } = useShowDetail(showId);
+  const { data: showSalesInfo, refetch: refetchShowSalesInfo } = useShowSalesInfo(showId);
   const { data: castTeamList, refetch: refetchCastTeamList } = useCastTeamList(showId);
-  const { castTeamListDraft, sensors, castTeamDragEndHandler } = useCastTeamListOrder({ showId, castTeamList, onChange: refetchCastTeamList });
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
-  const deleteShowMutation = useDeleteShow();
-  const putCastTeams = usePutCastTeams();
-  const postCastTeams = usePostCastTeams();
-  const deleteCastTeams = useDeleteCastTeams();
+
+  const isSaveButtonDisabled = useMemo(
+    () => !showBasicInfoForm.formState.isValid || !showDetailInfoForm.formState.isValid || imageFiles.length === 0 || show?.isEnded,
+    [imageFiles.length, show?.isEnded, showBasicInfoForm.formState.isValid, showDetailInfoForm.formState.isValid]
+  )
 
   const toast = useToast();
   const confirm = useConfirm();
-  const deleteShowDialog = useDialog();
 
   const setMiddleware = useSetAtom(middlewareAtom);
 
@@ -98,6 +84,15 @@ const ShowInfoPage = () => {
 
     const showBasicInfoFormInputs = showBasicInfoForm.getValues();
     const showDetailInfoFormInputs = showDetailInfoForm.getValues();
+    const castTeams = castTeamListDraft?.map((team) => ({
+      id: team.id >= 0 ? team.id : undefined,
+      name: team.name,
+      members: team.members?.map((member) => ({
+        id: member.id >= 0 ? member.id : undefined,
+        roleName: member.roleName ?? '',
+        userCode: member.userCode ?? ''
+      }))
+    })) ?? []
 
     await editShowInfoMutation.mutateAsync({
       showId,
@@ -120,16 +115,24 @@ const ShowInfoPage = () => {
           name: showDetailInfoFormInputs.hostName,
           phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
         },
+        castTeams
       },
+    }, {
+      onSuccess: () => {
+        refetchShowDetail()
+        refetchShowSalesInfo()
+        refetchCastTeamList()
+
+        toast.success('공연 정보를 저장했습니다.');
+        setPreviewDrawerOpen(false);
+      }
     });
 
-    toast.success('공연 정보를 저장했습니다.');
-    setPreviewDrawerOpen(false);
-  }, [editShowInfoMutation, imageFiles, show, showBasicInfoForm, showDetailInfoForm, showId, showImages, toast, uploadShowImageMutation])
+  }, [castTeamListDraft, editShowInfoMutation, imageFiles, refetchCastTeamList, refetchShowDetail, refetchShowSalesInfo, show, showBasicInfoForm, showDetailInfoForm, showId, showImages, toast, uploadShowImageMutation])
 
 
   const confirmSaveShowInfo = useCallback(async () => {
-    if (!showBasicInfoForm.formState.isDirty && !showDetailInfoForm.formState.isDirty && !isImageFilesDirty) {
+    if (!showBasicInfoForm.formState.isDirty && !showDetailInfoForm.formState.isDirty && !isImageFilesDirty && !isCastTeamListDraftDirty) {
       return true;
     }
 
@@ -147,7 +150,7 @@ const ShowInfoPage = () => {
     }
 
     return true;
-  }, [confirm, isImageFilesDirty, submitHandler, showBasicInfoForm, showDetailInfoForm]);
+  }, [showBasicInfoForm, showDetailInfoForm, isImageFilesDirty, isCastTeamListDraftDirty, confirm, submitHandler]);
 
   useEffect(() => {
     if (!show) return;
@@ -173,6 +176,19 @@ const ShowInfoPage = () => {
   }, [show, showBasicInfoForm, showDetailInfoForm]);
 
   useEffect(() => {
+    if (!castTeamList) return;
+
+    const initialCastTeamList = castTeamList.map((team) => ({
+      id: team.id,
+      name: team.name,
+      members: team.members
+    }))
+
+    setCastTeamListDraft(initialCastTeamList);
+    initialCastTeamListRef.current = JSON.stringify(initialCastTeamList)
+  }, [castTeamList])
+
+  useEffect(() => {
     setMiddleware(() => confirmSaveShowInfo);
     return () => {
       setMiddleware(undefined);
@@ -183,13 +199,14 @@ const ShowInfoPage = () => {
     return null;
   }
 
-  const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
+  // TODO: 공연 삭제 시 필요한 조건
+  // const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
 
   return (
     <>
       {myHostInfo?.type === HostType.SUPPORTER ? (
         <ShowDetailUnauthorized
-          pageName={'공연 기본 정보'}
+          pageName={'공연 정보'}
           name={myHostInfo?.hostName as string}
           type={myHostInfo?.type as HostType}
         />
@@ -221,8 +238,18 @@ const ShowInfoPage = () => {
               />
             </Styled.ShowInfoFormContent>
             <Styled.ShowInfoFormDivider />
-            <Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
               <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
+            </Styled.ShowInfoFormContent>
+            <Styled.ShowInfoFormContent>
+              {castTeamListDraft && (
+                <ShowCastInfoFormContent
+                  initialCastTeamList={castTeamListDraft}
+                  onChange={(data) => {
+                    setCastTeamListDraft(data)
+                  }}
+                />
+              )}
             </Styled.ShowInfoFormContent>
             <Styled.ShowInfoFormFooter>
               <Styled.SaveButton>
@@ -231,7 +258,7 @@ const ShowInfoPage = () => {
                   colorTheme="primary"
                   type="button"
                   disabled={
-                    !showBasicInfoForm.formState.isValid || !showDetailInfoForm.formState.isValid || imageFiles.length === 0 || show.isEnded
+                    isSaveButtonDisabled
                   }
                   onClick={() => {
                     setPreviewDrawerOpen(true);
@@ -242,101 +269,6 @@ const ShowInfoPage = () => {
               </Styled.SaveButton>
             </Styled.ShowInfoFormFooter>
           </Styled.ShowInfoForm>
-          <Styled.ShowInfoFormDivider />
-          <Styled.ShowInfoFormContent>
-            <ShowCastInfoFormContent
-              onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
-                await postCastTeams.mutateAsync(
-                  {
-                    showId,
-                    name,
-                    members: members
-                      ?.filter(({ userCode, roleName }) => userCode && roleName)
-                      .map(({ id, userCode, roleName }) => ({
-                        id: id < 0 ? undefined : id,
-                        userCode,
-                        roleName,
-                      })) as ShowCastTeamCreateOrUpdateRequest['members'],
-                  },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
-                    },
-                  },
-                );
-              }}
-            />
-            <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-              <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
-                {castTeamListDraft?.map((info) => (
-                  <ShowCastInfo
-                    key={info.id}
-                    showCastInfo={info}
-                    onSave={async ({ name, members }: TempShowCastInfoFormInput) => {
-                      if (info.id === undefined) return;
-
-                      await putCastTeams.mutateAsync(
-                        {
-                          name,
-                          members: members
-                            ?.filter(({ userCode, roleName }) => userCode && roleName)
-                            .map(({ id, userCode, roleName }) => ({
-                              id: id < 0 ? undefined : id,
-                              userCode,
-                              roleName,
-                            })) as ShowCastTeamCreateOrUpdateRequest['members'],
-                          castTeamId: info.id,
-                        },
-                        {
-                          onSuccess: () => {
-                            queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
-                          },
-                        },
-                      );
-                    }}
-                    onDelete={async () => {
-                      if (info.id === undefined) return;
-
-                      await deleteCastTeams.mutateAsync(info.id, {
-                        onSuccess: () => {
-                          queryClient.invalidateQueries(queryKeys.castTeams.list(showId));
-                        },
-                      });
-                    }}
-                  />
-                ))}
-              </SortableContext>
-            </DndContext>
-          </Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormFooter>
-            <Styled.DeleteButton>
-              <Button
-                size="bold"
-                colorTheme="line"
-                type="button"
-                disabled={salesStarted || show.isEnded}
-                onClick={() => {
-                  deleteShowDialog.open({
-                    title: '공연 삭제하기',
-                    content: (
-                      <ShowDeleteForm
-                        showName={show.name}
-                        onSubmit={async () => {
-                          await deleteShowMutation.mutateAsync(show.id);
-
-                          deleteShowDialog.close();
-                          navigate(PATH.HOME);
-                          toast.success('공연을 삭제했습니다.');
-                        }}
-                      />
-                    ),
-                  });
-                }}
-              >
-                삭제하기
-              </Button>
-            </Styled.DeleteButton>
-          </Styled.ShowInfoFormFooter>
           <Drawer
             open={previewDrawerOpen}
             title="공연 상세 미리보기"
@@ -374,7 +306,14 @@ const ShowInfoPage = () => {
                           hostName: showDetailInfoForm.watch('hostName'),
                           hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                         }}
-                        showCastTeams={castTeamList}
+                        showCastTeams={castTeamListDraft?.map((team) => ({
+                          name: team.name,
+                          members: team.members?.map((member) => ({
+                            roleName: member.roleName ?? '',
+                            userNickname: member.userNickname ?? '',
+                            userImgPath: member.userImgPath ?? ''
+                          }))
+                        })) ?? []}
                         hasNoticePage
                         containerRef={showPreviewRef}
                       />

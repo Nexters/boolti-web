@@ -12,9 +12,28 @@ const ShowTicketPage = styled.div`
 
 const ShowTicketForm = styled.form``;
 
-const ShowTicketFormContent = styled.div`
+const ShowTicketFormTitle = styled.h3`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-bottom: 16px;
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.h1};
+  }
+`;
+
+const ShowTicketFormContentContainer = styled.div`
   max-width: 600px;
 `;
+
+const ShowTicketFormContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+`
 
 const ShowTicketSubmitContainer = styled.div`
   margin-top: 32px;
@@ -36,6 +55,8 @@ const ShowTicketFormDivider = styled.hr`
 export default {
   ShowTicketPage,
   ShowTicketForm,
+  ShowTicketFormTitle,
+  ShowTicketFormContentContainer,
   ShowTicketFormContent,
   ShowTicketSubmitContainer,
   ShowTicketFormDivider,

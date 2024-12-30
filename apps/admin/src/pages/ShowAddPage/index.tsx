@@ -9,9 +9,6 @@ import { Button, Checkbox, StepProgressBar, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate } from 'react-router-dom';
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
@@ -27,10 +24,8 @@ import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
-import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { checkIsWebView } from '~/utils/webview';
-import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 const stepItems = [
   { key: 'basic', title: '기본 정보' },
@@ -47,6 +42,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const isWebView = checkIsWebView(window.navigator.userAgent);
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
+  const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
   const [invitationTicketList, setInvitationTicketList] = useState<InvitationTicket[]>([]);
 
@@ -58,7 +54,6 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
-  const { castTeamListDraft, sensors, setCastTeamListDraft, castTeamDragEndHandler } = useCastTeamListOrder();
 
   const toast = useToast();
 
@@ -105,7 +100,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      castTeams: castTeamListDraft.map(({ name, members }) => ({
+      castTeams: castTeamList.map(({ name, members }) => ({
         name,
         members: members
           ?.filter(({ userCode, roleName }) => userCode && roleName)
@@ -181,35 +176,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent style={{ marginBottom: '32px' }}>
           <ShowCastInfoFormContent
-            onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-              setCastTeamListDraft((prev) => [...prev, showCastInfoFormInput]);
-              return new Promise((reslve) => reslve());
+            onChange={(data) => {
+              setCastTeamList(data);
             }}
           />
-          <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-            <SortableContext items={castTeamListDraft.map((info) => info.id)} strategy={verticalListSortingStrategy}>
-              {castTeamListDraft.map((info) => (
-                <ShowCastInfo
-                  key={info.id}
-                  showCastInfo={info}
-                  onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
-                    setCastTeamListDraft((prev) =>
-                      prev.map((item) =>
-                        item.id === info.id ? showCastInfoFormInput : item,
-                      )
-                    );
-                    return new Promise((reslve) => reslve());
-                  }}
-                  onDelete={() => {
-                    setCastTeamListDraft((prev) =>
-                      prev.filter((item) => item.id !== info.id)
-                    );
-                    return new Promise((reslve) => reslve());
-                  }}
-                />
-              ))}
-            </SortableContext>
-          </DndContext>
         </Styled.ShowInfoFormContent>
         <Styled.ShowAddFormButtonContainer>
           <Styled.ShowAddFormButton
@@ -256,57 +226,60 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           form={showSalesInfoForm}
           showDate={showBasicInfoForm.watch('date')}
         />
-        <Styled.TicketGroupContainer>
-          <ShowSalesTicketFormContent
-            fullEditable
-            salesTicketList={salesTicketList}
-            onSubmitTicket={(ticket) => {
-              setSalesTicketList((prevList) =>
-                [...prevList, ticket].map((ticket) => ({
-                  name: ticket.name,
-                  price: Number(ticket.price),
-                  quantity: Number(ticket.totalForSale),
-                  totalForSale: Number(ticket.totalForSale),
-                })),
-              );
-              toast.success('일반 티켓을 생성했습니다.');
-            }}
-            onDeleteTicket={(ticket) => {
-              setSalesTicketList((prevList) =>
-                prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
-              );
-              toast.success('티켓을 삭제했습니다.');
-            }}
-          />
-          <ShowInvitationTicketFormContent
-            fullEditable
-            invitationTicketList={invitationTicketList}
-            description={
-              <>
-                초청 티켓 이용을 원하시면 티켓을 생성해주세요.
-                <br />* 초청 코드는 공연 등록 후{' '}
-                <strong>공연 관리 &gt; 티켓 관리</strong>
-                에서 확인할 수 있습니다.
-              </>
-            }
-            onSubmitTicket={(ticket) => {
-              setInvitationTicketList((prevList) =>
-                [...prevList, ticket].map((ticket) => ({
-                  name: ticket.name,
-                  quantity: Number(ticket.totalForSale),
-                  totalForSale: Number(ticket.totalForSale),
-                })),
-              );
-              toast.success('초청 티켓을 생성했습니다.');
-            }}
-            onDeleteTicket={(ticket) => {
-              setInvitationTicketList((prevList) =>
-                prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
-              );
-              toast.success('티켓을 삭제했습니다.');
-            }}
-          />
-        </Styled.TicketGroupContainer>
+        <Styled.TicketFormContainer>
+          <Styled.TicketFormTitle>판매 티켓</Styled.TicketFormTitle>
+          <Styled.TicketForm>
+            <ShowSalesTicketFormContent
+              fullEditable
+              salesTicketList={salesTicketList}
+              onSubmitTicket={(ticket) => {
+                setSalesTicketList((prevList) =>
+                  [...prevList, ticket].map((ticket) => ({
+                    name: ticket.name,
+                    price: Number(ticket.price),
+                    quantity: Number(ticket.totalForSale),
+                    totalForSale: Number(ticket.totalForSale),
+                  })),
+                );
+                toast.success('일반 티켓을 생성했습니다.');
+              }}
+              onDeleteTicket={(ticket) => {
+                setSalesTicketList((prevList) =>
+                  prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
+                );
+                toast.success('티켓을 삭제했습니다.');
+              }}
+            />
+            <ShowInvitationTicketFormContent
+              fullEditable
+              invitationTicketList={invitationTicketList}
+              description={
+                <>
+                  초청 티켓 이용을 원하시면 티켓을 생성해주세요.
+                  <br />* 초청 코드는 공연 등록 후{' '}
+                  <strong>공연 관리 &gt; 티켓 관리</strong>
+                  에서 확인할 수 있습니다.
+                </>
+              }
+              onSubmitTicket={(ticket) => {
+                setInvitationTicketList((prevList) =>
+                  [...prevList, ticket].map((ticket) => ({
+                    name: ticket.name,
+                    quantity: Number(ticket.totalForSale),
+                    totalForSale: Number(ticket.totalForSale),
+                  })),
+                );
+                toast.success('초청 티켓을 생성했습니다.');
+              }}
+              onDeleteTicket={(ticket) => {
+                setInvitationTicketList((prevList) =>
+                  prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
+                );
+                toast.success('티켓을 삭제했습니다.');
+              }}
+            />
+          </Styled.TicketForm>
+        </Styled.TicketFormContainer>
         <Styled.TermGroupContainer>
           <Styled.TermGroup>
             <Styled.Term>

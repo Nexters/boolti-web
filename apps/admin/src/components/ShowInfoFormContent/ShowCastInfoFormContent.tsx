@@ -5,32 +5,82 @@ import { PlusIcon } from '@boolti/icon';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
 } from '../ShowCastInfoFormDialogContent';
+import { DndContext, DragOverEvent, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import ShowCastInfo from '~/components/ShowCastInfo';
+import { useCallback, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
-interface Props {
-  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
+interface ShowCastInfoFormContentProps {
+  initialCastTeamList?: TempShowCastInfoFormInput[];
+  onChange: (value: TempShowCastInfoFormInput[]) => void;
 }
 
-const ShowCastInfoFormContent = ({ onSave }: Props) => {
+const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfoFormContentProps) => {
   const dialog = useDialog();
 
-  const onClick = () => {
+  const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>(initialCastTeamList ?? [])
+  const prevCastTeamList = useRef<string>(JSON.stringify(castTeamList))
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 0,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const castTeamDragEndHandler = useCallback((event: DragOverEvent) => {
+    const { active, over } = event;
+
+    if (active && over && over.id !== active.id) {
+      setCastTeamList((prev) => {
+        const oldIndex = prev.findIndex(({ id }) => id === active.id);
+        const newIndex = prev.findIndex(({ id }) => id === over.id);
+
+        return arrayMove(prev, oldIndex, newIndex);
+      });
+    }
+  }, []);
+
+
+  const castAddButtonClickHandler = () => {
     dialog.open({
       isAuto: true,
       title: '출연진 정보 등록',
       content: (
         <ShowCastInfoFormDialogContent
-          onSave={async (value) => {
-            try {
-              await onSave(value);
-              dialog.close();
-            } catch {
-              return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
-            }
+          onSave={(castInfo) => {
+            console.log(castInfo)
+            setCastTeamList((prev) => [
+              ...prev,
+              castInfo
+            ])
+            dialog.close();
           }}
         />
       ),
     });
   };
+
+  useEffect(() => {
+    const stringifiedCastTeamList = JSON.stringify(castTeamList)
+
+    if (prevCastTeamList.current !== stringifiedCastTeamList) {
+      prevCastTeamList.current = stringifiedCastTeamList
+      onChange?.(castTeamList)
+    }
+  }, [castTeamList, onChange])
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -38,7 +88,7 @@ const ShowCastInfoFormContent = ({ onSave }: Props) => {
         <Styled.ShowInfoFormGroupInfo style={{ marginBottom: 0 }}>
           <Styled.ShowInfoFormLabel style={{ justifyContent: 'space-between' }}>
             출연진 정보
-            <Styled.MobileCastInfoRegisterButton type="button" onClick={onClick}>
+            <Styled.MobileCastInfoRegisterButton type="button" onClick={castAddButtonClickHandler}>
               <PlusIcon />
               등록하기
             </Styled.MobileCastInfoRegisterButton>
@@ -52,11 +102,35 @@ const ShowCastInfoFormContent = ({ onSave }: Props) => {
           colorTheme="netural"
           size="small"
           icon={<PlusIcon />}
-          onClick={onClick}
+          onClick={castAddButtonClickHandler}
         >
           등록하기
         </Styled.DesktopCastInfoRegisterButton>
       </Styled.ShowInfoFormGroupHeader>
+      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
+        <SortableContext items={castTeamList.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+          {castTeamList.map((info) => (
+            <ShowCastInfo
+              key={info.id}
+              showCastInfo={info}
+              onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
+                setCastTeamList((prev) =>
+                  prev.map((item) =>
+                    item.id === info.id ? showCastInfoFormInput : item,
+                  )
+                );
+                return new Promise((resolve) => resolve());
+              }}
+              onDelete={() => {
+                setCastTeamList((prev) =>
+                  prev.filter((item) => item.id !== info.id)
+                );
+                return new Promise((resolve) => resolve());
+              }}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
     </Styled.ShowInfoFormGroup>
   );
 };

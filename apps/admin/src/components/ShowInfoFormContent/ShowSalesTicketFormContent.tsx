@@ -109,10 +109,11 @@ const ShowSalesTicketFormContent = ({
                     <Styled.TicketDescription>{ticket.price}원</Styled.TicketDescription>
                   </Styled.TicketInfo>
                   <Styled.TicketAction>
-                    <Button
+                    <TextButton
                       type="button"
-                      colorTheme="line"
-                      size="bold"
+                      colorTheme="netural"
+                      size="small"
+                      icon={<TrashIcon />}
                       disabled={(() => {
                         if (disabled) return disabled;
                         if (fullEditable) return false;
@@ -122,7 +123,7 @@ const ShowSalesTicketFormContent = ({
                       onClick={() => onDeleteTicket(ticket)}
                     >
                       삭제하기
-                    </Button>
+                    </TextButton>
                   </Styled.TicketAction>
                   <Styled.MobileTicketAction>
                     <TextButton

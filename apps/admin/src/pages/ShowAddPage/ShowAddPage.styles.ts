@@ -359,11 +359,29 @@ const TextArea = styled.textarea`
   }
 `;
 
-const TicketGroupContainer = styled.div`
+const TicketFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const TicketForm = styled.div`
   display: flex;
   flex-direction: column;
   gap: 60px;
   margin-bottom: 32px;
+`;
+
+const TicketFormTitle = styled.h3`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g90};
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.h1};
+  }
 `;
 
 const TermGroupContainer = styled.div`
@@ -479,7 +497,9 @@ export default {
   TextFieldSuffix,
   TextFieldRow,
   TextArea,
-  TicketGroupContainer,
+  TicketFormContainer,
+  TicketForm,
+  TicketFormTitle,
   TermGroupContainer,
   TermGroup,
   Term,
