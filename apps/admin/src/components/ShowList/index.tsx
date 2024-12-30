@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
 
 import EntranceConfirmDialogContent from '../EntranceConfirmDialogContent';
-import ShowListItem from '../ShowListItem';
+import ShowListItem from '~/components/ShowListItem';
 import Styled from './ShowList.styles';
 import { HostType } from '@boolti/api/src/types/host';
 

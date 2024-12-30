@@ -1,4 +1,4 @@
-export interface ShowInfoFormInputs {
+export interface ShowBasicInfoFormInputs {
   name: string;
   date: string;
   startTime: string;
@@ -6,12 +6,15 @@ export interface ShowInfoFormInputs {
   placeName: string;
   placeStreetAddress: string;
   placeDetailAddress: string;
+}
+
+export interface ShowDetailInfoFormInputs {
   notice: string;
   hostName: string;
   hostPhoneNumber: string;
 }
 
-export interface ShowTicketFormInputs {
+export interface ShowSalesInfoFormInputs {
   startDate: string;
   endDate: string;
   ticketNotice: string;

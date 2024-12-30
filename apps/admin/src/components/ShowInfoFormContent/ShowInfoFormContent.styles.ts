@@ -96,7 +96,8 @@ const ShowInfoFormContent = styled.div`
 `;
 
 const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
-  display: block;
+  display: flex;
+  align-items: flex-end;
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
@@ -311,6 +312,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   ${({ theme }) => theme.typo.b3};
 
   &:placeholder-shown {
+    ${({ theme }) => theme.typo.b3};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g30};
   }
@@ -358,7 +360,7 @@ const TicketGroupInfo = styled.div`
 
 const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   display: flex;
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   &::after {
@@ -370,7 +372,6 @@ const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   }
 
   ${mq_lg} {
-    ${({ theme }) => theme.typo.h1};
     margin-bottom: 2px;
   }
 `;
@@ -448,6 +449,11 @@ const TicketAction = styled.div`
 
   ${mq_lg} {
     display: flex;
+      
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 

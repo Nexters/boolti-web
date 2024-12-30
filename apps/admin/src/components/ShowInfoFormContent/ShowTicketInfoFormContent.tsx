@@ -3,11 +3,11 @@ import { format, sub } from 'date-fns';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
-import { ShowTicketFormInputs } from './types';
+import { ShowSalesInfoFormInputs } from './types';
 import { useCallback, useEffect } from 'react';
 
 interface ShowTicketInfoFormContentProps {
-  form: UseFormReturn<ShowTicketFormInputs>;
+  form: UseFormReturn<ShowSalesInfoFormInputs>;
   showDate: string;
   showCreatedAt?: string;
   salesStartTime?: string;
@@ -83,7 +83,7 @@ const ShowTicketInfoFormContent = ({
   return (
     <Styled.ShowInfoFormGroup>
       <Styled.ShowInfoFormGroupInfo>
-        <Styled.ShowInfoFormTitle>티켓 판매</Styled.ShowInfoFormTitle>
+        <Styled.ShowInfoFormTitle>판매 정보</Styled.ShowInfoFormTitle>
       </Styled.ShowInfoFormGroupInfo>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
@@ -159,7 +159,7 @@ const ShowTicketInfoFormContent = ({
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel>티켓 구매 시 안내사항</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel>구매 시 안내사항</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
             방문자에게 안내할 사항이 있다면 작성해 주세요. 작성한 내용은 티켓 상세 화면에
             노출됩니다.
@@ -172,7 +172,7 @@ const ShowTicketInfoFormContent = ({
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <Styled.TextArea
-                  placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                  placeholder="(ex. 주류반입이 불가한 공연장입니다. 드시던 음료는 입구에 놓고 입장해주세요.)"
                   rows={10}
                   disabled={disabled}
                   onChange={onChange}
