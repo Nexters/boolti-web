@@ -8,7 +8,6 @@ import { useState } from 'react';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
 } from '../ShowCastInfoFormDialogContent';
-import { useIsMobile } from '~/hooks/useIsMobile';
 
 interface Props {
   showCastInfo: TempShowCastInfoFormInput;
@@ -21,7 +20,6 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const memberLength = members.length ?? 0;
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
-  const isMobile = useIsMobile();
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: showCastInfo.id,
@@ -71,24 +69,20 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
     <Styled.Container ref={setNodeRef} style={style}>
       <Styled.Header>
         <Styled.HeaderNameWrapper>
-          {!isMobile && (
-            <Styled.Handle type="button" {...attributes} {...listeners}>
-              <MenuIcon />
-            </Styled.Handle>
-          )}
+          <Styled.Handle type="button" {...attributes} {...listeners}>
+            <MenuIcon />
+          </Styled.Handle>
           <Styled.Name>{showCastInfo.name}</Styled.Name>
         </Styled.HeaderNameWrapper>
+
+        <Styled.MobileEditButton type="button" onClick={onClickEdit}>
+          <EditIcon />
+        </Styled.MobileEditButton>
         <Styled.EditButtonWrapper>
-          {isMobile ? (
-            <Styled.MobileEditButton type="button" onClick={onClickEdit}>
-              <EditIcon />
-            </Styled.MobileEditButton>
-          ) : (
-            <TextButton type="button" colorTheme="netural" size="regular" onClick={onClickEdit}>
-              <EditIcon />
-              <span>정보 편집</span>
-            </TextButton>
-          )}
+          <TextButton type="button" colorTheme="netural" size="regular" onClick={onClickEdit}>
+            <EditIcon />
+            <span>정보 편집</span>
+          </TextButton>
         </Styled.EditButtonWrapper>
       </Styled.Header>
       {memberLength > 0 && (

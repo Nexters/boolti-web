@@ -37,13 +37,17 @@ const HeaderNameWrapper = styled.div`
 `;
 
 const Handle = styled.button`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme.palette.grey.g40};
-  cursor: grab;
-  user-select: none;
-  user-zoom: none;
+  display: none;
+
+  ${mq_lg} {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: ${({ theme }) => theme.palette.grey.g40};
+    cursor: grab;
+    user-select: none;
+    user-zoom: none;
+  }
 `;
 
 const Name = styled.span`
@@ -63,16 +67,24 @@ const MobileEditButton = styled.button`
     width: 24px;
     height: 24px;
   }
+
+  ${mq_lg} {
+    display: none;
+  }
 `;
 
 const EditButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: none;
 
-  span {
-    margin-left: 8px;
-    display: inline;
+  ${mq_lg} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      margin-left: 8px;
+      display: inline;
+    }
   }
 `;
 
