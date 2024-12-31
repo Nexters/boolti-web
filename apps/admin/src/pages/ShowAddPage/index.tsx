@@ -29,12 +29,7 @@ import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import {
-  checkIsWebView,
-  isWebViewBridgeAvailable,
-  navigateBack,
-  navigateToShowDetail,
-} from '@boolti/bridge';
+import { checkIsWebView, isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
 import useCastTeamListOrder from '~/hooks/useCastTeamListOrder';
 
 interface ShowAddPageProps {
@@ -110,9 +105,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     });
 
     if (isWebView && isWebViewBridgeAvailable()) {
-      navigateBack().then(() => {
-        navigateToShowDetail({ showId });
-      });
+      navigateToShowDetail({ showId });
       return;
     }
 
