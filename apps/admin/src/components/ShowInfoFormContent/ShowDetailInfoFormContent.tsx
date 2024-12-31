@@ -9,10 +9,15 @@ interface ShowDetailInfoFormContentProps {
   disabled?: boolean;
 }
 
-const phoneNumberRegExp = /^\d{3}-\d{3,4}-\d{4}$/
+const phoneNumberRegExp = /^\d{3}-\d{3,4}-\d{4}$/;
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
-  const { control, formState: { errors }, setError, clearErrors } = form;
+  const {
+    control,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = form;
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -70,10 +75,10 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
               rules={{
                 required: true,
                 validate: (fieldValue) => {
-                  if (!fieldValue) return '필수 입력사항입니다.'
+                  if (!fieldValue) return '필수 입력사항입니다.';
 
-                  return true
-                }
+                  return true;
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
@@ -84,7 +89,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   disabled={disabled}
                   onChange={(event) => {
                     onChange(event);
-                    clearErrors('hostName')
+                    clearErrors('hostName');
                   }}
                   onBlur={() => {
                     onBlur();
@@ -117,26 +122,33 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   required
                   disabled={disabled}
                   onChange={(event) => {
-                    if (event.target.value.length > 13) return
+                    if (event.target.value.length > 13) return;
 
                     event.target.value = event.target.value
                       .replace(/[^0-9]/g, '')
-                      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3').replace(/(-{1,2})$/g, '')
+                      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
+                      .replace(/(-{1,2})$/g, '');
 
                     onChange(event);
-                    clearErrors('hostPhoneNumber')
+                    clearErrors('hostPhoneNumber');
                   }}
                   onBlur={() => {
                     onBlur();
 
                     if (!value) {
-                      setError('hostPhoneNumber', { type: 'required', message: '필수 입력사항입니다.' });
-                      return
+                      setError('hostPhoneNumber', {
+                        type: 'required',
+                        message: '필수 입력사항입니다.',
+                      });
+                      return;
                     }
 
                     if (!phoneNumberRegExp.test(value)) {
-                      setError('hostPhoneNumber', { type: 'pattern', message: '유효한 전화번호 형식이 아닙니다.' });
-                      return
+                      setError('hostPhoneNumber', {
+                        type: 'pattern',
+                        message: '유효한 전화번호 형식이 아닙니다.',
+                      });
+                      return;
                     }
                   }}
                   value={value ?? ''}

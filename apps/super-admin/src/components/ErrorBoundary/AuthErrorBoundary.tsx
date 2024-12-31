@@ -1,4 +1,4 @@
-import { BooltiHTTPError, LOCAL_STORAGE } from '@boolti/api';
+import { CustomHttpError, LOCAL_STORAGE } from '@boolti/api';
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -9,7 +9,7 @@ interface AuthErrorBoundaryProps {
 }
 
 interface AuthErrorBoundaryState {
-  status: BooltiHTTPError['status'] | null;
+  status: CustomHttpError['status'] | null;
 }
 
 const initialState: AuthErrorBoundaryState = {
@@ -20,7 +20,7 @@ class AuthErrorBoundary extends React.Component<AuthErrorBoundaryProps, AuthErro
   public state: AuthErrorBoundaryState = initialState;
 
   public static getDerivedStateFromError(error: Error): AuthErrorBoundaryState {
-    if (error instanceof BooltiHTTPError) {
+    if (error instanceof CustomHttpError) {
       return {
         status: error.status,
       };

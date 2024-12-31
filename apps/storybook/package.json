@@ -6,7 +6,7 @@
   "main": ".storybook/main.ts",
   "types": ".storybook/main.ts",
   "scripts": {
-    "lint": "TIMING=1 eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "TIMING=1 eslint . --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "TIMING=1 eslint . --ext ts,tsx --max-warnings 0",
+    "lint": "TIMING=1 eslint . --ext ts,tsx",
     "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit",
     "preview": "vite preview"

@@ -19,27 +19,31 @@ import ShowSalesTicketFormContent, {
   SalesTicket,
 } from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
-import { ShowBasicInfoFormInputs, ShowDetailInfoFormInputs, ShowSalesInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import {
+  ShowBasicInfoFormInputs,
+  ShowDetailInfoFormInputs,
+  ShowSalesInfoFormInputs,
+} from '~/components/ShowInfoFormContent/types';
 import { PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView } from '~/utils/webview';
+import { checkIsWebView, isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
 
 const stepItems = [
   { key: 'basic', title: '기본 정보' },
   { key: 'detail', title: '상세 정보' },
   { key: 'sales', title: '판매 정보' },
-]
+];
 
 interface ShowAddPageProps {
-  step: 'basic' | 'detail' | 'sales'
+  step: 'basic' | 'detail' | 'sales';
 }
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
-  const isWebView = checkIsWebView(window.navigator.userAgent);
+  const isWebView = checkIsWebView();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>([]);
@@ -73,7 +77,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
     // 공연 생성
-    await addShowMutation.mutateAsync({
+    const showId = await addShowMutation.mutateAsync({
       name: showBasicInfoForm.getValues('name'),
       images: showImageInfo,
       date: `${showBasicInfoForm.getValues('date')}T${showBasicInfoForm.getValues('startTime')}:00.000Z`,
@@ -110,6 +114,11 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           })),
       })) as ShowCastTeamCreateOrUpdateRequest[],
     });
+
+    if (isWebView && isWebViewBridgeAvailable()) {
+      navigateToShowDetail({ showId });
+      return;
+    }
 
     navigate(PATH.SHOW_ADD_COMPLETE);
   };
@@ -156,15 +165,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Button>
       </Styled.ShowAddForm>
     </>
-  )
+  );
 
   const detailStepContent = (
     <>
-      {
-        (!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) && (
-          <Navigate to={PATH.SHOW_ADD} replace />
-        )
-      }
+      {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) && (
+        <Navigate to={PATH.SHOW_ADD} replace />
+      )}
       <Styled.CardDescription>
         공연의 상세 정보를 입력해 주세요.
         <br />
@@ -199,8 +206,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             colorTheme="primary"
             size="bold"
             disabled={
-              !showDetailInfoForm.formState.isDirty ||
-              !showDetailInfoForm.formState.isValid
+              !showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid
             }
           >
             다음으로
@@ -208,7 +214,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.ShowAddFormButtonContainer>
       </Styled.ShowAddForm>
     </>
-  )
+  );
 
   const salesStepContent = (
     <>
@@ -256,8 +262,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               description={
                 <>
                   초청 티켓 이용을 원하시면 티켓을 생성해주세요.
-                  <br />* 초청 코드는 공연 등록 후{' '}
-                  <strong>공연 관리 &gt; 티켓 관리</strong>
+                  <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 티켓 관리</strong>
                   에서 확인할 수 있습니다.
                 </>
               }
@@ -288,7 +293,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                   variant="main"
                   checked={isTermsAccepted}
                   onChange={(event) => {
-                    setIsTermsAccepted(event.target.checked)
+                    setIsTermsAccepted(event.target.checked);
                   }}
                 />
                 정책 확인 및 약관 동의
@@ -298,37 +303,40 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.TermGroup>
             <Styled.Term>
               <Styled.TermLabel>
-                <Checkbox
-                  variant="sub"
-                  checked={isTermsAccepted}
-                />
+                <Checkbox variant="sub" checked={isTermsAccepted} />
                 [필수] 공연 등록 및 관리 이용 약관
               </Styled.TermLabel>
-              <Styled.TermLink href="https://boolti.notion.site/a84dec05901b419d9d98191220e34985" target="_blank" rel="noopener noreferrer">
+              <Styled.TermLink
+                href="https://boolti.notion.site/a84dec05901b419d9d98191220e34985"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 보기
               </Styled.TermLink>
             </Styled.Term>
             <Styled.Term>
               <Styled.TermLabel>
-                <Checkbox
-                  variant="sub"
-                  checked={isTermsAccepted}
-                />
+                <Checkbox variant="sub" checked={isTermsAccepted} />
                 [필수] 수수료 정책
               </Styled.TermLabel>
-              <Styled.TermLink href="https://boolti.notion.site/155969481bd380918aa9c03c9cda4d08" target="_blank" rel="noopener noreferrer">
+              <Styled.TermLink
+                href="https://boolti.notion.site/155969481bd380918aa9c03c9cda4d08"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 보기
               </Styled.TermLink>
             </Styled.Term>
             <Styled.Term>
               <Styled.TermLabel>
-                <Checkbox
-                  variant="sub"
-                  checked={isTermsAccepted}
-                />
+                <Checkbox variant="sub" checked={isTermsAccepted} />
                 [필수] 환불 정책
               </Styled.TermLabel>
-              <Styled.TermLink href="https://boolti.notion.site/d2a89e2c19824c60bb1e928370d16989" target="_blank" rel="noopener noreferrer">
+              <Styled.TermLink
+                href="https://boolti.notion.site/d2a89e2c19824c60bb1e928370d16989"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 보기
               </Styled.TermLink>
             </Styled.Term>
@@ -363,7 +371,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.ShowAddFormButtonContainer>
       </Styled.ShowAddForm>
     </>
-  )
+  );
 
   const showAddPageContent = (
     <>
@@ -374,7 +382,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       {step === 'detail' && detailStepContent}
       {step === 'sales' && salesStepContent}
     </>
-  )
+  );
 
   return (
     <Styled.ShowAddPage>
@@ -411,14 +419,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.CardHeader>
             <Styled.CardHeaderText>공연 등록</Styled.CardHeaderText>
           </Styled.CardHeader>
-          <Styled.CardContent>
-            {showAddPageContent}
-          </Styled.CardContent>
+          <Styled.CardContent>{showAddPageContent}</Styled.CardContent>
         </Styled.Card>
       </Styled.Content>
-      <Styled.MobileContent>
-        {showAddPageContent}
-      </Styled.MobileContent>
+      <Styled.MobileContent>{showAddPageContent}</Styled.MobileContent>
     </Styled.ShowAddPage>
   );
 };

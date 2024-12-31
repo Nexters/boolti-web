@@ -25,3 +25,4 @@
 - `packages/config-typescript`: 각 패키지에서 공통적으로 사용될 TypeScript 관련 설정이 포함된 패키지입니다.
 - `packages/icon`: 공통적으로 사용될 아이콘 컴포넌트가 포함된 패키지입니다.
 - `packages/ui`: 공통적으로 사용될 디자인 컴포넌트가 포함된 패키지입니다.
+- `packages/ui`: 공통적으로 사용될 웹뷰 브릿지가 포함된 패키지입니다.
