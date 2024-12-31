@@ -8,14 +8,14 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
-import { ShowInfoFormInputs } from './types';
+import { ShowBasicInfoFormInputs } from './types';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
 const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd');
 
 interface ShowBasicInfoFormContentProps {
-  form: UseFormReturn<ShowInfoFormInputs, unknown, ShowInfoFormInputs>;
+  form: UseFormReturn<ShowBasicInfoFormInputs, unknown, ShowBasicInfoFormInputs>;
   imageFiles: ImageFile[];
   disabled?: boolean;
   onDropImage: (acceptedFiles: File[]) => void;
@@ -82,7 +82,9 @@ const ShowBasicInfoFormContent = ({
         <Styled.ShowInfoFormContent>
           <Styled.ShowInfoFormLabel required>공연 포스터</Styled.ShowInfoFormLabel>
           <Styled.ShowInfoFormDescription>
-            <span>원하시는 노출 순서대로 이미지를 업로드해주세요.&nbsp;</span>
+            <span>
+              원하시는 <strong>노출 순서대로</strong> 이미지를 업로드해주세요.&nbsp;
+            </span>
             <span>표준 종이규격(A, B)의 이미지를 권장합니다.</span>
             <br />
             <span>(최소 1장, 최대 {MAX_IMAGE_COUNT}장 업로드 가능 / jpg, png 형식)</span>

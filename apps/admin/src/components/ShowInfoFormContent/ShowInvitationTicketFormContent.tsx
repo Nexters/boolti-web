@@ -53,7 +53,7 @@ const ShowInvitationTicketFormContent = ({
           <Button
             type="button"
             colorTheme="netural"
-            size="bold"
+            size="small"
             icon={<PlusIcon />}
             onClick={() => {
               invitationTicketDialog.open({

@@ -19,8 +19,8 @@ export interface TempShowCastInfoFormInput {
 
 interface Props {
   prevShowCastInfo?: TempShowCastInfoFormInput;
-  onDelete?: () => Promise<void>;
-  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
+  onDelete?: () => void;
+  onSave: (value: TempShowCastInfoFormInput) => void;
 }
 
 const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: Props) => {
@@ -209,7 +209,6 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                   });
 
                   if (isConfirm) {
-                    toast.success('팀원 정보를 삭제했습니다.');
                     setIsMemberFieldBlurred((prev) =>
                       prev.filter((_, blurredIndex) => blurredIndex !== index),
                     );
@@ -227,7 +226,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                   field={draggingField}
                   index={draggingFieldIndex}
                   isFieldBlurred={isMemberFieldBlurred[draggingFieldIndex]}
-                /> 
+                />
               </Styled.DraggableShowCastInfoMemberRow>
             ) : null}
           </DragOverlay>
@@ -254,7 +253,6 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
               if (isConfirm) {
                 try {
                   onDelete();
-                  toast.success('팀 정보를 삭제했습니다.');
                 } catch {
                   toast.error('알 수 없는 오류가 발생했습니다.');
                 }
@@ -279,10 +277,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
             );
 
             try {
-              await onSave({ id, name, members });
-              toast.success(
-                onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.',
-              );
+              onSave({ id, name, members });
             } catch {
               toast.error('알 수 없는 오류가 발생했습니다.');
             }

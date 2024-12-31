@@ -21,10 +21,19 @@ interface PutShowInfoRequest {
     name: string;
     phoneNumber: string;
   };
+  castTeams?: {
+    id?: number
+    name: string
+    members?: {
+      id?: number
+      userCode: string
+      roleName: string
+    }[];
+  }[]
 }
 
 const putShowInfo = (showId: number, body: PutShowInfoRequest) =>
-  fetcher.put(`web/v1/host/shows/${showId}`, { json: body });
+  fetcher.put(`web/v2/shows/${showId}`, { json: body });
 
 const useEditShowInfo = () =>
   useMutation(({ showId, body }: { showId: number; body: PutShowInfoRequest }) =>

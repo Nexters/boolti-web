@@ -19,7 +19,7 @@ import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
 import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
-import { ShowTicketFormInputs } from '~/components/ShowInfoFormContent/types';
+import { ShowSalesInfoFormInputs } from '~/components/ShowInfoFormContent/types';
 
 import Styled from './ShowTicketPage.styles';
 import { useAtom } from 'jotai';
@@ -30,7 +30,7 @@ const ShowTicketPage = () => {
   const params = useParams<{ showId: string }>();
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
-  const showTicketForm = useForm<ShowTicketFormInputs>();
+  const showTicketForm = useForm<ShowSalesInfoFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -47,7 +47,7 @@ const ShowTicketPage = () => {
   const toast = useToast();
   const confirm = useConfirm();
 
-  const onSubmitShowTicketForm: SubmitHandler<ShowTicketFormInputs> = async (data) => {
+  const onSubmitShowTicketForm: SubmitHandler<ShowSalesInfoFormInputs> = async (data) => {
     if (!show) return;
 
     await editSalesTicketInfoMutation.mutateAsync({
@@ -84,7 +84,7 @@ const ShowTicketPage = () => {
       ) : (
         <Styled.ShowTicketPage>
           <Styled.ShowTicketForm onSubmit={showTicketForm.handleSubmit(onSubmitShowTicketForm)}>
-            <Styled.ShowTicketFormContent>
+            <Styled.ShowTicketFormContentContainer>
               <ShowTicketInfoFormContent
                 form={showTicketForm}
                 showDate={format(show.date, 'yyyy-MM-dd')}
@@ -92,7 +92,7 @@ const ShowTicketPage = () => {
                 showCreatedAt={show.createdAt}
                 disabled={show.isEnded}
               />
-            </Styled.ShowTicketFormContent>
+            </Styled.ShowTicketFormContentContainer>
             <Styled.ShowTicketSubmitContainer>
               <Button
                 type="submit"
@@ -105,94 +105,94 @@ const ShowTicketPage = () => {
             </Styled.ShowTicketSubmitContainer>
           </Styled.ShowTicketForm>
           <Styled.ShowTicketFormDivider />
-          <Styled.ShowTicketFormContent>
-            {salesTicketList && (
-              <ShowSalesTicketFormContent
-                salesTicketList={salesTicketList.map((ticket) => ({
-                  id: ticket.id,
-                  name: ticket.ticketName,
-                  price: ticket.price,
-                  quantity: ticket.quantity,
-                  totalForSale: ticket.totalForSale,
-                }))}
-                disabled={show.isEnded}
-                onSubmitTicket={async (ticket) => {
-                  await createSalesTicketMutation.mutateAsync({
-                    showId: show.id,
-                    ticketName: ticket.name,
-                    price: Number(ticket.price),
-                    totalForSale: Number(ticket.totalForSale),
-                  });
+          <Styled.ShowTicketFormContentContainer>
+            <Styled.ShowTicketFormTitle>판매 티켓</Styled.ShowTicketFormTitle>
+            <Styled.ShowTicketFormContent>
+              {salesTicketList && (
+                <ShowSalesTicketFormContent
+                  salesTicketList={salesTicketList.map((ticket) => ({
+                    id: ticket.id,
+                    name: ticket.ticketName,
+                    price: ticket.price,
+                    quantity: ticket.quantity,
+                    totalForSale: ticket.totalForSale,
+                  }))}
+                  disabled={show.isEnded}
+                  onSubmitTicket={async (ticket) => {
+                    await createSalesTicketMutation.mutateAsync({
+                      showId: show.id,
+                      ticketName: ticket.name,
+                      price: Number(ticket.price),
+                      totalForSale: Number(ticket.totalForSale),
+                    });
 
-                  await refetchSalesTicketList();
-                  toast.success('일반 티켓을 생성했습니다.');
-                }}
-                onDeleteTicket={async (ticket) => {
-                  if (ticket.id === undefined) return;
+                    await refetchSalesTicketList();
+                    toast.success('일반 티켓을 생성했습니다.');
+                  }}
+                  onDeleteTicket={async (ticket) => {
+                    if (ticket.id === undefined) return;
 
-                  const result = await confirm(
-                    '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
-                    {
-                      cancel: '취소하기',
-                      confirm: '삭제하기',
-                    },
-                  );
+                    const result = await confirm(
+                      '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                      {
+                        cancel: '취소하기',
+                        confirm: '삭제하기',
+                      },
+                    );
 
-                  if (!result) return;
+                    if (!result) return;
 
-                  await deleteSalesTicketMutation.mutateAsync(ticket.id);
-                  await refetchSalesTicketList();
-                  toast.success('티켓을 삭제했습니다.');
-                }}
-              />
-            )}
-          </Styled.ShowTicketFormContent>
-          <Styled.ShowTicketFormDivider />
-          <Styled.ShowTicketFormContent>
-            {invitationTicketList && (
-              <ShowInvitationTicketFormContent
-                invitationTicketList={invitationTicketList.map((ticket) => ({
-                  id: ticket.id,
-                  name: ticket.ticketName,
-                  quantity: ticket.quantity,
-                  totalForSale: ticket.totalForSale,
-                }))}
-                description={
-                  <>
-                    초청 티켓 이용을 원하시면 티켓을 생성해주세요.
-                    <br />* 사용 완료 처리된 코드는 재사용할 수 없습니다.
-                  </>
-                }
-                isShowEnded={show.isEnded}
-                onSubmitTicket={async (ticket) => {
-                  await createInvitationTicketMutation.mutateAsync({
-                    showId: show.id,
-                    ticketName: ticket.name,
-                    totalForSale: Number(ticket.totalForSale),
-                  });
-                  await refetchInvitationTicketList();
-                  toast.success('초청 티켓을 생성했습니다.');
-                }}
-                onDeleteTicket={async (ticket) => {
-                  if (ticket.id === undefined) return;
+                    await deleteSalesTicketMutation.mutateAsync(ticket.id);
+                    await refetchSalesTicketList();
+                    toast.success('티켓을 삭제했습니다.');
+                  }}
+                />
+              )}
+              {invitationTicketList && (
+                <ShowInvitationTicketFormContent
+                  invitationTicketList={invitationTicketList.map((ticket) => ({
+                    id: ticket.id,
+                    name: ticket.ticketName,
+                    quantity: ticket.quantity,
+                    totalForSale: ticket.totalForSale,
+                  }))}
+                  description={
+                    <>
+                      초청 티켓 이용을 원하시면 티켓을 생성해주세요.
+                      <br />* 사용 완료 처리된 코드는 재사용할 수 없습니다.
+                    </>
+                  }
+                  isShowEnded={show.isEnded}
+                  onSubmitTicket={async (ticket) => {
+                    await createInvitationTicketMutation.mutateAsync({
+                      showId: show.id,
+                      ticketName: ticket.name,
+                      totalForSale: Number(ticket.totalForSale),
+                    });
+                    await refetchInvitationTicketList();
+                    toast.success('초청 티켓을 생성했습니다.');
+                  }}
+                  onDeleteTicket={async (ticket) => {
+                    if (ticket.id === undefined) return;
 
-                  const result = await confirm(
-                    '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
-                    {
-                      cancel: '취소하기',
-                      confirm: '삭제하기',
-                    },
-                  );
+                    const result = await confirm(
+                      '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                      {
+                        cancel: '취소하기',
+                        confirm: '삭제하기',
+                      },
+                    );
 
-                  if (!result) return;
+                    if (!result) return;
 
-                  await deleteInvitationTicketMutation.mutateAsync(ticket.id);
-                  await refetchInvitationTicketList();
-                  toast.success('티켓을 삭제했습니다.');
-                }}
-              />
-            )}
-          </Styled.ShowTicketFormContent>
+                    await deleteInvitationTicketMutation.mutateAsync(ticket.id);
+                    await refetchInvitationTicketList();
+                    toast.success('티켓을 삭제했습니다.');
+                  }}
+                />
+              )}
+            </Styled.ShowTicketFormContent>
+          </Styled.ShowTicketFormContentContainer>
         </Styled.ShowTicketPage>
       )}
     </>

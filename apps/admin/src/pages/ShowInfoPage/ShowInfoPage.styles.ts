@@ -28,7 +28,7 @@ const ShowInfoFormDivider = styled.hr`
 const ShowInfoFormFooter = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 52px;
+  margin-top: 48px;
 
   button {
     width: 100%;

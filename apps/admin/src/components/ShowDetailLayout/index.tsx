@@ -60,8 +60,8 @@ const toTargets = {
 } as const;
 
 const label = {
-  INFO: '공연 기본 정보',
-  TICKET: '티켓 관리',
+  INFO: '공연 정보',
+  TICKET: '판매 정보',
   RESERVATION: '결제 관리',
   ENTRANCE: '방문자 관리',
   SETTLEMENT: '정산 관리',
