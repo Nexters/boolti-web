@@ -14,9 +14,7 @@ const BooltiUIProvider = ({ children }: BooltiUIProviderProps) => {
     <ThemeProvider>
       <AlertProvider>
         <ConfirmProvider>
-          <DialogProvider>
-            {children}
-          </DialogProvider>
+          <DialogProvider>{children}</DialogProvider>
         </ConfirmProvider>
       </AlertProvider>
     </ThemeProvider>

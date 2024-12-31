@@ -183,23 +183,23 @@ const ShowAddFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowAddFormButton = styled(Button) <ShowAddFormButtonProps>`
+const ShowAddFormButton = styled(Button)<ShowAddFormButtonProps>`
   ${({ variant }) => {
     switch (variant) {
       case 'next': {
         return `
           width: calc(100% - 100px);
-        `
+        `;
       }
       case 'prev': {
         return `
           width: 100px;
-        `
+        `;
       }
       default: {
         return `
           width: 100%;
-        `
+        `;
       }
     }
   }};
@@ -207,24 +207,24 @@ const ShowAddFormButton = styled(Button) <ShowAddFormButtonProps>`
 
   ${mq_lg} {
     ${({ variant }) => {
-    switch (variant) {
-      case 'next': {
-        return `
+      switch (variant) {
+        case 'next': {
+          return `
           width: calc(100% - 152px);
-        `
-      }
-      case 'prev': {
-        return `
+        `;
+        }
+        case 'prev': {
+          return `
           width: 152px;
-        `
-      }
-      default: {
-        return `
+        `;
+        }
+        default: {
+          return `
           width: 100%;
-        `
+        `;
+        }
       }
-    }
-  }};
+    }};
   }
 `;
 
@@ -405,15 +405,15 @@ const Term = styled.div`
   align-items: center;
 `;
 
-const TermLabel = styled(Checkbox.Label) <{ main?: boolean }>`
+const TermLabel = styled(Checkbox.Label)<{ main?: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;
-  ${({ theme, main }) => main ? theme.typo.sh1 : theme.typo.b1};
-  color: ${({ theme, main }) => main ? theme.palette.grey.g90 : theme.palette.grey.g60};
+  ${({ theme, main }) => (main ? theme.typo.sh1 : theme.typo.b1)};
+  color: ${({ theme, main }) => (main ? theme.palette.grey.g90 : theme.palette.grey.g60)};
   font-weight: ${({ main }) => (main ? '600' : '400')};
   user-select: none;
-  cursor: ${({ main }) => main ? 'pointer' : 'default'};
+  cursor: ${({ main }) => (main ? 'pointer' : 'default')};
 `;
 
 const TermLink = styled.a`
@@ -507,5 +507,5 @@ export default {
   TermLink,
   MobileHeader,
   MobileHeaderText,
-  MobileContent
+  MobileContent,
 };

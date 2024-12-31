@@ -62,7 +62,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
 
   &:focus-within {
     border-color: ${({ theme, isError }) =>
-    isError ? theme.palette.status.error : theme.palette.grey.g70};
+      isError ? theme.palette.status.error : theme.palette.grey.g70};
   }
 `;
 
@@ -76,7 +76,7 @@ const Handle = styled.button`
   cursor: grab;
   user-select: none;
   user-zoom: none;
-`
+`;
 
 const TextFieldWrap = styled.div`
   margin-bottom: 28px;
@@ -209,8 +209,7 @@ const DraggableShowCastInfoMemberRow = styled.div`
     border-radius: 4px;
     z-index: -1;
   }
-`
-
+`;
 
 export default {
   ShowInfoFormLabel,
@@ -231,5 +230,5 @@ export default {
   DeleteButton,
   ErrorMessage,
   FieldWrap,
-  DraggableShowCastInfoMemberRow
+  DraggableShowCastInfoMemberRow,
 };

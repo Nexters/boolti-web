@@ -10,6 +10,8 @@ const postChangeCastTeamOrder = (showId: number, body: PostChangeCastTeamOrderRe
   fetcher.post(`web/v1/shows/${showId}/cast-teams/change-sequence`, { json: body });
 
 const useChangeCastTeamOrder = () =>
-  useMutation(({ showId, body }: { showId: number, body: PostChangeCastTeamOrderRequest }) => postChangeCastTeamOrder(showId, body));
+  useMutation(({ showId, body }: { showId: number; body: PostChangeCastTeamOrderRequest }) =>
+    postChangeCastTeamOrder(showId, body),
+  );
 
 export default useChangeCastTeamOrder;

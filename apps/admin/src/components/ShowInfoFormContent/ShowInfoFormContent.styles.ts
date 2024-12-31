@@ -449,7 +449,7 @@ const TicketAction = styled.div`
 
   ${mq_lg} {
     display: flex;
-      
+
     svg {
       width: 20px;
       height: 20px;
