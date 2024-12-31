@@ -29,8 +29,7 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView } from '~/utils/webview';
-import { isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
+import { checkIsWebView, isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
 
 const stepItems = [
   { key: 'basic', title: '기본 정보' },
