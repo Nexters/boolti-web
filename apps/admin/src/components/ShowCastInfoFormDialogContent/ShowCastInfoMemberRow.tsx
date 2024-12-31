@@ -51,17 +51,19 @@ const ShowCastInfoMemberRow = forwardRef<HTMLDivElement, ShowCastInfoMemberRowPr
                 <Styled.InputWrapper isError={isError}>
                   {field.userNickname ? (
                     <>
-                      {field.userImgPath ? (
-                        <Styled.UserImage
-                          style={
-                            {
-                              '--imgPath': `url(${field.userImgPath})`,
-                            } as React.CSSProperties
-                          }
-                        />
-                      ) : (
-                        <UserIcon size={32} />
-                      )}
+                      <Styled.UserImageWrap>
+                        {field.userImgPath ? (
+                          <Styled.UserImage
+                            style={
+                              {
+                                '--imgPath': `url(${field.userImgPath})`,
+                              } as React.CSSProperties
+                            }
+                          />
+                        ) : (
+                          <UserIcon size={32} />
+                        )}
+                      </Styled.UserImageWrap>
                       <Styled.Username>{field.userNickname}</Styled.Username>
                       <Styled.RemoveButton
                         onClick={() => {

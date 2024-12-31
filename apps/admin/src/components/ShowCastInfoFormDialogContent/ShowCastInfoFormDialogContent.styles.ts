@@ -9,6 +9,10 @@ interface InputWrapperProps {
   isError?: boolean;
 }
 
+const Container = styled.div`
+  max-width: 600px;
+`;
+
 const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   display: block;
   ${({ theme }) => theme.typo.b3};
@@ -42,7 +46,8 @@ const MemberList = styled.div`
 const FieldWrap = styled.div`
   flex: 1;
   margin-right: 8px;
-  width: calc(50% - 32px);
+  width: calc(50% - 36px);
+  max-width: calc(50% - 36px);
 `;
 
 const InputWrapper = styled.div<InputWrapperProps>`
@@ -51,7 +56,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
     ${({ theme, isError }) => (isError ? theme.palette.status.error : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  padding: 8px 12px;
+  padding: 8px 36px 8px 12px;
   height: 48px;
   flex: auto;
   position: relative;
@@ -142,6 +147,14 @@ const RegisterButton = styled(Button)`
   margin-left: auto;
 `;
 
+const UserImageWrap = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+  }
+`;
+
 const UserImage = styled.div`
   box-sizing: border-box;
   width: 32px;
@@ -156,14 +169,23 @@ const UserImage = styled.div`
 const Username = styled.span`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin: 0 8px;
+  margin: 0 6px 0 0;
   flex: 1 1 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  ${mq_lg} {
+    margin: 0 8px;
+  }
 `;
 
 const RemoveButton = styled.button`
   width: 24px;
   height: 24px;
   cursor: pointer;
+  position: absolute;
+  right: 12px;
 `;
 
 const DeleteButton = styled.button`
@@ -212,6 +234,7 @@ const DraggableShowCastInfoMemberRow = styled.div`
 `;
 
 export default {
+  Container,
   ShowInfoFormLabel,
   InputWrapper,
   Handle,
@@ -223,6 +246,7 @@ export default {
   RegisterButton,
   MemberList,
   UserImage,
+  UserImageWrap,
   Username,
   RemoveButton,
   TextFieldWrap,

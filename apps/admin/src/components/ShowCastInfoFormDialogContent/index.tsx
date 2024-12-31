@@ -140,7 +140,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
   );
 
   return (
-    <>
+    <Styled.Container>
       <Styled.ShowInfoFormLabel required>팀명</Styled.ShowInfoFormLabel>
       <Controller
         control={control}
@@ -315,7 +315,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
           등록하기
         </Styled.RegisterButton>
       </Styled.ButtonWrap>
-    </>
+    </Styled.Container>
   );
 };
 
