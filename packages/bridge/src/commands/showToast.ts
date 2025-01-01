@@ -1,7 +1,13 @@
 import { sendCommand } from './sendCommand';
 
 export enum TOAST_DURATIONS {
+  /**
+   * 10초
+   */
   SHORT = 'SHORT',
+  /**
+   * 4초
+   */
   LONG = 'LONG',
 }
 

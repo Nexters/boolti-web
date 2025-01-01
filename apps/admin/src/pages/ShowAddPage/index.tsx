@@ -29,7 +29,13 @@ import { PATH } from '~/constants/routes';
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
-import { checkIsWebView, isWebViewBridgeAvailable, navigateToShowDetail } from '@boolti/bridge';
+import {
+  TOAST_DURATIONS,
+  checkIsWebView,
+  isWebViewBridgeAvailable,
+  navigateToShowDetail,
+  showToast,
+} from '@boolti/bridge';
 
 const stepItems = [
   { key: 'basic', title: '기본 정보' },
@@ -116,6 +122,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     });
 
     if (isWebView && isWebViewBridgeAvailable()) {
+      showToast({ message: '공연 등록이 완료되었습니다', duration: TOAST_DURATIONS.SHORT });
       navigateToShowDetail({ showId });
       return;
     }
