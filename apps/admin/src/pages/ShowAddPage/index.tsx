@@ -122,7 +122,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     });
 
     if (isWebView && isWebViewBridgeAvailable()) {
-      showToast({ message: '공연 등록이 완료되었습니다', duration: TOAST_DURATIONS.SHORT });
+      showToast({ message: '공연 등록을 완료했습니다.', duration: TOAST_DURATIONS.SHORT });
       navigateToShowDetail({ showId });
       return;
     }
