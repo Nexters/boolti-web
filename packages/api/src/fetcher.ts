@@ -30,14 +30,23 @@ export const instance = ky.create({
     afterResponse: [
       async (request, options, response) => {
         if (!response.ok && response.status === 401 && !request.url.includes('logout')) {
-          if (tokenRefreshMutex.isLocked()) {
-            await tokenRefreshMutex.waitForUnlock();
-          }
           try {
-            tokenRefreshMutex.acquire();
+            let accessToken: string | undefined;
 
-            const newAccessToken = await refreshAccessToken();
-            request.headers.set('Authorization', `Bearer ${newAccessToken}`);
+            if (tokenRefreshMutex.isLocked()) {
+              await tokenRefreshMutex.waitForUnlock();
+
+              const newAccessToken = window.localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN);
+
+              if (newAccessToken) {
+                accessToken = newAccessToken;
+              }
+            } else {
+              await tokenRefreshMutex.acquire();
+              accessToken = await refreshAccessToken();
+            }
+
+            request.headers.set('Authorization', `Bearer ${accessToken}`);
             return ky(request, options);
           } catch (e) {
             if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
