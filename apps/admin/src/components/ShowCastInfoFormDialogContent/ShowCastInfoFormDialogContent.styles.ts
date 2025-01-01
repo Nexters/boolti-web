@@ -144,7 +144,13 @@ const MemberAddButton = styled.button`
 `;
 
 const RegisterButton = styled(Button)`
-  margin-left: auto;
+  margin-left: 40px;
+  flex: 1;
+
+  ${mq_lg} {
+    margin-left: auto;
+    flex: none;
+  }
 `;
 
 const UserImageWrap = styled.div`
