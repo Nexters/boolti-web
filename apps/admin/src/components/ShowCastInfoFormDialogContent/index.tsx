@@ -6,8 +6,25 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { PlusIcon } from '@boolti/icon';
 import { Member, queryKeys, useQueryClient } from '@boolti/api';
 import ShowCastInfoMemberRow from './ShowCastInfoMemberRow';
-import { DndContext, DragOverlay, DragStartEvent, DragOverEvent, UniqueIdentifier, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import {
+  DndContext,
+  DragOverlay,
+  DragStartEvent,
+  DragOverEvent,
+  UniqueIdentifier,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import DraggableShowCastInfoMemberRow from './DraggableShowCastInfoMemberRow';
 
@@ -89,38 +106,41 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const dragStartHandler = (event: DragStartEvent) => {
     setDraggingItemId(event.active.id);
   };
 
-  const dragEndHandler = useCallback((event: DragOverEvent) => {
-    const { active, over } = event;
+  const dragEndHandler = useCallback(
+    (event: DragOverEvent) => {
+      const { active, over } = event;
 
-    if (!(active && over && over.id !== active.id)) return;
+      if (!(active && over && over.id !== active.id)) return;
 
-    const oldIndex = controlledFields.findIndex(({ _id }) => _id === active.id);
-    const newIndex = controlledFields.findIndex(({ _id }) => _id === over.id);
+      const oldIndex = controlledFields.findIndex(({ _id }) => _id === active.id);
+      const newIndex = controlledFields.findIndex(({ _id }) => _id === over.id);
 
-    if (oldIndex === -1 || newIndex === -1) return;
+      if (oldIndex === -1 || newIndex === -1) return;
 
-    const nextFields = arrayMove(controlledFields, oldIndex, newIndex);
-    replace(nextFields);
+      const nextFields = arrayMove(controlledFields, oldIndex, newIndex);
+      replace(nextFields);
 
-    setIsMemberFieldBlurred((prev) => {
-      const nextMemberFieldBlurred = [...prev];
-      nextMemberFieldBlurred.splice(oldIndex, 1);
-      nextMemberFieldBlurred.splice(newIndex, 0, prev[oldIndex]);
-      return nextMemberFieldBlurred;
-    })
+      setIsMemberFieldBlurred((prev) => {
+        const nextMemberFieldBlurred = [...prev];
+        nextMemberFieldBlurred.splice(oldIndex, 1);
+        nextMemberFieldBlurred.splice(newIndex, 0, prev[oldIndex]);
+        return nextMemberFieldBlurred;
+      });
 
-    setDraggingItemId(null);
-  }, [controlledFields, replace]);
+      setDraggingItemId(null);
+    },
+    [controlledFields, replace],
+  );
 
   return (
-    <>
+    <Styled.Container>
       <Styled.ShowInfoFormLabel required>팀명</Styled.ShowInfoFormLabel>
       <Controller
         control={control}
@@ -148,8 +168,17 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
-          <SortableContext items={controlledFields.map((field) => field._id)} strategy={verticalListSortingStrategy}>
+        <DndContext
+          sensors={sensors}
+          modifiers={[restrictToVerticalAxis]}
+          collisionDetection={closestCenter}
+          onDragStart={dragStartHandler}
+          onDragEnd={dragEndHandler}
+        >
+          <SortableContext
+            items={controlledFields.map((field) => field._id)}
+            strategy={verticalListSortingStrategy}
+          >
             {controlledFields.map((field, index) => (
               <DraggableShowCastInfoMemberRow
                 key={field._id}
@@ -172,8 +201,8 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                     } catch {
                       toast.error(
                         '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
-                        '\n' +
-                        '식별 코드를 확인 후 다시 시도해 주세요.',
+                          '\n' +
+                          '식별 코드를 확인 후 다시 시도해 주세요.',
                       );
                     } finally {
                       setIsMemberFieldBlurred((prev) => {
@@ -219,7 +248,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
             ))}
           </SortableContext>
           <DragOverlay>
-            {(draggingItemId && draggingField && draggingFieldIndex > -1) ? (
+            {draggingItemId && draggingField && draggingFieldIndex > -1 ? (
               <Styled.DraggableShowCastInfoMemberRow>
                 <ShowCastInfoMemberRow
                   control={control}
@@ -286,7 +315,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
           등록하기
         </Styled.RegisterButton>
       </Styled.ButtonWrap>
-    </>
+    </Styled.Container>
   );
 };
 

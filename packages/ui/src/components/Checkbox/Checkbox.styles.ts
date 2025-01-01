@@ -19,12 +19,12 @@ export const CheckboxContainer = styled.div<{ checked?: boolean; variant: 'main'
           &:hover {
             border-color: ${theme.palette.grey.g90};
           }
-        `
+        `;
       }
       case 'sub': {
         return `
           color: ${checked ? theme.palette.grey.g90 : theme.palette.grey.g20};
-        `
+        `;
       }
     }
   }}

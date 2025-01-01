@@ -33,7 +33,7 @@ const ShowTicketFormContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 48px;
-`
+`;
 
 const ShowTicketSubmitContainer = styled.div`
   margin-top: 32px;

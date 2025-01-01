@@ -16,7 +16,10 @@ import { useParams } from 'react-router-dom';
 import { middlewareAtom, myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
-import { ShowBasicInfoFormInputs, ShowDetailInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import {
+  ShowBasicInfoFormInputs,
+  ShowDetailInfoFormInputs,
+} from '~/components/ShowInfoFormContent/types';
 
 import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
@@ -37,9 +40,12 @@ const ShowInfoPage = () => {
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [showImages, setShowImages] = useState<ShowImage[]>([]);
-  const [castTeamListDraft, setCastTeamListDraft] = useState<TempShowCastInfoFormInput[] | null>(null);
+  const [castTeamListDraft, setCastTeamListDraft] = useState<TempShowCastInfoFormInput[] | null>(
+    null,
+  );
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
-  const isCastTeamListDraftDirty = initialCastTeamListRef.current !== JSON.stringify(castTeamListDraft)
+  const isCastTeamListDraftDirty =
+    initialCastTeamListRef.current !== JSON.stringify(castTeamListDraft);
   const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
   const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
 
@@ -52,9 +58,18 @@ const ShowInfoPage = () => {
   const uploadShowImageMutation = useUploadShowImage();
 
   const isSaveButtonDisabled = useMemo(
-    () => !showBasicInfoForm.formState.isValid || !showDetailInfoForm.formState.isValid || imageFiles.length === 0 || show?.isEnded,
-    [imageFiles.length, show?.isEnded, showBasicInfoForm.formState.isValid, showDetailInfoForm.formState.isValid]
-  )
+    () =>
+      !showBasicInfoForm.formState.isValid ||
+      !showDetailInfoForm.formState.isValid ||
+      imageFiles.length === 0 ||
+      show?.isEnded,
+    [
+      imageFiles.length,
+      show?.isEnded,
+      showBasicInfoForm.formState.isValid,
+      showDetailInfoForm.formState.isValid,
+    ],
+  );
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -77,62 +92,83 @@ const ShowInfoPage = () => {
 
     const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
       showBasicInfoForm.trigger(),
-      showDetailInfoForm.trigger()
+      showDetailInfoForm.trigger(),
     ]);
 
     if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
 
     const showBasicInfoFormInputs = showBasicInfoForm.getValues();
     const showDetailInfoFormInputs = showDetailInfoForm.getValues();
-    const castTeams = castTeamListDraft?.map((team) => ({
-      id: team.id >= 0 ? team.id : undefined,
-      name: team.name,
-      members: team.members?.map((member) => ({
-        id: member.id >= 0 ? member.id : undefined,
-        roleName: member.roleName ?? '',
-        userCode: member.userCode ?? ''
-      }))
-    })) ?? []
-
-    await editShowInfoMutation.mutateAsync({
-      showId,
-      body: {
-        name: showBasicInfoFormInputs.name,
-        images: [...showImages, ...newShowImages].map((image, index) => ({
-          sequence: index + 1,
-          thumbnailPath: image.thumbnailPath,
-          path: image.path,
+    const castTeams =
+      castTeamListDraft?.map((team) => ({
+        id: team.id >= 0 ? team.id : undefined,
+        name: team.name,
+        members: team.members?.map((member) => ({
+          id: member.id >= 0 ? member.id : undefined,
+          roleName: member.roleName ?? '',
+          userCode: member.userCode ?? '',
         })),
-        date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
-        runningTime: +showBasicInfoFormInputs.runningTime,
-        place: {
-          name: showBasicInfoFormInputs.placeName,
-          streetAddress: showBasicInfoFormInputs.placeStreetAddress,
-          detailAddress: showBasicInfoFormInputs.placeDetailAddress,
+      })) ?? [];
+
+    await editShowInfoMutation.mutateAsync(
+      {
+        showId,
+        body: {
+          name: showBasicInfoFormInputs.name,
+          images: [...showImages, ...newShowImages].map((image, index) => ({
+            sequence: index + 1,
+            thumbnailPath: image.thumbnailPath,
+            path: image.path,
+          })),
+          date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
+          runningTime: +showBasicInfoFormInputs.runningTime,
+          place: {
+            name: showBasicInfoFormInputs.placeName,
+            streetAddress: showBasicInfoFormInputs.placeStreetAddress,
+            detailAddress: showBasicInfoFormInputs.placeDetailAddress,
+          },
+          notice: showDetailInfoFormInputs.notice,
+          host: {
+            name: showDetailInfoFormInputs.hostName,
+            phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
+          },
+          castTeams,
         },
-        notice: showDetailInfoFormInputs.notice,
-        host: {
-          name: showDetailInfoFormInputs.hostName,
-          phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
-        },
-        castTeams
       },
-    }, {
-      onSuccess: () => {
-        refetchShowDetail()
-        refetchShowSalesInfo()
-        refetchCastTeamList()
+      {
+        onSuccess: () => {
+          refetchShowDetail();
+          refetchShowSalesInfo();
+          refetchCastTeamList();
 
-        toast.success('공연 정보를 저장했습니다.');
-        setPreviewDrawerOpen(false);
-      }
-    });
-
-  }, [castTeamListDraft, editShowInfoMutation, imageFiles, refetchCastTeamList, refetchShowDetail, refetchShowSalesInfo, show, showBasicInfoForm, showDetailInfoForm, showId, showImages, toast, uploadShowImageMutation])
-
+          toast.success('공연 정보를 저장했습니다.');
+          setPreviewDrawerOpen(false);
+        },
+      },
+    );
+  }, [
+    castTeamListDraft,
+    editShowInfoMutation,
+    imageFiles,
+    refetchCastTeamList,
+    refetchShowDetail,
+    refetchShowSalesInfo,
+    show,
+    showBasicInfoForm,
+    showDetailInfoForm,
+    showId,
+    showImages,
+    toast,
+    uploadShowImageMutation,
+  ]);
 
   const confirmSaveShowInfo = useCallback(async () => {
-    if (!showBasicInfoForm.formState.isDirty && !showDetailInfoForm.formState.isDirty && !isImageFilesDirty && !isCastTeamListDraftDirty) {
+    if (
+      !showBasicInfoForm.formState.isDirty &&
+      !showDetailInfoForm.formState.isDirty &&
+      !isImageFilesDirty &&
+      !isCastTeamListDraftDirty
+    ) {
       return true;
     }
 
@@ -150,7 +186,14 @@ const ShowInfoPage = () => {
     }
 
     return true;
-  }, [showBasicInfoForm, showDetailInfoForm, isImageFilesDirty, isCastTeamListDraftDirty, confirm, submitHandler]);
+  }, [
+    showBasicInfoForm,
+    showDetailInfoForm,
+    isImageFilesDirty,
+    isCastTeamListDraftDirty,
+    confirm,
+    submitHandler,
+  ]);
 
   useEffect(() => {
     if (!show) return;
@@ -181,12 +224,12 @@ const ShowInfoPage = () => {
     const initialCastTeamList = castTeamList.map((team) => ({
       id: team.id,
       name: team.name,
-      members: team.members
-    }))
+      members: team.members,
+    }));
 
     setCastTeamListDraft(initialCastTeamList);
-    initialCastTeamListRef.current = JSON.stringify(initialCastTeamList)
-  }, [castTeamList])
+    initialCastTeamListRef.current = JSON.stringify(initialCastTeamList);
+  }, [castTeamList]);
 
   useEffect(() => {
     setMiddleware(() => confirmSaveShowInfo);
@@ -246,7 +289,7 @@ const ShowInfoPage = () => {
                 <ShowCastInfoFormContent
                   initialCastTeamList={castTeamListDraft}
                   onChange={(data) => {
-                    setCastTeamListDraft(data)
+                    setCastTeamListDraft(data);
                   }}
                 />
               )}
@@ -257,9 +300,7 @@ const ShowInfoPage = () => {
                   size="bold"
                   colorTheme="primary"
                   type="button"
-                  disabled={
-                    isSaveButtonDisabled
-                  }
+                  disabled={isSaveButtonDisabled}
                   onClick={() => {
                     setPreviewDrawerOpen(true);
                   }}
@@ -287,7 +328,9 @@ const ShowInfoPage = () => {
                       <ShowPreview
                         show={{
                           images: imageFiles.map((file) => file.preview),
-                          name: showBasicInfoForm.watch('name') ? showBasicInfoForm.watch('name') : '',
+                          name: showBasicInfoForm.watch('name')
+                            ? showBasicInfoForm.watch('name')
+                            : '',
                           date: showBasicInfoForm.watch('date')
                             ? format(showBasicInfoForm.watch('date'), 'yyyy.MM.dd (E)')
                             : '',
@@ -306,14 +349,16 @@ const ShowInfoPage = () => {
                           hostName: showDetailInfoForm.watch('hostName'),
                           hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                         }}
-                        showCastTeams={castTeamListDraft?.map((team) => ({
-                          name: team.name,
-                          members: team.members?.map((member) => ({
-                            roleName: member.roleName ?? '',
-                            userNickname: member.userNickname ?? '',
-                            userImgPath: member.userImgPath ?? ''
-                          }))
-                        })) ?? []}
+                        showCastTeams={
+                          castTeamListDraft?.map((team) => ({
+                            name: team.name,
+                            members: team.members?.map((member) => ({
+                              roleName: member.roleName ?? '',
+                              userNickname: member.userNickname ?? '',
+                              userImgPath: member.userImgPath ?? '',
+                            })),
+                          })) ?? []
+                        }
                         hasNoticePage
                         containerRef={showPreviewRef}
                       />
@@ -330,10 +375,7 @@ const ShowInfoPage = () => {
                 >
                   닫기
                 </Styled.ShowInfoPreviewCloseButton>
-                <Styled.ShowInfoPreviewSubmitButton
-                  type="button"
-                  onClick={submitHandler}
-                >
+                <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
                   저장하기
                 </Styled.ShowInfoPreviewSubmitButton>
               </Styled.ShowInfoPreviewFooter>
@@ -379,10 +421,7 @@ const ShowInfoPage = () => {
                   >
                     닫기
                   </Styled.ShowInfoPreviewCloseButton>
-                  <Styled.ShowInfoPreviewSubmitButton
-                    type="button"
-                    onClick={submitHandler}
-                  >
+                  <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
                     저장하기
                   </Styled.ShowInfoPreviewSubmitButton>
                 </Styled.ShowInfoPreviewFooter>

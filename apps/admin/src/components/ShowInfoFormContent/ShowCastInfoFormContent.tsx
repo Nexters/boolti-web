@@ -5,9 +5,23 @@ import { PlusIcon } from '@boolti/icon';
 import ShowCastInfoFormDialogContent, {
   TempShowCastInfoFormInput,
 } from '../ShowCastInfoFormDialogContent';
-import { DndContext, DragOverEvent, KeyboardSensor, MouseSensor, TouchSensor, closestCenter, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  DndContext,
+  DragOverEvent,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
-import { SortableContext, arrayMove, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import ShowCastInfo from '~/components/ShowCastInfo';
 import { useCallback, useRef, useState } from 'react';
 import { useEffect } from 'react';
@@ -17,11 +31,16 @@ interface ShowCastInfoFormContentProps {
   onChange: (value: TempShowCastInfoFormInput[]) => void;
 }
 
-const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfoFormContentProps) => {
+const ShowCastInfoFormContent = ({
+  initialCastTeamList,
+  onChange,
+}: ShowCastInfoFormContentProps) => {
   const dialog = useDialog();
 
-  const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>(initialCastTeamList ?? [])
-  const prevCastTeamList = useRef<string>(JSON.stringify(castTeamList))
+  const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>(
+    initialCastTeamList ?? [],
+  );
+  const prevCastTeamList = useRef<string>(JSON.stringify(castTeamList));
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -37,7 +56,7 @@ const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfo
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const castTeamDragEndHandler = useCallback((event: DragOverEvent) => {
@@ -53,7 +72,6 @@ const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfo
     }
   }, []);
 
-
   const castAddButtonClickHandler = () => {
     dialog.open({
       isAuto: true,
@@ -61,11 +79,8 @@ const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfo
       content: (
         <ShowCastInfoFormDialogContent
           onSave={(castInfo) => {
-            console.log(castInfo)
-            setCastTeamList((prev) => [
-              ...prev,
-              castInfo
-            ])
+            console.log(castInfo);
+            setCastTeamList((prev) => [...prev, castInfo]);
             dialog.close();
           }}
         />
@@ -74,13 +89,13 @@ const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfo
   };
 
   useEffect(() => {
-    const stringifiedCastTeamList = JSON.stringify(castTeamList)
+    const stringifiedCastTeamList = JSON.stringify(castTeamList);
 
     if (prevCastTeamList.current !== stringifiedCastTeamList) {
-      prevCastTeamList.current = stringifiedCastTeamList
-      onChange?.(castTeamList)
+      prevCastTeamList.current = stringifiedCastTeamList;
+      onChange?.(castTeamList);
     }
-  }, [castTeamList, onChange])
+  }, [castTeamList, onChange]);
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -107,24 +122,28 @@ const ShowCastInfoFormContent = ({ initialCastTeamList, onChange }: ShowCastInfo
           등록하기
         </Styled.DesktopCastInfoRegisterButton>
       </Styled.ShowInfoFormGroupHeader>
-      <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragEnd={castTeamDragEndHandler}>
-        <SortableContext items={castTeamList.map((info) => info.id)} strategy={verticalListSortingStrategy}>
+      <DndContext
+        sensors={sensors}
+        modifiers={[restrictToVerticalAxis]}
+        collisionDetection={closestCenter}
+        onDragEnd={castTeamDragEndHandler}
+      >
+        <SortableContext
+          items={castTeamList.map((info) => info.id)}
+          strategy={verticalListSortingStrategy}
+        >
           {castTeamList.map((info) => (
             <ShowCastInfo
               key={info.id}
               showCastInfo={info}
               onSave={(showCastInfoFormInput: TempShowCastInfoFormInput) => {
                 setCastTeamList((prev) =>
-                  prev.map((item) =>
-                    item.id === info.id ? showCastInfoFormInput : item,
-                  )
+                  prev.map((item) => (item.id === info.id ? showCastInfoFormInput : item)),
                 );
                 return new Promise((resolve) => resolve());
               }}
               onDelete={() => {
-                setCastTeamList((prev) =>
-                  prev.filter((item) => item.id !== info.id)
-                );
+                setCastTeamList((prev) => prev.filter((item) => item.id !== info.id));
                 return new Promise((resolve) => resolve());
               }}
             />

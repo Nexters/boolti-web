@@ -22,14 +22,14 @@ interface PutShowInfoRequest {
     phoneNumber: string;
   };
   castTeams?: {
-    id?: number
-    name: string
+    id?: number;
+    name: string;
     members?: {
-      id?: number
-      userCode: string
-      roleName: string
+      id?: number;
+      userCode: string;
+      roleName: string;
     }[];
-  }[]
+  }[];
 }
 
 const putShowInfo = (showId: number, body: PutShowInfoRequest) =>

@@ -21,14 +21,9 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
   const dialog = useDialog();
   const [isOpen, setIsOpen] = useState(false);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging
-  } = useSortable({ id: showCastInfo.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: showCastInfo.id,
+  });
 
   const style = {
     transform: CSS.Translate.toString(transform),
@@ -38,8 +33,37 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
     zIndex: isDragging ? 100 : 99,
     cursor: isDragging ? 'grabbing' : undefined,
   };
-  
+
   const toggle = () => setIsOpen((prev) => !prev);
+
+  const onClickEdit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    dialog.open({
+      title: '출연진 정보 편집',
+      isAuto: true,
+      content: (
+        <ShowCastInfoFormDialogContent
+          onSave={async (castInfo) => {
+            try {
+              await onSave(castInfo);
+              dialog.close();
+            } catch {
+              return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
+            }
+          }}
+          prevShowCastInfo={showCastInfo}
+          onDelete={async () => {
+            try {
+              await onDelete?.();
+              dialog.close();
+            } catch {
+              return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
+            }
+          }}
+        />
+      ),
+    });
+  };
 
   return (
     <Styled.Container ref={setNodeRef} style={style}>
@@ -48,44 +72,14 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           <Styled.Handle type="button" {...attributes} {...listeners}>
             <MenuIcon />
           </Styled.Handle>
-          <Styled.Name>
-            {showCastInfo.name}
-          </Styled.Name>
+          <Styled.Name>{showCastInfo.name}</Styled.Name>
         </Styled.HeaderNameWrapper>
+
+        <Styled.MobileEditButton type="button" onClick={onClickEdit}>
+          <EditIcon />
+        </Styled.MobileEditButton>
         <Styled.EditButtonWrapper>
-          <TextButton
-            type="button"
-            colorTheme="netural"
-            size="regular"
-            onClick={(e) => {
-              e.preventDefault();
-              dialog.open({
-                title: '출연진 정보 편집',
-                isAuto: true,
-                content: (
-                  <ShowCastInfoFormDialogContent
-                    onSave={async (castInfo) => {
-                      try {
-                        await onSave(castInfo);
-                        dialog.close();
-                      } catch {
-                        return new Promise((_, reject) => reject('저장 중 오류가 발생하였습니다.'));
-                      }
-                    }}
-                    prevShowCastInfo={showCastInfo}
-                    onDelete={async () => {
-                      try {
-                        await onDelete?.();
-                        dialog.close();
-                      } catch {
-                        return new Promise((_, reject) => reject('삭제 중 오류가 발생하였습니다.'));
-                      }
-                    }}
-                  />
-                ),
-              });
-            }}
-          >
+          <TextButton type="button" colorTheme="netural" size="regular" onClick={onClickEdit}>
             <EditIcon />
             <span>정보 편집</span>
           </TextButton>
@@ -125,7 +119,7 @@ const ShowCastInfo = ({ showCastInfo, onSave, onDelete }: Props) => {
           </Styled.CollapseButton>
         </>
       )}
-    </Styled.Container >
+    </Styled.Container>
   );
 };
 
