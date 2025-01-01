@@ -2950,6 +2950,7 @@ const RAW_RUNTIME_STATE =
           ["@tanstack/react-query", "virtual:de80dc576383b2386358abc0e9fe49c00e3397fe355a0337462b73ab3115c2e557eb85784ee0fe776394cc11dd020b4e84dbbd75acf72ee6d54415d82d21f5c5#npm:4.36.1"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
+          ["async-mutex", "npm:0.5.0"],\
           ["image-resize", "npm:1.3.2"],\
           ["ky", "npm:1.2.0"],\
           ["react", "npm:18.2.0"],\
@@ -9171,6 +9172,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/async-limiter-npm-1.0.1-7e6819bcdb-0693d378cf.zip/node_modules/async-limiter/",\
         "packageDependencies": [\
           ["async-limiter", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["async-mutex", [\
+      ["npm:0.5.0", {\
+        "packageLocation": "./.yarn/cache/async-mutex-npm-0.5.0-cc288ce63d-9096e6ad6b.zip/node_modules/async-mutex/",\
+        "packageDependencies": [\
+          ["async-mutex", "npm:0.5.0"],\
+          ["tslib", "npm:2.6.2"]\
         ],\
         "linkType": "HARD"\
       }]\
