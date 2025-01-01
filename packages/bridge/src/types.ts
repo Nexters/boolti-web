@@ -1,4 +1,8 @@
-export type WebviewCommand = 'NAVIGATE_TO_SHOW_DETAIL' | 'NAVIGATE_BACK' | 'REQUEST_TOKEN';
+export type WebviewCommand =
+  | 'NAVIGATE_TO_SHOW_DETAIL'
+  | 'NAVIGATE_BACK'
+  | 'REQUEST_TOKEN'
+  | 'SHOW_TOAST';
 
 export type BaseCommand = {
   id: string;
