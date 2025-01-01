@@ -13,9 +13,13 @@ const storageMethod = {
   },
 };
 
-const accessTokenAtom = atom<string | null>(null);
+const accessTokenAtom = atom<string | null>(
+  storageMethod.getItem(LOCAL_STORAGE.ACCESS_TOKEN, null),
+);
 
-const refreshTokenAtom = atom<string | null>(null);
+const refreshTokenAtom = atom<string | null>(
+  storageMethod.getItem(LOCAL_STORAGE.REFRESH_TOKEN, null),
+);
 
 export const useAuthAtom = () => {
   const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
