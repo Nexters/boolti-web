@@ -454,8 +454,8 @@ const MobileHeaderText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
-const MobileContent = styled.div`
-  margin-top: 52px;
+const MobileContent = styled.div<{ isWebView: boolean }>`
+  margin-top: ${({ isWebView }) => (isWebView ? '0' : '52px')};
   padding: 32px 20px;
 
   ${mq_lg} {

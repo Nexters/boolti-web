@@ -422,7 +422,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.CardContent>{showAddPageContent}</Styled.CardContent>
         </Styled.Card>
       </Styled.Content>
-      <Styled.MobileContent>{showAddPageContent}</Styled.MobileContent>
+      <Styled.MobileContent isWebView={isWebView}>{showAddPageContent}</Styled.MobileContent>
     </Styled.ShowAddPage>
   );
 };
