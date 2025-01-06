@@ -1,10 +1,10 @@
 import styled from '@emotion/styled';
 
-type colorTheme = 'primary' | 'netural' | 'line';
+type ColorTheme = 'primary' | 'netural' | 'line' | 'secondary';
 type Size = 'bold' | 'medium' | 'regular' | 'small' | 'x-small';
 
 export interface ButtonProps {
-  colorTheme: colorTheme;
+  colorTheme: ColorTheme;
   size: Size;
   disabled?: boolean;
   icon?: React.ReactNode;
@@ -114,14 +114,44 @@ const Container = styled.button<ButtonProps>`
             background-color: ${theme.palette.grey.g10};
           }
         `;
+      case 'secondary':
+        return `
+          color: ${theme.palette.grey.g90};
+          border: 0;
+          background-color: ${theme.palette.grey.g10};
+          &:hover:not(:disabled) {
+            background-color: ${theme.palette.grey.g20};
+          }
+          &:active:not(:disabled) {
+            background-color: ${theme.palette.grey.g30};
+          }
+          &:disabled {
+            color: ${theme.palette.grey.g40};
+            background-color: ${theme.palette.grey.g00};
+          }
+        `;
     }
   }}
 `;
 
-const Icon = styled.div`
+const Icon = styled.div<Pick<ButtonProps, 'size'> & { hasChildren: boolean }>`
   width: 20px;
   height: 20px;
-  margin-right: 8px;
+
+  ${({ size, hasChildren }) => {
+    if (!hasChildren) return null
+
+    switch (size) {
+      case 'x-small':
+        return `
+          margin-right: 6px;
+        `
+      default:
+        return `
+          margin-right: 8px;
+        `
+    }
+  }}
 `;
 
 export default {

@@ -84,7 +84,7 @@ const DropdownListItem = styled.li<DropdownListItemProps>`
     isDelete ? theme.palette.status.error : theme.palette.grey.g70};
   background-color: ${({ theme }) => theme.palette.grey.w};
   cursor: pointer;
-  margin-top: ${({ isDelete }) => (isDelete ? '4px' : '0')};
+  margin-top: 0;
 
   &:hover {
     background-color: ${({ theme }) => theme.palette.grey.g10};

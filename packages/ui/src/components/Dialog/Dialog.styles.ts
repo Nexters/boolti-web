@@ -98,6 +98,12 @@ const DialogHeader = styled.div<{ mobileType: 'bottomSheet' | 'fullPage' | 'cent
   }
 `;
 
+const DialogTitleContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+`
+
 const DialogTitle = styled.h2`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
@@ -143,6 +149,39 @@ const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage'
   }
 `;
 
+const DialogBackButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.palette.grey.g70};
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  ${({ mobileType }) =>
+    mobileType === 'bottomSheet' &&
+    `
+    top: 16px;
+    right: 24px;
+  `}
+
+  ${({ mobileType }) =>
+    mobileType === 'fullPage' &&
+    `
+    top: 20px;
+    left: 20px;
+  `}
+
+  ${mq_lg} {
+    top: 17px;
+    right: 32px; 
+    left: initial;
+  }
+`;
+
 const DialogContent = styled.div<DialogContentProps>`
   padding: 0 24px;
   overflow-y: auto;
@@ -156,7 +195,9 @@ export default {
   DimmedArea,
   Dialog,
   DialogHeader,
+  DialogTitleContainer,
   DialogTitle,
   DialogCloseButton,
+  DialogBackButton,
   DialogContent,
 };

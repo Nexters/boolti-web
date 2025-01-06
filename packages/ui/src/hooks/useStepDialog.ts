@@ -1,9 +1,8 @@
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useRef, useState } from 'react';
-
 import dialogContext, { DialogListItem } from '../contexts/dialogContext';
 
-const useDialog = () => {
+const useStepDialog = <T extends string>() => {
   const id = useRef<string>(nanoid(6));
   const [isOpen, setIsOpen] = useState(false);
 
@@ -11,16 +10,22 @@ const useDialog = () => {
 
   const open = useCallback(
     ({
+      initialHistory,
       content,
-      title,
       isAuto,
       width,
       contentPadding,
       mobileType,
       onClose,
     }: {
-      content: React.ReactNode;
-      title?: string;
+      initialHistory: T[];
+      content: Record<T, {
+        children: (props: {
+          push: (nextStep: T) => void;
+          back: () => void;
+        }) => React.ReactNode;
+        title?: string
+      }>;
       isAuto?: boolean;
       width?: string;
       contentPadding?: string;
@@ -28,10 +33,10 @@ const useDialog = () => {
       onClose?: () => void;
     }) => {
       const newDialog: DialogListItem = {
-        type: 'default',
+        type: 'funnel',
+        initialHistory,
         id: id.current,
         content,
-        title,
         isAuto,
         width,
         contentPadding,
@@ -57,4 +62,4 @@ const useDialog = () => {
   };
 };
 
-export default useDialog;
+export default useStepDialog;

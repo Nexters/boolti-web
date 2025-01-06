@@ -1,13 +1,6 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-const HostListWrapper = styled.div`
-  height: calc(100vh - 215px);
-
-  ${mq_lg} {
-    height: auto;
-  }
-`;
+const HostListWrapper = styled.div``;
 
 const HostListTitle = styled.h3`
   ${({ theme }) => theme.typo.b3};

@@ -25,7 +25,7 @@ import PreviewFrame from './PreviewFrame';
 import Styled from './ShowInfoPage.styles';
 import { useAtom, useSetAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
-import ShowDetailUnauthorized from '~/components/ShowDetailUnauthorized';
+import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
 import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
@@ -238,153 +238,92 @@ const ShowInfoPage = () => {
     };
   }, [confirmSaveShowInfo, setMiddleware]);
 
-  if (!show || !showSalesInfo || !castTeamList) {
+  if (!show || !showSalesInfo || !castTeamList || !myHostInfo) {
     return null;
   }
 
-  // TODO: 공연 삭제 시 필요한 조건
-  // const salesStarted = compareAsc(new Date(showSalesInfo.salesStartTime), new Date()) === -1;
+  if (!PAGE_PERMISSION['공연 정보'].includes(myHostInfo.type)) {
+    return (
+      <ShowDetailUnauthorized
+        pageName={'공연 정보'}
+        name={myHostInfo.hostName as string}
+        type={myHostInfo.type as HostType}
+      />
+    );
+  }
 
   return (
-    <>
-      {myHostInfo?.type === HostType.SUPPORTER ? (
-        <ShowDetailUnauthorized
-          pageName={'공연 정보'}
-          name={myHostInfo?.hostName as string}
-          type={myHostInfo?.type as HostType}
-        />
-      ) : (
-        <Styled.ShowInfoPage>
-          <Styled.ShowInfoForm onSubmit={submitHandler}>
-            <Styled.ShowInfoFormContent>
-              <ShowBasicInfoFormContent
-                form={showBasicInfoForm}
-                imageFiles={imageFiles}
-                disabled={show.isEnded}
-                onDropImage={(acceptedFiles) => {
-                  setImageFiles((prevImageFiles) => [
-                    ...prevImageFiles,
-                    ...acceptedFiles.map((file) => ({
-                      ...file,
-                      preview: URL.createObjectURL(file),
-                    })),
-                  ]);
-                }}
-                onDeleteImage={(file) => {
-                  setImageFiles((prevImageFiles) =>
-                    prevImageFiles.filter((prevFile) => prevFile !== file),
-                  );
-                  setShowImages((prevShowImages) =>
-                    prevShowImages.filter((prevImage) => prevImage.thumbnailPath !== file.preview),
-                  );
-                }}
-              />
-            </Styled.ShowInfoFormContent>
-            <Styled.ShowInfoFormDivider />
-            <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
-              <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
-            </Styled.ShowInfoFormContent>
-            <Styled.ShowInfoFormContent>
-              {castTeamListDraft && (
-                <ShowCastInfoFormContent
-                  initialCastTeamList={castTeamListDraft}
-                  onChange={(data) => {
-                    setCastTeamListDraft(data);
-                  }}
-                />
-              )}
-            </Styled.ShowInfoFormContent>
-            <Styled.ShowInfoFormFooter>
-              <Styled.SaveButton>
-                <Button
-                  size="bold"
-                  colorTheme="primary"
-                  type="button"
-                  disabled={isSaveButtonDisabled}
-                  onClick={() => {
-                    setPreviewDrawerOpen(true);
-                  }}
-                >
-                  저장하기
-                </Button>
-              </Styled.SaveButton>
-            </Styled.ShowInfoFormFooter>
-          </Styled.ShowInfoForm>
-          <Drawer
-            open={previewDrawerOpen}
-            title="공연 상세 미리보기"
-            onClose={() => {
-              setPreviewDrawerOpen(false);
+    <Styled.ShowInfoPage>
+      <Styled.ShowInfoForm onSubmit={submitHandler}>
+        <Styled.ShowInfoFormContent>
+          <ShowBasicInfoFormContent
+            form={showBasicInfoForm}
+            imageFiles={imageFiles}
+            disabled={show.isEnded}
+            onDropImage={(acceptedFiles) => {
+              setImageFiles((prevImageFiles) => [
+                ...prevImageFiles,
+                ...acceptedFiles.map((file) => ({
+                  ...file,
+                  preview: URL.createObjectURL(file),
+                })),
+              ]);
             }}
-          >
-            <Styled.ShowInfoPreviewContainer>
-              <Styled.ShowInfoPreview>
-                <Styled.ShowInfoPreviewFrameContainer>
-                  <Styled.ShowInfoPreviewFrame>
-                    <PreviewFrame />
-                  </Styled.ShowInfoPreviewFrame>
-                  <Styled.ShowPreviewContainer>
-                    <Styled.ShowPreview ref={showPreviewRef}>
-                      <ShowPreview
-                        show={{
-                          images: imageFiles.map((file) => file.preview),
-                          name: showBasicInfoForm.watch('name')
-                            ? showBasicInfoForm.watch('name')
-                            : '',
-                          date: showBasicInfoForm.watch('date')
-                            ? format(showBasicInfoForm.watch('date'), 'yyyy.MM.dd (E)')
-                            : '',
-                          startTime: showBasicInfoForm.watch('startTime'),
-                          runningTime: showBasicInfoForm.watch('runningTime'),
-                          salesStartTime: showSalesInfo
-                            ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                            : '',
-                          salesEndTime: showSalesInfo
-                            ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                            : '',
-                          placeName: showBasicInfoForm.watch('placeName'),
-                          placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
-                          placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
-                          notice: showDetailInfoForm.watch('notice'),
-                          hostName: showDetailInfoForm.watch('hostName'),
-                          hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
-                        }}
-                        showCastTeams={
-                          castTeamListDraft?.map((team) => ({
-                            name: team.name,
-                            members: team.members?.map((member) => ({
-                              roleName: member.roleName ?? '',
-                              userNickname: member.userNickname ?? '',
-                              userImgPath: member.userImgPath ?? '',
-                            })),
-                          })) ?? []
-                        }
-                        hasNoticePage
-                        containerRef={showPreviewRef}
-                      />
-                    </Styled.ShowPreview>
-                  </Styled.ShowPreviewContainer>
-                </Styled.ShowInfoPreviewFrameContainer>
-              </Styled.ShowInfoPreview>
-              <Styled.ShowInfoPreviewFooter>
-                <Styled.ShowInfoPreviewCloseButton
-                  type="button"
-                  onClick={() => {
-                    setPreviewDrawerOpen(false);
-                  }}
-                >
-                  닫기
-                </Styled.ShowInfoPreviewCloseButton>
-                <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
-                  저장하기
-                </Styled.ShowInfoPreviewSubmitButton>
-              </Styled.ShowInfoPreviewFooter>
-            </Styled.ShowInfoPreviewContainer>
-          </Drawer>
-          {previewDrawerOpen && (
-            <Portal>
-              <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
-                <Styled.ShowInfoPreview>
+            onDeleteImage={(file) => {
+              setImageFiles((prevImageFiles) =>
+                prevImageFiles.filter((prevFile) => prevFile !== file),
+              );
+              setShowImages((prevShowImages) =>
+                prevShowImages.filter((prevImage) => prevImage.thumbnailPath !== file.preview),
+              );
+            }}
+          />
+        </Styled.ShowInfoFormContent>
+        <Styled.ShowInfoFormDivider />
+        <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
+          <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
+        </Styled.ShowInfoFormContent>
+        <Styled.ShowInfoFormContent>
+          {castTeamListDraft && (
+            <ShowCastInfoFormContent
+              initialCastTeamList={castTeamListDraft}
+              onChange={(data) => {
+                setCastTeamListDraft(data);
+              }}
+            />
+          )}
+        </Styled.ShowInfoFormContent>
+        <Styled.ShowInfoFormFooter>
+          <Styled.SaveButton>
+            <Button
+              size="bold"
+              colorTheme="primary"
+              type="button"
+              disabled={isSaveButtonDisabled}
+              onClick={() => {
+                setPreviewDrawerOpen(true);
+              }}
+            >
+              저장하기
+            </Button>
+          </Styled.SaveButton>
+        </Styled.ShowInfoFormFooter>
+      </Styled.ShowInfoForm>
+      <Drawer
+        open={previewDrawerOpen}
+        title="공연 상세 미리보기"
+        onClose={() => {
+          setPreviewDrawerOpen(false);
+        }}
+      >
+        <Styled.ShowInfoPreviewContainer>
+          <Styled.ShowInfoPreview>
+            <Styled.ShowInfoPreviewFrameContainer>
+              <Styled.ShowInfoPreviewFrame>
+                <PreviewFrame />
+              </Styled.ShowInfoPreviewFrame>
+              <Styled.ShowPreviewContainer>
+                <Styled.ShowPreview ref={showPreviewRef}>
                   <ShowPreview
                     show={{
                       images: imageFiles.map((file) => file.preview),
@@ -407,30 +346,86 @@ const ShowInfoPage = () => {
                       hostName: showDetailInfoForm.watch('hostName'),
                       hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                     }}
-                    showCastTeams={castTeamList}
+                    showCastTeams={
+                      castTeamListDraft?.map((team) => ({
+                        name: team.name,
+                        members: team.members?.map((member) => ({
+                          roleName: member.roleName ?? '',
+                          userNickname: member.userNickname ?? '',
+                          userImgPath: member.userImgPath ?? '',
+                        })),
+                      })) ?? []
+                    }
                     hasNoticePage
-                    containerRef={showPreviewMobileRef}
+                    containerRef={showPreviewRef}
                   />
-                </Styled.ShowInfoPreview>
-                <Styled.ShowInfoPreviewFooter>
-                  <Styled.ShowInfoPreviewCloseButton
-                    type="button"
-                    onClick={() => {
-                      setPreviewDrawerOpen(false);
-                    }}
-                  >
-                    닫기
-                  </Styled.ShowInfoPreviewCloseButton>
-                  <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
-                    저장하기
-                  </Styled.ShowInfoPreviewSubmitButton>
-                </Styled.ShowInfoPreviewFooter>
-              </Styled.ShowInfoPreviewMobile>
-            </Portal>
-          )}
-        </Styled.ShowInfoPage>
+                </Styled.ShowPreview>
+              </Styled.ShowPreviewContainer>
+            </Styled.ShowInfoPreviewFrameContainer>
+          </Styled.ShowInfoPreview>
+          <Styled.ShowInfoPreviewFooter>
+            <Styled.ShowInfoPreviewCloseButton
+              type="button"
+              onClick={() => {
+                setPreviewDrawerOpen(false);
+              }}
+            >
+              닫기
+            </Styled.ShowInfoPreviewCloseButton>
+            <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
+              저장하기
+            </Styled.ShowInfoPreviewSubmitButton>
+          </Styled.ShowInfoPreviewFooter>
+        </Styled.ShowInfoPreviewContainer>
+      </Drawer>
+      {previewDrawerOpen && (
+        <Portal>
+          <Styled.ShowInfoPreviewMobile ref={showPreviewMobileRef}>
+            <Styled.ShowInfoPreview>
+              <ShowPreview
+                show={{
+                  images: imageFiles.map((file) => file.preview),
+                  name: showBasicInfoForm.watch('name') ? showBasicInfoForm.watch('name') : '',
+                  date: showBasicInfoForm.watch('date')
+                    ? format(showBasicInfoForm.watch('date'), 'yyyy.MM.dd (E)')
+                    : '',
+                  startTime: showBasicInfoForm.watch('startTime'),
+                  runningTime: showBasicInfoForm.watch('runningTime'),
+                  salesStartTime: showSalesInfo
+                    ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
+                    : '',
+                  salesEndTime: showSalesInfo
+                    ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
+                    : '',
+                  placeName: showBasicInfoForm.watch('placeName'),
+                  placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
+                  placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                  notice: showDetailInfoForm.watch('notice'),
+                  hostName: showDetailInfoForm.watch('hostName'),
+                  hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
+                }}
+                showCastTeams={castTeamList}
+                hasNoticePage
+                containerRef={showPreviewMobileRef}
+              />
+            </Styled.ShowInfoPreview>
+            <Styled.ShowInfoPreviewFooter>
+              <Styled.ShowInfoPreviewCloseButton
+                type="button"
+                onClick={() => {
+                  setPreviewDrawerOpen(false);
+                }}
+              >
+                닫기
+              </Styled.ShowInfoPreviewCloseButton>
+              <Styled.ShowInfoPreviewSubmitButton type="button" onClick={submitHandler}>
+                저장하기
+              </Styled.ShowInfoPreviewSubmitButton>
+            </Styled.ShowInfoPreviewFooter>
+          </Styled.ShowInfoPreviewMobile>
+        </Portal>
       )}
-    </>
+    </Styled.ShowInfoPage>
   );
 };
 

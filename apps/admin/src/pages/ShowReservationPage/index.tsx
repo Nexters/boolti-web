@@ -17,6 +17,9 @@ import Styled from './ShowReservationPage.styles';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
+import { myHostInfoAtom } from '~/components/ShowDetailLayout';
+import { useAtom } from 'jotai';
+import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
 
 const emptyLabel: Record<TicketStatus, string> = {
   COMPLETE: '결제 완료된 티켓이 없어요.',
@@ -26,6 +29,8 @@ const emptyLabel: Record<TicketStatus, string> = {
 
 const ShowReservationPage = () => {
   const params = useParams<{ showId: string }>();
+  const [myHostInfo] = useAtom(myHostInfoAtom);
+
   const [selectedTicketType, setSelectedTicketType] = useState<
     React.ComponentProps<typeof TicketTypeSelect>['value']
   >({ value: 'ALL', label: '티켓 전체' });
@@ -74,7 +79,17 @@ const ShowReservationPage = () => {
     setCurrentPage(0);
   }, [selectedTicketType, selectedTicketStatus, debouncedSearchText]);
 
-  if (!show || !reservationSummary) return null;
+  if (!show || !reservationSummary || !myHostInfo) return null;
+
+  if (!PAGE_PERMISSION['결제 관리'].includes(myHostInfo.type)) {
+    return (
+      <ShowDetailUnauthorized
+        pageName={'결제 관리'}
+        name={myHostInfo.hostName}
+        type={myHostInfo.type}
+      />
+    );
+  }
 
   const {
     totalPaymentAmount,

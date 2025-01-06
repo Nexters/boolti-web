@@ -14,6 +14,7 @@ import TextField from './TextField';
 import TimePicker from './TimePicker';
 import StepProgressBar from './StepProgressBar';
 import Checkbox from './Checkbox';
+import StepDialog from './Dialog/StepDialog';
 
 export {
   AgreeCheck,
@@ -32,4 +33,5 @@ export {
   TimePicker,
   StepProgressBar,
   Checkbox,
+  StepDialog
 };
