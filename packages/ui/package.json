@@ -10,6 +10,10 @@
     "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
     "type-check": "tsc --noEmit"
   },
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme.css": "./src/theme.css"
+  },
   "dependencies": {
     "@boolti/icon": "*",
     "@emotion/react": "^11.11.3",
