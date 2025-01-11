@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-type ColorTheme = 'primary' | 'netural' | 'line' | 'secondary';
+type ColorTheme = 'primary' | 'netural' | 'line' | 'secondary' | 'danger';
 type Size = 'bold' | 'medium' | 'regular' | 'small' | 'x-small';
 
 export interface ButtonProps {
@@ -130,6 +130,22 @@ const Container = styled.button<ButtonProps>`
             background-color: ${theme.palette.grey.g00};
           }
         `;
+      case 'danger':
+        return `
+          color: ${theme.palette.grey.w};
+          border: 0;
+          background-color: ${theme.palette.status.error1};
+          &:hover:not(:disabled) {
+            background-color: ${theme.palette.status.error2};
+          }
+          &:active:not(:disabled) {
+            background-color: ${theme.palette.status.error3};
+          }
+          &:disabled {
+            color: ${theme.palette.grey.g40};
+            background-color: ${theme.palette.grey.g20};
+          }
+        `
     }
   }}
 `;

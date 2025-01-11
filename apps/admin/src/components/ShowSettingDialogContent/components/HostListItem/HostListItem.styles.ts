@@ -81,7 +81,7 @@ const DropdownListItem = styled.li<DropdownListItemProps>`
   padding: 7px 12px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ isDelete, theme }) =>
-    isDelete ? theme.palette.status.error : theme.palette.grey.g70};
+    isDelete ? theme.palette.status.error1 : theme.palette.grey.g70};
   background-color: ${({ theme }) => theme.palette.grey.w};
   cursor: pointer;
   margin-top: 0;

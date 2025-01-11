@@ -54,7 +54,7 @@ const Label = styled.label<LabelProps>`
 
   &::after {
     content: ${({ required }) => (required ? "'*'" : 'none')};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     ${({ theme }) => theme.typo.b1};
     line-height: 22px;
     margin-left: 2px;

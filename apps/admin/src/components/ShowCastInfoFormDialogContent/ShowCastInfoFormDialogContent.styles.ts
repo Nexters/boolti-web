@@ -22,7 +22,7 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b3};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -53,7 +53,7 @@ const FieldWrap = styled.div`
 const InputWrapper = styled.div<InputWrapperProps>`
   ${({ theme }) => theme.typo.b3};
   border: 1px solid
-    ${({ theme, isError }) => (isError ? theme.palette.status.error : theme.palette.grey.g20)};
+    ${({ theme, isError }) => (isError ? theme.palette.status.error1 : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   padding: 8px 36px 8px 12px;
@@ -67,7 +67,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
 
   &:focus-within {
     border-color: ${({ theme, isError }) =>
-      isError ? theme.palette.status.error : theme.palette.grey.g70};
+    isError ? theme.palette.status.error1 : theme.palette.grey.g70};
   }
 `;
 
@@ -213,7 +213,7 @@ const ButtonWrap = styled.div`
 
 const ErrorMessage = styled.span`
   ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.status.error};
+  color: ${({ theme }) => theme.palette.status.error1};
 `;
 
 const DraggableShowCastInfoMemberRow = styled.div`

@@ -211,7 +211,7 @@ const Label = styled.label<LabelProps>`
 
   &::after {
     content: ${({ required }) => (required ? "'*'" : 'none')};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     ${({ theme }) => theme.typo.b1};
     line-height: 22px;
     margin-left: 2px;
@@ -319,7 +319,7 @@ const TextAreaWrapper = styled.div`
 const TextAreaBox = styled.div<TextAreaProps>`
   border: 1px solid
     ${({ theme, hasError }) =>
-      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+    hasError ? `${theme.palette.status.error1} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   position: absolute;

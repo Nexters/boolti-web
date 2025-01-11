@@ -1,5 +1,5 @@
 import Styled from './ShowSettingDialogContent.styles';
-import { useHostList } from '@boolti/api';
+import { useHostList, useInvitationTicketList, useSalesTicketList } from '@boolti/api';
 import HostInputForm from './components/HostInputForm';
 import { Button } from '@boolti/ui';
 import { ChevronRightIcon } from '@boolti/icon';
@@ -19,6 +19,13 @@ const ShowSettingDialogContent = ({
   onClickDeleteButton,
 }: ShowSettingDialogContentProps) => {
   const { data: hosts } = useHostList(showId);
+  const { data: salesTicketList } = useSalesTicketList(showId);
+  const { data: invitationTicketList } = useInvitationTicketList(showId);
+
+  const hasSoldSalesTicketAtLeastOnce = salesTicketList?.some(({ soldAtLeastOnce }) => soldAtLeastOnce)
+  const hasSoldInvitationTicket = invitationTicketList?.some(({ totalForSale }) => totalForSale > 0)
+  const isShowDeletable = !hasSoldSalesTicketAtLeastOnce && !hasSoldInvitationTicket
+
   const [firstHost, ...restHosts] = hosts ?? [];
 
   const [myHostInfo] = useAtom(myHostInfoAtom);
@@ -65,8 +72,9 @@ const ShowSettingDialogContent = ({
             <Styled.DeleteButtonContainer>
               <Button
                 type="button"
-                colorTheme="primary"
+                colorTheme="danger"
                 size="x-small"
+                disabled={!isShowDeletable}
                 onClick={onClickDeleteButton}
               >
                 삭제하기

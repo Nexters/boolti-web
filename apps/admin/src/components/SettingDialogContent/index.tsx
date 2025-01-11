@@ -394,7 +394,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
             </Styled.SettingDescriptionItem>
           </Styled.SettingDescriptionList>
           <Button
-            style={{ background: theme.palette.status.error }}
+            style={{ background: theme.palette.status.error1 }}
             colorTheme="primary"
             size="x-small"
             onClick={() => {
