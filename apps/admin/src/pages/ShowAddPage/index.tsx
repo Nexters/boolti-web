@@ -190,6 +190,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent style={{ marginBottom: '32px' }}>
           <ShowCastInfoFormContent
+            initialCastTeamList={castTeamList}
             onChange={(data) => {
               setCastTeamList(data);
             }}
