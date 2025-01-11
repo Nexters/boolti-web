@@ -19,11 +19,15 @@ import { useTheme } from '@emotion/react';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 import TicketNameFilter from '~/components/TicketNameFilter';
 import { format } from 'date-fns';
+import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
+import { useAtom } from 'jotai';
+import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 
 type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
 const ShowEnterancePage = () => {
   const params = useParams<{ showId: string }>();
+  const [myHostInfo] = useAtom(myHostInfoAtom);
 
   const [enteranceTicketType, setEnteranceTicetType] = useState<TicketType>('ALL');
   const [searchText, setSearchText] = useState('');
@@ -78,7 +82,17 @@ const ShowEnterancePage = () => {
     setCurrentPage(0);
   }, [selectedTicketId, useTicketUsedFilter, debouncedSearchText]);
 
-  if (!show || !entranceSummary || !enteranceInfo || !ticketList) return null;
+  if (!show || !entranceSummary || !enteranceInfo || !ticketList || !myHostInfo) return null;
+
+  if (!PAGE_PERMISSION['방문자 관리'].includes(myHostInfo.type)) {
+    return (
+      <ShowDetailUnauthorized
+        pageName={'방문자 관리'}
+        name={myHostInfo.hostName}
+        type={myHostInfo.type}
+      />
+    );
+  }
 
   const {
     totalTicketCount = 0,

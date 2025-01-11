@@ -104,7 +104,7 @@ const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b3};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -137,7 +137,7 @@ const ShowInfoFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowInfoFormButton = styled(Button)<ShowInfoFormButtonProps>`
+const ShowInfoFormButton = styled(Button) <ShowInfoFormButtonProps>`
   width: ${({ width }) => width};
 `;
 
@@ -305,7 +305,7 @@ const TextArea = styled.textarea<TextAreaProps>`
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
-      hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+    hasError ? `${theme.palette.status.error1} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -335,7 +335,7 @@ const TextArea = styled.textarea<TextAreaProps>`
 const TextAreaErrorMessage = styled.p`
   margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.status.error};
+  color: ${({ theme }) => theme.palette.status.error1};
 `;
 
 const TicketGroup = styled.div`
@@ -366,7 +366,7 @@ const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b1};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -562,7 +562,7 @@ const MobileTicketAction = styled.div<MobileTicketActionProps>`
         width: 24px;
         height: 24px;
         stroke: ${({ theme, disabled }) =>
-          disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
+    disabled ? theme.palette.grey.g40 : theme.palette.grey.g90};
       }
     }
   }

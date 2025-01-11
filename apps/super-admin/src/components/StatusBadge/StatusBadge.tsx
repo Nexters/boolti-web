@@ -35,7 +35,7 @@ const StatusBadge = ({ status }: { status: SuperAdminShowStatus | 'ALL' }) => {
         return {
           label: '정산 중',
           color: theme.palette.red.sub,
-          fontColor: theme.palette.status.error,
+          fontColor: theme.palette.status.error1,
         };
       case 'SETTLEMENT_DONE':
         return {

@@ -1,55 +1,14 @@
-import { CloseIcon } from '@boolti/icon';
+import DialogBase from './DialogBase';
+import DialogContent from './DialogContent';
+import { DialogProps } from './types';
 
-import Portal from '../Portal';
-import Styled from './Dialog.styles';
-
-interface DialogProps {
-  open: boolean;
-  children: React.ReactNode;
-  isAuto?: boolean;
-  width?: string;
-  title?: string;
-  contentPadding?: string;
-  mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
-  onClose?: () => void;
-}
-
-const Dialog = ({
-  open,
-  children,
-  isAuto = false,
-  width,
-  title,
-  contentPadding,
-  mobileType = 'bottomSheet',
-  onClose,
-}: DialogProps) => {
-  if (!open) return null;
+const Dialog = (props: DialogProps) => {
+  if (!props.open) return null;
 
   return (
-    <Portal>
-      <Styled.DimmedArea
-        onClick={(e) => {
-          if (e.target === e.currentTarget) {
-            onClose?.();
-          }
-        }}
-      >
-        <Styled.Dialog className="dialog" isAuto={isAuto} width={width} mobileType={mobileType}>
-          {title && onClose && (
-            <Styled.DialogHeader mobileType={mobileType}>
-              {title && <Styled.DialogTitle>{title}</Styled.DialogTitle>}
-              <Styled.DialogCloseButton aria-label="닫기" onClick={onClose} mobileType={mobileType}>
-                <CloseIcon />
-              </Styled.DialogCloseButton>
-            </Styled.DialogHeader>
-          )}
-          <Styled.DialogContent className="dialog__content" padding={contentPadding}>
-            {children}
-          </Styled.DialogContent>
-        </Styled.Dialog>
-      </Styled.DimmedArea>
-    </Portal>
+    <DialogBase onClose={props.onClose}>
+      <DialogContent {...props} />
+    </DialogBase>
   );
 };
 

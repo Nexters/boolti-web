@@ -74,7 +74,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
       <Styled.InputWrapper text={memberId}>
         <Styled.HashTag>#</Styled.HashTag>
         <Styled.Input
-          placeholder="초대할 팀원의 식별 코드를 입력해 주세요"
+          placeholder="그룹원의 식별 코드를 입력해 주세요"
           value={memberId}
           onChange={onChange}
         />

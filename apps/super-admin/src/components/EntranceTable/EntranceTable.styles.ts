@@ -66,7 +66,7 @@ const TableItem = styled.div<TableItemProps>`
 
 const EntranceStateText = styled.p<EntranceStateTextProps>`
   color: ${({ complete, theme }) =>
-    complete ? theme.palette.status.success : theme.palette.status.error};
+    complete ? theme.palette.status.success : theme.palette.status.error1};
 `;
 
 const Empty = styled.div`

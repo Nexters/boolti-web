@@ -1,23 +1,19 @@
-import Styled from './HostList.styles';
-import {
-  HostListItem as IHostListItem,
-  HostListResponse,
-  HostType,
-} from '@boolti/api/src/types/host';
+import Styled from './HostListDialogContent';
+import { HostListItem as IHostListItem, HostType } from '@boolti/api/src/types/host';
 import HostListItem from '../HostListItem';
 import { useConfirm, useToast } from '@boolti/ui';
-import { useDeleteHost, useEditHost } from '@boolti/api';
+import { useDeleteHost, useEditHost, useHostList } from '@boolti/api';
 import { HREF, PATH } from '~/constants/routes';
 import { useNavigate } from 'react-router-dom';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface HostListProps {
-  hosts: HostListResponse;
   showId: number;
   onCloseDialog: () => void;
 }
 
-const HostList = ({ hosts, showId, onCloseDialog }: HostListProps) => {
+const HostList = ({ showId, onCloseDialog }: HostListProps) => {
+  const { data: hosts } = useHostList(showId);
   const editHostMutation = useEditHost(showId);
   const deleteHostMutation = useDeleteHost(showId);
   const navigate = useNavigate();
@@ -72,7 +68,6 @@ const HostList = ({ hosts, showId, onCloseDialog }: HostListProps) => {
 
   return (
     <Styled.HostListWrapper>
-      <Styled.HostListTitle>팀원</Styled.HostListTitle>
       <Styled.HostList>
         {hosts &&
           hosts.map((host) => (

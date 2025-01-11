@@ -12,8 +12,6 @@ interface InputProps {
 const Form = styled.form`
   display: flex;
   align-items: center;
-  margin-bottom: 28px;
-  margin-top: 20px;
 
   ${mq_lg} {
     margin-top: 0;

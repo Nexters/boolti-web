@@ -6,7 +6,7 @@ import {
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Setting } from '@boolti/icon/src/components/Setting.tsx';
-import { palette, useDialog } from '@boolti/ui';
+import { Button, palette, useStepDialog } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
@@ -17,12 +17,14 @@ import { HREF, PATH } from '~/constants/routes';
 import Header from '../Header/index.tsx';
 import Layout from '../Layout/index.tsx';
 import Styled from './ShowDetailLayout.styles.ts';
-import AuthoritySettingDialogContent from '../AuthoritySettingDialogContent';
+import ShowSettingDialogContent from '../ShowSettingDialogContent/index.tsx';
 import { HostListItem, HostType } from '@boolti/api/src/types/host.ts';
 import { atom, useAtom, useAtomValue } from 'jotai';
 import { useEffect } from 'react';
-import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
 import ProfileDropdown from '../ProfileDropdown/index.tsx';
+import HostList from '../ShowSettingDialogContent/components/HostList/index.tsx';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth.ts';
+import ShowDeleteDialogContent from '../ShowDeleteDialogContent/index.tsx';
 
 const settlementTooltipText = {
   SEND: '내역서 확인 및 정산 요청을 진행해 주세요',
@@ -116,10 +118,10 @@ const TabItem = ({ type }: TabItemProps) => {
     <Styled.TabItem
       active={match !== null}
       id={type === 'SETTLEMENT' ? 'settlement-page-tooltip' : undefined}
-      onClick={async () => {
+      onClick={() => {
         if (!params.showId) return;
 
-        if (middleware && !(await middleware())) {
+        if (middleware && !middleware()) {
           return;
         }
 
@@ -154,16 +156,16 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
     initialInView: true,
   });
   const theme = useTheme();
+  const deviceWidth = useDeviceWidth();
+  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+
   const navigate = useNavigate();
   const params = useParams<{ showId: string }>();
 
-  const authoritySettingDialog = useDialog();
+  const showSettingDialog = useStepDialog<'main' | 'hostList' | 'deleteShow'>();
   const showId = Number(params!.showId);
 
   const [, setMyHostInfo] = useAtom(myHostInfoAtom);
-
-  const deviceWidth = useDeviceWidth();
-  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
   const { data: show } = useShowDetail(showId);
   const { data: myHostInfoData } = useMyHostInfo(showId);
@@ -212,26 +214,53 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                   {show?.name}
                 </Styled.ShowName>
                 {myHostInfoData?.type !== HostType.SUPPORTER && (
-                  <Styled.AuthorSettingButton
-                    type="button"
-                    colorTheme="netural"
-                    size="small"
-                    onClick={() => {
-                      authoritySettingDialog.open({
-                        title: '권한 설정',
-                        width: '600px',
-                        content: (
-                          <AuthoritySettingDialogContent
-                            showId={showId}
-                            onClose={authoritySettingDialog.close}
-                          />
-                        ),
-                      });
-                    }}
-                  >
-                    <Setting />
-                    {!isMobile && <span style={{ paddingLeft: '8px' }}>권한 설정</span>}
-                  </Styled.AuthorSettingButton>
+                  <Styled.ShowSettingButtonContainer>
+                    <Button
+                      type="button"
+                      colorTheme="secondary"
+                      size="x-small"
+                      icon={<Setting />}
+                      onClick={() => {
+                        showSettingDialog.open({
+                          initialHistory: ['main'],
+                          width: '600px',
+                          content: {
+                            main: {
+                              title: '공연 설정',
+                              children: ({ push }) => (
+                                <ShowSettingDialogContent
+                                  showId={showId}
+                                  onClickHostList={() => {
+                                    push('hostList');
+                                  }}
+                                  onClickDeleteButton={() => {
+                                    push('deleteShow');
+                                  }}
+                                />
+                              ),
+                            },
+                            hostList: {
+                              title: '관리 그룹',
+                              children: () => (
+                                <Styled.HostListContainer>
+                                  <HostList
+                                    showId={showId}
+                                    onCloseDialog={showSettingDialog.close}
+                                  />
+                                </Styled.HostListContainer>
+                              ),
+                            },
+                            deleteShow: {
+                              title: '공연 삭제',
+                              children: () => <ShowDeleteDialogContent showId={showId} />,
+                            },
+                          },
+                        });
+                      }}
+                    >
+                      {!isMobile && '공연 설정'}
+                    </Button>
+                  </Styled.ShowSettingButtonContainer>
                 )}
               </Styled.ShowNameWrapper>
               <Styled.TabContainer>
