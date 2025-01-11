@@ -163,14 +163,12 @@ const ShowInfoPage = () => {
   ]);
 
   const confirmSaveShowInfo = useCallback(async () => {
-    if (
-      !showBasicInfoForm.formState.isDirty &&
-      !showDetailInfoForm.formState.isDirty &&
-      !isImageFilesDirty &&
-      !isCastTeamListDraftDirty
-    ) {
-      return true;
-    }
+    const isDirty = Object.values(showBasicInfoForm.formState.dirtyFields).some((value) => value) ||
+      Object.values(showDetailInfoForm.formState.dirtyFields).some((value) => value) ||
+      isImageFilesDirty ||
+      isCastTeamListDraftDirty
+
+    if (!isDirty) return true
 
     const result = await confirm(
       '저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.\n변경된 정보를 저장할까요?',
