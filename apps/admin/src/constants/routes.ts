@@ -11,7 +11,6 @@ export const PATH = {
   SHOW_ADD: '/show/add',
   SHOW_ADD_DETAIL: '/show/add/detail',
   SHOW_ADD_SALES: '/show/add/sales',
-  SHOW_ADD_COMPLETE: '/show/add/complete',
 
   SHOW_INFO: '/show/:showId/info',
   SHOW_TICKET: '/show/:showId/ticket',
