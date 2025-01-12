@@ -171,27 +171,22 @@ const ShowInfoPage = () => {
     if (!isDirty) return true
 
     const result = await confirm(
-      '저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.\n변경된 정보를 저장할까요?',
+      <Styled.ConfirmMessageContainer>
+        <Styled.ConfirmMessage>
+          저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.<br />이 페이지를 나갈까요?
+        </Styled.ConfirmMessage>
+        <Styled.ConfirmSubMessage>
+          *페이지 하단의 [저장하기] 버튼을 눌러 정보를 저장할 수 있습니다.
+        </Styled.ConfirmSubMessage>
+      </Styled.ConfirmMessageContainer>,
       {
-        cancel: '취소하기',
-        confirm: '저장하기',
+        cancel: '나가기',
+        confirm: '머무르기',
       },
     );
 
-    if (result) {
-      showBasicInfoForm.handleSubmit(submitHandler)();
-      showDetailInfoForm.handleSubmit(submitHandler)();
-    }
-
-    return true;
-  }, [
-    showBasicInfoForm,
-    showDetailInfoForm,
-    isImageFilesDirty,
-    isCastTeamListDraftDirty,
-    confirm,
-    submitHandler,
-  ]);
+    return !result;
+  }, [showBasicInfoForm, showDetailInfoForm, isImageFilesDirty, isCastTeamListDraftDirty, confirm]);
 
   useEffect(() => {
     if (!show) return;
