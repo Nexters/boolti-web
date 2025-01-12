@@ -444,7 +444,7 @@ export const castTeamQueryKeys = createQueryKeys('castTeams', {
 export const popupQueryKeys = createQueryKeys('popup', {
   info: {
     queryKey: null,
-    queryFn: () => fetcher.get<Popup[]>('web/papi/v1/popup'),
+    queryFn: () => fetcher.get<Popup>('web/papi/v1/popup'),
   },
 });
 

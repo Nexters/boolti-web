@@ -1,6 +1,6 @@
 export interface Popup {
   id: number;
-  type: 'Event' | 'Notice';
+  type: 'EVENT' | 'NOTICE';
   eventUrl: string | null;
   view: 'Home';
   noticeTitle: string | null;
