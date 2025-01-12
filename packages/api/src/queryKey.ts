@@ -23,6 +23,7 @@ import {
   ShowSummaryResponse,
   TicketStatus,
   TicketType,
+  Popup,
 } from './types';
 import {
   AdminShowDetailResponse,
@@ -440,6 +441,13 @@ export const castTeamQueryKeys = createQueryKeys('castTeams', {
   }),
 });
 
+export const popupQueryKeys = createQueryKeys('popup', {
+  info: {
+    queryKey: null,
+    queryFn: () => fetcher.get<Popup[]>('web/papi/v1/popup'),
+  },
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -451,4 +459,5 @@ export const queryKeys = mergeQueryKeys(
   giftQueryKeys,
   hostQueryKeys,
   castTeamQueryKeys,
+  popupQueryKeys,
 );
