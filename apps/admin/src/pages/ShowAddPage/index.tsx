@@ -24,7 +24,7 @@ import {
   ShowDetailInfoFormInputs,
   ShowSalesInfoFormInputs,
 } from '~/components/ShowInfoFormContent/types';
-import { PATH } from '~/constants/routes';
+import { HREF, PATH } from '~/constants/routes';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
@@ -127,7 +127,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       return;
     }
 
-    navigate(PATH.SHOW_ADD_COMPLETE);
+    toast.success('공연 등록을 완료했습니다.')
+    navigate(HREF.SHOW_INFO(showId));
   };
 
   const basicStepContent = (
@@ -190,6 +191,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent style={{ marginBottom: '32px' }}>
           <ShowCastInfoFormContent
+            initialCastTeamList={castTeamList}
             onChange={(data) => {
               setCastTeamList(data);
             }}

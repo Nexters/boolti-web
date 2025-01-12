@@ -97,14 +97,22 @@ const ProcessIndicator = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 16px;
+
+  ${mq_lg} {
+    margin-bottom: 28px;
+  }
 `;
 
 const CardDescription = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g60};
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+
+  ${mq_lg} {
+    margin-bottom: 40px;
+  }
 `;
 
 const ShowAddForm = styled.form`

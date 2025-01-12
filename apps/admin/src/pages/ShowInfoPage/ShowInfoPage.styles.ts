@@ -185,6 +185,22 @@ const ShowInfoPreviewSubmitButton = styled.button`
   }
 `;
 
+const ConfirmMessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`
+
+const ConfirmMessage = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`
+
+const ConfirmSubMessage = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+`
+
 export default {
   ShowInfoPage,
   ShowInfoForm,
@@ -203,4 +219,7 @@ export default {
   ShowInfoPreviewFooter,
   ShowInfoPreviewCloseButton,
   ShowInfoPreviewSubmitButton,
+  ConfirmMessageContainer,
+  ConfirmMessage,
+  ConfirmSubMessage
 };

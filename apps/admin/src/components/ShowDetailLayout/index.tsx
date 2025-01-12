@@ -118,10 +118,10 @@ const TabItem = ({ type }: TabItemProps) => {
     <Styled.TabItem
       active={match !== null}
       id={type === 'SETTLEMENT' ? 'settlement-page-tooltip' : undefined}
-      onClick={() => {
+      onClick={async () => {
         if (!params.showId) return;
 
-        if (middleware && !middleware()) {
+        if (middleware && !(await middleware())) {
           return;
         }
 
