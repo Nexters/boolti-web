@@ -226,6 +226,15 @@ const SettlementStatementPreviewContainer = styled.div`
   height: 600px;
 `;
 
+const PreviewMessage = styled.div`
+  background-color: #FACBCF;
+  border-radius: 8px;
+  padding: 16px 20px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-bottom: 32px;
+`;
+
 const TextFieldRow = styled.div`
   display: flex;
   gap: 8px;
@@ -267,6 +276,7 @@ export default {
   SettlementStatementForm,
   SettlementStatementFooter,
   SettlementStatementPreviewContainer,
+  PreviewMessage,
   TextFieldRow,
   TextField,
   Select,

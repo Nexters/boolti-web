@@ -72,7 +72,7 @@ const ProgressItem = styled.li<ProgressItemProps>`
     bottom: -36px;
     left: 12px;
     background-color: ${({ theme, active }) =>
-      active ? theme.palette.primary.o1 : theme.palette.grey.g20};
+    active ? theme.palette.primary.o1 : theme.palette.grey.g20};
     width: 1px;
     height: 30px;
   }
@@ -103,6 +103,20 @@ const ProgressItemTitle = styled.span<ProgressItemProps>`
 const ProgressItemDescription = styled.span`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g70};
+`;
+
+const ProgressItemButton = styled.button`
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 23px;
+  text-decoration: underline;
+  color: ${({ theme }) => theme.palette.grey.g70};
+  cursor: pointer;
+
+  &:hover, &:active {
+    text-decoration: underline;
+    color: ${({ theme }) => theme.palette.grey.g70};
+  }
 `;
 
 const UserInfo = styled.div`
@@ -217,6 +231,7 @@ export default {
   ProgressItemNumber,
   ProgressItemTitle,
   ProgressItemDescription,
+  ProgressItemButton,
   UserInfo,
   UserInfoItem,
   UserInfoTitle,

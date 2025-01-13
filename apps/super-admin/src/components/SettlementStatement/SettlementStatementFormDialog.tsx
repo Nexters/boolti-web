@@ -354,6 +354,9 @@ const SettlementStatementFormDialog = ({
       )}
       {step === 2 && (
         <Styled.SettlementStatementPreviewContainer>
+          <Styled.PreviewMessage>
+            발송 전 내역서를 다시 한 번 확인해 주세요!
+          </Styled.PreviewMessage>
           <SettlementStatementPreview
             data={{
               showName: watch('showName'),
