@@ -15,6 +15,7 @@ import useShowEnteranceSummary from './useShowEnteranceSummary';
 import useShowLastSettlementEvent from './useShowLastSettlementEvent';
 import useShowList from './useShowList';
 import useShowPreview from './useShowPreview';
+import useShowSettlementSummary from './useShowSettlementSummary';
 import useShowReservations from './useShowReservations';
 import useShowReservationSummary from './useShowReservationSummary';
 import useShowSalesInfo from './useShowSalesInfo';
@@ -53,6 +54,7 @@ export {
   useAdminShowDetail,
   useAdminShowList,
   useAdminTicketSalesInfo,
+  useShowSettlementSummary,
   useBankAccountList,
   useInvitationCodeList,
   useInvitationTicketList,

@@ -20,6 +20,7 @@ import {
   ShowSalesTicketResponse,
   ShowSettlementEventResponse,
   ShowSettlementInfoResponse,
+  ShowSettlementSummaryResponse,
   ShowSummaryResponse,
   TicketStatus,
   TicketType,
@@ -393,6 +394,11 @@ export const showQueryKeys = createQueryKeys('show', {
     queryKey: null,
     queryFn: () => fetcher.get<SettlementBannersResponse>(`web/v1/host/settlement-banners`),
   },
+  settlementSummary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowSettlementSummaryResponse>(`/web/v1/shows/${showId}/settlement-summaries`),
+  }),
 });
 
 export const userQueryKeys = createQueryKeys('user', {
