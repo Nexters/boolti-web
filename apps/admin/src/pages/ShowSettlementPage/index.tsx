@@ -108,6 +108,16 @@ const ShowSettlementPage = () => {
         <br />
         업로드 시 불티의 개인정보 처리방침에 동의한 것으로 간주하며, 정보는 정산 및 현금영수증
         발급에 사용됩니다.
+        <br />
+        정산 프로세스 및 관련 안내는 이{' '}
+        <Styled.Link
+          href="https://boolti.notion.site/a57e924d8039474985e6bb963a66a869"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
+        >
+          링크
+        </Styled.Link>
+        를 참고해 주세요. 개인정보 처리방침을 확인 후 정산에 필요한 정보를 업로드해 주세요.
       </Styled.Notice>
       {settlementInfo && (
         <>

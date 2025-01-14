@@ -14,12 +14,14 @@ const Notice = styled.div`
   padding: 20px 24px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 4px;
-  background-color: ${({ theme }) => theme.palette.grey.g00};
+  background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g60};
   ${({ theme }) => theme.typo.b1};
+  word-break: keep-all;
 `;
 
 const Link = styled.a`
+  display: inline-block;
   color: ${({ theme }) => theme.palette.grey.g90};
   cursor: pointer;
   font-weight: 600;
