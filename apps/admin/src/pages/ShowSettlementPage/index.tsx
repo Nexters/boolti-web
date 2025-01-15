@@ -12,10 +12,11 @@ import {
   useShowLastSettlementEvent,
   useShowSettlementInfo,
   useShowSettlementStatement,
+  useShowSettlementSummary,
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
-import { DownloadIcon } from '@boolti/icon';
+import { DownloadIcon, QuestionIcon } from '@boolti/icon';
 import { AgreeCheck, Button, TextButton, useToast } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
@@ -28,6 +29,8 @@ import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import Styled from './ShowSettlementPage.styles';
 import { useAtom } from 'jotai';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
+import { Tooltip } from 'react-tooltip';
+import { useIsMobile } from '~/hooks/useIsMobile';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -43,6 +46,7 @@ const ShowSettlementPage = () => {
   const [numPages, setNumPages] = useState<number>(0);
 
   const toast = useToast();
+  const isMobile = useIsMobile();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -52,6 +56,7 @@ const ShowSettlementPage = () => {
   const { data: settlementStatementBlob } = useShowSettlementStatement(showId, {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
+  const { data: settlementSummary } = useShowSettlementSummary(showId);
   const { data: settlementBanners } = useSettlementBanners();
 
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(showId);
@@ -82,7 +87,7 @@ const ShowSettlementPage = () => {
     });
   }, [params.showId, readSettlementBanner, settlementBanners]);
 
-  if (!show || !myHostInfo) return null;
+  if (!show || !myHostInfo || !settlementSummary) return null;
 
   if (!PAGE_PERMISSION['정산 관리'].includes(myHostInfo.type)) {
     return (
@@ -108,7 +113,103 @@ const ShowSettlementPage = () => {
         <br />
         업로드 시 불티의 개인정보 처리방침에 동의한 것으로 간주하며, 정보는 정산 및 현금영수증
         발급에 사용됩니다.
+        <br />
+        정산 프로세스 및 관련 안내는 이{' '}
+        <Styled.Link
+          href="https://boolti.notion.site/a57e924d8039474985e6bb963a66a869"
+          target="_blank"
+          rel="noreferrer noopener nofollow"
+        >
+          링크
+        </Styled.Link>
+        를 참고해 주세요. 개인정보 처리방침을 확인 후 정산에 필요한 정보를 업로드해 주세요.
       </Styled.Notice>
+      <Styled.SummaryContainer>
+        <Styled.Summary colorTheme="grey">
+          <Styled.SumamryLabel>결제 금액</Styled.SumamryLabel>
+          <Styled.SumamryValue>
+            {settlementSummary.salesAmount.toLocaleString()}원
+          </Styled.SumamryValue>
+        </Styled.Summary>
+        <Styled.Summary colorTheme="grey">
+          <Styled.SumamryLabel>
+            {settlementSummary.expected ? `예상 ` : ''}수수료
+            {settlementSummary.expected && (
+              <>
+                <QuestionIcon id="fee-tooltip" />
+                <Tooltip
+                  anchorSelect="#fee-tooltip"
+                  place={isMobile ? 'top-start' : 'top'}
+                  openEvents={{ mouseenter: true }}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 4,
+                    width: 271,
+                    whiteSpace: 'pre-line',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '150%',
+                  }}
+                  positionStrategy="fixed"
+                  offset={5}
+                  opacity={0.85}
+                  content={
+                    '결제 대행 수수료(PG사)와 중개 수수료(불티)를 합산한 예상 금액입니다. 결제 대행사 정책에 따라 결제 수단별수수료율이 달라 실제 금액과 차이가 날 수 있습니다.'
+                  }
+                />
+              </>
+            )}
+          </Styled.SumamryLabel>
+          <Styled.SumamryValue>
+            {(
+              settlementSummary.expected?.fee ??
+              settlementSummary.actual?.fee ??
+              0
+            ).toLocaleString()}
+            원
+          </Styled.SumamryValue>
+        </Styled.Summary>
+        <Styled.Summary colorTheme="primary">
+          <Styled.SumamryLabel>
+            {settlementSummary.expected ? `예상 ` : ''}정산 금액
+            {settlementSummary.expected && (
+              <>
+                <QuestionIcon id="settlement-amount-tooltip" />
+                <Tooltip
+                  anchorSelect="#settlement-amount-tooltip"
+                  place={isMobile ? 'top-start' : 'top'}
+                  openEvents={{ mouseenter: true }}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 4,
+                    width: 271,
+                    whiteSpace: 'pre-line',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '150%',
+                  }}
+                  positionStrategy="fixed"
+                  offset={5}
+                  opacity={0.85}
+                  content={
+                    '총 결제 금액에서 예상 수수료를 제외한 금액입니다.' +
+                    '\n' +
+                    '실제 수수료에 따라 최종 정산 금액과 차이가 날 수 있습니다.'
+                  }
+                />
+              </>
+            )}
+          </Styled.SumamryLabel>
+          <Styled.SumamryValue>
+            {(
+              settlementSummary.expected?.settlementAmount ??
+              settlementSummary.actual?.settlementAmount ??
+              0
+            ).toLocaleString()}
+            원
+          </Styled.SumamryValue>
+        </Styled.Summary>
+      </Styled.SummaryContainer>
       {settlementInfo && (
         <>
           <Styled.PageSection>

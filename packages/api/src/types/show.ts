@@ -349,3 +349,20 @@ export interface ShowCreateRequest {
   /** 출연진 팀 */
   castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
 }
+
+export interface SummaryItem {
+  /** 수수료 */
+  fee: number;
+
+  /** 정산 금액 */
+  settlementAmount: number;
+}
+
+export interface ShowSettlementSummaryResponse {
+  /** 결제 금액 */
+  salesAmount: number;
+  /** 최종. 정산 내역서가 발행되지 않았으면 null. */
+  expected?: SummaryItem;
+  /** 최종. 정산 내역서가 발행되지 않았으면 null. */
+  actual?: SummaryItem;
+}
