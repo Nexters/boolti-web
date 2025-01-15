@@ -15,7 +15,7 @@ import {
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
-import { DownloadIcon } from '@boolti/icon';
+import { DownloadIcon, QuestionIcon } from '@boolti/icon';
 import { AgreeCheck, Button, TextButton, useToast } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useEffect, useMemo, useState } from 'react';
@@ -28,6 +28,8 @@ import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import Styled from './ShowSettlementPage.styles';
 import { useAtom } from 'jotai';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
+import { Tooltip } from 'react-tooltip';
+import { useIsMobile } from '~/hooks/useIsMobile';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 
@@ -43,6 +45,7 @@ const ShowSettlementPage = () => {
   const [numPages, setNumPages] = useState<number>(0);
 
   const toast = useToast();
+  const isMobile = useIsMobile();
 
   const showId = Number(params!.showId);
   const { data: show } = useShowDetail(showId);
@@ -119,6 +122,68 @@ const ShowSettlementPage = () => {
         </Styled.Link>
         를 참고해 주세요. 개인정보 처리방침을 확인 후 정산에 필요한 정보를 업로드해 주세요.
       </Styled.Notice>
+      <Styled.SummaryContainer>
+        <Styled.Summary colorTheme="grey">
+          <Styled.SumamryLabel>결제 금액</Styled.SumamryLabel>
+          <Styled.SumamryValue>43,000원</Styled.SumamryValue>
+        </Styled.Summary>
+        <Styled.Summary colorTheme="grey">
+          <Styled.SumamryLabel>
+            예상 수수료
+            <QuestionIcon id="fee-tooltip" />
+            <Tooltip
+              anchorSelect="#fee-tooltip"
+              place={isMobile ? 'top-start' : 'top'}
+              openEvents={{ mouseenter: true }}
+              style={{
+                padding: '6px 8px',
+                borderRadius: 4,
+                width: 271,
+                whiteSpace: 'pre-line',
+                fontSize: 12,
+                fontWeight: 400,
+                lineHeight: '150%',
+              }}
+              positionStrategy="fixed"
+              offset={5}
+              opacity={0.85}
+              content={
+                '결제 대행 수수료(PG사)와 중개 수수료(불티)를 합산한 예상 금액입니다. 결제 대행사 정책에 따라 결제 수단별수수료율이 달라 실제 금액과 차이가 날 수 있습니다.'
+              }
+            />
+          </Styled.SumamryLabel>
+          <Styled.SumamryValue>43,000원</Styled.SumamryValue>
+        </Styled.Summary>
+        <Styled.Summary colorTheme="primary">
+          <Styled.SumamryLabel>
+            예상 정산 금액
+            <QuestionIcon id="settlement-amount-tooltip" />
+            <Tooltip
+              anchorSelect="#settlement-amount-tooltip"
+              place={isMobile ? 'top-start' : 'top'}
+              openEvents={{ mouseenter: true }}
+              style={{
+                padding: '6px 8px',
+                borderRadius: 4,
+                width: 271,
+                whiteSpace: 'pre-line',
+                fontSize: 12,
+                fontWeight: 400,
+                lineHeight: '150%',
+              }}
+              positionStrategy="fixed"
+              offset={5}
+              opacity={0.85}
+              content={
+                '총 결제 금액에서 예상 수수료를 제외한 금액입니다.' +
+                '\n' +
+                '실제 수수료에 따라 최종 정산 금액과 차이가 날 수 있습니다.'
+              }
+            />
+          </Styled.SumamryLabel>
+          <Styled.SumamryValue>957,000원</Styled.SumamryValue>
+        </Styled.Summary>
+      </Styled.SummaryContainer>
       {settlementInfo && (
         <>
           <Styled.PageSection>

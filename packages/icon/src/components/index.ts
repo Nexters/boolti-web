@@ -71,11 +71,13 @@ import { Logout } from './Logout';
 import { Call } from './Call';
 import { Message } from './Message';
 import { Discord } from './Discord';
+import { Question } from './Question';
 
 export {
   Apple as AppleIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
+  Question as QuestionIcon,
   BNK,
   BNP,
   BoA,

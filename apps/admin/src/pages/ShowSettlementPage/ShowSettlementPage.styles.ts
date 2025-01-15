@@ -12,6 +12,7 @@ const ShowSettlementPage = styled.div`
 
 const Notice = styled.div`
   padding: 20px 24px;
+  margin-bottom: 20px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
@@ -29,7 +30,7 @@ const Link = styled.a`
 `;
 
 const PageSection = styled.div`
-  margin: 52px 0;
+  margin: 0 0 52px;
 `;
 
 const PageSectionHeader = styled.div`
@@ -127,6 +128,76 @@ const SettlementDoneDescription = styled.p`
   margin-top: 52px;
 `;
 
+const SummaryContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+  ${mq_lg} {
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+`;
+
+const Summary = styled.div<{ colorTheme: 'grey' | 'primary' }>`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 8px;
+  flex: 1 0 auto;
+  height: 50px;
+  width: 100%;
+  ${({ colorTheme, theme }) => {
+    switch (colorTheme) {
+      case 'grey':
+        return `
+          border: 1px solid ${theme.palette.grey.g00};
+          background-color: ${theme.palette.grey.g00};
+          color: ${theme.palette.grey.g60};
+          & > b {
+            color: ${theme.palette.grey.g90};
+          }
+        `;
+      case 'primary':
+        return `
+          border: 1px solid ${theme.palette.primary.o0};
+          background-color: ${theme.palette.primary.o0};
+          color: ${theme.palette.primary.o2};
+        `;
+    }
+  }}
+  ${mq_lg} {
+    flex: 1 0 30%;
+    height: 58px;
+    padding: 16px 20px;
+    min-width: 230px;
+    align-items: center;
+  }
+`;
+
+const SumamryLabel = styled.span<{ bold?: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${({ theme }) => theme.typo.b1};
+  white-space: nowrap;
+
+  & > svg {
+    margin-left: 4px;
+  }
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.b2};
+  }
+`;
+
+const SumamryValue = styled.b`
+  white-space: nowrap;
+  margin-left: 4px;
+  ${({ theme }) => theme.typo.sh2};
+`;
+
 export default {
   ShowSettlementPage,
   Notice,
@@ -146,4 +217,8 @@ export default {
   AccountAddButton,
   PageSectionDivider,
   SettlementDoneDescription,
+  SummaryContainer,
+  Summary,
+  SumamryLabel,
+  SumamryValue,
 };
