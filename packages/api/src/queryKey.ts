@@ -131,6 +131,11 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     queryFn: () =>
       fetcher.get<SettlementEventResponse>(`sa-api/v1/shows/${showId}/settlement-events/each-last`),
   }),
+  settlementStatement: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      instance.get(`sa-api/v1/shows/${showId}/settlement-statements/last/file`).blob(),
+  }),
   ticketSalesInfo: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
