@@ -12,6 +12,7 @@ import {
   useShowLastSettlementEvent,
   useShowSettlementInfo,
   useShowSettlementStatement,
+  useShowSettlementSummary,
   useUploadBankAccountCopyPhoto,
   useUploadIDCardPhotoFile,
 } from '@boolti/api';
@@ -55,6 +56,7 @@ const ShowSettlementPage = () => {
   const { data: settlementStatementBlob } = useShowSettlementStatement(showId, {
     enabled: lastSettlementEvent?.settlementEventType != null,
   });
+  const { data: settlementSummary } = useShowSettlementSummary(showId);
   const { data: settlementBanners } = useSettlementBanners();
 
   const uploadIDCardPhotoFileMutation = useUploadIDCardPhotoFile(showId);
@@ -85,7 +87,7 @@ const ShowSettlementPage = () => {
     });
   }, [params.showId, readSettlementBanner, settlementBanners]);
 
-  if (!show || !myHostInfo) return null;
+  if (!show || !myHostInfo || !settlementSummary) return null;
 
   if (!PAGE_PERMISSION['정산 관리'].includes(myHostInfo.type)) {
     return (
@@ -125,63 +127,87 @@ const ShowSettlementPage = () => {
       <Styled.SummaryContainer>
         <Styled.Summary colorTheme="grey">
           <Styled.SumamryLabel>결제 금액</Styled.SumamryLabel>
-          <Styled.SumamryValue>43,000원</Styled.SumamryValue>
+          <Styled.SumamryValue>
+            {settlementSummary.salesAmount.toLocaleString()}원
+          </Styled.SumamryValue>
         </Styled.Summary>
         <Styled.Summary colorTheme="grey">
           <Styled.SumamryLabel>
-            예상 수수료
-            <QuestionIcon id="fee-tooltip" />
-            <Tooltip
-              anchorSelect="#fee-tooltip"
-              place={isMobile ? 'top-start' : 'top'}
-              openEvents={{ mouseenter: true }}
-              style={{
-                padding: '6px 8px',
-                borderRadius: 4,
-                width: 271,
-                whiteSpace: 'pre-line',
-                fontSize: 12,
-                fontWeight: 400,
-                lineHeight: '150%',
-              }}
-              positionStrategy="fixed"
-              offset={5}
-              opacity={0.85}
-              content={
-                '결제 대행 수수료(PG사)와 중개 수수료(불티)를 합산한 예상 금액입니다. 결제 대행사 정책에 따라 결제 수단별수수료율이 달라 실제 금액과 차이가 날 수 있습니다.'
-              }
-            />
+            {settlementSummary.expected ? `예상 ` : ''}수수료
+            {settlementSummary.expected && (
+              <>
+                <QuestionIcon id="fee-tooltip" />
+                <Tooltip
+                  anchorSelect="#fee-tooltip"
+                  place={isMobile ? 'top-start' : 'top'}
+                  openEvents={{ mouseenter: true }}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 4,
+                    width: 271,
+                    whiteSpace: 'pre-line',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '150%',
+                  }}
+                  positionStrategy="fixed"
+                  offset={5}
+                  opacity={0.85}
+                  content={
+                    '결제 대행 수수료(PG사)와 중개 수수료(불티)를 합산한 예상 금액입니다. 결제 대행사 정책에 따라 결제 수단별수수료율이 달라 실제 금액과 차이가 날 수 있습니다.'
+                  }
+                />
+              </>
+            )}
           </Styled.SumamryLabel>
-          <Styled.SumamryValue>43,000원</Styled.SumamryValue>
+          <Styled.SumamryValue>
+            {(
+              settlementSummary.expected?.fee ??
+              settlementSummary.actual?.fee ??
+              0
+            ).toLocaleString()}
+            원
+          </Styled.SumamryValue>
         </Styled.Summary>
         <Styled.Summary colorTheme="primary">
           <Styled.SumamryLabel>
-            예상 정산 금액
-            <QuestionIcon id="settlement-amount-tooltip" />
-            <Tooltip
-              anchorSelect="#settlement-amount-tooltip"
-              place={isMobile ? 'top-start' : 'top'}
-              openEvents={{ mouseenter: true }}
-              style={{
-                padding: '6px 8px',
-                borderRadius: 4,
-                width: 271,
-                whiteSpace: 'pre-line',
-                fontSize: 12,
-                fontWeight: 400,
-                lineHeight: '150%',
-              }}
-              positionStrategy="fixed"
-              offset={5}
-              opacity={0.85}
-              content={
-                '총 결제 금액에서 예상 수수료를 제외한 금액입니다.' +
-                '\n' +
-                '실제 수수료에 따라 최종 정산 금액과 차이가 날 수 있습니다.'
-              }
-            />
+            {settlementSummary.expected ? `예상 ` : ''}정산 금액
+            {settlementSummary.expected && (
+              <>
+                <QuestionIcon id="settlement-amount-tooltip" />
+                <Tooltip
+                  anchorSelect="#settlement-amount-tooltip"
+                  place={isMobile ? 'top-start' : 'top'}
+                  openEvents={{ mouseenter: true }}
+                  style={{
+                    padding: '6px 8px',
+                    borderRadius: 4,
+                    width: 271,
+                    whiteSpace: 'pre-line',
+                    fontSize: 12,
+                    fontWeight: 400,
+                    lineHeight: '150%',
+                  }}
+                  positionStrategy="fixed"
+                  offset={5}
+                  opacity={0.85}
+                  content={
+                    '총 결제 금액에서 예상 수수료를 제외한 금액입니다.' +
+                    '\n' +
+                    '실제 수수료에 따라 최종 정산 금액과 차이가 날 수 있습니다.'
+                  }
+                />
+              </>
+            )}
           </Styled.SumamryLabel>
-          <Styled.SumamryValue>957,000원</Styled.SumamryValue>
+          <Styled.SumamryValue>
+            {(
+              settlementSummary.expected?.settlementAmount ??
+              settlementSummary.actual?.settlementAmount ??
+              0
+            ).toLocaleString()}
+            원
+          </Styled.SumamryValue>
         </Styled.Summary>
       </Styled.SummaryContainer>
       {settlementInfo && (

@@ -397,7 +397,7 @@ export const showQueryKeys = createQueryKeys('show', {
   settlementSummary: (showId: number) => ({
     queryKey: [showId],
     queryFn: () =>
-      fetcher.get<ShowSettlementSummaryResponse>(`/web/v1/shows/${showId}/settlement-summaries`),
+      fetcher.get<ShowSettlementSummaryResponse>(`web/v1/shows/${showId}/settlement-summaries`),
   }),
 });
 
