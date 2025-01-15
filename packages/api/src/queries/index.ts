@@ -40,6 +40,7 @@ import useCastTeamList from './useCastTeamList';
 import useAdminTicketList from './useAdminTicketList';
 import useAdminSalesTicketList from './useAdminSalesTicketList';
 import useAdminReservationSummaryV2 from './useAdminReservationSummaryV2';
+import usePopup from './usePopup';
 import useSuperAdminShowSettlementStatement from './useSuperAdminShowSettlementStatement';
 
 export {
@@ -85,5 +86,6 @@ export {
   useSuperAdminSalesTicketList,
   useSuperAdminInvitationTicketList,
   useSuperAdminInvitationCodeList,
+  usePopup,
   useSuperAdminShowSettlementStatement,
 };
