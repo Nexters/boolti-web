@@ -3,16 +3,19 @@ import Styled from './EventPopupContent.styles';
 import { useState } from 'react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { useNavigate } from 'react-router-dom';
+import useCookie from '~/hooks/useCookie';
 
 interface HomePopupContentProps {
+  id: number;
   imagePath: string;
   detailPath: string | null;
   onClose: () => void;
 }
-const EventPopupContent = ({ imagePath, detailPath, onClose }: HomePopupContentProps) => {
+const EventPopupContent = ({ id, imagePath, detailPath, onClose }: HomePopupContentProps) => {
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
   useBodyScrollLock();
+  const { setCookie } = useCookie();
 
   const onChange = () => {
     setChecked((checked) => !checked);
@@ -20,7 +23,9 @@ const EventPopupContent = ({ imagePath, detailPath, onClose }: HomePopupContentP
 
   const closeDialog = () => {
     if (checked) {
-      // TODO: 쿠키 설정
+      const midnight = new Date();
+      midnight.setHours(24, 0, 0, 0);
+      setCookie('popup', `${id}`, { expires: midnight.toUTCString() });
     }
     onClose();
   };

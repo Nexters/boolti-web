@@ -22,6 +22,7 @@ import { useAuthAtom } from '~/atoms/useAuthAtom';
 import SettingDialogContent from '~/components/SettingDialogContent';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import usePopupDialog from '~/hooks/usePopupDialog';
 
 const bannerDescription = {
   REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
@@ -44,8 +45,8 @@ const HomePage = () => {
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
   const { data: settlementBanners } = useSettlementBanners();
   const { data: popupData } = usePopup();
+  usePopupDialog(popupData);
 
-  console.log(popupData);
   const { imgPath, nickname = '', userCode } = userProfileData ?? {};
 
   const isLoading = isUserProfileLoading || isShowListLoading;
