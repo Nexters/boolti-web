@@ -3,7 +3,7 @@ interface CookieOptions {
   'max-age'?: number;
   domain?: string;
   secure?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 const uscCookie = () => {
