@@ -201,8 +201,8 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                     } catch {
                       toast.error(
                         '불티에 회원으로 등록된 식별 코드로만 등록이 가능합니다.' +
-                          '\n' +
-                          '식별 코드를 확인 후 다시 시도해 주세요.',
+                        '\n' +
+                        '식별 코드를 확인 후 다시 시도해 주세요.',
                       );
                     } finally {
                       setIsMemberFieldBlurred((prev) => {
@@ -262,7 +262,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
         </DndContext>
         <Styled.MemberAddButton
           onClick={() => {
-            append({ id: -Math.floor(Math.random() * 1000000) });
+            append({ id: -Math.floor(Math.random() * 1000000), userCode: '', userNickname: '', roleName: '', userImgPath: '' });
             setIsMemberFieldBlurred((prev) => [...prev, { userCode: false, roleName: false }]);
           }}
         >
