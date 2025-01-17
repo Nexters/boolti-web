@@ -53,7 +53,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
         toast.error('이미 초대된 회원입니다.');
       } else {
         toast.error(
-          '불티에 회원으로 등록된 식별 코드로만 초대가 가능합니다. 식별 코드를 확인 후 다시 시도해 주세요.',
+          '불티에 회원으로 등록된 식별 코드로만 초대가 가능합니다.\n식별 코드를 확인 후 다시 시도해 주세요.',
         );
       }
     }

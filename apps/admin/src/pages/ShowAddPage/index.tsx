@@ -237,10 +237,12 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         티켓은 판매 종료일까지 추가할 수 있어요.
       </Styled.CardDescription>
       <Styled.ShowAddForm onSubmit={showSalesInfoForm.handleSubmit(onSubmitSalesInfoForm)}>
-        <ShowTicketInfoFormContent
-          form={showSalesInfoForm}
-          showDate={showBasicInfoForm.watch('date')}
-        />
+        <Styled.ShowAddFormGroup>
+          <ShowTicketInfoFormContent
+            form={showSalesInfoForm}
+            showDate={showBasicInfoForm.watch('date')}
+          />
+        </Styled.ShowAddFormGroup>
         <Styled.TicketFormContainer>
           <Styled.TicketFormTitle>판매 티켓</Styled.TicketFormTitle>
           <Styled.TicketForm>
