@@ -252,7 +252,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                             },
                             deleteShow: {
                               title: '공연 삭제',
-                              children: () => <ShowDeleteDialogContent showId={showId} />,
+                              children: () => <ShowDeleteDialogContent showId={showId} onDeleteShow={showSettingDialog.close} />,
                             },
                           },
                         });
