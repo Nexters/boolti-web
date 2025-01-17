@@ -140,7 +140,9 @@ const ShowInfoFormFooter = styled.div`
   }
 `;
 
-const ShowAddFormGroup = styled.div``;
+const ShowAddFormGroup = styled.div`
+  margin-bottom: 28px;
+`;
 
 const ShowAddFormTitle = styled.h3`
   ${({ theme }) => theme.typo.h1};
