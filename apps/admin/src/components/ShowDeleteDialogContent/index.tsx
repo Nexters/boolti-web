@@ -3,6 +3,7 @@ import ShowDeleteForm from '../ShowDeleteForm';
 import { useToast } from '@boolti/ui';
 import { useNavigate } from 'react-router-dom'
 import { PATH } from '~/constants/routes';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface ShowDeleteDialogContentProps {
   showId: number;
@@ -16,6 +17,8 @@ const ShowDeleteDialogContent: React.FC<ShowDeleteDialogContentProps> = ({ showI
   const deleteShowMutation = useDeleteShow();
 
   const toast = useToast();
+
+  useBodyScrollLock();
 
   if (!show) return;
 

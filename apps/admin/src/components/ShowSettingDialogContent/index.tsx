@@ -6,6 +6,7 @@ import { ChevronRightIcon } from '@boolti/icon';
 import { myHostInfoAtom } from '../ShowDetailLayout';
 import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
+import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 interface ShowSettingDialogContentProps {
   showId: number;
@@ -29,6 +30,8 @@ const ShowSettingDialogContent = ({
   const [firstHost, ...restHosts] = hosts ?? [];
 
   const [myHostInfo] = useAtom(myHostInfoAtom);
+
+  useBodyScrollLock();
 
   return (
     <Styled.Container>
