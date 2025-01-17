@@ -85,6 +85,7 @@ const tooltipStyle = {
 const TabItem = ({ type }: TabItemProps) => {
   const params = useParams<{ showId: string }>();
   const showId = Number(params!.showId);
+  const [myHostInfo] = useAtom(myHostInfoAtom);
 
   const { data: settlementInfo } = useShowSettlementInfo(showId);
   const { data: lastSettlementEvent } = useShowLastSettlementEvent(showId);
@@ -99,6 +100,8 @@ const TabItem = ({ type }: TabItemProps) => {
     settlementInfo?.settlementBankAccountPhotoFile === null;
 
   const isTooltipVisible = (() => {
+    if (myHostInfo?.type !== HostType.MAIN) return false;
+
     if (
       lastSettlementEvent?.settlementEventType === 'REQUEST' ||
       lastSettlementEvent?.settlementEventType === 'DONE' ||
@@ -252,7 +255,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                             },
                             deleteShow: {
                               title: '공연 삭제',
-                              children: () => <ShowDeleteDialogContent showId={showId} />,
+                              children: () => <ShowDeleteDialogContent showId={showId} onDeleteShow={showSettingDialog.close} />,
                             },
                           },
                         });

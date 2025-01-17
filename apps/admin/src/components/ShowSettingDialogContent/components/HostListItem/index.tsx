@@ -23,7 +23,7 @@ const dropdownItems: HostTypeInfo[] = [
 ];
 
 const HostListItem = ({ host, onEdit, onDelete }: HostListItemProps) => {
-  const { isOpen, toggleDropdown } = useDropdown();
+  const { isOpen, dropdownRef, toggleDropdown } = useDropdown();
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
   const getHostTypeName = (type: HostType) => {
@@ -65,7 +65,7 @@ const HostListItem = ({ host, onEdit, onDelete }: HostListItemProps) => {
         <Styled.HostName>{host.hostName}</Styled.HostName>
         {host.self && <Styled.HostSelfLabel>(나)</Styled.HostSelfLabel>}
       </Styled.HostInfoWrapper>
-      <Styled.Dropdown>
+      <Styled.Dropdown ref={dropdownRef}>
         <Styled.NameButton
           onClick={() => {
             if (host.type === HostType.MAIN || myHostInfo?.type === HostType.SUPPORTER) return;

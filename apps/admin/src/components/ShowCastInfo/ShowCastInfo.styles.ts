@@ -37,17 +37,13 @@ const HeaderNameWrapper = styled.div`
 `;
 
 const Handle = styled.button`
-  display: none;
-
-  ${mq_lg} {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: ${({ theme }) => theme.palette.grey.g40};
-    cursor: grab;
-    user-select: none;
-    user-zoom: none;
-  }
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.grey.g40};
+  cursor: grab;
+  user-select: none;
+  user-zoom: none;
 `;
 
 const Name = styled.span`
