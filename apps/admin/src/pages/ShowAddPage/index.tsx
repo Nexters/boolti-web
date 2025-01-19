@@ -43,6 +43,8 @@ const stepItems = [
   { key: 'sales', title: '판매 정보' },
 ];
 
+const SHOW_ADD_SUCCESS_MESSAGE = '공연 등록을 완료했습니다';
+
 interface ShowAddPageProps {
   step: 'basic' | 'detail' | 'sales';
 }
@@ -122,12 +124,12 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     });
 
     if (isWebView && isWebViewBridgeAvailable()) {
-      showToast({ message: '공연 등록을 완료했습니다.', duration: TOAST_DURATIONS.SHORT });
+      showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });
       navigateToShowDetail({ showId });
       return;
     }
 
-    toast.success('공연 등록을 완료했습니다.')
+    toast.success(SHOW_ADD_SUCCESS_MESSAGE);
     navigate(HREF.SHOW_INFO(showId));
   };
 
