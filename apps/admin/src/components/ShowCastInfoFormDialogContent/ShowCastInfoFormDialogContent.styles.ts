@@ -67,7 +67,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
 
   &:focus-within {
     border-color: ${({ theme, isError }) =>
-    isError ? theme.palette.status.error1 : theme.palette.grey.g70};
+      isError ? theme.palette.status.error1 : theme.palette.grey.g70};
   }
 `;
 
@@ -144,7 +144,6 @@ const MemberAddButton = styled.button`
 `;
 
 const RegisterButton = styled(Button)`
-  margin-left: 40px;
   flex: 1;
 
   ${mq_lg} {
@@ -198,6 +197,7 @@ const DeleteButton = styled.button`
   cursor: pointer;
   ${({ theme }) => theme.typo.sh1};
   text-decoration: underline;
+  margin-right: 48px;
 `;
 
 const ButtonWrap = styled.div`
