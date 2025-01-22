@@ -30,8 +30,9 @@ const SettlementPage = () => {
     useAdminSettlementEvent(Number(params!.showId));
   const { data: adminSettlementInfo } = useAdminSettlementInfo(Number(params!.showId));
   const { data: adminTicketSalesInfo } = useAdminTicketSalesInfo(Number(params!.showId));
-  const { data: superAdminShowSettlementStatementBlob } = useSuperAdminShowSettlementStatement(Number(params!.showId))
-
+  const { data: superAdminShowSettlementStatementBlob } = useSuperAdminShowSettlementStatement(Number(params!.showId), {
+    enabled: !!adminSettlementEvent && adminSettlementEvent?.SEND !== null
+  });
   const createSettlementStatementMutation = useAdminCreateSettlementStatement();
   const settlementDoneMutation = useAdminSettlementDone();
 
@@ -113,7 +114,7 @@ const SettlementPage = () => {
       description={`공연 종료 후 수익이 있을 때만 생성하는 내역서 입니다.\n신분증과 정산 계좌 정보, 통장 사본을 꼼꼼히 확인한 후 발송을 진행해 주세요.`}
     >
       {adminSettlementEvent &&
-        (adminSettlementEvent?.SEND !== null ||
+        (adminSettlementEvent?.SEND !== null !== null ||
           adminSettlementEvent?.REQUEST !== null ||
           adminSettlementEvent?.DONE !== null) && (
           <>
