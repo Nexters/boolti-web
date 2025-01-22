@@ -24,7 +24,7 @@ const ShowSettingDialogContent = ({
   const { data: invitationTicketList } = useInvitationTicketList(showId);
 
   const hasSoldSalesTicketAtLeastOnce = salesTicketList?.some(({ soldAtLeastOnce }) => soldAtLeastOnce)
-  const hasSoldInvitationTicket = invitationTicketList?.some(({ totalForSale }) => totalForSale > 0)
+  const hasSoldInvitationTicket = invitationTicketList?.some(({ totalForSale, quantity }) => totalForSale > quantity)
   const isShowDeletable = !hasSoldSalesTicketAtLeastOnce && !hasSoldInvitationTicket
 
   const [firstHost, ...restHosts] = hosts ?? [];
