@@ -9,7 +9,7 @@ const HomePopupContent = styled.div`
   margin: 0 -24px;
   ${mq_lg} {
     margin: 0;
-    width: 500px;
+    width: 420px;
   }
 `;
 
@@ -19,8 +19,8 @@ const PopupImage = styled.img<PopupImageProps>`
   cursor: ${({ hasDetail }) => (hasDetail ? 'pointer' : 'default')};
 
   ${mq_lg} {
-    width: 500px;
-    height: 578px;
+    width: 420px;
+    height: 486px;
   }
 `;
 
