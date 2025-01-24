@@ -65,6 +65,7 @@ const ShowSettlementPage = () => {
   const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(showId);
   const requestSettlementMutation = useRequestSettlement(showId);
   const readSettlementBanner = useReadSettlementBanner();
+  const hasActualSettlementSummary = !!settlementSummary?.actual;
 
   const settlementStatementFile = useMemo(() => {
     if (settlementStatementBlob) {
@@ -133,8 +134,8 @@ const ShowSettlementPage = () => {
         </Styled.Summary>
         <Styled.Summary colorTheme="grey">
           <Styled.SumamryLabel>
-            {settlementSummary.expected ? `예상 ` : ''}수수료
-            {settlementSummary.expected && (
+            {!hasActualSettlementSummary ? `예상 ` : ''}수수료
+            {!hasActualSettlementSummary && (
               <>
                 <QuestionIcon id="fee-tooltip" />
                 <Tooltip
@@ -171,8 +172,8 @@ const ShowSettlementPage = () => {
         </Styled.Summary>
         <Styled.Summary colorTheme="primary">
           <Styled.SumamryLabel>
-            {settlementSummary.expected ? `예상 ` : ''}정산 금액
-            {settlementSummary.expected && (
+            {!hasActualSettlementSummary ? `예상 ` : ''}정산 금액
+            {!hasActualSettlementSummary && (
               <>
                 <QuestionIcon id="settlement-amount-tooltip" />
                 <Tooltip
