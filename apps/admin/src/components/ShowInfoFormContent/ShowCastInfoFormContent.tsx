@@ -79,7 +79,6 @@ const ShowCastInfoFormContent = ({
       content: (
         <ShowCastInfoFormDialogContent
           onSave={(castInfo) => {
-            console.log(castInfo);
             setCastTeamList((prev) => [...prev, castInfo]);
             dialog.close();
           }}

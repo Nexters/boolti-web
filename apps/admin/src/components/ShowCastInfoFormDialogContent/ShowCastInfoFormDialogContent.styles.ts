@@ -36,10 +36,13 @@ const MemberList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 364px;
+  max-height: 228px;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
+  }
+  ${mq_lg} {
+    max-height: 364px;
   }
 `;
 
