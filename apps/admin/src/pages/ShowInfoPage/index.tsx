@@ -397,7 +397,15 @@ const ShowInfoPage = () => {
                   hostName: showDetailInfoForm.watch('hostName'),
                   hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
                 }}
-                showCastTeams={castTeamList}
+                showCastTeams={
+                  castTeamListDraft?.map((team) => ({
+                    name: team.name,
+                    members: team.members?.map((member) => ({
+                      roleName: member.roleName ?? '',
+                      userNickname: member.userNickname ?? '',
+                      userImgPath: member.userImgPath ?? '',
+                    })),
+                  })) ?? []}
                 hasNoticePage
                 containerRef={showPreviewMobileRef}
               />
