@@ -95,7 +95,7 @@ const ShowSettingButtonContainer = styled.div`
 
 const HostListContainer = styled.div`
   margin: 16px 0;
-  height: calc(100vh - 148px);
+  height: calc(100dvh - 148px);
 
   ${mq_lg} {
     margin: 0;

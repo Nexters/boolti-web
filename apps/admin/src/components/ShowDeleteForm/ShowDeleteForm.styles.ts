@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 const ShowDeleteForm = styled.form`
   position: relative;
   margin: 16px 0;
-  height: calc(100vh - 148px);
+  height: calc(100dvh - 148px);
 
   ${mq_lg} {
     margin: 0;
