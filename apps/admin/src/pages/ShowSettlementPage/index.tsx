@@ -299,16 +299,22 @@ const ShowSettlementPage = () => {
               settlementStatementFile !== null && (
                 <>
                   <Styled.DocumentContainer>
-                    <Document
-                      file={settlementStatementFile}
-                      onLoadSuccess={(data: { numPages: number }) => {
-                        setNumPages(data.numPages);
-                      }}
-                    >
-                      {Array.from(new Array(numPages), (_, index) => (
-                        <Page key={index} pageNumber={index + 1} width={1070} height={1200} />
-                      ))}
-                    </Document>
+                    {isMobile ? (
+                      <Styled.DocumentMobileText>
+                        내역서 미리보기는 PC를 이용해 주세요.
+                      </Styled.DocumentMobileText>
+                    ) : (
+                      <Document
+                        file={settlementStatementFile}
+                        onLoadSuccess={(data: { numPages: number }) => {
+                          setNumPages(data.numPages);
+                        }}
+                      >
+                        {Array.from(new Array(numPages), (_, index) => (
+                          <Page key={index} pageNumber={index + 1} width={1070} height={1200} />
+                        ))}
+                      </Document>
+                    )}
                   </Styled.DocumentContainer>
                   {lastSettlementEvent?.settlementEventType === 'SEND' && (
                     <Styled.DocumentFooter>

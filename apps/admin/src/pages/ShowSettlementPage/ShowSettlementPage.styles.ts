@@ -54,12 +54,27 @@ const PageDescription = styled.p`
 `;
 
 const DocumentContainer = styled.div`
+  height: 240px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   white-space: nowrap;
   overflow-x: auto;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   box-shadow: 0 8px 14px 0 ${({ theme }) => theme.palette.shadow};
+  padding: 0 20px;
+
+  ${mq_lg} {
+    height: auto;
+    padding: 0;
+  }
+`;
+
+const DocumentMobileText = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
 const DocumentFooter = styled.div`
@@ -221,4 +236,5 @@ export default {
   Summary,
   SumamryLabel,
   SumamryValue,
+  DocumentMobileText,
 };
