@@ -163,8 +163,8 @@ const ShowSettlementPage = () => {
           </Styled.SumamryLabel>
           <Styled.SumamryValue>
             {(
-              settlementSummary.expected?.fee ??
               settlementSummary.actual?.fee ??
+              settlementSummary.expected?.fee ??
               0
             ).toLocaleString()}
             원
@@ -203,8 +203,8 @@ const ShowSettlementPage = () => {
           </Styled.SumamryLabel>
           <Styled.SumamryValue>
             {(
-              settlementSummary.expected?.settlementAmount ??
               settlementSummary.actual?.settlementAmount ??
+              settlementSummary.expected?.settlementAmount ??
               0
             ).toLocaleString()}
             원
