@@ -1,4 +1,5 @@
 import {
+  checkIsHttpError,
   useAdminCreateSettlementStatement,
   useAdminSettlementDone,
   useAdminSettlementEvent,
@@ -100,8 +101,17 @@ const SettlementPage = () => {
           toast.success('정산 내역서를 발송했어요.');
           dialog.close();
         } catch (error) {
-          console.error(error);
-          toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
+          if (error instanceof Error && checkIsHttpError(error)) {
+            const json: {
+              type: string; detail: string
+            } = await error.response.json();
+
+            if (json.type === 'SETTLEMENT_STATEMENT_CREATION_ALREADY_IN_PROGRESS') {
+              toast.error(json.detail)
+            } else {
+              toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
+            }
+          }
         }
       }}
     />
