@@ -6,8 +6,25 @@ import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { PlusIcon } from '@boolti/icon';
 import { Member, queryKeys, useQueryClient } from '@boolti/api';
 import ShowCastInfoMemberRow from './ShowCastInfoMemberRow';
-import { DndContext, DragOverlay, DragStartEvent, DragOverEvent, UniqueIdentifier, KeyboardSensor, MouseSensor, TouchSensor, useSensor, useSensors, closestCenter } from '@dnd-kit/core';
-import { SortableContext, arrayMove, verticalListSortingStrategy, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import {
+  DndContext,
+  DragOverlay,
+  DragStartEvent,
+  DragOverEvent,
+  UniqueIdentifier,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  arrayMove,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import DraggableShowCastInfoMemberRow from './DraggableShowCastInfoMemberRow';
 
@@ -19,8 +36,8 @@ export interface TempShowCastInfoFormInput {
 
 interface Props {
   prevShowCastInfo?: TempShowCastInfoFormInput;
-  onDelete?: () => Promise<void>;
-  onSave: (value: TempShowCastInfoFormInput) => Promise<void>;
+  onDelete?: () => void;
+  onSave: (value: TempShowCastInfoFormInput) => void;
 }
 
 const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: Props) => {
@@ -89,38 +106,41 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const dragStartHandler = (event: DragStartEvent) => {
     setDraggingItemId(event.active.id);
   };
 
-  const dragEndHandler = useCallback((event: DragOverEvent) => {
-    const { active, over } = event;
+  const dragEndHandler = useCallback(
+    (event: DragOverEvent) => {
+      const { active, over } = event;
 
-    if (!(active && over && over.id !== active.id)) return;
+      if (!(active && over && over.id !== active.id)) return;
 
-    const oldIndex = controlledFields.findIndex(({ _id }) => _id === active.id);
-    const newIndex = controlledFields.findIndex(({ _id }) => _id === over.id);
+      const oldIndex = controlledFields.findIndex(({ _id }) => _id === active.id);
+      const newIndex = controlledFields.findIndex(({ _id }) => _id === over.id);
 
-    if (oldIndex === -1 || newIndex === -1) return;
+      if (oldIndex === -1 || newIndex === -1) return;
 
-    const nextFields = arrayMove(controlledFields, oldIndex, newIndex);
-    replace(nextFields);
+      const nextFields = arrayMove(controlledFields, oldIndex, newIndex);
+      replace(nextFields);
 
-    setIsMemberFieldBlurred((prev) => {
-      const nextMemberFieldBlurred = [...prev];
-      nextMemberFieldBlurred.splice(oldIndex, 1);
-      nextMemberFieldBlurred.splice(newIndex, 0, prev[oldIndex]);
-      return nextMemberFieldBlurred;
-    })
+      setIsMemberFieldBlurred((prev) => {
+        const nextMemberFieldBlurred = [...prev];
+        nextMemberFieldBlurred.splice(oldIndex, 1);
+        nextMemberFieldBlurred.splice(newIndex, 0, prev[oldIndex]);
+        return nextMemberFieldBlurred;
+      });
 
-    setDraggingItemId(null);
-  }, [controlledFields, replace]);
+      setDraggingItemId(null);
+    },
+    [controlledFields, replace],
+  );
 
   return (
-    <>
+    <Styled.Container>
       <Styled.ShowInfoFormLabel required>팀명</Styled.ShowInfoFormLabel>
       <Controller
         control={control}
@@ -148,8 +168,17 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
       />
       <Styled.ShowInfoFormLabel>팀원</Styled.ShowInfoFormLabel>
       <Styled.MemberList>
-        <DndContext sensors={sensors} modifiers={[restrictToVerticalAxis]} collisionDetection={closestCenter} onDragStart={dragStartHandler} onDragEnd={dragEndHandler}>
-          <SortableContext items={controlledFields.map((field) => field._id)} strategy={verticalListSortingStrategy}>
+        <DndContext
+          sensors={sensors}
+          modifiers={[restrictToVerticalAxis]}
+          collisionDetection={closestCenter}
+          onDragStart={dragStartHandler}
+          onDragEnd={dragEndHandler}
+        >
+          <SortableContext
+            items={controlledFields.map((field) => field._id)}
+            strategy={verticalListSortingStrategy}
+          >
             {controlledFields.map((field, index) => (
               <DraggableShowCastInfoMemberRow
                 key={field._id}
@@ -209,7 +238,6 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                   });
 
                   if (isConfirm) {
-                    toast.success('팀원 정보를 삭제했습니다.');
                     setIsMemberFieldBlurred((prev) =>
                       prev.filter((_, blurredIndex) => blurredIndex !== index),
                     );
@@ -220,21 +248,21 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
             ))}
           </SortableContext>
           <DragOverlay>
-            {(draggingItemId && draggingField && draggingFieldIndex > -1) ? (
+            {draggingItemId && draggingField && draggingFieldIndex > -1 ? (
               <Styled.DraggableShowCastInfoMemberRow>
                 <ShowCastInfoMemberRow
                   control={control}
                   field={draggingField}
                   index={draggingFieldIndex}
                   isFieldBlurred={isMemberFieldBlurred[draggingFieldIndex]}
-                /> 
+                />
               </Styled.DraggableShowCastInfoMemberRow>
             ) : null}
           </DragOverlay>
         </DndContext>
         <Styled.MemberAddButton
           onClick={() => {
-            append({ id: -Math.floor(Math.random() * 1000000) });
+            append({ id: -Math.floor(Math.random() * 1000000), userCode: '', userNickname: '', roleName: '', userImgPath: '' });
             setIsMemberFieldBlurred((prev) => [...prev, { userCode: false, roleName: false }]);
           }}
         >
@@ -254,7 +282,6 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
               if (isConfirm) {
                 try {
                   onDelete();
-                  toast.success('팀 정보를 삭제했습니다.');
                 } catch {
                   toast.error('알 수 없는 오류가 발생했습니다.');
                 }
@@ -279,10 +306,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
             );
 
             try {
-              await onSave({ id, name, members });
-              toast.success(
-                onDelete ? '출연진 정보를 수정했습니다.' : '출연진 정보를 생성했습니다.',
-              );
+              onSave({ id, name, members });
             } catch {
               toast.error('알 수 없는 오류가 발생했습니다.');
             }
@@ -291,7 +315,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
           등록하기
         </Styled.RegisterButton>
       </Styled.ButtonWrap>
-    </>
+    </Styled.Container>
   );
 };
 

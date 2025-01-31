@@ -16,21 +16,21 @@ const Text = styled(TextField)`
 
 const Dimmed = styled.div`
   position: fixed;
-  z-index: 1;
+  z-index: 999;
   bottom: 0;
   left: 0;
   width: 100vw !important;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.25);
   ${mq_lg} {
-    display: none;
+    background-color: transparent;
+    position: absolute;
   }
 `;
 
 const Control = styled.div`
   position: fixed;
   width: 100vw !important;
-  z-index: 2;
   left: 0;
   bottom: 0;
   border-radius: 12px 12px 0px 0px;

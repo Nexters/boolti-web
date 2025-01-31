@@ -85,6 +85,24 @@ const ShowName = styled.h2<ShowNameProps>`
   }
 `;
 
+const ShowSettingButtonContainer = styled.div`
+  margin-right: 20px;
+
+  ${mq_lg} {
+    margin-right: 0;
+  }
+`;
+
+const HostListContainer = styled.div`
+  margin: 16px 0;
+  height: calc(100dvh - 148px);
+
+  ${mq_lg} {
+    margin: 0;
+    height: auto;
+  }
+`;
+
 const TabContainer = styled.div`
   padding: 0 20px;
   white-space: nowrap;
@@ -177,6 +195,8 @@ export default {
   HeaderContent,
   ShowNameWrapper,
   ShowName,
+  ShowSettingButtonContainer,
+  HostListContainer,
   TabContainer,
   Tab,
   TabItem,

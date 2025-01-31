@@ -12,8 +12,6 @@ export const OAuthApplePage = lazy(() => import('./OAuth/OAuthApplePage'));
 
 export const HomePage = lazy(() => import('./HomePage'));
 
-export const ShowAddCompletePage = lazy(() => import('./ShowAddCompletePage'));
-
 export const ShowEnterancePage = lazy(() => import('./ShowEnterancePage'));
 
 export const ShowInfoPage = lazy(() => import('./ShowInfoPage'));

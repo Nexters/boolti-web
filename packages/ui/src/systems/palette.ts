@@ -6,7 +6,9 @@ const palette = {
     o3: '#C93E02',
   },
   status: {
-    error: '#FF4D4F',
+    error1: '#FF4D4F',
+    error2: '#EC2C2E',
+    error3: '#DE0609',
     warning: '#FAAD14',
     success: '#52C41A',
     link: '#1890FF',

@@ -20,9 +20,11 @@ import {
   ShowSalesTicketResponse,
   ShowSettlementEventResponse,
   ShowSettlementInfoResponse,
+  ShowSettlementSummaryResponse,
   ShowSummaryResponse,
   TicketStatus,
   TicketType,
+  Popup,
 } from './types';
 import {
   AdminShowDetailResponse,
@@ -129,6 +131,11 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
     queryKey: [showId],
     queryFn: () =>
       fetcher.get<SettlementEventResponse>(`sa-api/v1/shows/${showId}/settlement-events/each-last`),
+  }),
+  settlementStatement: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      instance.get(`sa-api/v1/shows/${showId}/settlement-statements/last/file`).blob(),
   }),
   ticketSalesInfo: (showId: number) => ({
     queryKey: [showId],
@@ -393,6 +400,11 @@ export const showQueryKeys = createQueryKeys('show', {
     queryKey: null,
     queryFn: () => fetcher.get<SettlementBannersResponse>(`web/v1/host/settlement-banners`),
   },
+  settlementSummary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<ShowSettlementSummaryResponse>(`web/v1/shows/${showId}/settlement-summaries`),
+  }),
 });
 
 export const userQueryKeys = createQueryKeys('user', {
@@ -440,6 +452,13 @@ export const castTeamQueryKeys = createQueryKeys('castTeams', {
   }),
 });
 
+export const popupQueryKeys = createQueryKeys('popup', {
+  info: {
+    queryKey: null,
+    queryFn: () => fetcher.get<Popup>('web/papi/v1/popup'),
+  },
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -451,4 +470,5 @@ export const queryKeys = mergeQueryKeys(
   giftQueryKeys,
   hostQueryKeys,
   castTeamQueryKeys,
+  popupQueryKeys,
 );

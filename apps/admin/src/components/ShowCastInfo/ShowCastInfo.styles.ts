@@ -19,10 +19,14 @@ const Header = styled.div`
   align-items: center;
   border-radius: 8px 8px 0px 0px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  padding: 24px 28px;
+  padding: 16px 20px;
 
   &:last-child {
     border-radius: 8px;
+  }
+
+  ${mq_lg} {
+    padding: 24px 28px;
   }
 `;
 
@@ -30,7 +34,7 @@ const HeaderNameWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-`
+`;
 
 const Handle = styled.button`
   display: inline-flex;
@@ -40,21 +44,41 @@ const Handle = styled.button`
   cursor: grab;
   user-select: none;
   user-zoom: none;
-`
+`;
 
 const Name = styled.span`
   color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.sh1};
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.sh2};
+  }
 `;
 
-const EditButtonWrapper = styled.div`
-  span {
-    display: none;
-    margin-left: 8px;
+const MobileEditButton = styled.button`
+  width: 24px;
+  height: 24px;
+
+  & > svg {
+    width: 24px;
+    height: 24px;
   }
 
   ${mq_lg} {
+    display: none;
+  }
+`;
+
+const EditButtonWrapper = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     span {
+      margin-left: 8px;
       display: inline;
     }
   }
@@ -78,16 +102,25 @@ const CastItem = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 14px 28px;
-  flex: 1 0 50%;
-  max-width: 50%;
+  padding: 8px 20px;
+  flex: 1 0 auto;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 
-  &:first-of-type,
-  &:nth-of-type(2) {
-    padding-top: 18px;
+  &:first-of-type {
+    padding-top: 12px;
+  }
+
+  ${mq_lg} {
+    flex: 1 0 50%;
+    max-width: 50%;
+    padding: 14px 28px;
+
+    &:first-of-type,
+    &:nth-of-type(2) {
+      padding-top: 18px;
+    }
   }
 `;
 
@@ -106,22 +139,30 @@ const UserImage = styled.div`
 
 const Username = styled.span`
   color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.b1};
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   flex: 0 1 auto;
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.b3};
+  }
 `;
 
 const Rolename = styled.span`
   color: ${({ theme }) => theme.palette.grey.g50};
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.b1};
   margin-left: 4px;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
   flex: 0 1 auto;
   max-width: 100px;
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.b3};
+  }
 `;
 
 const CollapseButton = styled.button`
@@ -132,12 +173,17 @@ const CollapseButton = styled.button`
   border-radius: 0px 0px 8px 8px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-top: none;
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
-  padding: 19px 32px;
+  padding: 12px 32px;
 
   & > svg {
     margin-left: 8px;
+  }
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.sh1};
+    padding: 19px 32px;
   }
 `;
 
@@ -154,4 +200,5 @@ export default {
   UserImage,
   Username,
   Rolename,
+  MobileEditButton,
 };

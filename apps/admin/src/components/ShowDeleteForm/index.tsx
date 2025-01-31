@@ -31,9 +31,8 @@ const ShowDeleteForm = ({ showName, onSubmit }: ShowDeleteFormProps) => {
   return (
     <Styled.ShowDeleteForm onSubmit={handleSubmit(onSubmitForm)}>
       <Styled.Description>
-        삭제한 공연은 다시 되돌릴 수 없습니다.
-        <br />
-        삭제하시려면 정확한 공연명을 입력해 주세요.
+        공연을 삭제하시려면 정확한 공연명을 입력해 주세요.
+        <br />* 삭제 시 작성했던 공연 정보는 전부 사라지며 복구할 수 없어요.
       </Styled.Description>
       <Styled.TextFieldContainer>
         <TextField
@@ -50,16 +49,13 @@ const ShowDeleteForm = ({ showName, onSubmit }: ShowDeleteFormProps) => {
         />
       </Styled.TextFieldContainer>
       <Styled.ButtonContainer>
-        <Button type="button" size="bold" colorTheme="line">
-          취소
-        </Button>
         <Button
           type="submit"
           size="bold"
           colorTheme="primary"
           disabled={watch('showName', '').length === 0}
         >
-          삭제
+          삭제하기
         </Button>
       </Styled.ButtonContainer>
     </Styled.ShowDeleteForm>

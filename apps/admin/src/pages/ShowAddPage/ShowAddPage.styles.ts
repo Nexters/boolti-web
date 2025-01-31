@@ -1,10 +1,5 @@
-import { Button, mq_lg } from '@boolti/ui';
+import { Button, Checkbox, mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
-
-interface ProcessIndicatorItemProps {
-  active?: boolean;
-  currentStep?: boolean;
-}
 
 interface ShowAddFormLabelProps {
   required?: boolean;
@@ -15,7 +10,7 @@ interface TextFieldProps {
 }
 
 interface ShowAddFormButtonProps {
-  width?: string;
+  variant: 'prev' | 'next';
 }
 
 interface FileUploadAreaProps {
@@ -23,15 +18,20 @@ interface FileUploadAreaProps {
 }
 
 const ShowAddPage = styled.div`
-  background-color: ${({ theme }) => theme.palette.grey.g00};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+
+  ${mq_lg} {
+    background-color: ${({ theme }) => theme.palette.grey.g00};
+  }
+`;
+
+const HeaderContainer = styled.div`
   display: none;
 
   ${mq_lg} {
     display: block;
   }
 `;
-
-const HeaderContainer = styled.div``;
 
 const Header = styled.header`
   display: flex;
@@ -58,8 +58,13 @@ const HeaderText = styled.span`
   margin-left: 8px;
 `;
 
-const CardContainer = styled.div`
+const Content = styled.div`
+  display: none;
   padding: 40px 20px 68px;
+
+  ${mq_lg} {
+    display: block;
+  }
 `;
 
 const Card = styled.div`
@@ -92,55 +97,22 @@ const ProcessIndicator = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 46px;
-  margin-bottom: 40px;
-`;
+  margin-bottom: 16px;
 
-const ProcessIndicatorItem = styled.div<ProcessIndicatorItemProps>`
-  display: inline-flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-
-  &::before {
-    content: '';
-    width: 72px;
-    height: 1px;
-    background-color: ${({ theme, active }) =>
-      active ? theme.palette.primary.o1 : theme.palette.grey.g20};
-    position: absolute;
-    left: -59px;
-    top: 5px;
+  ${mq_lg} {
+    margin-bottom: 28px;
   }
-
-  &:first-of-type::before {
-    content: none;
-  }
-`;
-
-const ProcessIndicatorDot = styled.div<ProcessIndicatorItemProps>`
-  width: 10px;
-  height: 10px;
-  border-radius: 10px;
-  background-color: ${({ theme, active, currentStep }) =>
-    active && currentStep ? theme.palette.primary.o1 : 'none'};
-  border: 2px solid
-    ${({ theme, active }) => (active ? theme.palette.primary.o1 : theme.palette.grey.g20)};
-`;
-
-const ProcessIndicatorText = styled.span<ProcessIndicatorItemProps>`
-  ${({ theme }) => theme.typo.c1};
-  font-weight: ${({ active }) => (active ? '600' : '400')};
-  color: ${({ theme, active }) => (active ? theme.palette.primary.o1 : theme.palette.grey.g30)};
 `;
 
 const CardDescription = styled.p`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g60};
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
+
+  ${mq_lg} {
+    margin-bottom: 40px;
+  }
 `;
 
 const ShowAddForm = styled.form`
@@ -148,7 +120,7 @@ const ShowAddForm = styled.form`
   max-width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 68px;
+  gap: 40px;
 `;
 
 const ShowInfoFormContent = styled.div``;
@@ -168,7 +140,9 @@ const ShowInfoFormFooter = styled.div`
   }
 `;
 
-const ShowAddFormGroup = styled.div``;
+const ShowAddFormGroup = styled.div`
+  margin-bottom: 28px;
+`;
 
 const ShowAddFormTitle = styled.h3`
   ${({ theme }) => theme.typo.h1};
@@ -198,7 +172,7 @@ const ShowAddFormLabel = styled.label<ShowAddFormLabelProps>`
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b3};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -219,9 +193,49 @@ const ShowAddFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowAddFormButton = styled(Button)<ShowAddFormButtonProps>`
-  width: ${({ width }) => width};
+const ShowAddFormButton = styled(Button) <ShowAddFormButtonProps>`
+  ${({ variant }) => {
+    switch (variant) {
+      case 'next': {
+        return `
+          width: calc(100% - 100px);
+        `;
+      }
+      case 'prev': {
+        return `
+          width: 100px;
+        `;
+      }
+      default: {
+        return `
+          width: 100%;
+        `;
+      }
+    }
+  }};
   padding: 0 8px;
+
+  ${mq_lg} {
+    ${({ variant }) => {
+    switch (variant) {
+      case 'next': {
+        return `
+          width: calc(100% - 152px);
+        `;
+      }
+      case 'prev': {
+        return `
+          width: 152px;
+        `;
+      }
+      default: {
+        return `
+          width: 100%;
+        `;
+      }
+    }
+  }};
+  }
 `;
 
 const PreviewImageContainer = styled.div`
@@ -355,19 +369,67 @@ const TextArea = styled.textarea`
   }
 `;
 
-const TicketGroupContainer = styled.div`
+const TicketFormContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 68px;
+  gap: 16px;
 `;
 
-const MobileShowAddPage = styled.div`
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  display: block;
+const TicketForm = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  margin-bottom: 32px;
+`;
+
+const TicketFormTitle = styled.h3`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g90};
 
   ${mq_lg} {
-    display: none;
+    ${({ theme }) => theme.typo.h1};
   }
+`;
+
+const TermGroupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  padding: 20px;
+  border-radius: 8px;
+`;
+
+const TermGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const Term = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const TermLabel = styled(Checkbox.Label) <{ main?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  ${({ theme, main }) => (main ? theme.typo.sh1 : theme.typo.b1)};
+  color: ${({ theme, main }) => (main ? theme.palette.grey.g90 : theme.palette.grey.g60)};
+  font-weight: ${({ main }) => (main ? '600' : '400')};
+  user-select: none;
+  cursor: ${({ main }) => (main ? 'pointer' : 'default')};
+`;
+
+const TermLink = styled.a`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  text-decoration: underline;
 `;
 
 const MobileHeader = styled.header`
@@ -383,6 +445,10 @@ const MobileHeader = styled.header`
   padding: 0 20px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
+
+  ${mq_lg} {
+    display: none;
+  }
 `;
 
 const MobileHeaderText = styled.div`
@@ -398,16 +464,13 @@ const MobileHeaderText = styled.div`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
-const MobileContent = styled.div`
-  margin-top: 52px;
+const MobileContent = styled.div<{ isWebView: boolean }>`
+  margin-top: ${({ isWebView }) => (isWebView ? '0' : '52px')};
   padding: 32px 20px;
-`;
 
-const MobileDescription = styled.p`
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g60};
-  text-align: center;
-  margin-bottom: 32px;
+  ${mq_lg} {
+    display: none;
+  }
 `;
 
 export default {
@@ -416,15 +479,12 @@ export default {
   Header,
   BackButton,
   HeaderText,
-  CardContainer,
+  Content,
   Card,
   CardHeader,
   CardHeaderText,
   CardContent,
   ProcessIndicator,
-  ProcessIndicatorItem,
-  ProcessIndicatorDot,
-  ProcessIndicatorText,
   CardDescription,
   ShowAddForm,
   ShowInfoFormContent,
@@ -447,10 +507,15 @@ export default {
   TextFieldSuffix,
   TextFieldRow,
   TextArea,
-  TicketGroupContainer,
-  MobileShowAddPage,
+  TicketFormContainer,
+  TicketForm,
+  TicketFormTitle,
+  TermGroupContainer,
+  TermGroup,
+  Term,
+  TermLabel,
+  TermLink,
   MobileHeader,
   MobileHeaderText,
   MobileContent,
-  MobileDescription,
 };

@@ -1554,6 +1554,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.17.2":
+  version: 7.26.0
+  resolution: "@babel/runtime@npm:7.26.0"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/12c01357e0345f89f4f7e8c0e81921f2a3e3e101f06e8eaa18a382b517376520cd2fa8c237726eb094dab25532855df28a7baaf1c26342b52782f6936b07c287
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.20.13":
   version: 7.24.7
   resolution: "@babel/runtime@npm:7.24.7"
@@ -1663,6 +1672,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@boolti/api@workspace:packages/api"
   dependencies:
+    "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@emotion/react": "npm:^11.11.3"
@@ -1671,11 +1681,25 @@ __metadata:
     "@tanstack/react-query": "npm:^4.32.6"
     "@types/react": "npm:^18.2.43"
     "@types/react-dom": "npm:^18.2.17"
+    async-mutex: "npm:^0.5.0"
     image-resize: "npm:^1.3.2"
     ky: "npm:^1.2.0"
     react: "npm:^18.2.0"
     react-dom: "npm:^18.2.0"
     typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
+"@boolti/bridge@npm:*, @boolti/bridge@workspace:packages/bridge":
+  version: 0.0.0-use.local
+  resolution: "@boolti/bridge@workspace:packages/bridge"
+  dependencies:
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
+    "@types/react": "npm:^18.2.43"
+    "@types/react-dom": "npm:^18.2.17"
+    typescript: "npm:^5.2.2"
+    uuid: "npm:^11.0.3"
   languageName: unknown
   linkType: soft
 
@@ -5441,6 +5465,7 @@ __metadata:
   resolution: "admin@workspace:apps/admin"
   dependencies:
     "@boolti/api": "npm:*"
+    "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"
@@ -5462,7 +5487,6 @@ __metadata:
     date-fns: "npm:^3.3.1"
     framer-motion: "npm:^11.2.10"
     jotai: "npm:^2.8.3"
-    js-cookie: "npm:^3.0.5"
     jwt-decode: "npm:^4.0.0"
     lodash.debounce: "npm:^4.0.8"
     qrcode.react: "npm:^3.1.0"
@@ -5470,6 +5494,7 @@ __metadata:
     react-daum-postcode: "npm:^3.1.3"
     react-dom: "npm:^18.2.0"
     react-dropzone: "npm:^14.2.3"
+    react-error-boundary: "npm:^4.1.2"
     react-hook-form: "npm:^7.50.0"
     react-intersection-observer: "npm:^9.8.0"
     react-pdf: "npm:^9.0.0"
@@ -5478,6 +5503,7 @@ __metadata:
     react-tooltip: "npm:^5.26.3"
     the-new-css-reset: "npm:^1.11.2"
     typescript: "npm:^5.2.2"
+    vconsole: "npm:^3.15.1"
     vite: "npm:^5.0.8"
   languageName: unknown
   linkType: soft
@@ -5840,6 +5866,15 @@ __metadata:
   version: 1.0.1
   resolution: "async-limiter@npm:1.0.1"
   checksum: 10c0/0693d378cfe86842a70d4c849595a0bb50dc44c11649640ca982fa90cbfc74e3cc4753b5a0847e51933f2e9c65ce8e05576e75e5e1fd963a086e673735b35969
+  languageName: node
+  linkType: hard
+
+"async-mutex@npm:^0.5.0":
+  version: 0.5.0
+  resolution: "async-mutex@npm:0.5.0"
+  dependencies:
+    tslib: "npm:^2.4.0"
+  checksum: 10c0/9096e6ad6b674c894d8ddd5aa4c512b09bb05931b8746ebd634952b05685608b2b0820ed5c406e6569919ff5fe237ab3c491e6f2887d6da6b6ba906db3ee9c32
   languageName: node
   linkType: hard
 
@@ -6602,6 +6637,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"copy-text-to-clipboard@npm:^3.0.1":
+  version: 3.2.0
+  resolution: "copy-text-to-clipboard@npm:3.2.0"
+  checksum: 10c0/d60fdadc59d526e19d56ad23cec2b292d33c771a5091621bd322d138804edd3c10eb2367d46ec71b39f5f7f7116a2910b332281aeb36a5b679199d746a8a5381
+  languageName: node
+  linkType: hard
+
 "copy-to-clipboard@npm:^3.3.3":
   version: 3.3.3
   resolution: "copy-to-clipboard@npm:3.3.3"
@@ -6617,6 +6659,13 @@ __metadata:
   dependencies:
     browserslist: "npm:^4.22.2"
   checksum: 10c0/c3b872e1f9703aa9554cce816207d85730da4703f1776c540b4da11bbbef6d9a1e6041625b5c1f58d2ada3d05f4a2b92897b7de5315c5ecd5d33d50dec86cca7
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^3.11.0":
+  version: 3.39.0
+  resolution: "core-js@npm:3.39.0"
+  checksum: 10c0/f7602069b6afb2e3298eec612a5c1e0c3e6a458930fbfc7a4c5f9ac03426507f49ce395eecdd2d9bae9024f820e44582b67ffe16f2272395af26964f174eeb6b
   languageName: node
   linkType: hard
 
@@ -9367,13 +9416,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "js-cookie@npm:3.0.5"
-  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -10154,6 +10196,13 @@ __metadata:
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: 10c0/d924b57e7312b3b63ad21fc5b3dc0af5e78d61a1fc7cfb5457edaf26326bf62be5307cc87ffb6862ef1c2b33b0233cdb5d4f01c4c958cc0d660948b65a287a48
+  languageName: node
+  linkType: hard
+
+"mutation-observer@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "mutation-observer@npm:1.0.3"
+  checksum: 10c0/2f010fdec4b860a6576558013bcaa691c4912e287ea1dc99ea3b9360b52586267b291e7a2a88c0f2a9b399b4ef1e116ce8c0f839f88d2d7c9b4323fb0badc321
   languageName: node
   linkType: hard
 
@@ -11837,6 +11886,17 @@ __metadata:
     react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
     react-dom: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1 || ^18.0.0
   checksum: 10c0/0d60a0ea758529c32a706d0c69d70b69fb94de3c46442fffdee34f08f51ffceddbb5395b41dfd1565895653e9f60f98ca525835be9d5db1f16d6b22be12f4cd4
+  languageName: node
+  linkType: hard
+
+"react-error-boundary@npm:^4.1.2":
+  version: 4.1.2
+  resolution: "react-error-boundary@npm:4.1.2"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.5"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 10c0/0737e5259bed40ce14eb0823b3c7b152171921f2179e604f48f3913490cdc594d6c22d43d7abb4ffb1512c832850228db07aa69d3b941db324953a5e393cb399
   languageName: node
   linkType: hard
 
@@ -13987,6 +14047,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"uuid@npm:^11.0.3":
+  version: 11.0.3
+  resolution: "uuid@npm:11.0.3"
+  bin:
+    uuid: dist/esm/bin/uuid
+  checksum: 10c0/cee762fc76d949a2ff9205770334699e0043d52bb766472593a25f150077c9deed821230251ea3d6ab3943a5ea137d2826678797f1d5f6754c7ce5ce27e9f7a6
+  languageName: node
+  linkType: hard
+
 "uuid@npm:^9.0.0":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
@@ -14010,6 +14079,18 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: 10c0/f15d588d79f3675135ba783c91a4083dcd290a2a5be9fcb6514220a1634e23df116847b1cc51f66bfb0644cf9353b2abb7815ae499bab06e46dd33c1a6bf1f4f
+  languageName: node
+  linkType: hard
+
+"vconsole@npm:^3.15.1":
+  version: 3.15.1
+  resolution: "vconsole@npm:3.15.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.17.2"
+    copy-text-to-clipboard: "npm:^3.0.1"
+    core-js: "npm:^3.11.0"
+    mutation-observer: "npm:^1.0.3"
+  checksum: 10c0/1e62132b719e324eb7d533c94f38e9db288a9d0c9e85c8752ba742adee4e5925df10d4b43d05ba0cd264d99c32817f9f9c8f24fe391a7d8837469bd318d1b2ac
   languageName: node
   linkType: hard
 

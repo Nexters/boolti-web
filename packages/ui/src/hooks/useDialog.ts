@@ -1,7 +1,7 @@
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useRef, useState } from 'react';
 
-import dialogContext, { IDialog } from '../contexts/dialogContext';
+import dialogContext, { DialogListItem } from '../contexts/dialogContext';
 
 const useDialog = () => {
   const id = useRef<string>(nanoid(6));
@@ -27,7 +27,8 @@ const useDialog = () => {
       mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
       onClose?: () => void;
     }) => {
-      const newDialog: IDialog = {
+      const newDialog: DialogListItem = {
+        type: 'default',
         id: id.current,
         content,
         title,

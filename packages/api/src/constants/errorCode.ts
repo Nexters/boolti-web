@@ -11,4 +11,12 @@ export const ERROR_CODE = {
     type: 'TOKEN_REFRESH_FAILED',
     status: 400,
   },
+  UNAUTHROIZED: {
+    type: 'UNAUTHROIZED',
+    status: 401,
+  },
+  FORBIDDEN: {
+    type: 'FORBIDDEN',
+    status: 403,
+  },
 };

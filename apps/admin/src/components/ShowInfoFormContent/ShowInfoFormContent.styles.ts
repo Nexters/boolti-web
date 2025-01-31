@@ -89,21 +89,22 @@ const ShowInfoFormResponsiveRowColumn = styled.div`
   &:last-of-type {
     margin-bottom: 0;
   }
-`
+`;
 
 const ShowInfoFormContent = styled.div`
   flex: 1;
 `;
 
 const ShowInfoFormLabel = styled.label<ShowInfoFormLabelProps>`
-  display: block;
+  display: flex;
+  align-items: flex-end;
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b3};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -304,13 +305,14 @@ const TextArea = styled.textarea<TextAreaProps>`
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) =>
-    hasError ? `${theme.palette.status.error} !important` : theme.palette.grey.g20};
+    hasError ? `${theme.palette.status.error1} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   color: ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.b3};
 
   &:placeholder-shown {
+    ${({ theme }) => theme.typo.b3};
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     color: ${({ theme }) => theme.palette.grey.g30};
   }
@@ -333,7 +335,7 @@ const TextArea = styled.textarea<TextAreaProps>`
 const TextAreaErrorMessage = styled.p`
   margin-top: 4px;
   ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.status.error};
+  color: ${({ theme }) => theme.palette.status.error1};
 `;
 
 const TicketGroup = styled.div`
@@ -358,19 +360,18 @@ const TicketGroupInfo = styled.div`
 
 const TicketGroupTitle = styled.h3<TicketGroupTitleProps>`
   display: flex;
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b1};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
 
   ${mq_lg} {
-    ${({ theme }) => theme.typo.h1};
     margin-bottom: 2px;
   }
 `;
@@ -448,6 +449,11 @@ const TicketAction = styled.div`
 
   ${mq_lg} {
     display: flex;
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 

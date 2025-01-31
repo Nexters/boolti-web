@@ -24,7 +24,6 @@ import {
   QRPage,
   OAuthKakaoPage,
   HomePage,
-  ShowAddCompletePage,
   SignUpCompletePage,
   SitePolicyPage,
   GiftRegisterPage,
@@ -40,8 +39,12 @@ import ShowTicketPage from './pages/ShowTicketPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
+import { initVConsole } from './utils/vConsole';
+import { checkIsWebView } from '@boolti/bridge';
 
 setDefaultOptions({ locale: ko });
+
+initVConsole();
 
 const publicRoutes = [
   {
@@ -97,7 +100,7 @@ const publicRoutes = [
 const PrivateRoute = () => {
   const { isLogin } = useAuthAtom();
 
-  if (!isLogin()) {
+  if (!isLogin() && !checkIsWebView()) {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 
@@ -124,12 +127,9 @@ const privateRoutes = [
         element: <SignUpCompletePage />,
       },
       { path: PATH.HOME, element: <HomePage /> },
-      { path: PATH.SHOW_ADD, element: <ShowAddPage step="info" /> },
-      { path: PATH.SHOW_ADD_TICKET, element: <ShowAddPage step="ticket" /> },
-      {
-        path: PATH.SHOW_ADD_COMPLETE,
-        element: <ShowAddCompletePage />,
-      },
+      { path: PATH.SHOW_ADD, element: <ShowAddPage step="basic" /> },
+      { path: PATH.SHOW_ADD_DETAIL, element: <ShowAddPage step="detail" /> },
+      { path: PATH.SHOW_ADD_SALES, element: <ShowAddPage step="sales" /> },
       {
         path: '/',
         element: (

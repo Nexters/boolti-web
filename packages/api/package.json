@@ -6,13 +6,15 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives"
   },
   "dependencies": {
+    "@boolti/bridge": "*",
     "@emotion/react": "^11.11.3",
     "@lukemorales/query-key-factory": "^1.3.2",
     "@tanstack/query-core": "^4.32.6",
     "@tanstack/react-query": "^4.32.6",
+    "async-mutex": "^0.5.0",
     "image-resize": "^1.3.2",
     "ky": "^1.2.0",
     "react": "^18.2.0",

@@ -50,7 +50,7 @@ const ShowPreviewNavbar = styled.div`
 const LogoLink = styled.a`
   display: flex;
   align-items: center;
-  cursor: ${({ href }) => href ? 'pointer' : 'default'};
+  cursor: ${({ href }) => (href ? 'pointer' : 'default')};
 
   svg {
     width: 53px;
@@ -243,7 +243,7 @@ const ShowInfoDescriptionBadge = styled.div`
   border-radius: 999px;
   position: relative;
   top: -1.5px;
-`
+`;
 
 const ShowInfoBox = styled.div`
   height: 56px;

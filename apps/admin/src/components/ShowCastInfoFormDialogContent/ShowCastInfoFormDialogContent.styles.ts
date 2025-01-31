@@ -9,6 +9,10 @@ interface InputWrapperProps {
   isError?: boolean;
 }
 
+const Container = styled.div`
+  max-width: 600px;
+`;
+
 const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   display: block;
   ${({ theme }) => theme.typo.b3};
@@ -18,7 +22,7 @@ const ShowInfoFormLabel = styled.span<ShowInfoFormLabelProps>`
   &::after {
     content: '*';
     ${({ theme }) => theme.typo.b3};
-    color: ${({ theme }) => theme.palette.status.error};
+    color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
   }
@@ -32,26 +36,30 @@ const MemberList = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  max-height: 364px;
+  max-height: 228px;
   overflow-y: scroll;
   ::-webkit-scrollbar {
     display: none;
+  }
+  ${mq_lg} {
+    max-height: 364px;
   }
 `;
 
 const FieldWrap = styled.div`
   flex: 1;
   margin-right: 8px;
-  width: calc(50% - 32px);
+  width: calc(50% - 36px);
+  max-width: calc(50% - 36px);
 `;
 
 const InputWrapper = styled.div<InputWrapperProps>`
   ${({ theme }) => theme.typo.b3};
   border: 1px solid
-    ${({ theme, isError }) => (isError ? theme.palette.status.error : theme.palette.grey.g20)};
+    ${({ theme, isError }) => (isError ? theme.palette.status.error1 : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  padding: 8px 12px;
+  padding: 8px 36px 8px 12px;
   height: 48px;
   flex: auto;
   position: relative;
@@ -62,7 +70,7 @@ const InputWrapper = styled.div<InputWrapperProps>`
 
   &:focus-within {
     border-color: ${({ theme, isError }) =>
-    isError ? theme.palette.status.error : theme.palette.grey.g70};
+      isError ? theme.palette.status.error1 : theme.palette.grey.g70};
   }
 `;
 
@@ -76,7 +84,7 @@ const Handle = styled.button`
   cursor: grab;
   user-select: none;
   user-zoom: none;
-`
+`;
 
 const TextFieldWrap = styled.div`
   margin-bottom: 28px;
@@ -139,7 +147,20 @@ const MemberAddButton = styled.button`
 `;
 
 const RegisterButton = styled(Button)`
-  margin-left: auto;
+  flex: 1;
+
+  ${mq_lg} {
+    margin-left: auto;
+    flex: none;
+  }
+`;
+
+const UserImageWrap = styled.div`
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+  }
 `;
 
 const UserImage = styled.div`
@@ -156,20 +177,30 @@ const UserImage = styled.div`
 const Username = styled.span`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin: 0 8px;
+  margin: 0 6px 0 0;
   flex: 1 1 auto;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+
+  ${mq_lg} {
+    margin: 0 8px;
+  }
 `;
 
 const RemoveButton = styled.button`
   width: 24px;
   height: 24px;
   cursor: pointer;
+  position: absolute;
+  right: 12px;
 `;
 
 const DeleteButton = styled.button`
   cursor: pointer;
   ${({ theme }) => theme.typo.sh1};
   text-decoration: underline;
+  margin-right: 48px;
 `;
 
 const ButtonWrap = styled.div`
@@ -185,7 +216,7 @@ const ButtonWrap = styled.div`
 
 const ErrorMessage = styled.span`
   ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.status.error};
+  color: ${({ theme }) => theme.palette.status.error1};
 `;
 
 const DraggableShowCastInfoMemberRow = styled.div`
@@ -209,10 +240,10 @@ const DraggableShowCastInfoMemberRow = styled.div`
     border-radius: 4px;
     z-index: -1;
   }
-`
-
+`;
 
 export default {
+  Container,
   ShowInfoFormLabel,
   InputWrapper,
   Handle,
@@ -224,6 +255,7 @@ export default {
   RegisterButton,
   MemberList,
   UserImage,
+  UserImageWrap,
   Username,
   RemoveButton,
   TextFieldWrap,
@@ -231,5 +263,5 @@ export default {
   DeleteButton,
   ErrorMessage,
   FieldWrap,
-  DraggableShowCastInfoMemberRow
+  DraggableShowCastInfoMemberRow,
 };

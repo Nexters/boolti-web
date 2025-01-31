@@ -3,14 +3,13 @@ import styled from '@emotion/styled';
 const Toast = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 8px;
   padding: 16px;
 `;
 
 const Icon = styled.div`
   display: inline-flex;
-  align-items: center;
+  margin-top: 1px;
 `;
 
 const Message = styled.div`
