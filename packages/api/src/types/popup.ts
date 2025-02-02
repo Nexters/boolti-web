@@ -8,4 +8,4 @@ export interface Popup {
   endDate: string;
 }
 
-export type PopupViewType = 'HOME' | 'SHOW';
+export type PopupViewType = 'HOME' | 'SHOW' | 'LANDING';
