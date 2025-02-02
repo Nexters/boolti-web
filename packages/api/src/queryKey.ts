@@ -25,6 +25,7 @@ import {
   TicketStatus,
   TicketType,
   Popup,
+  PopupViewType,
 } from './types';
 import {
   AdminShowDetailResponse,
@@ -134,8 +135,7 @@ export const adminShowQueryKeys = createQueryKeys('adminShow', {
   }),
   settlementStatement: (showId: number) => ({
     queryKey: [showId],
-    queryFn: () =>
-      instance.get(`sa-api/v1/shows/${showId}/settlement-statements/last/file`).blob(),
+    queryFn: () => instance.get(`sa-api/v1/shows/${showId}/settlement-statements/last/file`).blob(),
   }),
   ticketSalesInfo: (showId: number) => ({
     queryKey: [showId],
@@ -453,10 +453,10 @@ export const castTeamQueryKeys = createQueryKeys('castTeams', {
 });
 
 export const popupQueryKeys = createQueryKeys('popup', {
-  info: {
-    queryKey: null,
-    queryFn: () => fetcher.get<Popup>('web/papi/v1/popup'),
-  },
+  info: (view: PopupViewType) => ({
+    queryKey: [view],
+    queryFn: () => fetcher.get<Popup>(`web/papi/v1/popup/${view}`),
+  }),
 });
 
 export const queryKeys = mergeQueryKeys(
