@@ -44,7 +44,7 @@ const HomePage = () => {
   const { data: userProfileData, isLoading: isUserProfileLoading } = useUserProfile();
   const { data: showList = [], isLoading: isShowListLoading } = useShowList();
   const { data: settlementBanners } = useSettlementBanners();
-  const { data: popupData } = usePopup();
+  const { data: popupData } = usePopup('HOME');
   usePopupDialog(popupData);
 
   const { imgPath, nickname = '', userCode } = userProfileData ?? {};
