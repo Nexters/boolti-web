@@ -297,6 +297,7 @@ const TextAreaContainer = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  margin-top: 16px;
 `;
 
 const TextArea = styled.textarea<TextAreaProps>`

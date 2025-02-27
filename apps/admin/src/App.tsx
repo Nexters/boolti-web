@@ -1,5 +1,7 @@
 import 'the-new-css-reset/css/reset.css';
+import '@mdxeditor/editor/style.css';
 import './index.css';
+import './i18n';
 
 import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
