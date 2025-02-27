@@ -42,6 +42,7 @@ import usePutCastTeams from './usePutCastTeams';
 import useDeleteCastTeams from './useDeleteCastTeams';
 import usePostCastTeams from './usePostCastTeams';
 import useChangeCastTeamOrder from './useChangeCastTeamOrder';
+import useUploadShowContentImage from './useUploadShowContentImage';
 
 export {
   usePostCastTeams,
@@ -88,6 +89,7 @@ export {
   useSuperAdminCreateInvitationTicket,
   useSuperAdminEditSalesInfo,
   useChangeCastTeamOrder,
+  useUploadShowContentImage,
 };
 
 export type { ImageFile };

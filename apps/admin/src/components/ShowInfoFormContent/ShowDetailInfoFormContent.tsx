@@ -3,6 +3,7 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowDetailInfoFormInputs } from './types';
+import MarkdownEditor from '../MarkdownEditor';
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowDetailInfoFormInputs>;
@@ -39,7 +40,24 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <Styled.TextAreaContainer>
-                <Styled.TextArea
+                <MarkdownEditor
+                  value={value}
+                  placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                  disabled={disabled}
+                  hasError={!!errors.notice?.message}
+                  onChange={(event) => {
+                    onChange(event);
+                    clearErrors('notice');
+                  }}
+                  onBlur={() => {
+                    onBlur();
+
+                    if (!value) {
+                      setError('notice', { type: 'required', message: '필수 입력사항입니다.' });
+                    }
+                  }}
+                />
+                {/* <Styled.TextArea
                   placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
                   rows={10}
                   disabled={disabled}
@@ -56,7 +74,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   }}
                   value={value ?? ''}
                   hasError={!!errors.notice?.message}
-                />
+                /> */}
                 {errors.notice?.message && (
                   <Styled.TextAreaErrorMessage>{errors.notice.message}</Styled.TextAreaErrorMessage>
                 )}

@@ -72,6 +72,7 @@ import { Call } from './Call';
 import { Message } from './Message';
 import { Discord } from './Discord';
 import { Question } from './Question';
+import { YoutubeLink } from './YoutubeLink';
 
 export {
   Apple as AppleIcon,
@@ -148,4 +149,5 @@ export {
   Call as CallIcon,
   Message as MessageIcon,
   Discord as DiscordIcon,
+  YoutubeLink as YoutubeLinkIcon,
 };
