@@ -1,40 +1,9 @@
 import { TrashIcon, YoutubeLinkIcon } from '@boolti/icon';
-import { MDXEditor, BoldItalicUnderlineToggles, headingsPlugin, toolbarPlugin, listsPlugin, thematicBreakPlugin, BlockTypeSelect, InsertTable, tablePlugin, linkPlugin, linkDialogPlugin, CreateLink, markdownShortcutPlugin, imagePlugin, InsertImage, directivesPlugin, usePublisher, insertDirective$, DialogButton, InsertThematicBreak, ListsToggle, Separator, DirectiveDescriptor, quotePlugin } from '@mdxeditor/editor';
+import { MDXEditor, BoldItalicUnderlineToggles, headingsPlugin, toolbarPlugin, listsPlugin, thematicBreakPlugin, BlockTypeSelect, tablePlugin, linkPlugin, linkDialogPlugin, CreateLink, markdownShortcutPlugin, imagePlugin, InsertImage, directivesPlugin, usePublisher, insertDirective$, DialogButton, InsertThematicBreak, ListsToggle, Separator, DirectiveDescriptor, quotePlugin } from '@mdxeditor/editor';
 import { useUploadShowContentImage } from '@boolti/api';
 import { useTranslation } from 'react-i18next';
 
 import Styled from './MarkdownEditor.styles';
-
-// const BlockTypeSelect = () => {
-//   const items = [
-//     { label: "Paragraph", value: "paragraph" },
-//     { label: "Quote", value: "quote" },
-//     { label: "Heading 1", value: "h1" },
-//     { label: "Heading 2", value: "h2" },
-//     { label: "Heading 3", value: "h3" },
-//     { label: "Heading 4", value: "h4" },
-//   ];
-//   const currentBlockType = useCellValue(currentBlockType$);
-//   const nodeId = useNodeId();
-
-//   useEffect(() => {
-//     if (nodeId) {
-//       updateNodeData(nodeId, { blockType: currentBlockType });
-//     }
-//   }, [currentBlockType, nodeId]);
-
-//   return (
-//     <>
-//       {items.map(({ label, value }) => (
-//         <BlockTypeButton
-//           key={value}
-//           blockType={value as BlockType}
-//           label={label}
-//         />
-//       ))}
-//     </>
-//   );
-// }
 
 const YoutubeDirectiveDescriptor: DirectiveDescriptor = {
   name: 'youtube',
@@ -135,11 +104,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                 <ListsToggle options={["number", "bullet"]} />
                 <InsertThematicBreak />
                 <Separator />
+                <InsertYoutubeVideo />
                 <CreateLink />
                 <InsertImage />
-                <Separator />
-                <InsertTable />
-                <InsertYoutubeVideo />
               </>
             )
           }),

@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from '@boolti/icon';
-import React from 'react';
 
 import Styled from './ShowPreviewNotice.styles';
+import ShowInfoDescription from './ShowInfoDescription';
 
 interface ShowPreviewNoticeProps {
   notice: string;
@@ -20,12 +20,7 @@ const ShowPreviewNotice = ({ notice, onClickBackButton }: ShowPreviewNoticeProps
         </Styled.ShowPreviewNoticeNav>
       </Styled.ShowPreviewNoticeHeader>
       <Styled.ShowPreviewNoticeText>
-        {notice.split('\n').map((text, index) => (
-          <React.Fragment key={`${text}_${index}`}>
-            {text}
-            <br />
-          </React.Fragment>
-        ))}
+        <ShowInfoDescription content={notice} />
       </Styled.ShowPreviewNoticeText>
     </Styled.ShowPreviewNotice>
   );

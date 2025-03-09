@@ -98,29 +98,6 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
       border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
       margin: 16px 0;
     }
-
-    [data-lexical-decorator]>table {
-      table-layout: fixed;
-    }
-
-    [data-lexical-decorator]>table td {
-      vertical-align: middle;
-    }
-
-    [data-lexical-decorator]>table>tbody>tr,[data-lexical-decorator]>table>tfoot,[data-lexical-decorator]>table>thead {
-      border: 0;
-    }
-
-    [data-lexical-decorator]>table [data-tool-cell] {
-      padding: 1px;
-      border: 0;
-      line-height: 1rem;
-      vertical-align: middle;
-    }
-
-    [data-lexical-decorator]>table>thead [data-tool-cell]:first-child {
-      vertical-align: middle;
-    }
   }
 `;
 
