@@ -17,7 +17,7 @@ const ShowPreviewNoticePage: React.FC = () => {
         `}
         </style>
       </Helmet>
-      <ShowContentMarkdown content={notice} />
+      <ShowContentMarkdown content={notice} colorMode="dark" />
     </>
   );
 }
