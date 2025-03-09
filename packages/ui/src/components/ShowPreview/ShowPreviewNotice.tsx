@@ -1,7 +1,7 @@
 import { ArrowLeftIcon } from '@boolti/icon';
 
 import Styled from './ShowPreviewNotice.styles';
-import ShowInfoDescription from './ShowInfoDescription';
+import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface ShowPreviewNoticeProps {
   notice: string;

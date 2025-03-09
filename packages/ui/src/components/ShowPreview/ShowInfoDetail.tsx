@@ -1,7 +1,7 @@
 import Styled from './ShowPreview.styles';
 import { CallIcon, MessageIcon } from '@boolti/icon';
 
-import ShowInfoDescription from './ShowInfoDescription';
+import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface Props {
   show: {

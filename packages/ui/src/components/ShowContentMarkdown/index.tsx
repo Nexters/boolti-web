@@ -3,9 +3,9 @@ import rehypeRaw from 'rehype-raw'
 import { visit } from 'unist-util-visit'
 import { Root } from 'mdast'
 import remarkDirective from 'remark-directive'
-import Styled from './ShowInfoDescription.styles'
+import Styled from './ShowContentMarkdown.styles'
 
-interface ShowInfoDescriptionProps {
+interface ShowContentMarkdownProps {
   content: string
 }
 
@@ -37,7 +37,7 @@ function remarkYoutubePlugin() {
   }
 }
 
-const ShowInfoDescription: React.FC<ShowInfoDescriptionProps> = ({ content }) => {
+const ShowContentMarkdown: React.FC<ShowContentMarkdownProps> = ({ content }) => {
   return (
     <Styled.MarkdownContent>
       <Markdown
@@ -69,4 +69,4 @@ const ShowInfoDescription: React.FC<ShowInfoDescriptionProps> = ({ content }) =>
   )
 }
 
-export default ShowInfoDescription
+export default ShowContentMarkdown
