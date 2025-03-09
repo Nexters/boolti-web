@@ -7,7 +7,6 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { BooltiDark, ShareIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
-
 import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';

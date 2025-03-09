@@ -222,15 +222,6 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 10;
     `}
-
-  a {
-    color: #46a6ff;
-    text-decoration: underline;
-  }
-
-  span {
-    margin-right: 6px;
-  }
 `;
 
 const ShowInfoDescriptionBadge = styled.div`
@@ -306,11 +297,11 @@ const ShowCastListItem = styled.li`
   width: calc(50% - 8px);
   overflow: hidden;
 
-  &:nth-child(2n + 1) {
+  &:nth-of-type(2n + 1) {
     margin-right: 8px;
   }
 
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     margin-left: 8px;
   }
 `;

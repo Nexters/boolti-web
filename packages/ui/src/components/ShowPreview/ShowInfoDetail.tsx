@@ -1,6 +1,7 @@
-import Linkify from 'linkify-react';
 import Styled from './ShowPreview.styles';
 import { CallIcon, MessageIcon } from '@boolti/icon';
+
+import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface Props {
   show: {
@@ -119,13 +120,8 @@ const ShowInfoDetail = ({
             </Styled.ShowInfoTitleTextButton>
           )}
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription as="p" isFullContent={hasNoticePage}>
-          {notice.split('\n').map((text, index) => (
-            <Linkify key={`${text}_${index}`} options={{ target: '_blank' }}>
-              {text}
-              <br />
-            </Linkify>
-          ))}
+        <Styled.ShowInfoDescription isFullContent={hasNoticePage}>
+          <ShowInfoDescription content={notice} />
         </Styled.ShowInfoDescription>
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
