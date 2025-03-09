@@ -7,6 +7,7 @@ import Styled from './ShowContentMarkdown.styles'
 
 interface ShowContentMarkdownProps {
   content: string
+  colorMode?: 'light' | 'dark'
 }
 
 function remarkYoutubePlugin() {
@@ -37,9 +38,9 @@ function remarkYoutubePlugin() {
   }
 }
 
-const ShowContentMarkdown: React.FC<ShowContentMarkdownProps> = ({ content }) => {
+const ShowContentMarkdown: React.FC<ShowContentMarkdownProps> = ({ content, colorMode = 'dark' }) => {
   return (
-    <Styled.MarkdownContent>
+    <Styled.MarkdownContent colorMode={colorMode}>
       <Markdown
         components={{
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
