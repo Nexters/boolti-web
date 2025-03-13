@@ -4,9 +4,11 @@ interface DialogPropsBase {
   width?: string;
   title?: string;
   contentPadding?: string;
-  mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
+  mobileType?: DialogMobileType;
   onClose?: () => void;
 }
+
+export type DialogMobileType = 'bottomSheet' | 'fullPage' | 'centerPopup' | 'darkBottomSheet';
 
 export interface DialogProps extends DialogPropsBase {
   children: React.ReactNode;
@@ -25,7 +27,7 @@ export interface StepDialogProps {
   isAuto?: boolean;
   width?: string;
   contentPadding?: string;
-  mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
+  mobileType?: DialogMobileType;
   onClose?: () => void;
 }
 

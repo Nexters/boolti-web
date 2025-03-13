@@ -8,6 +8,8 @@ import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
+import useBodyScrollLock from '../../hooks/useBodyScrollLock';
+import { useState } from 'react';
 
 setDefaultOptions({ locale: ko });
 
@@ -40,11 +42,15 @@ const getShareText = (show: {
 };
 
 const ShowPreviewPage = () => {
+  const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
+
   const loaderData = useLoaderData() as
     | [ShowPreviewResponse, ShowCastTeamReadResponse[]]
     | undefined;
 
   const dialog = useDialog();
+
+  useBodyScrollLock(shareDialogOpen);
 
   if (!loaderData) {
     window.location.href = 'https://boolti.in';
@@ -68,23 +74,55 @@ const ShowPreviewPage = () => {
     hostPhoneNumber,
   } = previewData;
 
-  const shareButtonClickHandler = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        text: getShareText({
-          id,
-          title,
-          date: new Date(date),
-          placeName,
-          streetAddress,
-          detailAddress,
-        }),
-      });
-    } else {
-      await navigator.clipboard.writeText(getPreviewLink(id));
+  const shareShowPreviewLink = async () => {
+    const text = getPreviewLink(id);
 
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
       alert('공연 링크가 복사되었어요');
     }
+  };
+
+  const shareShowInfo = async () => {
+    const text = getShareText({
+      id,
+      title,
+      date: new Date(date),
+      placeName,
+      streetAddress,
+      detailAddress,
+    })
+
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      alert('공연 링크가 복사되었어요');
+    }
+  }
+
+  const shareButtonClickHandler = async () => {
+    dialog.open({
+      content: (
+        <Styled.ShareBottomSheet>
+          <Styled.ShareBottomSheetButton type="button" onClick={shareShowPreviewLink}>
+            URL만 공유하기
+          </Styled.ShareBottomSheetButton>
+          <Styled.ShareBottomSheetButton type="button" onClick={shareShowInfo}>
+            공연 정보 함께 공유하기
+          </Styled.ShareBottomSheetButton>
+        </Styled.ShareBottomSheet>
+      ),
+      isAuto: true,
+      mobileType: 'darkBottomSheet',
+      onClose: () => {
+        setShareDialogOpen(false)
+      }
+    })
+
+    setShareDialogOpen(true)
   };
 
   const reservationButtonClickHandler = () => {
