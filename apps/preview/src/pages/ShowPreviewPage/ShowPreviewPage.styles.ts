@@ -129,6 +129,22 @@ const DialogDescription = styled.p`
   }
 `;
 
+const ShareBottomSheet = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-top: 12px;
+  padding-bottom: 28px;
+`;
+
+const ShareBottomSheetButton = styled.button`
+  display: flex;
+  align-items: center;
+  height: 58px;
+  padding: 0;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+`;
+
 export default {
   ShowPreviewPage,
   ShowPreviewContainer,
@@ -141,4 +157,6 @@ export default {
   QRCodeContainer,
   DialogTitle,
   DialogDescription,
+  ShareBottomSheet,
+  ShareBottomSheetButton,
 };

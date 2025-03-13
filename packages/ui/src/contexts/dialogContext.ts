@@ -1,11 +1,12 @@
 import { createContext } from 'react';
+import { DialogMobileType } from '../components/Dialog/types';
 
 interface DialogListItemBase {
   id: string;
   isAuto?: boolean;
   width?: string;
   contentPadding?: string;
-  mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
+  mobileType?: DialogMobileType;
   onClose?: () => void;
 }
 

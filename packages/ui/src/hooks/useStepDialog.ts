@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { useCallback, useContext, useRef, useState } from 'react';
 import dialogContext, { DialogListItem } from '../contexts/dialogContext';
+import { DialogMobileType } from '../components/Dialog/types';
 
 const useStepDialog = <T extends string>() => {
   const id = useRef<string>(nanoid(6));
@@ -29,7 +30,7 @@ const useStepDialog = <T extends string>() => {
       isAuto?: boolean;
       width?: string;
       contentPadding?: string;
-      mobileType?: 'bottomSheet' | 'fullPage' | 'centerPopup';
+      mobileType?: DialogMobileType;
       onClose?: () => void;
     }) => {
       const newDialog: DialogListItem = {

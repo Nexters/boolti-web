@@ -6,7 +6,7 @@ const Dialog = (props: DialogProps) => {
   if (!props.open) return null;
 
   return (
-    <DialogBase onClose={props.onClose}>
+    <DialogBase mobileType={props.mobileType} onClose={props.onClose}>
       <DialogContent {...props} />
     </DialogBase>
   );
