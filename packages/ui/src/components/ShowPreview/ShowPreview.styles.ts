@@ -81,6 +81,20 @@ const ShowName = styled.h2`
   text-align: center;
 `;
 
+const ShowHeaderInfoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const ShowHeaderInfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
+
 const ShowPreviewContent = styled.div`
   padding: 20px 20px 0;
   position: relative;
@@ -230,7 +244,7 @@ const ShowInfoDescriptionBadge = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g50};
   ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-  padding: 3px 12px;
+  padding: 3px 8px;
   border-radius: 999px;
   position: relative;
   top: -1.5px;
@@ -368,6 +382,8 @@ export default {
   ShareButton,
   ShowImage,
   ShowName,
+  ShowHeaderInfoList,
+  ShowHeaderInfoItem,
   ShowPreviewContent,
   ShowPreviewTicketPeriod,
   ShowPreviewTicketPeriodInfo,

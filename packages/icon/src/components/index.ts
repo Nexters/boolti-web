@@ -73,6 +73,8 @@ import { Message } from './Message';
 import { Discord } from './Discord';
 import { Question } from './Question';
 import { YoutubeLink } from './YoutubeLink';
+import { MapMarker } from './MapMarker';
+import { ClockMobile } from './ClockMobile';
 
 export {
   Apple as AppleIcon,
@@ -150,4 +152,6 @@ export {
   Message as MessageIcon,
   Discord as DiscordIcon,
   YoutubeLink as YoutubeLinkIcon,
+  MapMarker as MapMarkerIcon,
+  ClockMobile as ClockMobileIcon,
 };
