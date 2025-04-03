@@ -1,46 +1,35 @@
 import Styled from './ShowPreview.styles';
-import { CallIcon, MessageIcon } from '@boolti/icon';
+import { CallIcon, MessageIcon, TicketIcon } from '@boolti/icon';
 
 import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface Props {
   show: {
-    images: string[];
-    name: string;
-    date: string;
-    startTime: string;
-    runningTime: string;
     salesStartTime: string;
     salesEndTime: string;
-    placeName: string;
-    placeStreetAddress: string;
-    placeDetailAddress: string;
     notice: string;
     hostName: string;
-    hostPhoneNumber: string;
   };
   hasNoticePage?: boolean;
-  onClickLink?: () => void;
-  onClickLinkMobile?: () => void;
+  onClickCallLink?: () => void;
+  onClickMessageLink?: () => void;
+  onClickCallLinkMobile?: () => void;
+  onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
 }
 
 const ShowInfoDetail = ({
   show: {
-    // date,
-    // startTime,
-    // runningTime,
     salesStartTime,
     salesEndTime,
-    // placeName,
-    // placeStreetAddress,
-    // placeDetailAddress,
     notice,
     hostName,
   },
   hasNoticePage,
-  onClickLink,
-  onClickLinkMobile,
+  onClickCallLink,
+  onClickMessageLink,
+  onClickCallLinkMobile,
+  onClickMessageLinkMobile,
   onClickViewNotice,
 }: Props) => {
   return (
@@ -52,6 +41,11 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoDescription>
           {salesStartTime} - {salesEndTime}
         </Styled.ShowInfoDescription>
+        <Styled.ShowTicketInfoDescription>
+          <Styled.TicketIcon>
+            <TicketIcon />
+          </Styled.TicketIcon> 50매 판매 완료
+        </Styled.ShowTicketInfoDescription>
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
@@ -73,18 +67,18 @@ const ShowInfoDetail = ({
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
           <Styled.ShowHostLink>
-            <a onClick={onClickLink}>
+            <a onClick={onClickCallLink}>
               <CallIcon />
             </a>
-            <a onClick={onClickLink}>
+            <a onClick={onClickMessageLink}>
               <MessageIcon />
             </a>
           </Styled.ShowHostLink>
           <Styled.ShowHostLinkMobile>
-            <a onClick={onClickLinkMobile}>
+            <a onClick={onClickCallLinkMobile}>
               <CallIcon />
             </a>
-            <a onClick={onClickLinkMobile}>
+            <a onClick={onClickMessageLinkMobile}>
               <MessageIcon />
             </a>
           </Styled.ShowHostLinkMobile>

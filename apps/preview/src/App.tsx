@@ -9,7 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import ShowPreviewPage from './pages/ShowPreviewPage';
 import { fetcher } from '@boolti/api/src/fetcher';
 import NotFound from './components/NotFound';
-import ShowPreviewNoticePage from './pages/ShowPreviewNoticePage';
+import ShowInfoDetailPage from './pages/ShowInfoDetailPage';
 
 const router = createBrowserRouter([
   {
@@ -28,8 +28,8 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
   },
   {
-    path: '/show/:showId/notice',
-    element: <ShowPreviewNoticePage />,
+    path: '/show/:showId/info',
+    element: <ShowInfoDetailPage />,
     loader: async ({ params }) => {
       const showId = params.showId;
       if (showId) {

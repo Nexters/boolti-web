@@ -130,8 +130,10 @@ const ShowPreview = ({
                 <ShowInfoDetail
                   show={show}
                   hasNoticePage={hasNoticePage}
-                  onClickLink={onClickLink}
-                  onClickLinkMobile={onClickLinkMobile}
+                  onClickCallLink={onClickLink}
+                  onClickMessageLink={onClickLink}
+                  onClickCallLinkMobile={onClickLinkMobile}
+                  onClickMessageLinkMobile={onClickLinkMobile}
                   onClickViewNotice={() => {
                     containerScrollTop.current = containerRef?.current?.scrollTop ?? null;
                     containerRef?.current?.scrollTo(0, 0);
