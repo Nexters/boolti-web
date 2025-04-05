@@ -9,7 +9,9 @@ interface Props {
     salesEndTime: string;
     notice: string;
     hostName: string;
+    isEnded: boolean;
   };
+  soldTicketCount?: number;
   hasNoticePage?: boolean;
   onClickCallLink?: () => void;
   onClickMessageLink?: () => void;
@@ -24,7 +26,9 @@ const ShowInfoDetail = ({
     salesEndTime,
     notice,
     hostName,
+    isEnded,
   },
+  soldTicketCount,
   hasNoticePage,
   onClickCallLink,
   onClickMessageLink,
@@ -41,11 +45,13 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoDescription>
           {salesStartTime} - {salesEndTime}
         </Styled.ShowInfoDescription>
-        <Styled.ShowTicketInfoDescription>
-          <Styled.TicketIcon>
-            <TicketIcon />
-          </Styled.TicketIcon> 50매 판매 완료
-        </Styled.ShowTicketInfoDescription>
+        {isEnded && soldTicketCount !== undefined && (
+          <Styled.ShowTicketInfoDescription>
+            <Styled.TicketIcon>
+              <TicketIcon />
+            </Styled.TicketIcon> {soldTicketCount}매 판매 완료
+          </Styled.ShowTicketInfoDescription>
+        )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>

@@ -33,7 +33,11 @@ const router = createBrowserRouter([
     loader: async ({ params }) => {
       const showId = params.showId;
       if (showId) {
-        return await fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`);
+        const response = await Promise.all([
+          fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
+          fetcher.get<{ count: number }>(`web/papi/v1/shows/${showId}/sold-ticket-counts`),
+        ])
+        return response;
       }
     },
     errorElement: <NotFound />,
