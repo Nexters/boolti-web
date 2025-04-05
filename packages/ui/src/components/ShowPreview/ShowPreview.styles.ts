@@ -226,6 +226,8 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   overflow-wrap: break-word;
   word-break: break-word;
+  display: flex;
+  align-items: center;
 
   ${({ isFullContent }) =>
     isFullContent &&
@@ -237,6 +239,23 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
       -webkit-line-clamp: 10;
     `}
 `;
+
+const ShowTicketInfoDescription = styled.div`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+`;
+
+const TicketIcon = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const ShowInfoDescriptionBadge = styled.div`
   display: inline-flex;
@@ -398,6 +417,8 @@ export default {
   ShowInfoTitleTextButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
+  ShowTicketInfoDescription,
+  TicketIcon,
   ShowInfoDescriptionBadge,
   ShowInfoBox,
   ShowHost,
