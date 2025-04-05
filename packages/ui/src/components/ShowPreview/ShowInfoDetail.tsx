@@ -5,11 +5,11 @@ import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface Props {
   show: {
+    date: string;
     salesStartTime: string;
     salesEndTime: string;
     notice: string;
     hostName: string;
-    isEnded: boolean;
   };
   soldTicketCount?: number;
   hasNoticePage?: boolean;
@@ -22,11 +22,11 @@ interface Props {
 
 const ShowInfoDetail = ({
   show: {
+    date,
     salesStartTime,
     salesEndTime,
     notice,
     hostName,
-    isEnded,
   },
   soldTicketCount,
   hasNoticePage,
@@ -36,6 +36,10 @@ const ShowInfoDetail = ({
   onClickMessageLinkMobile,
   onClickViewNotice,
 }: Props) => {
+  const nextDay = new Date(date);
+  nextDay.setDate(nextDay.getDate() + 1);
+  const isEnded = nextDay < new Date();
+
   return (
     <Styled.ShowInfo>
       <Styled.ShowInfoGroup>

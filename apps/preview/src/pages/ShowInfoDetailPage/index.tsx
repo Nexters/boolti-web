@@ -5,14 +5,14 @@ import { useLoaderData } from "react-router-dom";
 import Styled from './ShowInfoDetailPage.styles';
 
 const ShowInfoDetailPage: React.FC = () => {
-  const [show, { count: soldTicketCount }] = useLoaderData() as ShowPreviewResponse;
+  const [show, { count: soldTicketCount }] = useLoaderData() as [ShowPreviewResponse, { count: number }];
 
   const {
+    date,
     notice,
     salesEndTime,
     salesStartTime,
     hostName,
-    isEnded
   } = show;
 
   const callLinkClickHandler = () => {
@@ -27,11 +27,11 @@ const ShowInfoDetailPage: React.FC = () => {
     <Styled.Container>
       <ShowInfoDetail
         show={{
+          date,
           salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
           salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
           notice,
           hostName,
-          isEnded,
         }}
         soldTicketCount={soldTicketCount}
         onClickCallLink={callLinkClickHandler}
