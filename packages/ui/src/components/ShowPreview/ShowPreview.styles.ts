@@ -181,16 +181,8 @@ const ShowInfoTitle = styled.h3`
 `;
 
 const ShowInfoTitleButton = styled.button`
-  padding: 0 12px;
-  height: 30px;
-  border-radius: 4px;
-  ${({ theme }) => theme.typo.c1};
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.status.link};
   cursor: pointer;
 `;
 
@@ -204,7 +196,7 @@ const ShowInfoTitleTextButton = styled.button`
 const ShowInfoSubtitle = styled.h4`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 `;
 
 const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
@@ -212,6 +204,10 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   overflow-wrap: break-word;
   word-break: break-word;
+
+  &:not(:last-child) {
+    margin-bottom: 12px;
+  }
 
   ${({ isFullContent }) =>
     isFullContent &&

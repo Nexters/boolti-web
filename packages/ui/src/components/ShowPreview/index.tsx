@@ -27,6 +27,8 @@ interface ShowPreviewProps {
     notice: string;
     hostName: string;
     hostPhoneNumber: string;
+    latitude?: number;
+    longitude?: number;
   };
   showCastTeams: Array<{
     name: string;
