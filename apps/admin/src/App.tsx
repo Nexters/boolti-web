@@ -43,12 +43,11 @@ import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
 import { initVConsole } from './utils/vConsole';
 import { checkIsWebView } from '@boolti/bridge';
+import { X_NCP_APIGW_API_KEY_ID } from './constants/ncp';
 
 setDefaultOptions({ locale: ko });
 
 initVConsole();
-
-const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
 
 const publicRoutes = [
   {
