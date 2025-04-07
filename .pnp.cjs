@@ -3065,6 +3065,7 @@ const RAW_RUNTIME_STATE =
           ["@emotion/styled", "virtual:85869d3eba7afdb6f94c001c9503942ddc4354e881daf63c24e9d58366ea9f25c6bac2df65ae0f5266c54cd36fe68f0d9568da3a1ab62446405c98ac852f4431#npm:11.11.0"],\
           ["@react-spring/web", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:9.7.3"],\
           ["@types/mdast", "npm:4.0.4"],\
+          ["@types/navermaps", "npm:3.7.9"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["linkify-react", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:4.1.3"],\
@@ -9908,6 +9909,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/geojson", [\
+      ["npm:7946.0.16", {\
+        "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.16-7a73d95991-1ff24a288b.zip/node_modules/@types/geojson/",\
+        "packageDependencies": [\
+          ["@types/geojson", "npm:7946.0.16"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/glob", [\
       ["npm:7.2.0", {\
         "packageLocation": "./.yarn/cache/@types-glob-npm-7.2.0-772334bf9a-a8eb5d5cb5.zip/node_modules/@types/glob/",\
@@ -10097,6 +10107,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-ms-npm-2.1.0-529ef799cc-5ce692ffe1.zip/node_modules/@types/ms/",\
         "packageDependencies": [\
           ["@types/ms", "npm:2.1.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/navermaps", [\
+      ["npm:3.7.9", {\
+        "packageLocation": "./.yarn/cache/@types-navermaps-npm-3.7.9-451740b1b0-f97549153f.zip/node_modules/@types/navermaps/",\
+        "packageDependencies": [\
+          ["@types/navermaps", "npm:3.7.9"],\
+          ["@types/geojson", "npm:7946.0.16"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -10937,6 +10957,7 @@ const RAW_RUNTIME_STATE =
           ["@tanstack/react-table", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:8.12.0"],\
           ["@types/js-cookie", "npm:3.0.6"],\
           ["@types/lodash.debounce", "npm:4.0.9"],\
+          ["@types/navermaps", "npm:3.7.9"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["@vitejs/plugin-react", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:4.2.1"],\
@@ -10955,6 +10976,7 @@ const RAW_RUNTIME_STATE =
           ["react-hook-form", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:7.50.0"],\
           ["react-i18next", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:15.4.1"],\
           ["react-intersection-observer", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:9.8.0"],\
+          ["react-naver-maps", "virtual:9ef42ff9c873460955cc48cd9b15127324f3d1f83a4bea8e6327df0101bb993bef095b175f8d10a3f0d23ee47f702ca3ef7272cba815f708e8609d03d84b96a2#npm:0.1.3"],\
           ["react-pdf", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:9.0.0"],\
           ["react-router-dom", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:6.21.3"],\
           ["react-select", "virtual:9845906954fdbefbb879db24fa8772d77a945dca59f459806df47a5b67245d4bc6502880b373cca7201062c81bea9f13f699f52de2004c037e79dbdbd5d97fb3#npm:5.8.0"],\

@@ -1,4 +1,4 @@
-import { ImageFile } from '@boolti/api';
+import { ImageFile, fetcher } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { Button, TextField, TimePicker, useDialog } from '@boolti/ui';
 import { add, format } from 'date-fns';
@@ -56,8 +56,14 @@ const ShowBasicInfoFormContent = ({
       content: (
         <DaumPostcode
           style={{ maxWidth: 426, height: 470 }}
-          onComplete={(address) => {
+          onComplete={async (address) => {
+            const response = await fetcher.get<naver.maps.Service.GeocodeResponse>(
+              `web/v1/naver-maps/geocoding?query=${address.query}&filter=BCODE@${address.bcode};`,
+            );
+
+            console.log(response);
             setValue('placeStreetAddress', address.roadAddress);
+
             detailAddressInputRef.current?.focus();
           }}
           onClose={() => {

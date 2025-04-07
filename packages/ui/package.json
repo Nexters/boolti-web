@@ -34,6 +34,7 @@
     "@boolti/eslint-config": "*",
     "@boolti/typescript-config": "*",
     "@types/mdast": "^4.0.4",
+    "@types/navermaps": "^3.7.9",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "typescript": "^5.2.2"
