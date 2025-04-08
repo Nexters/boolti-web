@@ -5,6 +5,7 @@ import { add, format } from 'date-fns';
 import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import { useNavermaps } from 'react-naver-maps';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
@@ -30,6 +31,7 @@ const ShowBasicInfoFormContent = ({
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
   const { open, close, isOpen } = useDialog();
+  const naverMaps = useNavermaps();
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -57,11 +59,28 @@ const ShowBasicInfoFormContent = ({
         <DaumPostcode
           style={{ maxWidth: 426, height: 470 }}
           onComplete={async (address) => {
-            const response = await fetcher.get<naver.maps.Service.GeocodeResponse>(
-              `web/v1/naver-maps/geocoding?query=${address.query}&filter=BCODE@${address.bcode};`,
+            const response = await fetcher.get<naver.maps.Service.GeocodeResponse['v2']>(
+              'web/v1/naver-maps/geocoding',
+              {
+                searchParams: {
+                  query: address.query,
+                  filter: `BCODE@${address.bcode};`,
+                },
+              },
             );
 
-            console.log(response);
+            if (
+              response.status === naverMaps.Service.GeocodeStatus.OK &&
+              response.meta.totalCount > 0
+            ) {
+              const foundAddress = response.addresses.find(Boolean);
+
+              if (foundAddress) {
+                setValue('latitude', Number(foundAddress.y));
+                setValue('longitude', Number(foundAddress.x));
+              }
+            }
+
             setValue('placeStreetAddress', address.roadAddress);
 
             detailAddressInputRef.current?.focus();

@@ -158,7 +158,7 @@ const routes: RouteObject[] = [
       <QueryClientProvider>
         <BooltiUIProvider>
           <LazyMotion features={domAnimation}>
-            <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID}>
+            <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID} submodules={['geocoder']}>
               <Outlet />
             </NavermapsProvider>
           </LazyMotion>
