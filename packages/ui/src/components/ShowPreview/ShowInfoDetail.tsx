@@ -1,53 +1,56 @@
 import Styled from './ShowPreview.styles';
-import { CallIcon, MessageIcon } from '@boolti/icon';
+import { CallIcon, MessageIcon, TicketIcon } from '@boolti/icon';
 
 import ShowInfoDescription from '../ShowContentMarkdown';
 import PreviewMap from '../PreviewMap';
 
 interface Props {
   show: {
-    images: string[];
-    name: string;
     date: string;
-    startTime: string;
-    runningTime: string;
     salesStartTime: string;
     salesEndTime: string;
-    placeName: string;
-    placeStreetAddress: string;
-    placeDetailAddress: string;
     notice: string;
     hostName: string;
-    hostPhoneNumber: string;
+    placeName: string;
+    streetAddress: string;
+    detailAddress: string;
     latitude?: number;
     longitude?: number;
   };
+  soldTicketCount?: number;
   hasNoticePage?: boolean;
-  onClickLink?: () => void;
-  onClickLinkMobile?: () => void;
+  onClickCallLink?: () => void;
+  onClickMessageLink?: () => void;
+  onClickCallLinkMobile?: () => void;
+  onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
 }
 
 const ShowInfoDetail = ({
   show: {
     date,
-    startTime,
-    runningTime,
     salesStartTime,
     salesEndTime,
-    placeName,
-    placeStreetAddress,
-    placeDetailAddress,
     notice,
     hostName,
     latitude,
     longitude,
+    placeName,
+    streetAddress,
+    detailAddress,
   },
+  soldTicketCount,
   hasNoticePage,
-  onClickLink,
-  onClickLinkMobile,
+  onClickCallLink,
+  onClickMessageLink,
+  onClickCallLinkMobile,
+  onClickMessageLinkMobile,
   onClickViewNotice,
 }: Props) => {
+  const nextDay = new Date(date);
+  nextDay.setDate(nextDay.getDate() + 1);
+  const isEnded = nextDay < new Date();
+
   return (
     <Styled.ShowInfo>
       <Styled.ShowInfoGroup>
@@ -60,26 +63,15 @@ const ShowInfoDetail = ({
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>일시</Styled.ShowInfoTitle>
-        </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription>
-          <span>
-            {date} / {startTime}
-          </span>
-          <Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
-        </Styled.ShowInfoDescription>
-      </Styled.ShowInfoGroup>
-      <Styled.ShowInfoGroup>
-        <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>위치</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowInfoSubtitle>{placeName}</Styled.ShowInfoSubtitle>
         <Styled.ShowInfoDescription>
-          {`${placeStreetAddress} / ${placeDetailAddress} ・ `}
+          {`${streetAddress} / ${detailAddress} ・ `}
           <Styled.ShowInfoTitleButton
             type="button"
             onClick={() => {
-              navigator.clipboard.writeText(`${placeStreetAddress} ${placeDetailAddress}`);
+              navigator.clipboard.writeText(`${streetAddress} ${detailAddress}`);
               alert('공연장 주소가 복사되었어요');
             }}
           >
@@ -87,6 +79,14 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoTitleButton>
         </Styled.ShowInfoDescription>
         {latitude && longitude && <PreviewMap latitude={latitude} longitude={longitude} />}
+        {isEnded && soldTicketCount !== undefined && (
+          <Styled.ShowTicketInfoDescription>
+            <Styled.TicketIcon>
+              <TicketIcon />
+            </Styled.TicketIcon>{' '}
+            {soldTicketCount}매 판매 완료
+          </Styled.ShowTicketInfoDescription>
+        )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>
@@ -108,18 +108,18 @@ const ShowInfoDetail = ({
         <Styled.ShowHost>
           <Styled.ShowHostName>{hostName}</Styled.ShowHostName>
           <Styled.ShowHostLink>
-            <a onClick={onClickLink}>
+            <a onClick={onClickCallLink}>
               <CallIcon />
             </a>
-            <a onClick={onClickLink}>
+            <a onClick={onClickMessageLink}>
               <MessageIcon />
             </a>
           </Styled.ShowHostLink>
           <Styled.ShowHostLinkMobile>
-            <a onClick={onClickLinkMobile}>
+            <a onClick={onClickCallLinkMobile}>
               <CallIcon />
             </a>
-            <a onClick={onClickLinkMobile}>
+            <a onClick={onClickMessageLinkMobile}>
               <MessageIcon />
             </a>
           </Styled.ShowHostLinkMobile>

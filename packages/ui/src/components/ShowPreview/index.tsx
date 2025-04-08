@@ -4,7 +4,7 @@ import 'swiper/css/pagination';
 import { useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { BooltiDark, ShareIcon } from '@boolti/icon';
+import { BooltiDark, ClockMobileIcon, MapMarkerIcon, ShareIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 import Tab from '../Tab';
@@ -22,8 +22,8 @@ interface ShowPreviewProps {
     salesStartTime: string;
     salesEndTime: string;
     placeName: string;
-    placeStreetAddress: string;
-    placeDetailAddress: string;
+    streetAddress: string;
+    detailAddress: string;
     notice: string;
     hostName: string;
     hostPhoneNumber: string;
@@ -56,7 +56,7 @@ const ShowPreview = ({
   onClickLinkMobile,
   onClickShareButton,
 }: ShowPreviewProps) => {
-  const { images, name } = show;
+  const { images, name, date, startTime, runningTime, placeName } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const containerScrollTop = useRef<number | null>(null);
@@ -107,6 +107,19 @@ const ShowPreview = ({
           ))}
         </Swiper>
         <Styled.ShowName>{name}</Styled.ShowName>
+        <Styled.ShowHeaderInfoList>
+          <Styled.ShowHeaderInfoItem>
+            <ClockMobileIcon />
+            <span>
+              {date} / {startTime}
+            </span>
+            <Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
+          </Styled.ShowHeaderInfoItem>
+          <Styled.ShowHeaderInfoItem>
+            <MapMarkerIcon />
+            <span>{placeName}</span>
+          </Styled.ShowHeaderInfoItem>
+        </Styled.ShowHeaderInfoList>
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
         <Tab
@@ -117,8 +130,10 @@ const ShowPreview = ({
                 <ShowInfoDetail
                   show={show}
                   hasNoticePage={hasNoticePage}
-                  onClickLink={onClickLink}
-                  onClickLinkMobile={onClickLinkMobile}
+                  onClickCallLink={onClickLink}
+                  onClickMessageLink={onClickLink}
+                  onClickCallLinkMobile={onClickLinkMobile}
+                  onClickMessageLinkMobile={onClickLinkMobile}
                   onClickViewNotice={() => {
                     containerScrollTop.current = containerRef?.current?.scrollTop ?? null;
                     containerRef?.current?.scrollTo(0, 0);

@@ -16,6 +16,7 @@ import StepProgressBar from './StepProgressBar';
 import Checkbox from './Checkbox';
 import StepDialog from './Dialog/StepDialog';
 import ShowContentMarkdown from './ShowContentMarkdown';
+import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 
 export {
   AgreeCheck,
@@ -35,5 +36,6 @@ export {
   StepProgressBar,
   Checkbox,
   StepDialog,
-  ShowContentMarkdown
+  ShowContentMarkdown,
+  ShowInfoDetail,
 };
