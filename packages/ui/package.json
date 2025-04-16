@@ -11,6 +11,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@boolti/bridge": "*",
     "@boolti/icon": "*",
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
@@ -24,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
     "react-markdown": "^10.0.1",
+    "react-naver-maps": "^0.1.3",
     "rehype-raw": "^7.0.0",
     "remark-directive": "^4.0.0",
     "swiper": "^11.0.7",
@@ -33,6 +35,7 @@
     "@boolti/eslint-config": "*",
     "@boolti/typescript-config": "*",
     "@types/mdast": "^4.0.4",
+    "@types/navermaps": "^3.7.9",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "typescript": "^5.2.2"

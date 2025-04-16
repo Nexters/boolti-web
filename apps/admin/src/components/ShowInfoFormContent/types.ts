@@ -6,6 +6,8 @@ export interface ShowBasicInfoFormInputs {
   placeName: string;
   placeStreetAddress: string;
   placeDetailAddress: string;
+  latitude: number;
+  longitude: number;
 }
 
 export interface ShowDetailInfoFormInputs {

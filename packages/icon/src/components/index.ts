@@ -5,6 +5,7 @@ import { BNK } from './BNK';
 import { BNP } from './BNP';
 import { BoA } from './BoA';
 import { Boolti } from './Boolti';
+import { CurvedArrowRight } from './CurvedArrowRight';
 import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
 import { BooltiLightGrey } from './BooltiLightGrey';
@@ -154,4 +155,5 @@ export {
   YoutubeLink as YoutubeLinkIcon,
   MapMarker as MapMarkerIcon,
   ClockMobile as ClockMobileIcon,
+  CurvedArrowRight as CurvedArrowRightIcon,
 };

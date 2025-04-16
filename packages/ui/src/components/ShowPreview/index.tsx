@@ -22,11 +22,13 @@ interface ShowPreviewProps {
     salesStartTime: string;
     salesEndTime: string;
     placeName: string;
-    placeStreetAddress: string;
-    placeDetailAddress: string;
+    streetAddress: string;
+    detailAddress: string;
     notice: string;
     hostName: string;
     hostPhoneNumber: string;
+    latitude?: number;
+    longitude?: number;
   };
   showCastTeams: Array<{
     name: string;
@@ -115,9 +117,7 @@ const ShowPreview = ({
           </Styled.ShowHeaderInfoItem>
           <Styled.ShowHeaderInfoItem>
             <MapMarkerIcon />
-            <span>
-              {placeName}
-            </span>
+            <span>{placeName}</span>
           </Styled.ShowHeaderInfoItem>
         </Styled.ShowHeaderInfoList>
       </Styled.ShowPreviewHeader>

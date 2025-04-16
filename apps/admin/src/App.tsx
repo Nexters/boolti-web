@@ -2,7 +2,7 @@ import 'the-new-css-reset/css/reset.css';
 import '@mdxeditor/editor/style.css';
 import './index.css';
 import './i18n';
-
+import { NavermapsProvider } from 'react-naver-maps';
 import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { setDefaultOptions } from 'date-fns';
@@ -43,6 +43,7 @@ import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
 import { initVConsole } from './utils/vConsole';
 import { checkIsWebView } from '@boolti/bridge';
+import { X_NCP_APIGW_API_KEY_ID } from './constants/ncp';
 import { IS_PRODUCTION_PHASE } from './constants/phase';
 import WebView from './pages/WebView';
 
@@ -159,7 +160,9 @@ const routes: RouteObject[] = [
       <QueryClientProvider>
         <BooltiUIProvider>
           <LazyMotion features={domAnimation}>
-            <Outlet />
+            <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID} submodules={['geocoder']}>
+              <Outlet />
+            </NavermapsProvider>
           </LazyMotion>
         </BooltiUIProvider>
       </QueryClientProvider>
@@ -176,7 +179,11 @@ const routes: RouteObject[] = [
 const router = createBrowserRouter(routes);
 
 const App = () => {
-  return <RouterProvider router={router} />;
+  return (
+    <Suspense fallback={null}>
+      <RouterProvider router={router} />
+    </Suspense>
+  );
 };
 
 export default App;

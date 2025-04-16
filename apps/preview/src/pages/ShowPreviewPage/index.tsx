@@ -8,6 +8,7 @@ import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
+import { NavermapsProvider } from 'react-naver-maps';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { useState } from 'react';
 
@@ -41,6 +42,8 @@ const getShareText = (show: {
   );
 };
 
+const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
+
 const ShowPreviewPage = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
 
@@ -72,6 +75,8 @@ const ShowPreviewPage = () => {
     detailAddress,
     hostName,
     hostPhoneNumber,
+    latitude,
+    longitude,
   } = previewData;
 
   const shareShowPreviewLink = async () => {
@@ -93,7 +98,7 @@ const ShowPreviewPage = () => {
       placeName,
       streetAddress,
       detailAddress,
-    })
+    });
 
     if (navigator.share) {
       await navigator.share({ text });
@@ -101,7 +106,7 @@ const ShowPreviewPage = () => {
       await navigator.clipboard.writeText(text);
       alert('공연 링크가 복사되었어요');
     }
-  }
+  };
 
   const shareButtonClickHandler = async () => {
     dialog.open({
@@ -118,11 +123,11 @@ const ShowPreviewPage = () => {
       isAuto: true,
       mobileType: 'darkBottomSheet',
       onClose: () => {
-        setShareDialogOpen(false)
-      }
-    })
+        setShareDialogOpen(false);
+      },
+    });
 
-    setShareDialogOpen(true)
+    setShareDialogOpen(true);
   };
 
   const reservationButtonClickHandler = () => {
@@ -154,7 +159,7 @@ const ShowPreviewPage = () => {
   };
 
   return (
-    <>
+    <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID}>
       <Meta title={title} showId={id.toString()} />
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
@@ -168,8 +173,10 @@ const ShowPreviewPage = () => {
               salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
               salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
               placeName: placeName,
-              placeStreetAddress: streetAddress,
-              placeDetailAddress: detailAddress,
+              streetAddress,
+              detailAddress,
+              latitude,
+              longitude,
               notice: text,
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,
@@ -203,7 +210,7 @@ const ShowPreviewPage = () => {
           </Styled.ReservationButtonWrapper>
         </Styled.ShowPreviewContainer>
       </Styled.ShowPreviewPage>
-    </>
+    </NavermapsProvider>
   );
 };
 

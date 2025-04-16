@@ -61,6 +61,7 @@ const palette = {
     status: {
       error: '#FF4D4F',
       success: '#52C41A',
+      link: '#46A6FF',
     },
     grey: {
       w: '#FFFFFF',

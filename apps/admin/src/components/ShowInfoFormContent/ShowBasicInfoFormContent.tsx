@@ -1,10 +1,11 @@
-import { ImageFile } from '@boolti/api';
+import { ImageFile, fetcher } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { Button, TextField, TimePicker, useDialog } from '@boolti/ui';
 import { add, format } from 'date-fns';
 import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
+import { useNavermaps } from 'react-naver-maps';
 import DaumPostcode from 'react-daum-postcode';
 
 import Styled from './ShowInfoFormContent.styles';
@@ -30,6 +31,7 @@ const ShowBasicInfoFormContent = ({
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
   const { open, close, isOpen } = useDialog();
+  const naverMaps = useNavermaps();
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -56,8 +58,31 @@ const ShowBasicInfoFormContent = ({
       content: (
         <DaumPostcode
           style={{ maxWidth: 426, height: 470 }}
-          onComplete={(address) => {
+          onComplete={async (address) => {
+            const response = await fetcher.get<naver.maps.Service.GeocodeResponse['v2']>(
+              'web/v1/naver-maps/geocoding',
+              {
+                searchParams: {
+                  query: address.address,
+                  filter: `BCODE@${address.bcode};`,
+                },
+              },
+            );
+
+            if (
+              response.status === naverMaps.Service.GeocodeStatus.OK &&
+              response.meta.totalCount > 0
+            ) {
+              const foundAddress = response.addresses.find(Boolean);
+
+              if (foundAddress) {
+                setValue('latitude', Number(foundAddress.y));
+                setValue('longitude', Number(foundAddress.x));
+              }
+            }
+
             setValue('placeStreetAddress', address.roadAddress);
+
             detailAddressInputRef.current?.focus();
           }}
           onClose={() => {
