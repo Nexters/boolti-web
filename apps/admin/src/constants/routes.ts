@@ -21,6 +21,8 @@ export const PATH = {
   SITE_POLICY: '/site-policy/:policyId',
   GIFT_INTRO: '/gift/:giftId',
   GIFT_REGISTER: '/gift/:giftId/register',
+
+  WEBVIEW: '/webview',
 } as const;
 
 export const HREF = {

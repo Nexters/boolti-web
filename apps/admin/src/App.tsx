@@ -44,6 +44,8 @@ import ShowEnterancePage from './pages/ShowEnterancePage';
 import { initVConsole } from './utils/vConsole';
 import { checkIsWebView } from '@boolti/bridge';
 import { X_NCP_APIGW_API_KEY_ID } from './constants/ncp';
+import { IS_PRODUCTION_PHASE } from './constants/phase';
+import WebView from './pages/WebView';
 
 setDefaultOptions({ locale: ko });
 
@@ -166,7 +168,11 @@ const routes: RouteObject[] = [
       </QueryClientProvider>
     ),
     errorElement: <GlobalErrorBoundary />,
-    children: [...publicRoutes, ...privateRoutes],
+    children: [
+      ...publicRoutes,
+      ...privateRoutes,
+      ...(IS_PRODUCTION_PHASE ? [] : [{ path: PATH.WEBVIEW, element: <WebView /> }]),
+    ],
   },
 ];
 
