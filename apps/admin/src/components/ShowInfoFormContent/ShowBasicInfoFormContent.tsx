@@ -63,7 +63,7 @@ const ShowBasicInfoFormContent = ({
               'web/v1/naver-maps/geocoding',
               {
                 searchParams: {
-                  query: address.query,
+                  query: address.address,
                   filter: `BCODE@${address.bcode};`,
                 },
               },
