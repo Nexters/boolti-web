@@ -120,6 +120,8 @@ const ShowInfoPage = () => {
             thumbnailPath: image.thumbnailPath,
             path: image.path,
           })),
+          latitude: showBasicInfoForm.getValues('latitude'),
+          longitude: showBasicInfoForm.getValues('longitude'),
           date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
           runningTime: +showBasicInfoFormInputs.runningTime,
           place: {

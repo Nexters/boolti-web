@@ -75,6 +75,8 @@ const ShowPreviewPage = () => {
     detailAddress,
     hostName,
     hostPhoneNumber,
+    latitude,
+    longitude,
   } = previewData;
 
   const shareShowPreviewLink = async () => {
@@ -173,6 +175,8 @@ const ShowPreviewPage = () => {
               placeName: placeName,
               streetAddress,
               detailAddress,
+              latitude,
+              longitude,
               notice: text,
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,

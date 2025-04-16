@@ -90,6 +90,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       images: showImageInfo,
       date: `${showBasicInfoForm.getValues('date')}T${showBasicInfoForm.getValues('startTime')}:00.000Z`,
       runningTime: Number(showBasicInfoForm.getValues('runningTime')),
+      latitude: showBasicInfoForm.getValues('latitude'),
+      longitude: showBasicInfoForm.getValues('longitude'),
       place: {
         name: showBasicInfoForm.getValues('placeName'),
         streetAddress: showBasicInfoForm.getValues('placeStreetAddress'),

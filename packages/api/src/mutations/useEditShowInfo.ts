@@ -16,6 +16,8 @@ interface PutShowInfoRequest {
     streetAddress: string;
     detailAddress: string;
   };
+  latitude?: number;
+  longitude?: number;
   notice: string;
   host: {
     name: string;
