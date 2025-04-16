@@ -1,5 +1,6 @@
 import Styled from './ShowPreview.styles';
 import { CallIcon, MessageIcon, TicketIcon } from '@boolti/icon';
+import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
 
 import ShowInfoDescription from '../ShowContentMarkdown';
 import PreviewMap from '../PreviewMap';
@@ -72,13 +73,19 @@ const ShowInfoDetail = ({
             type="button"
             onClick={() => {
               navigator.clipboard.writeText(`${streetAddress} ${detailAddress}`);
-              alert('공연장 주소가 복사되었어요');
+              if (checkIsWebView()) {
+                showToast({ message: '주로를 복사했어요.', duration: TOAST_DURATIONS.SHORT });
+              } else {
+                alert('공연장 주소가 복사되었어요');
+              }
             }}
           >
             복사
           </Styled.ShowInfoTitleButton>
         </Styled.ShowInfoDescription>
-        {latitude && longitude && <PreviewMap latitude={latitude} longitude={longitude} />}
+        {latitude && longitude && (
+          <PreviewMap latitude={latitude} longitude={longitude} name={placeName} />
+        )}
         {isEnded && soldTicketCount !== undefined && (
           <Styled.ShowTicketInfoDescription>
             <Styled.TicketIcon>

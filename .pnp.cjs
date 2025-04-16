@@ -3058,6 +3058,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/ui/",\
         "packageDependencies": [\
           ["@boolti/ui", "workspace:packages/ui"],\
+          ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
           ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
