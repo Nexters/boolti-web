@@ -330,6 +330,8 @@ const ShowInfoPage = () => {
                         : '',
                       startTime: showBasicInfoForm.watch('startTime'),
                       runningTime: showBasicInfoForm.watch('runningTime'),
+                      latitude: showBasicInfoForm.watch('latitude'),
+                      longitude: showBasicInfoForm.watch('longitude'),
                       salesStartTime: showSalesInfo
                         ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                         : '',

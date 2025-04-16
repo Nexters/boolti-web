@@ -1,5 +1,8 @@
 import { Container, NaverMap, useNavermaps } from 'react-naver-maps';
 
+import Styled from './PreviewMap.styles';
+import { CurvedArrowRightIcon } from '@boolti/icon';
+
 interface Props {
   latitude: number;
   longitude: number;
@@ -36,6 +39,9 @@ const PreviewMap = ({ latitude, longitude }: Props) => {
         zoom={18}
         defaultCenter={new navermaps.LatLng(latitude, longitude)}
       />
+      <Styled.Button>
+        <CurvedArrowRightIcon />
+      </Styled.Button>
     </Container>
   );
 };
