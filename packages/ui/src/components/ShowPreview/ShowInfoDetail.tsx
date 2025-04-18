@@ -74,7 +74,7 @@ const ShowInfoDetail = ({
             onClick={() => {
               navigator.clipboard.writeText(`${streetAddress} ${detailAddress}`);
               if (checkIsWebView()) {
-                showToast({ message: '주로를 복사했어요.', duration: TOAST_DURATIONS.SHORT });
+                showToast({ message: '주소를 복사했어요.', duration: TOAST_DURATIONS.SHORT });
               } else {
                 alert('공연장 주소가 복사되었어요');
               }
