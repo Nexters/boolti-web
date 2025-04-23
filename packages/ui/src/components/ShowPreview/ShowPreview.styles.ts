@@ -199,6 +199,7 @@ const ShowInfoTitleButton = styled.button`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.status.link};
   cursor: pointer;
+  white-space: nowrap;
 `;
 
 const ShowInfoMoreButton = styled.button`
