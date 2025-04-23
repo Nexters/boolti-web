@@ -71,6 +71,18 @@ const MarkdownContent = styled.div<{ colorMode?: 'dark' | 'light' }>`
     border-top: 1px solid ${({ theme }) => theme.palette.grey.g20};
     margin: 16px 0;
   }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+  
+  u {
+    text-decoration: underline;
+  }
 `
 
 export default {
