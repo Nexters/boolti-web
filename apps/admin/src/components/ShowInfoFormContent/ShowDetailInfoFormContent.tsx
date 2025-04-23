@@ -38,7 +38,9 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
             rules={{
               required: true,
             }}
-            render={({ field: { onChange, onBlur, value = '' } }) => {
+            render={({ field: { onChange, onBlur, value } }) => {
+              if (value === undefined) return <></>;
+
               return (
                 <Styled.TextAreaContainer>
                   <MarkdownEditor

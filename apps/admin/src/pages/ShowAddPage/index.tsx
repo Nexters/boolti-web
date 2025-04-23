@@ -61,7 +61,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
   const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
-  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
+  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>({
+    defaultValues: {
+      notice: '',
+      hostName: '',
+      hostPhoneNumber: ''
+    }
+  });
   const showSalesInfoForm = useForm<ShowSalesInfoFormInputs>();
 
   const uploadShowImageMutation = useUploadShowImage();
