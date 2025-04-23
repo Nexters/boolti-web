@@ -1,7 +1,8 @@
 import styled from '@emotion/styled'
 
 const MarkdownContent = styled.div<{ colorMode?: 'dark' | 'light' }>`
-  color: ${({ colorMode, theme }) => colorMode === 'dark' ? theme.palette.mobile.grey.g30: 'inherit'};  
+  width: 100%;
+  color: ${({ colorMode, theme }) => colorMode === 'dark' ? theme.palette.mobile.grey.g30 : 'inherit'};  
   
   p, ul, ol, li, blockquote {
     font-size: 16px;

@@ -1,9 +1,11 @@
-import Styled from './ShowPreview.styles';
-import { CallIcon, MessageIcon, TicketIcon } from '@boolti/icon';
+import { useRef, useState, useEffect } from 'react';
+import { useSwiper } from 'swiper/react';
 import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
+import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } from '@boolti/icon';
 
-import ShowInfoDescription from '../ShowContentMarkdown';
+import Styled from './ShowPreview.styles';
 import PreviewMap from '../PreviewMap';
+import ShowInfoDescription from '../ShowContentMarkdown';
 
 interface Props {
   show: {
@@ -19,7 +21,6 @@ interface Props {
     longitude?: number;
   };
   soldTicketCount?: number;
-  hasNoticePage?: boolean;
   onClickCallLink?: () => void;
   onClickMessageLink?: () => void;
   onClickCallLinkMobile?: () => void;
@@ -41,16 +42,35 @@ const ShowInfoDetail = ({
     detailAddress,
   },
   soldTicketCount,
-  hasNoticePage,
   onClickCallLink,
   onClickMessageLink,
   onClickCallLinkMobile,
   onClickMessageLinkMobile,
   onClickViewNotice,
 }: Props) => {
+  const showNoticeRef = useRef<HTMLDivElement>(null);
+  const swiper = useSwiper();
+
   const nextDay = new Date(date);
   nextDay.setDate(nextDay.getDate() + 1);
   const isEnded = nextDay < new Date();
+
+  const [collapse, setCollapse] = useState(true);
+  const [isOverflow, setIsOverflow] = useState(false);
+
+  useEffect(() => {
+    if (showNoticeRef.current) {
+      setIsOverflow(showNoticeRef.current.scrollHeight > 400);
+    }
+  }, [notice]);
+
+  useEffect(() => {
+    swiper?.update();
+  }, [collapse, swiper]);
+
+  const viewMoreClickHandler = () => {
+    setCollapse((prev) => !prev);
+  };
 
   return (
     <Styled.ShowInfo>
@@ -95,18 +115,21 @@ const ShowInfoDetail = ({
           </Styled.ShowTicketInfoDescription>
         )}
       </Styled.ShowInfoGroup>
-      <Styled.ShowInfoGroup>
+      <Styled.ShowInfoGroup style={{ paddingBottom: 0 }}>
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
-          {hasNoticePage && (
-            <Styled.ShowInfoTitleTextButton type="button" onClick={onClickViewNotice}>
-              전체보기
-            </Styled.ShowInfoTitleTextButton>
-          )}
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription isFullContent={hasNoticePage}>
+        <Styled.ShowInfoDescription collapse={collapse} ref={showNoticeRef}>
           <ShowInfoDescription content={notice} />
         </Styled.ShowInfoDescription>
+        {isOverflow && (
+          <Styled.ShowInfoMoreButton type="button" onClick={() => {
+            onClickViewNotice?.();
+            viewMoreClickHandler();
+          }}>
+            {collapse ? <>내용 더 보기 <ChevronDownIcon /></> : <>내용 접기 <ChevronUpIcon /></>}
+          </Styled.ShowInfoMoreButton>
+        )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
         <Styled.ShowInfoTitleContainer>

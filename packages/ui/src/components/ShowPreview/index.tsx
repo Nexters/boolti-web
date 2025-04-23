@@ -38,7 +38,6 @@ interface ShowPreviewProps {
       userImgPath: string;
     }[];
   }>;
-  hasNoticePage?: boolean;
   logoLinkHref?: string;
   containerRef?: React.RefObject<HTMLDivElement>;
   onClickLink?: () => void;
@@ -49,7 +48,6 @@ interface ShowPreviewProps {
 const ShowPreview = ({
   show,
   showCastTeams,
-  hasNoticePage,
   logoLinkHref,
   containerRef,
   onClickLink,
@@ -129,16 +127,10 @@ const ShowPreview = ({
               content: (
                 <ShowInfoDetail
                   show={show}
-                  hasNoticePage={hasNoticePage}
                   onClickCallLink={onClickLink}
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
-                  onClickViewNotice={() => {
-                    containerScrollTop.current = containerRef?.current?.scrollTop ?? null;
-                    containerRef?.current?.scrollTo(0, 0);
-                    setNoticeOpen(true);
-                  }}
                 />
               ),
             },
