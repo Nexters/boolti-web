@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { mq_lg } from '../../systems';
 
 interface ShowInfoDescriptionProps {
-  isFullContent?: boolean;
+  collapse?: boolean;
+  isOverflow?: boolean;
 }
 
 const ShowPreview = styled.div`
@@ -200,10 +201,15 @@ const ShowInfoTitleButton = styled.button`
   cursor: pointer;
 `;
 
-const ShowInfoTitleTextButton = styled.button`
-  height: 22px;
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.mobile.grey.g50};
+const ShowInfoMoreButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px 0 32px;
+  text-align: center;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
   cursor: pointer;
 `;
 
@@ -220,20 +226,29 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   word-break: break-word;
   display: flex;
   align-items: center;
+  position: relative;
 
   &:not(:last-child) {
     margin-bottom: 12px;
   }
 
-  ${({ isFullContent }) =>
-    isFullContent &&
-    `
-      display: -webkit-box;
+  ${({ collapse }) =>
+    collapse && `
+      display: block;
       overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 10;
-    `}
+      height: 300px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(180deg, rgba(9, 10, 11, 0) 0%, #090A0B 100%);
+      }
+    `
+  }
 `;
 
 const ShowTicketInfoDescription = styled.div`
@@ -410,7 +425,7 @@ export default {
   ShowInfoTitleContainer,
   ShowInfoTitle,
   ShowInfoTitleButton,
-  ShowInfoTitleTextButton,
+  ShowInfoMoreButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
   ShowTicketInfoDescription,

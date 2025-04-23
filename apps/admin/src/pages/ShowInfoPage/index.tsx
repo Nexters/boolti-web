@@ -355,7 +355,6 @@ const ShowInfoPage = () => {
                         })),
                       })) ?? []
                     }
-                    hasNoticePage
                     containerRef={showPreviewRef}
                   />
                 </Styled.ShowPreview>
@@ -411,9 +410,7 @@ const ShowInfoPage = () => {
                       userNickname: member.userNickname ?? '',
                       userImgPath: member.userImgPath ?? '',
                     })),
-                  })) ?? []
-                }
-                hasNoticePage
+                  })) ?? []}
                 containerRef={showPreviewMobileRef}
               />
             </Styled.ShowInfoPreview>
