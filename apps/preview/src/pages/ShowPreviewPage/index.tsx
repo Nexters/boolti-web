@@ -8,7 +8,6 @@ import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
-import { NavermapsProvider } from 'react-naver-maps';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { useState } from 'react';
 
@@ -41,8 +40,6 @@ const getShareText = (show: {
     `${getPreviewLink(show.id)}`
   );
 };
-
-const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
 
 const ShowPreviewPage = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
@@ -159,7 +156,7 @@ const ShowPreviewPage = () => {
   };
 
   return (
-    <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID}>
+    <>
       <Meta title={title} showId={id.toString()} />
       <Styled.ShowPreviewPage>
         <Styled.ShowPreviewContainer>
@@ -210,7 +207,7 @@ const ShowPreviewPage = () => {
           </Styled.ReservationButtonWrapper>
         </Styled.ShowPreviewContainer>
       </Styled.ShowPreviewPage>
-    </NavermapsProvider>
+    </>
   );
 };
 
