@@ -195,13 +195,6 @@ const ShowInfoTitle = styled.h3`
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
 `;
 
-const ShowInfoTitleButton = styled.button`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.mobile.status.link};
-  cursor: pointer;
-  white-space: nowrap;
-`;
-
 const ShowInfoMoreButton = styled.button`
   display: flex;
   justify-content: center;
@@ -250,6 +243,21 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
       }
     `
   }
+`;
+
+const ShowInfoDescriptionText = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  overflow-wrap: break-word;
+  word-break: break-word;
+`
+
+const ShowInfoDescriptionButton = styled.button`
+  display: inline;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.status.link};
+  cursor: pointer;
+  white-space: nowrap;
 `;
 
 const ShowTicketInfoDescription = styled.div`
@@ -425,10 +433,11 @@ export default {
   ShowInfoGroup,
   ShowInfoTitleContainer,
   ShowInfoTitle,
-  ShowInfoTitleButton,
   ShowInfoMoreButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
+  ShowInfoDescriptionText,
+  ShowInfoDescriptionButton,
   ShowTicketInfoDescription,
   TicketIcon,
   ShowInfoDescriptionBadge,

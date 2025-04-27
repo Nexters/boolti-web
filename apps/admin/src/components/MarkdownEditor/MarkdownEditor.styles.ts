@@ -2,8 +2,10 @@ import styled from '@emotion/styled';
 
 const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: boolean }>`
   .mdx-editor {
+    width: 100%;
+    max-width: 600px;
     min-height: 220px;
-    max-height: 440px;
+    max-height: 320px;
     overflow-y: auto;
     border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     border-radius: 4px;
@@ -28,6 +30,7 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
 
   .mdxeditor-toolbar {
     border-radius: 0;
+    contain: inline-size;
   }
 
   .prose {
@@ -101,6 +104,12 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
   }
 `;
 
+const MarkdownEditorPlaceholder = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g30};
+  margin: 0;
+`
+
 const YoutubeEmbedDeleteButton = styled.button`
   position: absolute;
   right: 0;
@@ -143,6 +152,7 @@ const YoutubeEmbedContainer = styled.div`
 
 export default {
   MarkdownEditorContainer,
+  MarkdownEditorPlaceholder,
   YoutubeEmbedDeleteButton,
   YoutubeEmbedContainer,
 }
