@@ -230,7 +230,8 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
     collapse && `
       display: block;
       overflow: hidden;
-      height: 300px;
+      height: 100%;
+      max-height: 300px;
 
       &::after {
         content: '';

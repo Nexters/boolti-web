@@ -82,11 +82,11 @@ const ShowInfoDetail = ({
           {salesStartTime} - {salesEndTime}
         </Styled.ShowInfoDescription>
       </Styled.ShowInfoGroup>
-      <Styled.ShowInfoGroup style={{ paddingBottom: 0 }}>
+      <Styled.ShowInfoGroup style={{ paddingBottom: isOverflow ? '0' : '32px' }}>
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription collapse={collapse} ref={showNoticeRef}>
+        <Styled.ShowInfoDescription collapse={isOverflow ? collapse : false} ref={showNoticeRef}>
           <ShowInfoDescription content={notice} />
         </Styled.ShowInfoDescription>
         {isOverflow && (
