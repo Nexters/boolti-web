@@ -92,7 +92,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         className="mdx-editor"
         contentEditableClassName="prose"
         markdown={value}
-        placeholder={placeholder}
+        placeholder={<Styled.MarkdownEditorPlaceholder>{placeholder}</Styled.MarkdownEditorPlaceholder>}
         translation={(key, _defaultValue, interpolations) => t(key, interpolations)}
         plugins={[
           toolbarPlugin({
