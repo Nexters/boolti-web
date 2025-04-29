@@ -21,6 +21,7 @@ interface Props {
     longitude?: number;
   };
   soldTicketCount?: number;
+  isAppWebview?: boolean
   onClickCallLink?: () => void;
   onClickMessageLink?: () => void;
   onClickCallLinkMobile?: () => void;
@@ -42,6 +43,7 @@ const ShowInfoDetail = ({
     detailAddress,
   },
   soldTicketCount,
+  isAppWebview = false,
   onClickCallLink,
   onClickMessageLink,
   onClickCallLinkMobile,
@@ -130,7 +132,7 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoDescriptionText>
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
-          <PreviewMap latitude={latitude} longitude={longitude} name={placeName} />
+          <PreviewMap latitude={latitude} longitude={longitude} name={placeName} isAppWebview={isAppWebview} />
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
