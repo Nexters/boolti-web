@@ -81,8 +81,16 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoDescription>
           {salesStartTime} - {salesEndTime}
         </Styled.ShowInfoDescription>
+        {isEnded && soldTicketCount !== undefined && (
+          <Styled.ShowTicketInfoDescription>
+            <Styled.TicketIcon>
+              <TicketIcon />
+            </Styled.TicketIcon>{' '}
+            {soldTicketCount}매 판매 완료
+          </Styled.ShowTicketInfoDescription>
+        )}
       </Styled.ShowInfoGroup>
-      <Styled.ShowInfoGroup style={{ paddingBottom: isOverflow ? '0' : '32px' }}>
+      <Styled.ShowInfoGroup style={{ paddingBottom: isOverflow ? '0' : '24px' }}>
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
@@ -123,14 +131,6 @@ const ShowInfoDetail = ({
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
           <PreviewMap latitude={latitude} longitude={longitude} name={placeName} />
-        )}
-        {isEnded && soldTicketCount !== undefined && (
-          <Styled.ShowTicketInfoDescription>
-            <Styled.TicketIcon>
-              <TicketIcon />
-            </Styled.TicketIcon>{' '}
-            {soldTicketCount}매 판매 완료
-          </Styled.ShowTicketInfoDescription>
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>

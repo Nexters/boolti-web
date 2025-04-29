@@ -16,7 +16,7 @@ const ShowCastInfo = ({ showCastTeams }: Props) => {
     <Styled.CastInfo>
       {showCastTeams.length > 0 ? (
         showCastTeams.map((team, teamIndex) => (
-          <Styled.ShowInfoGroup key={teamIndex} type="small">
+          <Styled.ShowInfoGroup key={teamIndex}>
             <Styled.ShowInfoTitleContainer>
               <Styled.ShowInfoTitle>{team.name}</Styled.ShowInfoTitle>
             </Styled.ShowInfoTitleContainer>

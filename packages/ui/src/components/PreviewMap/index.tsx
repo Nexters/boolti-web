@@ -21,7 +21,7 @@ const PreviewMap = ({ latitude, longitude, name }: Props) => {
     if (!localStorage.getItem(CONFIRM_LOCAL_STORAGE_KEY)) {
       const isConfirm = await confirm(
         <Styled.ConfirmText>
-          길찾기를 위해{'\n'}네이버 지도앱으로 이동합니다.
+          길찾기를 위해{'\n'}네이버 지도로 이동합니다.
           <Styled.ConfirmDescription>* 이 안내는 한 번만 표시됩니다.</Styled.ConfirmDescription>
         </Styled.ConfirmText>,
         {
