@@ -1,10 +1,9 @@
 import styled from '@emotion/styled';
 
-const Button = styled.button`
+const Button = styled.div`
   position: absolute;
   bottom: 12px;
   right: 12px;
-  cursor: pointer;
   width: 32px;
   height: 32px;
   border-radius: 4px;

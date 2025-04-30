@@ -1,37 +1,43 @@
-import { Container, NaverMap, useNavermaps } from 'react-naver-maps';
+import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import { checkIsAndroid, checkIsIOS, checkIsWebView } from '@boolti/bridge';
 
 import Styled from './PreviewMap.styles';
 import { CurvedArrowRightIcon } from '@boolti/icon';
 import { useConfirm } from '../../hooks';
 
+import markerImageUrl from '../../assets/images/marker.png'
+
+
 interface Props {
   latitude: number;
   longitude: number;
   name: string;
+  isAppWebview: boolean;
 }
 
 const CONFIRM_LOCAL_STORAGE_KEY = 'BOOLTI_PREVIEW_MAP_OPEN_NAVER_MAP';
 
-const PreviewMap = ({ latitude, longitude, name }: Props) => {
-  const navermaps = useNavermaps();
+const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
   const confirm = useConfirm();
+  const navermaps = useNavermaps();
 
   const openNaverMaps = async () => {
     if (!localStorage.getItem(CONFIRM_LOCAL_STORAGE_KEY)) {
-      const isConfirm = await confirm(
-        <Styled.ConfirmText>
-          길찾기를 위해{'\n'}네이버 지도앱으로 이동합니다.
-          <Styled.ConfirmDescription>* 이 안내는 한 번만 표시됩니다.</Styled.ConfirmDescription>
-        </Styled.ConfirmText>,
-        {
-          cancel: '취소하기',
-          confirm: '이동하기',
-        },
-      );
+      if (!isAppWebview) {
+        const isConfirm = await confirm(
+          <Styled.ConfirmText>
+            길찾기를 위해{'\n'}네이버 지도로 이동합니다.
+            <Styled.ConfirmDescription>* 이 안내는 한 번만 표시됩니다.</Styled.ConfirmDescription>
+          </Styled.ConfirmText>,
+          {
+            cancel: '취소하기',
+            confirm: '이동하기',
+          },
+        );
 
-      if (!isConfirm) {
-        return;
+        if (!isConfirm) {
+          return;
+        }
       }
 
       localStorage.setItem(CONFIRM_LOCAL_STORAGE_KEY, new Date().valueOf().toString());
@@ -69,6 +75,7 @@ const PreviewMap = ({ latitude, longitude, name }: Props) => {
         zIndex: 0,
         borderRadius: 8,
       }}
+      onClick={openNaverMaps}
     >
       <NaverMap
         draggable={false}
@@ -85,8 +92,10 @@ const PreviewMap = ({ latitude, longitude, name }: Props) => {
         mapTypeControl={false}
         zoom={18}
         defaultCenter={new navermaps.LatLng(latitude, longitude)}
-      />
-      <Styled.Button onClick={openNaverMaps}>
+      >
+        <Marker position={new navermaps.LatLng(latitude, longitude)} icon={{ url: markerImageUrl, size: { width: 48, height: 61 } }} />
+      </NaverMap>
+      <Styled.Button>
         <CurvedArrowRightIcon />
       </Styled.Button>
     </Container>

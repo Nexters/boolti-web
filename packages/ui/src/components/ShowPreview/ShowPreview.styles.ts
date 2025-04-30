@@ -17,7 +17,6 @@ const ShowPreviewHeader = styled.div`
   padding-bottom: 32px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   background: ${({ theme }) => theme.palette.mobile.grey.g90};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -43,8 +42,7 @@ const ShowPreviewNavbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 44px;
-  padding: 0 20px;
+  padding: 22px 20px 10px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
 `;
 
@@ -79,7 +77,8 @@ const ShowImage = styled.img`
 const ShowName = styled.h2`
   ${({ theme }) => theme.typo.point.p3};
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 12px;
 `;
 
 const ShowHeaderInfoList = styled.div`
@@ -165,14 +164,16 @@ const ShowPreviewTicketPeriodText = styled.p`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
-const ShowInfo = styled.div``;
+const ShowInfo = styled.div`
+  padding: 8px 0;
+`;
 
 const CastInfo = styled.div`
   padding-bottom: 16px;
 `;
 
-const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
-  padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
+const ShowInfoGroup = styled.div`
+  padding: 24px 0;
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
 
   &:last-of-type {
@@ -186,7 +187,7 @@ const ShowInfoTitleContainer = styled.div`
   align-items: center;
 
   &:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 `;
 
@@ -200,7 +201,7 @@ const ShowInfoMoreButton = styled.button`
   justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 10px 0 32px;
+  padding: 10px 0 24px;
   text-align: center;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
@@ -284,7 +285,8 @@ const ShowInfoDescriptionBadge = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g50};
   ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-  padding: 3px 8px;
+  padding: 0 8px;
+  height: 22px;
   border-radius: 999px;
   position: relative;
   top: -1.5px;

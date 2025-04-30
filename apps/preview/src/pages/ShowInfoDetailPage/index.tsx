@@ -47,6 +47,7 @@ const ShowInfoDetailPage: React.FC = () => {
           longitude,
         }}
         soldTicketCount={soldTicketCount}
+        isAppWebview
         onClickCallLink={callLinkClickHandler}
         onClickMessageLink={messageLinkClickHandler}
         onClickCallLinkMobile={callLinkClickHandler}
