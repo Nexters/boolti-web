@@ -1,9 +1,12 @@
-import { Container, NaverMap, useNavermaps } from 'react-naver-maps';
+import { Container, Marker, NaverMap, useNavermaps } from 'react-naver-maps';
 import { checkIsAndroid, checkIsIOS, checkIsWebView } from '@boolti/bridge';
 
 import Styled from './PreviewMap.styles';
 import { CurvedArrowRightIcon } from '@boolti/icon';
 import { useConfirm } from '../../hooks';
+
+import markerImageUrl from '../../assets/images/marker.png'
+
 
 interface Props {
   latitude: number;
@@ -15,8 +18,8 @@ interface Props {
 const CONFIRM_LOCAL_STORAGE_KEY = 'BOOLTI_PREVIEW_MAP_OPEN_NAVER_MAP';
 
 const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
-  const navermaps = useNavermaps();
   const confirm = useConfirm();
+  const navermaps = useNavermaps();
 
   const openNaverMaps = async () => {
     if (!localStorage.getItem(CONFIRM_LOCAL_STORAGE_KEY)) {
@@ -89,7 +92,9 @@ const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
         mapTypeControl={false}
         zoom={18}
         defaultCenter={new navermaps.LatLng(latitude, longitude)}
-      />
+      >
+        <Marker position={new navermaps.LatLng(latitude, longitude)} icon={{ url: markerImageUrl, size: { width: 48, height: 61 } }} />
+      </NaverMap>
       <Styled.Button>
         <CurvedArrowRightIcon />
       </Styled.Button>
