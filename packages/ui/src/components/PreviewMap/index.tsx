@@ -52,7 +52,7 @@ const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
     }
 
     if (checkIsAndroid()) {
-      `intent://place?${params}&appname=com.nexters.boolti#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`;
+      location.href = `intent://place?${params}&appname=com.nexters.boolti#Intent;scheme=nmap;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=com.nhn.android.nmap;end`;
     } else if (checkIsIOS()) {
       location.href = `nmap://place?${params}&appname=com.nexters.boolti`;
 
