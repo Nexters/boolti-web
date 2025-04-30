@@ -80,7 +80,7 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>티켓 판매</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription>
+        <Styled.ShowInfoDescription style={{ marginBottom: '0' }}>
           {salesStartTime} - {salesEndTime}
         </Styled.ShowInfoDescription>
         {isEnded && soldTicketCount !== undefined && (

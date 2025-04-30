@@ -288,8 +288,6 @@ const ShowInfoDescriptionBadge = styled.div`
   padding: 0 8px;
   height: 22px;
   border-radius: 999px;
-  position: relative;
-  top: -1.5px;
 `;
 
 const ShowInfoBox = styled.div`
