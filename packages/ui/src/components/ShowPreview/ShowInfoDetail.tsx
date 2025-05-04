@@ -68,7 +68,7 @@ const ShowInfoDetail = ({
 
   useEffect(() => {
     swiper?.update();
-  }, [collapse, swiper]);
+  }, [collapse, isOverflow, swiper]);
 
   const viewMoreClickHandler = () => {
     setCollapse((prev) => !prev);
