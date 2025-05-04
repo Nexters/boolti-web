@@ -61,10 +61,41 @@ const ShareButton = styled.button`
   width: 24px;
   height: 24px;
   cursor: pointer;
+  position: relative;
 
   &:disabled {
     cursor: default;
   }
+
+  svg {
+    pointer-events: none;
+  }
+`;
+
+const ShareDropdownMenu = styled.div<{ open: boolean }>`
+  visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+  opacity: ${({ open }) => (open ? 1 : 0)};
+  position: absolute;
+  top: 54px;
+  right: 16px;
+  width: 164px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 14px 0 #8B8B8B26;
+`;
+
+const ShareDropdownItem = styled.button`
+  width: 100%;
+  padding: 7px 12px;
+  text-align: left;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  border: none;
+  cursor: pointer;
 `;
 
 const ShowImage = styled.img`
@@ -420,6 +451,8 @@ export default {
   ShowPreviewNavbar,
   LogoLink,
   ShareButton,
+  ShareDropdownMenu,
+  ShareDropdownItem,
   ShowImage,
   ShowName,
   ShowHeaderInfoList,

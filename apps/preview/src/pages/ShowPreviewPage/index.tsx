@@ -1,5 +1,5 @@
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
-import { Footer, ShowPreview, useDialog } from '@boolti/ui';
+import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
@@ -43,12 +43,20 @@ const getShareText = (show: {
 
 const ShowPreviewPage = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
+  const [shareDropdownOpen, setShareDropdownOpen] = useState<boolean>(false);
 
   const loaderData = useLoaderData() as
     | [ShowPreviewResponse, ShowCastTeamReadResponse[]]
     | undefined;
 
   const dialog = useDialog();
+  const { device } = useDeviceByWidth({
+    onChangeDeviceByWidth: () => {
+      setShareDialogOpen(false);
+      setShareDropdownOpen(false);
+      dialog.close();
+    }
+  });
 
   useBodyScrollLock(shareDialogOpen);
 
@@ -105,26 +113,32 @@ const ShowPreviewPage = () => {
     }
   };
 
-  const shareButtonClickHandler = async () => {
-    dialog.open({
-      content: (
-        <Styled.ShareBottomSheet>
-          <Styled.ShareBottomSheetButton type="button" onClick={shareShowPreviewLink}>
-            URL만 공유하기
-          </Styled.ShareBottomSheetButton>
-          <Styled.ShareBottomSheetButton type="button" onClick={shareShowInfo}>
-            공연 정보 함께 공유하기
-          </Styled.ShareBottomSheetButton>
-        </Styled.ShareBottomSheet>
-      ),
-      isAuto: true,
-      mobileType: 'darkBottomSheet',
-      onClose: () => {
-        setShareDialogOpen(false);
-      },
-    });
+  const shareButtonClickHandler = () => {
+    if (device === 'mobile') {
+      dialog.open({
+        content: (
+          <Styled.ShareBottomSheet>
+            <Styled.ShareBottomSheetButton type="button" onClick={shareShowPreviewLink}>
+              URL만 공유하기
+            </Styled.ShareBottomSheetButton>
+            <Styled.ShareBottomSheetButton type="button" onClick={shareShowInfo}>
+              공연 정보 함께 공유하기
+            </Styled.ShareBottomSheetButton>
+          </Styled.ShareBottomSheet>
+        ),
+        isAuto: true,
+        mobileType: 'darkBottomSheet',
+        onClose: () => {
+          setShareDialogOpen(false);
+          setShareDropdownOpen(false);
+        },
+      });
 
-    setShareDialogOpen(true);
+      setShareDialogOpen(true);
+      return
+    }
+
+    setShareDropdownOpen(true);
   };
 
   const reservationButtonClickHandler = () => {
@@ -149,6 +163,12 @@ const ShowPreviewPage = () => {
         </Styled.DialogContainer>
       ),
     });
+  };
+
+  const shareDropdownCloseHandler = () => {
+    setShareDialogOpen(false);
+    setShareDropdownOpen(false);
+    dialog.close();
   };
 
   const reservationButtonMobileClickHandler = () => {
@@ -186,10 +206,14 @@ const ShowPreviewPage = () => {
                 userImgPath,
               })),
             }))}
+            shareDropdownOpen={shareDropdownOpen}
             logoLinkHref="https://boolti.in"
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
             onClickShareButton={shareButtonClickHandler}
+            onShareShowPreviewLink={shareShowPreviewLink}
+            onShareShowInfo={shareShowInfo}
+            onCloseShareDropdown={shareDropdownCloseHandler}
           />
           <Styled.FooterWrapper>
             <Footer darkMode />
