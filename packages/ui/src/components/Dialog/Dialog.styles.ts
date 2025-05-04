@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 
 import { mq_lg } from '../../systems';
+import { DialogMobileType } from './types';
 
 interface DialogContentProps {
   padding?: string;
@@ -8,10 +9,10 @@ interface DialogContentProps {
 
 const DIALOG_WIDTH = '450px';
 
-const DimmedArea = styled.div`
+const DimmedArea = styled.div<{ mobileType?: DialogMobileType }>`
   position: fixed;
   inset: 0;
-  background-color: ${({ theme }) => theme.palette.dim.dialog};
+  background-color: ${({ mobileType, theme }) => mobileType === 'darkBottomSheet' ? theme.palette.mobile.dialog : theme.palette.dim.dialog};
   z-index: 999;
 
   ${mq_lg} {
@@ -25,14 +26,14 @@ const DimmedArea = styled.div`
 const Dialog = styled.div<{
   isAuto: boolean;
   width?: string;
-  mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup';
+  mobileType: DialogMobileType;
 }>`
   background-color: ${({ theme }) => theme.palette.grey.w};
   width: 100%;
   border-radius: 8px;
 
   ${({ mobileType }) =>
-    mobileType === 'bottomSheet' &&
+    (mobileType === 'bottomSheet') &&
     `
     position: fixed;
     bottom: 0;
@@ -58,6 +59,17 @@ const Dialog = styled.div<{
     width: 80%;
   `}
 
+  ${({ mobileType, theme }) =>
+    (mobileType === 'darkBottomSheet') &&
+    `
+    background-color: ${theme.palette.mobile.grey.g85};
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  `}
+
   ${mq_lg} {
     border-radius: 8px;
     width: ${({ isAuto, width }) => (isAuto ? 'auto' : width ?? DIALOG_WIDTH)};
@@ -70,7 +82,7 @@ const Dialog = styled.div<{
   }
 `;
 
-const DialogHeader = styled.div<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
+const DialogHeader = styled.div<{ mobileType: DialogMobileType }>`
   position: relative;
   display: flex;
   align-items: center;
@@ -113,7 +125,7 @@ const DialogTitle = styled.h2`
   }
 `;
 
-const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
+const DialogCloseButton = styled.button<{ mobileType: DialogMobileType }>`
   position: absolute;
   width: 24px;
   height: 24px;
@@ -149,7 +161,7 @@ const DialogCloseButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage'
   }
 `;
 
-const DialogBackButton = styled.button<{ mobileType: 'bottomSheet' | 'fullPage' | 'centerPopup' }>`
+const DialogBackButton = styled.button<{ mobileType: DialogMobileType }>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -191,6 +203,21 @@ const DialogContent = styled.div<DialogContentProps>`
   }
 `;
 
+const DialogHandleContainer = styled.div`
+  width: 100%;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DialogHandle = styled.div`
+  width: 45px;
+  height: 4px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g60};
+  border-radius: 2px;
+`;
+
 export default {
   DimmedArea,
   Dialog,
@@ -200,4 +227,6 @@ export default {
   DialogCloseButton,
   DialogBackButton,
   DialogContent,
+  DialogHandleContainer,
+  DialogHandle,
 };

@@ -1,5 +1,5 @@
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
-import { Footer, ShowPreview, useDialog } from '@boolti/ui';
+import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { QRCodeSVG } from 'qrcode.react';
@@ -8,6 +8,8 @@ import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
+import useBodyScrollLock from '../../hooks/useBodyScrollLock';
+import { useState } from 'react';
 
 setDefaultOptions({ locale: ko });
 
@@ -40,11 +42,23 @@ const getShareText = (show: {
 };
 
 const ShowPreviewPage = () => {
+  const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
+  const [shareDropdownOpen, setShareDropdownOpen] = useState<boolean>(false);
+
   const loaderData = useLoaderData() as
     | [ShowPreviewResponse, ShowCastTeamReadResponse[]]
     | undefined;
 
   const dialog = useDialog();
+  const { device } = useDeviceByWidth({
+    onChangeDeviceByWidth: () => {
+      setShareDialogOpen(false);
+      setShareDropdownOpen(false);
+      dialog.close();
+    }
+  });
+
+  useBodyScrollLock(shareDialogOpen);
 
   if (!loaderData) {
     window.location.href = 'https://boolti.in';
@@ -66,25 +80,65 @@ const ShowPreviewPage = () => {
     detailAddress,
     hostName,
     hostPhoneNumber,
+    latitude,
+    longitude,
   } = previewData;
 
-  const shareButtonClickHandler = async () => {
-    if (navigator.share) {
-      await navigator.share({
-        text: getShareText({
-          id,
-          title,
-          date: new Date(date),
-          placeName,
-          streetAddress,
-          detailAddress,
-        }),
-      });
-    } else {
-      await navigator.clipboard.writeText(getPreviewLink(id));
+  const shareShowPreviewLink = async () => {
+    const text = getPreviewLink(id);
 
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
       alert('공연 링크가 복사되었어요');
     }
+  };
+
+  const shareShowInfo = async () => {
+    const text = getShareText({
+      id,
+      title,
+      date: new Date(date),
+      placeName,
+      streetAddress,
+      detailAddress,
+    });
+
+    if (navigator.share) {
+      await navigator.share({ text });
+    } else {
+      await navigator.clipboard.writeText(text);
+      alert('공연 링크가 복사되었어요');
+    }
+  };
+
+  const shareButtonClickHandler = () => {
+    if (device === 'mobile') {
+      dialog.open({
+        content: (
+          <Styled.ShareBottomSheet>
+            <Styled.ShareBottomSheetButton type="button" onClick={shareShowPreviewLink}>
+              URL만 공유하기
+            </Styled.ShareBottomSheetButton>
+            <Styled.ShareBottomSheetButton type="button" onClick={shareShowInfo}>
+              공연 정보 함께 공유하기
+            </Styled.ShareBottomSheetButton>
+          </Styled.ShareBottomSheet>
+        ),
+        isAuto: true,
+        mobileType: 'darkBottomSheet',
+        onClose: () => {
+          setShareDialogOpen(false);
+          setShareDropdownOpen(false);
+        },
+      });
+
+      setShareDialogOpen(true);
+      return
+    }
+
+    setShareDropdownOpen(true);
   };
 
   const reservationButtonClickHandler = () => {
@@ -111,6 +165,12 @@ const ShowPreviewPage = () => {
     });
   };
 
+  const shareDropdownCloseHandler = () => {
+    setShareDialogOpen(false);
+    setShareDropdownOpen(false);
+    dialog.close();
+  };
+
   const reservationButtonMobileClickHandler = () => {
     window.location.href = getDynamicLink(id);
   };
@@ -130,8 +190,10 @@ const ShowPreviewPage = () => {
               salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
               salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
               placeName: placeName,
-              placeStreetAddress: streetAddress,
-              placeDetailAddress: detailAddress,
+              streetAddress,
+              detailAddress,
+              latitude,
+              longitude,
               notice: text,
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,
@@ -144,10 +206,14 @@ const ShowPreviewPage = () => {
                 userImgPath,
               })),
             }))}
+            shareDropdownOpen={shareDropdownOpen}
             logoLinkHref="https://boolti.in"
             onClickLink={reservationButtonClickHandler}
             onClickLinkMobile={reservationButtonMobileClickHandler}
             onClickShareButton={shareButtonClickHandler}
+            onShareShowPreviewLink={shareShowPreviewLink}
+            onShareShowInfo={shareShowInfo}
+            onCloseShareDropdown={shareDropdownCloseHandler}
           />
           <Styled.FooterWrapper>
             <Footer darkMode />

@@ -61,6 +61,7 @@ const palette = {
     status: {
       error: '#FF4D4F',
       success: '#52C41A',
+      link: '#46A6FF',
     },
     grey: {
       w: '#FFFFFF',
@@ -79,6 +80,7 @@ const palette = {
       g95: '#090A0B',
       b: '#000000',
     },
+    dialog: 'rgba(0, 0, 0, 0.25)'
   },
   opacity: {
     0: '00',

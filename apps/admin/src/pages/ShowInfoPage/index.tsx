@@ -120,6 +120,8 @@ const ShowInfoPage = () => {
             thumbnailPath: image.thumbnailPath,
             path: image.path,
           })),
+          latitude: showBasicInfoForm.getValues('latitude'),
+          longitude: showBasicInfoForm.getValues('longitude'),
           date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
           runningTime: +showBasicInfoFormInputs.runningTime,
           place: {
@@ -163,17 +165,19 @@ const ShowInfoPage = () => {
   ]);
 
   const confirmSaveShowInfo = useCallback(async () => {
-    const isDirty = Object.values(showBasicInfoForm.formState.dirtyFields).some((value) => value) ||
+    const isDirty =
+      Object.values(showBasicInfoForm.formState.dirtyFields).some((value) => value) ||
       Object.values(showDetailInfoForm.formState.dirtyFields).some((value) => value) ||
       isImageFilesDirty ||
-      isCastTeamListDraftDirty
+      isCastTeamListDraftDirty;
 
-    if (!isDirty) return true
+    if (!isDirty) return true;
 
     const result = await confirm(
       <Styled.ConfirmMessageContainer>
         <Styled.ConfirmMessage>
-          저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.<br />이 페이지를 나갈까요?
+          저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.
+          <br />이 페이지를 나갈까요?
         </Styled.ConfirmMessage>
         <Styled.ConfirmSubMessage>
           *페이지 하단의 [저장하기] 버튼을 눌러 정보를 저장할 수 있습니다.
@@ -326,6 +330,8 @@ const ShowInfoPage = () => {
                         : '',
                       startTime: showBasicInfoForm.watch('startTime'),
                       runningTime: showBasicInfoForm.watch('runningTime'),
+                      latitude: showBasicInfoForm.watch('latitude'),
+                      longitude: showBasicInfoForm.watch('longitude'),
                       salesStartTime: showSalesInfo
                         ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                         : '',
@@ -333,8 +339,8 @@ const ShowInfoPage = () => {
                         ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                         : '',
                       placeName: showBasicInfoForm.watch('placeName'),
-                      placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
-                      placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                      streetAddress: showBasicInfoForm.watch('placeStreetAddress'),
+                      detailAddress: showBasicInfoForm.watch('placeDetailAddress'),
                       notice: showDetailInfoForm.watch('notice'),
                       hostName: showDetailInfoForm.watch('hostName'),
                       hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
@@ -349,7 +355,6 @@ const ShowInfoPage = () => {
                         })),
                       })) ?? []
                     }
-                    hasNoticePage
                     containerRef={showPreviewRef}
                   />
                 </Styled.ShowPreview>
@@ -391,8 +396,8 @@ const ShowInfoPage = () => {
                     ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                     : '',
                   placeName: showBasicInfoForm.watch('placeName'),
-                  placeStreetAddress: showBasicInfoForm.watch('placeStreetAddress'),
-                  placeDetailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                  streetAddress: showBasicInfoForm.watch('placeStreetAddress'),
+                  detailAddress: showBasicInfoForm.watch('placeDetailAddress'),
                   notice: showDetailInfoForm.watch('notice'),
                   hostName: showDetailInfoForm.watch('hostName'),
                   hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
@@ -406,7 +411,6 @@ const ShowInfoPage = () => {
                       userImgPath: member.userImgPath ?? '',
                     })),
                   })) ?? []}
-                hasNoticePage
                 containerRef={showPreviewMobileRef}
               />
             </Styled.ShowInfoPreview>

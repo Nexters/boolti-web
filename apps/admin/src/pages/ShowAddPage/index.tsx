@@ -61,7 +61,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
   const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
-  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
+  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>({
+    defaultValues: {
+      notice: '',
+      hostName: '',
+      hostPhoneNumber: ''
+    }
+  });
   const showSalesInfoForm = useForm<ShowSalesInfoFormInputs>();
 
   const uploadShowImageMutation = useUploadShowImage();
@@ -90,6 +96,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       images: showImageInfo,
       date: `${showBasicInfoForm.getValues('date')}T${showBasicInfoForm.getValues('startTime')}:00.000Z`,
       runningTime: Number(showBasicInfoForm.getValues('runningTime')),
+      latitude: showBasicInfoForm.getValues('latitude'),
+      longitude: showBasicInfoForm.getValues('longitude'),
       place: {
         name: showBasicInfoForm.getValues('placeName'),
         streetAddress: showBasicInfoForm.getValues('placeStreetAddress'),

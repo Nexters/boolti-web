@@ -348,6 +348,10 @@ export interface ShowCreateRequest {
   }[];
   /** 출연진 팀 */
   castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
+  /** 위도 */
+  latitude?: number;
+  /** 경도 */
+  longitude?: number;
 }
 
 export interface SummaryItem {

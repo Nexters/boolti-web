@@ -2,7 +2,8 @@ import styled from '@emotion/styled';
 import { mq_lg } from '../../systems';
 
 interface ShowInfoDescriptionProps {
-  isFullContent?: boolean;
+  collapse?: boolean;
+  isOverflow?: boolean;
 }
 
 const ShowPreview = styled.div`
@@ -16,7 +17,6 @@ const ShowPreviewHeader = styled.div`
   padding-bottom: 32px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   background: ${({ theme }) => theme.palette.mobile.grey.g90};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -42,8 +42,7 @@ const ShowPreviewNavbar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 44px;
-  padding: 0 20px;
+  padding: 22px 20px 10px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
 `;
 
@@ -62,10 +61,41 @@ const ShareButton = styled.button`
   width: 24px;
   height: 24px;
   cursor: pointer;
+  position: relative;
 
   &:disabled {
     cursor: default;
   }
+
+  svg {
+    pointer-events: none;
+  }
+`;
+
+const ShareDropdownMenu = styled.div<{ open: boolean }>`
+  visibility: ${({ open }) => (open ? 'visible' : 'hidden')};
+  opacity: ${({ open }) => (open ? 1 : 0)};
+  position: absolute;
+  top: 54px;
+  right: 16px;
+  width: 164px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 14px 0 #8B8B8B26;
+`;
+
+const ShareDropdownItem = styled.button`
+  width: 100%;
+  padding: 7px 12px;
+  text-align: left;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  border: none;
+  cursor: pointer;
 `;
 
 const ShowImage = styled.img`
@@ -78,7 +108,22 @@ const ShowImage = styled.img`
 const ShowName = styled.h2`
   ${({ theme }) => theme.typo.point.p3};
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 12px;
+`;
+
+const ShowHeaderInfoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const ShowHeaderInfoItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
 const ShowPreviewContent = styled.div`
@@ -150,14 +195,16 @@ const ShowPreviewTicketPeriodText = styled.p`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
-const ShowInfo = styled.div``;
+const ShowInfo = styled.div`
+  padding: 8px 0;
+`;
 
 const CastInfo = styled.div`
   padding-bottom: 16px;
 `;
 
-const ShowInfoGroup = styled.div<{ type?: 'small' | 'normal' }>`
-  padding: ${({ type = 'normal' }) => (type === 'normal' ? '32px 0' : '24px 0')};
+const ShowInfoGroup = styled.div`
+  padding: 24px 0;
   border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
 
   &:last-of-type {
@@ -171,7 +218,7 @@ const ShowInfoTitleContainer = styled.div`
   align-items: center;
 
   &:not(:last-child) {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 `;
 
@@ -180,31 +227,22 @@ const ShowInfoTitle = styled.h3`
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
 `;
 
-const ShowInfoTitleButton = styled.button`
-  padding: 0 12px;
-  height: 30px;
-  border-radius: 4px;
-  ${({ theme }) => theme.typo.c1};
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  display: inline-flex;
+const ShowInfoMoreButton = styled.button`
+  display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
-  cursor: pointer;
-`;
-
-const ShowInfoTitleTextButton = styled.button`
-  height: 22px;
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  width: 100%;
+  padding: 10px 0 24px;
+  text-align: center;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
   cursor: pointer;
 `;
 
 const ShowInfoSubtitle = styled.h4`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 `;
 
 const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
@@ -212,26 +250,65 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   overflow-wrap: break-word;
   word-break: break-word;
+  display: flex;
+  align-items: center;
+  position: relative;
 
-  ${({ isFullContent }) =>
-    isFullContent &&
-    `
-      display: -webkit-box;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 10;
-    `}
-
-  a {
-    color: #46a6ff;
-    text-decoration: underline;
+  &:not(:last-child) {
+    margin-bottom: 12px;
   }
 
-  span {
-    margin-right: 6px;
+  ${({ collapse }) =>
+    collapse && `
+      display: block;
+      overflow: hidden;
+      height: 100%;
+      max-height: 300px;
+
+      &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        bottom: 0;
+        left: 0;
+        background: linear-gradient(180deg, rgba(9, 10, 11, 0) 0%, #090A0B 100%);
+      }
+    `
   }
 `;
+
+const ShowInfoDescriptionText = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  overflow-wrap: break-word;
+  word-break: break-word;
+`
+
+const ShowInfoDescriptionButton = styled.button`
+  display: inline;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.status.link};
+  cursor: pointer;
+  white-space: nowrap;
+`;
+
+const ShowTicketInfoDescription = styled.div`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+`;
+
+const TicketIcon = styled.div`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+`
 
 const ShowInfoDescriptionBadge = styled.div`
   display: inline-flex;
@@ -239,10 +316,9 @@ const ShowInfoDescriptionBadge = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g50};
   ${({ theme }) => theme.typo.c1};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
-  padding: 3px 12px;
+  padding: 0 8px;
+  height: 22px;
   border-radius: 999px;
-  position: relative;
-  top: -1.5px;
 `;
 
 const ShowInfoBox = styled.div`
@@ -306,11 +382,11 @@ const ShowCastListItem = styled.li`
   width: calc(50% - 8px);
   overflow: hidden;
 
-  &:nth-child(2n + 1) {
+  &:nth-of-type(2n + 1) {
     margin-right: 8px;
   }
 
-  &:nth-child(2n) {
+  &:nth-of-type(2n) {
     margin-left: 8px;
   }
 `;
@@ -375,8 +451,12 @@ export default {
   ShowPreviewNavbar,
   LogoLink,
   ShareButton,
+  ShareDropdownMenu,
+  ShareDropdownItem,
   ShowImage,
   ShowName,
+  ShowHeaderInfoList,
+  ShowHeaderInfoItem,
   ShowPreviewContent,
   ShowPreviewTicketPeriod,
   ShowPreviewTicketPeriodInfo,
@@ -387,10 +467,13 @@ export default {
   ShowInfoGroup,
   ShowInfoTitleContainer,
   ShowInfoTitle,
-  ShowInfoTitleButton,
-  ShowInfoTitleTextButton,
+  ShowInfoMoreButton,
   ShowInfoSubtitle,
   ShowInfoDescription,
+  ShowInfoDescriptionText,
+  ShowInfoDescriptionButton,
+  ShowTicketInfoDescription,
+  TicketIcon,
   ShowInfoDescriptionBadge,
   ShowInfoBox,
   ShowHost,

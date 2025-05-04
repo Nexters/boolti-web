@@ -5,6 +5,7 @@ import { BNK } from './BNK';
 import { BNP } from './BNP';
 import { BoA } from './BoA';
 import { Boolti } from './Boolti';
+import { CurvedArrowRight } from './CurvedArrowRight';
 import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
 import { BooltiLightGrey } from './BooltiLightGrey';
@@ -72,6 +73,9 @@ import { Call } from './Call';
 import { Message } from './Message';
 import { Discord } from './Discord';
 import { Question } from './Question';
+import { YoutubeLink } from './YoutubeLink';
+import { MapMarker } from './MapMarker';
+import { ClockMobile } from './ClockMobile';
 
 export {
   Apple as AppleIcon,
@@ -148,4 +152,8 @@ export {
   Call as CallIcon,
   Message as MessageIcon,
   Discord as DiscordIcon,
+  YoutubeLink as YoutubeLinkIcon,
+  MapMarker as MapMarkerIcon,
+  ClockMobile as ClockMobileIcon,
+  CurvedArrowRight as CurvedArrowRightIcon,
 };

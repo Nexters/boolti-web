@@ -56,7 +56,7 @@ const BackButton = styled.button`
   }
 `;
 
-const ShowPreviewNoticeText = styled.p`
+const ShowPreviewNoticeText = styled.div`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   padding: 20px;

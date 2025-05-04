@@ -3,6 +3,7 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 
 import Styled from './ShowInfoFormContent.styles';
 import { ShowDetailInfoFormInputs } from './types';
+import MarkdownEditor from '../MarkdownEditor';
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowDetailInfoFormInputs>;
@@ -37,31 +38,36 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
             rules={{
               required: true,
             }}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Styled.TextAreaContainer>
-                <Styled.TextArea
-                  placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
-                  rows={10}
-                  disabled={disabled}
-                  onChange={(event) => {
-                    onChange(event);
-                    clearErrors('notice');
-                  }}
-                  onBlur={() => {
-                    onBlur();
+            render={({ field: { onChange, onBlur, value } }) => {
+              if (value === undefined) return <></>;
 
-                    if (!value) {
-                      setError('notice', { type: 'required', message: '필수 입력사항입니다.' });
-                    }
-                  }}
-                  value={value ?? ''}
-                  hasError={!!errors.notice?.message}
-                />
-                {errors.notice?.message && (
-                  <Styled.TextAreaErrorMessage>{errors.notice.message}</Styled.TextAreaErrorMessage>
-                )}
-              </Styled.TextAreaContainer>
-            )}
+              return (
+                <Styled.TextAreaContainer>
+                  <MarkdownEditor
+                    value={value}
+                    placeholder="(ex. 공연 참가팀, 팀소개, 공연곡 소개 등)"
+                    disabled={disabled}
+                    hasError={!!errors.notice?.message}
+                    onChange={(event) => {
+                      onChange(event);
+                      clearErrors('notice');
+                    }}
+                    onBlur={() => {
+                      onBlur();
+
+                      if (!value) {
+                        setError('notice', { type: 'required', message: '필수 입력사항입니다.' });
+                      }
+                    }}
+                  />
+                  {errors.notice?.message && (
+                    <Styled.TextAreaErrorMessage>
+                      {errors.notice.message}
+                    </Styled.TextAreaErrorMessage>
+                  )}
+                </Styled.TextAreaContainer>
+              );
+            }}
             name="notice"
           />
         </Styled.ShowInfoFormContent>
