@@ -64,7 +64,7 @@ const ShowContentMarkdown: React.FC<ShowContentMarkdownProps> = ({ content, colo
         remarkPlugins={[remarkDirective, remarkYoutubePlugin]}
         rehypePlugins={[rehypeRaw]}
       >
-        {content}
+        {content.replace(/\n\n\n\n/gi, '<p><br/></p>')}
       </Markdown>
     </Styled.MarkdownContent>
   )
