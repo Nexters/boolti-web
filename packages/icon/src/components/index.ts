@@ -30,6 +30,8 @@ import { DGB } from './DGB';
 import { Download } from './Download';
 import { Edit } from './Edit';
 import { EPost } from './EPost';
+import { DollarTicket } from './DollarTicket';
+import { FreeTicket } from './FreeTicket';
 import { FileUp } from './FileUp';
 import { Github } from './Github';
 import { Hana } from './Hana';
@@ -98,6 +100,8 @@ export {
   ChevronLeft as ChevronLeftIcon,
   ChevronRight as ChevronRightIcon,
   ChevronUp as ChevronUpIcon,
+  DollarTicket as DollarTicketIcon,
+  FreeTicket as FreeTicketIcon,
   ChinaCB,
   Citi,
   Clear as ClearIcon,

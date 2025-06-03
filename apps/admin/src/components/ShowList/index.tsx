@@ -1,23 +1,24 @@
 import { ChevronRightIcon, PlusIcon } from '@boolti/icon';
 import { useDialog } from '@boolti/ui';
-import { useNavigate } from 'react-router-dom';
-
-import { PATH } from '~/constants/routes';
 
 import EntranceConfirmDialogContent from '../EntranceConfirmDialogContent';
 import ShowListItem from '~/components/ShowListItem';
 import Styled from './ShowList.styles';
 import { HostType } from '@boolti/api/src/types/host';
+import ShowTypeSelectDialogContent from '../ShowTypeSelectDialogContent';
 
 interface Props {
   shows: React.ComponentProps<typeof ShowListItem>[];
 }
 
 const ShowList = ({ shows }: Props) => {
-  const navigate = useNavigate();
   const { open, close } = useDialog();
 
   const isEmpty = shows.length === 0;
+
+  const openShowTypeSelectDialog = () => {
+    open({ title: '공연 유형 선택', content: <ShowTypeSelectDialogContent close={close} /> });
+  };
 
   return (
     <Styled.Container>
@@ -43,9 +44,7 @@ const ShowList = ({ shows }: Props) => {
           colorTheme="primary"
           size="small"
           icon={<PlusIcon />}
-          onClick={() => {
-            navigate(PATH.SHOW_ADD);
-          }}
+          onClick={openShowTypeSelectDialog}
         >
           등록하기
         </Styled.MobileButton>
@@ -54,9 +53,7 @@ const ShowList = ({ shows }: Props) => {
           colorTheme="primary"
           size="bold"
           icon={<PlusIcon />}
-          onClick={() => {
-            navigate(PATH.SHOW_ADD);
-          }}
+          onClick={openShowTypeSelectDialog}
         >
           공연 등록하기
         </Styled.DesktopButton>
