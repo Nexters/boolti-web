@@ -354,6 +354,31 @@ export interface ShowCreateRequest {
   longitude?: number;
 }
 
+export interface NonTicketingShowCreateRequest {
+  /** 공연 이름 */
+  name: string;
+  /** 공연 포스터 이미지 목록 */
+  images: ShowImage[];
+  /** 공연 시작 날짜, 시간. ISO8601. */
+  date: string;
+  /** 러닝 타임. 분 */
+  runningTime: number;
+  /** 장소 정보 */
+  place: Place;
+  /** 공지사항 (공연 상세) */
+  notice: string;
+  /** 호스트 정보 */
+  host: Host;
+  /** 출연진 팀 */
+  castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
+  /** 위도 */
+  latitude?: number;
+  /** 경도 */
+  longitude?: number;
+  /** 티켓 미진행 공연 여부 */
+  isNonTicketing: boolean;
+}
+
 export interface SummaryItem {
   /** 수수료 */
   fee: number;

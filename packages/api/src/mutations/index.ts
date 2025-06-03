@@ -43,11 +43,13 @@ import useDeleteCastTeams from './useDeleteCastTeams';
 import usePostCastTeams from './usePostCastTeams';
 import useChangeCastTeamOrder from './useChangeCastTeamOrder';
 import useUploadShowContentImage from './useUploadShowContentImage';
+import useAddNonTicketingShow from './useAddNonTicketingShow';
 
 export {
   usePostCastTeams,
   usePutCastTeams,
   useDeleteCastTeams,
+  useAddNonTicketingShow,
   useAddBankAccount,
   useAddShow,
   useAdminCreateSettlementStatement,

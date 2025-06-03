@@ -1,6 +1,7 @@
 import {
   ImageFile,
   ShowCastTeamCreateOrUpdateRequest,
+  useAddNonTicketingShow,
   useAddShow,
   useUploadShowImage,
 } from '@boolti/api';
@@ -65,13 +66,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     defaultValues: {
       notice: '',
       hostName: '',
-      hostPhoneNumber: ''
-    }
+      hostPhoneNumber: '',
+    },
   });
   const showSalesInfoForm = useForm<ShowSalesInfoFormInputs>();
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
+  const addNonTicketingShowMutation = useAddNonTicketingShow();
 
   const toast = useToast();
 
@@ -84,14 +86,17 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
-    if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
+    if (
+      uploadShowImageMutation.status === 'loading' ||
+      addShowMutation.status === 'loading' ||
+      addNonTicketingShowMutation.status === 'loading'
+    )
       return;
 
     // 공연 이미지 업로드
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
 
-    // 공연 생성
-    const showId = await addShowMutation.mutateAsync({
+    const body = {
       name: showBasicInfoForm.getValues('name'),
       images: showImageInfo,
       date: `${showBasicInfoForm.getValues('date')}T${showBasicInfoForm.getValues('startTime')}:00.000Z`,
@@ -108,6 +113,18 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         name: showDetailInfoForm.getValues('hostName'),
         phoneNumber: showDetailInfoForm.getValues('hostPhoneNumber'),
       },
+      castTeams: castTeamList.map(({ name, members }) => ({
+        name,
+        members: members
+          ?.filter(({ userCode, roleName }) => userCode && roleName)
+          .map(({ userCode, roleName }) => ({
+            userCode,
+            roleName,
+          })),
+      })) as ShowCastTeamCreateOrUpdateRequest[],
+    };
+
+    const ticketBody = {
       salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
       salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
       ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
@@ -120,16 +137,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      castTeams: castTeamList.map(({ name, members }) => ({
-        name,
-        members: members
-          ?.filter(({ userCode, roleName }) => userCode && roleName)
-          .map(({ userCode, roleName }) => ({
-            userCode,
-            roleName,
-          })),
-      })) as ShowCastTeamCreateOrUpdateRequest[],
-    });
+    };
+
+    // 공연 생성
+    const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
     if (isWebView && isWebViewBridgeAvailable()) {
       showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });
