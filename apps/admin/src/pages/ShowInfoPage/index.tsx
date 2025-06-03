@@ -57,14 +57,18 @@ const ShowInfoPage = () => {
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
 
+  const isNonTicketingShow =
+    showSalesInfo?.salesEndTime === undefined && showSalesInfo?.salesStartTime === undefined;
+
   const isSaveButtonDisabled = useMemo(
     () =>
       !showBasicInfoForm.formState.isValid ||
       !showDetailInfoForm.formState.isValid ||
       imageFiles.length === 0 ||
-      show?.isEnded,
+      (!isNonTicketingShow && show?.isEnded),
     [
       imageFiles.length,
+      isNonTicketingShow,
       show?.isEnded,
       showBasicInfoForm.formState.isValid,
       showDetailInfoForm.formState.isValid,
@@ -332,10 +336,10 @@ const ShowInfoPage = () => {
                       runningTime: showBasicInfoForm.watch('runningTime'),
                       latitude: showBasicInfoForm.watch('latitude'),
                       longitude: showBasicInfoForm.watch('longitude'),
-                      salesStartTime: showSalesInfo
+                      salesStartTime: showSalesInfo.salesStartTime
                         ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                         : '',
-                      salesEndTime: showSalesInfo
+                      salesEndTime: showSalesInfo.salesEndTime
                         ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                         : '',
                       placeName: showBasicInfoForm.watch('placeName'),
@@ -389,10 +393,10 @@ const ShowInfoPage = () => {
                     : '',
                   startTime: showBasicInfoForm.watch('startTime'),
                   runningTime: showBasicInfoForm.watch('runningTime'),
-                  salesStartTime: showSalesInfo
+                  salesStartTime: showSalesInfo.salesStartTime
                     ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                     : '',
-                  salesEndTime: showSalesInfo
+                  salesEndTime: showSalesInfo.salesEndTime
                     ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                     : '',
                   placeName: showBasicInfoForm.watch('placeName'),
@@ -410,7 +414,8 @@ const ShowInfoPage = () => {
                       userNickname: member.userNickname ?? '',
                       userImgPath: member.userImgPath ?? '',
                     })),
-                  })) ?? []}
+                  })) ?? []
+                }
                 containerRef={showPreviewMobileRef}
               />
             </Styled.ShowInfoPreview>

@@ -6,7 +6,7 @@ import { NonTicketingShowCreateRequest } from '../types';
 type PostAddShowResponse = number;
 
 const postAddNonticketingShow = (body: NonTicketingShowCreateRequest) =>
-  fetcher.post<PostAddShowResponse>('web/v1/host/shows', {
+  fetcher.post<PostAddShowResponse>('web/v1/host/shows/non-ticketing', {
     json: body,
   });
 

@@ -13,7 +13,8 @@ const ShowTypeSelectDialogContent = ({ close }: Props) => {
 
   const onClickButton = (isSalesTicket: boolean) => {
     close();
-    naviate(PATH.SHOW_ADD);
+    const to = `${PATH.SHOW_ADD}?type=${isSalesTicket ? 'SALES' : 'FREE'}`;
+    naviate(to);
   };
 
   useBodyScrollLock();

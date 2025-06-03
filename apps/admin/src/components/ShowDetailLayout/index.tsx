@@ -2,6 +2,7 @@ import {
   useMyHostInfo,
   useShowDetail,
   useShowLastSettlementEvent,
+  useShowSalesInfo,
   useShowSettlementInfo,
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
@@ -172,6 +173,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
 
   const { data: show } = useShowDetail(showId);
   const { data: myHostInfoData } = useMyHostInfo(showId);
+  const { data: showSalesInfo } = useShowSalesInfo(showId);
 
   const middleware = useAtomValue(middlewareAtom);
 
@@ -181,7 +183,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
     }
   }, [myHostInfoData, setMyHostInfo]);
 
-  if (!show || !myHostInfoData) {
+  if (!show || !myHostInfoData || !showSalesInfo) {
     return null;
   }
 
@@ -255,7 +257,12 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                             },
                             deleteShow: {
                               title: '공연 삭제',
-                              children: () => <ShowDeleteDialogContent showId={showId} onDeleteShow={showSettingDialog.close} />,
+                              children: () => (
+                                <ShowDeleteDialogContent
+                                  showId={showId}
+                                  onDeleteShow={showSettingDialog.close}
+                                />
+                              ),
                             },
                           },
                         });
@@ -269,10 +276,14 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
               <Styled.TabContainer>
                 <Styled.Tab>
                   <TabItem type="INFO" />
-                  <TabItem type="TICKET" />
-                  <TabItem type="RESERVATION" />
-                  <TabItem type="ENTRANCE" />
-                  <TabItem type="SETTLEMENT" />
+                  {showSalesInfo.salesEndTime && showSalesInfo.salesEndTime && (
+                    <>
+                      <TabItem type="TICKET" />
+                      <TabItem type="RESERVATION" />
+                      <TabItem type="ENTRANCE" />
+                      <TabItem type="SETTLEMENT" />
+                    </>
+                  )}
                 </Styled.Tab>
               </Styled.TabContainer>
             </Styled.HeaderContent>

@@ -70,9 +70,9 @@ export type ShowSummaryResponse = Array<{
 
 export interface ShowSalesInfoResponse {
   showId: number;
-  salesStartTime: string;
-  salesEndTime: string;
-  ticketNotice: string;
+  salesStartTime?: string;
+  salesEndTime?: string;
+  ticketNotice?: string;
 }
 
 export interface SalesTicketTypeResponseV2 {
