@@ -11,21 +11,21 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
     border-radius: 4px;
 
     ${({ disabled, hasError, theme }) => {
-    if (disabled) {
-      return `
+      if (disabled) {
+        return `
         background-color: ${theme.palette.grey.g10};
         border: 1px solid ${theme.palette.grey.g20};
         color: ${theme.palette.grey.g40};
         pointer-events: none;
       `;
-    }
+      }
 
-    if (hasError) {
-      return `
+      if (hasError) {
+        return `
         border-color: ${theme.palette.status.error1};
       `;
-    }
-  }}
+      }
+    }}
   }
 
   .mdxeditor-toolbar {
@@ -34,7 +34,11 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
   }
 
   .prose {
-    p, ul, ol, li, blockquote {
+    p,
+    ul,
+    ol,
+    li,
+    blockquote {
       font-size: 16px;
       font-style: normal;
       font-weight: 400;
@@ -104,11 +108,11 @@ const MarkdownEditorContainer = styled.div<{ disabled?: boolean; hasError?: bool
   }
 `;
 
-const MarkdownEditorPlaceholder = styled.p`
+const MarkdownEditorPlaceholder = styled.span`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g30};
   margin: 0;
-`
+`;
 
 const YoutubeEmbedDeleteButton = styled.button`
   position: absolute;
@@ -131,7 +135,7 @@ const YoutubeEmbedDeleteButton = styled.button`
     height: 20px;
   }
 
-  path { 
+  path {
     stroke: ${({ theme }) => theme.palette.grey.g20};
   }
 `;
@@ -155,4 +159,4 @@ export default {
   MarkdownEditorPlaceholder,
   YoutubeEmbedDeleteButton,
   YoutubeEmbedContainer,
-}
+};

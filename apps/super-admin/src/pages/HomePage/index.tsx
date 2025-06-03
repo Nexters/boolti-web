@@ -256,10 +256,12 @@ const HomePage = () => {
                                   >
                                     판매 기간
                                   </Typography>
-                                  <Typography.Text ellipsis>
-                                    {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}~
-                                    {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
-                                  </Typography.Text>
+                                  {salesStartTime && salesEndTime && (
+                                    <Typography.Text ellipsis>
+                                      {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}~
+                                      {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                                    </Typography.Text>
+                                  )}
                                 </Space>
                               </Flex>
                             </Flex>

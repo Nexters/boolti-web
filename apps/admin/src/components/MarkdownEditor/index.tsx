@@ -1,5 +1,29 @@
 import { TrashIcon, YoutubeLinkIcon } from '@boolti/icon';
-import { MDXEditor, BoldItalicUnderlineToggles, headingsPlugin, toolbarPlugin, listsPlugin, thematicBreakPlugin, BlockTypeSelect, tablePlugin, linkPlugin, linkDialogPlugin, CreateLink, markdownShortcutPlugin, imagePlugin, InsertImage, directivesPlugin, usePublisher, insertDirective$, DialogButton, InsertThematicBreak, ListsToggle, Separator, DirectiveDescriptor, quotePlugin } from '@mdxeditor/editor';
+import {
+  MDXEditor,
+  BoldItalicUnderlineToggles,
+  headingsPlugin,
+  toolbarPlugin,
+  listsPlugin,
+  thematicBreakPlugin,
+  BlockTypeSelect,
+  tablePlugin,
+  linkPlugin,
+  linkDialogPlugin,
+  CreateLink,
+  markdownShortcutPlugin,
+  imagePlugin,
+  InsertImage,
+  directivesPlugin,
+  usePublisher,
+  insertDirective$,
+  DialogButton,
+  InsertThematicBreak,
+  ListsToggle,
+  Separator,
+  DirectiveDescriptor,
+  quotePlugin,
+} from '@mdxeditor/editor';
 import { useUploadShowContentImage } from '@boolti/api';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +33,7 @@ const YoutubeDirectiveDescriptor: DirectiveDescriptor = {
   name: 'youtube',
   type: 'leafDirective',
   testNode(node) {
-    return node.name === 'youtube'
+    return node.name === 'youtube';
   },
   attributes: ['id'],
   hasChildren: false,
@@ -19,9 +43,9 @@ const YoutubeDirectiveDescriptor: DirectiveDescriptor = {
         <Styled.YoutubeEmbedDeleteButton
           onClick={() => {
             parentEditor.update(() => {
-              lexicalNode.selectNext()
-              lexicalNode.remove()
-            })
+              lexicalNode.selectNext();
+              lexicalNode.remove();
+            });
           }}
         >
           <TrashIcon />
@@ -36,12 +60,12 @@ const YoutubeDirectiveDescriptor: DirectiveDescriptor = {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         ></iframe>
       </Styled.YoutubeEmbedContainer>
-    )
-  }
-}
+    );
+  },
+};
 
 const InsertYoutubeVideo = () => {
-  const insertDirective = usePublisher(insertDirective$)
+  const insertDirective = usePublisher(insertDirective$);
   const { t } = useTranslation();
 
   return (
@@ -52,24 +76,24 @@ const InsertYoutubeVideo = () => {
       buttonContent={<YoutubeLinkIcon />}
       onSubmit={(url) => {
         try {
-          const videoId = new URL(url).searchParams.get('v')
+          const videoId = new URL(url).searchParams.get('v');
 
           if (videoId) {
             insertDirective({
               name: 'youtube',
               type: 'leafDirective',
               attributes: { id: videoId },
-            })
+            });
           } else {
-            throw new Error('Invalid URL')
+            throw new Error('Invalid URL');
           }
         } catch (error) {
-          alert(t('youtube.invalidMessage'))
+          alert(t('youtube.invalidMessage'));
         }
       }}
     />
-  )
-}
+  );
+};
 
 interface MarkdownEditorProps {
   value: string;
@@ -81,7 +105,12 @@ interface MarkdownEditorProps {
 }
 
 const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
-  value, placeholder, disabled, hasError, onChange, onBlur
+  value,
+  placeholder,
+  disabled,
+  hasError,
+  onChange,
+  onBlur,
 }) => {
   const { t } = useTranslation();
   const uploadShowContentImageMutation = useUploadShowContentImage();
@@ -92,7 +121,9 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         className="mdx-editor"
         contentEditableClassName="prose"
         markdown={value}
-        placeholder={<Styled.MarkdownEditorPlaceholder>{placeholder}</Styled.MarkdownEditorPlaceholder>}
+        placeholder={
+          <Styled.MarkdownEditorPlaceholder>{placeholder}</Styled.MarkdownEditorPlaceholder>
+        }
         translation={(key, _defaultValue, interpolations) => t(key, interpolations)}
         plugins={[
           toolbarPlugin({
@@ -101,14 +132,14 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
                 <BlockTypeSelect />
                 <BoldItalicUnderlineToggles />
                 <Separator />
-                <ListsToggle options={["number", "bullet"]} />
+                <ListsToggle options={['number', 'bullet']} />
                 <InsertThematicBreak />
                 <Separator />
                 <InsertYoutubeVideo />
                 <CreateLink />
                 <InsertImage />
               </>
-            )
+            ),
           }),
           headingsPlugin({
             allowedHeadingLevels: [1, 2, 3],
@@ -125,7 +156,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
               const imageFile = {
                 ...file,
                 preview: URL.createObjectURL(file),
-              }
+              };
               return uploadShowContentImageMutation.mutateAsync(imageFile);
             },
           }),
@@ -135,7 +166,7 @@ const MarkdownEditor: React.FC<MarkdownEditorProps> = ({
         onBlur={onBlur}
       />
     </Styled.MarkdownEditorContainer>
-  )
-}
+  );
+};
 
-export default MarkdownEditor
+export default MarkdownEditor;

@@ -1,6 +1,7 @@
 import {
   ImageFile,
   ShowCastTeamCreateOrUpdateRequest,
+  useAddNonTicketingShow,
   useAddShow,
   useUploadShowImage,
 } from '@boolti/api';
@@ -8,7 +9,7 @@ import { ArrowLeftIcon } from '@boolti/icon';
 import { Button, Checkbox, StepProgressBar, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import ShowBasicInfoFormContent from '~/components/ShowInfoFormContent/ShowBasicInfoFormContent';
 import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDetailInfoFormContent';
@@ -41,7 +42,7 @@ const stepItems = [
   { key: 'basic', title: '기본 정보' },
   { key: 'detail', title: '상세 정보' },
   { key: 'sales', title: '판매 정보' },
-];
+] as const;
 
 const SHOW_ADD_SUCCESS_MESSAGE = '공연 등록을 완료했습니다';
 
@@ -51,6 +52,8 @@ interface ShowAddPageProps {
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const isNonTicketingShow = searchParams.get('type') === 'FREE';
   const isWebView = checkIsWebView();
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
@@ -65,33 +68,31 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     defaultValues: {
       notice: '',
       hostName: '',
-      hostPhoneNumber: ''
-    }
+      hostPhoneNumber: '',
+    },
   });
   const showSalesInfoForm = useForm<ShowSalesInfoFormInputs>();
 
   const uploadShowImageMutation = useUploadShowImage();
   const addShowMutation = useAddShow();
+  const addNonTicketingShowMutation = useAddNonTicketingShow();
 
   const toast = useToast();
 
-  const onSubmitBasicInfoForm: SubmitHandler<ShowBasicInfoFormInputs> = async () => {
-    navigate(PATH.SHOW_ADD_DETAIL);
-  };
-
-  const onSubmitDetailInfoForm: SubmitHandler<ShowDetailInfoFormInputs> = async () => {
-    navigate(PATH.SHOW_ADD_SALES);
-  };
-
-  const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
-    if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
+  const onSuccessAddShow = (showId: number) => {
+    if (isWebView && isWebViewBridgeAvailable()) {
+      showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });
+      navigateToShowDetail({ showId });
       return;
+    }
 
-    // 공연 이미지 업로드
+    toast.success(SHOW_ADD_SUCCESS_MESSAGE);
+    navigate(HREF.SHOW_INFO(showId));
+  };
+
+  const getBasicBody = async () => {
     const showImageInfo = await uploadShowImageMutation.mutateAsync(imageFiles);
-
-    // 공연 생성
-    const showId = await addShowMutation.mutateAsync({
+    return {
       name: showBasicInfoForm.getValues('name'),
       images: showImageInfo,
       date: `${showBasicInfoForm.getValues('date')}T${showBasicInfoForm.getValues('startTime')}:00.000Z`,
@@ -108,6 +109,47 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         name: showDetailInfoForm.getValues('hostName'),
         phoneNumber: showDetailInfoForm.getValues('hostPhoneNumber'),
       },
+      castTeams: castTeamList.map(({ name, members }) => ({
+        name,
+        members: members
+          ?.filter(({ userCode, roleName }) => userCode && roleName)
+          .map(({ userCode, roleName }) => ({
+            userCode,
+            roleName,
+          })),
+      })) as ShowCastTeamCreateOrUpdateRequest[],
+    };
+  };
+
+  const onSubmitBasicInfoForm: SubmitHandler<ShowBasicInfoFormInputs> = async () => {
+    navigate(`${PATH.SHOW_ADD_DETAIL}?${searchParams.toString()}`);
+  };
+
+  const onSubmitDetailInfoForm: SubmitHandler<ShowDetailInfoFormInputs> = async () => {
+    if (!isNonTicketingShow) {
+      navigate(`${PATH.SHOW_ADD_SALES}?${searchParams.toString()}`);
+      return;
+    }
+
+    if (
+      uploadShowImageMutation.status === 'loading' ||
+      addNonTicketingShowMutation.status === 'loading'
+    ) {
+      return;
+    }
+
+    const body = await getBasicBody();
+    const showId = await addNonTicketingShowMutation.mutateAsync({ ...body, isNonTicketing: true });
+
+    onSuccessAddShow(showId);
+  };
+
+  const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
+    if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
+      return;
+
+    const body = await getBasicBody();
+    const ticketBody = {
       salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
       salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
       ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
@@ -120,25 +162,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      castTeams: castTeamList.map(({ name, members }) => ({
-        name,
-        members: members
-          ?.filter(({ userCode, roleName }) => userCode && roleName)
-          .map(({ userCode, roleName }) => ({
-            userCode,
-            roleName,
-          })),
-      })) as ShowCastTeamCreateOrUpdateRequest[],
-    });
+    };
+    const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
-    if (isWebView && isWebViewBridgeAvailable()) {
-      showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });
-      navigateToShowDetail({ showId });
-      return;
-    }
-
-    toast.success(SHOW_ADD_SUCCESS_MESSAGE);
-    navigate(HREF.SHOW_INFO(showId));
+    onSuccessAddShow(showId);
   };
 
   const basicStepContent = (
@@ -397,11 +424,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const showAddPageContent = (
     <>
       <Styled.ProcessIndicator>
-        <StepProgressBar width="175px" activeKey={step} items={stepItems} />
+        <StepProgressBar
+          activeKey={step}
+          items={stepItems.filter((item) => (isNonTicketingShow ? item.key !== 'sales' : true))}
+        />
       </Styled.ProcessIndicator>
       {step === 'basic' && basicStepContent}
       {step === 'detail' && detailStepContent}
-      {step === 'sales' && salesStepContent}
+      {step === 'sales' && !isNonTicketingShow && salesStepContent}
     </>
   );
 

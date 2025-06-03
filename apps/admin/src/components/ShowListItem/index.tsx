@@ -106,18 +106,20 @@ const ShowListItem = ({
               <Styled.InfoText isLabel>공연일시</Styled.InfoText>
               <Styled.InfoText>{format(date, 'yyyy.MM.dd (E)', { locale: ko })}</Styled.InfoText>
             </Styled.InfoColumn>
-            <Styled.InfoColumn>
-              <Styled.InfoText isLabel>판매 기간</Styled.InfoText>
-              <Styled.DateTextContainer>
-                <Styled.DateText>
-                  {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}
-                </Styled.DateText>
-                <Styled.DateText> - </Styled.DateText>
-                <Styled.DateText>
-                  {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
-                </Styled.DateText>
-              </Styled.DateTextContainer>
-            </Styled.InfoColumn>
+            {salesStartTime && salesEndTime && (
+              <Styled.InfoColumn>
+                <Styled.InfoText isLabel>판매 기간</Styled.InfoText>
+                <Styled.DateTextContainer>
+                  <Styled.DateText>
+                    {format(salesStartTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                  </Styled.DateText>
+                  <Styled.DateText> - </Styled.DateText>
+                  <Styled.DateText>
+                    {format(salesEndTime, 'yyyy.MM.dd (E)', { locale: ko })}
+                  </Styled.DateText>
+                </Styled.DateTextContainer>
+              </Styled.InfoColumn>
+            )}
           </Styled.TextContainer>
           <Styled.IconContainer>
             <ChevronRightIcon />
