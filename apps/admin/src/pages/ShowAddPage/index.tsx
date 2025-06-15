@@ -255,7 +255,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               !showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid
             }
           >
-            다음으로
+            {isNonTicketingShow ? '공연 등록 완료하기' : '다음으로'}
           </Styled.ShowAddFormButton>
         </Styled.ShowAddFormButtonContainer>
       </Styled.ShowAddForm>
