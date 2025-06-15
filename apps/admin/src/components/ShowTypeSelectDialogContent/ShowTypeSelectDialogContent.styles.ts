@@ -29,6 +29,7 @@ const Button = styled.button`
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   gap: 12px;
+  cursor: pointer;
   color: ${({ theme }) => theme.palette.grey.g60};
 
   &:hover {
