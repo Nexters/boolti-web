@@ -57,7 +57,11 @@ const HomePage = () => {
   useEffect(() => {
     if (!isLoading && searchParams.get('target') === 'register' && !isTriggered.current) {
       isTriggered.current = true;
-      open({ title: '공연 유형 선택', content: <ShowTypeSelectDialogContent close={close} /> });
+      open({
+        title: '공연 유형 선택',
+        mobileType: 'fullPage',
+        content: <ShowTypeSelectDialogContent close={close} />,
+      });
     }
   }, [close, isLoading, open, searchParams]);
 

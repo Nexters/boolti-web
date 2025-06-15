@@ -17,7 +17,11 @@ const ShowList = ({ shows }: Props) => {
   const isEmpty = shows.length === 0;
 
   const openShowTypeSelectDialog = () => {
-    open({ title: '공연 유형 선택', content: <ShowTypeSelectDialogContent close={close} /> });
+    open({
+      title: '공연 유형 선택',
+      mobileType: 'fullPage',
+      content: <ShowTypeSelectDialogContent close={close} />,
+    });
   };
 
   return (
