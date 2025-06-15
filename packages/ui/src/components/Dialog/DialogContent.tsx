@@ -11,7 +11,6 @@ const DialogContent: React.FC<DialogContentProps> = ({
   mobileType = 'bottomSheet',
   contentPadding,
   children,
-  closeButtonPosition = 'right',
   onClose,
   onClickBackButton,
 }) => {

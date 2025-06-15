@@ -33,6 +33,5 @@ export interface StepDialogProps {
 
 export interface DialogContentProps extends DialogPropsBase {
   children: React.ReactNode;
-  closeButtonPosition?: 'left' | 'right';
   onClickBackButton?: () => void;
 }

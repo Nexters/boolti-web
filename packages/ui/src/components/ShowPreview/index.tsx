@@ -19,8 +19,8 @@ interface ShowPreviewProps {
     date: string;
     startTime: string;
     runningTime: string;
-    salesStartTime: string;
-    salesEndTime: string;
+    salesStartTime?: string;
+    salesEndTime?: string;
     placeName: string;
     streetAddress: string;
     detailAddress: string;
@@ -128,7 +128,9 @@ const ShowPreview = ({
             onClick={() => {
               onShareShowInfo?.();
             }}
-          >공연 정보 함께 공유하기</Styled.ShareDropdownItem>
+          >
+            공연 정보 함께 공유하기
+          </Styled.ShareDropdownItem>
         </Styled.ShareDropdownMenu>
       </Styled.ShowPreviewNavbar>
       <Styled.ShowPreviewHeader>
