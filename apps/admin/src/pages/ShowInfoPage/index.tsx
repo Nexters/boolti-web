@@ -260,6 +260,7 @@ const ShowInfoPage = () => {
           <ShowBasicInfoFormContent
             form={showBasicInfoForm}
             imageFiles={imageFiles}
+            isNonTicketingShow={isNonTicketingShow}
             disabled={show.isEnded}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [

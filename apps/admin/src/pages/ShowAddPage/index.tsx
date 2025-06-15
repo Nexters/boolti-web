@@ -180,6 +180,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <ShowBasicInfoFormContent
             form={showBasicInfoForm}
             imageFiles={imageFiles}
+            isNonTicketingShow={isNonTicketingShow}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [
                 ...prevImageFiles,
