@@ -82,7 +82,7 @@ const TitleContainer = styled.div`
   align-items: center;
   margin-bottom: 12px;
   ${mq_lg} {
-    margin-bottom: 70px;
+    margin-bottom: auto;
   }
 `;
 
