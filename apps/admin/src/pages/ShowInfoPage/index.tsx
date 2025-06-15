@@ -260,6 +260,7 @@ const ShowInfoPage = () => {
           <ShowBasicInfoFormContent
             form={showBasicInfoForm}
             imageFiles={imageFiles}
+            isNonTicketingShow={isNonTicketingShow}
             disabled={show.isEnded}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [
@@ -336,12 +337,12 @@ const ShowInfoPage = () => {
                       runningTime: showBasicInfoForm.watch('runningTime'),
                       latitude: showBasicInfoForm.watch('latitude'),
                       longitude: showBasicInfoForm.watch('longitude'),
-                      salesStartTime: showSalesInfo.salesStartTime
-                        ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                        : '',
-                      salesEndTime: showSalesInfo.salesEndTime
-                        ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                        : '',
+                      salesStartTime:
+                        showSalesInfo.salesStartTime &&
+                        format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)'),
+                      salesEndTime:
+                        showSalesInfo.salesEndTime &&
+                        format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)'),
                       placeName: showBasicInfoForm.watch('placeName'),
                       streetAddress: showBasicInfoForm.watch('placeStreetAddress'),
                       detailAddress: showBasicInfoForm.watch('placeDetailAddress'),

@@ -18,14 +18,14 @@ interface Props {
   hostName: string;
   myHostType: HostType;
   thumbnailPath: string;
-  salesStartTime: string;
-  salesEndTime: string;
+  salesStartTime?: string;
+  salesEndTime?: string;
 }
 
 function getBadgeProps(
   date: string,
-  salesStartTime: string,
-  salesEndTime: string,
+  salesStartTime?: string,
+  salesEndTime?: string,
 ): React.ComponentProps<typeof Badge> {
   const today = new Date();
   if (isToday(date)) {
@@ -40,13 +40,18 @@ function getBadgeProps(
       colorTheme: 'grey',
     };
   }
-  if (isBefore(today, salesStartTime)) {
+  if (salesStartTime && isBefore(today, salesStartTime)) {
     return {
       children: `판매 시작 D-${differenceInDays(salesStartTime, today) + 1}`,
       colorTheme: 'purple',
     };
   }
-  if (isAfter(today, salesStartTime) && isBefore(today, salesEndTime)) {
+  if (
+    salesStartTime &&
+    salesEndTime &&
+    isAfter(today, salesStartTime) &&
+    isBefore(today, salesEndTime)
+  ) {
     return {
       children: '판매 중',
       colorTheme: 'blue',

@@ -55,9 +55,9 @@ export type ShowSummaryResponse = Array<{
   /** 나의 호스트 타입 */
   myHostType: HostType;
   /** 공연 판매 시작 날짜, 시간.ISO8601 */
-  salesStartTime: string;
+  salesStartTime?: string;
   /**공연 판매 종료 날짜, 시간.ISO8601 */
-  salesEndTime: string;
+  salesEndTime?: string;
   /** 공연 시작 날짜, 시간.ISO8601 */
   date: string;
   /** 러닝 타임.분 */

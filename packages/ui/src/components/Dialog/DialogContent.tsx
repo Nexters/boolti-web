@@ -12,31 +12,37 @@ const DialogContent: React.FC<DialogContentProps> = ({
   contentPadding,
   children,
   onClose,
-  onClickBackButton
+  onClickBackButton,
 }) => {
   const dialogRef = useRef<HTMLDivElement>(null);
   const [dragStartY, setDragStartY] = useState<number | null>(null);
   const [currentTranslate, setCurrentTranslate] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
 
-  const handleTouchStart = useCallback((event: React.TouchEvent) => {
-    if (mobileType !== 'darkBottomSheet') return;
-    setDragStartY(event.touches[0].clientY);
-    setIsDragging(true);
-  }, [mobileType]);
+  const handleTouchStart = useCallback(
+    (event: React.TouchEvent) => {
+      if (mobileType !== 'darkBottomSheet') return;
+      setDragStartY(event.touches[0].clientY);
+      setIsDragging(true);
+    },
+    [mobileType],
+  );
 
-  const handleTouchMove = useCallback((event: React.TouchEvent) => {
-    if (dragStartY === null || !dialogRef.current || mobileType !== 'darkBottomSheet') return;
+  const handleTouchMove = useCallback(
+    (event: React.TouchEvent) => {
+      if (dragStartY === null || !dialogRef.current || mobileType !== 'darkBottomSheet') return;
 
-    const currentY = event.touches[0].clientY;
-    const diff = currentY - dragStartY;
+      const currentY = event.touches[0].clientY;
+      const diff = currentY - dragStartY;
 
-    // 아래로 드래그할 때만 움직임 허용
-    if (diff >= 0) {
-      setCurrentTranslate(diff);
-      dialogRef.current.style.transform = `translateY(${diff}px)`;
-    }
-  }, [dragStartY, mobileType]);
+      // 아래로 드래그할 때만 움직임 허용
+      if (diff >= 0) {
+        setCurrentTranslate(diff);
+        dialogRef.current.style.transform = `translateY(${diff}px)`;
+      }
+    },
+    [dragStartY, mobileType],
+  );
 
   const handleTouchEnd = useCallback(() => {
     if (!dialogRef.current || mobileType !== 'darkBottomSheet') return;
@@ -77,7 +83,12 @@ const DialogContent: React.FC<DialogContentProps> = ({
         <Styled.DialogHeader mobileType={mobileType}>
           <Styled.DialogTitleContainer>
             {onClickBackButton && (
-              <Styled.DialogBackButton aria-label="뒤로 가기" type="button" mobileType={mobileType} onClick={onClickBackButton}>
+              <Styled.DialogBackButton
+                aria-label="뒤로 가기"
+                type="button"
+                mobileType={mobileType}
+                onClick={onClickBackButton}
+              >
                 <ChevronLeftIcon />
               </Styled.DialogBackButton>
             )}
@@ -92,7 +103,7 @@ const DialogContent: React.FC<DialogContentProps> = ({
         {children}
       </Styled.DialogContent>
     </Styled.Dialog>
-  )
-}
+  );
+};
 
 export default DialogContent;

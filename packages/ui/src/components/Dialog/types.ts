@@ -16,13 +16,13 @@ export interface DialogProps extends DialogPropsBase {
 
 export interface StepDialogProps {
   initialHistory: string[];
-  content: Record<string, {
-    children: (props: {
-      push: (nextStep: string) => void;
-      back: () => void;
-    }) => React.ReactNode
-    title?: string;
-  }>;
+  content: Record<
+    string,
+    {
+      children: (props: { push: (nextStep: string) => void; back: () => void }) => React.ReactNode;
+      title?: string;
+    }
+  >;
   open: boolean;
   isAuto?: boolean;
   width?: string;
