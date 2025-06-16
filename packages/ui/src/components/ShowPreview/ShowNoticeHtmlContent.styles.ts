@@ -1,10 +1,11 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
-const MarkdownContent = styled.div<{ colorMode?: 'dark' | 'light' }>`
-  width: 100%;
-  color: ${({ colorMode, theme }) => colorMode === 'dark' ? theme.palette.mobile.grey.g30 : 'inherit'};  
-  
-  p, ul, ol, li, blockquote {
+const Content = styled.div`
+  p,
+  ul,
+  ol,
+  li,
+  blockquote {
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -28,14 +29,14 @@ const MarkdownContent = styled.div<{ colorMode?: 'dark' | 'light' }>`
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
-    line-height: 26px;
+    line-height: 28px;
   }
 
   h3 {
     font-size: 16px;
     font-style: normal;
     font-weight: 600;
-    line-height: 24px;
+    line-height: 28px;
   }
 
   ul {
@@ -73,18 +74,18 @@ const MarkdownContent = styled.div<{ colorMode?: 'dark' | 'light' }>`
   }
 
   strong {
-    font-weight: 700;
+    font-weight: 600;
   }
 
   em {
     font-style: italic;
   }
-  
+
   u {
     text-decoration: underline;
   }
 `
 
 export default {
-  MarkdownContent
+  Content,
 }

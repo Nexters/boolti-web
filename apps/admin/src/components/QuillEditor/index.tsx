@@ -1,0 +1,147 @@
+import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
+import Quill from 'quill';
+import { useUploadShowContentImage } from '@boolti/api';
+import Styled from './QuillEditor.styles';
+import './blot';
+
+interface EditorProps {
+  readOnly?: boolean;
+  defaultValue?: string;
+  placeholder?: string;
+  error?: boolean;
+  onChange?: (value: string) => void;
+  onBlur?: (isEmpty: boolean) => void;
+}
+
+const QuillEditor: React.FC<EditorProps> = ({
+  readOnly = false,
+  defaultValue = null,
+  placeholder = '',
+  error = false,
+  onChange,
+  onBlur
+}) => {
+  const editorElementRef = useRef<HTMLDivElement | null>(null);
+  const quillRef = useRef<Quill | null>(null);
+  const readOnlyRef = useRef<boolean | null>(readOnly);
+  const defaultValueRef = useRef<string | null>(defaultValue);
+  const placeholderRef = useRef<string | null>(placeholder);
+  const errorRef = useRef<boolean | null>(error);
+  const onChangeRef = useRef(onChange);
+  const onBlurRef = useRef(onBlur);
+
+  const uploadShowContentImageMutation = useUploadShowContentImage();
+
+  const imageUploadHandler = useCallback(async () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = async () => {
+      if (!input.files || input.files.length === 0 || !quillRef.current) return;
+
+      const file = input.files[0];
+      const url = await uploadShowContentImageMutation.mutateAsync({
+        ...file,
+        preview: URL.createObjectURL(file),
+      });
+      const range = quillRef.current.getSelection();
+
+      if (range?.index === undefined) return;
+      quillRef.current.insertEmbed(range.index, 'image', url);
+    };
+    input.click();
+  }, [uploadShowContentImageMutation]);
+
+  const videoUploadHandler = useCallback(async () => {
+    if (!quillRef.current) return;
+
+    const url = prompt("YouTube 영상 URL을 입력하세요:");
+
+    if (url) {
+      const embedUrl = url.replace('watch?v=', 'embed/');
+      const range = quillRef.current.getSelection();
+
+      if (range?.index === undefined) return;
+      quillRef.current.insertEmbed(range.index, "video", embedUrl);
+    }
+  }, [quillRef]);
+
+  useLayoutEffect(() => {
+    readOnlyRef.current = readOnly;
+    defaultValueRef.current = defaultValue;
+    placeholderRef.current = placeholder;
+    errorRef.current = error;
+    onChangeRef.current = onChange;
+    onBlurRef.current = onBlur;
+  });
+
+  useEffect(() => {
+    quillRef.current?.enable(!readOnly);
+  }, [quillRef, readOnly]);
+
+  useEffect(() => {
+    const editorElement = editorElementRef.current;
+    if (!editorElement) return;
+
+    const quill = new Quill(editorElement, {
+      modules: {
+        toolbar: {
+          container: [
+            [{ header: [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline'],
+            ['blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            ['link', 'image', 'video'],
+          ],
+          handlers: {
+            image: imageUploadHandler,
+            video: videoUploadHandler
+          }
+        }
+      },
+      placeholder,
+      readOnly,
+      theme: 'snow'
+    });
+
+    quillRef.current = quill;
+
+    if (defaultValueRef.current) {
+      quillRef.current.clipboard.dangerouslyPasteHTML(defaultValueRef.current);
+    }
+
+    quillRef.current.on(Quill.events.TEXT_CHANGE, () => {
+      if (!quillRef.current) return;
+      onChangeRef.current?.(quillRef.current.root.innerHTML);
+    });
+
+    quillRef.current.root.addEventListener('blur', () => {
+      if (!quillRef.current) return;
+      const text = quillRef.current.getText().trim();
+      onBlurRef.current?.(!text);
+    });
+
+    return () => {
+      if (quillRef.current) {
+        quillRef.current.off(Quill.events.TEXT_CHANGE);
+        quillRef.current.root.removeEventListener('blur', () => {
+          if (!quillRef.current) return;
+          const text = quillRef.current.getText().trim();
+          onBlurRef.current?.(!text);
+        });
+        quillRef.current = null;
+      }
+
+      editorElementRef.current = null;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <Styled.Container readOnly={readOnly} error={error}>
+      <div id="quill-editor" ref={editorElementRef} />
+    </Styled.Container>
+  )
+}
+
+export default QuillEditor;
