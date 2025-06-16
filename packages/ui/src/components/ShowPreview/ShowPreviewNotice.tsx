@@ -1,6 +1,7 @@
 import { ArrowLeftIcon } from '@boolti/icon';
 
 import Styled from './ShowPreviewNotice.styles';
+import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
 
 interface ShowPreviewNoticeProps {
   notice: string;
@@ -19,7 +20,7 @@ const ShowPreviewNotice = ({ notice, onClickBackButton }: ShowPreviewNoticeProps
         </Styled.ShowPreviewNoticeNav>
       </Styled.ShowPreviewNoticeHeader>
       <Styled.ShowPreviewNoticeText>
-
+        <ShowNoticeHtmlContent content={notice} />
       </Styled.ShowPreviewNoticeText>
     </Styled.ShowPreviewNotice>
   );

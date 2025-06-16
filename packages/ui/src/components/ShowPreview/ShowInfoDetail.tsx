@@ -5,6 +5,7 @@ import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } fro
 
 import Styled from './ShowPreview.styles';
 import PreviewMap from '../PreviewMap';
+import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
 
 interface Props {
   show: {
@@ -98,7 +99,7 @@ const ShowInfoDetail = ({
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowInfoDescription collapse={isOverflow ? collapse : false} ref={showNoticeRef}>
-
+          <ShowNoticeHtmlContent content={notice} />
         </Styled.ShowInfoDescription>
         {isOverflow && (
           <Styled.ShowInfoMoreButton

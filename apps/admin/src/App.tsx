@@ -1,4 +1,6 @@
 import 'the-new-css-reset/css/reset.css';
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
 import './index.css';
 import './i18n';
 import { NavermapsProvider } from 'react-naver-maps';
