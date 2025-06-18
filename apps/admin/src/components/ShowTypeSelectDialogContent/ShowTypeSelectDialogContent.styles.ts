@@ -3,7 +3,7 @@ import { mq_lg } from '@boolti/ui';
 import { ChevronRightIcon as _ChevronRightIcon } from '@boolti/icon';
 
 const Container = styled.div`
-  height: calc(100dvh - 68px);
+  height: calc(100vh - 68px);
 
   ${mq_lg} {
     margin: 0;
