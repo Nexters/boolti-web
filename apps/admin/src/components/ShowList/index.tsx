@@ -6,6 +6,7 @@ import ShowListItem from '~/components/ShowListItem';
 import Styled from './ShowList.styles';
 import { HostType } from '@boolti/api/src/types/host';
 import ShowTypeSelectDialogContent from '../ShowTypeSelectDialogContent';
+import { checkIsWebView } from '@boolti/bridge';
 
 interface Props {
   shows: React.ComponentProps<typeof ShowListItem>[];
@@ -18,8 +19,9 @@ const ShowList = ({ shows }: Props) => {
 
   const openShowTypeSelectDialog = () => {
     open({
-      title: '공연 유형 선택',
+      title: checkIsWebView() ? undefined : '공연 유형 선택',
       mobileType: 'fullPage',
+      isAuto: true,
       content: <ShowTypeSelectDialogContent close={close} />,
     });
   };
