@@ -56,9 +56,7 @@ const ShowInfoPage = () => {
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
-
-  const isNonTicketingShow =
-    showSalesInfo?.salesEndTime === undefined && showSalesInfo?.salesStartTime === undefined;
+  const isNonTicketingShow = !showSalesInfo?.salesEndTime && !showSalesInfo?.salesStartTime;
 
   const isSaveButtonDisabled = useMemo(
     () =>
@@ -261,7 +259,7 @@ const ShowInfoPage = () => {
             form={showBasicInfoForm}
             imageFiles={imageFiles}
             isNonTicketingShow={isNonTicketingShow}
-            disabled={show.isEnded}
+            disabled={!isNonTicketingShow && show.isEnded}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [
                 ...prevImageFiles,
@@ -283,7 +281,10 @@ const ShowInfoPage = () => {
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormDivider />
         <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
-          <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
+          <ShowDetailInfoFormContent
+            form={showDetailInfoForm}
+            disabled={!isNonTicketingShow && show.isEnded}
+          />
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent>
           {castTeamListDraft && (
