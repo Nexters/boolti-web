@@ -4,7 +4,7 @@ import { ChevronRightIcon as _ChevronRightIcon } from '@boolti/icon';
 import { checkIsWebView } from '@boolti/bridge';
 
 const Container = styled.div`
-  height: ${checkIsWebView() ? '100vh' : 'calc(100vh - 68px)'};
+  height: ${checkIsWebView() ? '100dvh' : 'calc(100dvh - 68px)'};
 
   ${mq_lg} {
     margin: 0;
