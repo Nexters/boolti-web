@@ -24,6 +24,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import usePopupDialog from '~/hooks/usePopupDialog';
 import ShowTypeSelectDialogContent from '~/components/ShowTypeSelectDialogContent';
+import { checkIsWebView } from '@boolti/bridge';
 
 const bannerDescription = {
   REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
@@ -58,8 +59,9 @@ const HomePage = () => {
     if (!isLoading && searchParams.get('target') === 'register' && !isTriggered.current) {
       isTriggered.current = true;
       open({
-        title: '공연 유형 선택',
+        title: checkIsWebView() ? undefined : '공연 유형 선택',
         mobileType: 'fullPage',
+        isAuto: true,
         content: <ShowTypeSelectDialogContent close={close} />,
       });
     }

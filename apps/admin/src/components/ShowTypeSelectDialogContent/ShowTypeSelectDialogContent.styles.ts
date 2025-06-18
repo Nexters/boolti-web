@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { mq_lg } from '@boolti/ui';
 import { ChevronRightIcon as _ChevronRightIcon } from '@boolti/icon';
+import { checkIsWebView } from '@boolti/bridge';
 
 const Container = styled.div`
-  height: calc(100vh - 68px);
+  height: ${checkIsWebView() ? '100vh' : 'calc(100vh - 68px)'};
 
   ${mq_lg} {
     margin: 0;
