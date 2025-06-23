@@ -10,6 +10,7 @@ const Container = styled.div`
   ${mq_lg} {
     margin: 0;
     height: auto;
+    min-height: auto;
   }
 `;
 
