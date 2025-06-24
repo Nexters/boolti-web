@@ -123,7 +123,102 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
     z-index: 2;
     border: none;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
+    background-color: ${({ theme }) => theme.palette.grey.g10};
+  }
+
+  .ql-toolbar.ql-snow .ql-formats {
+    margin: 0;
+    padding: 0 12px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+
+    &:last-of-type {
+      padding-right: 0;
+    }
+
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 16px;
+      background-color: ${({ theme }) => theme.palette.grey.g30};
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:last-of-type::after {
+      display: none;
+    }
+  }
+
+  .ql-toolbar.ql-snow .ql-formats button {
+    width: 22px;
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ql-picker.ql-header {
+    width: 112px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
     background-color: ${({ theme }) => theme.palette.grey.w};
+    margin-right: 4px;
+  }
+
+  .ql-picker-label {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    padding: 0 8px;
+    ${({ theme }) => theme.typo.b1};
+    color: ${({ theme }) => theme.palette.grey.g90} !important;
+  }
+
+  .ql-picker-label.ql-active {
+    color: ${({ theme }) => theme.palette.grey.g90} !important;
+  }
+
+  .ql-header .ql-picker-label {
+    position: relative;
+  }
+
+  .ql-header .ql-picker-label svg {
+    display: none !important;
+  }
+
+  .ql-header .ql-picker-label::after {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background: url('data:image/svg+xml;utf8,%3Csvg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"%3E %3Cpath d="M11.3333 6.66675L7.99998 10.6667L4.66665 6.66675L11.3333 6.66675Z" fill="%23282B33" stroke="%23282B33" stroke-width="1.16667" stroke-linecap="round" stroke-linejoin="round"/%3E %3C/svg%3E') no-repeat center;
+    background-size: contain;
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .ql-picker.ql-expanded .ql-picker-label {
+    border-color: transparent !important;
   }
 `;
 

@@ -87,11 +87,9 @@ const QuillEditor: React.FC<EditorProps> = ({
       modules: {
         toolbar: {
           container: [
-            [{ header: [1, 2, 3, false] }],
-            ['bold', 'italic', 'underline'],
-            ['blockquote'],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['link', 'image', 'video'],
+            [{ header: [1, 2, 3, false] }, 'bold', 'italic', 'underline'],
+            [{ list: 'ordered' }, { list: 'bullet' }, 'blockquote'],
+            ['image', 'link', 'video'],
           ],
           handlers: {
             image: imageUploadHandler,
