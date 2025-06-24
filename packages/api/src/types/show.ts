@@ -258,8 +258,8 @@ export interface ShowPreviewResponse {
   longitude: number;
   notice: string;
   managerCode: string;
-  salesStartTime: string;
-  salesEndTime: string;
+  salesStartTime?: string;
+  salesEndTime?: string;
   deletedAt: string;
   showImg: [
     {

@@ -29,3 +29,5 @@ export const SitePolicyPage = lazy(() => import('./SitePolicyPage'));
 export const GiftRegisterPage = lazy(() => import('./GiftRegisterPage'));
 
 export const GiftIntroPage = lazy(() => import('./GiftIntroPage'));
+
+export const ShowTypeSelectpage = lazy(() => import('./ShowTypeSelectPage'));

@@ -23,9 +23,13 @@ const ShowSettingDialogContent = ({
   const { data: salesTicketList } = useSalesTicketList(showId);
   const { data: invitationTicketList } = useInvitationTicketList(showId);
 
-  const hasSoldSalesTicketAtLeastOnce = salesTicketList?.some(({ soldAtLeastOnce }) => soldAtLeastOnce)
-  const hasSoldInvitationTicket = invitationTicketList?.some(({ totalForSale, quantity }) => totalForSale > quantity)
-  const isShowDeletable = !hasSoldSalesTicketAtLeastOnce && !hasSoldInvitationTicket
+  const hasSoldSalesTicketAtLeastOnce = salesTicketList?.some(
+    ({ soldAtLeastOnce }) => soldAtLeastOnce,
+  );
+  const hasSoldInvitationTicket = invitationTicketList?.some(
+    ({ totalForSale, quantity }) => totalForSale > quantity,
+  );
+  const isShowDeletable = !hasSoldSalesTicketAtLeastOnce && !hasSoldInvitationTicket;
 
   const [firstHost, ...restHosts] = hosts ?? [];
 

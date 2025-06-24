@@ -19,7 +19,7 @@ const QuillEditor: React.FC<EditorProps> = ({
   placeholder = '',
   error = false,
   onChange,
-  onBlur
+  onBlur,
 }) => {
   const editorElementRef = useRef<HTMLDivElement | null>(null);
   const quillRef = useRef<Quill | null>(null);
@@ -55,14 +55,14 @@ const QuillEditor: React.FC<EditorProps> = ({
   const videoUploadHandler = useCallback(async () => {
     if (!quillRef.current) return;
 
-    const url = prompt("YouTube 영상 URL을 입력하세요:");
+    const url = prompt('YouTube 영상 URL을 입력하세요:');
 
     if (url) {
       const embedUrl = url.replace('watch?v=', 'embed/');
       const range = quillRef.current.getSelection();
 
       if (range?.index === undefined) return;
-      quillRef.current.insertEmbed(range.index, "video", embedUrl);
+      quillRef.current.insertEmbed(range.index, 'video', embedUrl);
     }
   }, [quillRef]);
 
@@ -90,18 +90,18 @@ const QuillEditor: React.FC<EditorProps> = ({
             [{ header: [1, 2, 3, false] }],
             ['bold', 'italic', 'underline'],
             ['blockquote'],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+            [{ list: 'ordered' }, { list: 'bullet' }],
             ['link', 'image', 'video'],
           ],
           handlers: {
             image: imageUploadHandler,
-            video: videoUploadHandler
-          }
-        }
+            video: videoUploadHandler,
+          },
+        },
       },
       placeholder,
       readOnly,
-      theme: 'snow'
+      theme: 'snow',
     });
 
     quillRef.current = quill;
@@ -133,7 +133,7 @@ const QuillEditor: React.FC<EditorProps> = ({
       }
 
       editorElementRef.current = null;
-    }
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -141,7 +141,7 @@ const QuillEditor: React.FC<EditorProps> = ({
     <Styled.Container readOnly={readOnly} error={error}>
       <div id="quill-editor" ref={editorElementRef} />
     </Styled.Container>
-  )
-}
+  );
+};
 
 export default QuillEditor;

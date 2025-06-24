@@ -145,7 +145,7 @@ const Container = styled.button<ButtonProps>`
             color: ${theme.palette.grey.g40};
             background-color: ${theme.palette.grey.g20};
           }
-        `
+        `;
     }
   }}
 `;
@@ -155,17 +155,17 @@ const Icon = styled.div<Pick<ButtonProps, 'size'> & { hasChildren: boolean }>`
   height: 20px;
 
   ${({ size, hasChildren }) => {
-    if (!hasChildren) return null
+    if (!hasChildren) return null;
 
     switch (size) {
       case 'x-small':
         return `
           margin-right: 6px;
-        `
+        `;
       default:
         return `
           margin-right: 8px;
-        `
+        `;
     }
   }}
 `;

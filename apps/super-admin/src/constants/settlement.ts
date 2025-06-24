@@ -1,1 +1,1 @@
-export const BOOLTI_FEE_RATE = 0.01
+export const BOOLTI_FEE_RATE = 0.01;

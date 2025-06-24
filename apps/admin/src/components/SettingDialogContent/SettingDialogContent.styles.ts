@@ -319,7 +319,7 @@ const TextAreaWrapper = styled.div`
 const TextAreaBox = styled.div<TextAreaProps>`
   border: 1px solid
     ${({ theme, hasError }) =>
-    hasError ? `${theme.palette.status.error1} !important` : theme.palette.grey.g20};
+      hasError ? `${theme.palette.status.error1} !important` : theme.palette.grey.g20};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   position: absolute;

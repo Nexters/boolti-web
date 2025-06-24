@@ -31,9 +31,12 @@ const SettlementPage = () => {
     useAdminSettlementEvent(Number(params!.showId));
   const { data: adminSettlementInfo } = useAdminSettlementInfo(Number(params!.showId));
   const { data: adminTicketSalesInfo } = useAdminTicketSalesInfo(Number(params!.showId));
-  const { data: superAdminShowSettlementStatementBlob } = useSuperAdminShowSettlementStatement(Number(params!.showId), {
-    enabled: !!adminSettlementEvent && adminSettlementEvent?.SEND !== null
-  });
+  const { data: superAdminShowSettlementStatementBlob } = useSuperAdminShowSettlementStatement(
+    Number(params!.showId),
+    {
+      enabled: !!adminSettlementEvent && adminSettlementEvent?.SEND !== null,
+    },
+  );
   const createSettlementStatementMutation = useAdminCreateSettlementStatement();
   const settlementDoneMutation = useAdminSettlementDone();
 
@@ -81,9 +84,7 @@ const SettlementPage = () => {
                 amount: parseInt(data.brokerageFee.replace(/,/g, '')),
               },
               {
-                feeType: 'PAYMENT_AGENCY_FEE' as
-                  | 'BROKERAGE_FEE'
-                  | 'PAYMENT_AGENCY_FEE',
+                feeType: 'PAYMENT_AGENCY_FEE' as 'BROKERAGE_FEE' | 'PAYMENT_AGENCY_FEE',
                 amount: parseInt(data.paymentAgencyFee.replace(/,/g, '')),
               },
             ],
@@ -103,11 +104,12 @@ const SettlementPage = () => {
         } catch (error) {
           if (error instanceof Error && checkIsHttpError(error)) {
             const json: {
-              type: string; detail: string
+              type: string;
+              detail: string;
             } = await error.response.json();
 
             if (json.type === 'SETTLEMENT_STATEMENT_CREATION_ALREADY_IN_PROGRESS') {
-              toast.error(json.detail)
+              toast.error(json.detail);
             } else {
               toast.error('정산 내역서를 생성하지 못했어요. 개발자에게 문의해주세요.');
             }
@@ -115,7 +117,7 @@ const SettlementPage = () => {
         }
       }}
     />
-  )
+  );
 
   return (
     <PageLayout
@@ -124,7 +126,7 @@ const SettlementPage = () => {
       description={`공연 종료 후 수익이 있을 때만 생성하는 내역서 입니다.\n신분증과 정산 계좌 정보, 통장 사본을 꼼꼼히 확인한 후 발송을 진행해 주세요.`}
     >
       {adminSettlementEvent &&
-        (adminSettlementEvent?.SEND !== null !== null ||
+        ((adminSettlementEvent?.SEND !== null) !== null ||
           adminSettlementEvent?.REQUEST !== null ||
           adminSettlementEvent?.DONE !== null) && (
           <>
@@ -144,18 +146,22 @@ const SettlementPage = () => {
                     </Styled.ProgressItemDescription>
                   )}
                   {adminSettlementEvent?.SEND && superAdminShowSettlementStatementBlob && (
-                    <Styled.ProgressItemButton onClick={() => {
-                      if (!adminShowDetail) return;
+                    <Styled.ProgressItemButton
+                      onClick={() => {
+                        if (!adminShowDetail) return;
 
-                      const downloadUrl = URL.createObjectURL(superAdminShowSettlementStatementBlob);
+                        const downloadUrl = URL.createObjectURL(
+                          superAdminShowSettlementStatementBlob,
+                        );
 
-                      const anchorElement = document.createElement('a');
-                      anchorElement.href = downloadUrl;
-                      anchorElement.download = `불티 정산 내역서 - ${adminShowDetail.name}.pdf`;
-                      anchorElement.click();
+                        const anchorElement = document.createElement('a');
+                        anchorElement.href = downloadUrl;
+                        anchorElement.download = `불티 정산 내역서 - ${adminShowDetail.name}.pdf`;
+                        anchorElement.click();
 
-                      URL.revokeObjectURL(downloadUrl);
-                    }}>
+                        URL.revokeObjectURL(downloadUrl);
+                      }}
+                    >
                       전송한 내역서 보기
                     </Styled.ProgressItemButton>
                   )}
@@ -179,8 +185,8 @@ const SettlementPage = () => {
                   </Styled.ProgressItemNumber>
                   <Styled.ProgressItemTitle active={!!adminSettlementEvent?.DONE}>
                     {adminSettlementEvent?.SEND &&
-                      adminSettlementEvent?.REQUEST &&
-                      !adminSettlementEvent?.DONE ? (
+                    adminSettlementEvent?.REQUEST &&
+                    !adminSettlementEvent?.DONE ? (
                       <Button
                         colorTheme="netural"
                         size="x-small"
@@ -325,8 +331,10 @@ const SettlementPage = () => {
               <Styled.TableItem></Styled.TableItem>
               <Styled.TableItem></Styled.TableItem>
               <Styled.TableItem align="right">
-                {((adminTicketSalesInfo ?? []).reduce<number>((acc, cur) => acc + cur.amount, 0) * BOOLTI_FEE_RATE)
-                  .toLocaleString()}
+                {(
+                  (adminTicketSalesInfo ?? []).reduce<number>((acc, cur) => acc + cur.amount, 0) *
+                  BOOLTI_FEE_RATE
+                ).toLocaleString()}
                 원
               </Styled.TableItem>
               <Styled.TableItem></Styled.TableItem>
@@ -369,7 +377,8 @@ const SettlementPage = () => {
                   content: dialogContent,
                   isAuto: true,
                 });
-              }}>
+              }}
+            >
               <PlusIcon />
               내역서 재생성하기
             </Button>
