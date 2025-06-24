@@ -227,7 +227,7 @@ const SettlementStatementPreviewContainer = styled.div`
 `;
 
 const PreviewMessage = styled.div`
-  background-color: #FACBCF;
+  background-color: #facbcf;
   border-radius: 8px;
   padding: 16px 20px;
   ${({ theme }) => theme.typo.b3};

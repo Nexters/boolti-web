@@ -25,7 +25,11 @@ const StepDialog: React.FC<StepDialogProps> = ({ initialHistory, ...props }) => 
 
   return (
     <DialogBase onClose={props.onClose}>
-      <DialogContent {...props} title={title} onClickBackButton={history.length > 1 ? back : undefined}>
+      <DialogContent
+        {...props}
+        title={title}
+        onClickBackButton={history.length > 1 ? back : undefined}
+      >
         {children({ push, back })}
       </DialogContent>
     </DialogBase>

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 
 const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
   min-height: 220px !important;
@@ -6,7 +6,7 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
   overflow-y: auto;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 4px;
-  
+
   ${({ readOnly, error, theme }) => {
     if (readOnly) {
       return `
@@ -125,8 +125,8 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
     background-color: ${({ theme }) => theme.palette.grey.w};
   }
-`
+`;
 
 export default {
-  Container
-}
+  Container,
+};

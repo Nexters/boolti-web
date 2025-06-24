@@ -11,24 +11,24 @@ interface DialogListItemBase {
 }
 
 interface DefaultDialogListItem extends DialogListItemBase {
-  type: 'default'
+  type: 'default';
   content: React.ReactNode;
-  title?: string
+  title?: string;
 }
 
 interface StepDialogListItem extends DialogListItemBase {
-  type: 'funnel'
-  content: Record<string, {
-    children: (props: {
-      push: (nextStep: string) => void;
-      back: () => void;
-    }) => React.ReactNode
-    title?: string
-  }>
-  initialHistory: string[]
+  type: 'funnel';
+  content: Record<
+    string,
+    {
+      children: (props: { push: (nextStep: string) => void; back: () => void }) => React.ReactNode;
+      title?: string;
+    }
+  >;
+  initialHistory: string[];
 }
 
-export type DialogListItem = DefaultDialogListItem | StepDialogListItem
+export type DialogListItem = DefaultDialogListItem | StepDialogListItem;
 
 interface DialogContext {
   dialogList: DialogListItem[];

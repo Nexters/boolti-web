@@ -10,7 +10,7 @@ icons['video'] = `
     <path d="M18.4746 15.2158L18.9132 14.9626C19.9512 14.3633 21.2785 14.719 21.8777 15.757V15.757C22.477 16.795 22.1214 18.1223 21.0834 18.7216L20.6448 18.9748" stroke="currentColor" strokeWidth="1.35" strokeLinecap="square" />
     <path d="M15.3516 17.0186L14.913 17.2717C13.875 17.871 13.5194 19.1983 14.1187 20.2363V20.2363C14.718 21.2744 16.0452 21.63 17.0833 21.0307L17.5218 20.7775" stroke="currentColor" strokeWidth="1.35" strokeLinecap="square" />
   </svg>
-`
+`;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const BlockEmbed = Quill.import('blots/block/embed') as any;
@@ -20,7 +20,10 @@ class YoutubeVideoBlot extends BlockEmbed {
     const node = super.create();
     node.setAttribute('src', value);
     node.setAttribute('frameborder', '0');
-    node.setAttribute('allow', 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share');
+    node.setAttribute(
+      'allow',
+      'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+    );
     node.setAttribute('width', '100%');
     node.setAttribute('style', 'aspect-ratio: 16 / 9;');
     node.setAttribute('title', 'YouTube video player');

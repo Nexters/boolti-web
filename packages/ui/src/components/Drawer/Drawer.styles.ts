@@ -20,7 +20,7 @@ const DimmedArea = styled(animated.div)`
   }
 `;
 
-const Drawer = styled(animated.div) <DrawerProps>`
+const Drawer = styled(animated.div)<DrawerProps>`
   position: fixed;
   top: 0;
   right: 0;

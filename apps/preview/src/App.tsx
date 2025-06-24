@@ -36,12 +36,12 @@ const router = createBrowserRouter([
         const response = await Promise.all([
           fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
           fetcher.get<{ count: number }>(`web/papi/v1/shows/${showId}/sold-ticket-counts`),
-        ])
+        ]);
         return response;
       }
     },
     errorElement: <NotFound />,
-  }
+  },
 ]);
 
 const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;

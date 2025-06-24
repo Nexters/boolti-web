@@ -84,8 +84,8 @@ const Content = styled.div`
   u {
     text-decoration: underline;
   }
-`
+`;
 
 export default {
   Content,
-}
+};

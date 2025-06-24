@@ -11,25 +11,29 @@ interface UseDeviceByWidthParams {
 const useDeviceByWidth = ({ onChangeDeviceByWidth }: UseDeviceByWidthParams) => {
   const [device, setDevice] = useState<DeviceType>('desktop');
 
-  const updateDeviceByWidth = useCallback((value: DeviceType) => {
-    if (device !== value) {
-      setDevice(value);
-      onChangeDeviceByWidth?.(value);
-    }
-  }, [device, onChangeDeviceByWidth]);
+  const updateDeviceByWidth = useCallback(
+    (value: DeviceType) => {
+      if (device !== value) {
+        setDevice(value);
+        onChangeDeviceByWidth?.(value);
+      }
+    },
+    [device, onChangeDeviceByWidth],
+  );
 
   const handleResize = useMemo(
-    () => debounce(() => {
-      const width = window.innerWidth;
-      if (width >= parseInt(breakpoint.desktop)) {
-        updateDeviceByWidth('desktop');
-      } else if (width >= parseInt(breakpoint.tablet)) {
-        updateDeviceByWidth('tablet');
-      } else {
-        updateDeviceByWidth('mobile');
-      }
-    }, 300),
-    [updateDeviceByWidth]
+    () =>
+      debounce(() => {
+        const width = window.innerWidth;
+        if (width >= parseInt(breakpoint.desktop)) {
+          updateDeviceByWidth('desktop');
+        } else if (width >= parseInt(breakpoint.tablet)) {
+          updateDeviceByWidth('tablet');
+        } else {
+          updateDeviceByWidth('mobile');
+        }
+      }, 300),
+    [updateDeviceByWidth],
   );
 
   useEffect(() => {

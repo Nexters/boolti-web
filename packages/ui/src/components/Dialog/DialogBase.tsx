@@ -2,7 +2,7 @@ import Portal from '../Portal';
 import { DialogProps } from './types';
 import Styled from './Dialog.styles';
 
-type DialogBaseProps = Pick<DialogProps, 'children' | 'mobileType' | 'onClose'>
+type DialogBaseProps = Pick<DialogProps, 'children' | 'mobileType' | 'onClose'>;
 
 const DialogBase: React.FC<DialogBaseProps> = ({ mobileType, children, onClose }) => {
   return (
@@ -18,7 +18,7 @@ const DialogBase: React.FC<DialogBaseProps> = ({ mobileType, children, onClose }
         {children}
       </Styled.DimmedArea>
     </Portal>
-  )
-}
+  );
+};
 
-export default DialogBase
+export default DialogBase;

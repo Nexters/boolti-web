@@ -85,7 +85,7 @@ const ShareDropdownMenu = styled.div<{ open: boolean }>`
   z-index: 10;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 14px 0 #8B8B8B26;
+  box-shadow: 0 8px 14px 0 #8b8b8b26;
 `;
 
 const ShareDropdownItem = styled.button`
@@ -259,7 +259,8 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
   }
 
   ${({ collapse }) =>
-    collapse && `
+    collapse &&
+    `
       display: block;
       overflow: hidden;
       height: 100%;
@@ -274,8 +275,7 @@ const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
         left: 0;
         background: linear-gradient(180deg, rgba(9, 10, 11, 0) 0%, #090A0B 100%);
       }
-    `
-  }
+    `}
 `;
 
 const ShowInfoDescriptionText = styled.p`
@@ -283,7 +283,7 @@ const ShowInfoDescriptionText = styled.p`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   overflow-wrap: break-word;
   word-break: break-word;
-`
+`;
 
 const ShowInfoDescriptionButton = styled.button`
   display: inline;
@@ -308,7 +308,7 @@ const TicketIcon = styled.div`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-`
+`;
 
 const ShowInfoDescriptionBadge = styled.div`
   display: inline-flex;

@@ -5,8 +5,7 @@ import Styled from './PreviewMap.styles';
 import { CurvedArrowRightIcon } from '@boolti/icon';
 import { useConfirm } from '../../hooks';
 
-import markerImageUrl from '../../assets/images/marker.png'
-
+import markerImageUrl from '../../assets/images/marker.png';
 
 interface Props {
   latitude: number;
@@ -93,7 +92,10 @@ const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
         zoom={18}
         defaultCenter={new navermaps.LatLng(latitude, longitude)}
       >
-        <Marker position={new navermaps.LatLng(latitude, longitude)} icon={{ url: markerImageUrl, size: { width: 48, height: 61 } }} />
+        <Marker
+          position={new navermaps.LatLng(latitude, longitude)}
+          icon={{ url: markerImageUrl, size: { width: 48, height: 61 } }}
+        />
       </NaverMap>
       <Styled.Button>
         <CurvedArrowRightIcon />
