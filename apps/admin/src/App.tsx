@@ -32,6 +32,7 @@ import {
   GiftRegisterPage,
   GiftIntroPage,
   OAuthApplePage,
+  ShowTypeSelectpage,
 } from './pages';
 import ShowAddPage from './pages/ShowAddPage';
 import { Suspense } from 'react';
@@ -136,6 +137,7 @@ const privateRoutes = [
       { path: PATH.SHOW_ADD, element: <ShowAddPage step="basic" /> },
       { path: PATH.SHOW_ADD_DETAIL, element: <ShowAddPage step="detail" /> },
       { path: PATH.SHOW_ADD_SALES, element: <ShowAddPage step="sales" /> },
+      { path: PATH.SHOW_TYPE_SELECT, element: <ShowTypeSelectpage /> },
       {
         path: '/',
         element: (
