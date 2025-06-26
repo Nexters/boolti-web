@@ -135,9 +135,36 @@ const QuillEditor: React.FC<EditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const adjustTooltipPosition = () => {
+      const tooltip = document.querySelector('.ql-tooltip') as HTMLDivElement | null;
+      if (tooltip) {
+        const left = parseFloat(tooltip.style.left) || 0;
+        if (left < 0) {
+          tooltip.style.left = '10px';
+        }
+      }
+    };
+
+    const observer = new MutationObserver(adjustTooltipPosition);
+    const editorContainer = document.querySelector('.ql-container');
+
+    if (editorContainer) {
+      observer.observe(editorContainer, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+      });
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <Styled.Container readOnly={readOnly} error={error}>
-      <div id="quill-editor" ref={editorElementRef} />
+      <div id="quill-editor" ref={editorElementRef} data-text-editor="editor" />
     </Styled.Container>
   );
 };
