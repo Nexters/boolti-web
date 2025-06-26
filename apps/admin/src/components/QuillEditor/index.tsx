@@ -137,7 +137,6 @@ const QuillEditor: React.FC<EditorProps> = ({
       }, 0);
     });
 
-
     return () => {
       if (quillRef.current) {
         quillRef.current.off(Quill.events.TEXT_CHANGE);
