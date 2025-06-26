@@ -127,6 +127,17 @@ const QuillEditor: React.FC<EditorProps> = ({
       }, 0);
     });
 
+
+    // IME 조합 완료 감지
+    quillRef.current.root.addEventListener('compositionend', () => {
+      if (!quillRef.current) return;
+
+      const selection = quillRef.current.getSelection();
+      if (selection) {
+        quill.setSelection(selection.index);
+      }
+    });
+
     quillRef.current.root.addEventListener('input', () => {
       setTimeout(() => {
         if (quillRef.current?.root.innerText.trim() === '') {
