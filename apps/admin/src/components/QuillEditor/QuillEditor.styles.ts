@@ -30,6 +30,9 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
   }
 
   .ql-editor {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+    
     p,
     ul,
     ol,
@@ -80,6 +83,7 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
 
     li {
       margin: 0;
+      padding: 0;
     }
 
     a {

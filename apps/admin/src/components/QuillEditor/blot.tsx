@@ -90,13 +90,23 @@ icons['video'] = `
 </svg>
 `;
 
+const toYoutubeEmbedUrl = (url: string): string | null => {
+  const regExp = /(?:youtube\.com\/(?:.*v=|v\/|embed\/|shorts\/)|youtu\.be\/)([A-Za-z0-9_-]+)/;
+  const match = url.match(regExp);
+  if (match?.[1]) {
+    return `https://www.youtube.com/embed/${match[1]}`;
+  }
+
+  return null;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const BlockEmbed = Quill.import('blots/block/embed') as any;
 
 class YoutubeVideoBlot extends BlockEmbed {
   static create(value: string) {
     const node = super.create();
-    node.setAttribute('src', value);
+    node.setAttribute('src', toYoutubeEmbedUrl(value) || value);
     node.setAttribute('frameborder', '0');
     node.setAttribute(
       'allow',
