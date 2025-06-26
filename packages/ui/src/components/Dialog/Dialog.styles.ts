@@ -12,7 +12,8 @@ const DIALOG_WIDTH = '450px';
 const DimmedArea = styled.div<{ mobileType?: DialogMobileType }>`
   position: fixed;
   inset: 0;
-  background-color: ${({ mobileType, theme }) => mobileType === 'darkBottomSheet' ? theme.palette.mobile.dialog : theme.palette.dim.dialog};
+  background-color: ${({ mobileType, theme }) =>
+    mobileType === 'darkBottomSheet' ? theme.palette.mobile.dialog : theme.palette.dim.dialog};
   z-index: 999;
 
   ${mq_lg} {
@@ -33,7 +34,7 @@ const Dialog = styled.div<{
   border-radius: 8px;
 
   ${({ mobileType }) =>
-    (mobileType === 'bottomSheet') &&
+    mobileType === 'bottomSheet' &&
     `
     position: fixed;
     bottom: 0;
@@ -60,7 +61,7 @@ const Dialog = styled.div<{
   `}
 
   ${({ mobileType, theme }) =>
-    (mobileType === 'darkBottomSheet') &&
+    mobileType === 'darkBottomSheet' &&
     `
     background-color: ${theme.palette.mobile.grey.g85};
     position: fixed;
@@ -114,7 +115,7 @@ const DialogTitleContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 12px;
-`
+`;
 
 const DialogTitle = styled.h2`
   ${({ theme }) => theme.typo.sh1};
@@ -189,7 +190,7 @@ const DialogBackButton = styled.button<{ mobileType: DialogMobileType }>`
 
   ${mq_lg} {
     top: 17px;
-    right: 32px; 
+    right: 32px;
     left: initial;
   }
 `;

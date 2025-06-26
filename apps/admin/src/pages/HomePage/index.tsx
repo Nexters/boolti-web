@@ -20,9 +20,11 @@ import Styled from './HomePage.styles';
 import ProfileDropdown from '~/components/ProfileDropdown';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
 import SettingDialogContent from '~/components/SettingDialogContent';
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import usePopupDialog from '~/hooks/usePopupDialog';
+import ShowTypeSelectDialogContent from '~/components/ShowTypeSelectDialogContent';
+import { checkIsWebView } from '@boolti/bridge';
 
 const bannerDescription = {
   REQUIRED: '공연의 정산 내역서가 도착했어요. 내역을 확인한 후 정산을 요청해 주세요.',
@@ -33,8 +35,10 @@ const HomePage = () => {
   const { removeToken } = useAuthAtom();
   const logoutMutation = useLogout();
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
+  const isTriggered = useRef(false);
 
-  const settingDialog = useDialog();
+  const { open, close } = useDialog();
   const confirm = useConfirm();
 
   const navigate = useNavigate();
@@ -50,6 +54,18 @@ const HomePage = () => {
   const { imgPath, nickname = '', userCode } = userProfileData ?? {};
 
   const isLoading = isUserProfileLoading || isShowListLoading;
+
+  useEffect(() => {
+    if (!isLoading && searchParams.get('target') === 'register' && !isTriggered.current) {
+      isTriggered.current = true;
+      open({
+        title: checkIsWebView() ? undefined : '공연 유형 선택',
+        mobileType: 'fullPage',
+        isAuto: true,
+        content: <ShowTypeSelectDialogContent close={close} />,
+      });
+    }
+  }, [close, isLoading, open, searchParams]);
 
   return (
     <Layout
@@ -86,7 +102,7 @@ const HomePage = () => {
               <Styled.HeaderMenuItemButton
                 type="button"
                 onClick={() => {
-                  settingDialog.open({
+                  open({
                     title: '설정',
                     content: <SettingDialogContent />,
                     isAuto: true,

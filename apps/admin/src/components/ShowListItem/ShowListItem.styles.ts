@@ -56,10 +56,11 @@ const Poster = styled.div<{ thumbnailPath: string }>`
 
 const TextContainer = styled.div`
   width: 100%;
+  height: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: start;
 `;
 
 const Title = styled.h2`
@@ -81,7 +82,7 @@ const TitleContainer = styled.div`
   align-items: center;
   margin-bottom: 12px;
   ${mq_lg} {
-    margin-bottom: 70px;
+    margin-bottom: auto;
   }
 `;
 

@@ -17,6 +17,7 @@ const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd');
 
 interface ShowBasicInfoFormContentProps {
   form: UseFormReturn<ShowBasicInfoFormInputs, unknown, ShowBasicInfoFormInputs>;
+  isNonTicketingShow?: boolean;
   imageFiles: ImageFile[];
   disabled?: boolean;
   onDropImage: (acceptedFiles: File[]) => void;
@@ -26,6 +27,7 @@ interface ShowBasicInfoFormContentProps {
 const ShowBasicInfoFormContent = ({
   form,
   imageFiles,
+  isNonTicketingShow,
   disabled,
   onDropImage,
   onDeleteImage,
@@ -195,7 +197,7 @@ const ShowBasicInfoFormContent = ({
             <Controller
               control={control}
               rules={{
-                min: MIN_DATE,
+                min: isNonTicketingShow ? undefined : MIN_DATE,
                 required: true,
               }}
               render={({ field: { onChange, onBlur, value } }) => (
@@ -206,7 +208,7 @@ const ShowBasicInfoFormContent = ({
                     onChange(event);
                     clearErrors('date');
 
-                    if (new Date(event.target.value) < new Date(MIN_DATE)) {
+                    if (!isNonTicketingShow && new Date(event.target.value) < new Date(MIN_DATE)) {
                       setError('date', { type: 'min', message: '오늘 이후부터 선택 가능합니다.' });
                       return;
                     }
@@ -220,7 +222,7 @@ const ShowBasicInfoFormContent = ({
                     }
                   }}
                   placeholder={value}
-                  min={MIN_DATE}
+                  min={isNonTicketingShow ? undefined : MIN_DATE}
                   required
                   disabled={disabled}
                   value={value}

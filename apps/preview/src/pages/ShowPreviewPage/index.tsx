@@ -55,7 +55,7 @@ const ShowPreviewPage = () => {
       setShareDialogOpen(false);
       setShareDropdownOpen(false);
       dialog.close();
-    }
+    },
   });
 
   useBodyScrollLock(shareDialogOpen);
@@ -135,7 +135,7 @@ const ShowPreviewPage = () => {
       });
 
       setShareDialogOpen(true);
-      return
+      return;
     }
 
     setShareDropdownOpen(true);
@@ -187,8 +187,8 @@ const ShowPreviewPage = () => {
               date: format(new Date(date), 'yyyy.MM.dd (E)'),
               startTime: format(new Date(date), 'HH:mm'),
               runningTime: runningTime.toString(),
-              salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
-              salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
+              salesStartTime: salesStartTime && format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
+              salesEndTime: salesEndTime && format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
               placeName: placeName,
               streetAddress,
               detailAddress,

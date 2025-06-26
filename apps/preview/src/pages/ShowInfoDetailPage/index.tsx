@@ -36,8 +36,8 @@ const ShowInfoDetailPage: React.FC = () => {
       <ShowInfoDetail
         show={{
           date,
-          salesStartTime: format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
-          salesEndTime: format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
+          salesStartTime: salesStartTime && format(new Date(salesStartTime), 'yyyy.MM.dd (E)'),
+          salesEndTime: salesEndTime && format(new Date(salesEndTime), 'yyyy.MM.dd (E)'),
           placeName,
           streetAddress,
           detailAddress,

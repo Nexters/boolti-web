@@ -33,7 +33,7 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
               >
                 {dialog.content}
               </Dialog>
-            )
+            );
           }
           case 'funnel': {
             return (
@@ -51,11 +51,10 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
                   setDialogList((prev) => prev.filter(({ id }) => dialog.id !== id));
                 }}
               />
-            )
+            );
           }
         }
-      }
-      )}
+      })}
     </dialogContext.Provider>
   );
 };

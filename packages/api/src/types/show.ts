@@ -38,6 +38,8 @@ export interface ShowResponse {
   host: Host;
   isEnded: boolean;
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
+  latitude: number;
+  longitude: number;
   createdAt: string;
 }
 
@@ -55,9 +57,9 @@ export type ShowSummaryResponse = Array<{
   /** 나의 호스트 타입 */
   myHostType: HostType;
   /** 공연 판매 시작 날짜, 시간.ISO8601 */
-  salesStartTime: string;
+  salesStartTime?: string;
   /**공연 판매 종료 날짜, 시간.ISO8601 */
-  salesEndTime: string;
+  salesEndTime?: string;
   /** 공연 시작 날짜, 시간.ISO8601 */
   date: string;
   /** 러닝 타임.분 */
@@ -70,9 +72,9 @@ export type ShowSummaryResponse = Array<{
 
 export interface ShowSalesInfoResponse {
   showId: number;
-  salesStartTime: string;
-  salesEndTime: string;
-  ticketNotice: string;
+  salesStartTime?: string;
+  salesEndTime?: string;
+  ticketNotice?: string;
 }
 
 export interface SalesTicketTypeResponseV2 {
@@ -258,8 +260,8 @@ export interface ShowPreviewResponse {
   longitude: number;
   notice: string;
   managerCode: string;
-  salesStartTime: string;
-  salesEndTime: string;
+  salesStartTime?: string;
+  salesEndTime?: string;
   deletedAt: string;
   showImg: [
     {
@@ -352,6 +354,31 @@ export interface ShowCreateRequest {
   latitude?: number;
   /** 경도 */
   longitude?: number;
+}
+
+export interface NonTicketingShowCreateRequest {
+  /** 공연 이름 */
+  name: string;
+  /** 공연 포스터 이미지 목록 */
+  images: ShowImage[];
+  /** 공연 시작 날짜, 시간. ISO8601. */
+  date: string;
+  /** 러닝 타임. 분 */
+  runningTime: number;
+  /** 장소 정보 */
+  place: Place;
+  /** 공지사항 (공연 상세) */
+  notice: string;
+  /** 호스트 정보 */
+  host: Host;
+  /** 출연진 팀 */
+  castTeams?: Array<ShowCastTeamCreateOrUpdateRequest>;
+  /** 위도 */
+  latitude?: number;
+  /** 경도 */
+  longitude?: number;
+  /** 티켓 미진행 공연 여부 */
+  isNonTicketing: boolean;
 }
 
 export interface SummaryItem {

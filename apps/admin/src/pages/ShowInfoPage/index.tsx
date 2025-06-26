@@ -56,15 +56,17 @@ const ShowInfoPage = () => {
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
+  const isNonTicketingShow = !showSalesInfo?.salesEndTime && !showSalesInfo?.salesStartTime;
 
   const isSaveButtonDisabled = useMemo(
     () =>
       !showBasicInfoForm.formState.isValid ||
       !showDetailInfoForm.formState.isValid ||
       imageFiles.length === 0 ||
-      show?.isEnded,
+      (!isNonTicketingShow && show?.isEnded),
     [
       imageFiles.length,
+      isNonTicketingShow,
       show?.isEnded,
       showBasicInfoForm.formState.isValid,
       showDetailInfoForm.formState.isValid,
@@ -203,6 +205,8 @@ const ShowInfoPage = () => {
       placeName: show.place.name,
       placeStreetAddress: show.place.streetAddress,
       placeDetailAddress: show.place.detailAddress,
+      latitude: show.latitude,
+      longitude: show.longitude,
     });
 
     showDetailInfoForm.reset({
@@ -256,7 +260,8 @@ const ShowInfoPage = () => {
           <ShowBasicInfoFormContent
             form={showBasicInfoForm}
             imageFiles={imageFiles}
-            disabled={show.isEnded}
+            isNonTicketingShow={isNonTicketingShow}
+            disabled={!isNonTicketingShow && show.isEnded}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [
                 ...prevImageFiles,
@@ -278,7 +283,10 @@ const ShowInfoPage = () => {
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormDivider />
         <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
-          <ShowDetailInfoFormContent form={showDetailInfoForm} disabled={show.isEnded} />
+          <ShowDetailInfoFormContent
+            form={showDetailInfoForm}
+            disabled={!isNonTicketingShow && show.isEnded}
+          />
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent>
           {castTeamListDraft && (
@@ -332,12 +340,12 @@ const ShowInfoPage = () => {
                       runningTime: showBasicInfoForm.watch('runningTime'),
                       latitude: showBasicInfoForm.watch('latitude'),
                       longitude: showBasicInfoForm.watch('longitude'),
-                      salesStartTime: showSalesInfo
-                        ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
-                        : '',
-                      salesEndTime: showSalesInfo
-                        ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
-                        : '',
+                      salesStartTime:
+                        showSalesInfo.salesStartTime &&
+                        format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)'),
+                      salesEndTime:
+                        showSalesInfo.salesEndTime &&
+                        format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)'),
                       placeName: showBasicInfoForm.watch('placeName'),
                       streetAddress: showBasicInfoForm.watch('placeStreetAddress'),
                       detailAddress: showBasicInfoForm.watch('placeDetailAddress'),
@@ -389,10 +397,10 @@ const ShowInfoPage = () => {
                     : '',
                   startTime: showBasicInfoForm.watch('startTime'),
                   runningTime: showBasicInfoForm.watch('runningTime'),
-                  salesStartTime: showSalesInfo
+                  salesStartTime: showSalesInfo.salesStartTime
                     ? format(showSalesInfo.salesStartTime, 'yyyy.MM.dd (E)')
                     : '',
-                  salesEndTime: showSalesInfo
+                  salesEndTime: showSalesInfo.salesEndTime
                     ? format(showSalesInfo.salesEndTime, 'yyyy.MM.dd (E)')
                     : '',
                   placeName: showBasicInfoForm.watch('placeName'),
@@ -410,7 +418,8 @@ const ShowInfoPage = () => {
                       userNickname: member.userNickname ?? '',
                       userImgPath: member.userImgPath ?? '',
                     })),
-                  })) ?? []}
+                  })) ?? []
+                }
                 containerRef={showPreviewMobileRef}
               />
             </Styled.ShowInfoPreview>

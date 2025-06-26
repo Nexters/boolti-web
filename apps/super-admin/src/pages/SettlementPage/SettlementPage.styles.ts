@@ -72,7 +72,7 @@ const ProgressItem = styled.li<ProgressItemProps>`
     bottom: -36px;
     left: 12px;
     background-color: ${({ theme, active }) =>
-    active ? theme.palette.primary.o1 : theme.palette.grey.g20};
+      active ? theme.palette.primary.o1 : theme.palette.grey.g20};
     width: 1px;
     height: 30px;
   }
@@ -113,7 +113,8 @@ const ProgressItemButton = styled.button`
   color: ${({ theme }) => theme.palette.grey.g70};
   cursor: pointer;
 
-  &:hover, &:active {
+  &:hover,
+  &:active {
     text-decoration: underline;
     color: ${({ theme }) => theme.palette.grey.g70};
   }

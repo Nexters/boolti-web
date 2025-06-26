@@ -5,13 +5,13 @@ import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } fro
 
 import Styled from './ShowPreview.styles';
 import PreviewMap from '../PreviewMap';
-import ShowInfoDescription from '../ShowContentMarkdown';
+import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
 
 interface Props {
   show: {
     date: string;
-    salesStartTime: string;
-    salesEndTime: string;
+    salesStartTime?: string;
+    salesEndTime?: string;
     notice: string;
     hostName: string;
     placeName: string;
@@ -21,7 +21,7 @@ interface Props {
     longitude?: number;
   };
   soldTicketCount?: number;
-  isAppWebview?: boolean
+  isAppWebview?: boolean;
   onClickCallLink?: () => void;
   onClickMessageLink?: () => void;
   onClickCallLinkMobile?: () => void;
@@ -76,35 +76,48 @@ const ShowInfoDetail = ({
 
   return (
     <Styled.ShowInfo>
-      <Styled.ShowInfoGroup>
-        <Styled.ShowInfoTitleContainer>
-          <Styled.ShowInfoTitle>티켓 판매</Styled.ShowInfoTitle>
-        </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoDescription style={{ marginBottom: '0' }}>
-          {salesStartTime} - {salesEndTime}
-        </Styled.ShowInfoDescription>
-        {isEnded && soldTicketCount !== undefined && (
-          <Styled.ShowTicketInfoDescription>
-            <Styled.TicketIcon>
-              <TicketIcon />
-            </Styled.TicketIcon>{' '}
-            {soldTicketCount}매 판매 완료
-          </Styled.ShowTicketInfoDescription>
-        )}
-      </Styled.ShowInfoGroup>
+      {salesStartTime && salesEndTime && (
+        <Styled.ShowInfoGroup>
+          <Styled.ShowInfoTitleContainer>
+            <Styled.ShowInfoTitle>티켓 판매</Styled.ShowInfoTitle>
+          </Styled.ShowInfoTitleContainer>
+          <Styled.ShowInfoDescription style={{ marginBottom: '0' }}>
+            {salesStartTime} - {salesEndTime}
+          </Styled.ShowInfoDescription>
+          {isEnded && soldTicketCount !== undefined && (
+            <Styled.ShowTicketInfoDescription>
+              <Styled.TicketIcon>
+                <TicketIcon />
+              </Styled.TicketIcon>{' '}
+              {soldTicketCount}매 판매 완료
+            </Styled.ShowTicketInfoDescription>
+          )}
+        </Styled.ShowInfoGroup>
+      )}
       <Styled.ShowInfoGroup style={{ paddingBottom: isOverflow ? '0' : '24px' }}>
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>내용</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
         <Styled.ShowInfoDescription collapse={isOverflow ? collapse : false} ref={showNoticeRef}>
-          <ShowInfoDescription content={notice} />
+          <ShowNoticeHtmlContent content={notice} />
         </Styled.ShowInfoDescription>
         {isOverflow && (
-          <Styled.ShowInfoMoreButton type="button" onClick={() => {
-            onClickViewNotice?.();
-            viewMoreClickHandler();
-          }}>
-            {collapse ? <>내용 더 보기 <ChevronDownIcon /></> : <>내용 접기 <ChevronUpIcon /></>}
+          <Styled.ShowInfoMoreButton
+            type="button"
+            onClick={() => {
+              onClickViewNotice?.();
+              viewMoreClickHandler();
+            }}
+          >
+            {collapse ? (
+              <>
+                내용 더 보기 <ChevronDownIcon />
+              </>
+            ) : (
+              <>
+                내용 접기 <ChevronUpIcon />
+              </>
+            )}
           </Styled.ShowInfoMoreButton>
         )}
       </Styled.ShowInfoGroup>
@@ -132,7 +145,12 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoDescriptionText>
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
-          <PreviewMap latitude={latitude} longitude={longitude} name={placeName} isAppWebview={isAppWebview} />
+          <PreviewMap
+            latitude={latitude}
+            longitude={longitude}
+            name={placeName}
+            isAppWebview={isAppWebview}
+          />
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>

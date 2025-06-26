@@ -20,13 +20,13 @@ const useStepDialog = <T extends string>() => {
       onClose,
     }: {
       initialHistory: T[];
-      content: Record<T, {
-        children: (props: {
-          push: (nextStep: T) => void;
-          back: () => void;
-        }) => React.ReactNode;
-        title?: string
-      }>;
+      content: Record<
+        T,
+        {
+          children: (props: { push: (nextStep: T) => void; back: () => void }) => React.ReactNode;
+          title?: string;
+        }
+      >;
       isAuto?: boolean;
       width?: string;
       contentPadding?: string;

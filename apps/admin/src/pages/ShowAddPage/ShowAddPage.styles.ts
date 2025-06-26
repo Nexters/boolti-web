@@ -193,7 +193,7 @@ const ShowAddFormButtonContainer = styled.div`
   gap: 8px;
 `;
 
-const ShowAddFormButton = styled(Button) <ShowAddFormButtonProps>`
+const ShowAddFormButton = styled(Button)<ShowAddFormButtonProps>`
   ${({ variant }) => {
     switch (variant) {
       case 'next': {
@@ -217,24 +217,24 @@ const ShowAddFormButton = styled(Button) <ShowAddFormButtonProps>`
 
   ${mq_lg} {
     ${({ variant }) => {
-    switch (variant) {
-      case 'next': {
-        return `
+      switch (variant) {
+        case 'next': {
+          return `
           width: calc(100% - 152px);
         `;
-      }
-      case 'prev': {
-        return `
+        }
+        case 'prev': {
+          return `
           width: 152px;
         `;
-      }
-      default: {
-        return `
+        }
+        default: {
+          return `
           width: 100%;
         `;
+        }
       }
-    }
-  }};
+    }};
   }
 `;
 
@@ -415,7 +415,7 @@ const Term = styled.div`
   align-items: center;
 `;
 
-const TermLabel = styled(Checkbox.Label) <{ main?: boolean }>`
+const TermLabel = styled(Checkbox.Label)<{ main?: boolean }>`
   display: flex;
   align-items: center;
   gap: 8px;

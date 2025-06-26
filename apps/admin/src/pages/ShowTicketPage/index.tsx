@@ -64,8 +64,10 @@ const ShowTicketPage = () => {
     if (!showSalesInfo) return;
 
     showTicketForm.reset({
-      startDate: format(showSalesInfo.salesStartTime, 'yyyy-MM-dd'),
-      endDate: format(showSalesInfo.salesEndTime, 'yyyy-MM-dd'),
+      startDate: showSalesInfo.salesStartTime
+        ? format(showSalesInfo.salesStartTime, 'yyyy-MM-dd')
+        : '',
+      endDate: showSalesInfo.salesEndTime ? format(showSalesInfo.salesEndTime, 'yyyy-MM-dd') : '',
       ticketNotice: showSalesInfo.ticketNotice,
     });
   }, [showSalesInfo, showTicketForm]);
@@ -89,7 +91,9 @@ const ShowTicketPage = () => {
           <ShowTicketInfoFormContent
             form={showTicketForm}
             showDate={format(show.date, 'yyyy-MM-dd')}
-            salesStartTime={format(showSalesInfo.salesStartTime, 'yyyy-MM-dd')}
+            salesStartTime={
+              showSalesInfo.salesStartTime ? format(showSalesInfo.salesStartTime, 'yyyy-MM-dd') : ''
+            }
             showCreatedAt={show.createdAt}
             disabled={show.isEnded}
           />

@@ -29,10 +29,16 @@ const StepProgressBarLine = styled.div<{ step: number; maxStep: number }>`
   }
 `;
 
-const StepProgressBarItemList = styled.div`
+const StepProgressBarItemList = styled.div<{ isJustifyCenter: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  ${(props) =>
+    props.isJustifyCenter
+      ? `
+        justify-content: center;
+        gap: 12px;
+      `
+      : 'justify-content: space-between;'};
 `;
 
 const StepProgressBarItem = styled.div<{ active: boolean }>`
