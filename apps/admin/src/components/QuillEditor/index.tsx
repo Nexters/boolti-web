@@ -96,26 +96,23 @@ const QuillEditor: React.FC<EditorProps> = ({
             video: videoUploadHandler,
           },
         },
-        keyboard: {
-          bindings: {
-            enter: {
-              key: 13,
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              handler: (range: any) => {
-                const selection = document.getSelection();
-                selection?.removeAllRanges();
-                quillRef.current?.setSelection(range.index, 0);
-                selection?.addRange(range);
-                quillRef.current?.editor?.insertText(range.index, '\n');
-              },
-            },
-          }
-        }
       },
       placeholder,
       readOnly,
       theme: 'snow',
     });
+
+    quill.keyboard.addBinding({
+      key: 13,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      handler: (range: any) => {
+        const selection = document.getSelection();
+        selection?.removeAllRanges();
+        quillRef.current?.setSelection(range.index, 0);
+        selection?.addRange(range);
+        quillRef.current?.editor?.insertText(range.index, '\n');
+      }
+    })
 
     quillRef.current = quill;
 
