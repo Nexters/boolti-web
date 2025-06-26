@@ -80,6 +80,7 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
 
     li {
       margin: 0;
+      padding: 0;
     }
 
     a {

@@ -51,6 +51,7 @@ const Content = styled.div`
 
   li {
     margin: 0;
+    padding: 0;
   }
 
   a {
