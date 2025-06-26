@@ -102,18 +102,6 @@ const QuillEditor: React.FC<EditorProps> = ({
       theme: 'snow',
     });
 
-    quill.keyboard.addBinding({
-      key: 13,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      handler: (range: any) => {
-        const selection = document.getSelection();
-        selection?.removeAllRanges();
-        quillRef.current?.setSelection(range.index, 0);
-        selection?.addRange(range);
-        quillRef.current?.editor?.insertText(range.index, '\n');
-      }
-    })
-
     quillRef.current = quill;
 
     if (defaultValueRef.current) {
@@ -137,17 +125,6 @@ const QuillEditor: React.FC<EditorProps> = ({
       setTimeout(() => {
         quill.root.classList.remove('ql-blank');
       }, 0);
-    });
-
-
-    // IME 조합 완료 감지
-    quillRef.current.root.addEventListener('compositionend', () => {
-      if (!quillRef.current) return;
-
-      const selection = quillRef.current.getSelection();
-      if (selection) {
-        quill.setSelection(selection.index);
-      }
     });
 
     quillRef.current.root.addEventListener('input', () => {
