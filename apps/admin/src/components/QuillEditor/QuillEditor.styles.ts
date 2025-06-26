@@ -86,6 +86,14 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
       padding: 0;
     }
 
+    li[data-list='bullet'] {
+      list-style-type: disc;
+    }
+
+    li[data-list='ordered'] {
+      list-style-type: decimal;
+    }
+
     a {
       color: #46a6ff;
       text-decoration-line: underline;
@@ -128,6 +136,10 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
     border: none;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g20};
     background-color: ${({ theme }) => theme.palette.grey.g10};
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 0;
+
   }
 
   .ql-toolbar.ql-snow .ql-formats {
