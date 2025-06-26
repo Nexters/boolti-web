@@ -98,16 +98,17 @@ const QuillEditor: React.FC<EditorProps> = ({
         },
         keyboard: {
           bindings: {
-            customEnter: {
+            enter: {
               key: 13,
-              handler: function (range: { index: number }) {
-                quill.insertText(range.index, '\n', 'user');
-                quill.setSelection(range.index + 1, 0, 'silent');
-                quill.blur();
-                setTimeout(() => quill.focus(), 0);
-                return false;
-              }
-            }
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              handler: (range: any) => {
+                const selection = document.getSelection();
+                selection?.removeAllRanges();
+                quillRef.current?.setSelection(range.index, 0);
+                selection?.addRange(range);
+                quillRef.current?.editor?.insertText(range.index, '\n');
+              },
+            },
           }
         }
       },
