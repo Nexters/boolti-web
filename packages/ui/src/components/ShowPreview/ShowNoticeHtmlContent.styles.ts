@@ -54,6 +54,14 @@ const Content = styled.div`
     padding: 0;
   }
 
+  li[data-list='bullet'] {
+    list-style-type: disc;
+  }
+
+  li[data-list='ordered'] {
+    list-style-type: decimal;
+  }
+
   a {
     color: #46a6ff;
     font-size: 16px;
