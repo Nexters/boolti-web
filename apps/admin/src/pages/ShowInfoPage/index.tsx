@@ -205,6 +205,8 @@ const ShowInfoPage = () => {
       placeName: show.place.name,
       placeStreetAddress: show.place.streetAddress,
       placeDetailAddress: show.place.detailAddress,
+      latitude: show.latitude,
+      longitude: show.longitude,
     });
 
     showDetailInfoForm.reset({
