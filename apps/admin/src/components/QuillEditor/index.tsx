@@ -119,6 +119,25 @@ const QuillEditor: React.FC<EditorProps> = ({
       onBlurRef.current?.(!text);
     });
 
+
+    // 한글 입력 IME 입력 이벤트 감지 및 강제 리렌더링
+    quillRef.current.root.addEventListener('compositionstart', () => {
+      setTimeout(() => {
+        quill.root.classList.remove('ql-blank');
+      }, 0);
+    });
+
+    quillRef.current.root.addEventListener('input', () => {
+      setTimeout(() => {
+        if (quillRef.current?.root.innerText.trim() === '') {
+          quill.root.classList.add('ql-blank');
+        } else {
+          quill.root.classList.remove('ql-blank');
+        }
+      }, 0);
+    });
+
+
     return () => {
       if (quillRef.current) {
         quillRef.current.off(Quill.events.TEXT_CHANGE);
@@ -135,6 +154,7 @@ const QuillEditor: React.FC<EditorProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // 링크 폼이 좌측으로 벗어나는 문제를 해결하기 위한 툴팁 위치 조정
   useEffect(() => {
     const adjustTooltipPosition = () => {
       const tooltip = document.querySelector('.ql-tooltip') as HTMLDivElement | null;
