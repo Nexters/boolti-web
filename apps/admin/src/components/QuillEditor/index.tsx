@@ -96,6 +96,20 @@ const QuillEditor: React.FC<EditorProps> = ({
             video: videoUploadHandler,
           },
         },
+        keyboard: {
+          bindings: {
+            customEnter: {
+              key: 13,
+              handler: function (range: { index: number }) {
+                quill.insertText(range.index, '\n', 'user');
+                quill.setSelection(range.index + 1, 0, 'silent');
+                quill.blur();
+                setTimeout(() => quill.focus(), 0);
+                return false;
+              }
+            }
+          }
+        }
       },
       placeholder,
       readOnly,
