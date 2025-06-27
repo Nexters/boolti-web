@@ -406,6 +406,8 @@ const ShowInfoPage = () => {
                   placeName: showBasicInfoForm.watch('placeName'),
                   streetAddress: showBasicInfoForm.watch('placeStreetAddress'),
                   detailAddress: showBasicInfoForm.watch('placeDetailAddress'),
+                  latitude: showBasicInfoForm.watch('latitude'),
+                  longitude: showBasicInfoForm.watch('longitude'),
                   notice: showDetailInfoForm.watch('notice'),
                   hostName: showDetailInfoForm.watch('hostName'),
                   hostPhoneNumber: showDetailInfoForm.watch('hostPhoneNumber'),
