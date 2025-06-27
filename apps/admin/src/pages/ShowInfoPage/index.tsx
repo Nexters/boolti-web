@@ -57,21 +57,18 @@ const ShowInfoPage = () => {
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
   const isNonTicketingShow = !showSalesInfo?.salesEndTime && !showSalesInfo?.salesStartTime;
+  // const isFormDisabled = !isNonTicketingShow && show?.isEnded;
+  const isFormDisabled = false
 
-  const isSaveButtonDisabled = useMemo(
-    () =>
-      !showBasicInfoForm.formState.isValid ||
-      !showDetailInfoForm.formState.isValid ||
-      imageFiles.length === 0 ||
-      (!isNonTicketingShow && show?.isEnded),
-    [
-      imageFiles.length,
-      isNonTicketingShow,
-      show?.isEnded,
-      showBasicInfoForm.formState.isValid,
-      showDetailInfoForm.formState.isValid,
-    ],
-  );
+  // const isSaveButtonDisabled = useMemo(
+  //   () =>
+  //     !showBasicInfoForm.formState.isValid ||
+  //     !showDetailInfoForm.formState.isValid ||
+  //     imageFiles.length === 0 ||
+  //     (isFormDisabled),
+  //   [imageFiles.length, isFormDisabled, showBasicInfoForm.formState.isValid, showDetailInfoForm.formState.isValid],
+  // );
+  const isSaveButtonDisabled = false
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -92,12 +89,12 @@ const ShowInfoPage = () => {
       return await uploadShowImageMutation.mutateAsync(newImageFiles);
     })();
 
-    const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
-      showBasicInfoForm.trigger(),
-      showDetailInfoForm.trigger(),
-    ]);
+    // const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
+    //   showBasicInfoForm.trigger(),
+    //   showDetailInfoForm.trigger(),
+    // ]);
 
-    if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
+    // if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
 
     const showBasicInfoFormInputs = showBasicInfoForm.getValues();
     const showDetailInfoFormInputs = showDetailInfoForm.getValues();
@@ -261,7 +258,7 @@ const ShowInfoPage = () => {
             form={showBasicInfoForm}
             imageFiles={imageFiles}
             isNonTicketingShow={isNonTicketingShow}
-            disabled={!isNonTicketingShow && show.isEnded}
+            disabled={isFormDisabled}
             onDropImage={(acceptedFiles) => {
               setImageFiles((prevImageFiles) => [
                 ...prevImageFiles,
@@ -285,7 +282,7 @@ const ShowInfoPage = () => {
         <Styled.ShowInfoFormContent style={{ marginBottom: '48px' }}>
           <ShowDetailInfoFormContent
             form={showDetailInfoForm}
-            disabled={!isNonTicketingShow && show.isEnded}
+            disabled={isFormDisabled}
           />
         </Styled.ShowInfoFormContent>
         <Styled.ShowInfoFormContent>
