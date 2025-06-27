@@ -48,7 +48,7 @@ const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
 
 const App = () => {
   return (
-    <NavermapsProvider ncpClientId={X_NCP_APIGW_API_KEY_ID}>
+    <NavermapsProvider ncpKeyId={X_NCP_APIGW_API_KEY_ID}>
       <BooltiUIProvider>
         <HelmetProvider>
           <RouterProvider router={router} />
