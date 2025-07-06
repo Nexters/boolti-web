@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
-import Quill from 'quill';
+import Quill, { Range as QuillRange } from 'quill';
 import { useUploadShowContentImage } from '@boolti/api';
 import Styled from './QuillEditor.styles';
 import './blot';
@@ -83,7 +83,7 @@ const QuillEditor: React.FC<EditorProps> = ({
     const editorElement = editorElementRef.current;
     if (!editorElement) return;
 
-    const quill = new Quill(editorElement, {
+    quillRef.current = new Quill(editorElement, {
       modules: {
         toolbar: {
           container: [
@@ -96,13 +96,38 @@ const QuillEditor: React.FC<EditorProps> = ({
             video: videoUploadHandler,
           },
         },
+        keyboard: {
+          bindings: {
+            enter: {
+              key: 'Enter',
+              collapsed: true,
+              handler: (range: QuillRange) => {
+                if (!quillRef.current || !document.activeElement) return
+
+                const selection = document.getSelection();
+                selection?.removeAllRanges();
+                quillRef.current.setSelection(range.index, 0);
+
+                /*
+                 * iOS 웹 브라우저 환경에서 발생하는 한글 IME 입력 버퍼 이슈를 해결하기 위한 코드
+                 * Selection.addRange 실행 시 일부러 에러를 발생시켜, 강제로 버퍼를 비우게 한다.
+                 * try catch 문으로 wrap하면 버퍼가 비워지지 않으니 주의할 것.
+                 */
+                selection?.addRange({} as Range);
+
+                quillRef.current.insertText(range.index, '\n');
+                quillRef.current.focus()
+
+                return false;
+              }
+            },
+          },
+        },
       },
       placeholder,
       readOnly,
       theme: 'snow',
     });
-
-    quillRef.current = quill;
 
     if (defaultValueRef.current) {
       quillRef.current.clipboard.dangerouslyPasteHTML(defaultValueRef.current);
@@ -119,20 +144,19 @@ const QuillEditor: React.FC<EditorProps> = ({
       onBlurRef.current?.(!text);
     });
 
-
     // 한글 입력 IME 입력 이벤트 감지 및 강제 리렌더링
     quillRef.current.root.addEventListener('compositionstart', () => {
       setTimeout(() => {
-        quill.root.classList.remove('ql-blank');
+        quillRef.current?.root.classList.remove('ql-blank');
       }, 0);
     });
 
     quillRef.current.root.addEventListener('input', () => {
       setTimeout(() => {
         if (quillRef.current?.root.innerText.trim() === '') {
-          quill.root.classList.add('ql-blank');
+          quillRef.current.root.classList.add('ql-blank');
         } else {
-          quill.root.classList.remove('ql-blank');
+          quillRef.current?.root.classList.remove('ql-blank');
         }
       }, 0);
     });
