@@ -3,9 +3,9 @@
     "relation": ["delegate_permission/common.handle_all_urls"],
     "target": {
       "namespace": "android_app",
-      "package_name": "com.example.yourapp",
+      "package_name": "com.nexters.boolti",
       "sha256_cert_fingerprints": [
-        "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99"
+        "BE:7A:EE:CB:F4:B5:35:80:E9:EE:1D:D8:E7:1A:73:7F:B2:BA:69:34:F0:C4:30:A6:49:2D:1C:1F:70:11:57:84"
       ]
     }
   }
