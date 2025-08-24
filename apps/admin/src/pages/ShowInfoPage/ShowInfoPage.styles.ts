@@ -109,10 +109,9 @@ const ShowPreviewContainer = styled.div`
   padding: 30px 34px 38px 39px;
 `;
 
-const ShowPreview = styled.div`
+const ShowPreview = styled.div<{ loaded: boolean }>`
   width: 375px;
   height: 100%;
-  zoom: 0.64266667;
   overflow-y: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -122,6 +121,12 @@ const ShowPreview = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+
+  ${({ loaded }) =>
+    loaded &&
+    `
+      zoom: 0.64266667;
+    `}
 `;
 
 const ShowInfoPreviewFooter = styled.div`
