@@ -15,6 +15,7 @@ interface Props {
 }
 
 const CONFIRM_LOCAL_STORAGE_KEY = 'BOOLTI_PREVIEW_MAP_OPEN_NAVER_MAP';
+const DEFAULT_CENTER_LATITUDE_OFFSET = 0.00005;
 
 const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
   const confirm = useConfirm();
@@ -62,6 +63,7 @@ const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
       }, 1500);
     }
   };
+
   return (
     <Container
       style={{ height: 140, borderRadius: 8 }}
@@ -90,7 +92,7 @@ const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
         zoomControl={false}
         mapTypeControl={false}
         zoom={18}
-        defaultCenter={new navermaps.LatLng(latitude, longitude)}
+        defaultCenter={new navermaps.LatLng(latitude + DEFAULT_CENTER_LATITUDE_OFFSET, longitude)}
       >
         <Marker
           position={new navermaps.LatLng(latitude, longitude)}
