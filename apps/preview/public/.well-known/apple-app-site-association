@@ -1,0 +1,14 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "T5CE483Z96.com.nexters.boolti",
+                "paths": [
+                    "/concerts/*",
+                    "/gift/*"
+                ]
+            }
+        ]
+    }
+}
