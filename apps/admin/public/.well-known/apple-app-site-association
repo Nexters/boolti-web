@@ -3,10 +3,11 @@
         "apps": [],
         "details": [
             {
-                "appID": "T5CE483Z96.com.nexters.boolti",
+                "appID": "83B9Y749K7.com.nexters.boolti",
                 "paths": [
                     "/concerts/*",
-                    "/gift/*"
+                    "/gift/*",
+                    "/show/*"
                 ]
             }
         ]
