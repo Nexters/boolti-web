@@ -66,6 +66,7 @@ const QuillEditor: React.FC<EditorProps> = ({
     }
   }, [quillRef]);
 
+
   useLayoutEffect(() => {
     readOnlyRef.current = readOnly;
     defaultValueRef.current = defaultValue;
@@ -133,8 +134,46 @@ const QuillEditor: React.FC<EditorProps> = ({
       quillRef.current.clipboard.dangerouslyPasteHTML(defaultValueRef.current);
     }
 
-    quillRef.current.on(Quill.events.TEXT_CHANGE, () => {
+    let typingTimer: ReturnType<typeof setTimeout> | null = null;
+
+    quillRef.current.on(Quill.events.TEXT_CHANGE, (delta, _oldDelta, source) => {
       if (!quillRef.current) return;
+
+      if (source === 'user') {
+        if (typingTimer) {
+          clearTimeout(typingTimer);
+        }
+
+        const ops = delta.ops || [];
+        const hasSpaceOrNewline = ops.some(op =>
+          op.insert && typeof op.insert === 'string' &&
+          (op.insert.includes(' ') || op.insert.includes('\n'))
+        );
+
+        if (hasSpaceOrNewline) {
+          typingTimer = setTimeout(() => {
+            const selection = quillRef.current!.getSelection();
+            if (!selection) return;
+
+            const fullText = quillRef.current!.getText();
+            const beforeCursor = fullText.substring(0, selection.index);
+
+            const urlRegex = /(https?:\/\/[^\s]+)/g;
+            let match;
+
+            while ((match = urlRegex.exec(beforeCursor)) !== null) {
+              const url = match[0];
+              const startIndex = match.index;
+
+              const format = quillRef.current!.getFormat(startIndex, url.length);
+              if (!format.link) {
+                quillRef.current!.formatText(startIndex, url.length, 'link', url);
+              }
+            }
+          }, 0);
+        }
+      }
+
       onChangeRef.current?.(quillRef.current.root.innerHTML);
     });
 
@@ -162,6 +201,9 @@ const QuillEditor: React.FC<EditorProps> = ({
     });
 
     return () => {
+      if (typingTimer) {
+        clearTimeout(typingTimer);
+      }
       if (quillRef.current) {
         quillRef.current.off(Quill.events.TEXT_CHANGE);
         quillRef.current.root.removeEventListener('blur', () => {
