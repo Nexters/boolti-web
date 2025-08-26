@@ -358,7 +358,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
               size="big"
               id="code"
               width="100%"
-              value={`#${userProfile?.userCode}`}
+              value={userProfile?.userCode}
               onChange={(event) => {
                 event.preventDefault();
               }}
