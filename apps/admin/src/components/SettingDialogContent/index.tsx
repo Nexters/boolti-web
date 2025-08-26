@@ -352,7 +352,7 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
             <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
           </Styled.SettingContentHeader>
           <Styled.SettingContentFormControl>
-            <Styled.Label htmlFor="code">식별 코드</Styled.Label>
+            <Styled.Label htmlFor="code">ID</Styled.Label>
             <TextField
               inputType="text"
               size="big"
