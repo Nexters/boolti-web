@@ -1,13 +1,11 @@
-import { BooltiLightGrey, EditIcon, PhotoIcon, PlusIcon } from '@boolti/icon';
+import { BooltiLightGrey } from '@boolti/icon';
 import Styled from './SettingDialogContent.styles';
-import { Button, TextButton, TextField, useDialog, useToast } from '@boolti/ui';
+import { Button, TextField, useDialog } from '@boolti/ui';
 import AccountDeleteForm from '../AccountDeleteForm';
-import { useEditUserProfile, useUploadProfileImage, useUserProfile } from '@boolti/api';
+import { useUserProfile } from '@boolti/api';
 import { useTheme } from '@emotion/react';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import LinkFormDialogContent, { LinkFormInputs } from '../LinkFormDialogContent';
+import { useState } from 'react';
 
 const KakaoIcon = () => {
   return (
@@ -33,114 +31,25 @@ const AppleIcon = () => {
   );
 };
 
-type ProfileFormInputs = {
-  nickname: string;
-  introduction: string;
-};
-
 interface SettingDialogContentProps {
   onDeleteAccount?: () => void;
 }
 
 type SettingMenuType = 'profile' | 'account';
 
-const MAX_NICKNAME_LENGTH = 20;
-const MAX_INTRODUCTION_LENGTH = 60;
-
-const NICKNAME_ERROR_MESSAGE = {
-  required: '1자 이상 입력해 주세요.',
-  minLength: '1자 이상 입력해 주세요.',
-  maxLength: `${MAX_NICKNAME_LENGTH}자 이내로 입력해 주세요.`,
-};
-
 const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) => {
   const theme = useTheme();
   const accountDeleteDialog = useDialog();
-  const linkDialog = useDialog();
-  const toast = useToast();
-  const [currentMenu, setCurrentMenu] = useState<SettingMenuType>('profile');
+  const [currentMenu, setCurrentMenu] = useState<SettingMenuType>('account');
 
-  const { data: userProfile, refetch: refetchUserProfile } = useUserProfile();
-  const uploadProfileImageMutation = useUploadProfileImage();
-  const editProfileMutation = useEditUserProfile();
-
-  const { register, handleSubmit, setValue, watch, setError, clearErrors, formState } =
-    useForm<ProfileFormInputs>();
-
-  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
-  const [links, setLinks] = useState<LinkFormInputs[]>([]);
+  const { data: userProfile } = useUserProfile();
 
   useBodyScrollLock();
-
-  const profileImageChangeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-
-    if (files && files.length > 0) {
-      setProfileImageFile(files[0]);
-    }
-  };
-
-  const submitHandler = async (data: ProfileFormInputs) => {
-    if (editProfileMutation.isLoading) return;
-
-    let nextProfileImageUrl = userProfile?.imgPath;
-
-    if (profileImageFile) {
-      const { url } = await uploadProfileImageMutation.mutateAsync(profileImageFile);
-
-      nextProfileImageUrl = url;
-    }
-
-    try {
-      await editProfileMutation.mutateAsync({
-        nickname: data.nickname.trim(),
-        introduction: data.introduction.trim(),
-        profileImagePath: nextProfileImageUrl,
-        link: links,
-      });
-
-      toast.success('프로필 정보를 저장했습니다.');
-      await refetchUserProfile();
-
-      setProfileImageFile(null);
-      setProfileImagePreview(null);
-    } catch (error) {
-      toast.error('프로필 정보를 저장하는 중 문제가 발생했습니다.');
-    }
-  };
-
-  useEffect(() => {
-    if (!userProfile) return;
-
-    setValue('nickname', userProfile.nickname ?? '');
-    setValue('introduction', userProfile.introduction ?? '');
-
-    setLinks(userProfile.link);
-  }, [setValue, userProfile]);
-
-  useEffect(() => {
-    if (!profileImageFile) return;
-
-    const url = URL.createObjectURL(profileImageFile);
-    setProfileImagePreview(url);
-
-    return () => URL.revokeObjectURL(url);
-  }, [profileImageFile]);
 
   return (
     <Styled.SettingDialogContent>
       <Styled.SettingMenuWrapper>
         <Styled.SettingMenu>
-          <Styled.SettingMenuItemButton
-            type="button"
-            active={currentMenu === 'profile'}
-            onClick={() => {
-              setCurrentMenu('profile');
-            }}
-          >
-            프로필
-          </Styled.SettingMenuItemButton>
           <Styled.SettingMenuItemButton
             type="button"
             active={currentMenu === 'account'}
@@ -155,210 +64,19 @@ const SettingDialogContent = ({ onDeleteAccount }: SettingDialogContentProps) =>
           <BooltiLightGrey />
         </Styled.SettingMenuBottomLogo>
       </Styled.SettingMenuWrapper>
-      {currentMenu === 'profile' && (
-        <Styled.SettingContent>
-          <Styled.SettingContentForm onSubmit={handleSubmit(submitHandler)}>
-            <Styled.SettingContentHeader>
-              <Styled.SettingContentTitle>프로필</Styled.SettingContentTitle>
-              <Styled.SettingContentSubmitWrapper>
-                <TextButton type="submit" size="small" colorTheme="primary">
-                  저장하기
-                </TextButton>
-              </Styled.SettingContentSubmitWrapper>
-            </Styled.SettingContentHeader>
-            <Styled.SettingContentFormControl>
-              <Styled.ProfileImageWrapper>
-                {profileImagePreview ?? userProfile?.imgPath ? (
-                  <Styled.ProfileImage
-                    src={profileImagePreview ?? userProfile?.imgPath}
-                    alt="프로필 이미지"
-                  />
-                ) : (
-                  <Styled.DefaultProfileImage />
-                )}
-
-                <Styled.ProfileImageEditButton>
-                  <PhotoIcon />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ width: 0, height: 0 }}
-                    onChange={profileImageChangeHandler}
-                  />
-                </Styled.ProfileImageEditButton>
-              </Styled.ProfileImageWrapper>
-            </Styled.SettingContentFormControl>
-            <Styled.SettingContentFormControl>
-              <Styled.Label htmlFor="nickname" required>
-                닉네임
-              </Styled.Label>
-              <TextField
-                inputType="text"
-                size="big"
-                id="nickname"
-                width="100%"
-                placeholder="닉네임을 입력해 주세요 (20자 이내)"
-                errorMessage={formState.errors.nickname?.message}
-                {...register('nickname', {
-                  required: {
-                    value: false,
-                    message: NICKNAME_ERROR_MESSAGE.required,
-                  },
-                  onChange: (event) => {
-                    // 문자열의 앞뒤 공백 입력 방지
-                    if (event.target.value.at(-1) === ' ') {
-                      event.target.value = event.target.value.trim();
-                    }
-
-                    if (event.target.value.at(0) === ' ') {
-                      event.target.value = event.target.value.trim();
-                      event.target.setSelectionRange(0, 0);
-                    }
-
-                    // 문자열이 0자일 때 에러 메시지 출력
-                    if (event.target.value.trim().length === 0) {
-                      setError('nickname', {
-                        type: 'minLength',
-                        message: NICKNAME_ERROR_MESSAGE.minLength,
-                      });
-
-                      return;
-                    }
-
-                    // 문자열 20자 초과 시 에러 메시지 출력
-                    if (event.target.value.trim().length > MAX_NICKNAME_LENGTH) {
-                      setError('nickname', {
-                        type: 'maxLength',
-                        message: NICKNAME_ERROR_MESSAGE.maxLength,
-                      });
-
-                      return;
-                    }
-
-                    // 이외의 경우에는 에러 메시지 미출력
-                    clearErrors('nickname');
-                  },
-                })}
-              />
-            </Styled.SettingContentFormControl>
-            <Styled.SettingContentFormControl>
-              <Styled.Label htmlFor="introduction">소개</Styled.Label>
-              <Styled.TextAreaWrapper>
-                <Styled.TextArea
-                  id="introduction"
-                  rows={3}
-                  placeholder="예) 재즈와 펑크락을 좋아해요"
-                  maxLength={MAX_INTRODUCTION_LENGTH}
-                  {...register('introduction', {
-                    maxLength: MAX_INTRODUCTION_LENGTH,
-                    onChange(event) {
-                      if (event.target.value.length > MAX_INTRODUCTION_LENGTH) {
-                        event.target.value = event.target.value.slice(0, MAX_INTRODUCTION_LENGTH);
-                      }
-
-                      setValue('introduction', event.target.value);
-                    },
-                  })}
-                />
-                <Styled.TextAreaBox />
-                <Styled.TextAreaCount>
-                  {watch('introduction')?.length ?? 0}/{MAX_INTRODUCTION_LENGTH}자
-                </Styled.TextAreaCount>
-              </Styled.TextAreaWrapper>
-            </Styled.SettingContentFormControl>
-            <Styled.SettingContentFormControl>
-              <Styled.Label>SNS 링크</Styled.Label>
-              <Button
-                size="regular"
-                colorTheme="line"
-                icon={<PlusIcon />}
-                type="button"
-                onClick={() => {
-                  linkDialog.open({
-                    title: '링크 추가',
-                    content: (
-                      <LinkFormDialogContent
-                        onSubmit={(data) => {
-                          setLinks((prev) => [...prev, { title: data.title, link: data.link }]);
-                          linkDialog.close();
-                        }}
-                      />
-                    ),
-                  });
-                }}
-              >
-                링크 추가
-              </Button>
-              <Styled.LinkList>
-                {links.map((link) => {
-                  return (
-                    <Styled.LinkItem key={`${link.title}_${link.link}`}>
-                      <Styled.LinkInfo>
-                        <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
-                        <Styled.LinkDescription>{link.link}</Styled.LinkDescription>
-                      </Styled.LinkInfo>
-                      <Styled.LinkEditButton
-                        type="button"
-                        onClick={() => {
-                          linkDialog.open({
-                            title: '링크 편집',
-                            content: (
-                              <LinkFormDialogContent
-                                defaultValues={link}
-                                onSubmit={(data) => {
-                                  setLinks((prev) =>
-                                    prev.map((item) => {
-                                      if (item.title === link.title && item.link === link.link) {
-                                        return { title: data.title, link: data.link };
-                                      }
-
-                                      return item;
-                                    }),
-                                  );
-                                  linkDialog.close();
-                                }}
-                                onDelete={() => {
-                                  setLinks((prev) =>
-                                    prev.filter(
-                                      (item) =>
-                                        item.title !== link.title && item.link !== link.link,
-                                    ),
-                                  );
-                                  linkDialog.close();
-                                }}
-                              />
-                            ),
-                          });
-                        }}
-                      >
-                        <EditIcon />
-                      </Styled.LinkEditButton>
-                    </Styled.LinkItem>
-                  );
-                })}
-              </Styled.LinkList>
-            </Styled.SettingContentFormControl>
-            <Styled.SettingContentSubmitWrapperMobile>
-              <Button size="bold" colorTheme="primary" type="submit">
-                저장하기
-              </Button>
-            </Styled.SettingContentSubmitWrapperMobile>
-          </Styled.SettingContentForm>
-        </Styled.SettingContent>
-      )}
       {currentMenu === 'account' && (
         <Styled.SettingContent>
           <Styled.SettingContentHeader>
             <Styled.SettingContentTitle>계정</Styled.SettingContentTitle>
           </Styled.SettingContentHeader>
           <Styled.SettingContentFormControl>
-            <Styled.Label htmlFor="code">식별 코드</Styled.Label>
+            <Styled.Label htmlFor="code">ID</Styled.Label>
             <TextField
               inputType="text"
               size="big"
               id="code"
               width="100%"
-              value={`#${userProfile?.userCode}`}
+              value={userProfile?.userCode}
               onChange={(event) => {
                 event.preventDefault();
               }}

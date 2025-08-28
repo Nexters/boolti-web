@@ -6,15 +6,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProfileDropdown from '~/components/ProfileDropdown';
-import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useScrollDirection } from '~/hooks/useScrollDirection';
 
-import { visibleSectionAtom } from '../../atoms/visibleSectionAtom';
-import { Tab } from '..';
-import Styled from './Header.styles';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
+import { openStoreLink } from '~/utils/link';
+import { Tab } from '..';
+import { visibleSectionAtom } from '../../atoms/visibleSectionAtom';
+import Styled from './Header.styles';
 
 const Header = () => {
   const { isLogin, removeToken } = useAuthAtom();
@@ -73,7 +73,7 @@ const Header = () => {
             to="#"
             onClick={() => {
               if (isMobile) {
-                return window.open(LINK.APP_QR, '_blank');
+                openStoreLink();
               }
               navigate(PATH.QR);
             }}
@@ -117,7 +117,8 @@ const Header = () => {
           to="#"
           onClick={() => {
             if (isMobile) {
-              return window.open(LINK.APP_QR, '_blank');
+              openStoreLink();
+              return;
             }
             navigate(PATH.QR);
           }}

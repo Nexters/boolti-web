@@ -78,7 +78,7 @@ const ShowCastInfoMemberRow = forwardRef<HTMLDivElement, ShowCastInfoMemberRowPr
                     <>
                       <Styled.HashTag>#</Styled.HashTag>
                       <Styled.Input
-                        placeholder="식별 코드"
+                        placeholder="ID"
                         required
                         onChange={(e) => {
                           const nextValue = replaceUserCode(e.target.value);
