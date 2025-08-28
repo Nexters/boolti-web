@@ -8,6 +8,7 @@ import { GiftStatus } from '@boolti/api/src/types/gift';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { openStoreLink } from '~/utils/link';
+import { LINK } from '~/constants/link';
 
 const GiftInformation = () => {
   const { giftId = '' } = useParams<{ giftId: string }>();
@@ -22,6 +23,7 @@ const GiftInformation = () => {
   const {
     recipientName,
     message,
+    showId,
     status,
     giftImageUrl,
     showImageUrl,
@@ -69,7 +71,7 @@ const GiftInformation = () => {
             <Styled.ShowTitle>{showName}</Styled.ShowTitle>
             <Styled.ShowDetailLink
               onClick={() => {
-                openStoreLink();
+                window.open(LINK.SHOW_DETAIL(showId), '_blank');
               }}
             >
               공연 자세히 보기
