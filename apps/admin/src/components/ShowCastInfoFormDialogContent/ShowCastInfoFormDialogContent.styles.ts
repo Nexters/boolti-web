@@ -94,12 +94,6 @@ const TextFieldWrap = styled.div`
   }
 `;
 
-const HashTag = styled.span`
-  color: ${({ theme }) => theme.palette.grey.g90};
-  line-height: 24px;
-  padding-right: 4px;
-`;
-
 const Input = styled.input`
   width: 100%;
   line-height: 24px;
@@ -247,7 +241,6 @@ export default {
   ShowInfoFormLabel,
   InputWrapper,
   Handle,
-  HashTag,
   Input,
   Row,
   TrashCanButton,
