@@ -72,7 +72,6 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
   return (
     <Styled.Form onSubmit={onSubmit}>
       <Styled.InputWrapper text={memberId}>
-        <Styled.HashTag>#</Styled.HashTag>
         <Styled.Input
           placeholder="그룹원의 ID를 입력해 주세요"
           value={memberId}
