@@ -31,12 +31,6 @@ const InputWrapper = styled.div<InputWrapperProps>`
   align-items: center;
 `;
 
-const HashTag = styled.span`
-  color: ${({ theme }) => theme.palette.grey.g90};
-  line-height: 24px;
-  padding-right: 4px;
-`;
-
 const Input = styled.input<InputProps>`
   width: ${({ value }) => (value ? 'calc(100% - 80px)' : '100%')};
   line-height: 24px;
@@ -128,7 +122,6 @@ const InviteButton = styled(Button)`
 export default {
   Form,
   InputWrapper,
-  HashTag,
   Input,
   Dropdown,
   DropdownList,
