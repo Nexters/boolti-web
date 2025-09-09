@@ -4,13 +4,19 @@ import { Controller, UseFormReturn } from 'react-hook-form';
 import Styled from './ShowInfoFormContent.styles';
 import { ShowDetailInfoFormInputs } from './types';
 import QuillEditor from '../QuillEditor';
+import { formatPhoneDynamic, validatePhoneOnBlur } from '~/utils/phone';
 
 interface ShowDetailInfoFormContentProps {
   form: UseFormReturn<ShowDetailInfoFormInputs>;
   disabled?: boolean;
 }
 
-const phoneNumberRegExp = /^\d{3}-\d{3,4}-\d{4}$/;
+// 화면 표기 기준 최대 길이 (하이픈 포함)
+const getVisibleMaxLengthByType = (type: string) => {
+  if (type === 'special') return 9; // 4-4
+  if (type === 'seoul') return 12; // 2-4-4
+  return 13; // 3-4-4 (region/mobile/voip/legacyMobile/unknown 상한)
+};
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
   const {
@@ -116,7 +122,10 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
               control={control}
               rules={{
                 required: true,
-                pattern: phoneNumberRegExp,
+                validate: (fieldValue) => {
+                  if (!fieldValue) return '필수 입력사항입니다.';
+                  return validatePhoneOnBlur(fieldValue) || '유효한 전화번호 형식이 아닙니다.';
+                },
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextField
@@ -125,13 +134,10 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   placeholder="주최자 연락처를 입력해 주세요"
                   required
                   disabled={disabled}
+                  maxLength={getVisibleMaxLengthByType(formatPhoneDynamic(value ?? '').type)}
                   onChange={(event) => {
-                    if (event.target.value.length > 13) return;
-
-                    event.target.value = event.target.value
-                      .replace(/[^0-9]/g, '')
-                      .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, '$1-$2-$3')
-                      .replace(/(-{1,2})$/g, '');
+                    const { formatted } = formatPhoneDynamic(event.target.value);
+                    event.target.value = formatted;
 
                     onChange(event);
                     clearErrors('hostPhoneNumber');
@@ -147,7 +153,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                       return;
                     }
 
-                    if (!phoneNumberRegExp.test(value)) {
+                    if (!validatePhoneOnBlur(value)) {
                       setError('hostPhoneNumber', {
                         type: 'pattern',
                         message: '유효한 전화번호 형식이 아닙니다.',
