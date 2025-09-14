@@ -75,22 +75,19 @@ const ShowCastInfoMemberRow = forwardRef<HTMLDivElement, ShowCastInfoMemberRowPr
                       </Styled.RemoveButton>
                     </>
                   ) : (
-                    <>
-                      <Styled.HashTag>#</Styled.HashTag>
-                      <Styled.Input
-                        placeholder="식별 코드"
-                        required
-                        onChange={(e) => {
-                          const nextValue = replaceUserCode(e.target.value);
-                          onChange(nextValue);
-                        }}
-                        onBlur={async (event) => {
-                          onBlur();
-                          onSetUser?.(event.target.value);
-                        }}
-                        value={value ?? ''}
-                      />
-                    </>
+                    <Styled.Input
+                      placeholder="ID"
+                      required
+                      onChange={(e) => {
+                        const nextValue = replaceUserCode(e.target.value);
+                        onChange(nextValue);
+                      }}
+                      onBlur={async (event) => {
+                        onBlur();
+                        onSetUser?.(event.target.value);
+                      }}
+                      value={value ?? ''}
+                    />
                   )}
                 </Styled.InputWrapper>
                 {isError && <Styled.ErrorMessage>필수 입력사항입니다.</Styled.ErrorMessage>}

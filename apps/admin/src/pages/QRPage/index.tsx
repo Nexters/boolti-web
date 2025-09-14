@@ -8,11 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ProfileDropdown from '~/components/ProfileDropdown';
-import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 
 import Styled from './QRPage.styles';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
+import { getStoreLink } from '~/utils/link';
 
 const QRPage = () => {
   const { isLogin } = useAuthAtom();
@@ -62,7 +62,7 @@ const QRPage = () => {
           </Styled.QRCodeDescriptionText>
           <Styled.QRCodeContainer>
             <Styled.QRCodeWrapper>
-              <QRCodeSVG value={LINK.APP_QR} size={182} level="L" />
+              <QRCodeSVG value={getStoreLink()} size={182} level="L" />
             </Styled.QRCodeWrapper>
             <BooltiGrey />
           </Styled.QRCodeContainer>

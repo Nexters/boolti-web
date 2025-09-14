@@ -79,6 +79,7 @@ const ShowInfoPage = () => {
   const setMiddleware = useSetAtom(middlewareAtom);
 
   const [previewDrawerOpen, setPreviewDrawerOpen] = useState<boolean>(false);
+  const [showPreviewLoaded, setShowPreviewLoaded] = useState<boolean>(false);
 
   useBodyScrollLock(previewDrawerOpen);
 
@@ -239,6 +240,17 @@ const ShowInfoPage = () => {
     };
   }, [confirmSaveShowInfo, setMiddleware]);
 
+  useEffect(() => {
+    if (previewDrawerOpen) {
+      const timer = setTimeout(() => {
+        setShowPreviewLoaded(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
+      setShowPreviewLoaded(false);
+    }
+  }, [previewDrawerOpen]);
+
   if (!show || !showSalesInfo || !castTeamList || !myHostInfo) {
     return null;
   }
@@ -328,7 +340,7 @@ const ShowInfoPage = () => {
                 <PreviewFrame />
               </Styled.ShowInfoPreviewFrame>
               <Styled.ShowPreviewContainer>
-                <Styled.ShowPreview ref={showPreviewRef}>
+                <Styled.ShowPreview ref={showPreviewRef} loaded={showPreviewLoaded}>
                   <ShowPreview
                     show={{
                       images: imageFiles.map((file) => file.preview),

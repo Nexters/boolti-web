@@ -7,6 +7,7 @@ import { format } from 'date-fns/format';
 import { GiftStatus } from '@boolti/api/src/types/gift';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
+import { openStoreLink } from '~/utils/link';
 import { LINK } from '~/constants/link';
 
 const GiftInformation = () => {
@@ -35,8 +36,6 @@ const GiftInformation = () => {
   const isCancelled = status === GiftStatus.CANCELLED;
   const isRejected = status === GiftStatus.REJECTED;
   const isRegistrable = status === GiftStatus.REGISTRABLE;
-  const showDetailLink = LINK.SHOW_DETAIL(showId);
-  const giftRegisterLink = LINK.GIFT_REGISTER_LINK(giftId);
 
   const handleRegister = async () => {
     if (!isMobile) {
@@ -50,9 +49,11 @@ const GiftInformation = () => {
       },
     );
 
-    if (result) {
-      window.open(giftRegisterLink, '_blank');
+    if (!result) {
+      return;
     }
+
+    openStoreLink();
   };
 
   return (
@@ -70,7 +71,7 @@ const GiftInformation = () => {
             <Styled.ShowTitle>{showName}</Styled.ShowTitle>
             <Styled.ShowDetailLink
               onClick={() => {
-                window.open(showDetailLink, '_blank');
+                window.open(LINK.SHOW_DETAIL(showId), '_blank');
               }}
             >
               공연 자세히 보기

@@ -1,5 +1,4 @@
 import { mq_lg } from '@boolti/ui';
-import { UserProfile as DefaultUserProfileIcon } from '@boolti/icon';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
@@ -164,42 +163,6 @@ const SettingContentFormControl = styled.div`
   & > div {
     width: 100%;
   }
-`;
-
-const ProfileImageWrapper = styled.div`
-  position: relative;
-
-  & > svg {
-    width: 100px;
-    height: 100px;
-  }
-`;
-
-const ProfileImage = styled.img`
-  width: 100px;
-  height: 100px;
-  border-radius: 100px;
-  object-fit: cover;
-`;
-
-const DefaultProfileImage = styled(DefaultUserProfileIcon)`
-  border-radius: 100px;
-`;
-
-const ProfileImageEditButton = styled.label`
-  width: 42px;
-  height: 42px;
-  border-radius: 42px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g10};
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  box-shadow: 0 4px 4px 0 ${({ theme }) => theme.palette.shadow};
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  bottom: 0;
-  left: calc(100px - 42px + 8px);
-  cursor: pointer;
 `;
 
 const Label = styled.label<LabelProps>`
@@ -383,10 +346,6 @@ export default {
   SettingContentSubmitWrapperMobile,
   SettingContentForm,
   SettingContentFormControl,
-  ProfileImageWrapper,
-  ProfileImage,
-  DefaultProfileImage,
-  ProfileImageEditButton,
   Label,
   LinkList,
   LinkItem,

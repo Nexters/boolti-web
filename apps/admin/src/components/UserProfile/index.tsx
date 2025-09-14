@@ -16,9 +16,7 @@ const UserProfile = ({ profileImage, username, userCode }: Props) => {
       )}
       <Styled.TextContainer>
         <Styled.Username>{username}</Styled.Username>
-        <Styled.UserCode>
-          {userCode ? `#${userCode}` : '사용자 코드를 알 수 없습니다.'}
-        </Styled.UserCode>
+        <Styled.UserCode>{userCode ? userCode : '사용자 ID를 알 수 없습니다.'}</Styled.UserCode>
       </Styled.TextContainer>
     </Styled.Container>
   );

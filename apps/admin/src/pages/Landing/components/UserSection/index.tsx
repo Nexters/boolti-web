@@ -6,13 +6,13 @@ import mobileTicketPreivewImg from '~/assets/images/mobile-ticket-preview.png';
 import pcTicketPreviewImg from '~/assets/images/pc-ticket-preview.png';
 import showInfoImg from '~/assets/images/show-info.png';
 import ticketPurchaseImg from '~/assets/images/ticket-purchase.png';
-import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
 import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import FeatureItem from '../FeatureItem';
 import Styled from './UserSection.styles';
+import { openStoreLink } from '~/utils/link';
 
 const UserSection = () => {
   const { ref: sectionRef } = useVisibleSectionAtom('user');
@@ -32,7 +32,8 @@ const UserSection = () => {
           size={isMobile ? 'regular' : 'bold'}
           onClick={() => {
             if (isMobile) {
-              return window.open(LINK.APP_QR, '_blank');
+              openStoreLink();
+              return;
             }
             navigate(PATH.QR);
           }}
