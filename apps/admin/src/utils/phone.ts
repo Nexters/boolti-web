@@ -59,6 +59,24 @@ export function getMaxLengthByType(type: PhoneType): number {
   }
 }
 
+export function getLengthRangeByType(type: PhoneType): { min: number; max: number } {
+  switch (type) {
+    case 'seoul':
+      return { min: 9, max: 10 };
+    case 'region':
+      return { min: 10, max: 11 };
+    case 'legacyMobile':
+      return { min: 10, max: 11 };
+    case 'mobile':
+    case 'voip':
+      return { min: 11, max: 11 };
+    case 'special':
+      return { min: 8, max: 8 };
+    default:
+      return { min: 11, max: 11 };
+  }
+}
+
 export function formatPhoneDynamic(input: string): {
   formatted: string;
   type: PhoneType;
@@ -107,7 +125,7 @@ export function formatPhoneDynamic(input: string): {
 export function validatePhoneOnBlur(input: string): boolean {
   const digits = stripNonDigits(input);
   const type = detectPhoneType(digits);
-  const max = getMaxLengthByType(type);
   if (type === 'unknown') return false;
-  return digits.length === max;
+  const { min, max } = getLengthRangeByType(type);
+  return digits.length >= min && digits.length <= max;
 }
