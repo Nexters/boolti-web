@@ -9,6 +9,7 @@ import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { openStoreLink } from '~/utils/link';
 import { LINK } from '~/constants/link';
+import { navigateToAppScheme } from '~/utils/app';
 
 const GiftInformation = () => {
   const { giftId = '' } = useParams<{ giftId: string }>();
@@ -53,7 +54,7 @@ const GiftInformation = () => {
       return;
     }
 
-    openStoreLink();
+    navigateToAppScheme(`boolti://gift/${giftId}`);
   };
 
   return (
