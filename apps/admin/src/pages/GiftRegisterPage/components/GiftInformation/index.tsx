@@ -7,7 +7,6 @@ import { format } from 'date-fns/format';
 import { GiftStatus } from '@boolti/api/src/types/gift';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
-import { openStoreLink } from '~/utils/link';
 import { LINK } from '~/constants/link';
 import { navigateToAppScheme } from '~/utils/app';
 
