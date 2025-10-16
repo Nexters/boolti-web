@@ -46,13 +46,14 @@ const ShowInfoPage = () => {
   const isImageFilesDirty = imageFiles.some((file) => file.preview.startsWith('blob:'));
   const isCastTeamListDraftDirty =
     initialCastTeamListRef.current !== JSON.stringify(castTeamListDraft);
-  const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
-  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
 
   const showId = Number(params!.showId);
   const { data: show, refetch: refetchShowDetail } = useShowDetail(showId);
   const { data: showSalesInfo, refetch: refetchShowSalesInfo } = useShowSalesInfo(showId);
   const { data: castTeamList, refetch: refetchCastTeamList } = useCastTeamList(showId);
+
+  const showBasicInfoForm = useForm<ShowBasicInfoFormInputs>();
+  const showDetailInfoForm = useForm<ShowDetailInfoFormInputs>();
 
   const editShowInfoMutation = useEditShowInfo();
   const uploadShowImageMutation = useUploadShowImage();
