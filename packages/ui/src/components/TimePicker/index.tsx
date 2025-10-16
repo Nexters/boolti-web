@@ -24,6 +24,7 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
   const ref = useRef<HTMLDivElement>(null);
   const hourRef = useRef<HTMLDivElement>(null);
   const minuteRef = useRef<HTMLDivElement>(null);
+
   const [hour, minute] = value ? value.split(':').map(Number) : [];
   const [isAM, setIsAM] = useState(value ? hour < 12 : true);
   const [open, setIsOpen] = useState(false);
@@ -58,6 +59,15 @@ function TimePicker({ disabled, errorMessage, value, onChange, onBlur }: Props) 
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
+
+  useEffect(() => {
+    if (value) {
+      const [hour, minute] = value.split(':').map(Number);
+      setCurrentHour(hour);
+      setCurrentMinute(minute);
+      setIsAM(hour < 12);
+    }
+  }, [value]);
 
   useEffect(() => {
     if (nextValue) {
