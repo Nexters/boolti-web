@@ -28,6 +28,6 @@ export const navigateToAppScheme = async (appScheme: string) => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       resolve(false);
-    }, 2_000);
+    }, 1_000);
   });
 };
