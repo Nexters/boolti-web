@@ -55,7 +55,7 @@ const GiftInformation = () => {
       return;
     }
 
-    const success = navigateToAppScheme(SCHEMES.선물_등록(giftId));
+    const success = await navigateToAppScheme(SCHEMES.선물_등록(giftId));
 
     if (!success) {
       openStoreLink();
