@@ -109,6 +109,12 @@ const CopyLinkSubText = styled.span`
   color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
+const CopyCompleteToast = styled.span`
+  color: ${({ theme }) => theme.palette.status.link};
+  ${({ theme }) => theme.typo.b3};
+  margin-left: 8px;
+`;
+
 export default {
   Container,
   RowSection,
@@ -127,4 +133,5 @@ export default {
   CopyLickContainer,
   CopyLinkText,
   CopyLinkSubText,
+  CopyCompleteToast,
 };

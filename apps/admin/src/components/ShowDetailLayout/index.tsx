@@ -241,6 +241,14 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                                   onClickDeleteButton={() => {
                                     push('deleteShow');
                                   }}
+                                  onClickShowManagerCopyLink={async () => {
+                                    const text = `https://boolti.in/show/${showId}/info`;
+                                    await navigator.clipboard.writeText(text);
+                                  }}
+                                  onClickShowTicketCopyLink={async () => {
+                                    const text = `https://preview.boolti.in/show/${showId}`;
+                                    await navigator.clipboard.writeText(text);
+                                  }}
                                 />
                               ),
                             },
