@@ -2,16 +2,15 @@ export const navigateToAppScheme = async (appScheme: string) => {
   let timerId: ReturnType<typeof setTimeout>;
 
   return new Promise((resolve) => {
-    const startTime = Date.now();
-
     const handleVisibilityChange = () => {
       if (document.hidden) {
         clearTimeout(timerId);
         document.removeEventListener('visibilitychange', handleVisibilityChange);
-
         resolve(true);
       }
     };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     window.addEventListener(
       'blur',
@@ -28,13 +27,7 @@ export const navigateToAppScheme = async (appScheme: string) => {
     timerId = setTimeout(() => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
 
-      const elapsedTime = Date.now() - startTime;
-
-      if (elapsedTime < 1_500) {
-        resolve(false);
-      } else {
-        resolve(false);
-      }
+      resolve(false);
     }, 2_000);
   });
 };
