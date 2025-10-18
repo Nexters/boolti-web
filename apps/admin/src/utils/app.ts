@@ -1,5 +1,3 @@
-import { openStoreLink } from './link';
-
 export const navigateToAppScheme = async (appScheme: string) => {
   let timerId: ReturnType<typeof setTimeout>;
 
@@ -34,8 +32,6 @@ export const navigateToAppScheme = async (appScheme: string) => {
 
       if (elapsedTime < 1_500) {
         resolve(false);
-
-        openStoreLink();
       } else {
         resolve(false);
       }
