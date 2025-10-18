@@ -2,7 +2,7 @@ import Styled from './ShowSettingDialogContent.styles';
 import { useHostList, useInvitationTicketList, useSalesTicketList } from '@boolti/api';
 import HostInputForm from './components/HostInputForm';
 import { Button } from '@boolti/ui';
-import { ChevronRightIcon } from '@boolti/icon';
+import { ChevronRightIcon, SettingIcon, TicketIcon } from '@boolti/icon';
 import { myHostInfoAtom } from '../ShowDetailLayout';
 import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
@@ -88,6 +88,20 @@ const ShowSettingDialogContent = ({
               </Button>
             </Styled.DeleteButtonContainer>
           </Styled.Section>
+          <Styled.SectionDivider />
+          <Styled.CopyLickContainer>
+            <Styled.RowSection>
+              <SettingIcon />
+              <Styled.CopyLinkText> 공연 관리 링크 복사</Styled.CopyLinkText>
+            </Styled.RowSection>
+            <Styled.CopyLinkSubText>권한이 있는 그룹원만 접근 가능</Styled.CopyLinkSubText>
+          </Styled.CopyLickContainer>
+          <Styled.CopyLickContainer>
+            <Styled.RowSection>
+              <TicketIcon />
+              <Styled.CopyLinkText> 공연 예매 링크 복사</Styled.CopyLinkText>
+            </Styled.RowSection>
+          </Styled.CopyLickContainer>
         </>
       )}
     </Styled.Container>
