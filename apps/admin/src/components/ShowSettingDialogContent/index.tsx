@@ -99,6 +99,10 @@ const ShowSettingDialogContent = ({
               </Button>
             </Styled.DeleteButtonContainer>
           </Styled.Section>
+        </>
+      )}
+      {(myHostInfo?.type === HostType.MAIN || myHostInfo?.type === HostType.MANAGER) && (
+        <>
           <Styled.SectionDivider />
           <Styled.CopyLickContainer onClick={handleShowManagerCopyLink}>
             <Styled.RowSection>
