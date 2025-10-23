@@ -1,0 +1,10 @@
+{
+  "extends": "@boolti/typescript-config/vite.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  },
+  "include": ["src"]
+}
