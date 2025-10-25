@@ -1,16 +1,22 @@
 import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-const Header = styled.div`
+const Header = styled.div<{ hasTitle: boolean }>`
   height: 68px;
   display: flex;
   align-items: center;
   padding: 0 20px;
   color: ${({ theme }) => theme.palette.grey.g10};
+  justify-content: ${({ hasTitle }) => (hasTitle ? 'space-between' : 'flex-end')};
 
   ${mq_lg} {
     padding: 0;
   }
+`;
+
+const Left = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const BackButton = styled.button`
@@ -25,6 +31,7 @@ const HeaderTitle = styled.p`
 
 export default {
   Header,
+  Left,
   BackButton,
   HeaderTitle,
 };

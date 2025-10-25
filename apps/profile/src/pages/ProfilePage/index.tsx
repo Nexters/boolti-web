@@ -1,7 +1,8 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon } from '@boolti/icon';
+import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
+import Header from '~/components/Header';
 
 import {
   CoverSection,
@@ -134,6 +135,7 @@ const ProfilePage = () => {
       </Helmet>
 
       <Layout>
+        <Header rightButton={<ShareIcon />} />
         <CoverSection>
           <CoverImage
             src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d"
