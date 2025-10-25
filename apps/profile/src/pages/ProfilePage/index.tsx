@@ -196,7 +196,7 @@ const ProfilePage = () => {
           <Section>
             <SectionHeader>
               <SectionTitle>영상</SectionTitle>
-              <ViewAllButton>전체 보기</ViewAllButton>
+              <ViewAllButton onClick={() => navigate('videos')}>전체 보기</ViewAllButton>
             </SectionHeader>
             <VideoList>
               {DUMMY_VIDEOS.map((video) => (
@@ -216,7 +216,7 @@ const ProfilePage = () => {
           <Section>
             <SectionHeader>
               <SectionTitle>링크</SectionTitle>
-              <ViewAllButton>전체 보기</ViewAllButton>
+              <ViewAllButton onClick={() => navigate('links')}>전체 보기</ViewAllButton>
             </SectionHeader>
             <LinkList>
               {DUMMY_LINKS.map((link) => (
