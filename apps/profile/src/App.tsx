@@ -3,6 +3,7 @@ import 'the-new-css-reset/css/reset.css';
 import 'swiper/css';
 
 import { BooltiUIProvider } from '@boolti/ui';
+import { QueryClientProvider } from '@boolti/api';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -38,11 +39,13 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
-    <BooltiUIProvider>
-      <HelmetProvider>
-        <RouterProvider router={router} />
-      </HelmetProvider>
-    </BooltiUIProvider>
+    <QueryClientProvider>
+      <BooltiUIProvider>
+        <HelmetProvider>
+          <RouterProvider router={router} />
+        </HelmetProvider>
+      </BooltiUIProvider>
+    </QueryClientProvider>
   );
 };
 
