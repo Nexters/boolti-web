@@ -8,6 +8,7 @@ import {
   CoverSection,
   CoverImage,
   CoverOverlay,
+  CoverBottomSection,
   ProfileInfo,
   Nickname,
   UserName,
@@ -17,6 +18,7 @@ import {
   Section,
   SectionHeader,
   SectionTitle,
+  InfoText,
   ViewAllButton,
   ShowList,
   ShowCard,
@@ -146,18 +148,20 @@ const ProfilePage = () => {
               <Nickname>{nickName}</Nickname>
               <UserName>@hey__sunn</UserName>
             </ProfileInfo>
-            {/** 소개 UI 넣어야함 */}
-            <p style={{ color: 'red' }}> 소개소개</p>
-            <ActionButtons>
-              <IconButton>
-                <InstagramIcon />
-              </IconButton>
-              <IconButton>
-                <YoutubeIcon />
-              </IconButton>
-            </ActionButtons>
           </CoverOverlay>
         </CoverSection>
+
+        <CoverBottomSection>
+          <InfoText> 소개소개</InfoText>
+          <ActionButtons>
+            <IconButton>
+              <InstagramIcon />
+            </IconButton>
+            <IconButton>
+              <YoutubeIcon />
+            </IconButton>
+          </ActionButtons>
+        </CoverBottomSection>
 
         <Sections>
           <Section>

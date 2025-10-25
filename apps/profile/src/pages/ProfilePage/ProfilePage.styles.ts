@@ -4,14 +4,28 @@ import { Swiper } from 'swiper/react';
 const CoverSection = styled.div`
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 0;
+  padding-top: 100%;
   overflow: hidden;
+  border-radius: 20px 20px 0 0;
+  :after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(18, 19, 24, 0.2) 0%, rgba(18, 19, 24, 1) 100%);
+  }
 `;
 
 const CoverImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
 `;
 
 const CoverOverlay = styled.div`
@@ -19,20 +33,30 @@ const CoverOverlay = styled.div`
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 24px 20px;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+  z-index: 1;
+  padding: 0 20px;
   display: flex;
   flex-direction: column;
+`;
+
+const CoverBottomSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px 32px;
+  background: #121318;
+  gap: 16px;
+  border-radius: 0 0 20px 20px;
 `;
 
 const ProfileInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
 `;
 
 const Nickname = styled.h1`
   ${({ theme }) => theme.typo.point.p3};
+  font-weight: bold;
   color: ${({ theme }) => theme.palette.grey.g10};
 `;
 
@@ -64,8 +88,8 @@ const InfoIcon = styled.div`
 `;
 
 const InfoText = styled.span`
-  ${({ theme }) => theme.typo.c1};
-  color: ${({ theme }) => theme.palette.grey.g20};
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.mobile.grey.g15};
 `;
 
 const ActionButtons = styled.div`
@@ -313,6 +337,7 @@ export {
   CoverSection,
   CoverImage,
   CoverOverlay,
+  CoverBottomSection,
   ProfileInfo,
   Nickname,
   UserName,
