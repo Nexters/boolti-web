@@ -1,5 +1,6 @@
 import './index.css';
 import 'the-new-css-reset/css/reset.css';
+import 'swiper/css';
 
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
@@ -10,7 +11,7 @@ import NotFound from './components/NotFound';
 
 const router = createBrowserRouter([
   {
-    path: '/:username',
+    path: '/:nickName',
     element: <ProfilePage />,
     errorElement: <NotFound />,
   },

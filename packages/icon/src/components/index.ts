@@ -5,6 +5,7 @@ import { BNK } from './BNK';
 import { BNP } from './BNP';
 import { BoA } from './BoA';
 import { Boolti } from './Boolti';
+import { BooltiIcon } from './BooltiIcon';
 import { CurvedArrowRight } from './CurvedArrowRight';
 import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
@@ -76,6 +77,9 @@ import { Message } from './Message';
 import { Discord } from './Discord';
 import { Question } from './Question';
 import { YoutubeLink } from './YoutubeLink';
+import { Youtube } from './Youtube';
+import { YoutubeIcon } from './YoutubeIcon';
+import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
 
@@ -92,6 +96,7 @@ export {
   BooltiLightGrey,
   Boolti as BooltiLogo,
   BooltiSmall as BooltiSmallLogo,
+  BooltiIcon,
   Calendar as CalendarIcon,
   CB,
   Filter as FilterIcon,
@@ -156,7 +161,10 @@ export {
   Call as CallIcon,
   Message as MessageIcon,
   Discord as DiscordIcon,
+  Youtube,
   YoutubeLink as YoutubeLinkIcon,
+  YoutubeIcon,
+  ChainLink,
   MapMarker as MapMarkerIcon,
   ClockMobile as ClockMobileIcon,
   CurvedArrowRight as CurvedArrowRightIcon,
