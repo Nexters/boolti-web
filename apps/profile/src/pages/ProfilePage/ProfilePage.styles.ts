@@ -1,22 +1,6 @@
 import styled from '@emotion/styled';
 import { Swiper } from 'swiper/react';
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
-  display: flex;
-  justify-content: center;
-`;
-
-const ContentWrapper = styled.div`
-  width: 100%;
-  max-width: 480px;
-  min-height: 100vh;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
-  position: relative;
-`;
-
 const CoverSection = styled.div`
   position: relative;
   width: 100%;
@@ -326,8 +310,6 @@ const CTAButton = styled.button`
 `;
 
 export {
-  Container,
-  ContentWrapper,
   CoverSection,
   CoverImage,
   CoverOverlay,

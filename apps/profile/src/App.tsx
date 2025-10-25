@@ -8,12 +8,27 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import ProfilePage from './pages/ProfilePage';
 import NotFound from './components/NotFound';
+import { ProfilePastShowsPage } from './pages/ProfilePastShowsPage';
+import { ProfileVideosPage } from './pages/ProfileVideosPage';
+import { ProfileLinkPage } from './pages/ProfileLinkPage';
 
 const router = createBrowserRouter([
   {
     path: '/:nickName',
     element: <ProfilePage />,
     errorElement: <NotFound />,
+  },
+  {
+    path: '/:nickName/shows',
+    element: <ProfilePastShowsPage />,
+  },
+  {
+    path: '/:nickName/videos',
+    element: <ProfileVideosPage />,
+  },
+  {
+    path: '/:nickName/links',
+    element: <ProfileLinkPage />,
   },
   {
     path: '/',

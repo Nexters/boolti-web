@@ -1,10 +1,9 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
+
 import {
-  Container,
-  ContentWrapper,
   CoverSection,
   CoverImage,
   CoverOverlay,
@@ -42,6 +41,7 @@ import {
   BottomCTA,
   CTAButton,
 } from './ProfilePage.styles';
+import Layout from '~/components/Layout';
 
 const DUMMY_UPCOMING_SHOWS = [
   {
@@ -122,6 +122,7 @@ const DUMMY_LINKS = [
 
 const ProfilePage = () => {
   const { nickName } = useParams<{ nickName: string }>();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -132,110 +133,108 @@ const ProfilePage = () => {
         <meta property="og:description" content={`${nickName}의 불티 프로필 페이지입니다.`} />
       </Helmet>
 
-      <Container>
-        <ContentWrapper>
-          <CoverSection>
-            <CoverImage
-              src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d"
-              alt="cover"
-            />
-            <CoverOverlay>
-              <ProfileInfo>
-                <Nickname>{nickName}</Nickname>
-                <UserName>@hey__sunn</UserName>
-              </ProfileInfo>
-              {/** 소개 UI 넣어야함 */}
-              <p style={{ color: 'red' }}> 소개소개</p>
-              <ActionButtons>
-                <IconButton>
-                  <InstagramIcon />
-                </IconButton>
-                <IconButton>
-                  <YoutubeIcon />
-                </IconButton>
-              </ActionButtons>
-            </CoverOverlay>
-          </CoverSection>
+      <Layout>
+        <CoverSection>
+          <CoverImage
+            src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d"
+            alt="cover"
+          />
+          <CoverOverlay>
+            <ProfileInfo>
+              <Nickname>{nickName}</Nickname>
+              <UserName>@hey__sunn</UserName>
+            </ProfileInfo>
+            {/** 소개 UI 넣어야함 */}
+            <p style={{ color: 'red' }}> 소개소개</p>
+            <ActionButtons>
+              <IconButton>
+                <InstagramIcon />
+              </IconButton>
+              <IconButton>
+                <YoutubeIcon />
+              </IconButton>
+            </ActionButtons>
+          </CoverOverlay>
+        </CoverSection>
 
-          <Sections>
-            <Section>
-              <SectionHeader>
-                <SectionTitle>다가오는 공연</SectionTitle>
-              </SectionHeader>
-              <ShowList>
-                {DUMMY_UPCOMING_SHOWS.map((show) => (
-                  <ShowCard key={show.id}>
-                    <ShowImage src={show.image} alt={show.title} />
-                    <ShowInfo>
-                      <ShowTitle>{show.title}</ShowTitle>
-                      <ShowDetail>{show.date}</ShowDetail>
-                    </ShowInfo>
-                  </ShowCard>
-                ))}
-              </ShowList>
-            </Section>
+        <Sections>
+          <Section>
+            <SectionHeader>
+              <SectionTitle>다가오는 공연</SectionTitle>
+            </SectionHeader>
+            <ShowList>
+              {DUMMY_UPCOMING_SHOWS.map((show) => (
+                <ShowCard key={show.id}>
+                  <ShowImage src={show.image} alt={show.title} />
+                  <ShowInfo>
+                    <ShowTitle>{show.title}</ShowTitle>
+                    <ShowDetail>{show.date}</ShowDetail>
+                  </ShowInfo>
+                </ShowCard>
+              ))}
+            </ShowList>
+          </Section>
 
-            <Section>
-              <SectionHeader>
-                <SectionTitle>지난 공연</SectionTitle>
-                <ViewAllButton>전체 보기</ViewAllButton>
-              </SectionHeader>
-              <PastShowSlider spaceBetween={12} slidesPerView={'auto'}>
-                {DUMMY_PAST_SHOWS.map((show) => (
-                  <SwiperSlide key={show.id}>
-                    <PastShowCard>
-                      <PastShowImage src={show.image} alt={show.title} />
-                      <PastShowTitle>{show.title}</PastShowTitle>
-                      <PastShowDate>{show.date}</PastShowDate>
-                    </PastShowCard>
-                  </SwiperSlide>
-                ))}
-              </PastShowSlider>
-            </Section>
+          <Section>
+            <SectionHeader>
+              <SectionTitle>지난 공연</SectionTitle>
+              <ViewAllButton onClick={() => navigate('shows')}>전체 보기</ViewAllButton>
+            </SectionHeader>
+            <PastShowSlider spaceBetween={12} slidesPerView={'auto'}>
+              {DUMMY_PAST_SHOWS.map((show) => (
+                <SwiperSlide key={show.id}>
+                  <PastShowCard>
+                    <PastShowImage src={show.image} alt={show.title} />
+                    <PastShowTitle>{show.title}</PastShowTitle>
+                    <PastShowDate>{show.date}</PastShowDate>
+                  </PastShowCard>
+                </SwiperSlide>
+              ))}
+            </PastShowSlider>
+          </Section>
 
-            <Section>
-              <SectionHeader>
-                <SectionTitle>영상</SectionTitle>
-                <ViewAllButton>전체 보기</ViewAllButton>
-              </SectionHeader>
-              <VideoList>
-                {DUMMY_VIDEOS.map((video) => (
-                  <VideoCard key={video.id}>
-                    <VideoThumbnailWrapper>
-                      <VideoThumbnail src={video.thumbnail} alt={video.title} />
-                    </VideoThumbnailWrapper>
-                    <VideoInfo>
-                      <VideoTitle>{video.title}</VideoTitle>
-                      <VideoDuration>{video.duration}</VideoDuration>
-                    </VideoInfo>
-                  </VideoCard>
-                ))}
-              </VideoList>
-            </Section>
+          <Section>
+            <SectionHeader>
+              <SectionTitle>영상</SectionTitle>
+              <ViewAllButton>전체 보기</ViewAllButton>
+            </SectionHeader>
+            <VideoList>
+              {DUMMY_VIDEOS.map((video) => (
+                <VideoCard key={video.id}>
+                  <VideoThumbnailWrapper>
+                    <VideoThumbnail src={video.thumbnail} alt={video.title} />
+                  </VideoThumbnailWrapper>
+                  <VideoInfo>
+                    <VideoTitle>{video.title}</VideoTitle>
+                    <VideoDuration>{video.duration}</VideoDuration>
+                  </VideoInfo>
+                </VideoCard>
+              ))}
+            </VideoList>
+          </Section>
 
-            <Section>
-              <SectionHeader>
-                <SectionTitle>링크</SectionTitle>
-                <ViewAllButton>전체 보기</ViewAllButton>
-              </SectionHeader>
-              <LinkList>
-                {DUMMY_LINKS.map((link) => (
-                  <LinkItem key={link.id}>
-                    <ChainLink />
-                    <LinkTitle>{link.title}</LinkTitle>
-                  </LinkItem>
-                ))}
-              </LinkList>
-            </Section>
-          </Sections>
+          <Section>
+            <SectionHeader>
+              <SectionTitle>링크</SectionTitle>
+              <ViewAllButton>전체 보기</ViewAllButton>
+            </SectionHeader>
+            <LinkList>
+              {DUMMY_LINKS.map((link) => (
+                <LinkItem key={link.id}>
+                  <ChainLink />
+                  <LinkTitle>{link.title}</LinkTitle>
+                </LinkItem>
+              ))}
+            </LinkList>
+          </Section>
+        </Sections>
 
-          <BottomCTA>
-            <CTAButton>
-              <BooltiIcon />이 프로필은 불티로 제작되었습니다
-            </CTAButton>
-          </BottomCTA>
-        </ContentWrapper>
-      </Container>
+        <BottomCTA>
+          <CTAButton>
+            <BooltiIcon />이 프로필은 불티로 제작되었습니다
+          </CTAButton>
+        </BottomCTA>
+      </Layout>
     </>
   );
 };
