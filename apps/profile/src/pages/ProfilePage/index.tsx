@@ -45,6 +45,7 @@ import {
   CTAButton,
 } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
+import { useUserByUserCodeV2 } from '@boolti/api';
 
 const DUMMY_UPCOMING_SHOWS = [
   {
@@ -124,16 +125,22 @@ const DUMMY_LINKS = [
 ];
 
 const ProfilePage = () => {
-  const { nickName } = useParams<{ nickName: string }>();
+  const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
+
+  if (!userCode) {
+    console.log('error');
+  }
+
+  const { data: profile } = useUserByUserCodeV2(userCode);
 
   return (
     <>
       <Helmet>
-        <title>{nickName} - 불티 프로필</title>
-        <meta name="description" content={`${nickName}의 불티 프로필 페이지입니다.`} />
-        <meta property="og:title" content={`${nickName} - 불티 프로필`} />
-        <meta property="og:description" content={`${nickName}의 불티 프로필 페이지입니다.`} />
+        <title>{userCode} - 불티 프로필</title>
+        <meta name="description" content={`${userCode}의 불티 프로필 페이지입니다.`} />
+        <meta property="og:title" content={`${userCode} - 불티 프로필`} />
+        <meta property="og:description" content={`${userCode}의 불티 프로필 페이지입니다.`} />
       </Helmet>
 
       <Layout>
@@ -145,7 +152,7 @@ const ProfilePage = () => {
           />
           <CoverOverlay>
             <ProfileInfo>
-              <Nickname>{nickName}</Nickname>
+              <Nickname>{profile?.nickname}</Nickname>
               <UserName>@hey__sunn</UserName>
             </ProfileInfo>
           </CoverOverlay>

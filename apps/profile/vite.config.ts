@@ -7,13 +7,20 @@ export default defineConfig({
     alias: [{ find: '~', replacement: '/src' }],
   },
   server: {
-    port: 8082,
-    host: 'localhost',
-    // HTTPS가 필요한 경우 인증서 파일을 추가하고 아래 주석을 해제하세요
-    // https: {
-    //   key: './profile.dev.boolti.in-key.pem',
-    //   cert: './profile.dev.boolti.in.pem',
-    // },
+    port: 8081,
+    host: 'profile.dev.boolti.in',
+    https: {
+      key: './profile.dev.boolti.in-key.pem',
+      cert: './profile.dev.boolti.in.pem',
+    },
+    proxy: {
+      '/api': {
+        target: 'https://dev.api.boolti.in',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+        secure: true,
+      },
+    },
   },
   plugins: [
     react({

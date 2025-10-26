@@ -12,23 +12,28 @@ import NotFound from './components/NotFound';
 import { ProfilePastShowsPage } from './pages/ProfilePastShowsPage';
 import { ProfileVideosPage } from './pages/ProfileVideosPage';
 import { ProfileLinkPage } from './pages/ProfileLinkPage';
+import { Suspense } from 'react';
 
 const router = createBrowserRouter([
   {
-    path: '/:nickName',
-    element: <ProfilePage />,
+    path: '/:userCode',
+    element: (
+      <Suspense fallback={null}>
+        <ProfilePage />
+      </Suspense>
+    ),
     errorElement: <NotFound />,
   },
   {
-    path: '/:nickName/shows',
+    path: '/:userCode/shows',
     element: <ProfilePastShowsPage />,
   },
   {
-    path: '/:nickName/videos',
+    path: '/:userCode/videos',
     element: <ProfileVideosPage />,
   },
   {
-    path: '/:nickName/links',
+    path: '/:userCode/links',
     element: <ProfileLinkPage />,
   },
   {

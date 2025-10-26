@@ -424,6 +424,10 @@ export const userQueryKeys = createQueryKeys('user', {
     queryKey: [userCode],
     queryFn: () => fetcher.get<UserProfileResponse>(`web/papi/v1/users/${userCode}`),
   }),
+  userCodeV2: (userCode: string) => ({
+    queryKey: [userCode, 'v2'],
+    queryFn: () => fetcher.get<UserProfileResponse>(`web/papi/v2/users/${userCode}`),
+  }),
 });
 
 export const giftQueryKeys = createQueryKeys('gift', {
