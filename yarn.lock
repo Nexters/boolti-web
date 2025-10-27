@@ -1599,6 +1599,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.28.4":
+  version: 7.28.4
+  resolution: "@babel/runtime@npm:7.28.4"
+  checksum: 10c0/792ce7af9750fb9b93879cc9d1db175701c4689da890e6ced242ea0207c9da411ccf16dc04e689cc01158b28d7898c40d75598f4559109f761c12ce01e959bf7
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.22.15":
   version: 7.22.15
   resolution: "@babel/template@npm:7.22.15"
@@ -12097,6 +12104,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "profile@workspace:apps/profile"
   dependencies:
+    "@babel/runtime": "npm:^7.28.4"
     "@boolti/api": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"

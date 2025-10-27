@@ -2869,6 +2869,13 @@ const RAW_RUNTIME_STATE =
           ["regenerator-runtime", "npm:0.14.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:7.28.4", {\
+        "packageLocation": "./.yarn/cache/@babel-runtime-npm-7.28.4-31bc1b0001-792ce7af97.zip/node_modules/@babel/runtime/",\
+        "packageDependencies": [\
+          ["@babel/runtime", "npm:7.28.4"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@babel/template", [\
@@ -16316,6 +16323,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./apps/profile/",\
         "packageDependencies": [\
           ["profile", "workspace:apps/profile"],\
+          ["@babel/runtime", "npm:7.28.4"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
