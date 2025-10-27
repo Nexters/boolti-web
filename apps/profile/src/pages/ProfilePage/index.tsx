@@ -56,10 +56,6 @@ const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
 
-  if (!userCode) {
-    console.log('error');
-  }
-
   const { data: profile } = useUserByUserCodeV2(userCode as string);
 
   if (!profile) {
