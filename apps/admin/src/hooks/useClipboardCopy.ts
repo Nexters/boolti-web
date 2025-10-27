@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const COPY_TOAST_DURATION = 2000;
 
-export const useCopyToast = (copyFn: () => void, duration: number = COPY_TOAST_DURATION) => {
+export const useClipboardCopy = (copyFn: () => void, duration: number = COPY_TOAST_DURATION) => {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {

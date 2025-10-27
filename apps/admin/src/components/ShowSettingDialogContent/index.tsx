@@ -7,7 +7,7 @@ import { myHostInfoAtom } from '../ShowDetailLayout';
 import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
-import { useCopyToast } from '~/hooks/useCopyToast';
+import { useClipboardCopy } from '~/hooks/useClipboardCopy';
 
 interface ShowSettingDialogContentProps {
   showId: number;
@@ -40,11 +40,11 @@ const ShowSettingDialogContent = ({
 
   const [myHostInfo] = useAtom(myHostInfoAtom);
 
-  const { isCopied: showManagerCopied, handleCopy: handleShowManagerCopyLink } = useCopyToast(
+  const { isCopied: showManagerCopied, handleCopy: handleShowManagerCopyLink } = useClipboardCopy(
     onClickShowManagerCopyLink,
   );
   const { isCopied: showTicketCopied, handleCopy: handleShowTicketCopyLink } =
-    useCopyToast(onClickShowTicketCopyLink);
+    useClipboardCopy(onClickShowTicketCopyLink);
 
   useBodyScrollLock();
 
