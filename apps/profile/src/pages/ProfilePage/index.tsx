@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
 import Header from '~/components/Header';
@@ -51,6 +50,7 @@ import {
   getYoutubeVideoId,
   getYoutubeThumbnailUrl,
 } from '~/utils';
+import { Meta } from '~/components/Meta';
 
 const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
@@ -71,20 +71,11 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Helmet>
-        <title>{profile.nickname} - 불티 프로필</title>
-        <meta
-          name="description"
-          content={profile.introduction || `${profile.nickname}의 불티 프로필 페이지입니다.`}
-        />
-        <meta property="og:title" content={`${profile.nickname} - 불티 프로필`} />
-        <meta
-          property="og:description"
-          content={profile.introduction || `${profile.nickname}의 불티 프로필 페이지입니다.`}
-        />
-        {profile.imgPath && <meta property="og:image" content={profile.imgPath} />}
-      </Helmet>
-
+      <Meta
+        nickname={profile.nickname}
+        introduction={profile.introduction}
+        imgPath={profile.imgPath}
+      />
       <Layout>
         <Header rightButton={<ShareIcon />} />
         <CoverSection>
