@@ -97,7 +97,7 @@ const ActionButtons = styled.div`
   gap: 8px;
 `;
 
-const IconButton = styled.button`
+const IconButton = styled.a`
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -246,7 +246,7 @@ const VideoList = styled.div`
   gap: 16px;
 `;
 
-const VideoCard = styled.div`
+const VideoCard = styled.a`
   display: flex;
   gap: 12px;
   cursor: pointer;

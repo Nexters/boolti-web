@@ -49,3 +49,49 @@ export interface UserProfileResponse {
 }
 
 export type BankAccountListResponse = BankAccount[];
+
+export interface UserSns {
+  type: 'INSTAGRAM' | 'YOUTUBE';
+  username: string;
+}
+
+export interface ShowPreviewItem {
+  id: number;
+  name: string;
+  date: string;
+  salesStartTime: string | null;
+  salesEndTime: string | null;
+  showImg: string;
+  isNonTicketing: boolean;
+}
+
+export interface ShowSection {
+  isVisible: boolean;
+  totalSize: number;
+  hasMoreItems: boolean;
+  previewItems: ShowPreviewItem[];
+}
+
+export interface LinkSection {
+  totalSize: number;
+  hasMoreItems: boolean;
+  previewItems: UserLink[];
+}
+
+export interface VideoSection {
+  totalSize: number;
+  hasMoreItems: boolean;
+  previewItems: string[];
+}
+
+export interface UserProfileResponseV2 {
+  nickname: string;
+  userCode: string;
+  imgPath: string;
+  introduction: string;
+  link: LinkSection;
+  sns: UserSns[];
+  comingSoonShow: ShowSection;
+  performedShow: ShowSection;
+  video: VideoSection;
+}

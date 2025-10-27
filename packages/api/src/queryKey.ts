@@ -39,6 +39,7 @@ import {
 import {
   BankAccountListResponse,
   UserProfileResponse,
+  UserProfileResponseV2,
   UserProfileSummaryResponse,
 } from './types/users';
 import { GiftInfoResponse } from './types/gift';
@@ -426,7 +427,7 @@ export const userQueryKeys = createQueryKeys('user', {
   }),
   userCodeV2: (userCode: string) => ({
     queryKey: [userCode, 'v2'],
-    queryFn: () => fetcher.get<UserProfileResponse>(`web/papi/v2/users/${userCode}`),
+    queryFn: () => fetcher.get<UserProfileResponseV2>(`web/papi/v2/users/${userCode}`),
   }),
 });
 
