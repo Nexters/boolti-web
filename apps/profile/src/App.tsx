@@ -17,11 +17,7 @@ import { Suspense } from 'react';
 const router = createBrowserRouter([
   {
     path: '/:userCode',
-    element: (
-      <Suspense fallback={null}>
-        <ProfilePage />
-      </Suspense>
-    ),
+    element: <ProfilePage />,
     errorElement: <NotFound />,
   },
   {
@@ -47,7 +43,9 @@ const App = () => {
     <QueryClientProvider>
       <BooltiUIProvider>
         <HelmetProvider>
-          <RouterProvider router={router} />
+          <Suspense fallback={null}>
+            <RouterProvider router={router} />
+          </Suspense>
         </HelmetProvider>
       </BooltiUIProvider>
     </QueryClientProvider>

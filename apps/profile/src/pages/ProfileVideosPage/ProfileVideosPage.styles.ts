@@ -7,10 +7,12 @@ const Container = styled.div`
   padding: 20px 0px;
 `;
 
-const VideoItem = styled.article`
+const VideoItem = styled.a`
   display: flex;
   gap: 16px;
   align-items: flex-start;
+  text-decoration: none;
+  cursor: pointer;
 `;
 
 const ThumbnailWrapper = styled.div`

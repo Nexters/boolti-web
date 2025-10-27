@@ -37,6 +37,10 @@ import useSuperAdminInvitationTicketList from './useSuperAdminInvitationTicketLi
 import useSuperAdminInvitationCodeList from './useSuperAdminInvitationCodeList';
 import useUserByUserCode from './useUserByUserCode';
 import useUserByUserCodeV2 from './useUserByUserCodeV2';
+import useUserVideos from './useUserVideos';
+import useUserShows from './useUserShows';
+import useUserLinks from './useUserLinks';
+import useUserPreviousShows from './useUserPreviousShows';
 import useShowReservationWithTickets from './useShowReservationWithTickets';
 import useCastTeamList from './useCastTeamList';
 import useAdminTicketList from './useAdminTicketList';
@@ -49,6 +53,10 @@ export {
   useCastTeamList,
   useUserByUserCode,
   useUserByUserCodeV2,
+  useUserVideos,
+  useUserShows,
+  useUserLinks,
+  useUserPreviousShows,
   useAdminSettlementEvent,
   useAdminTicketList,
   useAdminSalesTicketList,
