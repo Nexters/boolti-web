@@ -9,6 +9,8 @@ import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { useTheme } from '@emotion/react';
 import { LINK } from '~/constants/link';
 import { navigateToAppScheme } from '~/utils/app';
+import { SCHEMES } from '~/constants/schemes';
+import { openStoreLink } from '~/utils/link';
 
 const GiftInformation = () => {
   const { giftId = '' } = useParams<{ giftId: string }>();
@@ -53,7 +55,11 @@ const GiftInformation = () => {
       return;
     }
 
-    navigateToAppScheme(`boolti://gift/${giftId}`);
+    const success = await navigateToAppScheme(SCHEMES.선물_등록(giftId));
+
+    if (!success) {
+      openStoreLink();
+    }
   };
 
   return (
