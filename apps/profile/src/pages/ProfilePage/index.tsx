@@ -41,6 +41,8 @@ import {
   LinkTitle,
   BottomCTA,
   CTAButton,
+  NetetralButton,
+  IconButtonWrpper,
 } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
 import { useUserByUserCodeV2 } from '@boolti/api';
@@ -215,7 +217,10 @@ const ProfilePage = () => {
 
         <BottomCTA>
           <CTAButton>
-            <BooltiIcon />이 프로필은 불티로 제작되었습니다
+            <IconButtonWrpper>
+              <BooltiIcon /> 이 프로필은 불티로 제작되었습니다
+            </IconButtonWrpper>
+            <NetetralButton>나도 만들기</NetetralButton>
           </CTAButton>
         </BottomCTA>
       </Layout>

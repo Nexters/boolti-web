@@ -90,6 +90,7 @@ const InfoIcon = styled.div`
 const InfoText = styled.span`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.mobile.grey.g15};
+  white-space: pre-line;
 `;
 
 const ActionButtons = styled.div`
@@ -316,6 +317,27 @@ const CTAButton = styled.button`
   cursor: pointer;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: background-color 0.2s;
+`;
+
+const IconButtonWrpper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const NetetralButton = styled.button`
+  padding: 7px 14px;
+  background-color: ${({ theme }) => theme.palette.grey.g90};
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  ${({ theme }) => theme.typo.sh1};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   justify-content: center;
   gap: 8px;
   transition: background-color 0.2s;
@@ -363,4 +385,6 @@ export {
   LinkTitle,
   BottomCTA,
   CTAButton,
+  IconButtonWrpper,
+  NetetralButton,
 };
