@@ -2,22 +2,27 @@ import Styled from './ShowSettingDialogContent.styles';
 import { useHostList, useInvitationTicketList, useSalesTicketList } from '@boolti/api';
 import HostInputForm from './components/HostInputForm';
 import { Button } from '@boolti/ui';
-import { ChevronRightIcon } from '@boolti/icon';
+import { ChevronRightIcon, SettingIcon, TicketIcon } from '@boolti/icon';
 import { myHostInfoAtom } from '../ShowDetailLayout';
 import { useAtom } from 'jotai';
 import { HostType } from '@boolti/api/src/types/host';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
+import { useClipboardCopy } from '~/hooks/useClipboardCopy';
 
 interface ShowSettingDialogContentProps {
   showId: number;
   onClickHostList: () => void;
   onClickDeleteButton: () => void;
+  onClickShowManagerCopyLink: () => void;
+  onClickShowTicketCopyLink: () => void;
 }
 
 const ShowSettingDialogContent = ({
   showId,
   onClickHostList,
   onClickDeleteButton,
+  onClickShowManagerCopyLink,
+  onClickShowTicketCopyLink,
 }: ShowSettingDialogContentProps) => {
   const { data: hosts } = useHostList(showId);
   const { data: salesTicketList } = useSalesTicketList(showId);
@@ -34,6 +39,12 @@ const ShowSettingDialogContent = ({
   const [firstHost, ...restHosts] = hosts ?? [];
 
   const [myHostInfo] = useAtom(myHostInfoAtom);
+
+  const { isCopied: showManagerCopied, handleCopy: handleShowManagerCopyLink } = useClipboardCopy(
+    onClickShowManagerCopyLink,
+  );
+  const { isCopied: showTicketCopied, handleCopy: handleShowTicketCopyLink } =
+    useClipboardCopy(onClickShowTicketCopyLink);
 
   useBodyScrollLock();
 
@@ -88,6 +99,34 @@ const ShowSettingDialogContent = ({
               </Button>
             </Styled.DeleteButtonContainer>
           </Styled.Section>
+        </>
+      )}
+      {(myHostInfo?.type === HostType.MAIN || myHostInfo?.type === HostType.MANAGER) && (
+        <>
+          <Styled.SectionDivider />
+          <Styled.CopyLickContainer onClick={handleShowManagerCopyLink}>
+            <Styled.RowSection>
+              <SettingIcon />
+              <Styled.RowSection>
+                <Styled.CopyLinkText> 공연 관리 링크 복사</Styled.CopyLinkText>
+                {showManagerCopied && (
+                  <Styled.CopyCompleteToast>복사 완료!</Styled.CopyCompleteToast>
+                )}
+              </Styled.RowSection>
+            </Styled.RowSection>
+            <Styled.CopyLinkSubText>권한이 있는 그룹원만 접근 가능</Styled.CopyLinkSubText>
+          </Styled.CopyLickContainer>
+          <Styled.CopyLickContainer onClick={handleShowTicketCopyLink}>
+            <Styled.RowSection>
+              <TicketIcon />
+              <Styled.RowSection>
+                <Styled.CopyLinkText> 공연 예매 링크 복사</Styled.CopyLinkText>
+                {showTicketCopied && (
+                  <Styled.CopyCompleteToast>복사 완료!</Styled.CopyCompleteToast>
+                )}
+              </Styled.RowSection>
+            </Styled.RowSection>
+          </Styled.CopyLickContainer>
         </>
       )}
     </Styled.Container>

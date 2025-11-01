@@ -13,6 +13,7 @@ import { useInView } from 'react-intersection-observer';
 import { useMatch, useNavigate, useParams } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 
+import { EXTERNAL_URL } from '~/constants/external';
 import { HREF, PATH } from '~/constants/routes';
 
 import Header from '../Header/index.tsx';
@@ -240,6 +241,14 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                                   }}
                                   onClickDeleteButton={() => {
                                     push('deleteShow');
+                                  }}
+                                  onClickShowManagerCopyLink={async () => {
+                                    const text = EXTERNAL_URL.SHOW_MANAGER_INFO(showId);
+                                    await navigator.clipboard.writeText(text);
+                                  }}
+                                  onClickShowTicketCopyLink={async () => {
+                                    const text = EXTERNAL_URL.SHOW_TICKET_PREVIEW(showId);
+                                    await navigator.clipboard.writeText(text);
                                   }}
                                 />
                               ),

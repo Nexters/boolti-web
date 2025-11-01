@@ -15,5 +15,6 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
