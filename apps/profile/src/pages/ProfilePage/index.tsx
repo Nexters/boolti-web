@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
+import { BottomSheet } from '@boolti/ui';
 import Header from '~/components/Header';
 import Styled from './ProfilePage.styles';
 import Layout from '~/components/Layout';
@@ -12,10 +14,12 @@ import {
   getYoutubeThumbnailUrl,
 } from '~/utils';
 import { Meta } from '~/components/Meta';
+import { PROFILE_URL } from '~/constants/url';
 
 const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
+  const [isShareBottomSheetOpen, setIsShareBottomSheetOpen] = useState(false);
 
   const { data: profile } = useUserByUserCodeV2(userCode as string);
 
@@ -34,7 +38,13 @@ const ProfilePage = () => {
         imgPath={profile.imgPath}
       />
       <Layout>
-        <Header rightButton={<ShareIcon />} />
+        <Header
+          rightButton={
+            <button type="button" onClick={() => setIsShareBottomSheetOpen(true)}>
+              <ShareIcon />
+            </button>
+          }
+        />
         <Styled.CoverSection>
           <Styled.CoverImage
             src={profile.imgPath || 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
@@ -188,6 +198,26 @@ const ProfilePage = () => {
             <Styled.NetetralButton>나도 만들기</Styled.NetetralButton>
           </Styled.CTAButton>
         </Styled.BottomCTA>
+
+        <BottomSheet open={isShareBottomSheetOpen} onClose={() => setIsShareBottomSheetOpen(false)}>
+          <BottomSheet.MenuItem
+            onClick={() => {
+              navigator.clipboard.writeText(`${PROFILE_URL}${userCode}`);
+              setIsShareBottomSheetOpen(false);
+            }}
+          >
+            URL만 공유하기
+          </BottomSheet.MenuItem>
+          <BottomSheet.MenuItem
+            onClick={() => {
+              const shareText = `${profile.nickname}\n${profile.introduction}\n${PROFILE_URL}${userCode}`;
+              navigator.clipboard.writeText(shareText);
+              setIsShareBottomSheetOpen(false);
+            }}
+          >
+            아티스트 정보 함께 공유하기
+          </BottomSheet.MenuItem>
+        </BottomSheet>
       </Layout>
     </>
   );

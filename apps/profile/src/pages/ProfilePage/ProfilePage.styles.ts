@@ -110,10 +110,6 @@ const IconButton = styled.a`
   cursor: pointer;
   color: ${({ theme }) => theme.palette.grey.w};
   transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.grey.w}${({ theme }) => theme.palette.opacity[30]};
-  }
 `;
 
 const Section = styled.div`
