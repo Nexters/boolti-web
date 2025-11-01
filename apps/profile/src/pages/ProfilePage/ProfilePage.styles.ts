@@ -142,10 +142,6 @@ const ViewAllButton = styled.button`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
   cursor: pointer;
-
-  &:hover {
-    color: ${({ theme }) => theme.palette.grey.g30};
-  }
 `;
 
 const ArrowIcon = styled.div`
@@ -173,10 +169,6 @@ const ShowCard = styled.div`
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.grey.g80};
-  }
 `;
 
 const ShowImage = styled.img`
@@ -297,10 +289,6 @@ const LinkItem = styled.a`
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.grey.g80};
-  }
 `;
 
 const LinkTitle = styled.span`

@@ -42,7 +42,6 @@ const Thumbnail = styled.img`
 const VideoInfo = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px;
   flex: 1;
 `;
 
@@ -54,7 +53,7 @@ const Title = styled.p`
 `;
 
 const Duration = styled.p`
-  ${({ theme }) => theme.typo.c1};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g40};
   margin: 0;
 `;
