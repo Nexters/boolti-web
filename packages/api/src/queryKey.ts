@@ -39,7 +39,10 @@ import {
 import {
   BankAccountListResponse,
   UserProfileResponse,
+  UserProfileResponseV2,
   UserProfileSummaryResponse,
+  type ShowPreviewItem,
+  type UserLink,
 } from './types/users';
 import { GiftInfoResponse } from './types/gift';
 import { HostListItem, HostListResponse } from './types/host';
@@ -423,6 +426,26 @@ export const userQueryKeys = createQueryKeys('user', {
   userCode: (userCode: string) => ({
     queryKey: [userCode],
     queryFn: () => fetcher.get<UserProfileResponse>(`web/papi/v1/users/${userCode}`),
+  }),
+  userCodeV2: (userCode: string) => ({
+    queryKey: [userCode, 'v2'],
+    queryFn: () => fetcher.get<UserProfileResponseV2>(`web/papi/v2/users/${userCode}`),
+  }),
+  videos: (userCode: string) => ({
+    queryKey: [userCode, 'videos'],
+    queryFn: () => fetcher.get<string[]>(`web/papi/v2/users/${userCode}/videos`),
+  }),
+  shows: (userCode: string) => ({
+    queryKey: [userCode, 'shows'],
+    queryFn: () => fetcher.get<ShowPreviewItem[]>(`web/papi/v2/users/${userCode}/shows`),
+  }),
+  links: (userCode: string) => ({
+    queryKey: [userCode, 'links'],
+    queryFn: () => fetcher.get<UserLink[]>(`web/papi/v2/users/${userCode}/links`),
+  }),
+  previousShows: (userCode: string) => ({
+    queryKey: [userCode, 'previous-shows'],
+    queryFn: () => fetcher.get<ShowPreviewItem[]>(`web/papi/v2/users/${userCode}/previous-shows`),
   }),
 });
 

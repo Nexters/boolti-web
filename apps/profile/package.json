@@ -1,0 +1,40 @@
+{
+  "name": "profile",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "TIMING=1 eslint . --ext ts,tsx",
+    "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.28.4",
+    "@boolti/api": "*",
+    "@boolti/icon": "*",
+    "@boolti/ui": "*",
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@tanstack/react-query": "^5.90.5",
+    "date-fns": "^3.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^2.0.5",
+    "react-router-dom": "^6.22.3",
+    "swiper": "^12.0.3",
+    "the-new-css-reset": "^1.11.2"
+  },
+  "devDependencies": {
+    "@boolti/eslint-config": "*",
+    "@boolti/typescript-config": "*",
+    "@emotion/babel-plugin": "^11.11.0",
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.0.8"
+  }
+}
