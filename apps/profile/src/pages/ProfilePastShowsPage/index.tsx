@@ -3,7 +3,7 @@ import Styled from './ProfilePastShowsPage.styles';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import { useUserPreviousShows } from '@boolti/api';
-import { formatDateWithWeekday } from '~/utils';
+import { formatDateTimeWithWeekday } from '~/utils';
 
 export const ProfilePastShowsPage = () => {
   const { userCode } = useParams<{ userCode: string }>();
@@ -18,7 +18,7 @@ export const ProfilePastShowsPage = () => {
             <Styled.Poster src={show.showImg} alt={show.name} />
             <Styled.ShowInfo>
               <Styled.Title>{show.name}</Styled.Title>
-              <Styled.Meta>{formatDateWithWeekday(show.date)}</Styled.Meta>
+              <Styled.Meta>{formatDateTimeWithWeekday(show.date)}</Styled.Meta>
             </Styled.ShowInfo>
           </Styled.ShowCard>
         ))}
