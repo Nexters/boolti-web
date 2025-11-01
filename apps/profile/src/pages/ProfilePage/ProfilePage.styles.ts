@@ -322,7 +322,7 @@ const CTAButton = styled.button`
   transition: background-color 0.2s;
 `;
 
-const IconButtonWrpper = styled.div`
+const IconButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
@@ -343,7 +343,7 @@ const NetetralButton = styled.button`
   transition: background-color 0.2s;
 `;
 
-export {
+export default {
   CoverSection,
   CoverImage,
   CoverOverlay,
@@ -385,6 +385,6 @@ export {
   LinkTitle,
   BottomCTA,
   CTAButton,
-  IconButtonWrpper,
+  IconButtonWrapper,
   NetetralButton,
 };

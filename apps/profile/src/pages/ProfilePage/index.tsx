@@ -2,48 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
 import Header from '~/components/Header';
-
-import {
-  CoverSection,
-  CoverImage,
-  CoverOverlay,
-  CoverBottomSection,
-  ProfileInfo,
-  Nickname,
-  UserName,
-  ActionButtons,
-  IconButton,
-  Sections,
-  Section,
-  SectionHeader,
-  SectionTitle,
-  InfoText,
-  ViewAllButton,
-  ShowList,
-  ShowCard,
-  ShowImage,
-  ShowInfo,
-  ShowTitle,
-  ShowDetail,
-  PastShowCard,
-  PastShowImage,
-  PastShowTitle,
-  PastShowDate,
-  PastShowSlider,
-  VideoList,
-  VideoCard,
-  VideoInfo,
-  VideoThumbnail,
-  VideoTitle,
-  VideoThumbnailWrapper,
-  LinkList,
-  LinkItem,
-  LinkTitle,
-  BottomCTA,
-  CTAButton,
-  NetetralButton,
-  IconButtonWrpper,
-} from './ProfilePage.styles';
+import Styled from './ProfilePage.styles';
 import Layout from '~/components/Layout';
 import { useUserByUserCodeV2 } from '@boolti/api';
 import {
@@ -76,94 +35,98 @@ const ProfilePage = () => {
       />
       <Layout>
         <Header rightButton={<ShareIcon />} />
-        <CoverSection>
-          <CoverImage
+        <Styled.CoverSection>
+          <Styled.CoverImage
             src={profile.imgPath || 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
             alt={`${profile.nickname} 프로필`}
           />
-          <CoverOverlay>
-            <ProfileInfo>
-              <Nickname>{profile.nickname}</Nickname>
-              <UserName>@{profile.userCode}</UserName>
-            </ProfileInfo>
-          </CoverOverlay>
-        </CoverSection>
+          <Styled.CoverOverlay>
+            <Styled.ProfileInfo>
+              <Styled.Nickname>{profile.nickname}</Styled.Nickname>
+              <Styled.UserName>@{profile.userCode}</Styled.UserName>
+            </Styled.ProfileInfo>
+          </Styled.CoverOverlay>
+        </Styled.CoverSection>
 
-        <CoverBottomSection>
-          <InfoText>{profile.introduction}</InfoText>
-          <ActionButtons>
+        <Styled.CoverBottomSection>
+          <Styled.InfoText>{profile.introduction}</Styled.InfoText>
+          <Styled.ActionButtons>
             {instagramAccount?.username && (
-              <IconButton
+              <Styled.IconButton
                 href={`https://instagram.com/${instagramAccount.username}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <InstagramIcon />
-              </IconButton>
+              </Styled.IconButton>
             )}
             {youtubeAccount?.username && (
-              <IconButton
+              <Styled.IconButton
                 href={`https://youtube.com/@${youtubeAccount.username}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <YoutubeIcon />
-              </IconButton>
+              </Styled.IconButton>
             )}
-          </ActionButtons>
-        </CoverBottomSection>
+          </Styled.ActionButtons>
+        </Styled.CoverBottomSection>
 
-        <Sections>
+        <Styled.Sections>
           {profile.comingSoonShow.isVisible && profile.comingSoonShow.totalSize > 0 && (
-            <Section>
-              <SectionHeader>
-                <SectionTitle>다가오는 공연</SectionTitle>
-              </SectionHeader>
-              <ShowList>
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>다가오는 공연</Styled.SectionTitle>
+              </Styled.SectionHeader>
+              <Styled.ShowList>
                 {profile.comingSoonShow.previewItems.map((show) => (
-                  <ShowCard key={show.id}>
-                    <ShowImage src={show.showImg} alt={show.name} />
-                    <ShowInfo>
-                      <ShowTitle>{show.name}</ShowTitle>
-                      <ShowDetail>{formatDateTimeWithWeekday(show.date)}</ShowDetail>
-                    </ShowInfo>
-                  </ShowCard>
+                  <Styled.ShowCard key={show.id}>
+                    <Styled.ShowImage src={show.showImg} alt={show.name} />
+                    <Styled.ShowInfo>
+                      <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
+                      <Styled.ShowDetail>{formatDateTimeWithWeekday(show.date)}</Styled.ShowDetail>
+                    </Styled.ShowInfo>
+                  </Styled.ShowCard>
                 ))}
-              </ShowList>
-            </Section>
+              </Styled.ShowList>
+            </Styled.Section>
           )}
 
           {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
-            <Section>
-              <SectionHeader>
-                <SectionTitle>지난 공연</SectionTitle>
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>지난 공연</Styled.SectionTitle>
                 {profile.performedShow.hasMoreItems && (
-                  <ViewAllButton onClick={() => navigate('shows')}>전체 보기</ViewAllButton>
+                  <Styled.ViewAllButton onClick={() => navigate('shows')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
                 )}
-              </SectionHeader>
-              <PastShowSlider spaceBetween={12} slidesPerView={'auto'}>
+              </Styled.SectionHeader>
+              <Styled.PastShowSlider spaceBetween={12} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
-                    <PastShowCard>
-                      <PastShowImage src={show.showImg} alt={show.name} />
-                      <PastShowTitle>{show.name}</PastShowTitle>
-                      <PastShowDate>{formatDateWithWeekday(show.date)}</PastShowDate>
-                    </PastShowCard>
+                    <Styled.PastShowCard>
+                      <Styled.PastShowImage src={show.showImg} alt={show.name} />
+                      <Styled.PastShowTitle>{show.name}</Styled.PastShowTitle>
+                      <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
+                    </Styled.PastShowCard>
                   </SwiperSlide>
                 ))}
-              </PastShowSlider>
-            </Section>
+              </Styled.PastShowSlider>
+            </Styled.Section>
           )}
 
           {profile.video.totalSize > 0 && (
-            <Section>
-              <SectionHeader>
-                <SectionTitle>영상</SectionTitle>
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>영상</Styled.SectionTitle>
                 {profile.video.hasMoreItems && (
-                  <ViewAllButton onClick={() => navigate('videos')}>전체 보기</ViewAllButton>
+                  <Styled.ViewAllButton onClick={() => navigate('videos')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
                 )}
-              </SectionHeader>
-              <VideoList>
+              </Styled.SectionHeader>
+              <Styled.VideoList>
                 {profile.video.previewItems.map((videoUrl, index) => {
                   const videoId = getYoutubeVideoId(videoUrl);
                   const thumbnailUrl = videoId
@@ -171,58 +134,60 @@ const ProfilePage = () => {
                     : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
 
                   return (
-                    <VideoCard
+                    <Styled.VideoCard
                       key={videoId || index}
                       href={videoUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <VideoThumbnailWrapper>
-                        <VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
-                      </VideoThumbnailWrapper>
-                      <VideoInfo>
-                        <VideoTitle>YouTube 영상</VideoTitle>
-                      </VideoInfo>
-                    </VideoCard>
+                      <Styled.VideoThumbnailWrapper>
+                        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
+                      </Styled.VideoThumbnailWrapper>
+                      <Styled.VideoInfo>
+                        <Styled.VideoTitle>YouTube 영상</Styled.VideoTitle>
+                      </Styled.VideoInfo>
+                    </Styled.VideoCard>
                   );
                 })}
-              </VideoList>
-            </Section>
+              </Styled.VideoList>
+            </Styled.Section>
           )}
 
           {profile.link.totalSize > 0 && (
-            <Section>
-              <SectionHeader>
-                <SectionTitle>링크</SectionTitle>
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>링크</Styled.SectionTitle>
                 {profile.link.hasMoreItems && (
-                  <ViewAllButton onClick={() => navigate('links')}>전체 보기</ViewAllButton>
+                  <Styled.ViewAllButton onClick={() => navigate('links')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
                 )}
-              </SectionHeader>
-              <LinkList>
+              </Styled.SectionHeader>
+              <Styled.LinkList>
                 {profile.link.previewItems.map((link, index) => (
-                  <LinkItem
+                  <Styled.LinkItem
                     key={`${link.link}-${index}`}
                     href={link.link}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
                     <ChainLink />
-                    <LinkTitle>{link.title}</LinkTitle>
-                  </LinkItem>
+                    <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
+                  </Styled.LinkItem>
                 ))}
-              </LinkList>
-            </Section>
+              </Styled.LinkList>
+            </Styled.Section>
           )}
-        </Sections>
+        </Styled.Sections>
 
-        <BottomCTA>
-          <CTAButton>
-            <IconButtonWrpper>
+        <Styled.BottomCTA>
+          <Styled.CTAButton>
+            <Styled.IconButtonWrapper>
               <BooltiIcon /> 이 프로필은 불티로 제작되었습니다
-            </IconButtonWrpper>
-            <NetetralButton>나도 만들기</NetetralButton>
-          </CTAButton>
-        </BottomCTA>
+            </Styled.IconButtonWrapper>
+            <Styled.NetetralButton>나도 만들기</Styled.NetetralButton>
+          </Styled.CTAButton>
+        </Styled.BottomCTA>
       </Layout>
     </>
   );
