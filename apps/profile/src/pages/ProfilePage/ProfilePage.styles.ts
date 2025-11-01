@@ -1,13 +1,13 @@
 import styled from '@emotion/styled';
 import { Swiper } from 'swiper/react';
 
-const CoverSection = styled.div`
+const CoverSection = styled.div<{ isCover: boolean }>`
   position: relative;
   width: 100%;
   height: 0;
   padding-top: 100%;
   overflow: hidden;
-  border-radius: 20px 20px 0 0;
+  border-radius: ${({ isCover }) => (isCover ? '20px 20px 0 0' : '0')};
   :after {
     content: '';
     position: absolute;
