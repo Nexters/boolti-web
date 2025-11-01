@@ -1,10 +1,5 @@
 declare module 'swiper/react' {
-  import type {
-    CSSProperties,
-    ForwardRefExoticComponent,
-    ReactNode,
-    RefAttributes,
-  } from 'react';
+  import type { CSSProperties, ForwardRefExoticComponent, ReactNode, RefAttributes } from 'react';
 
   export interface SwiperInstance {
     activeIndex: number;
@@ -13,7 +8,7 @@ declare module 'swiper/react' {
   }
 
   export interface SwiperRef {
-    swiper?: SwiperInstance;
+    swiper: SwiperInstance;
   }
 
   export type SwiperClass = SwiperInstance;
