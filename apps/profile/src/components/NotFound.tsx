@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Helmet } from 'react-helmet-async';
+import { EXTERNAL_DOMAIN } from '~/constants/external';
 
 const NotFound = () => {
   return (
@@ -17,7 +18,7 @@ const NotFound = () => {
             <br />
             URL을 다시 확인해 주세요.
           </Description>
-          <HomeLink href="https://boolti.in">불티 홈으로 가기</HomeLink>
+          <HomeLink href={EXTERNAL_DOMAIN.SHOW_MANAGER}>불티 홈으로 가기</HomeLink>
         </Content>
       </Container>
     </>
