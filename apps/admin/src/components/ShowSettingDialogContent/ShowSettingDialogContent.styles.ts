@@ -92,10 +92,6 @@ const CopyLickContainer = styled.div`
   justify-content: space-between;
   cursor: pointer;
   padding: 12px 0px;
-  &:hover {
-    border-radius: 4px;
-    background-color: ${({ theme }) => theme.palette.grey.g00};
-  }
 `;
 
 const CopyLinkText = styled.span`
@@ -107,6 +103,11 @@ const CopyLinkText = styled.span`
 const CopyLinkSubText = styled.span`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g40};
+  display: none;
+
+  ${mq_lg} {
+    display: inline;
+  }
 `;
 
 const CopyCompleteToast = styled.span`
