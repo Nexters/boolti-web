@@ -1,3 +1,4 @@
+import { useEffect, useState, useMemo, useCallback, memo } from 'react';
 import {
   useAdminSalesTicketList,
   useAdminTicketList,
@@ -6,7 +7,6 @@ import {
   useShowEnteranceSummary,
 } from '@boolti/api';
 import { ClearIcon, SearchIcon } from '@boolti/icon';
-import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import EnteranceTable from '~/components/EnteranceTable';
@@ -45,14 +45,18 @@ const ShowEnterancePage = () => {
   const { data: salesTicketList = [] } = useAdminSalesTicketList(showId);
 
   const [selectedTicketId, setSelectedTicketId] = useState<string[]>([]);
-  const options = salesTicketList.map((ticket) => ({
-    value: ticket.id.toString(),
-    label: ticket.ticketName,
-  }));
+  const options = useMemo(
+    () =>
+      salesTicketList.map((ticket) => ({
+        value: ticket.id.toString(),
+        label: ticket.ticketName,
+      })),
+    [salesTicketList],
+  );
   const { data: ticketList, isLoading: isTicketListLoading } = useAdminTicketList(
     showId,
     currentPage,
-    searchText,
+    debouncedSearchText,
     selectedTicketId,
     useTicketUsedFilter,
   );
@@ -62,14 +66,19 @@ const ShowEnterancePage = () => {
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
   const totalPages = ticketList?.totalPages ?? 0;
-  const tickets = (ticketList?.content ?? []).filter(
-    ({ usedAt }) => useTicketUsedFilter === undefined || !!usedAt === useTicketUsedFilter,
+
+  const tickets = useMemo(
+    () =>
+      (ticketList?.content ?? []).filter(
+        ({ usedAt }) => useTicketUsedFilter === undefined || !!usedAt === useTicketUsedFilter,
+      ),
+    [ticketList, useTicketUsedFilter],
   );
 
-  const onClickReset = () => {
+  const onClickReset = useCallback(() => {
     setSelectedTicketId([]);
     setSearchText('');
-  };
+  }, []);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
@@ -174,9 +183,7 @@ const ShowEnterancePage = () => {
               <Styled.InputContainer>
                 <Styled.Input
                   value={searchText}
-                  onChange={(event) => {
-                    setSearchText(event.target.value);
-                  }}
+                  onChange={(event) => setSearchText(event.target.value)}
                   placeholder={isMobile ? '방문자명, 연락처' : '방문자명, 연락처 검색'}
                 />
                 <Styled.ButtonContainer>
@@ -231,4 +238,4 @@ const ShowEnterancePage = () => {
   );
 };
 
-export default ShowEnterancePage;
+export default memo(ShowEnterancePage);
