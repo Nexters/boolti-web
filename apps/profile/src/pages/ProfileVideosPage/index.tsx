@@ -28,8 +28,8 @@ export const ProfileVideosPage = () => {
 const VideoItem = ({ videoUrl }: VideoItemProps) => {
   const videoId = getYoutubeVideoId(videoUrl);
   const thumbnailUrl = videoId ? getYoutubeThumbnailUrl(videoId) : null;
-  const { data: duration } = useYoutubeVideoDuration(videoId);
-  const formattedDuration = formatYoutubeDuration(duration ?? null);
+  const { data } = useYoutubeVideoDuration(videoId);
+  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
 
   return (
     <Styled.VideoItem href={videoUrl} target="_blank" rel="noopener noreferrer">
@@ -41,7 +41,7 @@ const VideoItem = ({ videoUrl }: VideoItemProps) => {
         )}
       </Styled.ThumbnailWrapper>
       <Styled.VideoInfo>
-        <Styled.Title>YouTube 영상</Styled.Title>
+        <Styled.Title>{data?.title ?? 'YouTube 영상'}</Styled.Title>
         {formattedDuration && <Styled.Duration>{formattedDuration}</Styled.Duration>}
       </Styled.VideoInfo>
     </Styled.VideoItem>

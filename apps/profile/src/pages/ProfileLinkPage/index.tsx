@@ -13,6 +13,7 @@ export const ProfileLinkPage = () => {
     <Layout>
       <Header title="링크" />
       <Styled.Container>
+        <Styled.CountText>총 {data?.length || 0}개</Styled.CountText>
         {data?.map((link, index) => (
           <Styled.LinkItem
             key={`${link.link}-${index}`}

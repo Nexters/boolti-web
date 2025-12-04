@@ -1,10 +1,15 @@
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 20px 0px;
+  padding: 20px 20px;
+
+  ${mq_lg} {
+    padding: 20px 0;
+  }
 `;
 
 const VideoItem = styled.a`
@@ -17,14 +22,15 @@ const VideoItem = styled.a`
 
 const ThumbnailWrapper = styled.div`
   width: 160px;
-  aspect-ratio: 16 / 9;
-  border-radius: 10px;
+  height: 90px;
+  border-radius: 4px;
   overflow: hidden;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid #2e303a;
 
   svg {
     width: 36px;
@@ -47,7 +53,7 @@ const VideoInfo = styled.div`
 
 const Title = styled.p`
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
+  color: #f6f7ff;
   margin: 0;
   line-height: 1.4;
 `;

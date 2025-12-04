@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
 import { BottomSheet } from '@boolti/ui';
+import { Global } from '@emotion/react';
 import Header from '~/components/Header';
-import Styled from './ProfilePage.styles';
+import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
 import { useUserByUserCodeV2 } from '@boolti/api';
 import {
@@ -12,21 +13,101 @@ import {
   formatDateWithWeekday,
   getYoutubeVideoId,
   getYoutubeThumbnailUrl,
+  formatYoutubeDuration,
 } from '~/utils';
 import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
+import { EXTERNAL_URL } from '~/constants/external';
+import { useYoutubeVideoDuration } from '~/hooks/useYoutubeVideoDuration';
+
+interface VideoCardProps {
+  videoUrl: string;
+}
+
+const VideoCard = ({ videoUrl }: VideoCardProps) => {
+  const videoId = getYoutubeVideoId(videoUrl);
+  const thumbnailUrl = videoId
+    ? getYoutubeThumbnailUrl(videoId)
+    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
+  const { data } = useYoutubeVideoDuration(videoId);
+  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
+
+  return (
+    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
+      <Styled.VideoThumbnailWrapper>
+        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
+      </Styled.VideoThumbnailWrapper>
+      <Styled.VideoInfo>
+        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
+        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
+      </Styled.VideoInfo>
+    </Styled.VideoCard>
+  );
+};
 
 const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
   const [isShareBottomSheetOpen, setIsShareBottomSheetOpen] = useState(false);
+  const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   const { data: profile } = useUserByUserCodeV2(userCode as string);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    setIsDesktop(mediaQuery.matches);
+
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setIsDesktop(e.matches);
+    };
+
+    mediaQuery.addEventListener('change', handleMediaChange);
+    return () => mediaQuery.removeEventListener('change', handleMediaChange);
+  }, []);
+
+  useEffect(() => {
+    if (isShareDropdownOpen) {
+      const handleClickOutside = () => setIsShareDropdownOpen(false);
+      document.addEventListener('click', handleClickOutside);
+      return () => document.removeEventListener('click', handleClickOutside);
+    }
+  }, [isShareDropdownOpen]);
+
+  const handleShareButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isDesktop) {
+      setIsShareDropdownOpen(!isShareDropdownOpen);
+    } else {
+      setIsShareBottomSheetOpen(true);
+    }
+  };
+
+  const handleShareUrlCopy = () => {
+    navigator.clipboard.writeText(`${PROFILE_URL}${userCode}`);
+    setIsShareBottomSheetOpen(false);
+    setIsShareDropdownOpen(false);
+  };
+
+  const handleShareDetailCopy = () => {
+    if (!profile) return;
+    const shareText = [
+      '이 아티스트 어때요?',
+      '',
+      `- 닉네임 : #${profile.nickname}`,
+      `- 크레딧 : 참여 공연 #${profile.performedShow.totalSize}`,
+      '프로필 ▼',
+      `${PROFILE_URL}${userCode}`,
+    ].join('\n');
+    navigator.clipboard.writeText(shareText);
+    setIsShareBottomSheetOpen(false);
+    setIsShareDropdownOpen(false);
+  };
 
   if (!profile) {
     return (
       <Layout>
-        <Styled.CoverSection isCover={false}>
+        <Styled.CoverSection isCover={false} isDesktop={isDesktop}>
           <Styled.CoverImage
             src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgQChENDRAPDQ8QDQ0NEBANDQ8NDQ8PFBEWFhUdExMZHCggGBolGxUTITEhJSkrLi42Fx85ODMsNygtLisBCgoKDg0OFxAQFS4dICU3NSsrLS0rMC0rLSstKzctLSs1Ky03KystNS0rKy0tLS0rKysrKzc3LS03KysrKysrN//AABEIAOAA4QMBIgACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAAAQUCBAYD/8QAMRABAAIAAwYCCQUBAQAAAAAAAAECAwQRBRIhMUFRMnEiYXKRkqGxweEzQlKB0SMU/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAEDAgQF/8QAHhEBAQEBAAIDAQEAAAAAAAAAAAECEQMxIUFREhP/2gAMAwEAAhEDEQA/APVgr6L5qCoKKIIoAAAAAAAAAAAAAIKAgoCCgIKAgoCKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAKogCiKAAIAAAAAAAAAAAACAqiAKIAogAqAgAKAAKigACAAAAA5Uw72nSsTPlGr71yGYnpEecwlsiyWusO1Oz8x2ifK0PhiYOLXxVmP64e87DlcAFQABABQAAAAAAAQAFAAFRQABAACIno0crs+OeJ8P8Arns7KxEb9uc8vVDustb+o1zj7qVrERpEREdo4KDNqAA6eZyFLcaejPb9s/4y71tE6TGkw9A62dy0XrrHijl6/U0zv9Z6x+McBqxQAUAAAAAAAEABQABUUAAQfbJ4W/ixHTnPlD4tDZFeNreUOdXkdZna0QGD0AAAAAAMjaWFu4uscrcf76uq1Nq1/wCcT2t9YZbfN7GG5yoA6cgAAAAAAAAAAACooAAg09k+C3tR9GY72yr6XmveNfc536d49tMBg3AAAAAAdXaf6M+1VkNLa1/RrX17zNbY9MN+0AduQAAAAAAAQAFAAFRQABBywsSa3i0c4nVxBW/h3rasWjlMauTHyWamk6TxrPylr1tExrE6xPWGGs8b511QHLoAAJmIjWeEDLz+c3vQp4es9/wsnXOtcdfNY2/iTbpyjyfIG7BAFAAAAAAAAQAFAAFRQABAAB9cDMYlJ9GeHWJ5S+Qi9auFtHCnxa1n3w7FcfBnlavvhhI5uI7nkrfnGwo52r8UPhi5/AjlO9Pq/wBY6p/nC+SuxmM5iX4eGvaPu64O5OOLegCogAoAAAAAAAIACgACooAAgPtl8tiXnhwjrM8mngZPCpx03p7z9nN1I7zm1mYWUxrcq6R3nhDt4ezP5W+GPu0Bnd1pMR1a7Py8dJnzmXOMnl/4R833HPa6/mfj4/8Ajy/8I+bhbIZeekx5TLsh2n8z8Z99mR+23xQ6uLk8evONY714todTdc3EeeG1j5TCvzjSe8cJ/LMzOVxKc+Ne8fdpNSs9YsdcB05AAAAAAABAAUAAVFAdvJZOb+lbhX52/Djkctv21nwxz9c9mxEQz3rnxHeM9+aViIjSOER0gBk2AAAAAAAACYjTSeIAy89kt306eHrHb8Oi9GyNoZXdner4Z+Utca+qy1n7jpgNGYAAAAAIACgADlSk2tFY5zOji0NlYWtpvPThHmlvIsna7+Dh1rSKx0+cuYPO9AAAAAAAAAAAACuOJStqzWeUxo5Ajz+PhTS81np84cGntbC9GLx04T5dGY3zexhqcoA6QAAAEABQABt5Gm7g19cb3vYkRxehrGkRHaIhn5Gnj9qAyagAAAAAAAAAAAKAI4Y9N7DtXvE+9596N5/MV0xLR2tP1aeNn5HABqzAAABAAUABywvHX2o+r0Dz+F46+1X6vQMvI18f2AM2gAAAAAAAAAAACgCDCzv69/a+zdYee/Xv5/Z34/bjfp8AGzIAAAB//9k="
             alt="기본 프로필"
@@ -47,20 +128,42 @@ const ProfilePage = () => {
 
   return (
     <>
+      <Global styles={bottomSheetOverrides} />
       <Meta
         nickname={profile.nickname}
         introduction={profile.introduction}
         imgPath={profile.imgPath}
       />
       <Layout>
-        <Header
-          rightButton={
-            <button type="button" onClick={() => setIsShareBottomSheetOpen(true)}>
-              <ShareIcon />
-            </button>
-          }
-        />
-        <Styled.CoverSection isCover={!!profile.imgPath}>
+        {isDesktop && (
+          <Header
+            rightButton={
+              <Styled.ShareDropdownWrapper>
+                <button type="button" onClick={handleShareButtonClick}>
+                  <ShareIcon />
+                </button>
+                {isShareDropdownOpen && (
+                  <Styled.ShareDropdown>
+                    <Styled.ShareDropdownItem onClick={handleShareUrlCopy}>
+                      URL만 공유하기
+                    </Styled.ShareDropdownItem>
+                    <Styled.ShareDropdownItem onClick={handleShareDetailCopy}>
+                      아티스트 정보 함께 공유하기
+                    </Styled.ShareDropdownItem>
+                  </Styled.ShareDropdown>
+                )}
+              </Styled.ShareDropdownWrapper>
+            }
+          />
+        )}
+        <Styled.CoverSection isCover={!!profile.imgPath} isDesktop={isDesktop}>
+          {!isDesktop && (
+            <Styled.ShareDropdownWrapper isMobileInCover>
+              <button type="button" onClick={handleShareButtonClick}>
+                <ShareIcon />
+              </button>
+            </Styled.ShareDropdownWrapper>
+          )}
           <Styled.CoverImage
             src={profile.imgPath || 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
             alt={`${profile.nickname} 프로필`}
@@ -105,7 +208,12 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.ShowList>
                 {profile.comingSoonShow.previewItems.map((show) => (
-                  <Styled.ShowCard key={show.id}>
+                  <Styled.ShowCard
+                    key={show.id}
+                    href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Styled.ShowImage src={show.showImg} alt={show.name} />
                     <Styled.ShowInfo>
                       <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
@@ -127,10 +235,14 @@ const ProfilePage = () => {
                   </Styled.ViewAllButton>
                 )}
               </Styled.SectionHeader>
-              <Styled.PastShowSlider spaceBetween={12} slidesPerView={'auto'}>
+              <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
-                    <Styled.PastShowCard>
+                    <Styled.PastShowCard
+                      href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <Styled.PastShowImage src={show.showImg} alt={show.name} />
                       <Styled.PastShowTitle>{show.name}</Styled.PastShowTitle>
                       <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
@@ -152,28 +264,9 @@ const ProfilePage = () => {
                 )}
               </Styled.SectionHeader>
               <Styled.VideoList>
-                {profile.video.previewItems.map((videoUrl, index) => {
-                  const videoId = getYoutubeVideoId(videoUrl);
-                  const thumbnailUrl = videoId
-                    ? getYoutubeThumbnailUrl(videoId)
-                    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
-
-                  return (
-                    <Styled.VideoCard
-                      key={videoId || index}
-                      href={videoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Styled.VideoThumbnailWrapper>
-                        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
-                      </Styled.VideoThumbnailWrapper>
-                      <Styled.VideoInfo>
-                        <Styled.VideoTitle>YouTube 영상</Styled.VideoTitle>
-                      </Styled.VideoInfo>
-                    </Styled.VideoCard>
-                  );
-                })}
+                {profile.video.previewItems.map((videoUrl) => (
+                  <VideoCard key={videoUrl} videoUrl={videoUrl} />
+                ))}
               </Styled.VideoList>
             </Styled.Section>
           )}
@@ -214,32 +307,17 @@ const ProfilePage = () => {
           </Styled.CTAButton>
         </Styled.BottomCTA>
 
-        <BottomSheet open={isShareBottomSheetOpen} onClose={() => setIsShareBottomSheetOpen(false)}>
-          <BottomSheet.MenuItem
-            onClick={() => {
-              navigator.clipboard.writeText(`${PROFILE_URL}${userCode}`);
-              setIsShareBottomSheetOpen(false);
-            }}
+        {!isDesktop && (
+          <BottomSheet
+            open={isShareBottomSheetOpen}
+            onClose={() => setIsShareBottomSheetOpen(false)}
           >
-            URL만 공유하기
-          </BottomSheet.MenuItem>
-          <BottomSheet.MenuItem
-            onClick={() => {
-              const shareText = [
-                '이 아티스트 어때요?',
-                '',
-                `- 닉네임 : #${profile.nickname}`,
-                `- 크레딧 : 참여 공연 #${profile.performedShow.totalSize}`,
-                '프로필 ▼',
-                `${PROFILE_URL}${userCode}`,
-              ].join('\n');
-              navigator.clipboard.writeText(shareText);
-              setIsShareBottomSheetOpen(false);
-            }}
-          >
-            아티스트 정보 함께 공유하기
-          </BottomSheet.MenuItem>
-        </BottomSheet>
+            <BottomSheet.MenuItem onClick={handleShareUrlCopy}>URL만 공유하기</BottomSheet.MenuItem>
+            <BottomSheet.MenuItem onClick={handleShareDetailCopy}>
+              아티스트 정보 함께 공유하기
+            </BottomSheet.MenuItem>
+          </BottomSheet>
+        )}
       </Layout>
     </>
   );
