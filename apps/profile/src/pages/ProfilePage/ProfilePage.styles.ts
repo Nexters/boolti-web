@@ -354,6 +354,16 @@ const IconButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  flex-shrink: 1;
+  min-width: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
 `;
 
 const NetetralButton = styled.button`
@@ -368,7 +378,8 @@ const NetetralButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  flex-shrink: 0;
+  white-space: nowrap;
   transition: background-color 0.2s;
 `;
 
