@@ -2,40 +2,51 @@ import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 interface YouTubeVideoResponse {
   items?: Array<{
+    snippet?: {
+      title?: string;
+    };
     contentDetails?: {
       duration?: string;
     };
   }>;
 }
 
+export interface YouTubeVideoData {
+  title: string | null;
+  duration: string | null;
+}
+
 export const useYoutubeVideoDuration = (
   videoId: string | null,
-): UseQueryResult<string | null, Error> => {
+): UseQueryResult<YouTubeVideoData, Error> => {
   return useQuery({
-    queryKey: ['youtube', 'duration', videoId],
-    queryFn: async (): Promise<string | null> => {
-      if (!videoId) return null;
+    queryKey: ['youtube', 'video', videoId],
+    queryFn: async (): Promise<YouTubeVideoData> => {
+      if (!videoId) return { title: null, duration: null };
 
       const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
       if (!apiKey) {
         console.warn('YouTube API key is not configured');
-        return null;
+        return { title: null, duration: null };
       }
 
       try {
         const response = await fetch(
-          `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=contentDetails&key=${apiKey}`,
+          `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`,
         );
 
         if (!response.ok) {
-          throw new Error('Failed to fetch video duration');
+          throw new Error('Failed to fetch video data');
         }
 
         const data: YouTubeVideoResponse = await response.json();
-        return data.items?.[0]?.contentDetails?.duration ?? null;
+        return {
+          title: data.items?.[0]?.snippet?.title ?? null,
+          duration: data.items?.[0]?.contentDetails?.duration ?? null,
+        };
       } catch (error) {
-        console.error('Error fetching YouTube video duration:', error);
-        return null;
+        console.error('Error fetching YouTube video data:', error);
+        return { title: null, duration: null };
       }
     },
     enabled: !!videoId,

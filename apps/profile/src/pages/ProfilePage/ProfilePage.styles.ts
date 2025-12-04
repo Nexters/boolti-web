@@ -1,13 +1,36 @@
 import styled from '@emotion/styled';
+import { css } from '@emotion/react';
 import { Swiper } from 'swiper/react';
 
-const CoverSection = styled.div<{ isCover: boolean }>`
+export const bottomSheetOverrides = css`
+  /* BottomSheet 스타일 오버라이드 */
+  [role='dialog'][aria-modal='true'] {
+    & > div:last-child {
+      padding-bottom: 28px;
+    }
+  }
+
+  button[role='menuitem'] {
+    min-height: 58px !important;
+    height: 58px !important;
+  }
+
+  button[role='menuitem'] + button[role='menuitem'] {
+    border-top: none !important;
+  }
+
+  button[role='menuitem']::before {
+    display: none !important;
+  }
+`;
+
+const CoverSection = styled.div<{ isCover: boolean; isDesktop: boolean }>`
   position: relative;
   width: 100%;
   height: 0;
   padding-top: 100%;
   overflow: hidden;
-  border-radius: ${({ isCover }) => (isCover ? '20px 20px 0 0' : '0')};
+  border-radius: ${({ isCover, isDesktop }) => (isCover && isDesktop ? '20px 20px 0 0' : '0')};
   :after {
     content: '';
     position: absolute;
@@ -63,7 +86,7 @@ const Nickname = styled.h1`
 const UserName = styled.h1`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0 0 16px 0;
+  margin: 0;
 `;
 
 const InfoRow = styled.div`
@@ -99,8 +122,8 @@ const ActionButtons = styled.div`
 `;
 
 const IconButton = styled.a`
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.palette.grey.w}${({ theme }) => theme.palette.opacity[20]};
   border: none;
@@ -160,20 +183,22 @@ const ShowList = styled.div`
   gap: 20px;
 `;
 
-const ShowCard = styled.div`
+const ShowCard = styled.a`
   display: flex;
   gap: 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
+  text-decoration: none;
 `;
 
 const ShowImage = styled.img`
   width: 68px;
   height: 94px;
-  border-radius: 8px;
+  border-radius: 4px;
   object-fit: cover;
   flex-shrink: 0;
+  border: 1px solid #2e303a;
 `;
 
 const ShowInfo = styled.div`
@@ -185,7 +210,7 @@ const ShowInfo = styled.div`
 
 const ShowTitle = styled.h3`
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.w};
+  color: #f6f7ff;
   margin: 0;
 `;
 
@@ -202,10 +227,11 @@ const PastShowSlider = styled(Swiper)`
   }
 `;
 
-const PastShowCard = styled.div`
+const PastShowCard = styled.a`
   flex-shrink: 0;
   width: 128px;
   cursor: pointer;
+  text-decoration: none;
 `;
 
 const PastShowImage = styled.img`
@@ -214,6 +240,7 @@ const PastShowImage = styled.img`
   border-radius: 8px;
   object-fit: cover;
   margin-bottom: 8px;
+  border: 1px solid #2e303a;
 `;
 
 const PastShowTitle = styled.h4`
@@ -224,8 +251,8 @@ const PastShowTitle = styled.h4`
 `;
 
 const PastShowDate = styled.p`
-  ${({ theme }) => theme.typo.c1};
-  color: ${({ theme }) => theme.palette.grey.g50};
+  ${({ theme }) => theme.typo.b1};
+  color: #6f7485;
   margin: 0;
 `;
 
@@ -243,6 +270,7 @@ const VideoCard = styled.a`
 
 const VideoThumbnailWrapper = styled.div`
   flex: 1 0 0;
+  position: relative;
 `;
 
 const VideoInfo = styled.div`
@@ -253,21 +281,24 @@ const VideoInfo = styled.div`
 `;
 
 const VideoDuration = styled.p`
-  ${({ theme }) => theme.typo.c1};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
   margin: 0;
+  padding: 2px 0px;
+  border-radius: 2px;
 `;
 
 const VideoThumbnail = styled.img`
   width: 100%;
   aspect-ratio: 16 / 9;
-  border-radius: 8px;
+  border-radius: 4px;
   object-fit: cover;
+  border: 1px solid #2e303a;
 `;
 
 const VideoTitle = styled.p`
   ${({ theme }) => theme.typo.sh1};
-  color: ${({ theme }) => theme.palette.grey.w};
+  color: #f6f7ff;
 `;
 
 const LinkList = styled.div`
@@ -294,7 +325,7 @@ const LinkTitle = styled.span`
 `;
 
 const BottomCTA = styled.div`
-  padding: 16px 20px;
+  padding: 24px 20px 60px 20px;
 
   @media (min-width: 481px) {
     max-width: 480px;
@@ -304,7 +335,8 @@ const BottomCTA = styled.div`
 
 const CTAButton = styled.button`
   width: 100%;
-  padding: 16px;
+  height: 64px;
+  padding: 0 16px;
   background-color: #fff;
   color: ${({ theme }) => theme.palette.grey.g90};
   border: none;
@@ -325,18 +357,61 @@ const IconButtonWrapper = styled.div`
 `;
 
 const NetetralButton = styled.button`
-  padding: 7px 14px;
+  height: 36px;
+  padding: 0 14px;
   background-color: ${({ theme }) => theme.palette.grey.g90};
   color: #fff;
   border: none;
   border-radius: 8px;
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme }) => theme.typo.sh0};
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   transition: background-color 0.2s;
+`;
+
+const ShareDropdownWrapper = styled.div<{ isMobileInCover?: boolean }>`
+  position: ${({ isMobileInCover }) => (isMobileInCover ? 'absolute' : 'relative')};
+  ${({ isMobileInCover }) =>
+    isMobileInCover &&
+    `
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+  `}
+`;
+
+const ShareDropdown = styled.div`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  min-width: 240px;
+  z-index: 1000;
+  overflow: hidden;
+`;
+
+const ShareDropdownItem = styled.button`
+  width: 100%;
+  height: 58px;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g15};
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.grey.g80};
+  }
 `;
 
 export default {
@@ -383,4 +458,7 @@ export default {
   CTAButton,
   IconButtonWrapper,
   NetetralButton,
+  ShareDropdownWrapper,
+  ShareDropdown,
+  ShareDropdownItem,
 };
