@@ -4,7 +4,7 @@ import 'swiper/css';
 
 import { BooltiUIProvider } from '@boolti/ui';
 import { QueryClientProvider } from '@boolti/api';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 import ProfilePage from './pages/ProfilePage';
@@ -14,40 +14,22 @@ import { ProfileVideosPage } from './pages/ProfileVideosPage';
 import { ProfileLinkPage } from './pages/ProfileLinkPage';
 import { Suspense } from 'react';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <NotFound />,
-  },
-  {
-    path: '/:userCode/shows',
-    element: <ProfilePastShowsPage />,
-  },
-  {
-    path: '/:userCode/videos',
-    element: <ProfileVideosPage />,
-  },
-  {
-    path: '/:userCode/links',
-    element: <ProfileLinkPage />,
-  },
-  {
-    path: '/:userCode',
-    element: <ProfilePage />,
-  },
-  {
-    path: '*',
-    element: <NotFound />,
-  },
-]);
-
 const App = () => {
   return (
     <QueryClientProvider>
       <BooltiUIProvider>
         <HelmetProvider>
           <Suspense fallback={null}>
-            <RouterProvider router={router} />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<NotFound />} />
+                <Route path="/:userCode" element={<ProfilePage />} />
+                <Route path="/:userCode/shows" element={<ProfilePastShowsPage />} />
+                <Route path="/:userCode/videos" element={<ProfileVideosPage />} />
+                <Route path="/:userCode/links" element={<ProfileLinkPage />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
           </Suspense>
         </HelmetProvider>
       </BooltiUIProvider>
