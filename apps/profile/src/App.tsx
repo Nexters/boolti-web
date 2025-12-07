@@ -16,8 +16,8 @@ import { Suspense } from 'react';
 
 const router = createBrowserRouter([
   {
-    path: '/:userCode',
-    element: <ProfilePage />,
+    path: '/',
+    element: <NotFound />,
   },
   {
     path: '/:userCode/shows',
@@ -32,8 +32,8 @@ const router = createBrowserRouter([
     element: <ProfileLinkPage />,
   },
   {
-    path: '/',
-    element: <NotFound />,
+    path: '/:userCode',
+    element: <ProfilePage />,
   },
   {
     path: '*',
