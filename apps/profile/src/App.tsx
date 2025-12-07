@@ -18,7 +18,6 @@ const router = createBrowserRouter([
   {
     path: '/:userCode',
     element: <ProfilePage />,
-    errorElement: <NotFound />,
   },
   {
     path: '/:userCode/shows',
@@ -34,6 +33,10 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
+    element: <NotFound />,
+  },
+  {
+    path: '*',
     element: <NotFound />,
   },
 ]);
