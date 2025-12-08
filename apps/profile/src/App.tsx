@@ -2,6 +2,7 @@ import './index.css';
 import 'the-new-css-reset/css/reset.css';
 import 'swiper/css';
 
+import { QueryClientProvider } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
@@ -12,13 +13,10 @@ import { ProfilePastShowsPage } from './pages/ProfilePastShowsPage';
 import { ProfileVideosPage } from './pages/ProfileVideosPage';
 import { ProfileLinkPage } from './pages/ProfileLinkPage';
 import { Suspense } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const App = () => {
-  const queryClient = new QueryClient();
-
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryClientProvider>
       <BooltiUIProvider>
         <HelmetProvider>
           <Suspense fallback={null}>
