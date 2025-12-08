@@ -16,7 +16,7 @@ export interface YouTubeVideoData {
   duration: string | null;
 }
 
-export const useYoutubeVideoDuration = (
+const useYoutubeVideoDuration = (
   videoId: string | null,
 ): UseQueryResult<YouTubeVideoData, Error> => {
   return useQuery({
@@ -26,7 +26,6 @@ export const useYoutubeVideoDuration = (
 
       const apiKey = import.meta.env.VITE_YOUTUBE_API_KEY;
       if (!apiKey) {
-        console.warn('YouTube API key is not configured');
         return { title: null, duration: null };
       }
 
@@ -45,12 +44,13 @@ export const useYoutubeVideoDuration = (
           duration: data.items?.[0]?.contentDetails?.duration ?? null,
         };
       } catch (error) {
-        console.error('Error fetching YouTube video data:', error);
         return { title: null, duration: null };
       }
     },
     enabled: !!videoId,
-    staleTime: 1000 * 60 * 60 * 24, // 24시간 캐싱
+    staleTime: 1000 * 60 * 60 * 24,
     retry: 1,
   });
 };
+
+export default useYoutubeVideoDuration;
