@@ -3,9 +3,8 @@ import Styled from './ProfileVideosPage.styles';
 import { BooltiIcon } from '@boolti/icon';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
-import { useUserVideos } from '@boolti/api';
+import { useUserVideos, useYoutubeVideoDuration } from '@boolti/api';
 import { getYoutubeVideoId, getYoutubeThumbnailUrl, formatYoutubeDuration } from '~/utils';
-import { useYoutubeVideoDuration } from '~/hooks/useYoutubeVideoDuration';
 
 interface VideoItemProps {
   videoUrl: string;

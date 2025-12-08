@@ -7,7 +7,7 @@ import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
-import { useUserByUserCodeV2 } from '@boolti/api';
+import { useUserByUserCodeV2, useYoutubeVideoDuration } from '@boolti/api';
 import {
   formatDateTimeWithWeekday,
   formatDateWithWeekday,
@@ -18,7 +18,6 @@ import {
 import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
-import { useYoutubeVideoDuration } from '~/hooks/useYoutubeVideoDuration';
 
 interface VideoCardProps {
   videoUrl: string;

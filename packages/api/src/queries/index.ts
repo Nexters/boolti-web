@@ -48,6 +48,7 @@ import useAdminSalesTicketList from './useAdminSalesTicketList';
 import useAdminReservationSummaryV2 from './useAdminReservationSummaryV2';
 import usePopup from './usePopup';
 import useSuperAdminShowSettlementStatement from './useSuperAdminShowSettlementStatement';
+import useYoutubeVideoDuration from './useYoutubeVideoDuration';
 
 export {
   useCastTeamList,
@@ -100,4 +101,5 @@ export {
   useSuperAdminInvitationCodeList,
   usePopup,
   useSuperAdminShowSettlementStatement,
+  useYoutubeVideoDuration,
 };
