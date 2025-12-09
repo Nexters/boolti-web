@@ -10,7 +10,7 @@ const Container = styled.div`
 
 const ContentWrapper = styled.div`
   width: 100%;
-  max-width: 480px;
+  max-width: 680px;
   min-height: 100vh;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
   position: relative;

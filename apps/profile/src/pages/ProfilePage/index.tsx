@@ -19,31 +19,6 @@ import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
 
-interface VideoCardProps {
-  videoUrl: string;
-}
-
-const VideoCard = ({ videoUrl }: VideoCardProps) => {
-  const videoId = getYoutubeVideoId(videoUrl);
-  const thumbnailUrl = videoId
-    ? getYoutubeThumbnailUrl(videoId)
-    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
-  const { data } = useYoutubeVideoDuration(videoId);
-  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
-
-  return (
-    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
-      <Styled.VideoThumbnailWrapper>
-        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
-      </Styled.VideoThumbnailWrapper>
-      <Styled.VideoInfo>
-        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
-        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
-      </Styled.VideoInfo>
-    </Styled.VideoCard>
-  );
-};
-
 const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
@@ -319,6 +294,31 @@ const ProfilePage = () => {
         )}
       </Layout>
     </>
+  );
+};
+
+interface VideoCardProps {
+  videoUrl: string;
+}
+
+const VideoCard = ({ videoUrl }: VideoCardProps) => {
+  const videoId = getYoutubeVideoId(videoUrl);
+  const thumbnailUrl = videoId
+    ? getYoutubeThumbnailUrl(videoId)
+    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
+  const { data } = useYoutubeVideoDuration(videoId);
+  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
+
+  return (
+    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
+      <Styled.VideoThumbnailWrapper>
+        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
+      </Styled.VideoThumbnailWrapper>
+      <Styled.VideoInfo>
+        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
+        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
+      </Styled.VideoInfo>
+    </Styled.VideoCard>
   );
 };
 

@@ -3,7 +3,6 @@ import { css } from '@emotion/react';
 import { Swiper } from 'swiper/react';
 
 export const bottomSheetOverrides = css`
-  /* BottomSheet 스타일 오버라이드 */
   [role='dialog'][aria-modal='true'] {
     & > div:last-child {
       padding-bottom: 28px;
