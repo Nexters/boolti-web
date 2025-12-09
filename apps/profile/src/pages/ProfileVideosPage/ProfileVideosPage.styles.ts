@@ -15,7 +15,6 @@ const Container = styled.div`
 const VideoItem = styled.a`
   display: flex;
   gap: 16px;
-  align-items: flex-start;
   text-decoration: none;
   cursor: pointer;
 `;
@@ -25,18 +24,13 @@ const ThumbnailWrapper = styled.div`
   height: 90px;
   border-radius: 4px;
   overflow: hidden;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+  gap: 6px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g80};
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #2e303a;
-
-  svg {
-    width: 36px;
-    height: 36px;
-    color: ${({ theme }) => theme.palette.grey.g40};
-  }
 `;
 
 const Thumbnail = styled.img`
@@ -48,7 +42,7 @@ const Thumbnail = styled.img`
 const VideoInfo = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 1;
+  justify-content: center;
 `;
 
 const Title = styled.p`
@@ -64,6 +58,12 @@ const Duration = styled.p`
   margin: 0;
 `;
 
+const CountText = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  margin: 0 0 8px 0;
+`;
+
 export default {
   Container,
   VideoItem,
@@ -72,4 +72,5 @@ export default {
   VideoInfo,
   Title,
   Duration,
+  CountText,
 };
