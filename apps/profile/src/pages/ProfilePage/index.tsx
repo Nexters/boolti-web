@@ -213,7 +213,7 @@ const ProfilePage = () => {
           {profile.video.totalSize > 0 && (
             <Styled.Section>
               <Styled.SectionHeader>
-                <Styled.SectionTitle>영상</Styled.SectionTitle>
+                <Styled.SectionTitle>동영상</Styled.SectionTitle>
                 {profile.video.hasMoreItems && (
                   <Styled.ViewAllButton onClick={() => navigate('videos')}>
                     전체 보기
@@ -288,7 +288,7 @@ const VideoCard = ({ videoUrl }: VideoCardProps) => {
   const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
 
   return (
-    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
+    <Styled.VideoCard href={videoUrl}>
       <Styled.VideoThumbnailWrapper>
         <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
       </Styled.VideoThumbnailWrapper>

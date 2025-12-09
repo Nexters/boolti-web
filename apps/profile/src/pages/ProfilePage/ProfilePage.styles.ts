@@ -269,7 +269,6 @@ const VideoCard = styled.a`
 `;
 
 const VideoThumbnailWrapper = styled.div`
-  flex: 1 0 0;
   position: relative;
 `;
 
@@ -289,8 +288,8 @@ const VideoDuration = styled.p`
 `;
 
 const VideoThumbnail = styled.img`
-  width: 100%;
-  aspect-ratio: 16 / 9;
+  width: 160px;
+  height: 90px;
   border-radius: 4px;
   object-fit: cover;
   border: 1px solid #2e303a;
