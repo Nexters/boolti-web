@@ -5,21 +5,23 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0 20px 60px 20px;
+  padding: 20px;
+
+  ${mq_lg} {
+    padding: 20px;
 `;
 
 const CountText = styled.p`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0 0 8px 0;
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
 const ShowCard = styled.article`
   display: flex;
-  gap: 16px;
+  gap: 12px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
   border-radius: 0px;
-  padding: 16px;
+  padding: 16px 20px;
 
   ${mq_lg} {
     border-radius: 12px;

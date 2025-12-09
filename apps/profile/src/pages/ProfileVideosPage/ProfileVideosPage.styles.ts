@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  padding: 20px 20px;
+  gap: 16px;
+  padding: 20px;
 
   ${mq_lg} {
-    padding: 20px 0;
+    padding: 20px;
   }
 `;
 
@@ -61,7 +61,6 @@ const Duration = styled.p`
 const CountText = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0 0 8px 0;
 `;
 
 export default {
