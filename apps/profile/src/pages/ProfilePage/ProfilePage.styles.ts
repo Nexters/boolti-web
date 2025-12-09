@@ -140,6 +140,7 @@ const Section = styled.div`
 
 const Sections = styled.div`
   & > ${Section}:not(:last-child) {
+    margin: 0px 20px;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
   }
 `;

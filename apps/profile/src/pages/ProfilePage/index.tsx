@@ -154,20 +154,12 @@ const ProfilePage = () => {
           <Styled.InfoText>{profile.introduction}</Styled.InfoText>
           <Styled.ActionButtons>
             {instagramAccount?.username && (
-              <Styled.IconButton
-                href={`https://instagram.com/${instagramAccount.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Styled.IconButton href={`https://instagram.com/${instagramAccount.username}`}>
                 <InstagramIcon />
               </Styled.IconButton>
             )}
             {youtubeAccount?.username && (
-              <Styled.IconButton
-                href={`https://youtube.com/@${youtubeAccount.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Styled.IconButton href={`https://youtube.com/@${youtubeAccount.username}`}>
                 <YoutubeIcon />
               </Styled.IconButton>
             )}
@@ -182,12 +174,7 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.ShowList>
                 {profile.comingSoonShow.previewItems.map((show) => (
-                  <Styled.ShowCard
-                    key={show.id}
-                    href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Styled.ShowCard key={show.id} href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
                     <Styled.ShowImage src={show.showImg} alt={show.name} />
                     <Styled.ShowInfo>
                       <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
@@ -212,11 +199,7 @@ const ProfilePage = () => {
               <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
-                    <Styled.PastShowCard
-                      href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <Styled.PastShowCard href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
                       <Styled.PastShowImage src={show.showImg} alt={show.name} />
                       <Styled.PastShowTitle>{show.name}</Styled.PastShowTitle>
                       <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
@@ -257,12 +240,7 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.LinkList>
                 {profile.link.previewItems.map((link, index) => (
-                  <Styled.LinkItem
-                    key={`${link.link}-${index}`}
-                    href={link.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Styled.LinkItem key={`${link.link}-${index}`} href={link.link}>
                     <ChainLink />
                     <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
                   </Styled.LinkItem>
