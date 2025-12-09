@@ -262,44 +262,6 @@ const VideoList = styled.div`
   gap: 16px;
 `;
 
-const VideoCard = styled.a`
-  display: flex;
-  gap: 12px;
-  cursor: pointer;
-`;
-
-const VideoThumbnailWrapper = styled.div`
-  position: relative;
-`;
-
-const VideoInfo = styled.div`
-  flex: 1 0 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const VideoDuration = styled.p`
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0;
-  padding: 2px 0px;
-  border-radius: 2px;
-`;
-
-const VideoThumbnail = styled.img`
-  width: 160px;
-  height: 90px;
-  border-radius: 4px;
-  object-fit: cover;
-  border: 1px solid #2e303a;
-`;
-
-const VideoTitle = styled.p`
-  ${({ theme }) => theme.typo.sh1};
-  color: #f6f7ff;
-`;
-
 const LinkList = styled.div`
   display: flex;
   flex-direction: column;
@@ -382,7 +344,7 @@ const NetetralButton = styled.button`
   transition: background-color 0.2s;
 `;
 
-const ShareDropdownWrapper = styled.div<{ isMobileInCover?: boolean }>`
+const ShareDropdownButton = styled.button<{ isMobileInCover?: boolean }>`
   position: ${({ isMobileInCover }) => (isMobileInCover ? 'absolute' : 'relative')};
   ${({ isMobileInCover }) =>
     isMobileInCover &&
@@ -390,6 +352,7 @@ const ShareDropdownWrapper = styled.div<{ isMobileInCover?: boolean }>`
     top: 20px;
     right: 20px;
     z-index: 10;
+    cursor: pointer;
   `}
 `;
 
@@ -397,9 +360,8 @@ const ShareDropdown = styled.div`
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+  background-color: #1b1d23;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   min-width: 240px;
   z-index: 1000;
   overflow: hidden;
@@ -407,7 +369,7 @@ const ShareDropdown = styled.div`
 
 const ShareDropdownItem = styled.button`
   width: 100%;
-  height: 58px;
+  height: 36px;
   padding: 0 16px;
   background: none;
   border: none;
@@ -415,13 +377,8 @@ const ShareDropdownItem = styled.button`
   color: ${({ theme }) => theme.palette.mobile.grey.g15};
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s;
   display: flex;
   align-items: center;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.grey.g80};
-  }
 `;
 
 export default {
@@ -455,12 +412,6 @@ export default {
   PastShowTitle,
   PastShowDate,
   VideoList,
-  VideoCard,
-  VideoThumbnailWrapper,
-  VideoDuration,
-  VideoThumbnail,
-  VideoTitle,
-  VideoInfo,
   LinkList,
   LinkItem,
   LinkTitle,
@@ -468,7 +419,7 @@ export default {
   CTAButton,
   IconButtonWrapper,
   NetetralButton,
-  ShareDropdownWrapper,
+  ShareDropdownButton,
   ShareDropdown,
   ShareDropdownItem,
 };

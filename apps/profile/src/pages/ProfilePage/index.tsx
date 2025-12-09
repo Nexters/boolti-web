@@ -7,17 +7,12 @@ import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
-import { useUserByUserCodeV2, useYoutubeVideoDuration } from '@boolti/api';
-import {
-  formatDateTimeWithWeekday,
-  formatDateWithWeekday,
-  getYoutubeVideoId,
-  getYoutubeThumbnailUrl,
-  formatYoutubeDuration,
-} from '~/utils';
+import { useUserByUserCodeV2 } from '@boolti/api';
+import { formatDateTimeWithWeekday, formatDateWithWeekday } from '~/utils';
 import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
+import VideoCard from '~/components/VideoCard';
 
 const ProfilePage = () => {
   const { userCode } = useParams<{ userCode: string }>();
@@ -112,10 +107,8 @@ const ProfilePage = () => {
         {isDesktop && (
           <Header
             rightButton={
-              <Styled.ShareDropdownWrapper>
-                <button type="button" onClick={handleShareButtonClick}>
-                  <ShareIcon />
-                </button>
+              <Styled.ShareDropdownButton type="button" onClick={handleShareButtonClick}>
+                <ShareIcon />
                 {isShareDropdownOpen && (
                   <Styled.ShareDropdown>
                     <Styled.ShareDropdownItem onClick={handleShareUrlCopy}>
@@ -126,17 +119,19 @@ const ProfilePage = () => {
                     </Styled.ShareDropdownItem>
                   </Styled.ShareDropdown>
                 )}
-              </Styled.ShareDropdownWrapper>
+              </Styled.ShareDropdownButton>
             }
           />
         )}
         <Styled.CoverSection isCover={!!profile.imgPath} isDesktop={isDesktop}>
           {!isDesktop && (
-            <Styled.ShareDropdownWrapper isMobileInCover>
-              <button type="button" onClick={handleShareButtonClick}>
-                <ShareIcon />
-              </button>
-            </Styled.ShareDropdownWrapper>
+            <Styled.ShareDropdownButton
+              isMobileInCover
+              type="button"
+              onClick={handleShareButtonClick}
+            >
+              <ShareIcon />
+            </Styled.ShareDropdownButton>
           )}
           <Styled.CoverImage
             src={profile.imgPath || 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
@@ -272,31 +267,6 @@ const ProfilePage = () => {
         )}
       </Layout>
     </>
-  );
-};
-
-interface VideoCardProps {
-  videoUrl: string;
-}
-
-const VideoCard = ({ videoUrl }: VideoCardProps) => {
-  const videoId = getYoutubeVideoId(videoUrl);
-  const thumbnailUrl = videoId
-    ? getYoutubeThumbnailUrl(videoId)
-    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
-  const { data } = useYoutubeVideoDuration(videoId);
-  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
-
-  return (
-    <Styled.VideoCard href={videoUrl}>
-      <Styled.VideoThumbnailWrapper>
-        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
-      </Styled.VideoThumbnailWrapper>
-      <Styled.VideoInfo>
-        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
-        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
-      </Styled.VideoInfo>
-    </Styled.VideoCard>
   );
 };
 
