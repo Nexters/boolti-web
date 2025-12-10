@@ -1,50 +1,30 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
+import {
+  InstagramIcon,
+  YoutubeIcon,
+  ChainLink,
+  BooltiIcon,
+  ShareIcon,
+  BooltiGreyLogo,
+} from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
-import { BottomSheet } from '@boolti/ui';
+import { BottomSheet, useDialog } from '@boolti/ui';
 import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
-import { useUserByUserCodeV2, useYoutubeVideoDuration } from '@boolti/api';
-import {
-  formatDateTimeWithWeekday,
-  formatDateWithWeekday,
-  getYoutubeVideoId,
-  getYoutubeThumbnailUrl,
-  formatYoutubeDuration,
-} from '~/utils';
+import { useUserByUserCodeV2 } from '@boolti/api';
+import { formatDateTimeWithWeekday, formatDateWithWeekday } from '~/utils';
 import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
-
-interface VideoCardProps {
-  videoUrl: string;
-}
-
-const VideoCard = ({ videoUrl }: VideoCardProps) => {
-  const videoId = getYoutubeVideoId(videoUrl);
-  const thumbnailUrl = videoId
-    ? getYoutubeThumbnailUrl(videoId)
-    : 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d';
-  const { data } = useYoutubeVideoDuration(videoId);
-  const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
-
-  return (
-    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
-      <Styled.VideoThumbnailWrapper>
-        <Styled.VideoThumbnail src={thumbnailUrl} alt="YouTube video" />
-      </Styled.VideoThumbnailWrapper>
-      <Styled.VideoInfo>
-        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
-        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
-      </Styled.VideoInfo>
-    </Styled.VideoCard>
-  );
-};
+import VideoCard from '~/components/VideoCard';
+import NotFound from '~/components/Notfound';
+import { QRCodeSVG } from 'qrcode.react';
 
 const ProfilePage = () => {
+  const dialog = useDialog();
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
   const [isShareBottomSheetOpen, setIsShareBottomSheetOpen] = useState(false);
@@ -52,6 +32,10 @@ const ProfilePage = () => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   const { data: profile } = useUserByUserCodeV2(userCode as string);
+
+  const getPreviewLink = (showId: number) => {
+    return `${window.location.origin}/show/${showId}`;
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -103,23 +87,42 @@ const ProfilePage = () => {
     setIsShareDropdownOpen(false);
   };
 
+  const getStoreLink = () => {
+    const isAndroid = /android/i.test(navigator.userAgent);
+
+    return isAndroid
+      ? 'https://play.google.com/store/apps/details?id=com.nexters.boolti&hl=ko'
+      : 'https://apps.apple.com/kr/app/불티/id6476589322';
+  };
+
+  const reservationButtonClickHandler = (isDesktop: boolean) => {
+    if (!isDesktop) return;
+
+    dialog.open({
+      title: '불티 앱에서 예매하기',
+      content: (
+        <Styled.DialogContainer>
+          <Styled.DialogQRCodeContainer>
+            <Styled.QRCodeContainer>
+              <QRCodeSVG value={getStoreLink()} size={182} level="H" />
+            </Styled.QRCodeContainer>
+            <BooltiGreyLogo />
+          </Styled.DialogQRCodeContainer>
+          <Styled.DialogTitle>
+            불티 앱에서
+            <br />
+            핫한 공연을 예매하세요!
+          </Styled.DialogTitle>
+          <Styled.DialogDescription>
+            휴대폰 카메라로 QR코드를 찍어 앱을 다운로드 받아요
+          </Styled.DialogDescription>
+        </Styled.DialogContainer>
+      ),
+    });
+  };
+
   if (!profile) {
-    return (
-      <Layout>
-        <Styled.CoverSection isCover={false} isDesktop={isDesktop}>
-          <Styled.CoverImage
-            src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgQChENDRAPDQ8QDQ0NEBANDQ8NDQ8PFBEWFhUdExMZHCggGBolGxUTITEhJSkrLi42Fx85ODMsNygtLisBCgoKDg0OFxAQFS4dICU3NSsrLS0rMC0rLSstKzctLSs1Ky03KystNS0rKy0tLS0rKysrKzc3LS03KysrKysrN//AABEIAOAA4QMBIgACEQEDEQH/xAAaAAEBAQADAQAAAAAAAAAAAAAAAQUCBAYD/8QAMRABAAIAAwYCCQUBAQAAAAAAAAECAwQRBRIhMUFRMnEiYXKRkqGxweEzQlKB0SMU/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAEDAgQF/8QAHhEBAQEBAAIDAQEAAAAAAAAAAAECEQMxIUFREhP/2gAMAwEAAhEDEQA/APVgr6L5qCoKKIIoAAAAAAAAAAAAAIKAgoCCgIKAgoCKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAKogCiKAAIAAAAAAAAAAAACAqiAKIAogAqAgAKAAKigACAAAAA5Uw72nSsTPlGr71yGYnpEecwlsiyWusO1Oz8x2ifK0PhiYOLXxVmP64e87DlcAFQABABQAAAAAAAQAFAAFRQABAACIno0crs+OeJ8P8Arns7KxEb9uc8vVDustb+o1zj7qVrERpEREdo4KDNqAA6eZyFLcaejPb9s/4y71tE6TGkw9A62dy0XrrHijl6/U0zv9Z6x+McBqxQAUAAAAAAAEABQABUUAAQfbJ4W/ixHTnPlD4tDZFeNreUOdXkdZna0QGD0AAAAAAMjaWFu4uscrcf76uq1Nq1/wCcT2t9YZbfN7GG5yoA6cgAAAAAAAAAAACooAAg09k+C3tR9GY72yr6XmveNfc536d49tMBg3AAAAAAdXaf6M+1VkNLa1/RrX17zNbY9MN+0AduQAAAAAAAQAFAAFRQABBywsSa3i0c4nVxBW/h3rasWjlMauTHyWamk6TxrPylr1tExrE6xPWGGs8b511QHLoAAJmIjWeEDLz+c3vQp4es9/wsnXOtcdfNY2/iTbpyjyfIG7BAFAAAAAAAAQAFAAFRQABAAB9cDMYlJ9GeHWJ5S+Qi9auFtHCnxa1n3w7FcfBnlavvhhI5uI7nkrfnGwo52r8UPhi5/AjlO9Pq/wBY6p/nC+SuxmM5iX4eGvaPu64O5OOLegCogAoAAAAAAAIACgACooAAgPtl8tiXnhwjrM8mngZPCpx03p7z9nN1I7zm1mYWUxrcq6R3nhDt4ezP5W+GPu0Bnd1pMR1a7Py8dJnzmXOMnl/4R833HPa6/mfj4/8Ajy/8I+bhbIZeekx5TLsh2n8z8Z99mR+23xQ6uLk8evONY714todTdc3EeeG1j5TCvzjSe8cJ/LMzOVxKc+Ne8fdpNSs9YsdcB05AAAAAAABAAUAAVFAdvJZOb+lbhX52/Djkctv21nwxz9c9mxEQz3rnxHeM9+aViIjSOER0gBk2AAAAAAAACYjTSeIAy89kt306eHrHb8Oi9GyNoZXdner4Z+Utca+qy1n7jpgNGYAAAAAIACgADlSk2tFY5zOji0NlYWtpvPThHmlvIsna7+Dh1rSKx0+cuYPO9AAAAAAAAAAAACuOJStqzWeUxo5Ajz+PhTS81np84cGntbC9GLx04T5dGY3zexhqcoA6QAAAEABQABt5Gm7g19cb3vYkRxehrGkRHaIhn5Gnj9qAyagAAAAAAAAAAAKAI4Y9N7DtXvE+9596N5/MV0xLR2tP1aeNn5HABqzAAABAAUABywvHX2o+r0Dz+F46+1X6vQMvI18f2AM2gAAAAAAAAAAACgCDCzv69/a+zdYee/Xv5/Z34/bjfp8AGzIAAAB//9k="
-            alt="기본 프로필"
-          />
-          <Styled.CoverOverlay>
-            <Styled.ProfileInfo>
-              <Styled.Nickname>닉네임</Styled.Nickname>
-              <Styled.UserName>@{userCode}</Styled.UserName>
-            </Styled.ProfileInfo>
-          </Styled.CoverOverlay>
-        </Styled.CoverSection>
-      </Layout>
-    );
+    return <NotFound />;
   }
 
   const instagramAccount = profile.sns.find((sns) => sns.type === 'INSTAGRAM');
@@ -137,10 +140,8 @@ const ProfilePage = () => {
         {isDesktop && (
           <Header
             rightButton={
-              <Styled.ShareDropdownWrapper>
-                <button type="button" onClick={handleShareButtonClick}>
-                  <ShareIcon />
-                </button>
+              <Styled.ShareDropdownButton type="button" onClick={handleShareButtonClick}>
+                <ShareIcon />
                 {isShareDropdownOpen && (
                   <Styled.ShareDropdown>
                     <Styled.ShareDropdownItem onClick={handleShareUrlCopy}>
@@ -151,17 +152,19 @@ const ProfilePage = () => {
                     </Styled.ShareDropdownItem>
                   </Styled.ShareDropdown>
                 )}
-              </Styled.ShareDropdownWrapper>
+              </Styled.ShareDropdownButton>
             }
           />
         )}
         <Styled.CoverSection isCover={!!profile.imgPath} isDesktop={isDesktop}>
           {!isDesktop && (
-            <Styled.ShareDropdownWrapper isMobileInCover>
-              <button type="button" onClick={handleShareButtonClick}>
-                <ShareIcon />
-              </button>
-            </Styled.ShareDropdownWrapper>
+            <Styled.ShareDropdownButton
+              isMobileInCover
+              type="button"
+              onClick={handleShareButtonClick}
+            >
+              <ShareIcon />
+            </Styled.ShareDropdownButton>
           )}
           <Styled.CoverImage
             src={profile.imgPath || 'https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d'}
@@ -179,20 +182,12 @@ const ProfilePage = () => {
           <Styled.InfoText>{profile.introduction}</Styled.InfoText>
           <Styled.ActionButtons>
             {instagramAccount?.username && (
-              <Styled.IconButton
-                href={`https://instagram.com/${instagramAccount.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Styled.IconButton href={`https://instagram.com/${instagramAccount.username}`}>
                 <InstagramIcon />
               </Styled.IconButton>
             )}
             {youtubeAccount?.username && (
-              <Styled.IconButton
-                href={`https://youtube.com/@${youtubeAccount.username}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Styled.IconButton href={`https://youtube.com/@${youtubeAccount.username}`}>
                 <YoutubeIcon />
               </Styled.IconButton>
             )}
@@ -207,12 +202,7 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.ShowList>
                 {profile.comingSoonShow.previewItems.map((show) => (
-                  <Styled.ShowCard
-                    key={show.id}
-                    href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Styled.ShowCard key={show.id} href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
                     <Styled.ShowImage src={show.showImg} alt={show.name} />
                     <Styled.ShowInfo>
                       <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
@@ -225,37 +215,35 @@ const ProfilePage = () => {
           )}
 
           {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
-            <Styled.Section>
-              <Styled.SectionHeader>
+            <Styled.PastShowSection>
+              <Styled.PastSectionHeader>
                 <Styled.SectionTitle>지난 공연</Styled.SectionTitle>
                 {profile.performedShow.hasMoreItems && (
                   <Styled.ViewAllButton onClick={() => navigate('shows')}>
                     전체 보기
                   </Styled.ViewAllButton>
                 )}
-              </Styled.SectionHeader>
+              </Styled.PastSectionHeader>
               <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
-                    <Styled.PastShowCard
-                      href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <Styled.PastShowCard href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
                       <Styled.PastShowImage src={show.showImg} alt={show.name} />
-                      <Styled.PastShowTitle>{show.name}</Styled.PastShowTitle>
+                      <Styled.PastShowTitle>
+                        {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
+                      </Styled.PastShowTitle>
                       <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
                     </Styled.PastShowCard>
                   </SwiperSlide>
                 ))}
               </Styled.PastShowSlider>
-            </Styled.Section>
+            </Styled.PastShowSection>
           )}
 
           {profile.video.totalSize > 0 && (
             <Styled.Section>
               <Styled.SectionHeader>
-                <Styled.SectionTitle>영상</Styled.SectionTitle>
+                <Styled.SectionTitle>동영상</Styled.SectionTitle>
                 {profile.video.hasMoreItems && (
                   <Styled.ViewAllButton onClick={() => navigate('videos')}>
                     전체 보기
@@ -282,12 +270,7 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.LinkList>
                 {profile.link.previewItems.map((link, index) => (
-                  <Styled.LinkItem
-                    key={`${link.link}-${index}`}
-                    href={link.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Styled.LinkItem key={`${link.link}-${index}`} href={link.link}>
                     <ChainLink />
                     <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
                   </Styled.LinkItem>
@@ -302,7 +285,9 @@ const ProfilePage = () => {
             <Styled.IconButtonWrapper>
               <BooltiIcon /> 이 프로필은 불티로 제작되었습니다
             </Styled.IconButtonWrapper>
-            <Styled.NetetralButton>나도 만들기</Styled.NetetralButton>
+            <Styled.NetetralButton onClick={() => reservationButtonClickHandler(isDesktop)}>
+              나도 만들기
+            </Styled.NetetralButton>
           </Styled.CTAButton>
         </Styled.BottomCTA>
 

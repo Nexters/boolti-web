@@ -34,12 +34,12 @@ const Handle = styled.div`
 `;
 
 const BottomSheetContent = styled.div`
-  padding: 16px 20px 32px;
+  padding: 16px 20px 28px;
 `;
 
 const MenuItem = styled.button`
   width: 100%;
-  padding: 20px 0;
+  padding: 17px 0;
   background: none;
   border: none;
   ${({ theme }) => theme.typo.sh1};
@@ -50,10 +50,6 @@ const MenuItem = styled.button`
 
   &:active {
     opacity: 0.7;
-  }
-
-  &:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g80};
   }
 `;
 

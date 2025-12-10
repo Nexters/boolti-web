@@ -11,6 +11,8 @@ import { BooltiDark } from './BooltiDark';
 import { BooltiGrey } from './BooltiGrey';
 import { BooltiLightGrey } from './BooltiLightGrey';
 import { BooltiSmall } from './BooltiSmall';
+import { BooltiDarkIcon } from './BooltiDarkIcon';
+import { BooltiDarkLogo } from './BooltiDarkLogo';
 import { User } from './User';
 import { Calendar } from './Calendar';
 import { CB } from './CB';
@@ -82,6 +84,7 @@ import { YoutubeIcon } from './YoutubeIcon';
 import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
+import { BooltiGreyLogo } from './BooltiGreyLogo';
 
 export {
   Apple as AppleIcon,
@@ -96,7 +99,10 @@ export {
   BooltiLightGrey,
   Boolti as BooltiLogo,
   BooltiSmall as BooltiSmallLogo,
+  BooltiGreyLogo,
+  BooltiDarkLogo,
   BooltiIcon,
+  BooltiDarkIcon,
   Calendar as CalendarIcon,
   CB,
   Filter as FilterIcon,

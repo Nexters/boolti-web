@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
 import Styled from './ProfileVideosPage.styles';
-import { BooltiIcon } from '@boolti/icon';
+import { BooltiDarkIcon, BooltiDarkLogo } from '@boolti/icon';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import { useUserVideos, useYoutubeVideoDuration } from '@boolti/api';
@@ -18,6 +18,7 @@ export const ProfileVideosPage = () => {
     <Layout>
       <Header title="동영상" />
       <Styled.Container>
+        <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
         {data?.map((videoUrl, index) => <VideoItem key={videoUrl || index} videoUrl={videoUrl} />)}
       </Styled.Container>
     </Layout>
@@ -36,12 +37,15 @@ const VideoItem = ({ videoUrl }: VideoItemProps) => {
         {thumbnailUrl ? (
           <Styled.Thumbnail src={thumbnailUrl} alt="YouTube video" />
         ) : (
-          <BooltiIcon />
+          <>
+            <BooltiDarkIcon />
+            <BooltiDarkLogo />
+          </>
         )}
       </Styled.ThumbnailWrapper>
       <Styled.VideoInfo>
-        <Styled.Title>{data?.title ?? 'YouTube 영상'}</Styled.Title>
-        {formattedDuration && <Styled.Duration>{formattedDuration}</Styled.Duration>}
+        <Styled.Title>{data?.title ?? '알 수 없는 동영상'}</Styled.Title>
+        <Styled.Duration>{data?.duration ? formattedDuration : '-'}</Styled.Duration>
       </Styled.VideoInfo>
     </Styled.VideoItem>
   );

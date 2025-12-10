@@ -4,19 +4,17 @@ import { mq_lg } from '@boolti/ui';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 0 0 60px 0;
+  gap: 16px;
+  padding: 20px;
 
   ${mq_lg} {
-    padding: 0 20px 60px 20px;
+    padding: 20px;
   }
 `;
 
 const CountText = styled.p`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0 0 8px 0;
-  padding: 0 20px;
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g40};
 
   ${mq_lg} {
     padding: 0;
@@ -32,7 +30,6 @@ const LinkItem = styled.a`
   border-radius: 10px;
   text-decoration: none;
   cursor: pointer;
-  margin: 0 20px;
 
   ${mq_lg} {
     margin: 0;

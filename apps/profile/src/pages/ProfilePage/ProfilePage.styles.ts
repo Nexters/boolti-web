@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Swiper } from 'swiper/react';
+import { mq_lg } from '@boolti/ui';
 
 export const bottomSheetOverrides = css`
-  /* BottomSheet 스타일 오버라이드 */
   [role='dialog'][aria-modal='true'] {
     & > div:last-child {
       padding-bottom: 28px;
@@ -145,6 +145,18 @@ const Sections = styled.div`
   }
 `;
 
+const PastShowSection = styled.div`
+  padding: 32px 0px;
+`;
+
+const PastSectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0px 20px;
+`;
+
 const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -222,6 +234,7 @@ const ShowDetail = styled.p`
 
 const PastShowSlider = styled(Swiper)`
   padding-bottom: 8px;
+  margin-left: 20px;
   .swiper-slide {
     width: auto;
   }
@@ -262,45 +275,6 @@ const VideoList = styled.div`
   gap: 16px;
 `;
 
-const VideoCard = styled.a`
-  display: flex;
-  gap: 12px;
-  cursor: pointer;
-`;
-
-const VideoThumbnailWrapper = styled.div`
-  flex: 1 0 0;
-  position: relative;
-`;
-
-const VideoInfo = styled.div`
-  flex: 1 0 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const VideoDuration = styled.p`
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g50};
-  margin: 0;
-  padding: 2px 0px;
-  border-radius: 2px;
-`;
-
-const VideoThumbnail = styled.img`
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 4px;
-  object-fit: cover;
-  border: 1px solid #2e303a;
-`;
-
-const VideoTitle = styled.p`
-  ${({ theme }) => theme.typo.sh1};
-  color: #f6f7ff;
-`;
-
 const LinkList = styled.div`
   display: flex;
   flex-direction: column;
@@ -325,12 +299,8 @@ const LinkTitle = styled.span`
 `;
 
 const BottomCTA = styled.div`
+  width: 100%;
   padding: 24px 20px 60px 20px;
-
-  @media (min-width: 481px) {
-    max-width: 480px;
-    margin: 0 auto;
-  }
 `;
 
 const CTAButton = styled.button`
@@ -354,7 +324,7 @@ const IconButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.4;
   flex-shrink: 1;
   min-width: 0;
@@ -383,7 +353,7 @@ const NetetralButton = styled.button`
   transition: background-color 0.2s;
 `;
 
-const ShareDropdownWrapper = styled.div<{ isMobileInCover?: boolean }>`
+const ShareDropdownButton = styled.button<{ isMobileInCover?: boolean }>`
   position: ${({ isMobileInCover }) => (isMobileInCover ? 'absolute' : 'relative')};
   ${({ isMobileInCover }) =>
     isMobileInCover &&
@@ -391,6 +361,7 @@ const ShareDropdownWrapper = styled.div<{ isMobileInCover?: boolean }>`
     top: 20px;
     right: 20px;
     z-index: 10;
+    cursor: pointer;
   `}
 `;
 
@@ -398,9 +369,8 @@ const ShareDropdown = styled.div`
   position: absolute;
   top: calc(100% + 8px);
   right: 0;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+  background-color: #1b1d23;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   min-width: 240px;
   z-index: 1000;
   overflow: hidden;
@@ -408,7 +378,7 @@ const ShareDropdown = styled.div`
 
 const ShareDropdownItem = styled.button`
   width: 100%;
-  height: 58px;
+  height: 36px;
   padding: 0 16px;
   background: none;
   border: none;
@@ -416,12 +386,60 @@ const ShareDropdownItem = styled.button`
   color: ${({ theme }) => theme.palette.mobile.grey.g15};
   text-align: left;
   cursor: pointer;
-  transition: background-color 0.2s;
   display: flex;
   align-items: center;
+`;
 
-  &:hover {
-    background-color: ${({ theme }) => theme.palette.grey.g80};
+const DialogContainer = styled.div`
+  position: relative;
+`;
+
+const DialogQRCodeContainer = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  width: calc(100% + 48px);
+  height: 300px;
+  position: relative;
+  left: -24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  ${mq_lg} {
+    width: calc(100% + 64px);
+    left: -32px;
+    top: -32px;
+    margin-bottom: 0;
+  }
+`;
+
+const QRCodeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-radius: 8px;
+`;
+
+const DialogTitle = styled.h2`
+  ${({ theme }) => theme.typo.h2};
+  color: ${({ theme }) => theme.palette.grey.b};
+  text-align: center;
+  margin-bottom: 8px;
+`;
+
+const DialogDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  text-align: center;
+  margin-bottom: 24px;
+
+  ${mq_lg} {
+    margin-bottom: 0;
   }
 `;
 
@@ -450,18 +468,14 @@ export default {
   ShowInfo,
   ShowTitle,
   ShowDetail,
+  PastShowSection,
   PastShowSlider,
+  PastSectionHeader,
   PastShowCard,
   PastShowImage,
   PastShowTitle,
   PastShowDate,
   VideoList,
-  VideoCard,
-  VideoThumbnailWrapper,
-  VideoDuration,
-  VideoThumbnail,
-  VideoTitle,
-  VideoInfo,
   LinkList,
   LinkItem,
   LinkTitle,
@@ -469,7 +483,12 @@ export default {
   CTAButton,
   IconButtonWrapper,
   NetetralButton,
-  ShareDropdownWrapper,
+  ShareDropdownButton,
   ShareDropdown,
   ShareDropdownItem,
+  DialogContainer,
+  DialogQRCodeContainer,
+  QRCodeContainer,
+  DialogTitle,
+  DialogDescription,
 };
