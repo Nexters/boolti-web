@@ -140,9 +140,20 @@ const Section = styled.div`
 
 const Sections = styled.div`
   & > ${Section}:not(:last-child) {
-    margin: 0px 20px;
     border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
   }
+`;
+
+const PastShowSection = styled.div`
+  padding: 32px 0px;
+`;
+
+const PastSectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0px 20px;
 `;
 
 const SectionHeader = styled.div`
@@ -222,6 +233,7 @@ const ShowDetail = styled.p`
 
 const PastShowSlider = styled(Swiper)`
   padding-bottom: 8px;
+  margin-left: 20px;
   .swiper-slide {
     width: auto;
   }
@@ -406,7 +418,9 @@ export default {
   ShowInfo,
   ShowTitle,
   ShowDetail,
+  PastShowSection,
   PastShowSlider,
+  PastSectionHeader,
   PastShowCard,
   PastShowImage,
   PastShowTitle,

@@ -168,27 +168,29 @@ const ProfilePage = () => {
           )}
 
           {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
-            <Styled.Section>
-              <Styled.SectionHeader>
+            <Styled.PastShowSection>
+              <Styled.PastSectionHeader>
                 <Styled.SectionTitle>지난 공연</Styled.SectionTitle>
                 {profile.performedShow.hasMoreItems && (
                   <Styled.ViewAllButton onClick={() => navigate('shows')}>
                     전체 보기
                   </Styled.ViewAllButton>
                 )}
-              </Styled.SectionHeader>
+              </Styled.PastSectionHeader>
               <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
                     <Styled.PastShowCard href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
                       <Styled.PastShowImage src={show.showImg} alt={show.name} />
-                      <Styled.PastShowTitle>{show.name}</Styled.PastShowTitle>
+                      <Styled.PastShowTitle>
+                        {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
+                      </Styled.PastShowTitle>
                       <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
                     </Styled.PastShowCard>
                   </SwiperSlide>
                 ))}
               </Styled.PastShowSlider>
-            </Styled.Section>
+            </Styled.PastShowSection>
           )}
 
           {profile.video.totalSize > 0 && (
