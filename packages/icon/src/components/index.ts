@@ -84,6 +84,7 @@ import { YoutubeIcon } from './YoutubeIcon';
 import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
+import { BooltiGreyLogo } from './BooltiGreyLogo';
 
 export {
   Apple as AppleIcon,
@@ -98,6 +99,7 @@ export {
   BooltiLightGrey,
   Boolti as BooltiLogo,
   BooltiSmall as BooltiSmallLogo,
+  BooltiGreyLogo,
   BooltiDarkLogo,
   BooltiIcon,
   BooltiDarkIcon,

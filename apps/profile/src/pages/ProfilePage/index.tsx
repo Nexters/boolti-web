@@ -1,8 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { InstagramIcon, YoutubeIcon, ChainLink, BooltiIcon, ShareIcon } from '@boolti/icon';
+import {
+  InstagramIcon,
+  YoutubeIcon,
+  ChainLink,
+  BooltiIcon,
+  ShareIcon,
+  BooltiGreyLogo,
+} from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
-import { BottomSheet } from '@boolti/ui';
+import { BottomSheet, useDialog } from '@boolti/ui';
 import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
@@ -14,8 +21,10 @@ import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
 import VideoCard from '~/components/VideoCard';
 import NotFound from '~/components/Notfound';
+import { QRCodeSVG } from 'qrcode.react';
 
 const ProfilePage = () => {
+  const dialog = useDialog();
   const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
   const [isShareBottomSheetOpen, setIsShareBottomSheetOpen] = useState(false);
@@ -23,6 +32,10 @@ const ProfilePage = () => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   const { data: profile } = useUserByUserCodeV2(userCode as string);
+
+  const getPreviewLink = (showId: number) => {
+    return `${window.location.origin}/show/${showId}`;
+  };
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -72,6 +85,30 @@ const ProfilePage = () => {
     navigator.clipboard.writeText(shareText);
     setIsShareBottomSheetOpen(false);
     setIsShareDropdownOpen(false);
+  };
+
+  const reservationButtonClickHandler = () => {
+    dialog.open({
+      title: '불티 앱에서 예매하기',
+      content: (
+        <Styled.DialogContainer>
+          <Styled.DialogQRCodeContainer>
+            <Styled.QRCodeContainer>
+              <QRCodeSVG value={getPreviewLink(1)} size={182} level="H" />
+            </Styled.QRCodeContainer>
+            <BooltiGreyLogo />
+          </Styled.DialogQRCodeContainer>
+          <Styled.DialogTitle>
+            불티 앱에서
+            <br />
+            핫한 공연을 예매하세요!
+          </Styled.DialogTitle>
+          <Styled.DialogDescription>
+            휴대폰 카메라로 QR코드를 찍어 앱을 다운로드 받아요
+          </Styled.DialogDescription>
+        </Styled.DialogContainer>
+      ),
+    });
   };
 
   if (!profile) {
@@ -238,7 +275,9 @@ const ProfilePage = () => {
             <Styled.IconButtonWrapper>
               <BooltiIcon /> 이 프로필은 불티로 제작되었습니다
             </Styled.IconButtonWrapper>
-            <Styled.NetetralButton>나도 만들기</Styled.NetetralButton>
+            <Styled.NetetralButton onClick={reservationButtonClickHandler}>
+              나도 만들기
+            </Styled.NetetralButton>
           </Styled.CTAButton>
         </Styled.BottomCTA>
 

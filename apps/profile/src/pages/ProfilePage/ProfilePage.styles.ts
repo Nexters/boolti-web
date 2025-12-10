@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { Swiper } from 'swiper/react';
+import { mq_lg } from '@boolti/ui';
 
 export const bottomSheetOverrides = css`
   [role='dialog'][aria-modal='true'] {
@@ -389,6 +390,59 @@ const ShareDropdownItem = styled.button`
   align-items: center;
 `;
 
+const DialogContainer = styled.div`
+  position: relative;
+`;
+
+const DialogQRCodeContainer = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  width: calc(100% + 48px);
+  height: 300px;
+  position: relative;
+  left: -24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  ${mq_lg} {
+    width: calc(100% + 64px);
+    left: -32px;
+    top: -32px;
+    margin-bottom: 0;
+  }
+`;
+
+const QRCodeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-radius: 8px;
+`;
+
+const DialogTitle = styled.h2`
+  ${({ theme }) => theme.typo.h2};
+  color: ${({ theme }) => theme.palette.grey.b};
+  text-align: center;
+  margin-bottom: 8px;
+`;
+
+const DialogDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  text-align: center;
+  margin-bottom: 24px;
+
+  ${mq_lg} {
+    margin-bottom: 0;
+  }
+`;
+
 export default {
   CoverSection,
   CoverImage,
@@ -432,4 +486,9 @@ export default {
   ShareDropdownButton,
   ShareDropdown,
   ShareDropdownItem,
+  DialogContainer,
+  DialogQRCodeContainer,
+  QRCodeContainer,
+  DialogTitle,
+  DialogDescription,
 };
