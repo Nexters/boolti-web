@@ -33,10 +33,6 @@ const ProfilePage = () => {
 
   const { data: profile } = useUserByUserCodeV2(userCode as string);
 
-  const getPreviewLink = (showId: number) => {
-    return `${window.location.origin}/show/${showId}`;
-  };
-
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
     setIsDesktop(mediaQuery.matches);
