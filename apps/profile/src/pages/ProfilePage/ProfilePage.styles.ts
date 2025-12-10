@@ -298,12 +298,8 @@ const LinkTitle = styled.span`
 `;
 
 const BottomCTA = styled.div`
+  width: 100%;
   padding: 24px 20px 60px 20px;
-
-  @media (min-width: 481px) {
-    max-width: 480px;
-    margin: 0 auto;
-  }
 `;
 
 const CTAButton = styled.button`

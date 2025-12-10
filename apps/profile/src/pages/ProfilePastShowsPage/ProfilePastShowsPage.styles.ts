@@ -9,6 +9,7 @@ const Container = styled.div`
 
   ${mq_lg} {
     padding: 20px;
+  }
 `;
 
 const CountText = styled.p`
