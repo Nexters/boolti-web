@@ -2,13 +2,13 @@ import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 const Header = styled.div`
-  height: 60px;
   display: flex;
   align-items: center;
   padding: 0 20px;
   color: ${({ theme }) => theme.palette.grey.g10};
 
   ${mq_lg} {
+    height: 60px;
     padding: 0;
     position: relative;
     background-color: transparent;
