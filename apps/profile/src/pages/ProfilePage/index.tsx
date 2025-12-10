@@ -87,14 +87,24 @@ const ProfilePage = () => {
     setIsShareDropdownOpen(false);
   };
 
-  const reservationButtonClickHandler = () => {
+  const getStoreLink = () => {
+    const isAndroid = /android/i.test(navigator.userAgent);
+
+    return isAndroid
+      ? 'https://play.google.com/store/apps/details?id=com.nexters.boolti&hl=ko'
+      : 'https://apps.apple.com/kr/app/불티/id6476589322';
+  };
+
+  const reservationButtonClickHandler = (isDesktop: boolean) => {
+    if (!isDesktop) return;
+
     dialog.open({
       title: '불티 앱에서 예매하기',
       content: (
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={getPreviewLink(1)} size={182} level="H" />
+              <QRCodeSVG value={getStoreLink()} size={182} level="H" />
             </Styled.QRCodeContainer>
             <BooltiGreyLogo />
           </Styled.DialogQRCodeContainer>
@@ -275,7 +285,7 @@ const ProfilePage = () => {
             <Styled.IconButtonWrapper>
               <BooltiIcon /> 이 프로필은 불티로 제작되었습니다
             </Styled.IconButtonWrapper>
-            <Styled.NetetralButton onClick={reservationButtonClickHandler}>
+            <Styled.NetetralButton onClick={() => reservationButtonClickHandler(isDesktop)}>
               나도 만들기
             </Styled.NetetralButton>
           </Styled.CTAButton>

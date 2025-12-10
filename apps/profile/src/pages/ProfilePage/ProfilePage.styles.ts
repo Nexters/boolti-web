@@ -324,7 +324,7 @@ const IconButtonWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 1.4;
   flex-shrink: 1;
   min-width: 0;
