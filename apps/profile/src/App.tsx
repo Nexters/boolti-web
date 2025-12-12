@@ -12,6 +12,7 @@ import NotFound from './components/Notfound';
 import { ProfilePastShowsPage } from './pages/ProfilePastShowsPage';
 import { ProfileVideosPage } from './pages/ProfileVideosPage';
 import { ProfileLinkPage } from './pages/ProfileLinkPage';
+import AppStoreBridge from './pages/AppStoreBridge';
 import { Suspense } from 'react';
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<NotFound />} />
+                <Route path="/bridge/store" element={<AppStoreBridge />} />
                 <Route path="/:userCode" element={<ProfilePage />} />
                 <Route path="/:userCode/shows" element={<ProfilePastShowsPage />} />
                 <Route path="/:userCode/videos" element={<ProfileVideosPage />} />

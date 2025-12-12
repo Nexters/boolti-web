@@ -83,12 +83,9 @@ const ProfilePage = () => {
     setIsShareDropdownOpen(false);
   };
 
-  const getStoreLink = () => {
-    const isAndroid = /android/i.test(navigator.userAgent);
-
-    return isAndroid
-      ? 'https://play.google.com/store/apps/details?id=com.nexters.boolti&hl=ko'
-      : 'https://apps.apple.com/kr/app/불티/id6476589322';
+  const getBridgeLink = () => {
+    const url = `${PROFILE_URL}bridge/store`;
+    return url;
   };
 
   const reservationButtonClickHandler = (isDesktop: boolean) => {
@@ -100,7 +97,7 @@ const ProfilePage = () => {
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={getStoreLink()} size={182} level="H" />
+              <QRCodeSVG value={getBridgeLink()} size={182} level="H" />
             </Styled.QRCodeContainer>
             <BooltiGreyLogo />
           </Styled.DialogQRCodeContainer>
