@@ -84,7 +84,7 @@ const ProfilePage = () => {
   };
 
   const getBridgeLink = () => {
-    const url = `${PROFILE_URL}bridge/store`;
+    const url = `${window.location.origin}/bridge/store`;
     return url;
   };
 
