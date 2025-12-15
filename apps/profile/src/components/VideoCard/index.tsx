@@ -12,12 +12,12 @@ const VideoCard = ({ videoUrl }: VideoCardProps) => {
   const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
 
   return (
-    <Styled.VideoCard href={videoUrl}>
+    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
       <Styled.VideoThumbnailWrapper>
         <Styled.VideoThumbnail src={getYoutubeThumbnailUrl(videoId)} alt="YouTube video" />
       </Styled.VideoThumbnailWrapper>
       <Styled.VideoInfo>
-        <Styled.VideoTitle>{data?.title ?? 'YouTube 영상'}</Styled.VideoTitle>
+        <Styled.VideoTitle>{data?.title ?? '알 수 없는 동영상'}</Styled.VideoTitle>
         {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
       </Styled.VideoInfo>
     </Styled.VideoCard>

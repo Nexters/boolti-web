@@ -139,12 +139,6 @@ const Section = styled.div`
   padding: 32px 20px 24px 20px;
 `;
 
-const Sections = styled.div`
-  & > ${Section}:not(:last-child) {
-    border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
-  }
-`;
-
 const PastShowSection = styled.div`
   padding: 32px 0px;
 `;
@@ -382,7 +376,7 @@ const ShareDropdownItem = styled.button`
   padding: 0 16px;
   background: none;
   border: none;
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.mobile.grey.g15};
   text-align: left;
   cursor: pointer;
@@ -443,6 +437,11 @@ const DialogDescription = styled.p`
   }
 `;
 
+const Divider = styled.hr`
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  margin: 0px 20px;
+`;
+
 export default {
   CoverSection,
   CoverImage,
@@ -456,10 +455,10 @@ export default {
   InfoText,
   ActionButtons,
   IconButton,
-  Sections,
   Section,
   SectionHeader,
   SectionTitle,
+  Divider,
   ViewAllButton,
   ArrowIcon,
   ShowList,

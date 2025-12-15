@@ -5,19 +5,17 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px;
-
-  ${mq_lg} {
-    padding: 20px;
-  }
+  padding: 0px 20px;
 `;
 
 const CountText = styled.p`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g40};
+  padding: 16px 0px 12px 0px;
+  margin-left: 20px;
 `;
 
-const ShowCard = styled.article`
+const ShowCard = styled.a`
   display: flex;
   gap: 12px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};

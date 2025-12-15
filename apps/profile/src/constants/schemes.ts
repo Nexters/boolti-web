@@ -19,4 +19,5 @@ export function createAppScheme({ path, query }: SchemeOptions): string {
 export const SCHEMES = {
   홈: () => createAppScheme({ path: 'home' }),
   선물_등록: (giftId: string) => createAppScheme({ path: `gift/${giftId}` }),
+  브릿지_스토어: () => createAppScheme({ path: 'bridge/store' }),
 };
