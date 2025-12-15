@@ -15,7 +15,7 @@ const CountText = styled.p`
   margin-left: 20px;
 `;
 
-const ShowCard = styled.article`
+const ShowCard = styled.a`
   display: flex;
   gap: 12px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};

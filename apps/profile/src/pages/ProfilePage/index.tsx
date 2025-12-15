@@ -122,6 +122,7 @@ const ProfilePage = () => {
   const instagramAccount = profile.sns.find((sns) => sns.type === 'INSTAGRAM');
   const youtubeAccount = profile.sns.find((sns) => sns.type === 'YOUTUBE');
 
+  console.log(profile);
   return (
     <>
       <Global styles={bottomSheetOverrides} />
@@ -176,12 +177,20 @@ const ProfilePage = () => {
           <Styled.InfoText>{profile.introduction}</Styled.InfoText>
           <Styled.ActionButtons>
             {instagramAccount?.username && (
-              <Styled.IconButton href={`https://instagram.com/${instagramAccount.username}`}>
+              <Styled.IconButton
+                href={`https://instagram.com/${instagramAccount.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <InstagramIcon />
               </Styled.IconButton>
             )}
             {youtubeAccount?.username && (
-              <Styled.IconButton href={`https://youtube.com/@${youtubeAccount.username}`}>
+              <Styled.IconButton
+                href={`https://youtube.com/@${youtubeAccount.username}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <YoutubeIcon />
               </Styled.IconButton>
             )}
@@ -195,7 +204,12 @@ const ProfilePage = () => {
             </Styled.SectionHeader>
             <Styled.ShowList>
               {profile.comingSoonShow.previewItems.map((show) => (
-                <Styled.ShowCard key={show.id} href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
+                <Styled.ShowCard
+                  key={show.id}
+                  href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Styled.ShowImage src={show.showImg} alt={show.name} />
                   <Styled.ShowInfo>
                     <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
@@ -222,7 +236,11 @@ const ProfilePage = () => {
             <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
               {profile.performedShow.previewItems.map((show) => (
                 <SwiperSlide key={show.id}>
-                  <Styled.PastShowCard href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}>
+                  <Styled.PastShowCard
+                    href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <Styled.PastShowImage src={show.showImg} alt={show.name} />
                     <Styled.PastShowTitle>
                       {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
@@ -269,7 +287,12 @@ const ProfilePage = () => {
             </Styled.SectionHeader>
             <Styled.LinkList>
               {profile.link.previewItems.map((link, index) => (
-                <Styled.LinkItem key={`${link.link}-${index}`} href={link.link}>
+                <Styled.LinkItem
+                  key={`${link.link}-${index}`}
+                  href={link.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ChainLink />
                   <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
                 </Styled.LinkItem>

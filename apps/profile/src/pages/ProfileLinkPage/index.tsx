@@ -15,7 +15,12 @@ export const ProfileLinkPage = () => {
       <Styled.CountText>전체 {data?.length || 0}개</Styled.CountText>
       <Styled.Container>
         {data?.map((link, index) => (
-          <Styled.LinkItem key={`${link.link}-${index}`} href={link.link}>
+          <Styled.LinkItem
+            key={`${link.link}-${index}`}
+            href={link.link}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <Styled.IconWrapper>
               <ChainLink />
             </Styled.IconWrapper>

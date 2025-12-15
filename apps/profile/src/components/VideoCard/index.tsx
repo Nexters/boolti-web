@@ -12,7 +12,7 @@ const VideoCard = ({ videoUrl }: VideoCardProps) => {
   const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
 
   return (
-    <Styled.VideoCard href={videoUrl}>
+    <Styled.VideoCard href={videoUrl} target="_blank" rel="noopener noreferrer">
       <Styled.VideoThumbnailWrapper>
         <Styled.VideoThumbnail src={getYoutubeThumbnailUrl(videoId)} alt="YouTube video" />
       </Styled.VideoThumbnailWrapper>
