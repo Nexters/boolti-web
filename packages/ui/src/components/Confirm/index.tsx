@@ -24,9 +24,11 @@ const Confirm = ({
         <Styled.Confirm>
           <Styled.ConfirmMessage>{children}</Styled.ConfirmMessage>
           <Styled.ConfirmButtonContainer>
-            <Styled.CancelButton type="button" onClick={onCancel}>
-              {cancelText ?? '취소'}
-            </Styled.CancelButton>
+            {onCancel && (
+              <Styled.CancelButton type="button" onClick={onCancel}>
+                {cancelText ?? '취소'}
+              </Styled.CancelButton>
+            )}
             <Styled.ConfirmButton
               type="button"
               colorTheme={confirmButtonColorTheme}

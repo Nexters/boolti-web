@@ -25,8 +25,9 @@ import { QRCodeSVG } from 'qrcode.react';
 
 const ProfilePage = () => {
   const dialog = useDialog();
-  const { userCode } = useParams<{ userCode: string }>();
   const navigate = useNavigate();
+
+  const { userCode } = useParams<{ userCode: string }>();
   const [isShareBottomSheetOpen, setIsShareBottomSheetOpen] = useState(false);
   const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
