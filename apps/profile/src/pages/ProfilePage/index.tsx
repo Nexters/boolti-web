@@ -93,7 +93,7 @@ const ProfilePage = () => {
     if (!isDesktop) return;
 
     dialog.open({
-      title: '불티 앱에서 예매하기',
+      title: '불티 앱에서 프로필 만들기',
       content: (
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
@@ -105,7 +105,7 @@ const ProfilePage = () => {
           <Styled.DialogTitle>
             불티 앱에서
             <br />
-            핫한 공연을 예매하세요!
+            프로필을 만들어 보세요!
           </Styled.DialogTitle>
           <Styled.DialogDescription>
             휴대폰 카메라로 QR코드를 찍어 앱을 다운로드 받아요
