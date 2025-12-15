@@ -10,7 +10,6 @@ const Header = styled.div<{ hasTitle: boolean }>`
   justify-content: ${({ hasTitle }) => (hasTitle ? 'space-between' : 'flex-end')};
 
   ${mq_lg} {
-    padding: 0;
     position: relative;
     background-color: transparent;
   }
