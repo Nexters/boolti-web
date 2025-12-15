@@ -16,9 +16,12 @@ import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
 import Layout from '~/components/Layout';
 import { useUserByUserCodeV2 } from '@boolti/api';
 import { formatDateTimeWithWeekday, formatDateWithWeekday } from '~/utils';
+import { navigateToAppScheme } from '~/utils/app';
+import { openStoreLink } from '~/utils/link';
 import { Meta } from '~/components/Meta';
 import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
+import { SCHEMES } from '~/constants/schemes';
 import VideoCard from '~/components/VideoCard';
 import NotFound from '~/components/Notfound';
 import { QRCodeSVG } from 'qrcode.react';
@@ -89,8 +92,15 @@ const ProfilePage = () => {
     return url;
   };
 
-  const reservationButtonClickHandler = (isDesktop: boolean) => {
-    if (!isDesktop) return;
+  const reservationButtonClickHandler = async (isDesktop: boolean) => {
+    if (!isDesktop) {
+      const success = await navigateToAppScheme(SCHEMES.브릿지_스토어());
+
+      if (!success) {
+        openStoreLink();
+      }
+      return;
+    }
 
     dialog.open({
       title: '불티 앱에서 프로필 만들기',
@@ -122,7 +132,6 @@ const ProfilePage = () => {
   const instagramAccount = profile.sns.find((sns) => sns.type === 'INSTAGRAM');
   const youtubeAccount = profile.sns.find((sns) => sns.type === 'YOUTUBE');
 
-  console.log(profile);
   return (
     <>
       <Global styles={bottomSheetOverrides} />
