@@ -17,8 +17,8 @@ export const ProfileVideosPage = () => {
   return (
     <Layout>
       <Header title="동영상" />
+      <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
       <Styled.Container>
-        <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
         {data?.map((videoUrl, index) => <VideoItem key={videoUrl || index} videoUrl={videoUrl} />)}
       </Styled.Container>
     </Layout>

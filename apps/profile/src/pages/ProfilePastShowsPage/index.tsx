@@ -12,8 +12,8 @@ export const ProfilePastShowsPage = () => {
   return (
     <Layout>
       <Header title="지난 공연" />
+      <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
       <Styled.Container>
-        <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
         {data?.map((show) => (
           <Styled.ShowCard key={show.id}>
             <Styled.Poster src={show.showImg} alt={show.name} />
