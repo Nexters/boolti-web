@@ -136,7 +136,7 @@ const IconButton = styled.a`
 `;
 
 const Section = styled.div`
-  padding: 32px 20px 24px 20px;
+  padding: 24px 20px;
 `;
 
 const PastShowSection = styled.div`
