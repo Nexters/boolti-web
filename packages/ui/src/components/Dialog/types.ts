@@ -5,6 +5,7 @@ interface DialogPropsBase {
   title?: string;
   contentPadding?: string;
   mobileType?: DialogMobileType;
+  isBackdropClosable?: boolean;
   onClose?: () => void;
 }
 
@@ -28,6 +29,7 @@ export interface StepDialogProps {
   width?: string;
   contentPadding?: string;
   mobileType?: DialogMobileType;
+  isBackdropClosable?: boolean;
   onClose?: () => void;
 }
 

@@ -18,6 +18,7 @@ const useDialog = () => {
       width,
       contentPadding,
       mobileType,
+      isBackdropClosable,
       onClose,
     }: {
       content: React.ReactNode;
@@ -26,6 +27,7 @@ const useDialog = () => {
       width?: string;
       contentPadding?: string;
       mobileType?: DialogMobileType;
+      isBackdropClosable?: boolean;
       onClose?: () => void;
     }) => {
       const newDialog: DialogListItem = {
@@ -37,6 +39,7 @@ const useDialog = () => {
         width,
         contentPadding,
         mobileType,
+        isBackdropClosable,
         onClose,
       };
       setIsOpen(true);

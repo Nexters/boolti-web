@@ -104,6 +104,7 @@ const ProfilePage = () => {
 
     dialog.open({
       title: '불티 앱에서 프로필 만들기',
+      isBackdropClosable: false,
       content: (
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>

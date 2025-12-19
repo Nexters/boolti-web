@@ -26,6 +26,7 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
                 width={dialog.width}
                 contentPadding={dialog.contentPadding}
                 mobileType={dialog.mobileType}
+                isBackdropClosable={dialog.isBackdropClosable}
                 onClose={() => {
                   dialog.onClose?.();
                   setDialogList((prev) => prev.filter(({ id }) => dialog.id !== id));
@@ -46,6 +47,7 @@ const DialogProvider = ({ children }: DialogProviderProps) => {
                 width={dialog.width}
                 contentPadding={dialog.contentPadding}
                 mobileType={dialog.mobileType}
+                isBackdropClosable={dialog.isBackdropClosable}
                 onClose={() => {
                   dialog.onClose?.();
                   setDialogList((prev) => prev.filter(({ id }) => dialog.id !== id));
