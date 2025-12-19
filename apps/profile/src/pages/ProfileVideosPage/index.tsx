@@ -27,6 +27,7 @@ export const ProfileVideosPage = () => {
 
 const VideoItem = ({ videoUrl }: VideoItemProps) => {
   const videoId = getYoutubeVideoId(videoUrl);
+
   const thumbnailUrl = videoId ? getYoutubeThumbnailUrl(videoId) : null;
   const { data } = useYoutubeVideoDuration(videoId);
   const formattedDuration = formatYoutubeDuration(data?.duration ?? null);

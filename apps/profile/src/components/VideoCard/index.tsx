@@ -18,7 +18,7 @@ const VideoCard = ({ videoUrl }: VideoCardProps) => {
       </Styled.VideoThumbnailWrapper>
       <Styled.VideoInfo>
         <Styled.VideoTitle>{data?.title ?? '알 수 없는 동영상'}</Styled.VideoTitle>
-        {formattedDuration && <Styled.VideoDuration>{formattedDuration}</Styled.VideoDuration>}
+        <Styled.VideoDuration>{data?.duration ? formattedDuration : '-'}</Styled.VideoDuration>
       </Styled.VideoInfo>
     </Styled.VideoCard>
   );
