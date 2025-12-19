@@ -231,7 +231,9 @@ const ProfilePage = () => {
             </Styled.Section>
           )}
 
-          <Styled.Divider />
+          {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
+            <Styled.Divider />
+          )}
 
           {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
             <Styled.PastShowSection>
@@ -263,7 +265,7 @@ const ProfilePage = () => {
             </Styled.PastShowSection>
           )}
 
-          <Styled.Divider />
+          {profile.video.totalSize > 0 && <Styled.Divider />}
 
           {profile.video.totalSize > 0 && (
             <Styled.Section>
@@ -283,7 +285,7 @@ const ProfilePage = () => {
             </Styled.Section>
           )}
 
-          <Styled.Divider />
+          {profile.link.totalSize > 0 && <Styled.Divider />}
 
           {profile.link.totalSize > 0 && (
             <Styled.Section>
