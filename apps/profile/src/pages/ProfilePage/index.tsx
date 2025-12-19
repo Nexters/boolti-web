@@ -104,6 +104,7 @@ const ProfilePage = () => {
 
     dialog.open({
       title: '불티 앱에서 프로필 만들기',
+      isBackdropClosable: false,
       content: (
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
@@ -205,110 +206,111 @@ const ProfilePage = () => {
             )}
           </Styled.ActionButtons>
         </Styled.CoverBottomSection>
-
-        {profile.comingSoonShow.isVisible && profile.comingSoonShow.totalSize > 0 && (
-          <Styled.Section>
-            <Styled.SectionHeader>
-              <Styled.SectionTitle>다가오는 공연</Styled.SectionTitle>
-            </Styled.SectionHeader>
-            <Styled.ShowList>
-              {profile.comingSoonShow.previewItems.map((show) => (
-                <Styled.ShowCard
-                  key={show.id}
-                  href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Styled.ShowImage src={show.showImg} alt={show.name} />
-                  <Styled.ShowInfo>
-                    <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
-                    <Styled.ShowDetail>{formatDateTimeWithWeekday(show.date)}</Styled.ShowDetail>
-                  </Styled.ShowInfo>
-                </Styled.ShowCard>
-              ))}
-            </Styled.ShowList>
-          </Styled.Section>
-        )}
-
-        <Styled.Divider />
-
-        {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
-          <Styled.PastShowSection>
-            <Styled.PastSectionHeader>
-              <Styled.SectionTitle>지난 공연</Styled.SectionTitle>
-              {profile.performedShow.hasMoreItems && (
-                <Styled.ViewAllButton onClick={() => navigate('shows')}>
-                  전체 보기
-                </Styled.ViewAllButton>
-              )}
-            </Styled.PastSectionHeader>
-            <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
-              {profile.performedShow.previewItems.map((show) => (
-                <SwiperSlide key={show.id}>
-                  <Styled.PastShowCard
+        <Styled.ContentSection>
+          {profile.comingSoonShow.isVisible && profile.comingSoonShow.totalSize > 0 && (
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>다가오는 공연</Styled.SectionTitle>
+              </Styled.SectionHeader>
+              <Styled.ShowList>
+                {profile.comingSoonShow.previewItems.map((show) => (
+                  <Styled.ShowCard
+                    key={show.id}
                     href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <Styled.PastShowImage src={show.showImg} alt={show.name} />
-                    <Styled.PastShowTitle>
-                      {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
-                    </Styled.PastShowTitle>
-                    <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
-                  </Styled.PastShowCard>
-                </SwiperSlide>
-              ))}
-            </Styled.PastShowSlider>
-          </Styled.PastShowSection>
-        )}
+                    <Styled.ShowImage src={show.showImg} alt={show.name} />
+                    <Styled.ShowInfo>
+                      <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
+                      <Styled.ShowDetail>{formatDateTimeWithWeekday(show.date)}</Styled.ShowDetail>
+                    </Styled.ShowInfo>
+                  </Styled.ShowCard>
+                ))}
+              </Styled.ShowList>
+            </Styled.Section>
+          )}
 
-        <Styled.Divider />
+          <Styled.Divider />
 
-        {profile.video.totalSize > 0 && (
-          <Styled.Section>
-            <Styled.SectionHeader>
-              <Styled.SectionTitle>동영상</Styled.SectionTitle>
-              {profile.video.hasMoreItems && (
-                <Styled.ViewAllButton onClick={() => navigate('videos')}>
-                  전체 보기
-                </Styled.ViewAllButton>
-              )}
-            </Styled.SectionHeader>
-            <Styled.VideoList>
-              {profile.video.previewItems.map((videoUrl) => (
-                <VideoCard key={videoUrl} videoUrl={videoUrl} />
-              ))}
-            </Styled.VideoList>
-          </Styled.Section>
-        )}
+          {profile.performedShow.isVisible && profile.performedShow.totalSize > 0 && (
+            <Styled.PastShowSection>
+              <Styled.PastSectionHeader>
+                <Styled.SectionTitle>지난 공연</Styled.SectionTitle>
+                {profile.performedShow.hasMoreItems && (
+                  <Styled.ViewAllButton onClick={() => navigate('shows')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
+                )}
+              </Styled.PastSectionHeader>
+              <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
+                {profile.performedShow.previewItems.map((show) => (
+                  <SwiperSlide key={show.id}>
+                    <Styled.PastShowCard
+                      href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <Styled.PastShowImage src={show.showImg} alt={show.name} />
+                      <Styled.PastShowTitle>
+                        {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
+                      </Styled.PastShowTitle>
+                      <Styled.PastShowDate>{formatDateWithWeekday(show.date)}</Styled.PastShowDate>
+                    </Styled.PastShowCard>
+                  </SwiperSlide>
+                ))}
+              </Styled.PastShowSlider>
+            </Styled.PastShowSection>
+          )}
 
-        <Styled.Divider />
+          <Styled.Divider />
 
-        {profile.link.totalSize > 0 && (
-          <Styled.Section>
-            <Styled.SectionHeader>
-              <Styled.SectionTitle>링크</Styled.SectionTitle>
-              {profile.link.hasMoreItems && (
-                <Styled.ViewAllButton onClick={() => navigate('links')}>
-                  전체 보기
-                </Styled.ViewAllButton>
-              )}
-            </Styled.SectionHeader>
-            <Styled.LinkList>
-              {profile.link.previewItems.map((link, index) => (
-                <Styled.LinkItem
-                  key={`${link.link}-${index}`}
-                  href={link.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <ChainLink />
-                  <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
-                </Styled.LinkItem>
-              ))}
-            </Styled.LinkList>
-          </Styled.Section>
-        )}
+          {profile.video.totalSize > 0 && (
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>동영상</Styled.SectionTitle>
+                {profile.video.hasMoreItems && (
+                  <Styled.ViewAllButton onClick={() => navigate('videos')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
+                )}
+              </Styled.SectionHeader>
+              <Styled.VideoList>
+                {profile.video.previewItems.map((videoUrl) => (
+                  <VideoCard key={videoUrl} videoUrl={videoUrl} />
+                ))}
+              </Styled.VideoList>
+            </Styled.Section>
+          )}
+
+          <Styled.Divider />
+
+          {profile.link.totalSize > 0 && (
+            <Styled.Section>
+              <Styled.SectionHeader>
+                <Styled.SectionTitle>링크</Styled.SectionTitle>
+                {profile.link.hasMoreItems && (
+                  <Styled.ViewAllButton onClick={() => navigate('links')}>
+                    전체 보기
+                  </Styled.ViewAllButton>
+                )}
+              </Styled.SectionHeader>
+              <Styled.LinkList>
+                {profile.link.previewItems.map((link, index) => (
+                  <Styled.LinkItem
+                    key={`${link.link}-${index}`}
+                    href={link.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ChainLink />
+                    <Styled.LinkTitle>{link.title}</Styled.LinkTitle>
+                  </Styled.LinkItem>
+                ))}
+              </Styled.LinkList>
+            </Styled.Section>
+          )}
+        </Styled.ContentSection>
 
         <Styled.BottomCTA>
           <Styled.CTAButton>

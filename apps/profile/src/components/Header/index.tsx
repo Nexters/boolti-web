@@ -11,9 +11,14 @@ const Header = ({ title, rightButton }: Props) => {
   const navigate = useNavigate();
 
   const hasTitle = Boolean(title);
+  const hasRightButton = Boolean(rightButton);
 
   return (
-    <Styled.Header hasTitle={hasTitle} onClick={() => navigate(-1)}>
+    <Styled.Header
+      hasTitle={hasTitle}
+      rightButton={hasRightButton}
+      onClick={() => navigate(-1)}
+    >
       {title && (
         <Styled.Left>
           <Styled.BackButton>

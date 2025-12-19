@@ -24,7 +24,7 @@ const StepDialog: React.FC<StepDialogProps> = ({ initialHistory, ...props }) => 
   const title = props.content[currentHistory].title;
 
   return (
-    <DialogBase onClose={props.onClose}>
+    <DialogBase mobileType={props.mobileType} isBackdropClosable={props.isBackdropClosable} onClose={props.onClose}>
       <DialogContent
         {...props}
         title={title}

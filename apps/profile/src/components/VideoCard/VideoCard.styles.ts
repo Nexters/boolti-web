@@ -7,7 +7,17 @@ const VideoCard = styled.a`
 `;
 
 const VideoThumbnailWrapper = styled.div`
-  position: relative;
+  width: 160px;
+  height: 90px;
+  border-radius: 4px;
+  overflow: hidden;
+  gap: 6px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g80};
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2e303a;
 `;
 
 const VideoInfo = styled.div`
@@ -36,6 +46,13 @@ const VideoThumbnail = styled.img`
 const VideoTitle = styled.p`
   ${({ theme }) => theme.typo.sh1};
   color: #f6f7ff;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 `;
 
 export default {
