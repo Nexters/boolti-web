@@ -12,7 +12,7 @@ export const ProfileLinkPage = () => {
   return (
     <Layout>
       <Header title="링크" />
-      <Styled.CountText>전체 {data?.length || 0}개</Styled.CountText>
+      <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
       <Styled.Container>
         {data?.map((link, index) => (
           <Styled.LinkItem

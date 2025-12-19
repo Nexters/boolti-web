@@ -24,6 +24,10 @@ export const bottomSheetOverrides = css`
   }
 `;
 
+const ContentSection = styled.div`
+  margin: 8px 0px;
+`;
+
 const CoverSection = styled.div<{ isCover: boolean; isDesktop: boolean }>`
   position: relative;
   width: 100%;
@@ -443,6 +447,7 @@ const Divider = styled.hr`
 `;
 
 export default {
+  ContentSection,
   CoverSection,
   CoverImage,
   CoverOverlay,
