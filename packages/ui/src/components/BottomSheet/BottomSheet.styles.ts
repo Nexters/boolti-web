@@ -42,7 +42,7 @@ const MenuItem = styled.button`
   padding: 17px 0;
   background: none;
   border: none;
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
   text-align: left;
   cursor: pointer;
