@@ -45,6 +45,12 @@ const Title = styled.p`
   color: #f6f7ff;
   margin: 0;
   line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
 `;
 
 const Duration = styled.p`
