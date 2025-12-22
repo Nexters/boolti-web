@@ -29,10 +29,11 @@ const CoverSection = styled.div`
     width: 100%;
     height: 100%;
     background: linear-gradient(to bottom, rgba(18, 19, 24, 0.2) 0%, rgba(18, 19, 24, 1) 100%);
+    border-radius: 0px 0px 19px 19px;
   }
 
   ${mq_lg} {
-    border-radius: 20px;
+    border-radius: 20px 20px 0 0;
   }
 `;
 
@@ -41,6 +42,7 @@ const CoverImage = styled.img`
   height: 100%;
   object-fit: cover;
   position: absolute;
+  border-radius: 0px 0px 21px 21px;
   top: 0;
   left: 0;
 `;
