@@ -19,7 +19,6 @@ import { formatDateTimeWithWeekday, formatDateWithWeekday } from '~/utils';
 import { navigateToAppScheme } from '~/utils/app';
 import { openStoreLink } from '~/utils/link';
 import { Meta } from '~/components/Meta';
-import { PROFILE_URL } from '~/constants/url';
 import { EXTERNAL_URL } from '~/constants/external';
 import { SCHEMES } from '~/constants/schemes';
 import VideoCard from '~/components/VideoCard';
@@ -67,7 +66,7 @@ const ProfilePage = () => {
   };
 
   const handleShareUrlCopy = () => {
-    navigator.clipboard.writeText(`${PROFILE_URL}${userCode}`);
+    navigator.clipboard.writeText(`${window.location.origin}/${userCode}`);
     setIsShareBottomSheetOpen(false);
     setIsShareDropdownOpen(false);
   };
@@ -81,7 +80,7 @@ const ProfilePage = () => {
       `- 크레딧 : 참여 공연 ${profile.performedShow.totalSize}`,
       '',
       '프로필 ▼',
-      `${PROFILE_URL}${userCode}`,
+      `${window.location.origin}/${userCode}`,
     ].join('\n');
     navigator.clipboard.writeText(shareText);
     setIsShareBottomSheetOpen(false);
