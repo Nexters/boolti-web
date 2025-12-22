@@ -32,7 +32,7 @@ const CoverSection = styled.div`
   }
 
   ${mq_lg} {
-    border-radius: 20px 20px 0 0;
+    border-radius: 20px;
   }
 `;
 
