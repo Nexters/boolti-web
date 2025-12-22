@@ -77,8 +77,9 @@ const ProfilePage = () => {
     const shareText = [
       '이 아티스트 어때요?',
       '',
-      `- 닉네임 : #${profile.nickname}`,
-      `- 크레딧 : 참여 공연 #${profile.performedShow.totalSize}`,
+      `- 닉네임 : ${profile.nickname}`,
+      `- 크레딧 : 참여 공연 ${profile.performedShow.totalSize}`,
+      '',
       '프로필 ▼',
       `${PROFILE_URL}${userCode}`,
     ].join('\n');
