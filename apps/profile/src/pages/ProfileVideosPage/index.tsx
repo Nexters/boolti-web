@@ -33,7 +33,9 @@ const VideoItem = ({ videoUrl }: VideoItemProps) => {
   const formattedDuration = formatYoutubeDuration(data?.duration ?? null);
 
   return (
-    <Styled.VideoItem href={videoUrl} target="_blank" rel="noopener noreferrer">
+    <Styled.VideoItem
+      {...(data ? { href: videoUrl, target: '_blank', rel: 'noopener noreferrer' } : {})}
+    >
       <Styled.ThumbnailWrapper>
         {thumbnailUrl ? (
           <Styled.Thumbnail src={thumbnailUrl} alt="YouTube video" />
