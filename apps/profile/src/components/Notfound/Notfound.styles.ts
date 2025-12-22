@@ -52,6 +52,7 @@ const CoverOverlay = styled.div`
   right: 0;
   z-index: 1;
   padding: 0 20px;
+  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
 `;
