@@ -16,6 +16,7 @@ const NotFound = () => {
         <Styled.CoverOverlay>
           <Styled.ProfileInfo>
             <Styled.Nickname>-</Styled.Nickname>
+            <Styled.UserName>-</Styled.UserName>
           </Styled.ProfileInfo>
         </Styled.CoverOverlay>
       </Styled.CoverSection>
