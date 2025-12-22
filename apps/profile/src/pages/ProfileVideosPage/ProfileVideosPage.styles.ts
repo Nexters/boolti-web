@@ -4,7 +4,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 0px 20px;
+  margin: 8px 20px 24px 20px;
 `;
 
 const VideoItem = styled.a`
