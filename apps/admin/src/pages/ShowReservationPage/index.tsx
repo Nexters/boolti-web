@@ -20,6 +20,7 @@ import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import { useAtom } from 'jotai';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
+import { ShareBanner } from '~/components/ShareBanner';
 
 const emptyLabel: Record<TicketStatus, string> = {
   COMPLETE: '결제 완료된 티켓이 없어요.',
@@ -227,6 +228,7 @@ const ShowReservationPage = () => {
           )}
         </Styled.Container>
       )}
+      <ShareBanner text="PC에서 정보를 한 눈에 확인해 보세요" />
     </>
   );
 };
