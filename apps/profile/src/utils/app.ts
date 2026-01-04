@@ -22,10 +22,15 @@ export const navigateToAppScheme = async (appScheme: string): Promise<boolean> =
       { once: true },
     );
 
-    window.location.href = appScheme;
+    // Safari 호환성을 위해 iframe 방식 사용
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = appScheme;
+    document.body.appendChild(iframe);
 
     timerId = setTimeout(() => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
+      document.body.removeChild(iframe);
       resolve(false);
     }, 1_000);
   });
