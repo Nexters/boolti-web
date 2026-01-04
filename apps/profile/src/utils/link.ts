@@ -9,5 +9,5 @@ export const getStoreLink = (): string => {
 };
 
 export const openStoreLink = (): void => {
-  window.open(getStoreLink(), '_blank');
+  window.location.href = getStoreLink();
 };
