@@ -31,13 +31,6 @@ export const Meta = ({ nickname, introduction, userCode }: Props) => {
       <meta property="og:image" content={ogImage} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="600" />
-
-      <meta property="twitter:card" content="summary_large_image" />
-      <meta property="twitter:domain" content="profile.boolti.in" />
-      <meta property="twitter:url" content={profileUrl} />
-      <meta property="twitter:title" content={ogTitle} />
-      <meta property="twitter:description" content={ogDescription} />
-      <meta property="twitter:image" content={ogImage} />
     </Helmet>
   );
 };
