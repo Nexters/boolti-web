@@ -139,7 +139,6 @@ const ProfilePage = () => {
       <Meta
         nickname={profile.nickname}
         introduction={profile.introduction}
-        imgPath={profile.imgPath}
         userCode={userCode as string}
       />
       <Layout>
