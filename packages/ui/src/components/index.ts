@@ -1,5 +1,6 @@
 import AgreeCheck from './AgreeCheck';
 import Badge from './Badge';
+import BottomSheet from './BottomSheet';
 import BooltiUIProvider from './BooltiUIProvider';
 import Button from './Button';
 import Confirm from './Confirm';
@@ -20,6 +21,7 @@ import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 export {
   AgreeCheck,
   Badge,
+  BottomSheet,
   BooltiUIProvider,
   Button,
   Confirm,

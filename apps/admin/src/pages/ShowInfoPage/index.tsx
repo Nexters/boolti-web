@@ -30,6 +30,7 @@ import Portal from '@boolti/ui/src/components/Portal';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
+import { ShareBanner } from '~/components/ShareBanner';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
@@ -454,6 +455,7 @@ const ShowInfoPage = () => {
           </Styled.ShowInfoPreviewMobile>
         </Portal>
       )}
+      <ShareBanner text="PC에서 공연을 편하게 관리해 보세요" />
     </Styled.ShowInfoPage>
   );
 };

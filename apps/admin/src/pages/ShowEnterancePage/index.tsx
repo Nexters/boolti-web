@@ -22,6 +22,7 @@ import { format } from 'date-fns';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
 import { useAtom } from 'jotai';
 import { myHostInfoAtom } from '~/components/ShowDetailLayout';
+import { ShareBanner } from '~/components/ShareBanner';
 
 type TicketType = 'ALL' | 'USED' | 'UNUSED';
 
@@ -234,6 +235,7 @@ const ShowEnterancePage = () => {
           )}
         </Styled.Container>
       )}
+      <ShareBanner text="PC에서 정보를 한 눈에 확인해 보세요" />
     </>
   );
 };

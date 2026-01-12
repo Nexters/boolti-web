@@ -24,6 +24,7 @@ import { ShowSalesInfoFormInputs } from '~/components/ShowInfoFormContent/types'
 import Styled from './ShowTicketPage.styles';
 import { useAtom } from 'jotai';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
+import { ShareBanner } from '~/components/ShareBanner';
 
 const ShowTicketPage = () => {
   const params = useParams<{ showId: string }>();
@@ -198,6 +199,7 @@ const ShowTicketPage = () => {
           )}
         </Styled.ShowTicketFormContent>
       </Styled.ShowTicketFormContentContainer>
+      <ShareBanner text="PC에서 공연을 편하게 관리해 보세요" />
     </Styled.ShowTicketPage>
   );
 };

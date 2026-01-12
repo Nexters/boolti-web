@@ -1,4 +1,5 @@
 const palette = {
+  white: '#FCFCFC',
   primary: {
     o0: '#FFCFBA',
     o1: '#FF5A14',

@@ -36,6 +36,11 @@ import useSuperAdminSalesTicketList from './useSuperAdminSalesTicketList';
 import useSuperAdminInvitationTicketList from './useSuperAdminInvitationTicketList';
 import useSuperAdminInvitationCodeList from './useSuperAdminInvitationCodeList';
 import useUserByUserCode from './useUserByUserCode';
+import useUserByUserCodeV2 from './useUserByUserCodeV2';
+import useUserVideos from './useUserVideos';
+import useUserShows from './useUserShows';
+import useUserLinks from './useUserLinks';
+import useUserPreviousShows from './useUserPreviousShows';
 import useShowReservationWithTickets from './useShowReservationWithTickets';
 import useCastTeamList from './useCastTeamList';
 import useAdminTicketList from './useAdminTicketList';
@@ -43,10 +48,16 @@ import useAdminSalesTicketList from './useAdminSalesTicketList';
 import useAdminReservationSummaryV2 from './useAdminReservationSummaryV2';
 import usePopup from './usePopup';
 import useSuperAdminShowSettlementStatement from './useSuperAdminShowSettlementStatement';
+import useYoutubeVideoDuration from './useYoutubeVideoDuration';
 
 export {
   useCastTeamList,
   useUserByUserCode,
+  useUserByUserCodeV2,
+  useUserVideos,
+  useUserShows,
+  useUserLinks,
+  useUserPreviousShows,
   useAdminSettlementEvent,
   useAdminTicketList,
   useAdminSalesTicketList,
@@ -90,4 +101,5 @@ export {
   useSuperAdminInvitationCodeList,
   usePopup,
   useSuperAdminShowSettlementStatement,
+  useYoutubeVideoDuration,
 };

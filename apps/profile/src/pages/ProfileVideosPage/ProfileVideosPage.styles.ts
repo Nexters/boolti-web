@@ -1,0 +1,78 @@
+import styled from '@emotion/styled';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 8px 20px 24px 20px;
+`;
+
+const VideoItem = styled.a`
+  display: flex;
+  gap: 16px;
+  text-decoration: none;
+  cursor: pointer;
+`;
+
+const ThumbnailWrapper = styled.div`
+  width: 160px;
+  height: 90px;
+  border-radius: 4px;
+  overflow: hidden;
+  gap: 6px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g80};
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #2e303a;
+`;
+
+const Thumbnail = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+
+const VideoInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const Title = styled.p`
+  ${({ theme }) => theme.typo.sh1};
+  color: #f6f7ff;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break: break-word;
+`;
+
+const Duration = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g40};
+  margin: 0;
+`;
+
+const CountText = styled.p`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g40};
+  padding: 16px 0px 12px 0px;
+  margin-left: 20px;
+`;
+
+export default {
+  Container,
+  VideoItem,
+  ThumbnailWrapper,
+  Thumbnail,
+  VideoInfo,
+  Title,
+  Duration,
+  CountText,
+};

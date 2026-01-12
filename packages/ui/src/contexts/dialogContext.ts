@@ -7,6 +7,7 @@ interface DialogListItemBase {
   width?: string;
   contentPadding?: string;
   mobileType?: DialogMobileType;
+  isBackdropClosable?: boolean;
   onClose?: () => void;
 }
 

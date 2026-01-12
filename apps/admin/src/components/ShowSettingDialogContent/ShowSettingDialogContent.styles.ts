@@ -12,6 +12,10 @@ const Container = styled.div`
   }
 `;
 
+const RowSection = styled.div`
+  display: flex;
+`;
+
 const Section = styled.div`
   display: flex;
   flex-direction: column;
@@ -83,8 +87,38 @@ const DeleteButtonContainer = styled.div`
   margin-top: 16px;
 `;
 
+const CopyLickContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 12px 0px;
+`;
+
+const CopyLinkText = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-left: 12px;
+`;
+
+const CopyLinkSubText = styled.span`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g40};
+  display: none;
+
+  ${mq_lg} {
+    display: inline;
+  }
+`;
+
+const CopyCompleteToast = styled.span`
+  color: ${({ theme }) => theme.palette.status.link};
+  ${({ theme }) => theme.typo.b3};
+  margin-left: 8px;
+`;
+
 export default {
   Container,
+  RowSection,
   Section,
   SectionHeader,
   SectionTitle,
@@ -97,4 +131,8 @@ export default {
   HostDefaultProfileImage,
   HostName,
   DeleteButtonContainer,
+  CopyLickContainer,
+  CopyLinkText,
+  CopyLinkSubText,
+  CopyCompleteToast,
 };

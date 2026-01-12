@@ -1,0 +1,498 @@
+import styled from '@emotion/styled';
+import { css } from '@emotion/react';
+import { Swiper } from 'swiper/react';
+import { mq_lg } from '@boolti/ui';
+
+export const bottomSheetOverrides = css`
+  [role='dialog'][aria-modal='true'] {
+    & > div:last-child {
+      padding-bottom: 28px;
+    }
+  }
+
+  button[role='menuitem'] {
+    min-height: 58px !important;
+    height: 58px !important;
+  }
+
+  button[role='menuitem'] + button[role='menuitem'] {
+    border-top: none !important;
+  }
+
+  button[role='menuitem']::before {
+    display: none !important;
+  }
+`;
+
+const ContentSection = styled.div`
+  margin: 8px 0px;
+`;
+
+const CoverSection = styled.div<{ isCover: boolean; isDesktop: boolean }>`
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-top: 100%;
+  overflow: hidden;
+  border-radius: ${({ isCover, isDesktop }) => (isCover && isDesktop ? '20px 20px 0 0' : '0')};
+  :after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(18, 19, 24, 0.2) 0%, rgba(18, 19, 24, 1) 100%);
+  }
+`;
+
+const CoverImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const CoverOverlay = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const CoverBottomSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 16px 20px 32px;
+  background: #121318;
+  gap: 16px;
+  border-radius: 0 0 20px 20px;
+`;
+
+const ProfileInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Nickname = styled.h1`
+  ${({ theme }) => theme.typo.point.p3};
+  font-weight: bold;
+  color: ${({ theme }) => theme.palette.grey.g10};
+`;
+
+const UserName = styled.h1`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  margin: 0;
+`;
+
+const InfoRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: ${({ theme }) => theme.palette.grey.g20};
+`;
+
+const InfoIcon = styled.div`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const InfoText = styled.span`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.mobile.grey.g15};
+  white-space: pre-line;
+`;
+
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const IconButton = styled.a`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.palette.grey.w}${({ theme }) => theme.palette.opacity[20]};
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: ${({ theme }) => theme.palette.grey.w};
+  transition: background-color 0.2s;
+`;
+
+const Section = styled.div`
+  padding: 24px 20px;
+`;
+
+const PastShowSection = styled.div`
+  padding: 32px 0px;
+`;
+
+const PastSectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding: 0px 20px;
+`;
+
+const SectionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+`;
+
+const SectionTitle = styled.h2`
+  ${({ theme }) => theme.typo.sh2};
+  color: ${({ theme }) => theme.palette.grey.g10};
+  margin: 0;
+`;
+
+const ViewAllButton = styled.button`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  cursor: pointer;
+`;
+
+const ArrowIcon = styled.div`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const ShowList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const ShowCard = styled.a`
+  display: flex;
+  gap: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-decoration: none;
+`;
+
+const ShowImage = styled.img`
+  width: 68px;
+  height: 94px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #2e303a;
+`;
+
+const ShowInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  justify-content: center;
+`;
+
+const ShowTitle = styled.h3`
+  ${({ theme }) => theme.typo.sh1};
+  color: #f6f7ff;
+  margin: 0;
+`;
+
+const ShowDetail = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  margin: 0;
+`;
+
+const PastShowSlider = styled(Swiper)`
+  padding-bottom: 8px;
+  margin-left: 20px;
+  .swiper-slide {
+    width: auto;
+  }
+`;
+
+const PastShowCard = styled.a`
+  flex-shrink: 0;
+  width: 128px;
+  cursor: pointer;
+  text-decoration: none;
+`;
+
+const PastShowImage = styled.img`
+  width: 128px;
+  height: 176px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 8px;
+  border: 1px solid #2e303a;
+`;
+
+const PastShowTitle = styled.h4`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g05};
+  margin: 0 0 4px 0;
+  overflow: hidden;
+`;
+
+const PastShowDate = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: #6f7485;
+  margin: 0;
+`;
+
+const VideoList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const LinkList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const LinkItem = styled.a`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+`;
+
+const LinkTitle = styled.span`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g15};
+`;
+
+const BottomCTA = styled.div`
+  width: 100%;
+  padding: 24px 20px 60px 20px;
+`;
+
+const CTAButton = styled.button`
+  width: 100%;
+  height: 64px;
+  padding: 0 16px;
+  background-color: #fff;
+  color: ${({ theme }) => theme.palette.grey.g90};
+  border: none;
+  border-radius: 8px;
+  ${({ theme }) => theme.typo.sh1};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  transition: background-color 0.2s;
+`;
+
+const IconButtonWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 1.4;
+  flex-shrink: 1;
+  min-width: 0;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+`;
+
+const NetetralButton = styled.button`
+  height: 36px;
+  padding: 0 14px;
+  background-color: ${({ theme }) => theme.palette.grey.g90};
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  ${({ theme }) => theme.typo.sh0};
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: background-color 0.2s;
+`;
+
+const ShareDropdownButton = styled.button<{ isMobileInCover?: boolean }>`
+  position: ${({ isMobileInCover }) => (isMobileInCover ? 'absolute' : 'relative')};
+  ${({ isMobileInCover }) =>
+    isMobileInCover &&
+    `
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    cursor: pointer;
+  `}
+`;
+
+const ShareDropdown = styled.div`
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background-color: #1b1d23;
+  border-radius: 8px;
+  min-width: 240px;
+  z-index: 1000;
+  overflow: hidden;
+`;
+
+const ShareDropdownItem = styled.button`
+  width: 100%;
+  height: 36px;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g15};
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+`;
+
+const DialogContainer = styled.div`
+  position: relative;
+`;
+
+const DialogQRCodeContainer = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  width: calc(100% + 48px);
+  height: 300px;
+  position: relative;
+  left: -24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  ${mq_lg} {
+    width: calc(100% + 64px);
+    left: -32px;
+    top: -32px;
+    margin-bottom: 0;
+  }
+`;
+
+const QRCodeContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  height: 200px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-radius: 8px;
+`;
+
+const DialogTitle = styled.h2`
+  ${({ theme }) => theme.typo.h2};
+  color: ${({ theme }) => theme.palette.grey.b};
+  text-align: center;
+  margin-bottom: 8px;
+`;
+
+const DialogDescription = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  text-align: center;
+  margin-bottom: 24px;
+
+  ${mq_lg} {
+    margin-bottom: 0;
+  }
+`;
+
+const Divider = styled.hr`
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  margin: 0px 20px;
+`;
+
+export default {
+  ContentSection,
+  CoverSection,
+  CoverImage,
+  CoverOverlay,
+  CoverBottomSection,
+  ProfileInfo,
+  Nickname,
+  UserName,
+  InfoRow,
+  InfoIcon,
+  InfoText,
+  ActionButtons,
+  IconButton,
+  Section,
+  SectionHeader,
+  SectionTitle,
+  Divider,
+  ViewAllButton,
+  ArrowIcon,
+  ShowList,
+  ShowCard,
+  ShowImage,
+  ShowInfo,
+  ShowTitle,
+  ShowDetail,
+  PastShowSection,
+  PastShowSlider,
+  PastSectionHeader,
+  PastShowCard,
+  PastShowImage,
+  PastShowTitle,
+  PastShowDate,
+  VideoList,
+  LinkList,
+  LinkItem,
+  LinkTitle,
+  BottomCTA,
+  CTAButton,
+  IconButtonWrapper,
+  NetetralButton,
+  ShareDropdownButton,
+  ShareDropdown,
+  ShareDropdownItem,
+  DialogContainer,
+  DialogQRCodeContainer,
+  QRCodeContainer,
+  DialogTitle,
+  DialogDescription,
+};
