@@ -193,13 +193,18 @@ const ShowList = styled.div`
   gap: 20px;
 `;
 
-const ShowCard = styled.a`
+const ShowCard = styled.button`
   display: flex;
   gap: 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.2s;
   text-decoration: none;
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: left;
+  width: 100%;
 `;
 
 const ShowImage = styled.img`
@@ -238,11 +243,15 @@ const PastShowSlider = styled(Swiper)`
   }
 `;
 
-const PastShowCard = styled.a`
+const PastShowCard = styled.button`
   flex-shrink: 0;
   width: 128px;
   cursor: pointer;
   text-decoration: none;
+  border: none;
+  background: none;
+  padding: 0;
+  text-align: left;
 `;
 
 const PastShowImage = styled.img`

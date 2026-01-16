@@ -11,20 +11,28 @@ import { fetcher } from '@boolti/api/src/fetcher';
 import NotFound from './components/NotFound';
 import ShowInfoDetailPage from './pages/ShowInfoDetailPage';
 
+const showPageLoader = async ({ params }: { params: { showId?: string } }) => {
+  const showId = params.showId;
+  if (showId) {
+    const response = await Promise.all([
+      fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
+      fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
+    ]);
+    return response;
+  }
+};
+
 const router = createBrowserRouter([
   {
     path: '/show/:showId',
     element: <ShowPreviewPage />,
-    loader: async ({ params }) => {
-      const showId = params.showId;
-      if (showId) {
-        const response = await Promise.all([
-          fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
-          fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
-        ]);
-        return response;
-      }
-    },
+    loader: showPageLoader,
+    errorElement: <NotFound />,
+  },
+  {
+    path: '/web/show/:showId',
+    element: <ShowPreviewPage />,
+    loader: showPageLoader,
     errorElement: <NotFound />,
   },
   {

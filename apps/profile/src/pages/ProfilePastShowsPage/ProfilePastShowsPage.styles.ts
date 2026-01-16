@@ -15,12 +15,16 @@ const CountText = styled.p`
   margin-left: 20px;
 `;
 
-const ShowCard = styled.a`
+const ShowCard = styled.button`
   display: flex;
   gap: 12px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
   border-radius: 0px;
   padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
 
   ${mq_lg} {
     border-radius: 12px;

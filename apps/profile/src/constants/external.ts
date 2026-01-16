@@ -5,5 +5,6 @@ export const EXTERNAL_DOMAIN = {
 } as const;
 
 export const EXTERNAL_URL = {
-  SHOW_MANAGER_INFO: (showId: string | number) => `${EXTERNAL_DOMAIN.SHOW_MANAGER}/show/${showId}`,
+  SHOW_MANAGER_INFO: (showId: string | number) =>
+    `${EXTERNAL_DOMAIN.SHOW_MANAGER}/web/show/${showId}`,
 } as const;

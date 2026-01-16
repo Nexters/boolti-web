@@ -65,13 +65,29 @@ const ProfilePage = () => {
     }
   };
 
-  const handleShareUrlCopy = () => {
-    navigator.clipboard.writeText(`${window.location.origin}/${userCode}`);
-    setIsShareBottomSheetOpen(false);
-    setIsShareDropdownOpen(false);
+  const handleShareUrlCopy = async () => {
+    const url = `${window.location.origin}/${userCode}`;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          url,
+        });
+        setIsShareBottomSheetOpen(false);
+        setIsShareDropdownOpen(false);
+      } catch (error) {
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error);
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(url);
+      setIsShareBottomSheetOpen(false);
+      setIsShareDropdownOpen(false);
+    }
   };
 
-  const handleShareDetailCopy = () => {
+  const handleShareDetailCopy = async () => {
     if (!profile) return;
     const shareText = [
       '이 아티스트 어때요?',
@@ -82,14 +98,33 @@ const ProfilePage = () => {
       '프로필 ▼',
       `${window.location.origin}/${userCode}`,
     ].join('\n');
-    navigator.clipboard.writeText(shareText);
-    setIsShareBottomSheetOpen(false);
-    setIsShareDropdownOpen(false);
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          text: shareText,
+        });
+        setIsShareBottomSheetOpen(false);
+        setIsShareDropdownOpen(false);
+      } catch (error) {
+        if ((error as Error).name !== 'AbortError') {
+          console.error('Share failed:', error);
+        }
+      }
+    } else {
+      navigator.clipboard.writeText(shareText);
+      setIsShareBottomSheetOpen(false);
+      setIsShareDropdownOpen(false);
+    }
   };
 
   const getBridgeLink = () => {
     const url = `${window.location.origin}/bridge/store`;
     return url;
+  };
+
+  const handleShowClick = (showId: string | number) => {
+    window.location.href = EXTERNAL_URL.SHOW_MANAGER_INFO(showId);
   };
 
   const reservationButtonClickHandler = async (isDesktop: boolean) => {
@@ -214,12 +249,7 @@ const ProfilePage = () => {
               </Styled.SectionHeader>
               <Styled.ShowList>
                 {profile.comingSoonShow.previewItems.map((show) => (
-                  <Styled.ShowCard
-                    key={show.id}
-                    href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  <Styled.ShowCard key={show.id} onClick={() => handleShowClick(show.id)}>
                     <Styled.ShowImage src={show.showImg} alt={show.name} />
                     <Styled.ShowInfo>
                       <Styled.ShowTitle>{show.name}</Styled.ShowTitle>
@@ -249,11 +279,7 @@ const ProfilePage = () => {
               <Styled.PastShowSlider spaceBetween={16} slidesPerView={'auto'}>
                 {profile.performedShow.previewItems.map((show) => (
                   <SwiperSlide key={show.id}>
-                    <Styled.PastShowCard
-                      href={EXTERNAL_URL.SHOW_MANAGER_INFO(show.id)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <Styled.PastShowCard onClick={() => handleShowClick(show.id)}>
                       <Styled.PastShowImage src={show.showImg} alt={show.name} />
                       <Styled.PastShowTitle>
                         {show.name.length > 10 ? `${show.name.slice(0, 10)}...` : show.name}
