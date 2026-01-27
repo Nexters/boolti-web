@@ -354,6 +354,15 @@ export interface ShowCreateRequest {
   latitude?: number;
   /** 경도 */
   longitude?: number;
+  /** 사전 질문 목록. optional. 최대 3개 */
+  preQuestions?: {
+    /** 질문 내용 (필수, 100자 이내) */
+    question: string;
+    /** 질문 설명 (선택, 100자 이내) */
+    description?: string;
+    /** 답변 필수 여부 */
+    required: boolean;
+  }[];
 }
 
 export interface NonTicketingShowCreateRequest {

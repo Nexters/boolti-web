@@ -137,6 +137,7 @@ const privateRoutes = [
       { path: PATH.SHOW_ADD, element: <ShowAddPage step="basic" /> },
       { path: PATH.SHOW_ADD_DETAIL, element: <ShowAddPage step="detail" /> },
       { path: PATH.SHOW_ADD_SALES, element: <ShowAddPage step="sales" /> },
+      { path: PATH.SHOW_ADD_PRE_QUESTION, element: <ShowAddPage step="preQuestion" /> },
       { path: PATH.SHOW_TYPE_SELECT, element: <ShowTypeSelectpage /> },
       {
         path: '/',
