@@ -3,6 +3,8 @@ import Quill, { Range as QuillRange } from 'quill';
 import { useUploadShowContentImage } from '@boolti/api';
 import Styled from './QuillEditor.styles';
 import './blot';
+import { useDialog } from '@boolti/ui';
+import YoutubeUrlDialogContent from '../YoutubeUrlDialogContent';
 
 interface EditorProps {
   readOnly?: boolean;
@@ -32,6 +34,8 @@ const QuillEditor: React.FC<EditorProps> = ({
 
   const uploadShowContentImageMutation = useUploadShowContentImage();
 
+  const youtubeUrlDialog = useDialog()
+
   const imageUploadHandler = useCallback(async () => {
     const input = document.createElement('input');
     input.type = 'file';
@@ -52,19 +56,26 @@ const QuillEditor: React.FC<EditorProps> = ({
     input.click();
   }, [uploadShowContentImageMutation]);
 
+  const youtubeUrlSubmitHandler = useCallback((url: string) => {
+    if (!quillRef.current) return;
+
+    youtubeUrlDialog.close();
+    const embedUrl = url.replace('watch?v=', 'embed/');
+    quillRef.current.focus();
+    const range = quillRef.current.getSelection();
+    if (range?.index === undefined) return;
+    quillRef.current.insertEmbed(range.index, 'video', embedUrl);
+  }, [youtubeUrlDialog, quillRef]);
+
   const videoUploadHandler = useCallback(async () => {
     if (!quillRef.current) return;
 
-    const url = prompt('YouTube 영상 URL을 입력하세요:');
-
-    if (url) {
-      const embedUrl = url.replace('watch?v=', 'embed/');
-      const range = quillRef.current.getSelection();
-
-      if (range?.index === undefined) return;
-      quillRef.current.insertEmbed(range.index, 'video', embedUrl);
-    }
-  }, [quillRef]);
+    youtubeUrlDialog.open({
+      title: '유튜브 영상 업로드',
+      isBackdropClosable: true,
+      content: <YoutubeUrlDialogContent onSubmit={youtubeUrlSubmitHandler} />
+    })
+  }, [quillRef, youtubeUrlDialog, youtubeUrlSubmitHandler]);
 
 
   useLayoutEffect(() => {
