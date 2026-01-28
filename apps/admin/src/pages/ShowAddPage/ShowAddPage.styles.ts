@@ -110,8 +110,18 @@ const CardDescription = styled.p`
   text-align: center;
   margin-bottom: 32px;
 
+  span {
+    display: inline-block;
+    width: 100%;
+  }
+
   ${mq_lg} {
     margin-bottom: 40px;
+
+    span {
+      display: inline;
+      width: auto;
+    }
   }
 `;
 

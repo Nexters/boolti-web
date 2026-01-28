@@ -51,7 +51,7 @@ const PreQuestionLabel = styled.label<{ required?: boolean }>`
 const TextArea = styled.textarea<{ hasError?: boolean }>`
   width: 100%;
   min-height: 48px;
-  max-height: 96px;
+  max-height: 200px;
   padding: 12px;
   border: 1px solid
     ${({ theme, hasError }) => (hasError ? theme.palette.status.error1 : theme.palette.grey.g20)};
@@ -227,12 +227,9 @@ const ShowPreQuestionFormContent = ({
   const handleTextChange = (index: number, field: 'question' | 'description', value: string) => {
     const preQuestion = preQuestionList[index];
 
-    // 100자 초과 시 슬라이싱
-    const slicedValue = value.length > MAX_LENGTH ? value.slice(0, MAX_LENGTH) : value;
-
     onUpdateQuestion(index, {
       ...preQuestion,
-      [field]: slicedValue,
+      [field]: value,
     });
   };
 

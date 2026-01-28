@@ -442,9 +442,18 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     </>
   );
 
-  // 버튼 활성화 조건: 질문 0개면 활성화, 질문 1개 이상이면 모든 질문 필드가 채워져야 활성화
+  // 버튼 활성화 조건:
+  // 1. 질문 0개면 활성화
+  // 2. 질문 1개 이상이면 모든 질문 필드가 채워져야 하고, 100자를 초과하지 않아야 활성화
+  const MAX_QUESTION_LENGTH = 100;
   const isPreQuestionFormValid =
-    preQuestionList.length === 0 || preQuestionList.every((q) => q.question.trim().length > 0);
+    preQuestionList.length === 0 ||
+    preQuestionList.every(
+      (q) =>
+        q.question.trim().length > 0 &&
+        q.question.length <= MAX_QUESTION_LENGTH &&
+        (q.description?.length ?? 0) <= MAX_QUESTION_LENGTH,
+    );
 
   const preQuestionStepContent = (
     <>
@@ -454,7 +463,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Navigate to={PATH.SHOW_ADD} replace />
         )}
       <Styled.CardDescription>
-        공연 전, 관객에게 미리 물어보고 싶은 내용이 있다면 작성해 주세요.
+        공연 전, 관객에게 미리 물어보고 싶은
+        <span> 내용이 있다면 작성해 주세요.</span>
         <br />
         작성된 질문은 예매 단계에서 관객에게 노출돼요.
       </Styled.CardDescription>
