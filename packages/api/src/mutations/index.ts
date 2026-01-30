@@ -44,6 +44,7 @@ import usePostCastTeams from './usePostCastTeams';
 import useChangeCastTeamOrder from './useChangeCastTeamOrder';
 import useUploadShowContentImage from './useUploadShowContentImage';
 import useAddNonTicketingShow from './useAddNonTicketingShow';
+import usePutPreQuestions from './usePutPreQuestions';
 
 export {
   usePostCastTeams,
@@ -92,6 +93,7 @@ export {
   useSuperAdminEditSalesInfo,
   useChangeCastTeamOrder,
   useUploadShowContentImage,
+  usePutPreQuestions,
 };
 
 export type { ImageFile };
