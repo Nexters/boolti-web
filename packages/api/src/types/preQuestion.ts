@@ -1,17 +1,29 @@
 import { PageResponse, TicketType } from './common';
 
+/** 사전 질문 생성 요청 항목 */
+export interface PreQuestionCreateRequest {
+  /** 질문 텍스트 (필수, 100자 이내) */
+  questionText: string;
+  /** 질문 설명 (선택, 100자 이내) */
+  description?: string;
+  /** 필수 질문 여부 */
+  isRequired: boolean;
+  /** 질문 순서, 1부터 시작 */
+  sequence: number;
+}
+
 /** 사전 질문 항목 */
 export interface PreQuestionItem {
   /** 사전질문 ID */
   id: number;
-  /** 질문 내용 */
-  question: string;
+  /** 질문 텍스트 */
+  questionText: string;
   /** 질문 설명 */
   description?: string;
-  /** 답변 필수 여부 */
-  required: boolean;
-  /** 정렬 순서 */
-  order: number;
+  /** 필수 질문 여부 */
+  isRequired: boolean;
+  /** 질문 순서, 1부터 시작 */
+  sequence: number;
 }
 
 /** 사전질문 목록 + 전체 답변 수 응답 */
@@ -27,14 +39,14 @@ export interface PreQuestionsUpdateRequest {
   preQuestions: {
     /** 사전질문 ID (신규 생성 시 undefined) */
     id?: number;
-    /** 질문 내용 */
-    question: string;
-    /** 질문 설명 */
+    /** 질문 텍스트 (필수, 100자 이내) */
+    questionText: string;
+    /** 질문 설명 (선택, 100자 이내) */
     description?: string;
-    /** 답변 필수 여부 */
-    required: boolean;
-    /** 정렬 순서 */
-    order: number;
+    /** 필수 질문 여부 */
+    isRequired: boolean;
+    /** 질문 순서, 1부터 시작 */
+    sequence: number;
   }[];
 }
 

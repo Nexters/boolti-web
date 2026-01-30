@@ -356,12 +356,14 @@ export interface ShowCreateRequest {
   longitude?: number;
   /** 사전 질문 목록. optional. 최대 3개 */
   preQuestions?: {
-    /** 질문 내용 (필수, 100자 이내) */
-    question: string;
+    /** 질문 텍스트 (필수, 100자 이내) */
+    questionText: string;
     /** 질문 설명 (선택, 100자 이내) */
     description?: string;
-    /** 답변 필수 여부 */
-    required: boolean;
+    /** 필수 질문 여부 */
+    isRequired: boolean;
+    /** 질문 순서, 1부터 시작 */
+    sequence: number;
   }[];
 }
 
