@@ -1,6 +1,7 @@
 import { PlusIcon } from '@boolti/icon';
 import styled from '@emotion/styled';
-import { useCallback, useRef } from 'react';
+
+import { PreQuestionTextArea } from '~/components/ShowPreQuestion';
 
 export interface PreQuestion {
   id?: number;
@@ -45,31 +46,6 @@ const PreQuestionLabel = styled.label<{ required?: boolean }>`
     color: ${({ theme }) => theme.palette.status.error1};
     display: ${({ required }) => (required ? 'inline' : 'none')};
     margin-left: 2px;
-  }
-`;
-
-const TextArea = styled.textarea<{ hasError?: boolean }>`
-  width: 100%;
-  min-height: 48px;
-  max-height: 200px;
-  padding: 12px;
-  border: 1px solid
-    ${({ theme, hasError }) => (hasError ? theme.palette.status.error1 : theme.palette.grey.g20)};
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  color: ${({ theme }) => theme.palette.grey.g90};
-  ${({ theme }) => theme.typo.b3};
-  resize: none;
-  box-sizing: border-box;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.palette.grey.g30};
-  }
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme, hasError }) =>
-      hasError ? theme.palette.status.error1 : theme.palette.grey.g90};
   }
 `;
 
@@ -177,47 +153,6 @@ interface ShowPreQuestionFormContentProps {
   onDeleteQuestion: (index: number) => void;
 }
 
-interface AutoResizeTextAreaProps {
-  placeholder: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  hasError?: boolean;
-}
-
-const AutoResizeTextArea = ({
-  placeholder,
-  value,
-  onChange,
-  hasError,
-}: AutoResizeTextAreaProps) => {
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const adjustHeight = useCallback(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  }, []);
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange(e);
-    adjustHeight();
-  };
-
-  return (
-    <TextArea
-      ref={textareaRef}
-      placeholder={placeholder}
-      value={value}
-      onChange={handleChange}
-      hasError={hasError}
-      rows={1}
-      onInput={adjustHeight}
-    />
-  );
-};
-
 const ShowPreQuestionFormContent = ({
   preQuestionList,
   onUpdateQuestion,
@@ -243,7 +178,7 @@ const ShowPreQuestionFormContent = ({
           <PreQuestionItem key={preQuestion.id ?? `question-${index}`}>
             <PreQuestionRow>
               <PreQuestionLabel required>질문</PreQuestionLabel>
-              <AutoResizeTextArea
+              <PreQuestionTextArea
                 placeholder="ex. 어떤 팀을 보러 오셨나요? (100자 이내)"
                 value={preQuestion.questionText}
                 onChange={(e) => handleTextChange(index, 'questionText', e.target.value)}
@@ -253,7 +188,7 @@ const ShowPreQuestionFormContent = ({
             </PreQuestionRow>
             <PreQuestionRow>
               <PreQuestionLabel>설명</PreQuestionLabel>
-              <AutoResizeTextArea
+              <PreQuestionTextArea
                 placeholder="설명을 입력해 주세요 (100자 이내)"
                 value={preQuestion.description ?? ''}
                 onChange={(e) => handleTextChange(index, 'description', e.target.value)}
