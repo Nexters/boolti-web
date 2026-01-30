@@ -4,9 +4,9 @@ import { useCallback, useRef } from 'react';
 
 export interface PreQuestion {
   id?: number;
-  question: string;
+  questionText: string;
   description?: string;
-  required: boolean;
+  isRequired: boolean;
 }
 
 const MAX_LENGTH = 100;
@@ -224,7 +224,7 @@ const ShowPreQuestionFormContent = ({
   onAddQuestion,
   onDeleteQuestion,
 }: ShowPreQuestionFormContentProps) => {
-  const handleTextChange = (index: number, field: 'question' | 'description', value: string) => {
+  const handleTextChange = (index: number, field: 'questionText' | 'description', value: string) => {
     const preQuestion = preQuestionList[index];
 
     onUpdateQuestion(index, {
@@ -236,7 +236,7 @@ const ShowPreQuestionFormContent = ({
   return (
     <PreQuestionContainer>
       {preQuestionList.map((preQuestion, index) => {
-        const isQuestionOverLimit = preQuestion.question.length > MAX_LENGTH;
+        const isQuestionOverLimit = preQuestion.questionText.length > MAX_LENGTH;
         const isDescriptionOverLimit = (preQuestion.description?.length ?? 0) > MAX_LENGTH;
 
         return (
@@ -245,8 +245,8 @@ const ShowPreQuestionFormContent = ({
               <PreQuestionLabel required>질문</PreQuestionLabel>
               <AutoResizeTextArea
                 placeholder="ex. 어떤 팀을 보러 오셨나요? (100자 이내)"
-                value={preQuestion.question}
-                onChange={(e) => handleTextChange(index, 'question', e.target.value)}
+                value={preQuestion.questionText}
+                onChange={(e) => handleTextChange(index, 'questionText', e.target.value)}
                 hasError={isQuestionOverLimit}
               />
               {isQuestionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
@@ -269,9 +269,9 @@ const ShowPreQuestionFormContent = ({
                 <ToggleLabel>답변 필수</ToggleLabel>
                 <ToggleSwitch
                   type="button"
-                  isOn={preQuestion.required}
+                  isOn={preQuestion.isRequired}
                   onClick={() =>
-                    onUpdateQuestion(index, { ...preQuestion, required: !preQuestion.required })
+                    onUpdateQuestion(index, { ...preQuestion, isRequired: !preQuestion.isRequired })
                   }
                 />
               </ToggleContainer>

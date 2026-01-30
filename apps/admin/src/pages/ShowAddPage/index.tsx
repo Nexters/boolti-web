@@ -171,14 +171,15 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
-      ...(preQuestionList.filter((q) => q.question.trim()).length > 0
+      ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
         ? {
             preQuestions: preQuestionList
-              .filter((q) => q.question.trim())
-              .map((preQuestion) => ({
-                question: preQuestion.question,
+              .filter((q) => q.questionText.trim())
+              .map((preQuestion, index) => ({
+                questionText: preQuestion.questionText,
                 description: preQuestion.description || undefined,
-                required: preQuestion.required,
+                isRequired: preQuestion.isRequired,
+                sequence: index + 1,
               })),
           }
         : {}),
@@ -450,8 +451,8 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     preQuestionList.length === 0 ||
     preQuestionList.every(
       (q) =>
-        q.question.trim().length > 0 &&
-        q.question.length <= MAX_QUESTION_LENGTH &&
+        q.questionText.trim().length > 0 &&
+        q.questionText.length <= MAX_QUESTION_LENGTH &&
         (q.description?.length ?? 0) <= MAX_QUESTION_LENGTH,
     );
 
@@ -481,7 +482,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             onAddQuestion={() => {
               setPreQuestionList((prevList) => [
                 ...prevList,
-                { question: '', description: '', required: false },
+                { questionText: '', description: '', isRequired: false },
               ]);
             }}
             onDeleteQuestion={(index) => {
