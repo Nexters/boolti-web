@@ -497,13 +497,21 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
     showId: number,
     preQuestionId: number,
     page: number,
+    size?: number,
+    salesTicketTypeId?: string,
     sort?: string,
   ) => ({
-    queryKey: [showId, preQuestionId, page, sort],
+    queryKey: [showId, preQuestionId, page, size, salesTicketTypeId, sort],
     queryFn: () => {
       const searchParams: SearchParamsOption = {
         page,
       };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (salesTicketTypeId) {
+        searchParams.salesTicketTypeId = salesTicketTypeId;
+      }
       if (sort) {
         searchParams.sort = sort;
       }
@@ -516,20 +524,20 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   participants: (
     showId: number,
     page: number,
-    ticketType?: TicketType,
-    reservationNameOrPhoneNumber?: string,
-    sort?: string,
+    salesTicketTypeId?: number,
+    reservationName?: string,
+    sort?: 'ASC' | 'DESC',
   ) => ({
-    queryKey: [showId, page, ticketType, reservationNameOrPhoneNumber, sort],
+    queryKey: [showId, page, salesTicketTypeId, reservationName, sort],
     queryFn: () => {
       const searchParams: SearchParamsOption = {
         page,
       };
-      if (ticketType) {
-        searchParams.ticketType = ticketType;
+      if (salesTicketTypeId !== undefined) {
+        searchParams.salesTicketTypeId = salesTicketTypeId;
       }
-      if (reservationNameOrPhoneNumber) {
-        searchParams.reservationNameOrPhoneNumber = reservationNameOrPhoneNumber;
+      if (reservationName) {
+        searchParams.reservationName = reservationName;
       }
       if (sort) {
         searchParams.sort = sort;
