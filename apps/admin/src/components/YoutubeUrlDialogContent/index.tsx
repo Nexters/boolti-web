@@ -7,6 +7,11 @@ interface YoutubeUrlDialogContentProps {
   onSubmit: (url: string) => void;
 }
 
+const isValidYoutubeUrl = (url: string): boolean => {
+  const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/(watch\?v=|embed\/|shorts\/)|youtu\.be\/)[\w-]+/;
+  return youtubeRegex.test(url.trim());
+};
+
 const YoutubeUrlDialogContent: React.FC<YoutubeUrlDialogContentProps> = ({ onSubmit }) => {
   useBodyScrollLock();
 
@@ -14,11 +19,14 @@ const YoutubeUrlDialogContent: React.FC<YoutubeUrlDialogContentProps> = ({ onSub
     onSubmit(url.trim());
   };
 
-  const { register, handleSubmit } = useForm<{ url: string }>({
+  const { register, handleSubmit, watch } = useForm<{ url: string }>({
     defaultValues: {
       url: '',
     },
   });
+
+  const urlValue = watch('url');
+  const isValidUrl = isValidYoutubeUrl(urlValue);
 
   return (
     <Styled.YoutubeUrlDialogContent>
@@ -38,6 +46,7 @@ const YoutubeUrlDialogContent: React.FC<YoutubeUrlDialogContentProps> = ({ onSub
             colorTheme="primary"
             type="submit"
             style={{ width: '100%' }}
+            disabled={!isValidUrl}
           >
             업로드하기
           </Button>
