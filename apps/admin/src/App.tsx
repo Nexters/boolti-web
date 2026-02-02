@@ -40,6 +40,7 @@ import { domAnimation, LazyMotion } from 'framer-motion';
 import ShowDetailLayout from './components/ShowDetailLayout';
 import ShowInfoPage from './pages/ShowInfoPage';
 import ShowTicketPage from './pages/ShowTicketPage';
+import ShowPreQuestionPage from './pages/ShowPreQuestionPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
@@ -149,6 +150,7 @@ const privateRoutes = [
         children: [
           { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
           { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
+          { path: PATH.SHOW_PRE_QUESTION, element: <ShowPreQuestionPage /> },
           { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
           { path: PATH.SHOW_ENTRANCE, element: <ShowEnterancePage /> },
           { path: PATH.SHOW_SETTLEMENT, element: <ShowSettlementPage /> },
