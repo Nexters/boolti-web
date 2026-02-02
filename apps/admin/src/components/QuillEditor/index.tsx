@@ -3,6 +3,9 @@ import Quill, { Range as QuillRange } from 'quill';
 import { useUploadShowContentImage } from '@boolti/api';
 import Styled from './QuillEditor.styles';
 import './blot';
+import { useDialog } from '@boolti/ui';
+import YoutubeUrlDialogContent from '../YoutubeUrlDialogContent';
+import LinkFormDialogContent, { LinkFormInputs } from '../LinkFormDialogContent';
 
 interface EditorProps {
   readOnly?: boolean;
@@ -29,8 +32,12 @@ const QuillEditor: React.FC<EditorProps> = ({
   const errorRef = useRef<boolean | null>(error);
   const onChangeRef = useRef(onChange);
   const onBlurRef = useRef(onBlur);
+  const selectedLinkRangeRef = useRef<{ index: number; length: number } | null>(null);
 
   const uploadShowContentImageMutation = useUploadShowContentImage();
+
+  const youtubeUrlDialog = useDialog()
+  const linkDialog = useDialog()
 
   const imageUploadHandler = useCallback(async () => {
     const input = document.createElement('input');
@@ -52,20 +59,114 @@ const QuillEditor: React.FC<EditorProps> = ({
     input.click();
   }, [uploadShowContentImageMutation]);
 
-  const videoUploadHandler = useCallback(async () => {
+  const youtubeUrlSubmitHandler = useCallback((url: string) => {
     if (!quillRef.current) return;
 
-    const url = prompt('YouTube 영상 URL을 입력하세요:');
+    youtubeUrlDialog.close();
+    const embedUrl = url.replace('watch?v=', 'embed/');
+    quillRef.current.focus();
+    const range = quillRef.current.getSelection();
+    if (range?.index === undefined) return;
+    quillRef.current.insertEmbed(range.index, 'video', embedUrl);
+  }, [youtubeUrlDialog, quillRef]);
 
-    if (url) {
-      const embedUrl = url.replace('watch?v=', 'embed/');
-      const range = quillRef.current.getSelection();
+  const linkSubmitHandler = useCallback((data: LinkFormInputs) => {
+    if (!quillRef.current) return;
 
-      if (range?.index === undefined) return;
-      quillRef.current.insertEmbed(range.index, 'video', embedUrl);
+    linkDialog.close();
+    quillRef.current.focus();
+    const range = quillRef.current.getSelection();
+
+    if (range?.index === undefined) return;
+
+    quillRef.current.focus();
+
+    if (range.length === 0) {
+      quillRef.current.insertText(range.index, data.title, 'user');
+      quillRef.current.setSelection(range.index, data.title.length);
+      quillRef.current.formatText(range.index, data.title.length, 'link', data.link);
+      quillRef.current.setSelection(range.index + data.title.length, 0);
+
+      return;
     }
-  }, [quillRef]);
 
+    quillRef.current.formatText(range.index, range.length, 'link', data.link);
+    quillRef.current.setSelection(range.index + range.length, 0);
+  }, [quillRef, linkDialog]);
+
+  const linkEditSubmitHandler = useCallback((data: LinkFormInputs) => {
+    if (!quillRef.current || !selectedLinkRangeRef.current) return;
+
+    const { index, length } = selectedLinkRangeRef.current;
+
+    linkDialog.close();
+    quillRef.current.formatText(index, length, 'link', data.link);
+    quillRef.current.setSelection(index + length, 0);
+    selectedLinkRangeRef.current = null;
+  }, [quillRef, linkDialog]);
+
+  const linkDeleteHandler = useCallback(() => {
+    if (!quillRef.current || !selectedLinkRangeRef.current) return;
+
+    const { index, length } = selectedLinkRangeRef.current;
+
+    linkDialog.close();
+    quillRef.current.formatText(index, length, 'link', false);
+    quillRef.current.setSelection(index + length, 0);
+    selectedLinkRangeRef.current = null;
+  }, [quillRef, linkDialog]);
+
+  const openLinkEditDialog = useCallback((linkInfo: { title: string; link: string; index: number; length: number }) => {
+    if (!quillRef.current) return;
+
+    selectedLinkRangeRef.current = { index: linkInfo.index, length: linkInfo.length };
+
+    linkDialog.open({
+      title: '링크 수정',
+      isBackdropClosable: true,
+      content: (
+        <LinkFormDialogContent
+          defaultValues={{ title: linkInfo.title, link: linkInfo.link }}
+          onSubmit={linkEditSubmitHandler}
+          onDelete={linkDeleteHandler}
+        />
+      ),
+    });
+  }, [quillRef, linkDialog, linkEditSubmitHandler, linkDeleteHandler]);
+
+  const openYoutubeUrlDialog = useCallback(async () => {
+    if (!quillRef.current) return;
+
+    youtubeUrlDialog.open({
+      title: '유튜브 영상 업로드',
+      isBackdropClosable: true,
+      content: <YoutubeUrlDialogContent onSubmit={youtubeUrlSubmitHandler} />
+    })
+  }, [quillRef, youtubeUrlDialog, youtubeUrlSubmitHandler]);
+
+  const openLinkFormDialog = useCallback(() => {
+    if (!quillRef.current) return;
+
+    const range = quillRef.current.getSelection();
+    let defaultValues: LinkFormInputs | undefined;
+
+    if (range && range.length > 0) {
+      const selectedText = quillRef.current.getText(range.index, range.length);
+      const format = quillRef.current.getFormat(range.index, range.length);
+      const existingLink = typeof format.link === 'string' ? format.link : '';
+
+      defaultValues = {
+        title: selectedText.trim(),
+        link: existingLink,
+      };
+    }
+
+    linkDialog.open({
+      title: '링크 업로드',
+      isBackdropClosable: true,
+      content: <LinkFormDialogContent defaultValues={defaultValues} onSubmit={linkSubmitHandler} />
+    })
+  }, [quillRef, linkDialog, linkSubmitHandler]);
 
   useLayoutEffect(() => {
     readOnlyRef.current = readOnly;
@@ -94,7 +195,8 @@ const QuillEditor: React.FC<EditorProps> = ({
           ],
           handlers: {
             image: imageUploadHandler,
-            video: videoUploadHandler,
+            video: openYoutubeUrlDialog,
+            link: openLinkFormDialog,
           },
         },
         keyboard: {
@@ -200,6 +302,34 @@ const QuillEditor: React.FC<EditorProps> = ({
       }, 0);
     });
 
+    // 링크 클릭 이벤트 핸들러
+    const handleLinkClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (target.tagName === 'A' && quillRef.current) {
+        event.preventDefault();
+
+        const linkElement = target as HTMLAnchorElement;
+        const linkUrl = linkElement.getAttribute('href') || '';
+        const linkText = linkElement.textContent || '';
+
+        // Quill에서 링크의 위치 찾기
+        const blot = Quill.find(linkElement);
+        if (blot && !(blot instanceof Quill)) {
+          const index = quillRef.current.getIndex(blot);
+          const length = linkText.length;
+
+          openLinkEditDialog({
+            title: linkText,
+            link: linkUrl,
+            index,
+            length,
+          });
+        }
+      }
+    };
+
+    quillRef.current.root.addEventListener('click', handleLinkClick);
+
     return () => {
       if (typingTimer) {
         clearTimeout(typingTimer);
@@ -211,40 +341,13 @@ const QuillEditor: React.FC<EditorProps> = ({
           const text = quillRef.current.getText().trim();
           onBlurRef.current?.(!text);
         });
+        quillRef.current.root.removeEventListener('click', handleLinkClick);
         quillRef.current = null;
       }
 
       editorElementRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // 링크 폼이 좌측으로 벗어나는 문제를 해결하기 위한 툴팁 위치 조정
-  useEffect(() => {
-    const adjustTooltipPosition = () => {
-      const tooltip = document.querySelector('.ql-tooltip') as HTMLDivElement | null;
-      if (tooltip) {
-        const left = parseFloat(tooltip.style.left) || 0;
-        if (left < 0) {
-          tooltip.style.left = '10px';
-        }
-      }
-    };
-
-    const observer = new MutationObserver(adjustTooltipPosition);
-    const editorContainer = document.querySelector('.ql-container');
-
-    if (editorContainer) {
-      observer.observe(editorContainer, {
-        childList: true,
-        subtree: true,
-        attributes: true,
-      });
-    }
-
-    return () => {
-      observer.disconnect();
-    };
   }, []);
 
   return (
