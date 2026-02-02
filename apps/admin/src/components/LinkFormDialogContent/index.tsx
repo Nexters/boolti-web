@@ -11,6 +11,8 @@ interface LinkFormDialogContentProps {
   onDelete?: () => void;
 }
 
+const URL_PATTERN = /^https?:\/\/.+/;
+
 const LinkFormDialogContent = ({
   defaultValues,
   onSubmit,
@@ -18,36 +20,43 @@ const LinkFormDialogContent = ({
 }: LinkFormDialogContentProps) => {
   const linkForm = useForm<LinkFormInputs>({
     defaultValues,
+    mode: 'onChange',
   });
 
   const isEditMode = !!defaultValues;
+  const hasTitleValue = !!defaultValues?.title;
 
   const submitHandler = (data: LinkFormInputs) => {
+    const trimmedLink = data.link.trim();
+    const trimmedTitle = data.title?.trim();
+
     onSubmit({
-      title: data.title.trim(),
-      link: data.link.trim(),
+      title: trimmedTitle || trimmedLink,
+      link: trimmedLink,
     });
   };
 
   return (
     <Styled.LinkForm onSubmit={linkForm.handleSubmit(submitHandler)}>
       <Styled.LinkFormControl>
-        <Styled.Label htmlFor="title">링크 이름</Styled.Label>
-        <TextField
-          inputType="text"
-          size="small"
-          id="title"
-          autoFocus
-          {...linkForm.register('title', { required: true })}
-        />
-      </Styled.LinkFormControl>
-      <Styled.LinkFormControl>
-        <Styled.Label htmlFor="link">URL</Styled.Label>
+        <Styled.Label htmlFor="link" required>URL</Styled.Label>
         <TextField
           inputType="text"
           size="small"
           id="link"
-          {...linkForm.register('link', { required: true })}
+          autoFocus={hasTitleValue}
+          required
+          {...linkForm.register('link', { required: true, pattern: URL_PATTERN })}
+        />
+      </Styled.LinkFormControl>
+      <Styled.LinkFormControl>
+        <Styled.Label htmlFor="title">제목</Styled.Label>
+        <TextField
+          inputType="text"
+          size="small"
+          id="title"
+          autoFocus={!hasTitleValue}
+          {...linkForm.register('title')}
         />
       </Styled.LinkFormControl>
       <Styled.LinkFormButtonWrapper isEditMode={isEditMode}>
