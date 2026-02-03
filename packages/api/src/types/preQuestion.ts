@@ -31,7 +31,7 @@ export interface PreQuestionsResponse {
   /** 사전 질문 목록 */
   preQuestions: PreQuestionItem[];
   /** 전체 답변 수 */
-  totalAnswerCount: number;
+  totalRespondentCount: number;
 }
 
 /** 사전질문 일괄 수정 요청 */
@@ -83,22 +83,18 @@ export type PagePreQuestionAnswerResponse = PageResponse<PreQuestionAnswerItem>;
 export interface PreQuestionParticipantItem {
   /** 예매 ID */
   reservationId: number;
-  /** cs용(유저용) 예매 ID */
-  csReservationId: string;
   /** 예매자 이름 */
   reservationName: string;
-  /** 예매자 전화번호 */
-  reservationPhoneNumber: string;
-  /** 티켓 타입 */
-  ticketType: TicketType;
-  /** 티켓 이름 */
-  ticketName: string;
+  /** 유저 ID */
+  userId: number;
+  /** 판매 티켓 타입 ID */
+  salesTicketTypeId: number;
+  /** 판매 티켓 타입 이름 */
+  salesTicketTypeName: string;
   /** 티켓 수량 */
   ticketCount: number;
-  /** 답변 완료 여부 */
-  answered: boolean;
-  /** 예매 일시 */
-  createdAt: string;
+  /** 답변 일시 */
+  answeredAt: string;
 }
 
 /** 참여자 목록 응답 (페이징) */
@@ -110,28 +106,38 @@ export interface PreQuestionAnswerDetailItem {
   preQuestionId: number;
   /** 질문 내용 */
   question: string;
-  /** 답변 내용 (미응답 시 null) */
+  /** 질문 설명 */
+  description: string;
+  /** 필수 질문 여부 */
+  isRequired: boolean;
+  /** 답변 내용 */
   answer: string | null;
+  /** 답변 순서 */
+  sequence: number;
+  /** 생성일시 */
+  createdAt: string;
+  /** 수정일시 */
+  modifiedAt: string;
 }
 
 /** 참여자 단건 상세 응답 */
 export interface PreQuestionParticipantDetailResponse {
   /** 예매 ID */
   reservationId: number;
-  /** cs용(유저용) 예매 ID */
-  csReservationId: string;
+  /** 유저 ID */
+  userId: number;
   /** 예매자 이름 */
   reservationName: string;
-  /** 예매자 전화번호 */
-  reservationPhoneNumber: string;
-  /** 티켓 타입 */
-  ticketType: TicketType;
-  /** 티켓 이름 */
-  ticketName: string;
+  /** 판매 티켓 타입 ID */
+  salesTicketTypeId: number;
+  /** 판매 티켓 타입 이름 */
+  salesTicketTypeName: string;
   /** 티켓 수량 */
   ticketCount: number;
   /** 예매 일시 */
   createdAt: string;
+  /** 수정일시 */
+  modifiedAt: string;
   /** 질문별 답변 목록 */
   answers: PreQuestionAnswerDetailItem[];
 }

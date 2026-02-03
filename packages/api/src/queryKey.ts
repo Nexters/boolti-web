@@ -490,8 +490,7 @@ export const popupQueryKeys = createQueryKeys('popup', {
 export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   list: (showId: number) => ({
     queryKey: [showId],
-    queryFn: () =>
-      fetcher.get<PreQuestionsResponse>(`web/v1/host/shows/${showId}/pre-questions`),
+    queryFn: () => fetcher.get<PreQuestionsResponse>(`web/v1/host/shows/${showId}/pre-questions`),
   }),
   answers: (
     showId: number,
@@ -516,7 +515,7 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
         searchParams.sort = sort;
       }
       return fetcher.get<PagePreQuestionAnswerResponse>(
-        `web/v1/host/shows/${showId}/pre-questions/${preQuestionId}/answers`,
+        `web/v1/host/shows/${showId}/pre-question-answers/questions/${preQuestionId}`,
         { searchParams },
       );
     },
