@@ -5,18 +5,12 @@ import { queryKeys } from '../queryKey';
 const usePreQuestionParticipants = (
   showId: number,
   page: number,
-  salesTicketTypeId?: number,
+  salesTicketTypeId?: string,
   reservationName?: string,
   sort?: 'ASC' | 'DESC',
 ) =>
   useQuery(
-    queryKeys.preQuestion.participants(
-      showId,
-      page,
-      salesTicketTypeId,
-      reservationName,
-      sort,
-    ),
+    queryKeys.preQuestion.participants(showId, page, salesTicketTypeId, reservationName, sort),
   );
 
 export default usePreQuestionParticipants;

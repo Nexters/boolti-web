@@ -4,6 +4,7 @@ import {
   usePreQuestionAnswers,
   usePreQuestionParticipants,
   usePreQuestionParticipantDetail,
+  useSalesTicketTypesSummary,
 } from '@boolti/api';
 import {
   PreQuestionItem,
@@ -16,6 +17,7 @@ import Styled from './ResponseTab.styles';
 import EmptyView from './EmptyView';
 import QuestionResponseView from './QuestionResponseView';
 import ParticipantResponseView from './ParticipantResponseView';
+import TicketNameFilter from '~/components/TicketNameFilter';
 
 type ViewType = 'question' | 'participant';
 type SortOrder = 'latest' | 'oldest';
@@ -37,10 +39,20 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
+  // 티켓 필터 상태
+  const [selectedTicketIds, setSelectedTicketIds] = useState<string[]>([]);
+
   // 참여자별 응답 상태
   const [participantPage, setParticipantPage] = useState(1);
   const [participantSearchText, setParticipantSearchText] = useState('');
   const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
+
+  // 티켓 목록 조회
+  const { data: ticketTypesSummary } = useSalesTicketTypesSummary(showId);
+  const ticketOptions = (ticketTypesSummary ?? []).map((ticket) => ({
+    label: ticket.ticketName,
+    value: String(ticket.id),
+  }));
 
   // 질문별 응답 데이터 - 각 질문에 대해 답변 조회
   const [answersMap, setAnswersMap] = useState<
@@ -51,6 +63,9 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const answersSortParam = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
   const participantsSortParam: 'ASC' | 'DESC' = sortOrder === 'latest' ? 'DESC' : 'ASC';
 
+  // 필터 파라미터 (선택된 티켓 ID를 쉼표로 연결)
+  const ticketFilterParam = selectedTicketIds.length > 0 ? selectedTicketIds.join(',') : undefined;
+
   // 질문별 응답 조회 (첫 번째 질문만 useQuery로 조회, 나머지는 수동)
   const firstQuestion = questions[0];
   const { data: firstQuestionAnswers } = usePreQuestionAnswers(
@@ -58,7 +73,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     firstQuestion?.id ?? 0,
     0,
     100, // 충분히 큰 수로 설정
-    undefined,
+    ticketFilterParam,
     answersSortParam,
   );
 
@@ -69,7 +84,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     secondQuestion?.id ?? 0,
     0,
     100,
-    undefined,
+    ticketFilterParam,
     answersSortParam,
   );
 
@@ -79,7 +94,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     thirdQuestion?.id ?? 0,
     0,
     100,
-    undefined,
+    ticketFilterParam,
     answersSortParam,
   );
 
@@ -122,7 +137,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const { data: participantsData } = usePreQuestionParticipants(
     showId,
     participantPage - 1, // 0-based page
-    undefined,
+    ticketFilterParam,
     participantSearchText || undefined,
     participantsSortParam,
   );
@@ -177,6 +192,12 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     setIsSortMenuOpen(false);
   };
 
+  const handleTicketFilterChange = useCallback((values: string[]) => {
+    setSelectedTicketIds(values);
+    setParticipantPage(1);
+    setSelectedReservationId(null);
+  }, []);
+
   // 응답이 없는 경우
   if (totalRespondentCount === 0) {
     return (
@@ -207,6 +228,13 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
         </Styled.SegmentButtonContainer>
 
         <Styled.SortContainer>
+          {ticketOptions.length > 0 && (
+            <TicketNameFilter
+              options={ticketOptions}
+              selectedValues={selectedTicketIds}
+              updateSelectValues={handleTicketFilterChange}
+            />
+          )}
           <Styled.SortDropdown ref={sortRef}>
             <Styled.SortButton
               data-open={isSortMenuOpen}

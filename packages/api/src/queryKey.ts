@@ -523,7 +523,7 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   participants: (
     showId: number,
     page: number,
-    salesTicketTypeId?: number,
+    salesTicketTypeId?: string,
     reservationName?: string,
     sort?: 'ASC' | 'DESC',
   ) => ({
@@ -532,7 +532,7 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
       const searchParams: SearchParamsOption = {
         page,
       };
-      if (salesTicketTypeId !== undefined) {
+      if (salesTicketTypeId) {
         searchParams.salesTicketTypeId = salesTicketTypeId;
       }
       if (reservationName) {

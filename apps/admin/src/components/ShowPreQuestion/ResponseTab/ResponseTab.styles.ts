@@ -52,6 +52,7 @@ export const SegmentButton = styled.button<{ isActive: boolean }>`
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex: 1;
 
   ${({ theme, isActive }) =>
     isActive
@@ -93,7 +94,12 @@ export const HeaderContainer = styled.div`
 export const SortContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
+
+  ${mq_lg} {
+    justify-content: flex-end;
+  }
 `;
 
 export const SortDropdown = styled.div`
@@ -289,25 +295,28 @@ export const EmptyAnswer = styled.div`
 export const ParticipantContainer = styled.div`
   display: flex;
   min-height: 500px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border: none;
   border-radius: 10px;
 
   ${mq_lg} {
+    border: 1px solid ${({ theme }) => theme.palette.grey.g20};
     flex-direction: row;
   }
 `;
 
 export const ParticipantListSection = styled.div`
+  display: flex;
+  flex-direction: column;
   flex-shrink: 0;
   width: 100%;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  border-right: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  border-radius: 10px 0 0 10px;
-  box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
   overflow: hidden;
-  padding: 20px;
 
   ${mq_lg} {
+    padding: 20px;
+    box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
+    border-radius: 10px 0 0 10px;
+    border-right: 1px solid ${({ theme }) => theme.palette.grey.g20};
     width: 340px;
   }
 `;
@@ -345,7 +354,7 @@ export const ParticipantSearchInputButtonGroup = styled.div`
   align-items: center;
   gap: 8px;
   position: absolute;
-  top: 25%;
+  top: 8px;
   right: 12px;
 `;
 
@@ -467,12 +476,17 @@ export const PaginationButton = styled.button<{ isActive?: boolean }>`
 
 // ===== 참여자 상세 =====
 export const ParticipantDetailSection = styled.div`
-  flex: 1;
-  background-color: ${({ theme }) => theme.palette.grey.w};
-  border-radius: 0 10px 10px 0;
-  box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
-  overflow: hidden;
-  height: 670px;
+  display: none;
+
+  ${mq_lg} {
+    display: block;
+    flex: 1;
+    background-color: ${({ theme }) => theme.palette.grey.w};
+    border-radius: 0 10px 10px 0;
+    box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
+    overflow: hidden;
+    height: 670px;
+  }
 `;
 
 export const ParticipantDetailHeader = styled.div`
@@ -505,13 +519,21 @@ export const ParticipantDetailTime = styled.div`
   }
 `;
 
-export const ParticipantDetailBody = styled.div`
+export const ParticipantDetailBody = styled.div<{ isEmpty?: boolean }>`
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
   height: inherit;
+
+  ${({ isEmpty }) =>
+    isEmpty &&
+    `
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+  `}
 `;
 
 export const ParticipantAnswerCard = styled.div`
@@ -551,10 +573,206 @@ export const NoSelectionMessage = styled.div`
   color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
+// ===== 검색 결과 없음 =====
+export const SearchEmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  gap: 18px;
+  padding: 60px 20px 40px;
+
+  ${mq_lg} {
+    flex: 1;
+    padding: 20px;
+  }
+`;
+
+export const SearchEmptyIcon = styled.div`
+  width: 48px;
+  height: 48px;
+
+  ${mq_lg} {
+    width: 60px;
+    height: 60px;
+  }
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+export const SearchEmptyText = styled.div`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  text-align: center;
+  line-height: 24px;
+
+  ${mq_lg} {
+    ${({ theme }) => theme.typo.b4};
+    color: ${({ theme }) => theme.palette.grey.g40};
+    line-height: 26px;
+  }
+`;
+
+export const SearchResetButton = styled.button`
+  display: none;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding: 0 20px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  border-radius: 4px;
+  cursor: pointer;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+
+  ${mq_lg} {
+    display: flex;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.grey.g00};
+  }
+`;
+
 export const Highlight = styled.mark`
   background-color: ${({ theme }) => theme.palette.primary.o0};
   color: inherit;
   padding: 0;
+`;
+
+// ===== 모바일 BottomSheet =====
+export const MobileBottomSheetOverlay = styled.div<{ isOpen: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  z-index: 999;
+  align-items: flex-end;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
+export const MobileBottomSheet = styled.div`
+  position: relative;
+  width: 100%;
+  max-height: 85vh;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+export const MobileBottomSheetHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 24px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  flex-shrink: 0;
+`;
+
+export const MobileBottomSheetHeaderContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+export const MobileBottomSheetTitle = styled.h3`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+`;
+
+export const MobileBottomSheetTimeWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  ${({ theme }) => theme.typo.b1};
+`;
+
+export const MobileBottomSheetTime = styled.div`
+  display: flex;
+  gap: 8px;
+  color: ${({ theme }) => theme.palette.grey.g40};
+
+  span {
+    color: ${({ theme }) => theme.palette.grey.g60};
+  }
+`;
+
+export const MobileBottomSheetCloseButton = styled.button`
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    color: ${({ theme }) => theme.palette.grey.g70};
+  }
+`;
+
+export const MobileBottomSheetBody = styled.div`
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 20px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+export const MobileAnswerCard = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 10px;
+  box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
+  overflow: hidden;
+  padding: 0 20px 12px 12px;
+`;
+
+export const MobileAnswerCardHeader = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 20px 10px;
+`;
+
+export const MobileAnswerCardTitle = styled.div`
+  display: flex;
+  gap: 2px;
+  align-items: flex-start;
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+export const MobileAnswerCardDescription = styled.p`
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g60};
+`;
+
+export const MobileAnswerCardContent = styled.div<{ isEmpty?: boolean }>`
+  padding: 20px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.palette.grey.g00};
+  box-shadow: 0px -7px 10px 0px rgba(0, 0, 0, 0.02);
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme, isEmpty }) => (isEmpty ? theme.palette.grey.g40 : theme.palette.grey.g90)};
+  word-break: break-word;
 `;
 
 export default {
@@ -612,5 +830,23 @@ export default {
   ParticipantAnswerHeader,
   ParticipantAnswerContent,
   NoSelectionMessage,
+  SearchEmptyContainer,
+  SearchEmptyIcon,
+  SearchEmptyText,
+  SearchResetButton,
   Highlight,
+  MobileBottomSheetOverlay,
+  MobileBottomSheet,
+  MobileBottomSheetHeader,
+  MobileBottomSheetHeaderContent,
+  MobileBottomSheetTitle,
+  MobileBottomSheetTimeWrapper,
+  MobileBottomSheetTime,
+  MobileBottomSheetCloseButton,
+  MobileBottomSheetBody,
+  MobileAnswerCard,
+  MobileAnswerCardHeader,
+  MobileAnswerCardTitle,
+  MobileAnswerCardDescription,
+  MobileAnswerCardContent,
 };
