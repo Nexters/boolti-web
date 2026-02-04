@@ -15,6 +15,7 @@ import TextField from './TextField';
 import TimePicker from './TimePicker';
 import StepProgressBar from './StepProgressBar';
 import Checkbox from './Checkbox';
+import RadioButton from './RadioButton';
 import StepDialog from './Dialog/StepDialog';
 import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 
@@ -36,6 +37,7 @@ export {
   TimePicker,
   StepProgressBar,
   Checkbox,
+  RadioButton,
   StepDialog,
   ShowInfoDetail,
 };
