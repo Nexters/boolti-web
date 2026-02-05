@@ -21,29 +21,28 @@ export const ShowInvitationTicketInfoCard = ({
   isDeleteDisabled,
   isShowEnded,
 }: Props) => {
+  const ticketStatus = disabled ? '판매 종료' : ticket.isPaused ? '판매 중단' : '구매 가능';
+  const ticketColorTheme =
+    ticketStatus === '판매 종료' ? 'grey' : ticketStatus === '판매 중단' ? 'red' : 'green';
+
   return (
     <Styled.Ticket key={ticket.id ?? ticket.name}>
       <Styled.TicketContent>
         <Styled.TicketInfo>
           <Styled.TicketTitle>
-            <NewBadge colorTheme={ticket.quantity === 0 ? 'grey' : 'red'}>
-              재고 {ticket.quantity}/{ticket.totalForSale}
-            </NewBadge>
+            <NewBadge colorTheme={ticketColorTheme}>{ticketStatus}</NewBadge>
             <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
           </Styled.TicketTitle>
-          <Styled.TicketDescription>1인 1매</Styled.TicketDescription>
+          <Styled.TicketDescription>
+            판매: {ticket.quantity}/{ticket.totalForSale}
+          </Styled.TicketDescription>
         </Styled.TicketInfo>
         <Styled.TicketAction>
           <Button
             type="button"
             colorTheme="line"
             size="bold"
-            disabled={(() => {
-              if (disabled) return disabled;
-              if (fullEditable) return false;
-
-              return isDeleteDisabled;
-            })()}
+            disabled={disabled || (!fullEditable && isDeleteDisabled)}
             onClick={() => onDeleteTicket(ticket)}
           >
             삭제하기
@@ -55,12 +54,7 @@ export const ShowInvitationTicketInfoCard = ({
             colorTheme="netural"
             size="small"
             icon={<TrashIcon />}
-            disabled={(() => {
-              if (disabled) return disabled;
-              if (fullEditable) return false;
-
-              return isDeleteDisabled;
-            })()}
+            disabled={disabled || (!fullEditable && isDeleteDisabled)}
             onClick={() => onDeleteTicket(ticket)}
           />
         </Styled.MobileTicketAction>

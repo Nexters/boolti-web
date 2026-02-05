@@ -12,6 +12,7 @@ export interface SalesTicket {
   price: number;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }
 
 interface ShowSalesTicketFormContentProps {

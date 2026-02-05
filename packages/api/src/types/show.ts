@@ -231,6 +231,7 @@ export type ShowSalesTicketResponse = {
   totalForSale: number;
   /** 최소 한번 이상 판매된 티켓이 있는지 여부 */
   soldAtLeastOnce: boolean;
+  isPaused: boolean;
 }[];
 
 export type ShowInvitationTicketResponse = {
@@ -239,6 +240,7 @@ export type ShowInvitationTicketResponse = {
   price: number;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }[];
 
 export type ShowInvitationCodeListResponse = {

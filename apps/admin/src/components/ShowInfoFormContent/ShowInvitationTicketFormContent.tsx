@@ -13,6 +13,7 @@ export interface InvitationTicket {
   name: string;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }
 
 interface ShowInvitationTicketFormContentProps {

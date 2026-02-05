@@ -122,6 +122,7 @@ const ShowTicketPage = () => {
                 price: ticket.price,
                 quantity: ticket.quantity,
                 totalForSale: ticket.totalForSale,
+                isPaused: ticket.isPaused,
               }))}
               disabled={show.isEnded}
               onSubmitTicket={async (ticket) => {
@@ -161,6 +162,7 @@ const ShowTicketPage = () => {
                 name: ticket.ticketName,
                 quantity: ticket.quantity,
                 totalForSale: ticket.totalForSale,
+                isPaused: ticket.isPaused,
               }))}
               description={
                 <>
