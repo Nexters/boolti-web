@@ -420,6 +420,11 @@ const TicketInfo = styled.div`
   gap: 6px;
 `;
 
+const TicketInfoRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const TicketTitle = styled.div`
   display: flex;
   align-items: center;
@@ -628,6 +633,7 @@ export default {
   Ticket,
   TicketContent,
   TicketInfo,
+  TicketInfoRow,
   TicketTitle,
   TicketTitleText,
   TicketDescription,

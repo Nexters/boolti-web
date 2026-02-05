@@ -1,9 +1,10 @@
-import { PlusIcon, TrashIcon } from '@boolti/icon';
-import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
+import { PlusIcon } from '@boolti/icon';
+import { Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
 import SalesTicketForm, { SalesTicketFormInputs } from '../TicketForm/SalesTicketForm';
 import Styled from './ShowInfoFormContent.styles';
+import ShowTicketInfoCard from './ShowTicketInfoCard';
 
 export interface SalesTicket {
   id?: number;
@@ -97,51 +98,14 @@ const ShowSalesTicketFormContent = ({
             const isDeleteDisabled = isSingleTicket || isSoldTicket;
 
             return (
-              <Styled.Ticket key={ticket.id ?? ticket.name}>
-                <Styled.TicketContent>
-                  <Styled.TicketInfo>
-                    <Styled.TicketTitle>
-                      <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
-                      <Badge colorTheme={ticket.quantity === 0 ? 'grey' : 'red'}>
-                        재고 {ticket.quantity}/{ticket.totalForSale}
-                      </Badge>
-                    </Styled.TicketTitle>
-                    <Styled.TicketDescription>{ticket.price}원</Styled.TicketDescription>
-                  </Styled.TicketInfo>
-                  <Styled.TicketAction>
-                    <TextButton
-                      type="button"
-                      colorTheme="netural"
-                      size="small"
-                      icon={<TrashIcon />}
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    >
-                      삭제하기
-                    </TextButton>
-                  </Styled.TicketAction>
-                  <Styled.MobileTicketAction>
-                    <TextButton
-                      type="button"
-                      colorTheme="netural"
-                      size="small"
-                      icon={<TrashIcon />}
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    />
-                  </Styled.MobileTicketAction>
-                </Styled.TicketContent>
-              </Styled.Ticket>
+              <ShowTicketInfoCard
+                key={ticket.id ?? ticket.name}
+                ticket={ticket}
+                fullEditable={fullEditable}
+                disabled={disabled}
+                onDeleteTicket={onDeleteTicket}
+                isDeleteDisabled={isDeleteDisabled}
+              />
             );
           })}
         </Styled.TicketList>
