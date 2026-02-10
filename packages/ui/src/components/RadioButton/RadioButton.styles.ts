@@ -53,7 +53,7 @@ export const RadioButtonLabel = styled.span`
 export const RadioButtonContainer = styled.label<{ disabled?: boolean }>`
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 
   &:hover ${RadioButtonCircle} {

@@ -9,7 +9,7 @@ import {
   useShowDetail,
   useShowSalesInfo,
 } from '@boolti/api';
-import { Button, useConfirm, useToast } from '@boolti/ui';
+import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -20,6 +20,7 @@ import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/Sh
 import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
 import { ShowSalesInfoFormInputs } from '~/components/ShowInfoFormContent/types';
+import TicketSettingForm from '~/components/TicketForm/TicketSettingForm';
 
 import Styled from './ShowTicketPage.styles';
 import { useAtom } from 'jotai';
@@ -46,6 +47,8 @@ const ShowTicketPage = () => {
 
   const toast = useToast();
   const confirm = useConfirm();
+  const salesTicketSettingDialog = useDialog();
+  const invitationTicketSettingDialog = useDialog();
 
   const onSubmitShowTicketForm: SubmitHandler<ShowSalesInfoFormInputs> = async (data) => {
     if (!show) return;
@@ -155,8 +158,50 @@ const ShowTicketPage = () => {
                 toast.success('티켓을 삭제했습니다.');
               }}
               onSettingClick={(ticket) => {
-                // TODO: 설정 다이얼로그 열기
-                console.log('설정 클릭:', ticket);
+                const isSingleTicket = salesTicketList.length === 1;
+                const isSoldTicket = ticket.totalForSale > ticket.quantity;
+
+                salesTicketSettingDialog.open({
+                  title: '일반 티켓 설정',
+                  content: (
+                    <TicketSettingForm
+                      ticketType="sales"
+                      defaultValues={{
+                        name: ticket.name,
+                        price: ticket.price,
+                        totalForSale: ticket.totalForSale,
+                        quantity: ticket.quantity,
+                        isPaused: ticket.isPaused,
+                      }}
+                      isDeleteDisabled={isSingleTicket || isSoldTicket}
+                      onSubmit={async (data) => {
+                        // TODO: 티켓 수정 API 호출
+                        console.log('티켓 수정:', data);
+                        salesTicketSettingDialog.close();
+                        await refetchSalesTicketList();
+                        toast.success('티켓 정보를 저장했습니다.');
+                      }}
+                      onDelete={async () => {
+                        if (ticket.id === undefined) return;
+
+                        const result = await confirm(
+                          '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                          {
+                            cancel: '취소하기',
+                            confirm: '삭제하기',
+                          },
+                        );
+
+                        if (!result) return;
+
+                        await deleteSalesTicketMutation.mutateAsync(ticket.id);
+                        salesTicketSettingDialog.close();
+                        await refetchSalesTicketList();
+                        toast.success('티켓을 삭제했습니다.');
+                      }}
+                    />
+                  ),
+                });
               }}
             />
           )}
@@ -204,8 +249,48 @@ const ShowTicketPage = () => {
                 toast.success('티켓을 삭제했습니다.');
               }}
               onSettingClick={(ticket) => {
-                // TODO: 설정 다이얼로그 열기
-                console.log('설정 클릭:', ticket);
+                const isSoldTicket = ticket.totalForSale > ticket.quantity;
+
+                invitationTicketSettingDialog.open({
+                  title: '초청 티켓 설정',
+                  content: (
+                    <TicketSettingForm
+                      ticketType="invitation"
+                      defaultValues={{
+                        name: ticket.name,
+                        totalForSale: ticket.totalForSale,
+                        quantity: ticket.quantity,
+                        isPaused: ticket.isPaused,
+                      }}
+                      isDeleteDisabled={isSoldTicket}
+                      onSubmit={async (data) => {
+                        // TODO: 티켓 수정 API 호출
+                        console.log('티켓 수정:', data);
+                        invitationTicketSettingDialog.close();
+                        await refetchInvitationTicketList();
+                        toast.success('티켓 정보를 저장했습니다.');
+                      }}
+                      onDelete={async () => {
+                        if (ticket.id === undefined) return;
+
+                        const result = await confirm(
+                          '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                          {
+                            cancel: '취소하기',
+                            confirm: '삭제하기',
+                          },
+                        );
+
+                        if (!result) return;
+
+                        await deleteInvitationTicketMutation.mutateAsync(ticket.id);
+                        invitationTicketSettingDialog.close();
+                        await refetchInvitationTicketList();
+                        toast.success('티켓을 삭제했습니다.');
+                      }}
+                    />
+                  ),
+                });
               }}
             />
           )}

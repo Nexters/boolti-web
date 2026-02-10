@@ -46,7 +46,7 @@ const TicketFormRow = styled.div`
 
   ${mq_lg} {
     flex-direction: row;
-    gap: 24px;
+    gap: 28px;
   }
 `;
 
@@ -96,6 +96,33 @@ const TicketFormButton = styled.div`
   }
 `;
 
+const RadioGroup = styled.div`
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+`;
+
+const QuantityDisplay = styled.div`
+  margin-top: 8px;
+  padding: 13px 16px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  background-color: ${({ theme }) => theme.palette.grey.g10};
+  border-radius: 4px;
+`;
+
+const TicketFormFooter = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 8px;
+  padding-bottom: 16px;
+
+  ${mq_lg} {
+    padding-top: 4px;
+  }
+`;
+
 export default {
   TicketForm,
   TicketFormDescription,
@@ -107,4 +134,7 @@ export default {
   TicketFormButton,
   TextField,
   TextFieldSuffix,
+  RadioGroup,
+  QuantityDisplay,
+  TicketFormFooter,
 };
