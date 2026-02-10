@@ -31,3 +31,5 @@ export const GiftRegisterPage = lazy(() => import('./GiftRegisterPage'));
 export const GiftIntroPage = lazy(() => import('./GiftIntroPage'));
 
 export const ShowTypeSelectpage = lazy(() => import('./ShowTypeSelectPage'));
+
+export const AppStoreBridgePage = lazy(() => import('./AppStoreBridge'));
