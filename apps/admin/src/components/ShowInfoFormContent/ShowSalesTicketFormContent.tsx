@@ -4,7 +4,7 @@ import { SubmitHandler } from 'react-hook-form';
 
 import SalesTicketForm, { SalesTicketFormInputs } from '../TicketForm/SalesTicketForm';
 import Styled from './ShowInfoFormContent.styles';
-import ShowTicketInfoCard from './ShowTicketInfoCard';
+import TicketInfoCard from './TicketInfoCard';
 
 export interface SalesTicket {
   id?: number;
@@ -21,6 +21,8 @@ interface ShowSalesTicketFormContentProps {
   disabled?: boolean;
   onSubmitTicket: SubmitHandler<SalesTicketFormInputs>;
   onDeleteTicket: (ticket: SalesTicket) => void;
+  actionType?: 'delete' | 'setting';
+  onSettingClick?: (ticket: SalesTicket) => void;
 }
 
 const ShowSalesTicketFormContent = ({
@@ -29,6 +31,8 @@ const ShowSalesTicketFormContent = ({
   disabled,
   onSubmitTicket,
   onDeleteTicket,
+  actionType = 'delete',
+  onSettingClick,
 }: ShowSalesTicketFormContentProps) => {
   const salesTicketDialog = useDialog();
 
@@ -99,13 +103,16 @@ const ShowSalesTicketFormContent = ({
             const isDeleteDisabled = isSingleTicket || isSoldTicket;
 
             return (
-              <ShowTicketInfoCard
+              <TicketInfoCard
                 key={ticket.id ?? ticket.name}
                 ticket={ticket}
+                ticketType="sales"
                 fullEditable={fullEditable}
                 disabled={disabled}
                 onDeleteTicket={onDeleteTicket}
                 isDeleteDisabled={isDeleteDisabled}
+                actionType={actionType}
+                onSettingClick={onSettingClick}
               />
             );
           })}

@@ -125,6 +125,7 @@ const ShowTicketPage = () => {
                 isPaused: ticket.isPaused,
               }))}
               disabled={show.isEnded}
+              actionType="setting"
               onSubmitTicket={async (ticket) => {
                 await createSalesTicketMutation.mutateAsync({
                   showId: show.id,
@@ -153,6 +154,10 @@ const ShowTicketPage = () => {
                 await refetchSalesTicketList();
                 toast.success('티켓을 삭제했습니다.');
               }}
+              onSettingClick={(ticket) => {
+                // TODO: 설정 다이얼로그 열기
+                console.log('설정 클릭:', ticket);
+              }}
             />
           )}
           {invitationTicketList && (
@@ -171,6 +176,7 @@ const ShowTicketPage = () => {
                 </>
               }
               isShowEnded={show.isEnded}
+              actionType="setting"
               onSubmitTicket={async (ticket) => {
                 await createInvitationTicketMutation.mutateAsync({
                   showId: show.id,
@@ -196,6 +202,10 @@ const ShowTicketPage = () => {
                 await deleteInvitationTicketMutation.mutateAsync(ticket.id);
                 await refetchInvitationTicketList();
                 toast.success('티켓을 삭제했습니다.');
+              }}
+              onSettingClick={(ticket) => {
+                // TODO: 설정 다이얼로그 열기
+                console.log('설정 클릭:', ticket);
               }}
             />
           )}

@@ -6,7 +6,7 @@ import InvitationTicketForm, {
   InvitationTicketFormInputs,
 } from '../TicketForm/InvitationTicketForm';
 import Styled from './ShowInfoFormContent.styles';
-import { ShowInvitationTicketInfoCard } from './ShowInvitationTicketInfoCard';
+import TicketInfoCard from './TicketInfoCard';
 
 export interface InvitationTicket {
   id?: number;
@@ -24,6 +24,8 @@ interface ShowInvitationTicketFormContentProps {
   isShowEnded?: boolean;
   onSubmitTicket: SubmitHandler<InvitationTicketFormInputs>;
   onDeleteTicket: (ticket: InvitationTicket) => void;
+  actionType?: 'delete' | 'setting';
+  onSettingClick?: (ticket: InvitationTicket) => void;
 }
 
 const ShowInvitationTicketFormContent = ({
@@ -34,6 +36,8 @@ const ShowInvitationTicketFormContent = ({
   isShowEnded,
   onSubmitTicket,
   onDeleteTicket,
+  actionType = 'delete',
+  onSettingClick,
 }: ShowInvitationTicketFormContentProps) => {
   const invitationTicketDialog = useDialog();
 
@@ -97,14 +101,17 @@ const ShowInvitationTicketFormContent = ({
             const isDeleteDisabled = isSoldTicket;
 
             return (
-              <ShowInvitationTicketInfoCard
+              <TicketInfoCard
                 key={ticket.id ?? ticket.name}
                 ticket={ticket}
+                ticketType="invitation"
                 fullEditable={fullEditable}
                 disabled={disabled}
                 onDeleteTicket={onDeleteTicket}
                 isDeleteDisabled={isDeleteDisabled}
                 isShowEnded={isShowEnded}
+                actionType={actionType}
+                onSettingClick={onSettingClick}
               />
             );
           })}

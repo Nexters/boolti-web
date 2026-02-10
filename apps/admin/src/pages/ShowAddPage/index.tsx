@@ -294,6 +294,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     price: Number(ticket.price),
                     quantity: Number(ticket.totalForSale),
                     totalForSale: Number(ticket.totalForSale),
+                    isPaused: false,
                   })),
                 );
                 toast.success('일반 티켓을 생성했습니다.');
@@ -321,6 +322,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     name: ticket.name,
                     quantity: Number(ticket.totalForSale),
                     totalForSale: Number(ticket.totalForSale),
+                    isPaused: false,
                   })),
                 );
                 toast.success('초청 티켓을 생성했습니다.');
