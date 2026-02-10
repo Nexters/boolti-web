@@ -33,7 +33,10 @@ const ShowTicketInfoCard = ({
           <Styled.TicketInfoRow>
             <Styled.TicketDescription>{ticket.price}원</Styled.TicketDescription>
             <Styled.TicketDescription>∙</Styled.TicketDescription>
-            <Styled.TicketDescription>판매 0/10</Styled.TicketDescription>
+            <Styled.TicketDescription>
+              판매 {ticket.totalForSale - ticket.quantity}/{ticket.totalForSale}{' '}
+              {ticket.quantity === 0 ? `[품절]` : ''}
+            </Styled.TicketDescription>
           </Styled.TicketInfoRow>
         </Styled.TicketInfo>
         <Styled.TicketAction>

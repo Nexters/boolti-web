@@ -1,4 +1,4 @@
-import { Button, NewBadge, TextButton } from '@boolti/ui';
+import { NewBadge, TextButton } from '@boolti/ui';
 import Styled from './ShowInfoFormContent.styles';
 import { TrashIcon } from '@boolti/icon';
 import ShowInvitationCodeList from './ShowInvitationCodeList';
@@ -34,19 +34,21 @@ export const ShowInvitationTicketInfoCard = ({
             <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
           </Styled.TicketTitle>
           <Styled.TicketDescription>
-            판매: {ticket.quantity}/{ticket.totalForSale}
+            판매 {ticket.totalForSale - ticket.quantity}/{ticket.totalForSale}{' '}
+            {ticket.quantity === 0 ? `[품절]` : ''}
           </Styled.TicketDescription>
         </Styled.TicketInfo>
         <Styled.TicketAction>
-          <Button
+          <TextButton
             type="button"
-            colorTheme="line"
-            size="bold"
+            colorTheme="netural"
+            size="small"
+            icon={<TrashIcon />}
             disabled={disabled || (!fullEditable && isDeleteDisabled)}
             onClick={() => onDeleteTicket(ticket)}
           >
-            삭제하기
-          </Button>
+            삭제
+          </TextButton>
         </Styled.TicketAction>
         <Styled.MobileTicketAction disabled={disabled}>
           <TextButton
