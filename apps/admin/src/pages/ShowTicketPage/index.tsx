@@ -4,6 +4,7 @@ import {
   useDeleteInvitationTicket,
   useDeleteSalesTicket,
   useEditSalesTicketInfo,
+  useEditSalesTicketType,
   useInvitationTicketList,
   useSalesTicketList,
   useShowDetail,
@@ -44,6 +45,7 @@ const ShowTicketPage = () => {
   const createInvitationTicketMutation = useCreateInvitationTicket();
   const deleteSalesTicketMutation = useDeleteSalesTicket();
   const deleteInvitationTicketMutation = useDeleteInvitationTicket();
+  const editSalesTicketTypeMutation = useEditSalesTicketType();
 
   const toast = useToast();
   const confirm = useConfirm();
@@ -175,8 +177,15 @@ const ShowTicketPage = () => {
                       }}
                       isDeleteDisabled={isSingleTicket || isSoldTicket}
                       onSubmit={async (data) => {
-                        // TODO: 티켓 수정 API 호출
-                        console.log('티켓 수정:', data);
+                        if (ticket.id === undefined) return;
+
+                        await editSalesTicketTypeMutation.mutateAsync({
+                          salesTicketTypeId: ticket.id,
+                          ticketName: data.name,
+                          price: data.price ? Number(data.price) : undefined,
+                          totalForSale: Number(data.totalForSale),
+                          isPaused: data.isPaused,
+                        });
                         salesTicketSettingDialog.close();
                         await refetchSalesTicketList();
                         toast.success('티켓 정보를 저장했습니다.');
@@ -264,8 +273,14 @@ const ShowTicketPage = () => {
                       }}
                       isDeleteDisabled={isSoldTicket}
                       onSubmit={async (data) => {
-                        // TODO: 티켓 수정 API 호출
-                        console.log('티켓 수정:', data);
+                        if (ticket.id === undefined) return;
+
+                        await editSalesTicketTypeMutation.mutateAsync({
+                          salesTicketTypeId: ticket.id,
+                          ticketName: data.name,
+                          totalForSale: Number(data.totalForSale),
+                          isPaused: data.isPaused,
+                        });
                         invitationTicketSettingDialog.close();
                         await refetchInvitationTicketList();
                         toast.success('티켓 정보를 저장했습니다.');
