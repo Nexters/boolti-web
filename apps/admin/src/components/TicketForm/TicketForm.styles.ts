@@ -104,22 +104,65 @@ const RadioGroup = styled.div`
 
 const QuantityDisplay = styled.div`
   margin-top: 8px;
-  padding: 13px 16px;
+  padding: 13px 0px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g70};
-  background-color: ${({ theme }) => theme.palette.grey.g10};
   border-radius: 4px;
+  border: 1px solid transparent;
+`;
+
+const QuantityRow = styled.div`
+  margin-bottom: 28px;
+  display: flex;
+  gap: 28px;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const SoldQuantityContent = styled.div`
+  ${mq_lg} {
+    width: 118px;
+    flex-shrink: 0;
+  }
+`;
+
+const TotalQuantityContent = styled.div`
+  ${mq_lg} {
+    width: 240px;
+    flex-shrink: 0;
+  }
 `;
 
 const TicketFormFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  gap: 36px;
   padding-top: 8px;
   padding-bottom: 16px;
 
+  & > button:first-of-type {
+    min-width: 70px;
+  }
+
+  & > button:last-of-type {
+    width: 100%;
+  }
+
   ${mq_lg} {
+    gap: 16px;
     padding-top: 4px;
+
+    & > button:first-of-type {
+      min-width: auto;
+    }
+
+    & > button:last-of-type {
+      width: auto;
+    }
   }
 `;
 
@@ -136,5 +179,8 @@ export default {
   TextFieldSuffix,
   RadioGroup,
   QuantityDisplay,
+  QuantityRow,
+  SoldQuantityContent,
+  TotalQuantityContent,
   TicketFormFooter,
 };

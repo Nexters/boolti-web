@@ -1,7 +1,6 @@
 import { Button, RadioButton, TextField, TextButton } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
 import Styled from './TicketForm.styles';
 
 export interface TicketSettingFormInputs {
@@ -139,12 +138,15 @@ const TicketSettingForm = ({
           </Styled.TicketFormContent>
         </Styled.TicketFormRow>
       )}
-      <Styled.TicketFormRow>
-        <Styled.TicketFormContent>
+      <Styled.QuantityRow>
+        <Styled.SoldQuantityContent>
           <Styled.TicketFormLabel>판매된 수량</Styled.TicketFormLabel>
-          <Styled.QuantityDisplay>{soldQuantity} 매</Styled.QuantityDisplay>
-        </Styled.TicketFormContent>
-        <Styled.TicketFormContent>
+          <Styled.QuantityDisplay>
+            {soldQuantity}
+            <Styled.TextFieldSuffix>매</Styled.TextFieldSuffix>
+          </Styled.QuantityDisplay>
+        </Styled.SoldQuantityContent>
+        <Styled.TotalQuantityContent>
           <Styled.TicketFormLabel>총 수량</Styled.TicketFormLabel>
           <Styled.TextField>
             <TextField
@@ -162,14 +164,20 @@ const TicketSettingForm = ({
             />
             <Styled.TextFieldSuffix>매</Styled.TextFieldSuffix>
           </Styled.TextField>
-        </Styled.TicketFormContent>
-      </Styled.TicketFormRow>
+        </Styled.TotalQuantityContent>
+      </Styled.QuantityRow>
 
       <Styled.TicketFormFooter>
         <TextButton
           type="button"
-          size="small"
           colorTheme="netural"
+          style={{
+            color: '#282B33',
+            textUnderlineOffset: '4px',
+            textDecoration: 'underline',
+            cursor: 'pointer',
+          }}
+          size="small"
           disabled={isDeleteDisabled}
           onClick={onDelete}
         >
