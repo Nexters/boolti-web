@@ -1,6 +1,7 @@
-import { Button, RadioButton, TextField, TextButton } from '@boolti/ui';
+import { Button, palette, RadioButton, TextField, TextButton } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
 
 export interface TicketSettingFormInputs {
@@ -19,6 +20,7 @@ interface TicketSettingFormProps {
     quantity: number;
     isPaused: boolean;
   };
+  soldAtLeastOnce?: boolean;
   onSubmit: SubmitHandler<TicketSettingFormInputs>;
   onDelete: () => void;
   isDeleteDisabled?: boolean;
@@ -27,6 +29,7 @@ interface TicketSettingFormProps {
 const TicketSettingForm = ({
   ticketType,
   defaultValues,
+  soldAtLeastOnce = false,
   onSubmit,
   onDelete,
   isDeleteDisabled,
@@ -96,8 +99,8 @@ const TicketSettingForm = ({
             <TextField
               inputType="text"
               size="big"
-              maxLength={12}
-              placeholder="티켓 이름을 입력해 주세요 (12자 이내)"
+              maxLength={20}
+              placeholder="티켓 이름을 입력해 주세요 (20자 이내)"
               {...register('name', { required: true })}
               onBlur={(event) => {
                 register('name', { required: true }).onBlur(event);
@@ -120,6 +123,7 @@ const TicketSettingForm = ({
                 size="big"
                 placeholder="0"
                 min={0}
+                disabled={soldAtLeastOnce}
                 {...register('price', { required: ticketType === 'sales' })}
                 onChange={(event) => {
                   register('price', {
@@ -169,13 +173,14 @@ const TicketSettingForm = ({
 
       <Styled.TicketFormFooter>
         <TextButton
+          data-tooltip-id="delete-ticket-tooltip-multiline"
           type="button"
           colorTheme="netural"
           style={{
-            color: '#282B33',
+            color: isDeleteDisabled ? palette.grey.g50 : palette.grey.g90,
             textUnderlineOffset: '4px',
             textDecoration: 'underline',
-            cursor: 'pointer',
+            cursor: isDeleteDisabled ? 'not-allowed' : 'pointer',
           }}
           size="small"
           disabled={isDeleteDisabled}
@@ -187,6 +192,26 @@ const TicketSettingForm = ({
           저장하기
         </Button>
       </Styled.TicketFormFooter>
+      {isDeleteDisabled && (
+        <Tooltip
+          id="delete-ticket-tooltip-multiline"
+          place="top-start"
+          style={{
+            backgroundColor: palette.grey.g90,
+            padding: '8px 12px',
+            borderRadius: '4px',
+            lineHeight: '22px',
+            fontSize: '14px',
+            fontWeight: 400,
+          }}
+        >
+          환불을 포함한 판매 이력이 있어 티켓 삭제가
+          <br />
+          불가합니다. 미판매를 원하시는 경우,
+          <br />
+          ‘판매 설정&gt; 판매 중단’을 선택해 주세요.
+        </Tooltip>
+      )}
     </Styled.TicketForm>
   );
 };

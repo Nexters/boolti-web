@@ -161,7 +161,8 @@ const ShowTicketPage = () => {
               }}
               onSettingClick={(ticket) => {
                 const isSingleTicket = salesTicketList.length === 1;
-                const isSoldTicket = ticket.totalForSale > ticket.quantity;
+                const originalTicket = salesTicketList.find((t) => t.id === ticket.id);
+                const soldAtLeastOnce = originalTicket?.soldAtLeastOnce ?? false;
 
                 salesTicketSettingDialog.open({
                   title: '일반 티켓 설정',
@@ -175,7 +176,8 @@ const ShowTicketPage = () => {
                         quantity: ticket.quantity,
                         isPaused: ticket.isPaused,
                       }}
-                      isDeleteDisabled={isSingleTicket || isSoldTicket}
+                      soldAtLeastOnce={soldAtLeastOnce}
+                      isDeleteDisabled={isSingleTicket || soldAtLeastOnce}
                       onSubmit={async (data) => {
                         if (ticket.id === undefined) return;
 
@@ -271,6 +273,7 @@ const ShowTicketPage = () => {
                         quantity: ticket.quantity,
                         isPaused: ticket.isPaused,
                       }}
+                      soldAtLeastOnce={isSoldTicket}
                       isDeleteDisabled={isSoldTicket}
                       onSubmit={async (data) => {
                         if (ticket.id === undefined) return;
