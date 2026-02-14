@@ -76,6 +76,8 @@ export const fetcher = {
   get: <T>(pathname: string, options?: Options) => resultify<T>(instance.get(pathname, options)),
   post: <T>(pathname: string, options?: Options) => resultify<T>(instance.post(pathname, options)),
   put: <T>(pathname: string, options?: Options) => resultify<T>(instance.put(pathname, options)),
+  patch: <T>(pathname: string, options?: Options) =>
+    resultify<T>(instance.patch(pathname, options)),
   delete: <T>(pathname: string, options?: Options) =>
     resultify<T>(instance.delete(pathname, options)),
 };

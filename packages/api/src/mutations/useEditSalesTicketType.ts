@@ -10,10 +10,10 @@ interface EditSalesTicketTypeRequest {
   isPaused?: boolean;
 }
 
-const putEditSalesTicketType = ({ salesTicketTypeId, ...body }: EditSalesTicketTypeRequest) =>
-  fetcher.put(`web/v1/host/sales-ticket-types/${salesTicketTypeId}`, { json: body });
+const patchEditSalesTicketType = ({ salesTicketTypeId, ...body }: EditSalesTicketTypeRequest) =>
+  fetcher.patch(`web/v1/host/sales-ticket-types/${salesTicketTypeId}`, { json: body });
 
 const useEditSalesTicketType = () =>
-  useMutation((data: EditSalesTicketTypeRequest) => putEditSalesTicketType(data));
+  useMutation((data: EditSalesTicketTypeRequest) => patchEditSalesTicketType(data));
 
 export default useEditSalesTicketType;
