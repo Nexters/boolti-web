@@ -20,7 +20,7 @@ const StepProgressBar: React.FC<StepProgressBarProps> = ({ activeKey, items }) =
       <Styled.StepProgressBarLine step={step} maxStep={items.length} />
       <Styled.StepProgressBarItemList isJustifyCenter={isJustifyCenter}>
         {items.map((item, index) => (
-          <Styled.StepProgressBarItem key={item.key} active={step >= index + 1}>
+          <Styled.StepProgressBarItem key={item.key} active={step === index + 1}>
             <span>{item.title}</span>
           </Styled.StepProgressBarItem>
         ))}

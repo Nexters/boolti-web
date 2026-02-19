@@ -49,6 +49,11 @@ import useAdminReservationSummaryV2 from './useAdminReservationSummaryV2';
 import usePopup from './usePopup';
 import useSuperAdminShowSettlementStatement from './useSuperAdminShowSettlementStatement';
 import useYoutubeVideoDuration from './useYoutubeVideoDuration';
+import usePreQuestions from './usePreQuestions';
+import usePreQuestionAnswers from './usePreQuestionAnswers';
+import usePreQuestionParticipants from './usePreQuestionParticipants';
+import usePreQuestionParticipantDetail from './usePreQuestionParticipantDetail';
+import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
 
 export {
   useCastTeamList,
@@ -102,4 +107,9 @@ export {
   usePopup,
   useSuperAdminShowSettlementStatement,
   useYoutubeVideoDuration,
+  usePreQuestions,
+  usePreQuestionAnswers,
+  usePreQuestionParticipants,
+  usePreQuestionParticipantDetail,
+  useSalesTicketTypesSummary,
 };

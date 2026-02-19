@@ -40,6 +40,7 @@ const TicketOptions = styled.div`
   white-space: nowrap;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.grey.w};
+  z-index: 5;
   ${mq_lg} {
     left: 0;
     position: absolute;

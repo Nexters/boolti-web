@@ -2,11 +2,12 @@ import { HostType } from '@boolti/api/src/types/host';
 import Styled from './ShowDetailUnauthorized.styles';
 import { BooltiGreyIcon } from '@boolti/icon/src/components/BooltiGreyIcon';
 
-type ShowDetailPageName = '공연 정보' | '판매 정보' | '결제 관리' | '방문자 관리' | '정산 관리';
+type ShowDetailPageName = '공연 정보' | '판매 정보' | '사전 질문 관리' | '결제 관리' | '방문자 관리' | '정산 관리';
 
 export const PAGE_PERMISSION: Record<ShowDetailPageName, HostType[]> = {
   '공연 정보': [HostType.MAIN, HostType.MANAGER],
   '판매 정보': [HostType.MAIN, HostType.MANAGER],
+  '사전 질문 관리': [HostType.MAIN, HostType.MANAGER],
   '결제 관리': [HostType.MAIN, HostType.MANAGER],
   '방문자 관리': [HostType.MAIN, HostType.MANAGER, HostType.SUPPORTER],
   '정산 관리': [HostType.MAIN],
