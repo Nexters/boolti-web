@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 
 interface SubTabItemProps {
   active?: boolean;
+  isDisabled?: boolean;
 }
 
 const ShowPreQuestionPage = styled.div`
@@ -22,22 +23,27 @@ const SubTabContainer = styled.div`
 `;
 
 const SubTabItem = styled.button<SubTabItemProps>`
-  ${({ theme }) => theme.typo.sh1};
-  color: ${({ active, theme }) => (active ? theme.palette.grey.g90 : theme.palette.grey.g50)};
   background: none;
   border: none;
   padding: 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 4px;
+  opacity: 1;
+  cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
+  ${({ theme, active }) => (active ? theme.typo.sh1 : theme.typo.b3)};
+  color: ${({ active, isDisabled, theme }) => {
+    if (active) return theme.palette.grey.g90;
+    if (isDisabled) return theme.palette.grey.g70;
+    return theme.palette.grey.g50;
+  }};
 
   &:hover {
-    color: ${({ theme }) => theme.palette.grey.g90};
+    color: ${({ isDisabled, theme }) => (isDisabled ? theme.palette.grey.g70 : theme.palette.grey.g90)};
   }
 `;
 
-const Badge = styled.span`
+const Badge = styled.span<{ isDisabled?: boolean }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -45,7 +51,8 @@ const Badge = styled.span`
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.palette.grey.g90};
+  background-color: ${({ isDisabled, theme }) =>
+    isDisabled ? theme.palette.grey.g50 : theme.palette.grey.g90};
   color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.c1};
 `;

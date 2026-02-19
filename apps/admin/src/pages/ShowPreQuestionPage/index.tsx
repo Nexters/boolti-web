@@ -126,6 +126,13 @@ const ShowPreQuestionPage = () => {
     [preQuestionsData],
   );
   const questions = useMemo(() => preQuestionsData?.preQuestions ?? [], [preQuestionsData]);
+  const hasNoQuestion = isInitialized && preQuestionList.length === 0;
+  const isEditEmptyAfterDeadline = isQuestionDeadlineEnded && hasNoQuestion;
+  const isEditEmptyBeforeDeadline = !isQuestionDeadlineEnded && hasNoQuestion;
+  const isResponseTabDisabled = isEditEmptyBeforeDeadline;
+  const isSubTabHidden = isEditEmptyAfterDeadline;
+  const currentTab: SubTab = isSubTabHidden || isResponseTabDisabled ? 'edit' : activeTab;
+  const responseBadgeText = isResponseTabDisabled ? '-' : String(responseCount);
 
   if (!show || !myHostInfo) {
     return null;
@@ -143,21 +150,25 @@ const ShowPreQuestionPage = () => {
 
   return (
     <Styled.ShowPreQuestionPage>
-      <Styled.SubTabContainer>
-        <Styled.SubTabItem active={activeTab === 'edit'} onClick={() => setActiveTab('edit')}>
-          질문 편집
-        </Styled.SubTabItem>
-        <Styled.SubTabItem
-          active={activeTab === 'response'}
-          onClick={() => setActiveTab('response')}
-        >
-          응답 확인
-          <Styled.Badge>{responseCount}</Styled.Badge>
-        </Styled.SubTabItem>
-      </Styled.SubTabContainer>
+      {!isSubTabHidden && (
+        <Styled.SubTabContainer>
+          <Styled.SubTabItem active={currentTab === 'edit'} onClick={() => setActiveTab('edit')}>
+            질문 편집
+          </Styled.SubTabItem>
+          <Styled.SubTabItem
+            active={currentTab === 'response'}
+            isDisabled={isResponseTabDisabled}
+            disabled={isResponseTabDisabled}
+            onClick={() => setActiveTab('response')}
+          >
+            응답 확인
+            <Styled.Badge isDisabled={isResponseTabDisabled}>{responseBadgeText}</Styled.Badge>
+          </Styled.SubTabItem>
+        </Styled.SubTabContainer>
+      )}
 
-      <Styled.Content fullWidth={activeTab === 'response'}>
-        {activeTab === 'edit' && (
+      <Styled.Content fullWidth={currentTab === 'response' || isEditEmptyAfterDeadline}>
+        {currentTab === 'edit' && (
           <PreQuestionEditForm
             preQuestionList={preQuestionList}
             isDisabled={isQuestionDeadlineEnded}
@@ -168,7 +179,7 @@ const ShowPreQuestionPage = () => {
             onSave={handleSave}
           />
         )}
-        {activeTab === 'response' && (
+        {currentTab === 'response' && (
           <ResponseTab showId={showId} questions={questions} totalRespondentCount={responseCount} />
         )}
       </Styled.Content>

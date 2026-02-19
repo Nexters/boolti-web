@@ -1,4 +1,4 @@
-import { PlusIcon } from '@boolti/icon';
+import { BooltiGreyIcon, PlusIcon } from '@boolti/icon';
 import { useConfirm } from '@boolti/ui';
 import styled from '@emotion/styled';
 
@@ -133,24 +133,30 @@ const EmptyState = styled.div`
 `;
 
 const EmptyStateDisabled = styled.div`
+  width: 100%;
+  min-height: 560px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 60px 20px;
-  border: 1px dashed ${({ theme }) => theme.palette.grey.g20};
+  padding: 120px 20px;
   border-radius: 8px;
   text-align: center;
 `;
 
-const EmptyStateTitle = styled.p`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g50};
-  margin-bottom: 8px;
+const EmptyStateIcon = styled.div`
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
-const EmptyStateDescription = styled.p`
-  ${({ theme }) => theme.typo.b1};
+const EmptyStateText = styled.p`
+  ${({ theme }) => theme.typo.b4};
   color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
@@ -214,7 +220,7 @@ const AddButton = ({ onAddQuestion }: { onAddQuestion: () => void }) => (
       추가하기
     </AddButtonText>
   </EmptyState>
-)
+);
 
 interface PreQuestionEditFormProps {
   preQuestionList: PreQuestion[];
@@ -265,10 +271,10 @@ const PreQuestionEditForm = ({
   if (preQuestionList.length === 0 && isDisabled) {
     return (
       <EmptyStateDisabled>
-        <EmptyStateTitle>등록된 사전 질문이 없습니다</EmptyStateTitle>
-        <EmptyStateDescription>
-          공연이 시작되어 사전 질문을 추가할 수 없습니다
-        </EmptyStateDescription>
+        <EmptyStateIcon>
+          <BooltiGreyIcon />
+        </EmptyStateIcon>
+        <EmptyStateText>생성한 사전 질문이 없어요.</EmptyStateText>
       </EmptyStateDisabled>
     );
   }
