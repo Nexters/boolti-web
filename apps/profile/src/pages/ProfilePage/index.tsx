@@ -66,31 +66,45 @@ const ProfilePage = () => {
     }
   };
 
-  const handleShareUrlCopy = async () => {
-    const url = `${window.location.origin}/${userCode}`;
+  const closeShareModals = () => {
+    setIsShareBottomSheetOpen(false);
+    setIsShareDropdownOpen(false);
+  };
 
-    if (navigator.share) {
+  const shareOrCopy = async (options: {
+    shareData?: ShareData;
+    copyText: string;
+    successMessage: string;
+  }) => {
+    const { shareData, copyText, successMessage } = options;
+
+    if (navigator.share && shareData) {
       try {
-        await navigator.share({
-          url,
-        });
-        setIsShareBottomSheetOpen(false);
-        setIsShareDropdownOpen(false);
-        toast.success('URL을 복사했어요');
+        await navigator.share(shareData);
+        closeShareModals();
+        toast.success(successMessage);
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
           console.error('Share failed:', error);
         }
       }
     } else {
-      navigator.clipboard.writeText(url);
-      toast.success('URL을 복사했어요');
-      setIsShareBottomSheetOpen(false);
-      setIsShareDropdownOpen(false);
+      navigator.clipboard.writeText(copyText);
+      toast.success(successMessage);
+      closeShareModals();
     }
   };
 
-  const handleShareDetailCopy = async () => {
+  const handleShareUrlCopy = () => {
+    const url = `${window.location.origin}/${userCode}`;
+    shareOrCopy({
+      shareData: { url },
+      copyText: url,
+      successMessage: 'URL을 복사했어요',
+    });
+  };
+
+  const handleShareDetailCopy = () => {
     if (!profile) return;
     const shareText = [
       '이 아티스트 어때요?',
@@ -102,25 +116,20 @@ const ProfilePage = () => {
       `${window.location.origin}/${userCode}`,
     ].join('\n');
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          text: shareText,
-        });
-        setIsShareBottomSheetOpen(false);
-        setIsShareDropdownOpen(false);
-        toast.success('아티스트 정보를 복사했어요');
-      } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
-          console.error('Share failed:', error);
-        }
-      }
-    } else {
-      navigator.clipboard.writeText(shareText);
-      toast.success('아티스트 정보를 복사했어요');
-      setIsShareBottomSheetOpen(false);
-      setIsShareDropdownOpen(false);
-    }
+    shareOrCopy({
+      shareData: { text: shareText },
+      copyText: shareText,
+      successMessage: '아티스트 정보를 복사했어요',
+    });
+  };
+
+  const handleUserCodeCopy = () => {
+    if (!profile) return;
+    shareOrCopy({
+      shareData: { text: profile.userCode },
+      copyText: profile.userCode,
+      successMessage: 'ID를 복사했어요',
+    });
   };
 
   const getBridgeLink = () => {
@@ -218,7 +227,7 @@ const ProfilePage = () => {
           <Styled.CoverOverlay>
             <Styled.ProfileInfo>
               <Styled.Nickname>{profile.nickname}</Styled.Nickname>
-              <Styled.UserName>@{profile.userCode}</Styled.UserName>
+              <Styled.UserName onClick={handleUserCodeCopy}>{profile.userCode}</Styled.UserName>
             </Styled.ProfileInfo>
           </Styled.CoverOverlay>
         </Styled.CoverSection>
