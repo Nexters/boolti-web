@@ -10,6 +10,7 @@ import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { useState } from 'react';
+import { EXTERNAL_URL } from '../../constants/external';
 
 setDefaultOptions({ locale: ko });
 
@@ -200,12 +201,16 @@ const ShowPreviewPage = () => {
             }}
             showCastTeams={showCastTeams.map(({ name, members }) => ({
               name,
-              members: members?.map(({ roleName, userNickname, userImgPath }) => ({
+              members: members?.map(({ userCode, roleName, userNickname, userImgPath }) => ({
+                userCode,
                 roleName,
                 userNickname,
                 userImgPath,
               })),
             }))}
+            onClickCastMember={(userCode) => {
+              window.open(EXTERNAL_URL.USER_PROFILE(userCode), '_blank');
+            }}
             shareDropdownOpen={shareDropdownOpen}
             logoLinkHref="https://boolti.in"
             onClickLink={reservationButtonClickHandler}
