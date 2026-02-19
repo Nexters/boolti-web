@@ -46,9 +46,12 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const [participantPage, setParticipantPage] = useState(1);
   const [participantSearchText, setParticipantSearchText] = useState('');
   const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
+  const shouldFetchResponseData = totalRespondentCount > 0;
 
   // 티켓 목록 조회
-  const { data: ticketTypesSummary } = useSalesTicketTypesSummary(showId);
+  const { data: ticketTypesSummary } = useSalesTicketTypesSummary(showId, {
+    enabled: shouldFetchResponseData,
+  });
   const ticketOptions = (ticketTypesSummary ?? []).map((ticket) => ({
     label: ticket.ticketName,
     value: String(ticket.id),
@@ -75,6 +78,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     100, // 충분히 큰 수로 설정
     ticketFilterParam,
     answersSortParam,
+    { enabled: shouldFetchResponseData && firstQuestion !== undefined },
   );
 
   // 나머지 질문들의 답변도 가져오기 위한 훅들
@@ -86,6 +90,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     100,
     ticketFilterParam,
     answersSortParam,
+    { enabled: shouldFetchResponseData && secondQuestion !== undefined },
   );
 
   const thirdQuestion = questions[2];
@@ -96,6 +101,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     100,
     ticketFilterParam,
     answersSortParam,
+    { enabled: shouldFetchResponseData && thirdQuestion !== undefined },
   );
 
   // 응답 데이터 맵 업데이트
@@ -140,13 +146,14 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     ticketFilterParam,
     participantSearchText || undefined,
     participantsSortParam,
+    { enabled: shouldFetchResponseData },
   );
 
   // 선택된 참여자 상세 조회 (selectedReservationId가 있을 때만 실행)
   const { data: participantDetail } = usePreQuestionParticipantDetail(
     showId,
     selectedReservationId ?? 0,
-    { enabled: selectedReservationId !== null },
+    { enabled: shouldFetchResponseData && selectedReservationId !== null },
   );
 
   const participants: PreQuestionParticipantItem[] = participantsData?.content ?? [];

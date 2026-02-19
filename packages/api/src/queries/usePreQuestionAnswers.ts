@@ -9,6 +9,11 @@ const usePreQuestionAnswers = (
   size?: number,
   salesTicketTypeId?: string,
   sort?: string,
-) => useQuery(queryKeys.preQuestion.answers(showId, preQuestionId, page, size, salesTicketTypeId, sort));
+  options?: { enabled?: boolean },
+) =>
+  useQuery({
+    ...queryKeys.preQuestion.answers(showId, preQuestionId, page, size, salesTicketTypeId, sort),
+    enabled: options?.enabled ?? true,
+  });
 
 export default usePreQuestionAnswers;

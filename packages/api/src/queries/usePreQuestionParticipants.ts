@@ -8,9 +8,11 @@ const usePreQuestionParticipants = (
   salesTicketTypeId?: string,
   reservationName?: string,
   sort?: 'ASC' | 'DESC',
+  options?: { enabled?: boolean },
 ) =>
-  useQuery(
-    queryKeys.preQuestion.participants(showId, page, salesTicketTypeId, reservationName, sort),
-  );
+  useQuery({
+    ...queryKeys.preQuestion.participants(showId, page, salesTicketTypeId, reservationName, sort),
+    enabled: options?.enabled ?? true,
+  });
 
 export default usePreQuestionParticipants;

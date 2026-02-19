@@ -126,10 +126,9 @@ const ShowPreQuestionPage = () => {
     [preQuestionsData],
   );
   const questions = useMemo(() => preQuestionsData?.preQuestions ?? [], [preQuestionsData]);
-  const hasNoQuestion = isInitialized && preQuestionList.length === 0;
-  const isEditEmptyAfterDeadline = isQuestionDeadlineEnded && hasNoQuestion;
-  const isEditEmptyBeforeDeadline = !isQuestionDeadlineEnded && hasNoQuestion;
-  const isResponseTabDisabled = isEditEmptyBeforeDeadline;
+  const hasNoSavedQuestion = isInitialized && questions.length === 0;
+  const isEditEmptyAfterDeadline = isQuestionDeadlineEnded && hasNoSavedQuestion;
+  const isResponseTabDisabled = !isQuestionDeadlineEnded && hasNoSavedQuestion;
   const isSubTabHidden = isEditEmptyAfterDeadline;
   const currentTab: SubTab = isSubTabHidden || isResponseTabDisabled ? 'edit' : activeTab;
   const responseBadgeText = isResponseTabDisabled ? '-' : String(responseCount);

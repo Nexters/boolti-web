@@ -35,7 +35,7 @@ const SubTabItem = styled.button<SubTabItemProps>`
   color: ${({ active, isDisabled, theme }) => {
     if (active) return theme.palette.grey.g90;
     if (isDisabled) return theme.palette.grey.g70;
-    return theme.palette.grey.g50;
+    return theme.palette.grey.g70;
   }};
 
   &:hover {
