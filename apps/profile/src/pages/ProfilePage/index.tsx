@@ -9,7 +9,7 @@ import {
   BooltiGreyLogo,
 } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
-import { BottomSheet, useDialog } from '@boolti/ui';
+import { BottomSheet, useDialog, useToast } from '@boolti/ui';
 import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
@@ -27,6 +27,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 const ProfilePage = () => {
   const dialog = useDialog();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const { userCode } = useParams<{ userCode: string }>();
@@ -75,6 +76,7 @@ const ProfilePage = () => {
         });
         setIsShareBottomSheetOpen(false);
         setIsShareDropdownOpen(false);
+        toast.success('URL을 복사했어요');
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
           console.error('Share failed:', error);
@@ -82,6 +84,7 @@ const ProfilePage = () => {
       }
     } else {
       navigator.clipboard.writeText(url);
+      toast.success('URL을 복사했어요');
       setIsShareBottomSheetOpen(false);
       setIsShareDropdownOpen(false);
     }
@@ -106,6 +109,7 @@ const ProfilePage = () => {
         });
         setIsShareBottomSheetOpen(false);
         setIsShareDropdownOpen(false);
+        toast.success('아티스트 정보를 복사했어요');
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
           console.error('Share failed:', error);
@@ -113,6 +117,7 @@ const ProfilePage = () => {
       }
     } else {
       navigator.clipboard.writeText(shareText);
+      toast.success('아티스트 정보를 복사했어요');
       setIsShareBottomSheetOpen(false);
       setIsShareDropdownOpen(false);
     }
@@ -165,8 +170,8 @@ const ProfilePage = () => {
     return <NotFound />;
   }
 
-  const instagramAccount = profile.sns.find((sns) => sns.type === 'INSTAGRAM');
-  const youtubeAccount = profile.sns.find((sns) => sns.type === 'YOUTUBE');
+  const instagramAccount = profile.sns?.find((sns) => sns.type === 'INSTAGRAM');
+  const youtubeAccount = profile.sns?.find((sns) => sns.type === 'YOUTUBE');
 
   return (
     <>
