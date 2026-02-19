@@ -35,7 +35,7 @@ const ProfilePage = () => {
   const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const { data: profile } = useUserByUserCodeV2(userCode as string);
+  const { data: profile, isLoading } = useUserByUserCodeV2(userCode as string);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -174,6 +174,10 @@ const ProfilePage = () => {
       ),
     });
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   if (!profile) {
     return <NotFound />;
