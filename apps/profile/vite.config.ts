@@ -8,10 +8,10 @@ export default defineConfig({
   },
   server: {
     port: 8081,
-    host: 'dev.profile.boolti.in',
+    host: 'profile.dev.boolti.in',
     https: {
-      key: './dev.profile.boolti.in-key.pem',
-      cert: './dev.profile.boolti.in.pem',
+      key: './profile.dev.boolti.in-key.pem',
+      cert: './profile.dev.boolti.in.pem',
     },
     proxy: {
       '/api': {
