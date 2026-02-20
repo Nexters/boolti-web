@@ -43,7 +43,6 @@ const ShowInvitationTicketFormContent = ({
 
   const handleSubmitTicket: SubmitHandler<InvitationTicketFormInputs> = (data) => {
     invitationTicketDialog.close();
-
     onSubmitTicket(data);
   };
 
@@ -60,6 +59,7 @@ const ShowInvitationTicketFormContent = ({
             colorTheme="netural"
             size="small"
             icon={<PlusIcon />}
+            disabled={disabled}
             onClick={() => {
               invitationTicketDialog.open({
                 title: '초청 티켓 생성하기',

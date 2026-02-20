@@ -60,6 +60,7 @@ const ShowSalesTicketFormContent = ({
             colorTheme="netural"
             size="small"
             icon={<PlusIcon />}
+            disabled={disabled}
             onClick={() => {
               salesTicketDialog.open({
                 title: '일반 티켓 생성하기',

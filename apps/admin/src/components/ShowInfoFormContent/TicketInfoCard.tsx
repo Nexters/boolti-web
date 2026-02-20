@@ -30,7 +30,8 @@ const TicketInfoCard = <T extends Ticket>({
   actionType = 'delete',
   onSettingClick,
 }: Props<T>) => {
-  const ticketStatus = disabled ? '판매 종료' : ticket.isPaused ? '판매 중단' : '구매 가능';
+  const ticketStatus = disabled ? '판매 종료' : ticket.isPaused ? '판매 중단' : '판매 운영';
+  const mobileTicketStatus = disabled ? '종료' : ticket.isPaused ? '중단' : '운영';
   const ticketColorTheme =
     ticketStatus === '판매 종료' ? 'grey' : ticketStatus === '판매 중단' ? 'red' : 'green';
 
@@ -53,7 +54,12 @@ const TicketInfoCard = <T extends Ticket>({
       <Styled.TicketContent>
         <Styled.TicketInfo>
           <Styled.TicketTitle>
-            <NewBadge colorTheme={ticketColorTheme}>{ticketStatus}</NewBadge>
+            <Styled.DesktopTicketBadge>
+              <NewBadge colorTheme={ticketColorTheme}>{ticketStatus}</NewBadge>
+            </Styled.DesktopTicketBadge>
+            <Styled.MobileTicketBadge>
+              <NewBadge colorTheme={ticketColorTheme}>{mobileTicketStatus}</NewBadge>
+            </Styled.MobileTicketBadge>
             <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
           </Styled.TicketTitle>
           {isSalesTicket && 'price' in ticket ? (
@@ -78,7 +84,7 @@ const TicketInfoCard = <T extends Ticket>({
             colorTheme="netural"
             size="small"
             icon={actionIcon}
-            disabled={isDeleteAction && (disabled || (!fullEditable && isDeleteDisabled))}
+            disabled={disabled || (!fullEditable && isDeleteDisabled)}
             onClick={handleActionClick}
           >
             {actionLabel}
@@ -90,7 +96,7 @@ const TicketInfoCard = <T extends Ticket>({
             colorTheme="netural"
             size="small"
             icon={actionIcon}
-            disabled={isDeleteAction && (disabled || (!fullEditable && isDeleteDisabled))}
+            disabled={disabled || (!fullEditable && isDeleteDisabled)}
             onClick={handleActionClick}
           />
         </Styled.MobileTicketAction>

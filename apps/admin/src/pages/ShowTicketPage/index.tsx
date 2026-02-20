@@ -225,6 +225,7 @@ const ShowTicketPage = () => {
                 totalForSale: ticket.totalForSale,
                 isPaused: ticket.isPaused,
               }))}
+              disabled={show.isEnded}
               description={
                 <>
                   초청 티켓 이용을 원하시면 티켓을 생성해주세요.

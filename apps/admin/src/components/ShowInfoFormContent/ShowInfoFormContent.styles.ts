@@ -431,6 +431,22 @@ const TicketTitle = styled.div`
   gap: 8px;
 `;
 
+const DesktopTicketBadge = styled.span`
+  display: none;
+
+  ${mq_lg} {
+    display: inline-flex;
+  }
+`;
+
+const MobileTicketBadge = styled.span`
+  display: inline-flex;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
 const TicketTitleText = styled.h4`
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
@@ -635,6 +651,8 @@ export default {
   TicketInfo,
   TicketInfoRow,
   TicketTitle,
+  DesktopTicketBadge,
+  MobileTicketBadge,
   TicketTitleText,
   TicketDescription,
   TicketAction,
