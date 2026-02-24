@@ -33,11 +33,13 @@ interface ShowPreviewProps {
   showCastTeams: Array<{
     name: string;
     members?: {
+      userCode?: string;
       roleName: string;
       userNickname: string;
       userImgPath: string;
     }[];
   }>;
+  onClickCastMember?: (userCode: string) => void;
   shareDropdownOpen?: boolean;
   logoLinkHref?: string;
   containerRef?: React.RefObject<HTMLDivElement>;
@@ -52,6 +54,7 @@ interface ShowPreviewProps {
 const ShowPreview = ({
   show,
   showCastTeams,
+  onClickCastMember,
   shareDropdownOpen,
   logoLinkHref,
   containerRef,
@@ -184,7 +187,9 @@ const ShowPreview = ({
             },
             {
               title: '출연진',
-              content: <ShowCastInfo showCastTeams={showCastTeams} />,
+              content: (
+                <ShowCastInfo showCastTeams={showCastTeams} onClickMember={onClickCastMember} />
+              ),
             },
           ]}
         />

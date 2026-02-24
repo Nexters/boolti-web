@@ -26,6 +26,11 @@ import {
   TicketType,
   Popup,
   PopupViewType,
+  PreQuestionsResponse,
+  PagePreQuestionAnswerResponse,
+  PagePreQuestionParticipantResponse,
+  PreQuestionParticipantDetailResponse,
+  SalesTicketTypesSummaryResponse,
 } from './types';
 import {
   AdminShowDetailResponse,
@@ -482,6 +487,82 @@ export const popupQueryKeys = createQueryKeys('popup', {
   }),
 });
 
+export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
+  list: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () => fetcher.get<PreQuestionsResponse>(`web/v1/host/shows/${showId}/pre-questions`),
+  }),
+  answers: (
+    showId: number,
+    preQuestionId: number,
+    page: number,
+    size?: number,
+    salesTicketTypeId?: string,
+    sort?: string,
+  ) => ({
+    queryKey: [showId, preQuestionId, page, size, salesTicketTypeId, sort],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (salesTicketTypeId) {
+        searchParams.salesTicketTypeId = salesTicketTypeId;
+      }
+      if (sort) {
+        searchParams.sort = sort;
+      }
+      return fetcher.get<PagePreQuestionAnswerResponse>(
+        `web/v1/host/shows/${showId}/pre-question-answers/questions/${preQuestionId}`,
+        { searchParams },
+      );
+    },
+  }),
+  participants: (
+    showId: number,
+    page: number,
+    salesTicketTypeId?: string,
+    reservationName?: string,
+    sort?: 'ASC' | 'DESC',
+  ) => ({
+    queryKey: [showId, page, salesTicketTypeId, reservationName, sort],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page,
+      };
+      if (salesTicketTypeId) {
+        searchParams.salesTicketTypeId = salesTicketTypeId;
+      }
+      if (reservationName) {
+        searchParams.reservationName = reservationName;
+      }
+      if (sort) {
+        searchParams.sort = sort;
+      }
+      return fetcher.get<PagePreQuestionParticipantResponse>(
+        `web/v1/host/shows/${showId}/pre-question-answers/participants`,
+        { searchParams },
+      );
+    },
+  }),
+  participantDetail: (showId: number, reservationId: number) => ({
+    queryKey: [showId, reservationId],
+    queryFn: () =>
+      fetcher.get<PreQuestionParticipantDetailResponse>(
+        `web/v1/host/shows/${showId}/pre-question-answers/participants/${reservationId}`,
+      ),
+  }),
+  salesTicketTypesSummary: (showId: number) => ({
+    queryKey: [showId],
+    queryFn: () =>
+      fetcher.get<SalesTicketTypesSummaryResponse>(
+        `web/v1/host/shows/${showId}/sales-ticket-types/summary`,
+      ),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -494,4 +575,5 @@ export const queryKeys = mergeQueryKeys(
   hostQueryKeys,
   castTeamQueryKeys,
   popupQueryKeys,
+  preQuestionQueryKeys,
 );

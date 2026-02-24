@@ -85,6 +85,7 @@ import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
 import { BooltiGreyLogo } from './BooltiGreyLogo';
+import { BooltiGreyIcon } from './BooltiGreyIcon';
 
 export {
   Apple as AppleIcon,
@@ -174,4 +175,5 @@ export {
   MapMarker as MapMarkerIcon,
   ClockMobile as ClockMobileIcon,
   CurvedArrowRight as CurvedArrowRightIcon,
+  BooltiGreyIcon,
 };

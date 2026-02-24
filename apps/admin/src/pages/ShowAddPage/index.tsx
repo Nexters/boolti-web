@@ -16,6 +16,9 @@ import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDeta
 import ShowInvitationTicketFormContent, {
   InvitationTicket,
 } from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
+import ShowPreQuestionFormContent, {
+  PreQuestion,
+} from '~/components/ShowInfoFormContent/ShowPreQuestionFormContent';
 import ShowSalesTicketFormContent, {
   SalesTicket,
 } from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
@@ -42,12 +45,13 @@ const stepItems = [
   { key: 'basic', title: '기본 정보' },
   { key: 'detail', title: '상세 정보' },
   { key: 'sales', title: '판매 정보' },
+  { key: 'preQuestion', title: '사전 질문' },
 ] as const;
 
 const SHOW_ADD_SUCCESS_MESSAGE = '공연 등록을 완료했습니다';
 
 interface ShowAddPageProps {
-  step: 'basic' | 'detail' | 'sales';
+  step: 'basic' | 'detail' | 'sales' | 'preQuestion';
 }
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
@@ -60,6 +64,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
   const [invitationTicketList, setInvitationTicketList] = useState<InvitationTicket[]>([]);
+  const [preQuestionList, setPreQuestionList] = useState<PreQuestion[]>([]);
 
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
@@ -145,6 +150,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
+    navigate(`${PATH.SHOW_ADD_PRE_QUESTION}?${searchParams.toString()}`);
+  };
+
+  const onSubmitPreQuestionForm = async () => {
     if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
       return;
 
@@ -162,6 +171,18 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
+      ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
+        ? {
+            preQuestions: preQuestionList
+              .filter((q) => q.questionText.trim())
+              .map((preQuestion, index) => ({
+                questionText: preQuestion.questionText,
+                description: preQuestion.description || undefined,
+                isRequired: preQuestion.isRequired,
+                sequence: index + 1,
+              })),
+          }
+        : {}),
     };
     const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
@@ -417,6 +438,81 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               !isTermsAccepted
             }
           >
+            다음으로
+          </Styled.ShowAddFormButton>
+        </Styled.ShowAddFormButtonContainer>
+      </Styled.ShowAddForm>
+    </>
+  );
+
+  // 버튼 활성화 조건:
+  // 1. 질문 0개면 활성화
+  // 2. 질문 1개 이상이면 모든 질문 필드가 채워져야 하고, 100자를 초과하지 않아야 활성화
+  const MAX_QUESTION_LENGTH = 100;
+  const isPreQuestionFormValid =
+    preQuestionList.length === 0 ||
+    preQuestionList.every(
+      (q) =>
+        q.questionText.trim().length > 0 &&
+        q.questionText.length <= MAX_QUESTION_LENGTH &&
+        (q.description?.length ?? 0) <= MAX_QUESTION_LENGTH,
+    );
+
+  const preQuestionStepContent = (
+    <>
+      {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) &&
+        (!showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid) &&
+        (!showSalesInfoForm.formState.isDirty || !showSalesInfoForm.formState.isValid) && (
+          <Navigate to={PATH.SHOW_ADD} replace />
+        )}
+      <Styled.CardDescription>
+        공연 전, 관객에게 미리 물어보고 싶은
+        <span> 내용이 있다면 작성해 주세요.</span>
+        <br />
+        작성된 질문은 예매 단계에서 관객에게 노출돼요.
+      </Styled.CardDescription>
+      <Styled.ShowAddForm>
+        <Styled.TicketFormContainer>
+          <Styled.TicketFormTitle>사전 질문</Styled.TicketFormTitle>
+          <ShowPreQuestionFormContent
+            preQuestionList={preQuestionList}
+            onUpdateQuestion={(index, updatedQuestion) => {
+              setPreQuestionList((prevList) =>
+                prevList.map((q, i) => (i === index ? updatedQuestion : q)),
+              );
+            }}
+            onAddQuestion={() => {
+              setPreQuestionList((prevList) => [
+                ...prevList,
+                { questionText: '', description: '', isRequired: false },
+              ]);
+            }}
+            onDeleteQuestion={(index) => {
+              setPreQuestionList((prevList) => prevList.filter((_, i) => i !== index));
+              toast.success('사전 질문을 삭제했습니다.');
+            }}
+          />
+        </Styled.TicketFormContainer>
+        <Styled.ShowAddFormButtonContainer>
+          <Styled.ShowAddFormButton
+            variant="prev"
+            type="button"
+            colorTheme="line"
+            size="bold"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            이전으로
+          </Styled.ShowAddFormButton>
+          <Styled.ShowAddFormButton
+            variant="next"
+            type="button"
+            colorTheme="primary"
+            size="bold"
+            disabled={!isPreQuestionFormValid}
+            onClick={onSubmitPreQuestionForm}
+          >
             공연 등록 완료하기
           </Styled.ShowAddFormButton>
         </Styled.ShowAddFormButtonContainer>
@@ -435,6 +531,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       {step === 'basic' && basicStepContent}
       {step === 'detail' && detailStepContent}
       {step === 'sales' && !isNonTicketingShow && salesStepContent}
+      {step === 'preQuestion' && !isNonTicketingShow && preQuestionStepContent}
     </>
   );
 

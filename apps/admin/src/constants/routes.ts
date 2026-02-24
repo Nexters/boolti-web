@@ -12,10 +12,12 @@ export const PATH = {
   SHOW_ADD: '/show/add',
   SHOW_ADD_DETAIL: '/show/add/detail',
   SHOW_ADD_SALES: '/show/add/sales',
+  SHOW_ADD_PRE_QUESTION: '/show/add/pre-question',
   SHOW_TYPE_SELECT: '/show/add/type',
 
   SHOW_INFO: '/show/:showId/info',
   SHOW_TICKET: '/show/:showId/ticket',
+  SHOW_PRE_QUESTION: '/show/:showId/pre-question',
   SHOW_RESERVATION: '/show/:showId/reservation',
   SHOW_ENTRANCE: '/show/:showId/enterance',
   SHOW_SETTLEMENT: '/show/:showId/settlement',
@@ -30,6 +32,7 @@ export const PATH = {
 export const HREF = {
   SHOW_INFO: (showId: string | number) => `/show/${showId}/info`,
   SHOW_TICKET: (showId: string | number) => `/show/${showId}/ticket`,
+  SHOW_PRE_QUESTION: (showId: string | number) => `/show/${showId}/pre-question`,
   SHOW_RESERVATION: (showId: string | number) => `/show/${showId}/reservation`,
   SHOW_ENTRANCE: (showId: string | number) => `/show/${showId}/enterance`,
   SHOW_SETTLEMENT: (showId: string | number) => `/show/${showId}/settlement`,

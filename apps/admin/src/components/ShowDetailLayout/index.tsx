@@ -44,12 +44,13 @@ export const myHostInfoAtom = atom<HostListItem | null>(null);
 export const middlewareAtom = atom<(() => Promise<boolean>) | undefined>(undefined);
 
 interface TabItemProps {
-  type: 'INFO' | 'TICKET' | 'RESERVATION' | 'ENTRANCE' | 'SETTLEMENT';
+  type: 'INFO' | 'TICKET' | 'PRE_QUESTION' | 'RESERVATION' | 'ENTRANCE' | 'SETTLEMENT';
 }
 
 const matchTargets: Record<TabItemProps['type'], string> = {
   INFO: PATH.SHOW_INFO,
   TICKET: PATH.SHOW_TICKET,
+  PRE_QUESTION: PATH.SHOW_PRE_QUESTION,
   RESERVATION: PATH.SHOW_RESERVATION,
   ENTRANCE: PATH.SHOW_ENTRANCE,
   SETTLEMENT: PATH.SHOW_SETTLEMENT,
@@ -58,6 +59,7 @@ const matchTargets: Record<TabItemProps['type'], string> = {
 const toTargets = {
   INFO: HREF.SHOW_INFO,
   TICKET: HREF.SHOW_TICKET,
+  PRE_QUESTION: HREF.SHOW_PRE_QUESTION,
   RESERVATION: HREF.SHOW_RESERVATION,
   ENTRANCE: HREF.SHOW_ENTRANCE,
   SETTLEMENT: HREF.SHOW_SETTLEMENT,
@@ -66,6 +68,7 @@ const toTargets = {
 const label = {
   INFO: '공연 정보',
   TICKET: '판매 정보',
+  PRE_QUESTION: '사전 질문 관리',
   RESERVATION: '결제 관리',
   ENTRANCE: '방문자 관리',
   SETTLEMENT: '정산 관리',
@@ -288,6 +291,7 @@ const ShowDetailLayout = ({ children }: ShowDetailLayoutProps) => {
                   {showSalesInfo.salesEndTime && showSalesInfo.salesEndTime && (
                     <>
                       <TabItem type="TICKET" />
+                      <TabItem type="PRE_QUESTION" />
                       <TabItem type="RESERVATION" />
                       <TabItem type="ENTRANCE" />
                       <TabItem type="SETTLEMENT" />
