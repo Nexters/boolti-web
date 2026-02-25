@@ -12,7 +12,7 @@ import { PATH } from '~/constants/routes';
 
 import Styled from './QRPage.styles';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
-import { getStoreLink } from '~/utils/link';
+import { LINK } from '~/constants/link';
 
 const QRPage = () => {
   const { isLogin } = useAuthAtom();
@@ -62,7 +62,7 @@ const QRPage = () => {
           </Styled.QRCodeDescriptionText>
           <Styled.QRCodeContainer>
             <Styled.QRCodeWrapper>
-              <QRCodeSVG value={getStoreLink()} size={182} level="L" />
+              <QRCodeSVG value={LINK.APP_STORE_BRIDGE} size={182} level="L" />
             </Styled.QRCodeWrapper>
             <BooltiGrey />
           </Styled.QRCodeContainer>

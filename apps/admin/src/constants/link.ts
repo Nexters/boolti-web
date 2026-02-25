@@ -6,6 +6,7 @@ export const LINK = {
   BOOLTI_KAKAO_CHANNEL: 'http://pf.kakao.com/_pVxfxaG/chat',
   ANDROID_STORE: 'https://play.google.com/store/apps/details?id=com.nexters.boolti&hl=ko',
   IOS_STORE: 'https://apps.apple.com/kr/app/%EB%B6%88%ED%8B%B0/id6476589322',
+  APP_STORE_BRIDGE: `https://${IS_PRODUCTION_PHASE ? '' : 'dev.'}boolti.in/bridge/store`,
   SHOW_DETAIL: (showId?: number) =>
     `https://${IS_PRODUCTION_PHASE ? '' : 'dev.'}preview.boolti.in/show/${showId}`,
 };

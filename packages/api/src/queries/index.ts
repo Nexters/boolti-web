@@ -54,6 +54,7 @@ import usePreQuestionAnswers from './usePreQuestionAnswers';
 import usePreQuestionParticipants from './usePreQuestionParticipants';
 import usePreQuestionParticipantDetail from './usePreQuestionParticipantDetail';
 import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
+import usePutPreQuestions from '../mutations/usePutPreQuestions';
 
 export {
   useCastTeamList,
@@ -108,6 +109,7 @@ export {
   useSuperAdminShowSettlementStatement,
   useYoutubeVideoDuration,
   usePreQuestions,
+  usePutPreQuestions,
   usePreQuestionAnswers,
   usePreQuestionParticipants,
   usePreQuestionParticipantDetail,

@@ -1,9 +1,10 @@
-import { PlusIcon, TrashIcon } from '@boolti/icon';
-import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
+import { PlusIcon } from '@boolti/icon';
+import { Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
 import SalesTicketForm, { SalesTicketFormInputs } from '../TicketForm/SalesTicketForm';
 import Styled from './ShowInfoFormContent.styles';
+import TicketInfoCard from './TicketInfoCard';
 
 export interface SalesTicket {
   id?: number;
@@ -11,6 +12,7 @@ export interface SalesTicket {
   price: number;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }
 
 interface ShowSalesTicketFormContentProps {
@@ -19,6 +21,8 @@ interface ShowSalesTicketFormContentProps {
   disabled?: boolean;
   onSubmitTicket: SubmitHandler<SalesTicketFormInputs>;
   onDeleteTicket: (ticket: SalesTicket) => void;
+  actionType?: 'delete' | 'setting';
+  onSettingClick?: (ticket: SalesTicket) => void;
 }
 
 const ShowSalesTicketFormContent = ({
@@ -27,6 +31,8 @@ const ShowSalesTicketFormContent = ({
   disabled,
   onSubmitTicket,
   onDeleteTicket,
+  actionType = 'delete',
+  onSettingClick,
 }: ShowSalesTicketFormContentProps) => {
   const salesTicketDialog = useDialog();
 
@@ -54,6 +60,7 @@ const ShowSalesTicketFormContent = ({
             colorTheme="netural"
             size="small"
             icon={<PlusIcon />}
+            disabled={disabled}
             onClick={() => {
               salesTicketDialog.open({
                 title: '일반 티켓 생성하기',
@@ -97,51 +104,17 @@ const ShowSalesTicketFormContent = ({
             const isDeleteDisabled = isSingleTicket || isSoldTicket;
 
             return (
-              <Styled.Ticket key={ticket.id ?? ticket.name}>
-                <Styled.TicketContent>
-                  <Styled.TicketInfo>
-                    <Styled.TicketTitle>
-                      <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
-                      <Badge colorTheme={ticket.quantity === 0 ? 'grey' : 'red'}>
-                        재고 {ticket.quantity}/{ticket.totalForSale}
-                      </Badge>
-                    </Styled.TicketTitle>
-                    <Styled.TicketDescription>{ticket.price}원</Styled.TicketDescription>
-                  </Styled.TicketInfo>
-                  <Styled.TicketAction>
-                    <TextButton
-                      type="button"
-                      colorTheme="netural"
-                      size="small"
-                      icon={<TrashIcon />}
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    >
-                      삭제하기
-                    </TextButton>
-                  </Styled.TicketAction>
-                  <Styled.MobileTicketAction>
-                    <TextButton
-                      type="button"
-                      colorTheme="netural"
-                      size="small"
-                      icon={<TrashIcon />}
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    />
-                  </Styled.MobileTicketAction>
-                </Styled.TicketContent>
-              </Styled.Ticket>
+              <TicketInfoCard
+                key={ticket.id ?? ticket.name}
+                ticket={ticket}
+                ticketType="sales"
+                fullEditable={fullEditable}
+                disabled={disabled}
+                onDeleteTicket={onDeleteTicket}
+                isDeleteDisabled={isDeleteDisabled}
+                actionType={actionType}
+                onSettingClick={onSettingClick}
+              />
             );
           })}
         </Styled.TicketList>

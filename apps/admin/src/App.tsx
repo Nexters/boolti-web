@@ -33,6 +33,7 @@ import {
   GiftIntroPage,
   OAuthApplePage,
   ShowTypeSelectpage,
+  AppStoreBridgePage,
 } from './pages';
 import ShowAddPage from './pages/ShowAddPage';
 import { Suspense } from 'react';
@@ -76,6 +77,10 @@ const publicRoutes = [
       {
         path: PATH.QR,
         element: <QRPage />,
+      },
+      {
+        path: PATH.APP_STORE_BRIDGE,
+        element: <AppStoreBridgePage />,
       },
       {
         path: PATH.OAUTH_KAKAO,

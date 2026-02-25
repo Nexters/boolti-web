@@ -1,6 +1,7 @@
 export const PATH = {
   INDEX: '/',
   QR: '/qr',
+  APP_STORE_BRIDGE: '/bridge/store',
   HOME: '/home',
 
   LOGIN: '/login',

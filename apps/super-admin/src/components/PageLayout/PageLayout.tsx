@@ -5,12 +5,16 @@ interface PageLayoutProps {
   title: string;
   description: string;
   children: React.ReactNode;
+  action?: React.ReactNode;
 }
 
-const PageLayout = ({ breadscrumb, title, description, children }: PageLayoutProps) => {
+const PageLayout = ({ breadscrumb, title, description, children, action }: PageLayoutProps) => {
   return (
     <Styled.Container>
-      <Styled.Breadcrumb>{breadscrumb}</Styled.Breadcrumb>
+      <Styled.TopRow>
+        <Styled.Breadcrumb>{breadscrumb}</Styled.Breadcrumb>
+        {action && <Styled.ActionArea>{action}</Styled.ActionArea>}
+      </Styled.TopRow>
       <Styled.PageHeader>
         <Styled.PageTitle>{title}</Styled.PageTitle>
         <Styled.PageDescription>{description}</Styled.PageDescription>

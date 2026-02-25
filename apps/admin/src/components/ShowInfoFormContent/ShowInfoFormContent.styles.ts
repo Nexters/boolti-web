@@ -420,10 +420,31 @@ const TicketInfo = styled.div`
   gap: 6px;
 `;
 
+const TicketInfoRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const TicketTitle = styled.div`
   display: flex;
   align-items: center;
   gap: 8px;
+`;
+
+const DesktopTicketBadge = styled.span`
+  display: none;
+
+  ${mq_lg} {
+    display: inline-flex;
+  }
+`;
+
+const MobileTicketBadge = styled.span`
+  display: inline-flex;
+
+  ${mq_lg} {
+    display: none;
+  }
 `;
 
 const TicketTitleText = styled.h4`
@@ -628,7 +649,10 @@ export default {
   Ticket,
   TicketContent,
   TicketInfo,
+  TicketInfoRow,
   TicketTitle,
+  DesktopTicketBadge,
+  MobileTicketBadge,
   TicketTitleText,
   TicketDescription,
   TicketAction,
