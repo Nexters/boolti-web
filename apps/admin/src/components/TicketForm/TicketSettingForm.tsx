@@ -59,7 +59,8 @@ const TicketSettingForm = ({
   const isPaused = watch('isPaused');
   const soldQuantity = defaultValues.totalForSale - defaultValues.quantity;
 
-  const validatePrice = (price: string) => {
+  const validatePrice = (price?: string) => {
+    if (!price) return false;
     const parsedPrice = Number(price);
     return parsedPrice >= 200 || parsedPrice === 0;
   };
