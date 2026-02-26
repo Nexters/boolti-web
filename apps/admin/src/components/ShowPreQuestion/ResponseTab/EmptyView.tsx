@@ -7,7 +7,7 @@ const EmptyView = () => {
       <Styled.EmptyIcon>
         <BooltiGreyIcon />
       </Styled.EmptyIcon>
-      <Styled.EmptyText>아직 받은 응답이 없어요.</Styled.EmptyText>
+      <Styled.EmptyText>받은 응답이 없어요.</Styled.EmptyText>
     </Styled.EmptyContainer>
   );
 };
