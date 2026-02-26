@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ChevronDownIcon } from '@boolti/icon';
 import {
   usePreQuestionAnswers,
@@ -62,6 +62,10 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const [answersMap, setAnswersMap] = useState<
     Map<number, { answers: PreQuestionAnswerItem[]; totalCount: number }>
   >(new Map());
+  const selectedTicketIdSet = useMemo(
+    () => new Set(selectedTicketIds.map((id) => Number(id))),
+    [selectedTicketIds],
+  );
 
   // 정렬 파라미터 변환
   const answersSortParam = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
@@ -108,25 +112,43 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   // 응답 데이터 맵 업데이트
   useEffect(() => {
     const newMap = new Map<number, { answers: PreQuestionAnswerItem[]; totalCount: number }>();
+    const filterAnswersBySelectedTicket = (answers: PreQuestionAnswerItem[]) => {
+      if (selectedTicketIdSet.size === 0) {
+        return answers;
+      }
+      return answers.filter((answer) => selectedTicketIdSet.has(answer.salesTicketTypeId));
+    };
 
     if (firstQuestion && firstQuestionAnswers) {
+      const filteredAnswers = filterAnswersBySelectedTicket(firstQuestionAnswers.content ?? []);
       newMap.set(firstQuestion.id, {
-        answers: firstQuestionAnswers.content ?? [],
-        totalCount: firstQuestionAnswers.totalElements ?? 0,
+        answers: filteredAnswers,
+        totalCount:
+          selectedTicketIdSet.size > 0
+            ? filteredAnswers.length
+            : firstQuestionAnswers.totalElements ?? 0,
       });
     }
 
     if (secondQuestion && secondQuestionAnswers) {
+      const filteredAnswers = filterAnswersBySelectedTicket(secondQuestionAnswers.content ?? []);
       newMap.set(secondQuestion.id, {
-        answers: secondQuestionAnswers.content ?? [],
-        totalCount: secondQuestionAnswers.totalElements ?? 0,
+        answers: filteredAnswers,
+        totalCount:
+          selectedTicketIdSet.size > 0
+            ? filteredAnswers.length
+            : secondQuestionAnswers.totalElements ?? 0,
       });
     }
 
     if (thirdQuestion && thirdQuestionAnswers) {
+      const filteredAnswers = filterAnswersBySelectedTicket(thirdQuestionAnswers.content ?? []);
       newMap.set(thirdQuestion.id, {
-        answers: thirdQuestionAnswers.content ?? [],
-        totalCount: thirdQuestionAnswers.totalElements ?? 0,
+        answers: filteredAnswers,
+        totalCount:
+          selectedTicketIdSet.size > 0
+            ? filteredAnswers.length
+            : thirdQuestionAnswers.totalElements ?? 0,
       });
     }
 
@@ -136,6 +158,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     firstQuestionAnswers,
     secondQuestion,
     secondQuestionAnswers,
+    selectedTicketIdSet,
     thirdQuestion,
     thirdQuestionAnswers,
   ]);

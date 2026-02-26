@@ -117,7 +117,7 @@ const EmptyState = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  padding: 13px 0;
   border: 1px dashed ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   cursor: pointer;
@@ -346,7 +346,7 @@ const PreQuestionEditForm = ({
           );
         })}
 
-        {/* 추가하기 버튼 - 마감 전 & 질문 3개 미만일 때만 표시 */}
+        {/* 추가하기 버튼 - 마감 전에만 표시 */}
         {!isDisabled && <AddButton onAddQuestion={onAddQuestion} />}
       </QuestionContainer>
 
