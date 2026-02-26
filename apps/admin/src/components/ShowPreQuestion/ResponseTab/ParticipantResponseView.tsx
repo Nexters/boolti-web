@@ -270,7 +270,7 @@ const ParticipantResponseView = ({
         ) : isSearchEmpty ? (
           <>
             <Styled.ParticipantDetailHeader>
-              <Styled.ParticipantDetailTitle></Styled.ParticipantDetailTitle>
+              <Styled.ParticipantDetailTitle>응답 상세</Styled.ParticipantDetailTitle>
             </Styled.ParticipantDetailHeader>
             <Styled.ParticipantDetailBody isEmpty>
               <Styled.SearchEmptyIcon>
