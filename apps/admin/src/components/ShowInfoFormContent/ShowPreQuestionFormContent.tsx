@@ -64,7 +64,7 @@ const PreQuestionFooter = styled.div`
 `;
 
 const DeleteButton = styled.button`
-  ${({ theme }) => theme.typo.b1};
+  ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
   text-decoration: underline;
   cursor: pointer;
@@ -112,13 +112,12 @@ const ToggleSwitch = styled.button<{ isOn: boolean }>`
   }
 `;
 
-const EmptyState = styled.div<{ questionsLength: number }>`
+const EmptyState = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
-  border: ${({ questionsLength }) => (questionsLength === 0 ? '1px dashed' : 'none')}
-    ${({ theme }) => theme.palette.grey.g20};
+  padding: 13px 0;
+  border: 1px dashed ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   cursor: pointer;
 
@@ -127,10 +126,9 @@ const EmptyState = styled.div<{ questionsLength: number }>`
   }
 `;
 
-const AddButtonText = styled.span<{ questionsLength: number }>`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ questionsLength, theme }) =>
-    questionsLength === 0 ? theme.palette.grey.g40 : theme.palette.grey.g90};
+const AddButtonText = styled.span`
+  ${({ theme }) => theme.typo.sh1};
+  color: ${({ theme }) => theme.palette.grey.g40};
   display: flex;
   align-items: center;
   gap: 4px;
@@ -141,8 +139,7 @@ const AddButtonText = styled.span<{ questionsLength: number }>`
   }
 
   path {
-    stroke: ${({ questionsLength, theme }) =>
-      questionsLength === 0 ? theme.palette.grey.g40 : theme.palette.grey.g90};
+    stroke: ${({ theme }) => theme.palette.grey.g40};
   }
 `;
 
@@ -159,7 +156,11 @@ const ShowPreQuestionFormContent = ({
   onAddQuestion,
   onDeleteQuestion,
 }: ShowPreQuestionFormContentProps) => {
-  const handleTextChange = (index: number, field: 'questionText' | 'description', value: string) => {
+  const handleTextChange = (
+    index: number,
+    field: 'questionText' | 'description',
+    value: string,
+  ) => {
     const preQuestion = preQuestionList[index];
 
     onUpdateQuestion(index, {
@@ -215,14 +216,12 @@ const ShowPreQuestionFormContent = ({
         );
       })}
 
-      {preQuestionList.length < 3 && (
-        <EmptyState questionsLength={preQuestionList.length} onClick={onAddQuestion}>
-          <AddButtonText questionsLength={preQuestionList.length}>
-            <PlusIcon />
-            추가하기
-          </AddButtonText>
-        </EmptyState>
-      )}
+      <EmptyState onClick={onAddQuestion}>
+        <AddButtonText>
+          <PlusIcon />
+          추가하기
+        </AddButtonText>
+      </EmptyState>
     </PreQuestionContainer>
   );
 };

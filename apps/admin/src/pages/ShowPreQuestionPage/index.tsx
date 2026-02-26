@@ -20,7 +20,6 @@ import Styled from './ShowPreQuestionPage.styles';
 type SubTab = 'edit' | 'response';
 
 const MAX_LENGTH = 100;
-const MAX_QUESTIONS = 3;
 
 const ShowPreQuestionPage = () => {
   const params = useParams<{ showId: string }>();
@@ -58,32 +57,36 @@ const ShowPreQuestionPage = () => {
   }, [preQuestionsData, isInitialized]);
 
   const handleAddQuestion = () => {
-    if (preQuestionList.length >= MAX_QUESTIONS || isQuestionDeadlineEnded) return;
+    if (isQuestionDeadlineEnded) {
+      return;
+    }
 
     setPreQuestionList((prev) => [
       ...prev,
-      {
-        questionText: '',
-        description: '',
-        isRequired: true,
-      },
+      { questionText: '', description: '', isRequired: true },
     ]);
   };
 
   const handleUpdateQuestion = (index: number, updatedQuestion: PreQuestion) => {
-    if (isQuestionDeadlineEnded) return;
+    if (isQuestionDeadlineEnded) {
+      return;
+    }
 
     setPreQuestionList((prev) => prev.map((q, i) => (i === index ? updatedQuestion : q)));
   };
 
   const handleDeleteQuestion = (index: number) => {
-    if (isQuestionDeadlineEnded) return;
+    if (isQuestionDeadlineEnded) {
+      return;
+    }
 
     setPreQuestionList((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSave = async () => {
-    if (isQuestionDeadlineEnded) return;
+    if (isQuestionDeadlineEnded) {
+      return;
+    }
 
     // 빈 질문 체크
     const hasEmptyQuestion = preQuestionList.some((q) => !q.questionText.trim());
