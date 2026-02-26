@@ -12,7 +12,6 @@ export interface PreQuestion {
 }
 
 const MAX_LENGTH = 100;
-const MAX_QUESTIONS = 3;
 
 // Styled Components
 const QuestionContainer = styled.div`
@@ -66,7 +65,7 @@ const QuestionFooter = styled.div<{ showDeleteButton?: boolean }>`
 `;
 
 const DeleteButton = styled.button`
-  ${({ theme }) => theme.typo.b1};
+  ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g70};
   text-decoration: underline;
   cursor: pointer;
@@ -98,11 +97,7 @@ const ToggleSwitch = styled.button<{ isOn: boolean; disabled?: boolean }>`
   border: none;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   background-color: ${({ theme, isOn, disabled }) =>
-    disabled
-      ? theme.palette.grey.g40
-      : isOn
-        ? theme.palette.primary.o1
-        : theme.palette.grey.g20};
+    disabled ? theme.palette.grey.g40 : isOn ? theme.palette.primary.o1 : theme.palette.grey.g20};
   transition: background-color 0.2s ease;
 
   &::after {
@@ -161,7 +156,7 @@ const EmptyStateText = styled.p`
 `;
 
 const AddButtonText = styled.span`
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g40};
   display: flex;
   align-items: center;
@@ -352,9 +347,7 @@ const PreQuestionEditForm = ({
         })}
 
         {/* 추가하기 버튼 - 마감 전 & 질문 3개 미만일 때만 표시 */}
-        {!isDisabled && preQuestionList.length < MAX_QUESTIONS && (
-          <AddButton onAddQuestion={onAddQuestion} />
-        )}
+        {!isDisabled && <AddButton onAddQuestion={onAddQuestion} />}
       </QuestionContainer>
 
       {/* 저장하기 버튼 */}
