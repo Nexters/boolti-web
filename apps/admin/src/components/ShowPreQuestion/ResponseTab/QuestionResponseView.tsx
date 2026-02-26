@@ -42,15 +42,15 @@ const QuestionCard = ({ question, answers, totalCount }: QuestionCardProps) => {
               <Styled.AnswerItem key={answer.id}>
                 <Styled.AnswerContent>
                   <Styled.AnswerText>{answer.answer}</Styled.AnswerText>
-                  <Styled.AnswerTime>{formatDateTime(answer.createdAt)}</Styled.AnswerTime>
+                  <Styled.AnswerMeta>
+                    <span>{answer.reservationName}</span>
+                    <Styled.MetaSeparator>·</Styled.MetaSeparator>
+                    <span>{answer.salesTicketTypeName}</span>
+                    <Styled.MetaSeparator>·</Styled.MetaSeparator>
+                    <span>{answer.ticketCount}매</span>
+                  </Styled.AnswerMeta>
                 </Styled.AnswerContent>
-                <Styled.AnswerMeta>
-                  <span>{answer.reservationName}</span>
-                  <Styled.MetaSeparator>·</Styled.MetaSeparator>
-                  <span>{answer.salesTicketTypeName}</span>
-                  <Styled.MetaSeparator>·</Styled.MetaSeparator>
-                  <span>{answer.ticketCount}매</span>
-                </Styled.AnswerMeta>
+                <Styled.AnswerTime>{formatDateTime(answer.createdAt)}</Styled.AnswerTime>
               </Styled.AnswerItem>
             ))}
           </Styled.AnswerList>

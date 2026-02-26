@@ -81,13 +81,15 @@ export const SegmentButton = styled.button<{ isActive: boolean }>`
 export const HeaderContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 4px;
+  margin-bottom: 12px;
 
   ${mq_lg} {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
   }
 `;
 
@@ -175,10 +177,17 @@ export const QuestionCard = styled.div`
 
 export const QuestionCardHeader = styled.div`
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 24px 26px;
-  gap: 24px;
+  padding: 20px 30px 20px 22px;
+  flex-direction: column;
+  gap: 4px;
+
+  ${mq_lg} {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 26px;
+    gap: 24px;
+  }
 `;
 
 export const QuestionTitleWrapper = styled.div`
@@ -244,19 +253,29 @@ export const AnswerList = styled.div`
 `;
 
 export const AnswerItem = styled.div`
-  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
 
   &:last-child {
     border-bottom: none;
   }
+
+  ${mq_lg} {
+    flex-direction: row;
+    padding: 20px 24px;
+  }
 `;
 
 export const AnswerContent = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 20px;
+  gap: 4px;
 `;
 
 export const AnswerText = styled.p`

@@ -202,28 +202,31 @@ const ParticipantResponseView = ({
         ) : (
           <>
             <Styled.ParticipantList>
-              {participants.map((participant) => (
-                <Styled.ParticipantItem
-                  key={participant.reservationId}
-                  isSelected={selectedParticipant?.reservationId === participant.reservationId}
-                  onClick={() => handleSelectParticipant(participant.reservationId)}
-                >
-                  <Styled.ParticipantInfo>
-                    <Styled.ParticipantName
-                      isSelected={selectedParticipant?.reservationId === participant.reservationId}
-                    >
-                      {highlightText(participant.reservationName, localSearch, Styled.Highlight)}
-                    </Styled.ParticipantName>
-                    <Styled.ParticipantMeta>
-                      {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName} ·{' '}
-                      {participant.ticketCount}매
-                    </Styled.ParticipantMeta>
-                  </Styled.ParticipantInfo>
-                  <Styled.ParticipantArrow>
-                    <ChevronRightIcon />
-                  </Styled.ParticipantArrow>
-                </Styled.ParticipantItem>
-              ))}
+              {participants.map((participant) => {
+                const isSelected =
+                  !isMobile && selectedParticipant?.reservationId === participant.reservationId;
+
+                return (
+                  <Styled.ParticipantItem
+                    key={participant.reservationId}
+                    isSelected={isSelected}
+                    onClick={() => handleSelectParticipant(participant.reservationId)}
+                  >
+                    <Styled.ParticipantInfo>
+                      <Styled.ParticipantName isSelected={isSelected}>
+                        {highlightText(participant.reservationName, localSearch, Styled.Highlight)}
+                      </Styled.ParticipantName>
+                      <Styled.ParticipantMeta>
+                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName} ·{' '}
+                        {participant.ticketCount}매
+                      </Styled.ParticipantMeta>
+                    </Styled.ParticipantInfo>
+                    <Styled.ParticipantArrow>
+                      <ChevronRightIcon />
+                    </Styled.ParticipantArrow>
+                  </Styled.ParticipantItem>
+                );
+              })}
             </Styled.ParticipantList>
 
             {renderPagination()}
