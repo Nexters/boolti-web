@@ -46,6 +46,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   const [participantPage, setParticipantPage] = useState(1);
   const [participantSearchText, setParticipantSearchText] = useState('');
   const [selectedReservationId, setSelectedReservationId] = useState<number | null>(null);
+  const shouldForceSelectFirstParticipantRef = useRef(false);
   const shouldFetchResponseData = totalRespondentCount > 0;
 
   // 티켓 목록 조회
@@ -163,10 +164,28 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
 
   // 참여자 목록이 로드되면 첫 번째 참여자 자동 선택
   useEffect(() => {
-    const firstParticipant = participantsData?.content?.[0];
-    if (firstParticipant && selectedReservationId === null) {
+    const participantList = participantsData?.content ?? [];
+    const firstParticipant = participantList[0];
+
+    if (!firstParticipant) {
+      setSelectedReservationId(null);
+      shouldForceSelectFirstParticipantRef.current = false;
+      return;
+    }
+
+    const hasSelectedParticipant = participantList.some(
+      (participant) => participant.reservationId === selectedReservationId,
+    );
+
+    if (
+      shouldForceSelectFirstParticipantRef.current ||
+      selectedReservationId === null ||
+      !hasSelectedParticipant
+    ) {
       setSelectedReservationId(firstParticipant.reservationId);
     }
+
+    shouldForceSelectFirstParticipantRef.current = false;
   }, [participantsData?.content, selectedReservationId]);
 
   // 클릭 외부 감지
@@ -182,6 +201,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   }, []);
 
   const handleSearchChange = useCallback((text: string) => {
+    shouldForceSelectFirstParticipantRef.current = true;
     setParticipantSearchText(text);
     setParticipantPage(1);
   }, []);
