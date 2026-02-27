@@ -54,7 +54,7 @@ const TicketOptions = styled.div`
 `;
 
 const TicketOptionTitle = styled.div`
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
@@ -66,11 +66,12 @@ const OptionList = styled.div`
 
 const OptionItem = styled.button`
   cursor: pointer;
-  padding: 8px 0;
+  height: 48px;
+  padding: 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  ${({ theme }) => theme.typo.b1};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   & > svg {
@@ -87,13 +88,15 @@ const ButtonWrap = styled.div`
 
   & > button {
     flex: 1 0 auto;
+    height: 48px;
 
     &:first-of-type {
       flex: 0 0 0;
       justify-content: flex-start;
       margin-right: 36px;
       padding-left: 0;
-      ${({ theme }) => theme.typo.b1};
+      ${({ theme }) => theme.typo.b3};
+      color: ${({ theme }) => theme.palette.grey.g70};
     }
   }
 
