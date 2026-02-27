@@ -39,7 +39,8 @@ const SubTabItem = styled.button<SubTabItemProps>`
   }};
 
   &:hover {
-    color: ${({ isDisabled, theme }) => (isDisabled ? theme.palette.grey.g70 : theme.palette.grey.g90)};
+    color: ${({ isDisabled, theme }) =>
+      isDisabled ? theme.palette.grey.g70 : theme.palette.grey.g90};
   }
 `;
 
@@ -73,6 +74,10 @@ const QuestionItem = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   overflow: hidden;
+
+  ${mq_lg} {
+    padding: 24px 28px 32px 28px;
+  }
 `;
 
 const QuestionRow = styled.div`

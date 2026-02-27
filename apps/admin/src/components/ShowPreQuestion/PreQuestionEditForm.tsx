@@ -1,5 +1,5 @@
 import { BooltiGreyIcon, PlusIcon } from '@boolti/icon';
-import { useConfirm } from '@boolti/ui';
+import { mq_lg, useConfirm } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 import { PreQuestionTextArea } from '~/components/ShowPreQuestion';
@@ -26,6 +26,10 @@ const QuestionItem = styled.div`
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
   overflow: hidden;
+
+  ${mq_lg} {
+    padding: 24px 28px 32px 28px;
+  }
 `;
 
 const QuestionRow = styled.div`
