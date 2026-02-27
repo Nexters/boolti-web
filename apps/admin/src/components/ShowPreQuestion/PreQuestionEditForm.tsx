@@ -210,6 +210,11 @@ const ConfirmDescription = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g70};
   line-height: 1.6;
+  text-align: center;
+
+  ${mq_lg} {
+    text-align: left;
+  }
 `;
 
 const AddButton = ({ onAddQuestion }: { onAddQuestion: () => void }) => (
