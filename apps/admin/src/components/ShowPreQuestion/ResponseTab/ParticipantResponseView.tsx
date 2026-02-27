@@ -207,8 +207,8 @@ const ParticipantResponseView = ({
                         {highlightText(participant.reservationName, localSearch, Styled.Highlight)}
                       </Styled.ParticipantName>
                       <Styled.ParticipantMeta>
-                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName} ·{' '}
-                        {participant.ticketCount}매
+                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName}{' '}
+                        · {participant.ticketCount}매
                       </Styled.ParticipantMeta>
                     </Styled.ParticipantInfo>
                     <Styled.ParticipantArrow>

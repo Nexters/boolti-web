@@ -498,7 +498,8 @@ export const ParticipantDetailSection = styled.div`
   display: none;
 
   ${mq_lg} {
-    display: block;
+    display: flex;
+    flex-direction: column;
     flex: 1;
     background-color: ${({ theme }) => theme.palette.grey.w};
     border-radius: 0 10px 10px 0;
@@ -514,6 +515,7 @@ export const ParticipantDetailHeader = styled.div`
   align-items: center;
   padding: 16px 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g10};
+  flex-shrink: 0;
 `;
 
 export const ParticipantDetailTitle = styled.h3`
@@ -539,23 +541,25 @@ export const ParticipantDetailTime = styled.div`
 `;
 
 export const ParticipantDetailBody = styled.div<{ isEmpty?: boolean }>`
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   padding: 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
   background-color: ${({ theme }) => theme.palette.grey.g00};
-  height: inherit;
 
   ${({ isEmpty }) =>
     isEmpty &&
     `
-    flex: 1;
     align-items: center;
     justify-content: center;
   `}
 `;
 
 export const ParticipantAnswerCard = styled.div`
+  flex-shrink: 0;
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 10px;
