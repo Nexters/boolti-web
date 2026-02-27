@@ -11,9 +11,8 @@ import {
   PreQuestionParticipantDetailResponse,
 } from '@boolti/api/src/types';
 import Styled from './ResponseTab.styles';
+import { useIsMobile } from '~/hooks/useIsMobile';
 import { highlightText } from '~/utils/highlight';
-
-const MOBILE_BREAKPOINT = 641;
 
 const formatDateTime = (dateString: string): string => {
   const date = new Date(dateString);
@@ -47,20 +46,9 @@ const ParticipantResponseView = ({
   onPageChange,
 }: ParticipantResponseViewProps) => {
   const [localSearch, setLocalSearch] = useState(searchText);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const isSearchEmpty = participants.length === 0 && localSearch.trim() !== '';
-
-  // 모바일 환경 감지
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
-    };
-    checkMobile();
-
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // BottomSheet 열릴 때 body 스크롤 방지
   useEffect(() => {
@@ -187,9 +175,11 @@ const ParticipantResponseView = ({
 
         {isSearchEmpty ? (
           <Styled.SearchEmptyContainer>
-            <Styled.SearchEmptyIcon>
-              <BooltiGreyIcon />
-            </Styled.SearchEmptyIcon>
+            {isMobile && (
+              <Styled.SearchEmptyIcon>
+                <BooltiGreyIcon />
+              </Styled.SearchEmptyIcon>
+            )}
             <Styled.SearchEmptyText>
               검색 결과가 없어요.
               <br />
@@ -217,8 +207,8 @@ const ParticipantResponseView = ({
                         {highlightText(participant.reservationName, localSearch, Styled.Highlight)}
                       </Styled.ParticipantName>
                       <Styled.ParticipantMeta>
-                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName} ·{' '}
-                        {participant.ticketCount}매
+                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName}{' '}
+                        · {participant.ticketCount}매
                       </Styled.ParticipantMeta>
                     </Styled.ParticipantInfo>
                     <Styled.ParticipantArrow>

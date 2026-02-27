@@ -64,7 +64,7 @@ const TicketFilterOptions = ({
         </TextButton>
         <Button
           colorTheme="primary"
-          size="regular"
+          size="bold"
           disabled={tempSelectedValues.length === 0}
           onClick={() => {
             if (tempSelectedValues.length > 0) {

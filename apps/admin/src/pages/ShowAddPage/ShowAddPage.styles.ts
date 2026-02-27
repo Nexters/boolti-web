@@ -18,6 +18,8 @@ interface FileUploadAreaProps {
 }
 
 const ShowAddPage = styled.div`
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: ${({ theme }) => theme.palette.grey.w};
 
   ${mq_lg} {

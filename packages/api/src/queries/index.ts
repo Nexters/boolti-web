@@ -51,6 +51,7 @@ import useSuperAdminShowSettlementStatement from './useSuperAdminShowSettlementS
 import useYoutubeVideoDuration from './useYoutubeVideoDuration';
 import usePreQuestions from './usePreQuestions';
 import usePreQuestionAnswers from './usePreQuestionAnswers';
+import usePreQuestionAnswersList from './usePreQuestionAnswersList';
 import usePreQuestionParticipants from './usePreQuestionParticipants';
 import usePreQuestionParticipantDetail from './usePreQuestionParticipantDetail';
 import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
@@ -111,6 +112,7 @@ export {
   usePreQuestions,
   usePutPreQuestions,
   usePreQuestionAnswers,
+  usePreQuestionAnswersList,
   usePreQuestionParticipants,
   usePreQuestionParticipantDetail,
   useSalesTicketTypesSummary,
