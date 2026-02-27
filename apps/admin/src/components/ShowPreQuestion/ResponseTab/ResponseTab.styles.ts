@@ -358,7 +358,7 @@ export const ParticipantSearchInput = styled.div`
     background-color: ${({ theme }) => theme.palette.grey.w};
 
     &::placeholder {
-      color: ${({ theme }) => theme.palette.grey.g40};
+      color: ${({ theme }) => theme.palette.grey.g30};
     }
 
     &:focus {
@@ -748,6 +748,7 @@ export const MobileBottomSheetCloseButton = styled.button`
 
 export const MobileBottomSheetBody = styled.div`
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 8px 20px 32px;
   display: flex;
@@ -756,6 +757,7 @@ export const MobileBottomSheetBody = styled.div`
 `;
 
 export const MobileAnswerCard = styled.div`
+  flex-shrink: 0;
   background-color: ${({ theme }) => theme.palette.grey.w};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 10px;
