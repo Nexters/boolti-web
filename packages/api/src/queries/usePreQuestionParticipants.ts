@@ -7,7 +7,7 @@ const usePreQuestionParticipants = (
   page: number,
   salesTicketTypeId?: string,
   reservationName?: string,
-  sort?: 'ASC' | 'DESC',
+  sort?: string,
   options?: { enabled?: boolean },
 ) =>
   useQuery({

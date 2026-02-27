@@ -525,7 +525,7 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
     page: number,
     salesTicketTypeId?: string,
     reservationName?: string,
-    sort?: 'ASC' | 'DESC',
+    sort?: string,
   ) => ({
     queryKey: [showId, page, salesTicketTypeId, reservationName, sort],
     queryFn: () => {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { ChevronDownIcon } from '@boolti/icon';
 import {
-  usePreQuestionAnswers,
+  usePreQuestionAnswersList,
   usePreQuestionParticipants,
   usePreQuestionParticipantDetail,
   useSalesTicketTypesSummary,
@@ -58,59 +58,30 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     value: String(ticket.id),
   }));
 
-  // 질문별 응답 데이터 - 각 질문에 대해 답변 조회
-  const [answersMap, setAnswersMap] = useState<
-    Map<number, { answers: PreQuestionAnswerItem[]; totalCount: number }>
-  >(new Map());
   const selectedTicketIdSet = useMemo(
     () => new Set(selectedTicketIds.map((id) => Number(id))),
     [selectedTicketIds],
   );
 
   // 정렬 파라미터 변환
-  const answersSortParam = sortOrder === 'latest' ? 'createdAt,desc' : 'createdAt,asc';
-  const participantsSortParam: 'ASC' | 'DESC' = sortOrder === 'latest' ? 'DESC' : 'ASC';
+  const answersSortParam = sortOrder === 'latest' ? 'createdAt,DESC' : 'createdAt,ASC';
+  const participantsSortParam = sortOrder === 'latest' ? 'answeredAt,DESC' : 'answeredAt,ASC';
 
   // 필터 파라미터 (선택된 티켓 ID를 쉼표로 연결)
   const ticketFilterParam = selectedTicketIds.length > 0 ? selectedTicketIds.join(',') : undefined;
 
-  // 질문별 응답 조회 (첫 번째 질문만 useQuery로 조회, 나머지는 수동)
-  const firstQuestion = questions[0];
-  const { data: firstQuestionAnswers } = usePreQuestionAnswers(
+  // 질문별 응답 조회 - 질문 개수만큼 동적으로 조회
+  const questionAnswersQueries = usePreQuestionAnswersList(
     showId,
-    firstQuestion?.id ?? 0,
+    questions.map((question) => question.id),
     0,
     100, // 충분히 큰 수로 설정
     ticketFilterParam,
     answersSortParam,
-    { enabled: shouldFetchResponseData && firstQuestion !== undefined },
+    { enabled: shouldFetchResponseData },
   );
 
-  // 나머지 질문들의 답변도 가져오기 위한 훅들
-  const secondQuestion = questions[1];
-  const { data: secondQuestionAnswers } = usePreQuestionAnswers(
-    showId,
-    secondQuestion?.id ?? 0,
-    0,
-    100,
-    ticketFilterParam,
-    answersSortParam,
-    { enabled: shouldFetchResponseData && secondQuestion !== undefined },
-  );
-
-  const thirdQuestion = questions[2];
-  const { data: thirdQuestionAnswers } = usePreQuestionAnswers(
-    showId,
-    thirdQuestion?.id ?? 0,
-    0,
-    100,
-    ticketFilterParam,
-    answersSortParam,
-    { enabled: shouldFetchResponseData && thirdQuestion !== undefined },
-  );
-
-  // 응답 데이터 맵 업데이트
-  useEffect(() => {
+  const answersMap = useMemo(() => {
     const newMap = new Map<number, { answers: PreQuestionAnswerItem[]; totalCount: number }>();
     const filterAnswersBySelectedTicket = (answers: PreQuestionAnswerItem[]) => {
       if (selectedTicketIdSet.size === 0) {
@@ -119,49 +90,24 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
       return answers.filter((answer) => selectedTicketIdSet.has(answer.salesTicketTypeId));
     };
 
-    if (firstQuestion && firstQuestionAnswers) {
-      const filteredAnswers = filterAnswersBySelectedTicket(firstQuestionAnswers.content ?? []);
-      newMap.set(firstQuestion.id, {
+    questions.forEach((question, index) => {
+      const questionAnswers = questionAnswersQueries[index]?.data;
+      if (!questionAnswers) {
+        return;
+      }
+
+      const filteredAnswers = filterAnswersBySelectedTicket(questionAnswers.content ?? []);
+      newMap.set(question.id, {
         answers: filteredAnswers,
         totalCount:
           selectedTicketIdSet.size > 0
             ? filteredAnswers.length
-            : firstQuestionAnswers.totalElements ?? 0,
+            : questionAnswers.totalElements ?? 0,
       });
-    }
+    });
 
-    if (secondQuestion && secondQuestionAnswers) {
-      const filteredAnswers = filterAnswersBySelectedTicket(secondQuestionAnswers.content ?? []);
-      newMap.set(secondQuestion.id, {
-        answers: filteredAnswers,
-        totalCount:
-          selectedTicketIdSet.size > 0
-            ? filteredAnswers.length
-            : secondQuestionAnswers.totalElements ?? 0,
-      });
-    }
-
-    if (thirdQuestion && thirdQuestionAnswers) {
-      const filteredAnswers = filterAnswersBySelectedTicket(thirdQuestionAnswers.content ?? []);
-      newMap.set(thirdQuestion.id, {
-        answers: filteredAnswers,
-        totalCount:
-          selectedTicketIdSet.size > 0
-            ? filteredAnswers.length
-            : thirdQuestionAnswers.totalElements ?? 0,
-      });
-    }
-
-    setAnswersMap(newMap);
-  }, [
-    firstQuestion,
-    firstQuestionAnswers,
-    secondQuestion,
-    secondQuestionAnswers,
-    selectedTicketIdSet,
-    thirdQuestion,
-    thirdQuestionAnswers,
-  ]);
+    return newMap;
+  }, [questions, questionAnswersQueries, selectedTicketIdSet]);
 
   // 참여자 목록 조회
   const { data: participantsData } = usePreQuestionParticipants(
