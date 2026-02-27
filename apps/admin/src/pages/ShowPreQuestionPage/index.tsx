@@ -16,6 +16,7 @@ import { PreQuestionEditForm, PreQuestion, ResponseTab } from '~/components/Show
 import { HostType } from '@boolti/api/src/types/host';
 
 import Styled from './ShowPreQuestionPage.styles';
+import { useToast } from '@boolti/ui';
 
 type SubTab = 'edit' | 'response';
 
@@ -36,6 +37,7 @@ const ShowPreQuestionPage = () => {
   const { data: show } = useShowDetail(showId);
   const { data: preQuestionsData } = usePreQuestions(showId);
   const putPreQuestionsMutation = usePutPreQuestions();
+  const toast = useToast();
 
   // 질문 마감 시간 = 공연 시작 시간
   const isQuestionDeadlineEnded = show?.date ? new Date(show.date) < new Date() : false;
@@ -81,6 +83,7 @@ const ShowPreQuestionPage = () => {
     }
 
     setPreQuestionList((prev) => prev.filter((_, i) => i !== index));
+    toast.success('선택한 질문을 삭제했어요.');
   };
 
   const handleSave = async () => {
@@ -118,9 +121,9 @@ const ShowPreQuestionPage = () => {
 
       // 성공 시 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: queryKeys.preQuestion.list(showId).queryKey });
-      alert('저장되었습니다.');
+      toast.success('사전 질문을 저장했어요.');
     } catch {
-      alert('저장에 실패했습니다. 다시 시도해 주세요.');
+      toast.error('사전 질문을 저장하는데 실패했어요. 다시 시도해 주세요.');
     }
   };
 
