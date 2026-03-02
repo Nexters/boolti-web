@@ -1,6 +1,7 @@
 export const PATH = {
   INDEX: '/',
   LOGIN: '/login',
+  ADMIN_USERS: '/admin-users',
   INFO: '/show/:showId/info',
   TICKET: '/show/:showId/ticket',
   PAYMENT: '/show/:showId/payment',
