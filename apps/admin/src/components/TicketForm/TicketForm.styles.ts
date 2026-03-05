@@ -139,11 +139,12 @@ const TicketFormFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 16px;
 
   gap: 36px;
 
   & > button:first-of-type {
-    min-width: 70px;
+    min-width: auto;
   }
 
   & > button:last-of-type {
@@ -151,6 +152,7 @@ const TicketFormFooter = styled.div`
   }
 
   ${mq_lg} {
+    padding-bottom: 0;
     gap: 16px;
 
     & > button:first-of-type {

@@ -48,7 +48,7 @@ const stepItems = [
   { key: 'preQuestion', title: '사전 질문' },
 ] as const;
 
-const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요';
+const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요.';
 
 interface ShowAddPageProps {
   step: 'basic' | 'detail' | 'sales' | 'preQuestion';
@@ -324,7 +324,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               }}
               onDeleteTicket={async (ticket) => {
                 const result = await confirm(
-                  '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
                   {
                     cancel: '취소하기',
                     confirm: '삭제하기',
@@ -346,7 +346,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               description={
                 <>
                   초청 티켓 이용을 원하시면 티켓을 생성해주세요.
-                  <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 티켓 관리</strong>
+                  <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 판매 정보</strong>
                   에서 확인할 수 있습니다.
                 </>
               }
@@ -363,7 +363,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               }}
               onDeleteTicket={async (ticket) => {
                 const result = await confirm(
-                  '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
                   {
                     cancel: '취소하기',
                     confirm: '삭제하기',

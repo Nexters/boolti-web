@@ -74,6 +74,7 @@ const Header = () => {
             onClick={() => {
               if (isMobile) {
                 openStoreLink();
+                return;
               }
               navigate(PATH.QR);
             }}
