@@ -91,7 +91,7 @@ const DialogHeader = styled.div<{ mobileType: DialogMobileType }>`
   ${({ mobileType }) =>
     mobileType === 'bottomSheet' &&
     `
-    padding: 16px 24px 8px;
+    padding: 16px 24px 16px;
     justify-content: space-between;
   `}
 

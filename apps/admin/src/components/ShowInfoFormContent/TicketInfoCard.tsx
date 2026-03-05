@@ -12,6 +12,7 @@ interface Props<T extends Ticket> {
   ticketType: 'sales' | 'invitation';
   fullEditable?: boolean;
   disabled?: boolean;
+  hideStatus?: boolean;
   onDeleteTicket: (ticket: T) => void;
   isDeleteDisabled: boolean;
   isShowEnded?: boolean;
@@ -24,6 +25,7 @@ const TicketInfoCard = <T extends Ticket>({
   ticketType,
   fullEditable,
   disabled,
+  hideStatus,
   onDeleteTicket,
   isDeleteDisabled,
   isShowEnded,
@@ -38,6 +40,9 @@ const TicketInfoCard = <T extends Ticket>({
   const isDeleteAction = actionType === 'delete';
   const actionIcon = isDeleteAction ? <TrashIcon /> : <SettingIcon />;
   const actionLabel = isDeleteAction ? '삭제' : '설정';
+  const isActionDisabled = isDeleteAction
+    ? disabled || (!fullEditable && isDeleteDisabled)
+    : disabled;
   const handleActionClick = () => {
     if (isDeleteAction) {
       onDeleteTicket(ticket);
@@ -54,12 +59,16 @@ const TicketInfoCard = <T extends Ticket>({
       <Styled.TicketContent>
         <Styled.TicketInfo>
           <Styled.TicketTitle>
-            <Styled.DesktopTicketBadge>
-              <NewBadge colorTheme={ticketColorTheme}>{ticketStatus}</NewBadge>
-            </Styled.DesktopTicketBadge>
-            <Styled.MobileTicketBadge>
-              <NewBadge colorTheme={ticketColorTheme}>{mobileTicketStatus}</NewBadge>
-            </Styled.MobileTicketBadge>
+            {!hideStatus && (
+              <>
+                <Styled.DesktopTicketBadge>
+                  <NewBadge colorTheme={ticketColorTheme}>{ticketStatus}</NewBadge>
+                </Styled.DesktopTicketBadge>
+                <Styled.MobileTicketBadge>
+                  <NewBadge colorTheme={ticketColorTheme}>{mobileTicketStatus}</NewBadge>
+                </Styled.MobileTicketBadge>
+              </>
+            )}
             <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
           </Styled.TicketTitle>
           {isSalesTicket && 'price' in ticket ? (
@@ -84,19 +93,19 @@ const TicketInfoCard = <T extends Ticket>({
             colorTheme="netural"
             size="small"
             icon={actionIcon}
-            disabled={disabled || (!fullEditable && isDeleteDisabled)}
+            disabled={isActionDisabled}
             onClick={handleActionClick}
           >
             {actionLabel}
           </TextButton>
         </Styled.TicketAction>
-        <Styled.MobileTicketAction disabled={disabled}>
+        <Styled.MobileTicketAction disabled={isActionDisabled}>
           <TextButton
             type="button"
             colorTheme="netural"
             size="small"
             icon={actionIcon}
-            disabled={disabled || (!fullEditable && isDeleteDisabled)}
+            disabled={isActionDisabled}
             onClick={handleActionClick}
           />
         </Styled.MobileTicketAction>

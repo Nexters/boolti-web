@@ -6,7 +6,7 @@ import {
   useUploadShowImage,
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { Button, Checkbox, StepProgressBar, useToast } from '@boolti/ui';
+import { Button, Checkbox, StepProgressBar, useConfirm, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
@@ -48,7 +48,7 @@ const stepItems = [
   { key: 'preQuestion', title: '사전 질문' },
 ] as const;
 
-const SHOW_ADD_SUCCESS_MESSAGE = '공연 등록을 완료했습니다';
+const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요';
 
 interface ShowAddPageProps {
   step: 'basic' | 'detail' | 'sales' | 'preQuestion';
@@ -83,6 +83,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const addNonTicketingShowMutation = useAddNonTicketingShow();
 
   const toast = useToast();
+  const confirm = useConfirm();
 
   const onSuccessAddShow = (showId: number) => {
     if (isWebView && isWebViewBridgeAvailable()) {
@@ -307,6 +308,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.TicketForm>
             <ShowSalesTicketFormContent
               fullEditable
+              hideStatus
               salesTicketList={salesTicketList}
               onSubmitTicket={(ticket) => {
                 setSalesTicketList((prevList) =>
@@ -318,17 +320,28 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     isPaused: false,
                   })),
                 );
-                toast.success('일반 티켓을 생성했습니다.');
+                toast.success('일반 티켓을 생성했어요.');
               }}
-              onDeleteTicket={(ticket) => {
+              onDeleteTicket={async (ticket) => {
+                const result = await confirm(
+                  '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                  {
+                    cancel: '취소하기',
+                    confirm: '삭제하기',
+                  },
+                );
+
+                if (!result) return;
+
                 setSalesTicketList((prevList) =>
                   prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                 );
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
             />
             <ShowInvitationTicketFormContent
               fullEditable
+              hideStatus
               invitationTicketList={invitationTicketList}
               description={
                 <>
@@ -346,13 +359,23 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     isPaused: false,
                   })),
                 );
-                toast.success('초청 티켓을 생성했습니다.');
+                toast.success('초청 티켓을 생성했어요.');
               }}
-              onDeleteTicket={(ticket) => {
+              onDeleteTicket={async (ticket) => {
+                const result = await confirm(
+                  '삭제한 티켓은 다시 생성할 수 없어요. 삭제하시겠어요?',
+                  {
+                    cancel: '취소하기',
+                    confirm: '삭제하기',
+                  },
+                );
+
+                if (!result) return;
+
                 setInvitationTicketList((prevList) =>
                   prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                 );
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
             />
           </Styled.TicketForm>

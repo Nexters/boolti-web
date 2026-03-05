@@ -21,6 +21,7 @@ interface ShowInvitationTicketFormContentProps {
   description: React.ReactNode;
   fullEditable?: boolean;
   disabled?: boolean;
+  hideStatus?: boolean;
   isShowEnded?: boolean;
   onSubmitTicket: SubmitHandler<InvitationTicketFormInputs>;
   onDeleteTicket: (ticket: InvitationTicket) => void;
@@ -33,6 +34,7 @@ const ShowInvitationTicketFormContent = ({
   description,
   fullEditable,
   disabled,
+  hideStatus,
   isShowEnded,
   onSubmitTicket,
   onDeleteTicket,
@@ -80,6 +82,7 @@ const ShowInvitationTicketFormContent = ({
               size="small"
               colorTheme="netural"
               icon={<PlusIcon />}
+              disabled={disabled}
               onClick={() => {
                 invitationTicketDialog.open({
                   title: '초청 티켓 생성하기',
@@ -107,6 +110,7 @@ const ShowInvitationTicketFormContent = ({
                 ticketType="invitation"
                 fullEditable={fullEditable}
                 disabled={disabled}
+                hideStatus={hideStatus}
                 onDeleteTicket={onDeleteTicket}
                 isDeleteDisabled={isDeleteDisabled}
                 isShowEnded={isShowEnded}

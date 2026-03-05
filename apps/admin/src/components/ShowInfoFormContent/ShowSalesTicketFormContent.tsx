@@ -19,6 +19,7 @@ interface ShowSalesTicketFormContentProps {
   salesTicketList: SalesTicket[];
   fullEditable?: boolean;
   disabled?: boolean;
+  hideStatus?: boolean;
   onSubmitTicket: SubmitHandler<SalesTicketFormInputs>;
   onDeleteTicket: (ticket: SalesTicket) => void;
   actionType?: 'delete' | 'setting';
@@ -29,6 +30,7 @@ const ShowSalesTicketFormContent = ({
   salesTicketList,
   fullEditable = false,
   disabled,
+  hideStatus,
   onSubmitTicket,
   onDeleteTicket,
   actionType = 'delete',
@@ -81,6 +83,7 @@ const ShowSalesTicketFormContent = ({
               size="small"
               colorTheme="netural"
               icon={<PlusIcon />}
+              disabled={disabled}
               onClick={() => {
                 salesTicketDialog.open({
                   title: '일반 티켓 생성하기',
@@ -110,6 +113,7 @@ const ShowSalesTicketFormContent = ({
                 ticketType="sales"
                 fullEditable={fullEditable}
                 disabled={disabled}
+                hideStatus={hideStatus}
                 onDeleteTicket={onDeleteTicket}
                 isDeleteDisabled={isDeleteDisabled}
                 actionType={actionType}

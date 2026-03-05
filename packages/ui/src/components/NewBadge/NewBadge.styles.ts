@@ -14,7 +14,7 @@ const Container = styled.span<NewBadgeProps>`
   justify-content: center;
   align-items: center;
   border-radius: 100px;
-  padding: 2px 10px;
+  padding: 2px 8px;
   font-size: 12px;
   font-weight: 600;
   ${({ colorTheme, theme }) => {
