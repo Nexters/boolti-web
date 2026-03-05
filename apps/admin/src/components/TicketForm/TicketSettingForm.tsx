@@ -67,7 +67,7 @@ const TicketSettingForm = ({
 
   const handlePriceErrorMessage = (hasBlurred: boolean, price: string) => {
     if (hasBlurred && (!price || !validatePrice(price))) {
-      return '0원 또는 200원 이상을 입력해 주세요.';
+      return '0 또는 200 이상을 입력해 주세요.';
     }
     return '';
   };
@@ -100,8 +100,9 @@ const TicketSettingForm = ({
             <TextField
               inputType="text"
               size="big"
-              maxLength={20}
-              placeholder="티켓 이름을 입력해 주세요 (20자 이내)"
+              maxLength={12}
+              placeholder="티켓 이름을 입력해 주세요 (12자 이내)"
+              disabled={isPaused}
               {...register('name', { required: true })}
               onBlur={(event) => {
                 register('name', { required: true }).onBlur(event);
@@ -124,7 +125,7 @@ const TicketSettingForm = ({
                 size="big"
                 placeholder="0"
                 min={0}
-                disabled={soldAtLeastOnce}
+                disabled={isPaused || soldAtLeastOnce}
                 {...register('price', { required: ticketType === 'sales' })}
                 onChange={(event) => {
                   register('price', {
@@ -157,7 +158,8 @@ const TicketSettingForm = ({
             <TextField
               inputType="number"
               size="big"
-              min={soldQuantity || 1}
+              min={ticketType === 'invitation' && soldAtLeastOnce ? defaultValues.totalForSale : (soldQuantity || 1)}
+              disabled={isPaused || (ticketType === 'invitation' && soldAtLeastOnce)}
               {...register('totalForSale', { required: true })}
               onBlur={(event) => {
                 register('totalForSale', { required: true }).onBlur(event);
@@ -182,6 +184,7 @@ const TicketSettingForm = ({
             textUnderlineOffset: '4px',
             textDecoration: 'underline',
             cursor: isDeleteDisabled ? 'not-allowed' : 'pointer',
+            padding: '0',
           }}
           size="small"
           disabled={isDeleteDisabled}
@@ -189,7 +192,7 @@ const TicketSettingForm = ({
         >
           티켓 삭제
         </TextButton>
-        <Button type="submit" size="bold" colorTheme="primary" disabled={!isDirty || !isValid}>
+        <Button type="submit" size="bold" colorTheme="primary" disabled={isPaused ? (!isDirty || !isValid) : !isValid}>
           저장하기
         </Button>
       </Styled.TicketFormFooter>

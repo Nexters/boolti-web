@@ -36,7 +36,7 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
 
   const handlePriceErrorMessage = (hasBlurred: boolean, price: string) => {
     if (hasBlurred && (!price || !validatePrice(price))) {
-      return '0원 또는 200원 이상을 입력해 주세요.';
+      return '0 또는 200 이상을 입력해 주세요.';
     }
     return '';
   };
@@ -44,10 +44,9 @@ const SalesTicketForm = ({ onSubmit }: SalesTicketFormProps) => {
   return (
     <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
       <Styled.TicketFormDescription>
-        <Styled.Description>만들고 싶은 티켓 정보를 입력해 주세요.</Styled.Description>
+        <Styled.Description>생성할 티켓의 정보를 입력해 주세요.</Styled.Description>
         <Styled.SubDescription>
-          * 퀵계좌이체 지원을 위해 유료 티켓은 200원 이상 입력이 필요합니다.{'\n'}* 무료 티켓 생성을
-          원하시면 0원을 입력해 주세요.
+          * 무료 티켓 생성을 원하시면 0원을 입력해 주세요.
         </Styled.SubDescription>
       </Styled.TicketFormDescription>
       <Styled.TicketFormRow>

@@ -11,7 +11,7 @@ import {
   useShowSalesInfo,
 } from '@boolti/api';
 import { Button, useConfirm, useDialog, useToast } from '@boolti/ui';
-import { format } from 'date-fns';
+import { format, isAfter, addDays, parseISO } from 'date-fns';
 import { useEffect } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -78,6 +78,11 @@ const ShowTicketPage = () => {
     });
   }, [showSalesInfo, showTicketForm]);
 
+  const isSalesEnded = showSalesInfo?.salesEndTime
+    ? isAfter(new Date(), addDays(parseISO(showSalesInfo.salesEndTime), 1))
+    : false;
+  const isTicketDisabled = show?.isEnded || isSalesEnded;
+
   if (!show || !showSalesInfo || !myHostInfo) return null;
 
   if (!PAGE_PERMISSION['판매 정보'].includes(myHostInfo.type)) {
@@ -129,9 +134,11 @@ const ShowTicketPage = () => {
                 totalForSale: ticket.totalForSale,
                 isPaused: ticket.isPaused,
               }))}
-              disabled={show.isEnded}
+              disabled={isTicketDisabled || createSalesTicketMutation.isLoading}
               actionType="setting"
               onSubmitTicket={async (ticket) => {
+                if (createSalesTicketMutation.isLoading) return;
+
                 await createSalesTicketMutation.mutateAsync({
                   showId: show.id,
                   ticketName: ticket.name,
@@ -140,7 +147,7 @@ const ShowTicketPage = () => {
                 });
 
                 await refetchSalesTicketList();
-                toast.success('일반 티켓을 생성했습니다.');
+                toast.success('일반 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
                 if (ticket.id === undefined) return;
@@ -157,10 +164,9 @@ const ShowTicketPage = () => {
 
                 await deleteSalesTicketMutation.mutateAsync(ticket.id);
                 await refetchSalesTicketList();
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
               onSettingClick={(ticket) => {
-                const isSingleTicket = salesTicketList.length === 1;
                 const originalTicket = salesTicketList.find((t) => t.id === ticket.id);
                 const soldAtLeastOnce = originalTicket?.soldAtLeastOnce ?? false;
 
@@ -177,7 +183,7 @@ const ShowTicketPage = () => {
                         isPaused: ticket.isPaused,
                       }}
                       soldAtLeastOnce={soldAtLeastOnce}
-                      isDeleteDisabled={isSingleTicket || soldAtLeastOnce}
+                      isDeleteDisabled={salesTicketList.length === 1 || soldAtLeastOnce}
                       onSubmit={async (data) => {
                         if (ticket.id === undefined) return;
 
@@ -190,7 +196,7 @@ const ShowTicketPage = () => {
                         });
                         salesTicketSettingDialog.close();
                         await refetchSalesTicketList();
-                        toast.success('티켓 정보를 저장했습니다.');
+                        toast.success('티켓 정보를 저장했어요.');
                       }}
                       onDelete={async () => {
                         if (ticket.id === undefined) return;
@@ -208,7 +214,7 @@ const ShowTicketPage = () => {
                         await deleteSalesTicketMutation.mutateAsync(ticket.id);
                         salesTicketSettingDialog.close();
                         await refetchSalesTicketList();
-                        toast.success('티켓을 삭제했습니다.');
+                        toast.success('티켓을 삭제했어요.');
                       }}
                     />
                   ),
@@ -225,7 +231,7 @@ const ShowTicketPage = () => {
                 totalForSale: ticket.totalForSale,
                 isPaused: ticket.isPaused,
               }))}
-              disabled={show.isEnded}
+              disabled={isTicketDisabled}
               description={
                 <>
                   초청 티켓 이용을 원하시면 티켓을 생성해주세요.
@@ -241,7 +247,7 @@ const ShowTicketPage = () => {
                   totalForSale: Number(ticket.totalForSale),
                 });
                 await refetchInvitationTicketList();
-                toast.success('초청 티켓을 생성했습니다.');
+                toast.success('초청 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
                 if (ticket.id === undefined) return;
@@ -258,7 +264,7 @@ const ShowTicketPage = () => {
 
                 await deleteInvitationTicketMutation.mutateAsync(ticket.id);
                 await refetchInvitationTicketList();
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
               onSettingClick={(ticket) => {
                 const isSoldTicket = ticket.totalForSale > ticket.quantity;
@@ -287,7 +293,7 @@ const ShowTicketPage = () => {
                         });
                         invitationTicketSettingDialog.close();
                         await refetchInvitationTicketList();
-                        toast.success('티켓 정보를 저장했습니다.');
+                        toast.success('티켓 정보를 저장했어요.');
                       }}
                       onDelete={async () => {
                         if (ticket.id === undefined) return;
@@ -305,7 +311,7 @@ const ShowTicketPage = () => {
                         await deleteInvitationTicketMutation.mutateAsync(ticket.id);
                         invitationTicketSettingDialog.close();
                         await refetchInvitationTicketList();
-                        toast.success('티켓을 삭제했습니다.');
+                        toast.success('티켓을 삭제했어요.');
                       }}
                     />
                   ),
