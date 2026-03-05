@@ -113,7 +113,7 @@ const ShowPreQuestionPage = () => {
         preQuestions: preQuestionList.map((q, index) => ({
           id: q.id,
           questionText: q.questionText,
-          description: q.description || undefined,
+          description: q.description ?? '',
           isRequired: q.isRequired,
           sequence: index + 1,
         })),
