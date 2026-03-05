@@ -1,4 +1,5 @@
 import { PlusIcon } from '@boolti/icon';
+import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 import { PreQuestionTextArea } from '~/components/ShowPreQuestion';
@@ -20,11 +21,16 @@ const PreQuestionContainer = styled.div`
 `;
 
 const PreQuestionItem = styled.div`
-  padding: 20px;
+  padding: 20px 20px 24px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
+  box-shadow: 0 8px 14px 0 rgba(139, 139, 139, 0.15);
   overflow: hidden;
+
+  ${mq_lg} {
+    padding: 24px 28px 32px 28px;
+  }
 `;
 
 const PreQuestionRow = styled.div`

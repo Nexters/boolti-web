@@ -177,7 +177,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               .filter((q) => q.questionText.trim())
               .map((preQuestion, index) => ({
                 questionText: preQuestion.questionText,
-                description: preQuestion.description || undefined,
+                description: preQuestion.description ?? '',
                 isRequired: preQuestion.isRequired,
                 sequence: index + 1,
               })),
@@ -525,7 +525,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       <Styled.ProcessIndicator>
         <StepProgressBar
           activeKey={step}
-          items={stepItems.filter((item) => (isNonTicketingShow ? item.key !== 'sales' : true))}
+          items={stepItems.filter((item) =>
+            isNonTicketingShow ? item.key !== 'sales' && item.key !== 'preQuestion' : true,
+          )}
         />
       </Styled.ProcessIndicator>
       {step === 'basic' && basicStepContent}

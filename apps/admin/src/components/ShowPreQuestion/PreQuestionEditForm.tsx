@@ -25,6 +25,7 @@ const QuestionItem = styled.div`
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.grey.w};
+  box-shadow: 0 8px 14px 0 rgba(139, 139, 139, 0.15);
   overflow: hidden;
 
   ${mq_lg} {
@@ -33,7 +34,7 @@ const QuestionItem = styled.div`
 `;
 
 const QuestionRow = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -246,27 +247,29 @@ const PreQuestionEditForm = ({
   onSave,
 }: PreQuestionEditFormProps) => {
   const confirm = useConfirm();
+  const hasOverLimitQuestion = preQuestionList.some(
+    (preQuestion) =>
+      preQuestion.questionText.length > MAX_LENGTH ||
+      (preQuestion.description?.length ?? 0) > MAX_LENGTH,
+  );
 
-  const handleDeleteQuestion = async (index: number, hasId: boolean) => {
-    // id가 있는 질문(이미 저장된 질문)은 확인 팝업 표시
-    if (hasId) {
-      const isConfirmed = await confirm(
-        <ConfirmContent>
-          <ConfirmTitle>질문을 삭제할까요?</ConfirmTitle>
-          <ConfirmDescription>
-            삭제 후 저장할 경우 질문과 수집된 응답이 모두 삭제됩니다. 삭제된 질문과 응답은 복구가
-            불가능합니다.
-          </ConfirmDescription>
-        </ConfirmContent>,
-        {
-          cancel: '취소하기',
-          confirm: '삭제하기',
-        },
-      );
+  const handleDeleteQuestion = async (index: number) => {
+    const isConfirmed = await confirm(
+      <ConfirmContent>
+        <ConfirmTitle>질문을 삭제할까요?</ConfirmTitle>
+        <ConfirmDescription>
+          삭제 후 저장할 경우 질문과 수집된 응답이 모두 삭제됩니다. 삭제된 질문과 응답은 복구가
+          불가능합니다.
+        </ConfirmDescription>
+      </ConfirmContent>,
+      {
+        cancel: '취소하기',
+        confirm: '삭제하기',
+      },
+    );
 
-      if (!isConfirmed) {
-        return;
-      }
+    if (!isConfirmed) {
+      return;
     }
 
     onDeleteQuestion(index);
@@ -299,7 +302,7 @@ const PreQuestionEditForm = ({
           return (
             <QuestionItem key={preQuestion.id ?? `question-${index}`}>
               <QuestionRow>
-                <QuestionLabel required>질문 입력</QuestionLabel>
+                <QuestionLabel required>질문</QuestionLabel>
                 <PreQuestionTextArea
                   placeholder="ex. 어떤 팀을 보러 오셨나요? (100자 이내)"
                   value={preQuestion.questionText}
@@ -312,7 +315,7 @@ const PreQuestionEditForm = ({
                 {isQuestionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
               </QuestionRow>
               <QuestionRow>
-                <QuestionLabel>설명 입력</QuestionLabel>
+                <QuestionLabel>설명</QuestionLabel>
                 <PreQuestionTextArea
                   placeholder={
                     isDisabled ? '입력된 설명이 없어요' : '설명을 입력해 주세요 (100자 이내)'
@@ -328,10 +331,7 @@ const PreQuestionEditForm = ({
               </QuestionRow>
               <QuestionFooter showDeleteButton={!isDisabled}>
                 {!isDisabled && (
-                  <DeleteButton
-                    type="button"
-                    onClick={() => handleDeleteQuestion(index, !!preQuestion.id)}
-                  >
+                  <DeleteButton type="button" onClick={() => handleDeleteQuestion(index)}>
                     질문 삭제
                   </DeleteButton>
                 )}
@@ -361,7 +361,11 @@ const PreQuestionEditForm = ({
 
       {/* 저장하기 버튼 */}
       <FormFooter>
-        <SaveButton type="button" disabled={isDisabled || isSaving} onClick={onSave}>
+        <SaveButton
+          type="button"
+          disabled={isDisabled || isSaving || hasOverLimitQuestion}
+          onClick={onSave}
+        >
           {isSaving ? '저장 중...' : '저장하기'}
         </SaveButton>
       </FormFooter>

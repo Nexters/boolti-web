@@ -113,7 +113,7 @@ const ShowPreQuestionPage = () => {
         preQuestions: preQuestionList.map((q, index) => ({
           id: q.id,
           questionText: q.questionText,
-          description: q.description || undefined,
+          description: q.description ?? '',
           isRequired: q.isRequired,
           sequence: index + 1,
         })),
@@ -134,10 +134,9 @@ const ShowPreQuestionPage = () => {
   const questions = useMemo(() => preQuestionsData?.preQuestions ?? [], [preQuestionsData]);
   const hasNoSavedQuestion = isInitialized && questions.length === 0;
   const isEditEmptyAfterDeadline = isQuestionDeadlineEnded && hasNoSavedQuestion;
-  const isResponseTabDisabled = !isQuestionDeadlineEnded && hasNoSavedQuestion;
   const isSubTabHidden = isEditEmptyAfterDeadline;
-  const currentTab: SubTab = isSubTabHidden || isResponseTabDisabled ? 'edit' : activeTab;
-  const responseBadgeText = isResponseTabDisabled ? '-' : String(responseCount);
+  const currentTab: SubTab = isSubTabHidden ? 'edit' : activeTab;
+  const responseBadgeText = String(responseCount);
 
   if (!show || !myHostInfo) {
     return null;
@@ -162,12 +161,10 @@ const ShowPreQuestionPage = () => {
           </Styled.SubTabItem>
           <Styled.SubTabItem
             active={currentTab === 'response'}
-            isDisabled={isResponseTabDisabled}
-            disabled={isResponseTabDisabled}
             onClick={() => setActiveTab('response')}
           >
             응답 확인
-            <Styled.Badge isDisabled={isResponseTabDisabled}>{responseBadgeText}</Styled.Badge>
+            <Styled.Badge isActive={currentTab === 'response'}>{responseBadgeText}</Styled.Badge>
           </Styled.SubTabItem>
         </Styled.SubTabContainer>
       )}

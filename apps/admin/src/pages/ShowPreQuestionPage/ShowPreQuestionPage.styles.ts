@@ -44,7 +44,7 @@ const SubTabItem = styled.button<SubTabItemProps>`
   }
 `;
 
-const Badge = styled.span<{ isDisabled?: boolean }>`
+const Badge = styled.span<{ isActive?: boolean }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -52,8 +52,8 @@ const Badge = styled.span<{ isDisabled?: boolean }>`
   height: 20px;
   padding: 0 6px;
   border-radius: 10px;
-  background-color: ${({ isDisabled, theme }) =>
-    isDisabled ? theme.palette.grey.g50 : theme.palette.grey.g90};
+  background-color: ${({ isActive, theme }) =>
+    isActive ? theme.palette.grey.g90 : theme.palette.grey.g50};
   color: ${({ theme }) => theme.palette.grey.w};
   ${({ theme }) => theme.typo.c1};
 `;
