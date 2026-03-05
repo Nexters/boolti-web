@@ -177,7 +177,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               .filter((q) => q.questionText.trim())
               .map((preQuestion, index) => ({
                 questionText: preQuestion.questionText,
-                description: preQuestion.description || undefined,
+                description: preQuestion.description ?? '',
                 isRequired: preQuestion.isRequired,
                 sequence: index + 1,
               })),
