@@ -89,37 +89,36 @@ const ParticipantResponseView = ({
   }, [localSearch, onSearchChange]);
 
   const renderPagination = () => {
-    if (totalPages <= 1) return null;
-
+    const pageCount = Math.max(totalPages, 1);
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
 
-    if (totalPages <= maxVisiblePages) {
-      for (let i = 1; i <= totalPages; i++) {
+    if (pageCount <= maxVisiblePages) {
+      for (let i = 1; i <= pageCount; i++) {
         pages.push(i);
       }
     } else {
       if (currentPage <= 3) {
         for (let i = 1; i <= 3; i++) pages.push(i);
         pages.push('...');
-        pages.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
+        pages.push(pageCount);
+      } else if (currentPage >= pageCount - 2) {
         pages.push(1);
         pages.push('...');
-        for (let i = totalPages - 2; i <= totalPages; i++) pages.push(i);
+        for (let i = pageCount - 2; i <= pageCount; i++) pages.push(i);
       } else {
         pages.push(1);
         pages.push('...');
         pages.push(currentPage);
         pages.push('...');
-        pages.push(totalPages);
+        pages.push(pageCount);
       }
     }
 
     return (
       <Styled.PaginationContainer>
         <Styled.PaginationButton
-          disabled={currentPage === 1}
+          disabled={currentPage <= 1}
           onClick={() => onPageChange(currentPage - 1)}
         >
           <ChevronLeftIcon />
@@ -138,7 +137,7 @@ const ParticipantResponseView = ({
           ),
         )}
         <Styled.PaginationButton
-          disabled={currentPage === totalPages}
+          disabled={currentPage >= pageCount}
           onClick={() => onPageChange(currentPage + 1)}
         >
           <ChevronRightIcon />

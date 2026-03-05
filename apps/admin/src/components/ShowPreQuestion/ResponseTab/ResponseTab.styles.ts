@@ -336,7 +336,7 @@ export const ParticipantListSection = styled.div`
     box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
     border-radius: 10px 0 0 10px;
     border-right: 1px solid ${({ theme }) => theme.palette.grey.g20};
-    width: 340px;
+    width: 416px;
   }
 `;
 
@@ -406,8 +406,6 @@ export const SearchButton = styled.button`
 `;
 
 export const ParticipantList = styled.div`
-  max-height: 400px;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -500,7 +498,7 @@ export const ParticipantDetailSection = styled.div`
   ${mq_lg} {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    width: 664px;
     background-color: ${({ theme }) => theme.palette.grey.w};
     border-radius: 0 10px 10px 0;
     box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);

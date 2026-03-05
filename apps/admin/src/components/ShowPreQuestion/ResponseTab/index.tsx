@@ -21,6 +21,7 @@ import TicketNameFilter from '~/components/TicketNameFilter';
 
 type ViewType = 'question' | 'participant';
 type SortOrder = 'latest' | 'oldest';
+const PARTICIPANT_PAGE_SIZE = 5;
 
 interface ResponseTabProps {
   showId: number;
@@ -109,10 +110,13 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     return newMap;
   }, [questions, questionAnswersQueries, selectedTicketIdSet]);
 
-  // 참여자 목록 조회
+  const participantFetchSize = Math.max(totalRespondentCount, PARTICIPANT_PAGE_SIZE);
+
+  // 참여자 목록 조회 (전체 조회 후 프론트에서 필터/페이지네이션 처리)
   const { data: participantsData } = usePreQuestionParticipants(
     showId,
-    participantPage - 1, // 0-based page
+    0,
+    participantFetchSize,
     ticketFilterParam,
     participantSearchText || undefined,
     participantsSortParam,
@@ -126,15 +130,35 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     { enabled: shouldFetchResponseData && selectedReservationId !== null },
   );
 
-  const participants: PreQuestionParticipantItem[] = participantsData?.content ?? [];
-  const totalPages = participantsData?.totalPages ?? 0;
+  const filteredParticipants = useMemo(() => {
+    const participantList = participantsData?.content ?? [];
+    if (selectedTicketIdSet.size === 0) {
+      return participantList;
+    }
+    return participantList.filter((participant) => selectedTicketIdSet.has(participant.salesTicketTypeId));
+  }, [participantsData?.content, selectedTicketIdSet]);
+
+  const totalPages = Math.ceil(filteredParticipants.length / PARTICIPANT_PAGE_SIZE);
+  const participants: PreQuestionParticipantItem[] = useMemo(() => {
+    const startIndex = (participantPage - 1) * PARTICIPANT_PAGE_SIZE;
+    return filteredParticipants.slice(startIndex, startIndex + PARTICIPANT_PAGE_SIZE);
+  }, [filteredParticipants, participantPage]);
   const selectedParticipantDetail: PreQuestionParticipantDetailResponse | null =
     participantDetail ?? null;
 
+  useEffect(() => {
+    if (totalPages === 0 && participantPage !== 1) {
+      setParticipantPage(1);
+      return;
+    }
+    if (totalPages > 0 && participantPage > totalPages) {
+      setParticipantPage(totalPages);
+    }
+  }, [participantPage, totalPages]);
+
   // 참여자 목록이 로드되면 첫 번째 참여자 자동 선택
   useEffect(() => {
-    const participantList = participantsData?.content ?? [];
-    const firstParticipant = participantList[0];
+    const firstParticipant = participants[0];
 
     if (!firstParticipant) {
       setSelectedReservationId(null);
@@ -142,7 +166,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
       return;
     }
 
-    const hasSelectedParticipant = participantList.some(
+    const hasSelectedParticipant = participants.some(
       (participant) => participant.reservationId === selectedReservationId,
     );
 
@@ -155,7 +179,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     }
 
     shouldForceSelectFirstParticipantRef.current = false;
-  }, [participantsData?.content, selectedReservationId]);
+  }, [participants, selectedReservationId]);
 
   // 클릭 외부 감지
   useEffect(() => {
