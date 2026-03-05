@@ -42,6 +42,7 @@ const TicketSettingForm = ({
     watch,
     formState: { isDirty, isValid },
   } = useForm<TicketSettingFormInputs>({
+    mode: 'onChange',
     defaultValues: {
       name: defaultValues.name,
       price: defaultValues.price?.toString(),
@@ -159,7 +160,7 @@ const TicketSettingForm = ({
               inputType="number"
               size="big"
               min={ticketType === 'invitation' && soldAtLeastOnce ? defaultValues.totalForSale : (soldQuantity || 1)}
-              disabled={isPaused || (ticketType === 'invitation' && soldAtLeastOnce)}
+              disabled={isPaused}
               {...register('totalForSale', { required: true })}
               onBlur={(event) => {
                 register('totalForSale', { required: true }).onBlur(event);
