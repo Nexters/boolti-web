@@ -525,7 +525,9 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       <Styled.ProcessIndicator>
         <StepProgressBar
           activeKey={step}
-          items={stepItems.filter((item) => (isNonTicketingShow ? item.key !== 'sales' : true))}
+          items={stepItems.filter((item) =>
+            isNonTicketingShow ? item.key !== 'sales' && item.key !== 'preQuestion' : true,
+          )}
         />
       </Styled.ProcessIndicator>
       {step === 'basic' && basicStepContent}
