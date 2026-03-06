@@ -81,15 +81,12 @@ const TextFieldSuffix = styled.span`
 const TicketFormButton = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding-bottom: 16px;
 
   button {
     width: 100%;
   }
 
   ${mq_lg} {
-    margin-top: 4px;
-
     button {
       width: auto;
     }
@@ -145,10 +142,12 @@ const TicketFormFooter = styled.div`
 
   & > button:first-of-type {
     min-width: auto;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   & > button:last-of-type {
-    width: 100%;
+    flex: 1;
   }
 
   ${mq_lg} {

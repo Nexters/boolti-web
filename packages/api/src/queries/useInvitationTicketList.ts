@@ -2,7 +2,14 @@ import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '../queryKey';
 
-const useInvitationTicketList = (showId: number) =>
-  useQuery(queryKeys.show.invitationTicketList(showId));
+interface UseInvitationTicketListOptions {
+  refetchInterval?: number | false;
+}
+
+const useInvitationTicketList = (showId: number, options?: UseInvitationTicketListOptions) =>
+  useQuery({
+    ...queryKeys.show.invitationTicketList(showId),
+    ...(options?.refetchInterval !== undefined && { refetchInterval: options.refetchInterval }),
+  });
 
 export default useInvitationTicketList;
