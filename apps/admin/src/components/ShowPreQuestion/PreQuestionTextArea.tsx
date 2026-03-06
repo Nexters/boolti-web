@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface PreQuestionTextAreaProps {
   placeholder: string;
@@ -24,6 +24,11 @@ const StyledTextArea = styled.textarea<{ hasError?: boolean; disabled?: boolean 
   ${({ theme }) => theme.typo.b3};
   resize: none;
   box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 
   &::placeholder {
     color: ${({ theme }) => theme.palette.grey.g30};
@@ -62,6 +67,10 @@ const PreQuestionTextArea = ({
     onChange(e);
     adjustHeight();
   };
+
+  useEffect(() => {
+    adjustHeight();
+  }, [adjustHeight, value]);
 
   return (
     <StyledTextArea

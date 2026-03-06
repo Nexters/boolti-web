@@ -12,7 +12,7 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
   align-items: center;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.primary.o1 : theme.palette.grey.g90)};
   border-radius: 4px;
-  ${({ theme }) => theme.typo.b3};
+  ${({ theme, isActive }) => (isActive ? theme.typo.sh1 : theme.typo.b3)};
   padding: 9px 16px;
   padding-left: 0px;
 

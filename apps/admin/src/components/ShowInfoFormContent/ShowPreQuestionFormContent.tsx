@@ -1,5 +1,5 @@
 import { PlusIcon } from '@boolti/icon';
-import { mq_lg } from '@boolti/ui';
+import { mq_lg, useConfirm } from '@boolti/ui';
 import styled from '@emotion/styled';
 
 import { PreQuestionTextArea } from '~/components/ShowPreQuestion';
@@ -149,6 +149,27 @@ const AddButtonText = styled.span`
   }
 `;
 
+const ConfirmContent = styled.div`
+  text-align: left;
+`;
+
+const ConfirmTitle = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  margin-bottom: 8px;
+`;
+
+const ConfirmDescription = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+  line-height: 1.6;
+  text-align: center;
+
+  ${mq_lg} {
+    text-align: left;
+  }
+`;
+
 interface ShowPreQuestionFormContentProps {
   preQuestionList: PreQuestion[];
   onUpdateQuestion: (index: number, question: PreQuestion) => void;
@@ -162,6 +183,8 @@ const ShowPreQuestionFormContent = ({
   onAddQuestion,
   onDeleteQuestion,
 }: ShowPreQuestionFormContentProps) => {
+  const confirm = useConfirm();
+
   const handleTextChange = (
     index: number,
     field: 'questionText' | 'description',
@@ -173,6 +196,28 @@ const ShowPreQuestionFormContent = ({
       ...preQuestion,
       [field]: value,
     });
+  };
+
+  const handleDeleteQuestion = async (index: number) => {
+    const isConfirmed = await confirm(
+      <ConfirmContent>
+        <ConfirmTitle>질문을 삭제할까요?</ConfirmTitle>
+        <ConfirmDescription>
+          삭제 후 저장할 경우 질문과 수집된 응답이 모두 삭제됩니다. 삭제된 질문과 응답은 복구가
+          불가능합니다.
+        </ConfirmDescription>
+      </ConfirmContent>,
+      {
+        cancel: '취소하기',
+        confirm: '삭제하기',
+      },
+    );
+
+    if (!isConfirmed) {
+      return;
+    }
+
+    onDeleteQuestion(index);
   };
 
   return (
@@ -204,7 +249,7 @@ const ShowPreQuestionFormContent = ({
               {isDescriptionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
             </PreQuestionRow>
             <PreQuestionFooter>
-              <DeleteButton type="button" onClick={() => onDeleteQuestion(index)}>
+              <DeleteButton type="button" onClick={() => void handleDeleteQuestion(index)}>
                 질문 삭제
               </DeleteButton>
               <ToggleContainer>

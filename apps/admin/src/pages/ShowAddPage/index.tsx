@@ -157,6 +157,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const onSubmitPreQuestionForm = async () => {
     if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
       return;
+    const hasEmptyPreQuestion = preQuestionList.some((q) => q.questionText.trim().length === 0);
+    const hasOverLimitPreQuestion = preQuestionList.some(
+      (q) => q.questionText.length > 100 || (q.description?.length ?? 0) > 100,
+    );
+
+    if (hasEmptyPreQuestion || hasOverLimitPreQuestion) {
+      return;
+    }
 
     const body = await getBasicBody();
     const ticketBody = {
@@ -468,18 +476,14 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
     </>
   );
 
-  // 버튼 활성화 조건:
-  // 1. 질문 0개면 활성화
-  // 2. 질문 1개 이상이면 모든 질문 필드가 채워져야 하고, 100자를 초과하지 않아야 활성화
   const MAX_QUESTION_LENGTH = 100;
-  const isPreQuestionFormValid =
-    preQuestionList.length === 0 ||
-    preQuestionList.every(
-      (q) =>
-        q.questionText.trim().length > 0 &&
-        q.questionText.length <= MAX_QUESTION_LENGTH &&
-        (q.description?.length ?? 0) <= MAX_QUESTION_LENGTH,
-    );
+  const hasEmptyPreQuestion = preQuestionList.some((q) => q.questionText.trim().length === 0);
+  const hasOverLimitPreQuestion = preQuestionList.some(
+    (q) =>
+      q.questionText.length > MAX_QUESTION_LENGTH ||
+      (q.description?.length ?? 0) > MAX_QUESTION_LENGTH,
+  );
+  const isPreQuestionFormValid = !hasEmptyPreQuestion && !hasOverLimitPreQuestion;
 
   const preQuestionStepContent = (
     <>

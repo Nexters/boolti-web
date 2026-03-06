@@ -53,20 +53,13 @@ export const SegmentButton = styled.button<{ isActive: boolean }>`
   cursor: pointer;
   transition: all 0.2s ease;
   flex: 1;
-
-  ${({ theme, isActive }) =>
-    isActive
-      ? `
-        background-color: ${theme.palette.grey.w};
-        box-shadow: 0px 8px 14px 0px rgba(139, 139, 139, 0.15);
-        ${theme.typo.sh1};
-        color: ${theme.palette.grey.g90};
-      `
-      : `
-        background-color: transparent;
-        ${theme.typo.b3};
-        color: ${theme.palette.grey.g70};
-      `}
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.palette.grey.w : 'transparent'};
+  box-shadow: ${({ isActive }) =>
+    isActive ? '0px 8px 14px 0px rgba(139, 139, 139, 0.15)' : 'none'};
+  ${({ theme, isActive }) => (isActive ? theme.typo.sh1 : theme.typo.b3)};
+  color: ${({ theme, isActive }) =>
+    isActive ? theme.palette.grey.g90 : theme.palette.grey.g70};
 
   &:hover {
     ${({ theme, isActive }) =>

@@ -202,14 +202,14 @@ const ConfirmContent = styled.div`
 `;
 
 const ConfirmTitle = styled.p`
-  ${({ theme }) => theme.typo.sh2};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 `;
 
 const ConfirmDescription = styled.p`
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g70};
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
   line-height: 1.6;
   text-align: center;
 
@@ -251,6 +251,9 @@ const PreQuestionEditForm = ({
     (preQuestion) =>
       preQuestion.questionText.length > MAX_LENGTH ||
       (preQuestion.description?.length ?? 0) > MAX_LENGTH,
+  );
+  const hasEmptyQuestion = preQuestionList.some(
+    (preQuestion) => preQuestion.questionText.trim().length === 0,
   );
 
   const handleDeleteQuestion = async (index: number) => {
@@ -363,7 +366,7 @@ const PreQuestionEditForm = ({
       <FormFooter>
         <SaveButton
           type="button"
-          disabled={isDisabled || isSaving || hasOverLimitQuestion}
+          disabled={isDisabled || isSaving || hasOverLimitQuestion || hasEmptyQuestion}
           onClick={onSave}
         >
           {isSaving ? '저장 중...' : '저장하기'}
