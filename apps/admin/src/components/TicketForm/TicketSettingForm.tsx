@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
+import QuantityStepperInput from './QuantityStepperInput';
 
 export interface TicketSettingFormInputs {
   name: string;
@@ -58,7 +59,11 @@ const TicketSettingForm = ({
   });
 
   const isPaused = watch('isPaused');
+  const totalForSaleValue = watch('totalForSale');
   const soldQuantity = defaultValues.totalForSale - defaultValues.quantity;
+  const totalForSaleMin = ticketType === 'invitation' && soldAtLeastOnce
+    ? defaultValues.totalForSale
+    : (soldQuantity || 1);
 
   const validatePrice = (price?: string) => {
     if (!price) return false;
@@ -156,15 +161,23 @@ const TicketSettingForm = ({
         <Styled.TotalQuantityContent>
           <Styled.TicketFormLabel>총 수량</Styled.TicketFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="number"
-              size="big"
-              min={ticketType === 'invitation' && soldAtLeastOnce ? defaultValues.totalForSale : (soldQuantity || 1)}
+            <QuantityStepperInput
+              min={totalForSaleMin}
               disabled={isPaused}
+              disableDecrement={Number(totalForSaleValue) <= totalForSaleMin}
               {...register('totalForSale', { required: true })}
               onBlur={(event) => {
                 register('totalForSale', { required: true }).onBlur(event);
                 setHasBlurred((prev) => ({ ...prev, totalForSale: true }));
+              }}
+              onIncrement={() => {
+                const current = Number(getValues('totalForSale')) || 0;
+                setValue('totalForSale', String(current + 1), { shouldDirty: true, shouldValidate: true });
+              }}
+              onDecrement={() => {
+                const current = Number(getValues('totalForSale')) || 0;
+                const newVal = Math.max(totalForSaleMin, current - 1);
+                setValue('totalForSale', String(newVal), { shouldDirty: true, shouldValidate: true });
               }}
               errorMessage={
                 hasBlurred.totalForSale && !getValues('totalForSale') ? '필수 입력사항입니다.' : ''
