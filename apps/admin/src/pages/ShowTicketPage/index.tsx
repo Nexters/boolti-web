@@ -21,7 +21,10 @@ import ShowInvitationTicketFormContent from '~/components/ShowInfoFormContent/Sh
 import ShowSalesTicketFormContent from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
 import ShowTicketInfoFormContent from '~/components/ShowInfoFormContent/ShowTicketInfoFormContent';
 import { ShowSalesInfoFormInputs } from '~/components/ShowInfoFormContent/types';
-import TicketSettingForm from '~/components/TicketForm/TicketSettingForm';
+import {
+  SalesTicketSettingDialogContent,
+  InvitationTicketSettingDialogContent,
+} from '~/components/TicketForm/TicketSettingDialogContent';
 
 import Styled from './ShowTicketPage.styles';
 import { useAtom } from 'jotai';
@@ -167,23 +170,15 @@ const ShowTicketPage = () => {
                 toast.success('티켓을 삭제했어요.');
               }}
               onSettingClick={(ticket) => {
-                const originalTicket = salesTicketList.find((t) => t.id === ticket.id);
-                const soldAtLeastOnce = originalTicket?.soldAtLeastOnce ?? false;
+                if (ticket.id === undefined) return;
 
                 salesTicketSettingDialog.open({
                   title: '일반 티켓 설정',
                   content: (
-                    <TicketSettingForm
-                      ticketType="sales"
-                      defaultValues={{
-                        name: ticket.name,
-                        price: ticket.price,
-                        totalForSale: ticket.totalForSale,
-                        quantity: ticket.quantity,
-                        isPaused: ticket.isPaused,
-                      }}
-                      soldAtLeastOnce={soldAtLeastOnce}
-                      isDeleteDisabled={salesTicketList.length === 1 || soldAtLeastOnce}
+                    <SalesTicketSettingDialogContent
+                      showId={show.id}
+                      ticketId={ticket.id}
+                      salesTicketCount={salesTicketList.length}
                       onSubmit={async (data) => {
                         if (ticket.id === undefined) return;
 
@@ -267,21 +262,14 @@ const ShowTicketPage = () => {
                 toast.success('티켓을 삭제했어요.');
               }}
               onSettingClick={(ticket) => {
-                const isSoldTicket = ticket.totalForSale > ticket.quantity;
+                if (ticket.id === undefined) return;
 
                 invitationTicketSettingDialog.open({
                   title: '초청 티켓 설정',
                   content: (
-                    <TicketSettingForm
-                      ticketType="invitation"
-                      defaultValues={{
-                        name: ticket.name,
-                        totalForSale: ticket.totalForSale,
-                        quantity: ticket.quantity,
-                        isPaused: ticket.isPaused,
-                      }}
-                      soldAtLeastOnce={isSoldTicket}
-                      isDeleteDisabled={isSoldTicket}
+                    <InvitationTicketSettingDialogContent
+                      showId={show.id}
+                      ticketId={ticket.id}
                       onSubmit={async (data) => {
                         if (ticket.id === undefined) return;
 

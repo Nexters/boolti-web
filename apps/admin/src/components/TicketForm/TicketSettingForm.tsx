@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
+import QuantityStepperInput from './QuantityStepperInput';
 
 export interface TicketSettingFormInputs {
   name: string;
@@ -10,6 +11,8 @@ export interface TicketSettingFormInputs {
   totalForSale: string;
   isPaused: boolean;
 }
+
+type DeleteDisabledReason = 'soldAtLeastOnce' | 'singleTicket' | 'both';
 
 interface TicketSettingFormProps {
   ticketType: 'sales' | 'invitation';
@@ -24,7 +27,36 @@ interface TicketSettingFormProps {
   onSubmit: SubmitHandler<TicketSettingFormInputs>;
   onDelete: () => void;
   isDeleteDisabled?: boolean;
+  deleteDisabledReason?: DeleteDisabledReason;
 }
+
+const DELETE_DISABLED_TOOLTIPS: Record<DeleteDisabledReason, React.ReactNode> = {
+  soldAtLeastOnce: (
+    <>
+      환불을 포함한 판매 이력이 있어 티켓 삭제가
+      <br />
+      불가합니다. 미판매를 원하시는 경우,
+      <br />
+      &apos;판매 설정&gt; 판매 중단&apos;을 선택해 주세요.
+    </>
+  ),
+  singleTicket: (
+    <>
+      티켓 판매를 위해서는 최소 1개 이상의
+      <br />
+      일반 티켓이 필요하여 삭제가 불가합니다.
+    </>
+  ),
+  both: (
+    <>
+      환불을 포함한 판매 이력이 있어 티켓 삭제가
+      <br />
+      불가합니다. 미판매를 원하시는 경우,
+      <br />
+      &apos;판매 설정&gt; 판매 중단&apos;을 선택해 주세요.
+    </>
+  ),
+};
 
 const TicketSettingForm = ({
   ticketType,
@@ -33,6 +65,7 @@ const TicketSettingForm = ({
   onSubmit,
   onDelete,
   isDeleteDisabled,
+  deleteDisabledReason,
 }: TicketSettingFormProps) => {
   const {
     handleSubmit,
@@ -58,7 +91,11 @@ const TicketSettingForm = ({
   });
 
   const isPaused = watch('isPaused');
+  const totalForSaleValue = watch('totalForSale');
   const soldQuantity = defaultValues.totalForSale - defaultValues.quantity;
+  const totalForSaleMin = ticketType === 'invitation' && soldAtLeastOnce
+    ? defaultValues.totalForSale
+    : (soldQuantity || 1);
 
   const validatePrice = (price?: string) => {
     if (!price) return false;
@@ -156,15 +193,23 @@ const TicketSettingForm = ({
         <Styled.TotalQuantityContent>
           <Styled.TicketFormLabel>총 수량</Styled.TicketFormLabel>
           <Styled.TextField>
-            <TextField
-              inputType="number"
-              size="big"
-              min={ticketType === 'invitation' && soldAtLeastOnce ? defaultValues.totalForSale : (soldQuantity || 1)}
+            <QuantityStepperInput
+              min={totalForSaleMin}
               disabled={isPaused}
+              disableDecrement={Number(totalForSaleValue) <= totalForSaleMin}
               {...register('totalForSale', { required: true })}
               onBlur={(event) => {
                 register('totalForSale', { required: true }).onBlur(event);
                 setHasBlurred((prev) => ({ ...prev, totalForSale: true }));
+              }}
+              onIncrement={() => {
+                const current = Number(getValues('totalForSale')) || 0;
+                setValue('totalForSale', String(current + 1), { shouldDirty: true, shouldValidate: true });
+              }}
+              onDecrement={() => {
+                const current = Number(getValues('totalForSale')) || 0;
+                const newVal = Math.max(totalForSaleMin, current - 1);
+                setValue('totalForSale', String(newVal), { shouldDirty: true, shouldValidate: true });
               }}
               errorMessage={
                 hasBlurred.totalForSale && !getValues('totalForSale') ? '필수 입력사항입니다.' : ''
@@ -197,7 +242,7 @@ const TicketSettingForm = ({
           저장하기
         </Button>
       </Styled.TicketFormFooter>
-      {isDeleteDisabled && (
+      {isDeleteDisabled && deleteDisabledReason && (
         <Tooltip
           id="delete-ticket-tooltip-multiline"
           place="top-start"
@@ -210,11 +255,7 @@ const TicketSettingForm = ({
             fontWeight: 400,
           }}
         >
-          환불을 포함한 판매 이력이 있어 티켓 삭제가
-          <br />
-          불가합니다. 미판매를 원하시는 경우,
-          <br />
-          ‘판매 설정&gt; 판매 중단’을 선택해 주세요.
+          {DELETE_DISABLED_TOOLTIPS[deleteDisabledReason]}
         </Tooltip>
       )}
     </Styled.TicketForm>
