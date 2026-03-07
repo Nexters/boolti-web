@@ -133,9 +133,9 @@ const ShowPreQuestionPage = () => {
   );
   const questions = useMemo(() => preQuestionsData?.preQuestions ?? [], [preQuestionsData]);
   const hasNoSavedQuestion = isInitialized && questions.length === 0;
+  const shouldShowResponseTab = !hasNoSavedQuestion;
   const isEditEmptyAfterDeadline = isQuestionDeadlineEnded && hasNoSavedQuestion;
-  const isSubTabHidden = isEditEmptyAfterDeadline;
-  const currentTab: SubTab = isSubTabHidden ? 'edit' : activeTab;
+  const currentTab: SubTab = shouldShowResponseTab ? activeTab : 'edit';
   const responseBadgeText = String(responseCount);
 
   if (!show || !myHostInfo) {
@@ -154,18 +154,20 @@ const ShowPreQuestionPage = () => {
 
   return (
     <Styled.ShowPreQuestionPage>
-      {!isSubTabHidden && (
+      {!isEditEmptyAfterDeadline && (
         <Styled.SubTabContainer>
           <Styled.SubTabItem active={currentTab === 'edit'} onClick={() => setActiveTab('edit')}>
             질문 편집
           </Styled.SubTabItem>
-          <Styled.SubTabItem
-            active={currentTab === 'response'}
-            onClick={() => setActiveTab('response')}
-          >
-            응답 확인
-            <Styled.Badge isActive={currentTab === 'response'}>{responseBadgeText}</Styled.Badge>
-          </Styled.SubTabItem>
+          {shouldShowResponseTab && (
+            <Styled.SubTabItem
+              active={currentTab === 'response'}
+              onClick={() => setActiveTab('response')}
+            >
+              응답 확인
+              <Styled.Badge isActive={currentTab === 'response'}>{responseBadgeText}</Styled.Badge>
+            </Styled.SubTabItem>
+          )}
         </Styled.SubTabContainer>
       )}
 

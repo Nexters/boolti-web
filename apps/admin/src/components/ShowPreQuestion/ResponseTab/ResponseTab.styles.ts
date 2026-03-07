@@ -603,6 +603,16 @@ export const SearchEmptyContainer = styled.div`
   }
 `;
 
+export const QuestionSearchEmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: clamp(360px, 50vh, 670px);
+  gap: 18px;
+  padding: 20px;
+`;
+
 export const SearchEmptyIcon = styled.div`
   width: 48px;
   height: 48px;
@@ -847,6 +857,7 @@ export default {
   ParticipantAnswerContent,
   NoSelectionMessage,
   SearchEmptyContainer,
+  QuestionSearchEmptyContainer,
   SearchEmptyIcon,
   SearchEmptyText,
   SearchResetButton,

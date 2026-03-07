@@ -30,7 +30,9 @@ interface ParticipantResponseViewProps {
   currentPage: number;
   totalPages: number;
   searchText: string;
+  isFilterApplied: boolean;
   onSearchChange: (text: string) => void;
+  onResetFilter: () => void;
   onSelectParticipant: (reservationId: number) => void;
   onPageChange: (page: number) => void;
 }
@@ -41,14 +43,18 @@ const ParticipantResponseView = ({
   currentPage,
   totalPages,
   searchText,
+  isFilterApplied,
   onSearchChange,
+  onResetFilter,
   onSelectParticipant,
   onPageChange,
 }: ParticipantResponseViewProps) => {
   const [localSearch, setLocalSearch] = useState(searchText);
   const isMobile = useIsMobile();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const isSearchEmpty = participants.length === 0 && localSearch.trim() !== '';
+  const isFilterEmpty = totalPages === 0 && isFilterApplied;
+  const isSearchEmpty = totalPages === 0 && !isFilterApplied && localSearch.trim() !== '';
+  const isResultEmpty = isFilterEmpty || isSearchEmpty;
 
   // BottomSheet 열릴 때 body 스크롤 방지
   useEffect(() => {
@@ -172,7 +178,7 @@ const ParticipantResponseView = ({
           </Styled.ParticipantSearchInput>
         </Styled.ParticipantSearchContainer>
 
-        {isSearchEmpty ? (
+        {isResultEmpty ? (
           <Styled.SearchEmptyContainer>
             {isMobile && (
               <Styled.SearchEmptyIcon>
@@ -180,12 +186,24 @@ const ParticipantResponseView = ({
               </Styled.SearchEmptyIcon>
             )}
             <Styled.SearchEmptyText>
-              검색 결과가 없어요.
-              <br />
-              참여자 이름을 변경해보세요.
+              {isFilterEmpty ? (
+                <>
+                  찾으시는 결과가 없어요.
+                  <br />
+                  조건을 변경해 보세요.
+                </>
+              ) : (
+                <>
+                  검색 결과가 없어요.
+                  <br />
+                  참여자 이름을 변경해보세요.
+                </>
+              )}
             </Styled.SearchEmptyText>
-            <Styled.SearchResetButton onClick={handleSearchReset}>
-              검색 초기화
+            <Styled.SearchResetButton
+              onClick={isFilterEmpty ? onResetFilter : handleSearchReset}
+            >
+              {isFilterEmpty ? '필터 초기화' : '검색 초기화'}
             </Styled.SearchResetButton>
           </Styled.SearchEmptyContainer>
         ) : (
@@ -225,7 +243,7 @@ const ParticipantResponseView = ({
 
       {/* 응답 상세 - 데스크톱에서만 표시 */}
       <Styled.ParticipantDetailSection>
-        {selectedParticipant && !isSearchEmpty ? (
+        {selectedParticipant && !isResultEmpty ? (
           <>
             <Styled.ParticipantDetailHeader>
               <Styled.ParticipantDetailTitle>
@@ -259,7 +277,7 @@ const ParticipantResponseView = ({
               ))}
             </Styled.ParticipantDetailBody>
           </>
-        ) : isSearchEmpty ? (
+        ) : isResultEmpty ? (
           <>
             <Styled.ParticipantDetailHeader>
               <Styled.ParticipantDetailTitle>응답 상세</Styled.ParticipantDetailTitle>

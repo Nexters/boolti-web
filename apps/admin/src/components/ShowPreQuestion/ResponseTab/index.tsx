@@ -109,6 +109,20 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
 
     return newMap;
   }, [questions, questionAnswersQueries, selectedTicketIdSet]);
+  const isQuestionAnswersLoading = useMemo(
+    () => questionAnswersQueries.some((query) => query?.isLoading || query?.isFetching),
+    [questionAnswersQueries],
+  );
+  const totalFilteredQuestionAnswers = useMemo(
+    () =>
+      questions.reduce((sum, question) => {
+        const answerData = answersMap.get(question.id);
+        return sum + (answerData?.totalCount ?? 0);
+      }, 0),
+    [answersMap, questions],
+  );
+  const isQuestionFilterEmpty =
+    selectedTicketIds.length > 0 && !isQuestionAnswersLoading && totalFilteredQuestionAnswers === 0;
 
   const participantFetchSize = Math.max(totalRespondentCount, PARTICIPANT_PAGE_SIZE);
 
@@ -218,6 +232,12 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     setSelectedReservationId(null);
   }, []);
 
+  const handleTicketFilterReset = useCallback(() => {
+    setSelectedTicketIds([]);
+    setParticipantPage(1);
+    setSelectedReservationId(null);
+  }, []);
+
   // 응답이 없는 경우
   if (totalRespondentCount === 0) {
     return (
@@ -282,7 +302,12 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
       </Styled.HeaderContainer>
 
       {viewType === 'question' ? (
-        <QuestionResponseView questions={questions} answersMap={answersMap} />
+        <QuestionResponseView
+          questions={questions}
+          answersMap={answersMap}
+          isFilterEmpty={isQuestionFilterEmpty}
+          onResetFilter={handleTicketFilterReset}
+        />
       ) : (
         <ParticipantResponseView
           participants={participants}
@@ -290,7 +315,9 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
           currentPage={participantPage}
           totalPages={totalPages}
           searchText={participantSearchText}
+          isFilterApplied={selectedTicketIds.length > 0}
           onSearchChange={handleSearchChange}
+          onResetFilter={handleTicketFilterReset}
           onSelectParticipant={handleSelectParticipant}
           onPageChange={handlePageChange}
         />

@@ -1,5 +1,7 @@
+import { BooltiGreyIcon } from '@boolti/icon';
 import { PreQuestionItem, PreQuestionAnswerItem } from '@boolti/api/src/types';
 import Styled from './ResponseTab.styles';
+import { useIsMobile } from '~/hooks/useIsMobile';
 
 interface QuestionCardProps {
   question: PreQuestionItem;
@@ -65,9 +67,36 @@ const QuestionCard = ({ question, answers, totalCount }: QuestionCardProps) => {
 interface QuestionResponseViewProps {
   questions: PreQuestionItem[];
   answersMap: Map<number, { answers: PreQuestionAnswerItem[]; totalCount: number }>;
+  isFilterEmpty: boolean;
+  onResetFilter: () => void;
 }
 
-const QuestionResponseView = ({ questions, answersMap }: QuestionResponseViewProps) => {
+const QuestionResponseView = ({
+  questions,
+  answersMap,
+  isFilterEmpty,
+  onResetFilter,
+}: QuestionResponseViewProps) => {
+  const isMobile = useIsMobile();
+
+  if (isFilterEmpty) {
+    return (
+      <Styled.QuestionSearchEmptyContainer>
+        {isMobile && (
+          <Styled.SearchEmptyIcon>
+            <BooltiGreyIcon />
+          </Styled.SearchEmptyIcon>
+        )}
+        <Styled.SearchEmptyText>
+          찾으시는 결과가 없어요.
+          <br />
+          조건을 변경해 보세요.
+        </Styled.SearchEmptyText>
+        <Styled.SearchResetButton onClick={onResetFilter}>필터 초기화</Styled.SearchResetButton>
+      </Styled.QuestionSearchEmptyContainer>
+    );
+  }
+
   return (
     <Styled.QuestionCardList>
       {questions.map((question) => {
