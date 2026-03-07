@@ -277,90 +277,85 @@ const PreQuestionEditForm = ({
 
     onDeleteQuestion(index);
   };
-  // 질문이 없고 마감된 경우
-  if (preQuestionList.length === 0 && isDisabled) {
-    return (
-      <EmptyStateDisabled>
-        <EmptyStateIcon>
-          <BooltiGreyIcon />
-        </EmptyStateIcon>
-        <EmptyStateText>생성한 사전 질문이 없어요.</EmptyStateText>
-      </EmptyStateDisabled>
-    );
-  }
-
-  // 질문이 없고 마감 전인 경우
-  if (preQuestionList.length === 0) {
-    return <AddButton onAddQuestion={onAddQuestion} />;
-  }
-
-  // 질문이 있는 경우
   return (
     <>
-      <QuestionContainer>
-        {preQuestionList.map((preQuestion, index) => {
-          const isQuestionOverLimit = preQuestion.questionText.length > MAX_LENGTH;
-          const isDescriptionOverLimit = (preQuestion.description?.length ?? 0) > MAX_LENGTH;
+      {preQuestionList.length === 0 ? (
+        isDisabled ? (
+          <EmptyStateDisabled>
+            <EmptyStateIcon>
+              <BooltiGreyIcon />
+            </EmptyStateIcon>
+            <EmptyStateText>생성한 사전 질문이 없어요.</EmptyStateText>
+          </EmptyStateDisabled>
+        ) : (
+          <AddButton onAddQuestion={onAddQuestion} />
+        )
+      ) : (
+        <QuestionContainer>
+          {preQuestionList.map((preQuestion, index) => {
+            const isQuestionOverLimit = preQuestion.questionText.length > MAX_LENGTH;
+            const isDescriptionOverLimit = (preQuestion.description?.length ?? 0) > MAX_LENGTH;
 
-          return (
-            <QuestionItem key={preQuestion.id ?? `question-${index}`}>
-              <QuestionRow>
-                <QuestionLabel required>질문</QuestionLabel>
-                <PreQuestionTextArea
-                  placeholder="ex. 어떤 팀을 보러 오셨나요? (100자 이내)"
-                  value={preQuestion.questionText}
-                  onChange={(e) =>
-                    onUpdateQuestion(index, { ...preQuestion, questionText: e.target.value })
-                  }
-                  hasError={isQuestionOverLimit}
-                  disabled={isDisabled}
-                />
-                {isQuestionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
-              </QuestionRow>
-              <QuestionRow>
-                <QuestionLabel>설명</QuestionLabel>
-                <PreQuestionTextArea
-                  placeholder={
-                    isDisabled ? '입력된 설명이 없어요' : '설명을 입력해 주세요 (100자 이내)'
-                  }
-                  value={preQuestion.description ?? ''}
-                  onChange={(e) =>
-                    onUpdateQuestion(index, { ...preQuestion, description: e.target.value })
-                  }
-                  hasError={isDescriptionOverLimit}
-                  disabled={isDisabled}
-                />
-                {isDescriptionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
-              </QuestionRow>
-              <QuestionFooter showDeleteButton={!isDisabled}>
-                {!isDisabled && (
-                  <DeleteButton type="button" onClick={() => handleDeleteQuestion(index)}>
-                    질문 삭제
-                  </DeleteButton>
-                )}
-                <ToggleContainer>
-                  <ToggleLabel>답변 필수</ToggleLabel>
-                  <ToggleSwitch
-                    type="button"
-                    isOn={preQuestion.isRequired}
+            return (
+              <QuestionItem key={preQuestion.id ?? `question-${index}`}>
+                <QuestionRow>
+                  <QuestionLabel required>질문</QuestionLabel>
+                  <PreQuestionTextArea
+                    placeholder="ex. 어떤 팀을 보러 오셨나요? (100자 이내)"
+                    value={preQuestion.questionText}
+                    onChange={(e) =>
+                      onUpdateQuestion(index, { ...preQuestion, questionText: e.target.value })
+                    }
+                    hasError={isQuestionOverLimit}
                     disabled={isDisabled}
-                    onClick={() => {
-                      if (isDisabled) return;
-                      onUpdateQuestion(index, {
-                        ...preQuestion,
-                        isRequired: !preQuestion.isRequired,
-                      });
-                    }}
                   />
-                </ToggleContainer>
-              </QuestionFooter>
-            </QuestionItem>
-          );
-        })}
+                  {isQuestionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
+                </QuestionRow>
+                <QuestionRow>
+                  <QuestionLabel>설명</QuestionLabel>
+                  <PreQuestionTextArea
+                    placeholder={
+                      isDisabled ? '입력된 설명이 없어요' : '설명을 입력해 주세요 (100자 이내)'
+                    }
+                    value={preQuestion.description ?? ''}
+                    onChange={(e) =>
+                      onUpdateQuestion(index, { ...preQuestion, description: e.target.value })
+                    }
+                    hasError={isDescriptionOverLimit}
+                    disabled={isDisabled}
+                  />
+                  {isDescriptionOverLimit && <ErrorMessage>100자 이내로 입력해 주세요</ErrorMessage>}
+                </QuestionRow>
+                <QuestionFooter showDeleteButton={!isDisabled}>
+                  {!isDisabled && (
+                    <DeleteButton type="button" onClick={() => handleDeleteQuestion(index)}>
+                      질문 삭제
+                    </DeleteButton>
+                  )}
+                  <ToggleContainer>
+                    <ToggleLabel>답변 필수</ToggleLabel>
+                    <ToggleSwitch
+                      type="button"
+                      isOn={preQuestion.isRequired}
+                      disabled={isDisabled}
+                      onClick={() => {
+                        if (isDisabled) return;
+                        onUpdateQuestion(index, {
+                          ...preQuestion,
+                          isRequired: !preQuestion.isRequired,
+                        });
+                      }}
+                    />
+                  </ToggleContainer>
+                </QuestionFooter>
+              </QuestionItem>
+            );
+          })}
 
-        {/* 추가하기 버튼 - 마감 전에만 표시 */}
-        {!isDisabled && <AddButton onAddQuestion={onAddQuestion} />}
-      </QuestionContainer>
+          {/* 추가하기 버튼 - 마감 전에만 표시 */}
+          {!isDisabled && <AddButton onAddQuestion={onAddQuestion} />}
+        </QuestionContainer>
+      )}
 
       {/* 저장하기 버튼 */}
       <FormFooter>

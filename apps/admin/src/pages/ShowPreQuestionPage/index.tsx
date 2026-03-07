@@ -7,8 +7,8 @@ import {
   PreQuestionItem,
 } from '@boolti/api';
 import { useAtom } from 'jotai';
-import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useBlocker, useParams } from 'react-router-dom';
 
 import { myHostInfoAtom } from '~/components/ShowDetailLayout';
 import ShowDetailUnauthorized, { PAGE_PERMISSION } from '~/components/ShowDetailUnauthorized';
@@ -16,11 +16,21 @@ import { PreQuestionEditForm, PreQuestion, ResponseTab } from '~/components/Show
 import { HostType } from '@boolti/api/src/types/host';
 
 import Styled from './ShowPreQuestionPage.styles';
-import { useToast } from '@boolti/ui';
+import { useConfirm, useToast } from '@boolti/ui';
 
 type SubTab = 'edit' | 'response';
 
 const MAX_LENGTH = 100;
+
+const serializePreQuestionList = (list: PreQuestion[]) =>
+  JSON.stringify(
+    list.map((question) => ({
+      id: question.id ?? null,
+      questionText: question.questionText,
+      description: question.description ?? '',
+      isRequired: question.isRequired,
+    })),
+  );
 
 const ShowPreQuestionPage = () => {
   const params = useParams<{ showId: string }>();
@@ -33,11 +43,26 @@ const ShowPreQuestionPage = () => {
   // 질문 편집 상태
   const [preQuestionList, setPreQuestionList] = useState<PreQuestion[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [initialQuestionSnapshot, setInitialQuestionSnapshot] = useState<string | null>(null);
 
   const { data: show } = useShowDetail(showId);
   const { data: preQuestionsData } = usePreQuestions(showId);
   const putPreQuestionsMutation = usePutPreQuestions();
+  const currentQuestionSnapshot = useMemo(
+    () => serializePreQuestionList(preQuestionList),
+    [preQuestionList],
+  );
+  const hasPendingSaveChanges = useMemo(() => {
+    if (!isInitialized || initialQuestionSnapshot === null) {
+      return false;
+    }
+    return currentQuestionSnapshot !== initialQuestionSnapshot;
+  }, [currentQuestionSnapshot, initialQuestionSnapshot, isInitialized]);
   const toast = useToast();
+  const confirm = useConfirm();
+  const blocker = useBlocker(hasPendingSaveChanges);
+  const { state: blockerState, proceed, reset } = blocker;
+  const isHandlingBlockRef = useRef(false);
 
   // 질문 마감 시간 = 공연 시작 시간
   const isQuestionDeadlineEnded = show?.date ? new Date(show.date) < new Date() : false;
@@ -55,6 +80,7 @@ const ShowPreQuestionPage = () => {
       );
       setPreQuestionList(mappedQuestions);
       setIsInitialized(true);
+      setInitialQuestionSnapshot(serializePreQuestionList(mappedQuestions));
     }
   }, [preQuestionsData, isInitialized]);
 
@@ -121,11 +147,72 @@ const ShowPreQuestionPage = () => {
 
       // 성공 시 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: queryKeys.preQuestion.list(showId).queryKey });
+      setInitialQuestionSnapshot(currentQuestionSnapshot);
       toast.success('사전 질문을 저장했어요.');
     } catch {
       toast.error('사전 질문을 저장하는데 실패했어요. 다시 시도해 주세요.');
     }
   };
+
+  const confirmSavePreQuestion = useCallback(async () => {
+    if (!hasPendingSaveChanges) return true;
+
+    const result = await confirm(
+      <Styled.ConfirmMessageContainer>
+        <Styled.ConfirmMessage>
+          저장하지 않고 이 페이지를 나가면 작성한 정보가 손실됩니다.
+          <br />
+          이 페이지를 나갈까요?
+        </Styled.ConfirmMessage>
+        <Styled.ConfirmSubMessage>
+          *페이지 하단의 [저장하기] 버튼을 눌러 정보를 저장할 수 있습니다.
+        </Styled.ConfirmSubMessage>
+      </Styled.ConfirmMessageContainer>,
+      {
+        cancel: '나가기',
+        confirm: '머무르기',
+      },
+    );
+
+    return !result;
+  }, [confirm, hasPendingSaveChanges]);
+
+  useEffect(() => {
+    if (blockerState !== 'blocked' || isHandlingBlockRef.current) {
+      return;
+    }
+
+    isHandlingBlockRef.current = true;
+    void (async () => {
+      try {
+        const shouldLeave = await confirmSavePreQuestion();
+
+        if (shouldLeave) {
+          proceed();
+        } else {
+          reset();
+        }
+      } finally {
+        isHandlingBlockRef.current = false;
+      }
+    })();
+  }, [blockerState, confirmSavePreQuestion, proceed, reset]);
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      if (!hasPendingSaveChanges) {
+        return;
+      }
+
+      event.preventDefault();
+      event.returnValue = '';
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [hasPendingSaveChanges]);
 
   const responseCount = useMemo(
     () => preQuestionsData?.totalRespondentCount ?? 0,
