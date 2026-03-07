@@ -41,6 +41,7 @@ import {
   SuperAdminShowStatus,
   TicketSalesInfoResponse,
 } from './types/adminShow';
+import { SuperAdminUserResponse } from './types/superAdminUser';
 import {
   BankAccountListResponse,
   UserProfileResponse,
@@ -567,6 +568,13 @@ export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   }),
 });
 
+export const superAdminUserQueryKeys = createQueryKeys('superAdminUser', {
+  list: {
+    queryKey: null,
+    queryFn: () => fetcher.get<SuperAdminUserResponse[]>('sa-api/v1/super-admin-users'),
+  },
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -580,4 +588,5 @@ export const queryKeys = mergeQueryKeys(
   castTeamQueryKeys,
   popupQueryKeys,
   preQuestionQueryKeys,
+  superAdminUserQueryKeys,
 );

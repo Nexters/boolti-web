@@ -47,6 +47,7 @@ import useAddNonTicketingShow from './useAddNonTicketingShow';
 import useEditSalesTicketType from './useEditSalesTicketType';
 import usePauseSalesTicket from './usePauseSalesTicket';
 import useResumeSalesTicket from './useResumeSalesTicket';
+import useSuperAdminCreateUser from './useSuperAdminCreateUser';
 
 export {
   usePostCastTeams,
@@ -98,6 +99,7 @@ export {
   useEditSalesTicketType,
   usePauseSalesTicket,
   useResumeSalesTicket,
+  useSuperAdminCreateUser,
 };
 
 export type { ImageFile };

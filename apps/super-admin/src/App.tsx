@@ -18,6 +18,7 @@ import InfoPage from './pages/InfoPage';
 import TicketPage from './pages/TicketPage';
 import PaymentPage from './pages/PaymentPage';
 import EntrancePage from './pages/EntrancePage';
+import AdminUserPage from './pages/AdminUserPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -70,6 +71,10 @@ const privateRoutes = [
       {
         path: PATH.INDEX,
         element: <HomePage />,
+      },
+      {
+        path: PATH.ADMIN_USERS,
+        element: <AdminUserPage />,
       },
       {
         path: PATH.INFO,

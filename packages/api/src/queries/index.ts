@@ -55,6 +55,7 @@ import usePreQuestionAnswersList from './usePreQuestionAnswersList';
 import usePreQuestionParticipants from './usePreQuestionParticipants';
 import usePreQuestionParticipantDetail from './usePreQuestionParticipantDetail';
 import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
+import useSuperAdminUserList from './useSuperAdminUserList';
 import usePutPreQuestions from '../mutations/usePutPreQuestions';
 
 export {
@@ -116,4 +117,5 @@ export {
   usePreQuestionParticipants,
   usePreQuestionParticipantDetail,
   useSalesTicketTypesSummary,
+  useSuperAdminUserList,
 };
