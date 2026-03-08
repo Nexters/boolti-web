@@ -3,6 +3,8 @@ import {
   SearchIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  AscendingIcon,
+  DescendingIcon,
   CloseIcon,
   BooltiGreyIcon,
 } from '@boolti/icon';
@@ -13,6 +15,7 @@ import {
 import Styled from './ResponseTab.styles';
 import { useIsMobile } from '~/hooks/useIsMobile';
 import { highlightText } from '~/utils/highlight';
+import TicketNameFilter from '~/components/TicketNameFilter';
 
 const formatDateTime = (dateString: string): string => {
   const date = new Date(dateString);
@@ -30,7 +33,14 @@ interface ParticipantResponseViewProps {
   currentPage: number;
   totalPages: number;
   searchText: string;
+  isFilterApplied: boolean;
+  sortOrder: 'latest' | 'oldest';
+  ticketOptions: { label: string; value: string }[];
+  selectedTicketIds: string[];
   onSearchChange: (text: string) => void;
+  onResetFilter: () => void;
+  onToggleSort: () => void;
+  onTicketFilterChange: (values: string[]) => void;
   onSelectParticipant: (reservationId: number) => void;
   onPageChange: (page: number) => void;
 }
@@ -41,14 +51,23 @@ const ParticipantResponseView = ({
   currentPage,
   totalPages,
   searchText,
+  isFilterApplied,
+  sortOrder,
+  ticketOptions,
+  selectedTicketIds,
   onSearchChange,
+  onResetFilter,
+  onToggleSort,
+  onTicketFilterChange,
   onSelectParticipant,
   onPageChange,
 }: ParticipantResponseViewProps) => {
   const [localSearch, setLocalSearch] = useState(searchText);
   const isMobile = useIsMobile();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const isSearchEmpty = participants.length === 0 && localSearch.trim() !== '';
+  const isFilterEmpty = totalPages === 0 && isFilterApplied;
+  const isSearchEmpty = totalPages === 0 && !isFilterApplied && localSearch.trim() !== '';
+  const isResultEmpty = isFilterEmpty || isSearchEmpty;
 
   // BottomSheet 열릴 때 body 스크롤 방지
   useEffect(() => {
@@ -151,28 +170,58 @@ const ParticipantResponseView = ({
       {/* 참여자 목록 */}
       <Styled.ParticipantListSection>
         <Styled.ParticipantSearchContainer>
-          <Styled.ParticipantSearchInput>
-            <input
-              type="text"
-              placeholder="참여자명 검색"
-              value={localSearch}
-              onChange={(e) => setLocalSearch(e.target.value)}
-            />
+          {isMobile ? (
+            <Styled.MobileParticipantFilterSearchRow>
+              <Styled.MobileParticipantControlGroup>
+                {ticketOptions.length > 0 && (
+                  <TicketNameFilter
+                    options={ticketOptions}
+                    selectedValues={selectedTicketIds}
+                    updateSelectValues={onTicketFilterChange}
+                    iconOnly
+                  />
+                )}
+                <Styled.MobileParticipantSortButton onClick={onToggleSort}>
+                  {sortOrder === 'latest' ? <DescendingIcon /> : <AscendingIcon />}
+                </Styled.MobileParticipantSortButton>
+              </Styled.MobileParticipantControlGroup>
+              <Styled.MobileParticipantSearchInput>
+                <input
+                  type="text"
+                  placeholder="참여자명 검색"
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
+                />
 
-            <Styled.ParticipantSearchInputButtonGroup>
-              {localSearch !== '' && (
-                <Styled.ResetButton onClick={handleSearchReset}>
-                  <CloseIcon />
-                </Styled.ResetButton>
-              )}
-              <Styled.SearchButton>
-                <SearchIcon />
-              </Styled.SearchButton>
-            </Styled.ParticipantSearchInputButtonGroup>
-          </Styled.ParticipantSearchInput>
+                <Styled.MobileParticipantSearchIcon>
+                  <SearchIcon />
+                </Styled.MobileParticipantSearchIcon>
+              </Styled.MobileParticipantSearchInput>
+            </Styled.MobileParticipantFilterSearchRow>
+          ) : (
+            <Styled.ParticipantSearchInput>
+              <input
+                type="text"
+                placeholder="참여자명 검색"
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+              />
+
+              <Styled.ParticipantSearchInputButtonGroup>
+                {localSearch !== '' && (
+                  <Styled.ResetButton onClick={handleSearchReset}>
+                    <CloseIcon />
+                  </Styled.ResetButton>
+                )}
+                <Styled.SearchButton>
+                  <SearchIcon />
+                </Styled.SearchButton>
+              </Styled.ParticipantSearchInputButtonGroup>
+            </Styled.ParticipantSearchInput>
+          )}
         </Styled.ParticipantSearchContainer>
 
-        {isSearchEmpty ? (
+        {isResultEmpty ? (
           <Styled.SearchEmptyContainer>
             {isMobile && (
               <Styled.SearchEmptyIcon>
@@ -180,12 +229,22 @@ const ParticipantResponseView = ({
               </Styled.SearchEmptyIcon>
             )}
             <Styled.SearchEmptyText>
-              검색 결과가 없어요.
-              <br />
-              참여자 이름을 변경해보세요.
+              {isFilterEmpty ? (
+                <>
+                  찾으시는 결과가 없어요.
+                  <br />
+                  조건을 변경해 보세요.
+                </>
+              ) : (
+                <>
+                  검색 결과가 없어요.
+                  <br />
+                  참여자 이름을 변경해보세요.
+                </>
+              )}
             </Styled.SearchEmptyText>
-            <Styled.SearchResetButton onClick={handleSearchReset}>
-              검색 초기화
+            <Styled.SearchResetButton onClick={isFilterEmpty ? onResetFilter : handleSearchReset}>
+              {isFilterEmpty ? '필터 초기화' : '검색 초기화'}
             </Styled.SearchResetButton>
           </Styled.SearchEmptyContainer>
         ) : (
@@ -225,7 +284,7 @@ const ParticipantResponseView = ({
 
       {/* 응답 상세 - 데스크톱에서만 표시 */}
       <Styled.ParticipantDetailSection>
-        {selectedParticipant && !isSearchEmpty ? (
+        {selectedParticipant && !isResultEmpty ? (
           <>
             <Styled.ParticipantDetailHeader>
               <Styled.ParticipantDetailTitle>
@@ -259,7 +318,7 @@ const ParticipantResponseView = ({
               ))}
             </Styled.ParticipantDetailBody>
           </>
-        ) : isSearchEmpty ? (
+        ) : isResultEmpty ? (
           <>
             <Styled.ParticipantDetailHeader>
               <Styled.ParticipantDetailTitle>응답 상세</Styled.ParticipantDetailTitle>

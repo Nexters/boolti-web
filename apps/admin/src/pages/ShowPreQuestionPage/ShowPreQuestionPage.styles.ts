@@ -62,6 +62,22 @@ const Content = styled.div<{ fullWidth?: boolean }>`
   max-width: ${({ fullWidth }) => (fullWidth ? 'none' : '600px')};
 `;
 
+const ConfirmMessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ConfirmMessage = styled.p`
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const ConfirmSubMessage = styled.p`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g60};
+`;
+
 const QuestionContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -656,6 +672,9 @@ export default {
   SubTabItem,
   Badge,
   Content,
+  ConfirmMessageContainer,
+  ConfirmMessage,
+  ConfirmSubMessage,
   QuestionContainer,
   QuestionItem,
   QuestionRow,

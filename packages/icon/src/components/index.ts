@@ -1,4 +1,5 @@
 import { Apple } from './Apple';
+import { Ascending } from './Ascending';
 import { ArrowLeft } from './ArrowLeft';
 import { ArrowRight } from './ArrowRIght';
 import { BNK } from './BNK';
@@ -30,6 +31,7 @@ import { Close } from './Close';
 import { CU } from './CU';
 import { Deutsche } from './Deutsche';
 import { DGB } from './DGB';
+import { Descending } from './Descending';
 import { Download } from './Download';
 import { Edit } from './Edit';
 import { EPost } from './EPost';
@@ -89,6 +91,7 @@ import { BooltiGreyIcon } from './BooltiGreyIcon';
 
 export {
   Apple as AppleIcon,
+  Ascending as AscendingIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
   Question as QuestionIcon,
@@ -122,6 +125,7 @@ export {
   CU,
   Deutsche,
   DGB,
+  Descending as DescendingIcon,
   Download as DownloadIcon,
   Edit as EditIcon,
   EPost,

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { ChevronDownIcon } from '@boolti/icon';
+import { ChevronDownIcon, AscendingIcon, DescendingIcon } from '@boolti/icon';
 import {
   usePreQuestionAnswersList,
   usePreQuestionParticipants,
@@ -18,6 +18,7 @@ import EmptyView from './EmptyView';
 import QuestionResponseView from './QuestionResponseView';
 import ParticipantResponseView from './ParticipantResponseView';
 import TicketNameFilter from '~/components/TicketNameFilter';
+import { useIsMobile } from '~/hooks/useIsMobile';
 
 type ViewType = 'question' | 'participant';
 type SortOrder = 'latest' | 'oldest';
@@ -35,6 +36,7 @@ const SORT_OPTIONS: { value: SortOrder; label: string }[] = [
 ];
 
 const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabProps) => {
+  const isMobile = useIsMobile();
   const [viewType, setViewType] = useState<ViewType>('question');
   const [sortOrder, setSortOrder] = useState<SortOrder>('latest');
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
@@ -66,7 +68,7 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
 
   // 정렬 파라미터 변환
   const answersSortParam = sortOrder === 'latest' ? 'createdAt,DESC' : 'createdAt,ASC';
-  const participantsSortParam = sortOrder === 'latest' ? 'answeredAt,DESC' : 'answeredAt,ASC';
+  const participantsSortParam = sortOrder === 'latest' ? 'createdAt,DESC' : 'createdAt,ASC';
 
   // 필터 파라미터 (선택된 티켓 ID를 쉼표로 연결)
   const ticketFilterParam = selectedTicketIds.length > 0 ? selectedTicketIds.join(',') : undefined;
@@ -109,6 +111,20 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
 
     return newMap;
   }, [questions, questionAnswersQueries, selectedTicketIdSet]);
+  const isQuestionAnswersLoading = useMemo(
+    () => questionAnswersQueries.some((query) => query?.isLoading || query?.isFetching),
+    [questionAnswersQueries],
+  );
+  const totalFilteredQuestionAnswers = useMemo(
+    () =>
+      questions.reduce((sum, question) => {
+        const answerData = answersMap.get(question.id);
+        return sum + (answerData?.totalCount ?? 0);
+      }, 0),
+    [answersMap, questions],
+  );
+  const isQuestionFilterEmpty =
+    selectedTicketIds.length > 0 && !isQuestionAnswersLoading && totalFilteredQuestionAnswers === 0;
 
   const participantFetchSize = Math.max(totalRespondentCount, PARTICIPANT_PAGE_SIZE);
 
@@ -211,9 +227,18 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
     setSortOrder(order);
     setIsSortMenuOpen(false);
   };
+  const handleSortToggle = () => {
+    setSortOrder((prev) => (prev === 'latest' ? 'oldest' : 'latest'));
+  };
 
   const handleTicketFilterChange = useCallback((values: string[]) => {
     setSelectedTicketIds(values);
+    setParticipantPage(1);
+    setSelectedReservationId(null);
+  }, []);
+
+  const handleTicketFilterReset = useCallback(() => {
+    setSelectedTicketIds([]);
     setParticipantPage(1);
     setSelectedReservationId(null);
   }, []);
@@ -228,6 +253,8 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
   }
 
   const currentSortLabel = SORT_OPTIONS.find((opt) => opt.value === sortOrder)?.label;
+  const isMobileQuestionView = isMobile && viewType === 'question';
+  const isMobileParticipantView = isMobile && viewType === 'participant';
 
   return (
     <Styled.Container>
@@ -248,41 +275,64 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
         </Styled.SegmentButtonContainer>
 
         <Styled.SortContainer>
-          {ticketOptions.length > 0 && (
-            <TicketNameFilter
-              options={ticketOptions}
-              selectedValues={selectedTicketIds}
-              updateSelectValues={handleTicketFilterChange}
-            />
-          )}
-          <Styled.SortDropdown ref={sortRef}>
-            <Styled.SortButton
-              data-open={isSortMenuOpen}
-              onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
-            >
-              {currentSortLabel}
-              <ChevronDownIcon />
-            </Styled.SortButton>
+          {isMobileQuestionView ? (
+            <>
+              {ticketOptions.length > 0 && (
+                <TicketNameFilter
+                  options={ticketOptions}
+                  selectedValues={selectedTicketIds}
+                  updateSelectValues={handleTicketFilterChange}
+                />
+              )}
+              <Styled.MobileQuestionSortToggle onClick={handleSortToggle}>
+                {sortOrder === 'latest' ? <DescendingIcon /> : <AscendingIcon />}
+                {sortOrder === 'latest' ? '최신 순' : '오래된 순'}
+              </Styled.MobileQuestionSortToggle>
+            </>
+          ) : isMobileParticipantView ? null : (
+            <>
+              {ticketOptions.length > 0 && (
+                <TicketNameFilter
+                  options={ticketOptions}
+                  selectedValues={selectedTicketIds}
+                  updateSelectValues={handleTicketFilterChange}
+                />
+              )}
+              <Styled.SortDropdown ref={sortRef}>
+                <Styled.SortButton
+                  data-open={isSortMenuOpen}
+                  onClick={() => setIsSortMenuOpen(!isSortMenuOpen)}
+                >
+                  {currentSortLabel}
+                  <ChevronDownIcon />
+                </Styled.SortButton>
 
-            {isSortMenuOpen && (
-              <Styled.SortMenu>
-                {SORT_OPTIONS.map((option) => (
-                  <Styled.SortMenuItem
-                    key={option.value}
-                    isActive={sortOrder === option.value}
-                    onClick={() => handleSortChange(option.value)}
-                  >
-                    {option.label}
-                  </Styled.SortMenuItem>
-                ))}
-              </Styled.SortMenu>
-            )}
-          </Styled.SortDropdown>
+                {isSortMenuOpen && (
+                  <Styled.SortMenu>
+                    {SORT_OPTIONS.map((option) => (
+                      <Styled.SortMenuItem
+                        key={option.value}
+                        isActive={sortOrder === option.value}
+                        onClick={() => handleSortChange(option.value)}
+                      >
+                        {option.label}
+                      </Styled.SortMenuItem>
+                    ))}
+                  </Styled.SortMenu>
+                )}
+              </Styled.SortDropdown>
+            </>
+          )}
         </Styled.SortContainer>
       </Styled.HeaderContainer>
 
       {viewType === 'question' ? (
-        <QuestionResponseView questions={questions} answersMap={answersMap} />
+        <QuestionResponseView
+          questions={questions}
+          answersMap={answersMap}
+          isFilterEmpty={isQuestionFilterEmpty}
+          onResetFilter={handleTicketFilterReset}
+        />
       ) : (
         <ParticipantResponseView
           participants={participants}
@@ -290,7 +340,14 @@ const ResponseTab = ({ showId, questions, totalRespondentCount }: ResponseTabPro
           currentPage={participantPage}
           totalPages={totalPages}
           searchText={participantSearchText}
+          isFilterApplied={selectedTicketIds.length > 0}
+          sortOrder={sortOrder}
+          ticketOptions={ticketOptions}
+          selectedTicketIds={selectedTicketIds}
           onSearchChange={handleSearchChange}
+          onResetFilter={handleTicketFilterReset}
+          onToggleSort={handleSortToggle}
+          onTicketFilterChange={handleTicketFilterChange}
           onSelectParticipant={handleSelectParticipant}
           onPageChange={handlePageChange}
         />
