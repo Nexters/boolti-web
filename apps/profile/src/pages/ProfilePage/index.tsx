@@ -82,7 +82,7 @@ const ProfilePage = () => {
       try {
         await navigator.share(shareData);
         closeShareModals();
-        toast.success(successMessage);
+        toast.success(successMessage, { offset: { y: -52 } });
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
           console.error('Share failed:', error);
@@ -90,7 +90,7 @@ const ProfilePage = () => {
       }
     } else {
       navigator.clipboard.writeText(copyText);
-      toast.success(successMessage);
+      toast.success(successMessage, { offset: { y: -52 } });
       closeShareModals();
     }
   };
@@ -98,7 +98,6 @@ const ProfilePage = () => {
   const handleShareUrlCopy = () => {
     const url = `${window.location.origin}/${userCode}`;
     shareOrCopy({
-      shareData: { url },
       copyText: url,
       successMessage: 'URL을 복사했어요',
     });
@@ -117,7 +116,6 @@ const ProfilePage = () => {
     ].join('\n');
 
     shareOrCopy({
-      shareData: { text: shareText },
       copyText: shareText,
       successMessage: '아티스트 정보를 복사했어요',
     });
