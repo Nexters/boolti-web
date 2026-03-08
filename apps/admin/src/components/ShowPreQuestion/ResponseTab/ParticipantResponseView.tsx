@@ -3,6 +3,8 @@ import {
   SearchIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  AscendingIcon,
+  DescendingIcon,
   CloseIcon,
   BooltiGreyIcon,
 } from '@boolti/icon';
@@ -13,6 +15,7 @@ import {
 import Styled from './ResponseTab.styles';
 import { useIsMobile } from '~/hooks/useIsMobile';
 import { highlightText } from '~/utils/highlight';
+import TicketNameFilter from '~/components/TicketNameFilter';
 
 const formatDateTime = (dateString: string): string => {
   const date = new Date(dateString);
@@ -31,8 +34,13 @@ interface ParticipantResponseViewProps {
   totalPages: number;
   searchText: string;
   isFilterApplied: boolean;
+  sortOrder: 'latest' | 'oldest';
+  ticketOptions: { label: string; value: string }[];
+  selectedTicketIds: string[];
   onSearchChange: (text: string) => void;
   onResetFilter: () => void;
+  onToggleSort: () => void;
+  onTicketFilterChange: (values: string[]) => void;
   onSelectParticipant: (reservationId: number) => void;
   onPageChange: (page: number) => void;
 }
@@ -44,8 +52,13 @@ const ParticipantResponseView = ({
   totalPages,
   searchText,
   isFilterApplied,
+  sortOrder,
+  ticketOptions,
+  selectedTicketIds,
   onSearchChange,
   onResetFilter,
+  onToggleSort,
+  onTicketFilterChange,
   onSelectParticipant,
   onPageChange,
 }: ParticipantResponseViewProps) => {
@@ -157,25 +170,55 @@ const ParticipantResponseView = ({
       {/* 참여자 목록 */}
       <Styled.ParticipantListSection>
         <Styled.ParticipantSearchContainer>
-          <Styled.ParticipantSearchInput>
-            <input
-              type="text"
-              placeholder="참여자명 검색"
-              value={localSearch}
-              onChange={(e) => setLocalSearch(e.target.value)}
-            />
+          {isMobile ? (
+            <Styled.MobileParticipantFilterSearchRow>
+              <Styled.MobileParticipantControlGroup>
+                {ticketOptions.length > 0 && (
+                  <TicketNameFilter
+                    options={ticketOptions}
+                    selectedValues={selectedTicketIds}
+                    updateSelectValues={onTicketFilterChange}
+                    iconOnly
+                  />
+                )}
+                <Styled.MobileParticipantSortButton onClick={onToggleSort}>
+                  {sortOrder === 'latest' ? <DescendingIcon /> : <AscendingIcon />}
+                </Styled.MobileParticipantSortButton>
+              </Styled.MobileParticipantControlGroup>
+              <Styled.MobileParticipantSearchInput>
+                <input
+                  type="text"
+                  placeholder="참여자명 검색"
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
+                />
 
-            <Styled.ParticipantSearchInputButtonGroup>
-              {localSearch !== '' && (
-                <Styled.ResetButton onClick={handleSearchReset}>
-                  <CloseIcon />
-                </Styled.ResetButton>
-              )}
-              <Styled.SearchButton>
-                <SearchIcon />
-              </Styled.SearchButton>
-            </Styled.ParticipantSearchInputButtonGroup>
-          </Styled.ParticipantSearchInput>
+                <Styled.MobileParticipantSearchIcon>
+                  <SearchIcon />
+                </Styled.MobileParticipantSearchIcon>
+              </Styled.MobileParticipantSearchInput>
+            </Styled.MobileParticipantFilterSearchRow>
+          ) : (
+            <Styled.ParticipantSearchInput>
+              <input
+                type="text"
+                placeholder="참여자명 검색"
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+              />
+
+              <Styled.ParticipantSearchInputButtonGroup>
+                {localSearch !== '' && (
+                  <Styled.ResetButton onClick={handleSearchReset}>
+                    <CloseIcon />
+                  </Styled.ResetButton>
+                )}
+                <Styled.SearchButton>
+                  <SearchIcon />
+                </Styled.SearchButton>
+              </Styled.ParticipantSearchInputButtonGroup>
+            </Styled.ParticipantSearchInput>
+          )}
         </Styled.ParticipantSearchContainer>
 
         {isResultEmpty ? (
@@ -200,9 +243,7 @@ const ParticipantResponseView = ({
                 </>
               )}
             </Styled.SearchEmptyText>
-            <Styled.SearchResetButton
-              onClick={isFilterEmpty ? onResetFilter : handleSearchReset}
-            >
+            <Styled.SearchResetButton onClick={isFilterEmpty ? onResetFilter : handleSearchReset}>
               {isFilterEmpty ? '필터 초기화' : '검색 초기화'}
             </Styled.SearchResetButton>
           </Styled.SearchEmptyContainer>

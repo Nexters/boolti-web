@@ -97,6 +97,30 @@ export const SortContainer = styled.div`
   }
 `;
 
+export const MobileQuestionSortToggle = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  border: none;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border-radius: 4px;
+  padding: 12px 0;
+  ${({ theme }) => theme.typo.b2};
+  color: ${({ theme }) => theme.palette.grey.g90};
+  white-space: nowrap;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
 export const SortDropdown = styled.div`
   position: relative;
 `;
@@ -337,6 +361,45 @@ export const ParticipantSearchContainer = styled.div`
   margin-bottom: 16px;
 `;
 
+export const MobileParticipantFilterSearchRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
+export const MobileParticipantControlGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 60px;
+  min-width: 60px;
+  height: 40px;
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  padding: 8px;
+`;
+
+export const MobileParticipantSortButton = styled.button`
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  color: ${({ theme }) => theme.palette.grey.g40};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`;
+
 export const ParticipantSearchInput = styled.div`
   position: relative;
 
@@ -368,6 +431,51 @@ export const ParticipantSearchInputButtonGroup = styled.div`
   position: absolute;
   top: 8px;
   right: 12px;
+`;
+
+export const MobileParticipantSearchInput = styled.div`
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  height: 40px;
+  padding: 8px 12px 8px 16px;
+
+  ${mq_lg} {
+    display: none;
+  }
+
+  input {
+    border: none;
+    background: transparent;
+    flex: 1;
+    min-width: 0;
+    ${({ theme }) => theme.typo.b2};
+    color: ${({ theme }) => theme.palette.grey.g90};
+
+    &::placeholder {
+      color: ${({ theme }) => theme.palette.grey.g30};
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
+
+export const MobileParticipantSearchIcon = styled.span`
+  width: 24px;
+  height: 24px;
+  color: ${({ theme }) => theme.palette.grey.g70};
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 export const ResetButton = styled.button`
@@ -810,6 +918,7 @@ export default {
   SegmentButton,
   HeaderContainer,
   SortContainer,
+  MobileQuestionSortToggle,
   SortDropdown,
   SortButton,
   SortMenu,
@@ -834,8 +943,13 @@ export default {
   ParticipantContainer,
   ParticipantListSection,
   ParticipantSearchContainer,
+  MobileParticipantFilterSearchRow,
+  MobileParticipantControlGroup,
+  MobileParticipantSortButton,
   ParticipantSearchInput,
   ParticipantSearchInputButtonGroup,
+  MobileParticipantSearchInput,
+  MobileParticipantSearchIcon,
   ResetButton,
   SearchButton,
   ParticipantList,

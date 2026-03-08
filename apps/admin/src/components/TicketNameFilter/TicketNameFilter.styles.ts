@@ -5,7 +5,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const TicketFilterButton = styled.button<{ isActive?: boolean }>`
+const TicketFilterButton = styled.button<{ isActive?: boolean; isIconOnly?: boolean }>`
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -13,11 +13,13 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
   color: ${({ theme, isActive }) => (isActive ? theme.palette.primary.o1 : theme.palette.grey.g90)};
   border-radius: 4px;
   ${({ theme, isActive }) => (isActive ? theme.typo.sh1 : theme.typo.b3)};
-  padding: 9px 16px;
-  padding-left: 0px;
+  padding: ${({ isIconOnly }) => (isIconOnly ? '0' : '9px 16px')};
+  padding-left: ${({ isIconOnly }) => (isIconOnly ? '0' : '0px')};
+  width: ${({ isIconOnly }) => (isIconOnly ? '24px' : 'auto')};
+  height: ${({ isIconOnly }) => (isIconOnly ? '24px' : 'auto')};
 
   & > svg {
-    margin-right: 8px;
+    margin-right: ${({ isIconOnly }) => (isIconOnly ? '0' : '8px')};
   }
 
   ${({ isActive, theme }) =>
@@ -31,7 +33,7 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
       : ''}
 
   ${mq_lg} {
-    padding-left: 9px;
+    padding-left: ${({ isIconOnly }) => (isIconOnly ? '0' : '9px')};
   }
 `;
 
