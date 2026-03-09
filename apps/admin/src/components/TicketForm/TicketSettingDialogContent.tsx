@@ -37,9 +37,11 @@ export const SalesTicketSettingDialogContent = ({
     return undefined;
   };
 
+  const latestSoldQuantity = ticket.totalForSale - ticket.quantity;
+
   return (
     <TicketSettingForm
-      key={`${ticketId}-${soldAtLeastOnce}-${ticket.quantity}`}
+      key={`${ticketId}-${soldAtLeastOnce}`}
       ticketType="sales"
       defaultValues={{
         name: ticket.ticketName,
@@ -48,6 +50,7 @@ export const SalesTicketSettingDialogContent = ({
         quantity: ticket.quantity,
         isPaused: ticket.isPaused,
       }}
+      latestSoldQuantity={latestSoldQuantity}
       soldAtLeastOnce={soldAtLeastOnce}
       isDeleteDisabled={isDeleteDisabled}
       deleteDisabledReason={getDeleteDisabledReason()}
@@ -78,10 +81,11 @@ export const InvitationTicketSettingDialogContent = ({
   if (!ticket) return null;
 
   const isSoldTicket = ticket.totalForSale > ticket.quantity;
+  const latestSoldQuantity = ticket.totalForSale - ticket.quantity;
 
   return (
     <TicketSettingForm
-      key={`${ticketId}-${isSoldTicket}-${ticket.quantity}`}
+      key={`${ticketId}-${isSoldTicket}`}
       ticketType="invitation"
       defaultValues={{
         name: ticket.ticketName,
@@ -89,6 +93,7 @@ export const InvitationTicketSettingDialogContent = ({
         quantity: ticket.quantity,
         isPaused: ticket.isPaused,
       }}
+      latestSoldQuantity={latestSoldQuantity}
       soldAtLeastOnce={isSoldTicket}
       isDeleteDisabled={isSoldTicket}
       deleteDisabledReason={isSoldTicket ? 'soldAtLeastOnce' : undefined}
