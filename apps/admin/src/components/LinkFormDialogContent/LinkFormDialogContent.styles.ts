@@ -12,7 +12,7 @@ interface LinkFormButtonWrapperProps {
 const LinkForm = styled.form`
   display: flex;
   flex-direction: column;
-  padding: 20px 0 16px;
+  padding: 12px 0 16px;
 
   ${mq_lg} {
     padding: 0;
@@ -32,7 +32,6 @@ const LinkFormButtonWrapper = styled.div<LinkFormButtonWrapperProps>`
   justify-content: space-between;
   align-items: center;
   flex-direction: row-reverse;
-  margin-top: 4px;
 
   button {
     width: ${({ isEditMode }) => (isEditMode ? 'auto' : '100%')};

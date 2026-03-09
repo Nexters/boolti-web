@@ -5,7 +5,7 @@ const YoutubeUrlDialogContent = styled.div`
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 12px 0;
+  margin: 12px 0 16px;
 
   ${mq_lg} {
     margin: 0;
@@ -16,7 +16,7 @@ const TextFieldContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 24px;
 
   div {
     width: 100%;
