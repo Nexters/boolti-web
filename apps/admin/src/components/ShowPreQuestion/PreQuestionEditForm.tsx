@@ -205,6 +205,11 @@ const ConfirmTitle = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 8px;
+  text-align: center;
+
+  ${mq_lg} {
+    text-align: left;
+  }
 `;
 
 const ConfirmDescription = styled.p`

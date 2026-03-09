@@ -221,6 +221,10 @@ export const QuestionTitle = styled.div`
   gap: 2px;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 export const RequiredMark = styled.span`
@@ -231,6 +235,9 @@ export const RequiredMark = styled.span`
 export const QuestionDescription = styled.p`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 export const AnswerCount = styled.span`
@@ -673,6 +680,10 @@ export const ParticipantAnswerHeader = styled.div`
   padding: 24px 14px;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 export const ParticipantAnswerContent = styled.div<{ isEmpty?: boolean }>`
@@ -892,11 +903,18 @@ export const MobileAnswerCardTitle = styled.div`
   align-items: flex-start;
   ${({ theme }) => theme.typo.sh1};
   color: ${({ theme }) => theme.palette.grey.g90};
+  min-width: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 export const MobileAnswerCardDescription = styled.p`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g60};
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 `;
 
 export const MobileAnswerCardContent = styled.div<{ isEmpty?: boolean }>`
