@@ -1,9 +1,10 @@
 import { Button, palette, RadioButton, TextField, TextButton } from '@boolti/ui';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
 import QuantityStepperInput from './QuantityStepperInput';
+import { WarningIcon } from '@boolti/ui/src/components/Toast/icons';
 
 export interface TicketSettingFormInputs {
   name: string;
@@ -23,6 +24,7 @@ interface TicketSettingFormProps {
     quantity: number;
     isPaused: boolean;
   };
+  latestSoldQuantity: number;
   soldAtLeastOnce?: boolean;
   onSubmit: SubmitHandler<TicketSettingFormInputs>;
   onDelete: () => void;
@@ -42,9 +44,10 @@ const DELETE_DISABLED_TOOLTIPS: Record<DeleteDisabledReason, React.ReactNode> = 
   ),
   singleTicket: (
     <>
-      티켓 판매를 위해서는 최소 1개 이상의
+      티켓 판매를 위해서는 최소 1개 이상의 티켓이
       <br />
-      일반 티켓이 필요하여 삭제가 불가합니다.
+      필요합니다. 해당 티켓의 삭제를 원하시는 경우,
+      <br />새 일반 티켓을 먼저 생성해 주세요.
     </>
   ),
   both: (
@@ -61,6 +64,7 @@ const DELETE_DISABLED_TOOLTIPS: Record<DeleteDisabledReason, React.ReactNode> = 
 const TicketSettingForm = ({
   ticketType,
   defaultValues,
+  latestSoldQuantity,
   soldAtLeastOnce = false,
   onSubmit,
   onDelete,
@@ -90,12 +94,32 @@ const TicketSettingForm = ({
     totalForSale: false,
   });
 
+  const initialSoldQuantityRef = useRef(defaultValues.totalForSale - defaultValues.quantity);
+  const initialTotalForSaleRef = useRef(defaultValues.totalForSale);
+  const [displayedSoldQuantity, setDisplayedSoldQuantity] = useState(
+    defaultValues.totalForSale - defaultValues.quantity,
+  );
+  const [showConcurrencyBanner, setShowConcurrencyBanner] = useState(false);
+
+  useEffect(() => {
+    if (latestSoldQuantity !== initialSoldQuantityRef.current) {
+      setShowConcurrencyBanner(true);
+      setDisplayedSoldQuantity(latestSoldQuantity);
+      setValue('totalForSale', String(initialTotalForSaleRef.current), {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      initialSoldQuantityRef.current = latestSoldQuantity;
+    }
+  }, [latestSoldQuantity, setValue]);
+
   const isPaused = watch('isPaused');
   const totalForSaleValue = watch('totalForSale');
-  const soldQuantity = defaultValues.totalForSale - defaultValues.quantity;
-  const totalForSaleMin = ticketType === 'invitation' && soldAtLeastOnce
-    ? defaultValues.totalForSale
-    : (soldQuantity || 1);
+  const soldQuantity = displayedSoldQuantity;
+  const totalForSaleMin =
+    ticketType === 'invitation' && soldAtLeastOnce
+      ? initialTotalForSaleRef.current
+      : soldQuantity || 1;
 
   const validatePrice = (price?: string) => {
     if (!price) return false;
@@ -110,8 +134,29 @@ const TicketSettingForm = ({
     return '';
   };
 
+  const handleFormSubmit: SubmitHandler<TicketSettingFormInputs> = (data) => {
+    if (initialSoldQuantityRef.current !== latestSoldQuantity) {
+      setShowConcurrencyBanner(true);
+      setDisplayedSoldQuantity(latestSoldQuantity);
+      setValue('totalForSale', String(initialTotalForSaleRef.current), {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      initialSoldQuantityRef.current = latestSoldQuantity;
+      return;
+    }
+
+    onSubmit(data);
+  };
+
   return (
-    <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
+    <Styled.TicketForm onSubmit={handleSubmit(handleFormSubmit)}>
+      {showConcurrencyBanner && (
+        <Styled.ConcurrencyBanner>
+          <WarningIcon />
+          판매된 수량이 업데이트 되었어요. 수량을 다시 확인해 주세요.
+        </Styled.ConcurrencyBanner>
+      )}
       <Styled.TicketFormRow>
         <Styled.TicketFormContent>
           <Styled.TicketFormLabel>판매 설정</Styled.TicketFormLabel>
@@ -204,12 +249,18 @@ const TicketSettingForm = ({
               }}
               onIncrement={() => {
                 const current = Number(getValues('totalForSale')) || 0;
-                setValue('totalForSale', String(current + 1), { shouldDirty: true, shouldValidate: true });
+                setValue('totalForSale', String(current + 1), {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
               }}
               onDecrement={() => {
                 const current = Number(getValues('totalForSale')) || 0;
                 const newVal = Math.max(totalForSaleMin, current - 1);
-                setValue('totalForSale', String(newVal), { shouldDirty: true, shouldValidate: true });
+                setValue('totalForSale', String(newVal), {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
               }}
               errorMessage={
                 hasBlurred.totalForSale && !getValues('totalForSale') ? '필수 입력사항입니다.' : ''
@@ -238,7 +289,12 @@ const TicketSettingForm = ({
         >
           티켓 삭제
         </TextButton>
-        <Button type="submit" size="bold" colorTheme="primary" disabled={isPaused ? (!isDirty || !isValid) : !isValid}>
+        <Button
+          type="submit"
+          size="bold"
+          colorTheme="primary"
+          disabled={isPaused ? !isDirty || !isValid : !isValid}
+        >
           저장하기
         </Button>
       </Styled.TicketFormFooter>

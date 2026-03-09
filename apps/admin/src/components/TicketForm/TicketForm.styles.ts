@@ -58,6 +58,7 @@ const TicketFormLabel = styled.label`
   display: block;
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
+  white-space: nowrap;
 `;
 
 const TextField = styled.div`
@@ -132,12 +133,28 @@ const TotalQuantityContent = styled.div`
   }
 `;
 
+const ConcurrencyBanner = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #fceace;
+  background-color: rgba(254, 250, 243, 0.95);
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g90};
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
 const TicketFormFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding-bottom: 16px;
-
   gap: 36px;
 
   & > button:first-of-type {
@@ -148,6 +165,7 @@ const TicketFormFooter = styled.div`
 
   & > button:last-of-type {
     flex: 1;
+    width: auto;
   }
 
   ${mq_lg} {
@@ -156,10 +174,12 @@ const TicketFormFooter = styled.div`
 
     & > button:first-of-type {
       min-width: auto;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     & > button:last-of-type {
-      width: auto;
+      flex: initial;
     }
   }
 `;
@@ -180,5 +200,6 @@ export default {
   QuantityRow,
   SoldQuantityContent,
   TotalQuantityContent,
+  ConcurrencyBanner,
   TicketFormFooter,
 };
