@@ -24,7 +24,6 @@ const LinkFormDialogContent = ({
   });
 
   const isEditMode = !!defaultValues;
-  const hasTitleValue = !!defaultValues?.title;
 
   const submitHandler = (data: LinkFormInputs) => {
     const trimmedLink = data.link.trim();
@@ -39,25 +38,20 @@ const LinkFormDialogContent = ({
   return (
     <Styled.LinkForm onSubmit={linkForm.handleSubmit(submitHandler)}>
       <Styled.LinkFormControl>
-        <Styled.Label htmlFor="link" required>URL</Styled.Label>
+        <Styled.Label htmlFor="link" required>
+          URL
+        </Styled.Label>
         <TextField
           inputType="text"
           size="small"
           id="link"
-          autoFocus={hasTitleValue}
           required
           {...linkForm.register('link', { required: true, pattern: URL_PATTERN })}
         />
       </Styled.LinkFormControl>
       <Styled.LinkFormControl>
         <Styled.Label htmlFor="title">제목</Styled.Label>
-        <TextField
-          inputType="text"
-          size="small"
-          id="title"
-          autoFocus={!hasTitleValue}
-          {...linkForm.register('title')}
-        />
+        <TextField inputType="text" size="small" id="title" {...linkForm.register('title')} />
       </Styled.LinkFormControl>
       <Styled.LinkFormButtonWrapper isEditMode={isEditMode}>
         <Button

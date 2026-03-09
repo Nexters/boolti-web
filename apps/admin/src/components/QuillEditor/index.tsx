@@ -36,8 +36,8 @@ const QuillEditor: React.FC<EditorProps> = ({
 
   const uploadShowContentImageMutation = useUploadShowContentImage();
 
-  const youtubeUrlDialog = useDialog()
-  const linkDialog = useDialog()
+  const youtubeUrlDialog = useDialog();
+  const linkDialog = useDialog();
 
   const imageUploadHandler = useCallback(async () => {
     const input = document.createElement('input');
@@ -59,51 +59,60 @@ const QuillEditor: React.FC<EditorProps> = ({
     input.click();
   }, [uploadShowContentImageMutation]);
 
-  const youtubeUrlSubmitHandler = useCallback((url: string) => {
-    if (!quillRef.current) return;
+  const youtubeUrlSubmitHandler = useCallback(
+    (url: string) => {
+      if (!quillRef.current) return;
 
-    youtubeUrlDialog.close();
-    const embedUrl = url.replace('watch?v=', 'embed/');
-    quillRef.current.focus();
-    const range = quillRef.current.getSelection();
-    if (range?.index === undefined) return;
-    quillRef.current.insertEmbed(range.index, 'video', embedUrl);
-  }, [youtubeUrlDialog, quillRef]);
+      youtubeUrlDialog.close();
+      const embedUrl = url.replace('watch?v=', 'embed/');
+      quillRef.current.focus();
+      const range = quillRef.current.getSelection();
+      if (range?.index === undefined) return;
+      quillRef.current.insertEmbed(range.index, 'video', embedUrl);
+    },
+    [youtubeUrlDialog, quillRef],
+  );
 
-  const linkSubmitHandler = useCallback((data: LinkFormInputs) => {
-    if (!quillRef.current) return;
+  const linkSubmitHandler = useCallback(
+    (data: LinkFormInputs) => {
+      if (!quillRef.current) return;
 
-    linkDialog.close();
-    quillRef.current.focus();
-    const range = quillRef.current.getSelection();
+      linkDialog.close();
+      quillRef.current.focus();
+      const range = quillRef.current.getSelection();
 
-    if (range?.index === undefined) return;
+      if (range?.index === undefined) return;
 
-    quillRef.current.focus();
+      quillRef.current.focus();
 
-    if (range.length === 0) {
-      quillRef.current.insertText(range.index, data.title, 'user');
-      quillRef.current.setSelection(range.index, data.title.length);
-      quillRef.current.formatText(range.index, data.title.length, 'link', data.link);
-      quillRef.current.setSelection(range.index + data.title.length, 0);
+      if (range.length === 0) {
+        quillRef.current.insertText(range.index, data.title, 'user');
+        quillRef.current.setSelection(range.index, data.title.length);
+        quillRef.current.formatText(range.index, data.title.length, 'link', data.link);
+        quillRef.current.setSelection(range.index + data.title.length, 0);
 
-      return;
-    }
+        return;
+      }
 
-    quillRef.current.formatText(range.index, range.length, 'link', data.link);
-    quillRef.current.setSelection(range.index + range.length, 0);
-  }, [quillRef, linkDialog]);
+      quillRef.current.formatText(range.index, range.length, 'link', data.link);
+      quillRef.current.setSelection(range.index + range.length, 0);
+    },
+    [quillRef, linkDialog],
+  );
 
-  const linkEditSubmitHandler = useCallback((data: LinkFormInputs) => {
-    if (!quillRef.current || !selectedLinkRangeRef.current) return;
+  const linkEditSubmitHandler = useCallback(
+    (data: LinkFormInputs) => {
+      if (!quillRef.current || !selectedLinkRangeRef.current) return;
 
-    const { index, length } = selectedLinkRangeRef.current;
+      const { index, length } = selectedLinkRangeRef.current;
 
-    linkDialog.close();
-    quillRef.current.formatText(index, length, 'link', data.link);
-    quillRef.current.setSelection(index + length, 0);
-    selectedLinkRangeRef.current = null;
-  }, [quillRef, linkDialog]);
+      linkDialog.close();
+      quillRef.current.formatText(index, length, 'link', data.link);
+      quillRef.current.setSelection(index + length, 0);
+      selectedLinkRangeRef.current = null;
+    },
+    [quillRef, linkDialog],
+  );
 
   const linkDeleteHandler = useCallback(() => {
     if (!quillRef.current || !selectedLinkRangeRef.current) return;
@@ -116,32 +125,39 @@ const QuillEditor: React.FC<EditorProps> = ({
     selectedLinkRangeRef.current = null;
   }, [quillRef, linkDialog]);
 
-  const openLinkEditDialog = useCallback((linkInfo: { title: string; link: string; index: number; length: number }) => {
-    if (!quillRef.current) return;
+  const openLinkEditDialog = useCallback(
+    (linkInfo: { title: string; link: string; index: number; length: number }) => {
+      if (!quillRef.current) return;
 
-    selectedLinkRangeRef.current = { index: linkInfo.index, length: linkInfo.length };
+      quillRef.current.blur();
 
-    linkDialog.open({
-      title: '링크 수정',
-      isBackdropClosable: true,
-      content: (
-        <LinkFormDialogContent
-          defaultValues={{ title: linkInfo.title, link: linkInfo.link }}
-          onSubmit={linkEditSubmitHandler}
-          onDelete={linkDeleteHandler}
-        />
-      ),
-    });
-  }, [quillRef, linkDialog, linkEditSubmitHandler, linkDeleteHandler]);
+      selectedLinkRangeRef.current = { index: linkInfo.index, length: linkInfo.length };
+
+      linkDialog.open({
+        title: '링크 수정',
+        isBackdropClosable: true,
+        content: (
+          <LinkFormDialogContent
+            defaultValues={{ title: linkInfo.title, link: linkInfo.link }}
+            onSubmit={linkEditSubmitHandler}
+            onDelete={linkDeleteHandler}
+          />
+        ),
+      });
+    },
+    [quillRef, linkDialog, linkEditSubmitHandler, linkDeleteHandler],
+  );
 
   const openYoutubeUrlDialog = useCallback(async () => {
     if (!quillRef.current) return;
 
+    quillRef.current.blur();
+
     youtubeUrlDialog.open({
       title: '유튜브 영상 업로드',
       isBackdropClosable: true,
-      content: <YoutubeUrlDialogContent onSubmit={youtubeUrlSubmitHandler} />
-    })
+      content: <YoutubeUrlDialogContent onSubmit={youtubeUrlSubmitHandler} />,
+    });
   }, [quillRef, youtubeUrlDialog, youtubeUrlSubmitHandler]);
 
   const openLinkFormDialog = useCallback(() => {
@@ -161,11 +177,13 @@ const QuillEditor: React.FC<EditorProps> = ({
       };
     }
 
+    quillRef.current.blur();
+
     linkDialog.open({
       title: '링크 업로드',
       isBackdropClosable: true,
-      content: <LinkFormDialogContent defaultValues={defaultValues} onSubmit={linkSubmitHandler} />
-    })
+      content: <LinkFormDialogContent defaultValues={defaultValues} onSubmit={linkSubmitHandler} />,
+    });
   }, [quillRef, linkDialog, linkSubmitHandler]);
 
   useLayoutEffect(() => {
@@ -205,7 +223,7 @@ const QuillEditor: React.FC<EditorProps> = ({
               key: 'Enter',
               collapsed: true,
               handler: (range: QuillRange) => {
-                if (!quillRef.current || !document.activeElement) return
+                if (!quillRef.current || !document.activeElement) return;
 
                 const selection = document.getSelection();
                 selection?.removeAllRanges();
@@ -219,10 +237,10 @@ const QuillEditor: React.FC<EditorProps> = ({
                 selection?.addRange({} as Range);
 
                 quillRef.current.insertText(range.index, '\n');
-                quillRef.current.focus()
+                quillRef.current.focus();
 
                 return false;
-              }
+              },
             },
           },
         },
@@ -247,9 +265,11 @@ const QuillEditor: React.FC<EditorProps> = ({
         }
 
         const ops = delta.ops || [];
-        const hasSpaceOrNewline = ops.some(op =>
-          op.insert && typeof op.insert === 'string' &&
-          (op.insert.includes(' ') || op.insert.includes('\n'))
+        const hasSpaceOrNewline = ops.some(
+          (op) =>
+            op.insert &&
+            typeof op.insert === 'string' &&
+            (op.insert.includes(' ') || op.insert.includes('\n')),
         );
 
         if (hasSpaceOrNewline) {
