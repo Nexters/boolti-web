@@ -1,5 +1,5 @@
 import { Button, palette, RadioButton, TextField, TextButton } from '@boolti/ui';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
@@ -95,16 +95,31 @@ const TicketSettingForm = ({
   });
 
   const initialSoldQuantityRef = useRef(defaultValues.totalForSale - defaultValues.quantity);
+  const initialTotalForSaleRef = useRef(defaultValues.totalForSale);
   const [displayedSoldQuantity, setDisplayedSoldQuantity] = useState(
     defaultValues.totalForSale - defaultValues.quantity,
   );
   const [showConcurrencyBanner, setShowConcurrencyBanner] = useState(false);
 
+  useEffect(() => {
+    if (latestSoldQuantity !== initialSoldQuantityRef.current) {
+      setShowConcurrencyBanner(true);
+      setDisplayedSoldQuantity(latestSoldQuantity);
+      setValue('totalForSale', String(initialTotalForSaleRef.current), {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
+      initialSoldQuantityRef.current = latestSoldQuantity;
+    }
+  }, [latestSoldQuantity, setValue]);
+
   const isPaused = watch('isPaused');
   const totalForSaleValue = watch('totalForSale');
   const soldQuantity = displayedSoldQuantity;
   const totalForSaleMin =
-    ticketType === 'invitation' && soldAtLeastOnce ? defaultValues.totalForSale : soldQuantity || 1;
+    ticketType === 'invitation' && soldAtLeastOnce
+      ? initialTotalForSaleRef.current
+      : soldQuantity || 1;
 
   const validatePrice = (price?: string) => {
     if (!price) return false;
@@ -123,7 +138,7 @@ const TicketSettingForm = ({
     if (initialSoldQuantityRef.current !== latestSoldQuantity) {
       setShowConcurrencyBanner(true);
       setDisplayedSoldQuantity(latestSoldQuantity);
-      setValue('totalForSale', String(defaultValues.totalForSale), {
+      setValue('totalForSale', String(initialTotalForSaleRef.current), {
         shouldDirty: true,
         shouldValidate: true,
       });

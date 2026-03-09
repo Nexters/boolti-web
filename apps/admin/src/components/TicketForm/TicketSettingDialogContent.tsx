@@ -41,7 +41,7 @@ export const SalesTicketSettingDialogContent = ({
 
   return (
     <TicketSettingForm
-      key={`${ticketId}-${soldAtLeastOnce}`}
+      key={ticketId}
       ticketType="sales"
       defaultValues={{
         name: ticket.ticketName,
@@ -85,7 +85,7 @@ export const InvitationTicketSettingDialogContent = ({
 
   return (
     <TicketSettingForm
-      key={`${ticketId}-${isSoldTicket}`}
+      key={ticketId}
       ticketType="invitation"
       defaultValues={{
         name: ticket.ticketName,
