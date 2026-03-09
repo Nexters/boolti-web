@@ -34,7 +34,7 @@ const PreQuestionItem = styled.div`
 `;
 
 const PreQuestionRow = styled.div`
-  margin-bottom: 16px;
+  margin-bottom: 28px;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -157,6 +157,11 @@ const ConfirmTitle = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
   margin-bottom: 8px;
+  text-align: center;
+
+  ${mq_lg} {
+    text-align: left;
+  }
 `;
 
 const ConfirmDescription = styled.p`
