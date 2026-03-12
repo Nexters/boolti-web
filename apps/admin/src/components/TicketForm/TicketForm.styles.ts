@@ -138,7 +138,7 @@ const ConcurrencyBanner = styled.div`
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   border-radius: 8px;
   border: 1px solid #fceace;
   background-color: rgba(254, 250, 243, 0.95);
