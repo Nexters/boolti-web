@@ -1,5 +1,5 @@
 import { Button, palette, RadioButton, TextField, TextButton } from '@boolti/ui';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tooltip } from 'react-tooltip';
 import Styled from './TicketForm.styles';
@@ -100,18 +100,6 @@ const TicketSettingForm = ({
     defaultValues.totalForSale - defaultValues.quantity,
   );
   const [showConcurrencyBanner, setShowConcurrencyBanner] = useState(false);
-
-  useEffect(() => {
-    if (latestSoldQuantity !== initialSoldQuantityRef.current) {
-      setShowConcurrencyBanner(true);
-      setDisplayedSoldQuantity(latestSoldQuantity);
-      setValue('totalForSale', String(initialTotalForSaleRef.current), {
-        shouldDirty: true,
-        shouldValidate: true,
-      });
-      initialSoldQuantityRef.current = latestSoldQuantity;
-    }
-  }, [latestSoldQuantity, setValue]);
 
   const isPaused = watch('isPaused');
   const totalForSaleValue = watch('totalForSale');
