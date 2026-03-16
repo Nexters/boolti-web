@@ -61,26 +61,30 @@ const ShowBasicInfoFormContent = ({
         <DaumPostcode
           style={{ maxWidth: 426, height: 470 }}
           onComplete={async (address) => {
-            const response = await fetcher.get<naver.maps.Service.GeocodeResponse['v2']>(
-              'web/v1/naver-maps/geocoding',
-              {
-                searchParams: {
-                  query: address.address,
-                  filter: `BCODE@${address.bcode};`,
+            try {
+              const response = await fetcher.get<naver.maps.Service.GeocodeResponse['v2']>(
+                'web/v1/naver-maps/geocoding',
+                {
+                  searchParams: {
+                    query: address.address,
+                    filter: `BCODE@${address.bcode};`,
+                  },
                 },
-              },
-            );
+              );
 
-            if (
-              response.status === naverMaps.Service.GeocodeStatus.OK &&
-              response.meta.totalCount > 0
-            ) {
-              const foundAddress = response.addresses.find(Boolean);
+              if (
+                response.status === naverMaps.Service.GeocodeStatus.OK &&
+                response.meta.totalCount > 0
+              ) {
+                const foundAddress = response.addresses.find(Boolean);
 
-              if (foundAddress) {
-                setValue('latitude', Number(foundAddress.y));
-                setValue('longitude', Number(foundAddress.x));
+                if (foundAddress) {
+                  setValue('latitude', Number(foundAddress.y));
+                  setValue('longitude', Number(foundAddress.x));
+                }
               }
+            } catch (e) {
+              console.warn('[ShowBasicInfoFormContent] geocoding failed:', e);
             }
 
             setValue('placeStreetAddress', address.roadAddress);
