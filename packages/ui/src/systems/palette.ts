@@ -15,28 +15,32 @@ const palette = {
     link: '#1890FF',
   },
   purple: {
-    main: '#B150FF',
-    sub: '#E6C8FE',
+    main: '#A14CE5',
+    sub: '#E8D3F8',
   },
   blue: {
     main: '#2B7BE9',
     sub: '#C8E7FE',
   },
   green: {
-    main: '#52C41A',
-    sub: '#CCF3BA',
+    main: '#37A600',
+    sub: '#CCF2B9',
   },
   red: {
+    main: '#FF4D4F',
+    sub: '#FFDBDC',
+  },
+  orange: {
     main: '#FF5A14',
-    sub: '#FFCFBA',
+    sub: '#FFD6C5',
   },
   yellow: {
     main: '#E09500',
     sub: '#FFE2A9',
   },
   grey: {
-    main: '#888D9D',
-    sub: '#F3F5F9',
+    main: '#6F7485',
+    sub: '#D8DBE5',
     w: '#FFFFFF',
     g00: '#F3F5F9',
     g10: '#E7EAF2',
