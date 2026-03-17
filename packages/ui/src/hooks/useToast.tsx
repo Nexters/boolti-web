@@ -74,9 +74,8 @@ const useToast = () => {
           position,
           style: {
             ...variables.style,
-            ...(offset && {
-              transform: `translate(${offset.x ?? 0}px, ${offset.y ?? 0}px)`,
-            }),
+            ...(offset?.x && { marginLeft: `${offset.x}px` }),
+            ...(offset?.y && { marginTop: `${offset.y}px` }),
           },
         });
       },
