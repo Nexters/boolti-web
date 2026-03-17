@@ -20,21 +20,28 @@ export const Purple: Story = {
 export const Blue: Story = {
   args: {
     colorTheme: 'blue',
-    children: '티켓 판매 중',
+    children: '홍보 중',
   },
 };
 
 export const Green: Story = {
   args: {
     colorTheme: 'green',
-    children: '티켓 판매 종료',
+    children: '판매 중',
   },
 };
 
 export const Red: Story = {
   args: {
     colorTheme: 'red',
-    children: '공연 당일',
+    children: '판매 종료',
+  },
+};
+
+export const Orange: Story = {
+  args: {
+    colorTheme: 'orange',
+    children: '공연일',
   },
 };
 

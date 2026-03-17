@@ -30,8 +30,8 @@ function getBadgeProps(
   const today = new Date();
   if (isToday(date)) {
     return {
-      children: '공연 당일',
-      colorTheme: 'red',
+      children: '공연일',
+      colorTheme: 'orange',
     };
   }
   if (isBefore(date, today)) {
@@ -40,26 +40,27 @@ function getBadgeProps(
       colorTheme: 'grey',
     };
   }
-  if (salesStartTime && isBefore(today, salesStartTime)) {
+  if (!salesStartTime || !salesEndTime) {
+    return {
+      children: '홍보 중',
+      colorTheme: 'blue',
+    };
+  }
+  if (isBefore(today, salesStartTime)) {
     return {
       children: `판매 시작 D-${differenceInDays(salesStartTime, today) + 1}`,
       colorTheme: 'purple',
     };
   }
-  if (
-    salesStartTime &&
-    salesEndTime &&
-    isAfter(today, salesStartTime) &&
-    isBefore(today, salesEndTime)
-  ) {
+  if (isAfter(today, salesStartTime) && isBefore(today, salesEndTime)) {
     return {
       children: '판매 중',
-      colorTheme: 'blue',
+      colorTheme: 'green',
     };
   }
   return {
     children: '판매 종료',
-    colorTheme: 'green',
+    colorTheme: 'red',
   };
 }
 
