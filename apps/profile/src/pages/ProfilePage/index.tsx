@@ -99,7 +99,7 @@ const ProfilePage = () => {
     const url = `${window.location.origin}/${userCode}`;
     shareOrCopy({
       copyText: url,
-      successMessage: 'URL을 복사했어요',
+      successMessage: 'URL을 복사했어요.',
     });
   };
 
@@ -117,7 +117,7 @@ const ProfilePage = () => {
 
     shareOrCopy({
       copyText: shareText,
-      successMessage: '아티스트 정보를 복사했어요',
+      successMessage: '아티스트 정보를 복사했어요.',
     });
   };
 
@@ -126,7 +126,7 @@ const ProfilePage = () => {
     shareOrCopy({
       shareData: { text: profile.userCode },
       copyText: profile.userCode,
-      successMessage: 'ID를 복사했어요',
+      successMessage: 'ID를 복사했어요.',
     });
   };
 
