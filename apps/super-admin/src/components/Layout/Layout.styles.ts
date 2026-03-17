@@ -1,12 +1,11 @@
 import styled from '@emotion/styled';
-import { PATH } from '~/constants/routes';
 
 interface LayoutContainerProps {
-  path: string;
+  hasNavigation: boolean;
 }
 
 const Container = styled.main<LayoutContainerProps>`
-  padding-left: ${({ path }) => (path === PATH.INDEX ? 0 : '220px')};
+  padding-left: ${({ hasNavigation }) => (hasNavigation ? '220px' : 0)};
   width: 100%;
 `;
 

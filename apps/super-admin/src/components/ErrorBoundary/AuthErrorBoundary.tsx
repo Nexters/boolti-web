@@ -23,7 +23,8 @@ class AuthErrorBoundary extends React.Component<AuthErrorBoundaryProps, AuthErro
 
   public static getDerivedStateFromError(error: Error): AuthErrorBoundaryState {
     if (checkIsHttpError(error)) {
-      return { hasError: true, isAuthError: checkIsAuthError(error) };
+      const isRefreshFailure = error.response.url.includes('/login/refresh');
+      return { hasError: true, isAuthError: checkIsAuthError(error) || isRefreshFailure };
     }
 
     if (error instanceof CustomHttpError) {
@@ -34,16 +35,13 @@ class AuthErrorBoundary extends React.Component<AuthErrorBoundaryProps, AuthErro
     return { hasError: true, isAuthError: false };
   }
 
-  public componentDidCatch() {
-    if (this.state.isAuthError) {
-      window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
-      window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
-    }
-  }
-
   public render() {
     if (this.state.hasError) {
+      this.setState(initialState);
+
       if (this.state.isAuthError) {
+        window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
+        window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
         return <Navigate to={PATH.LOGIN} replace />;
       }
 

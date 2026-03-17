@@ -4,11 +4,12 @@ import SideNavigation from '../SideNavigation/SideNavigation';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
+  const isShowRoute = pathname.startsWith('/show/');
 
   return (
     <>
-      {pathname !== '/' && <SideNavigation />}
-      <Styled.Container path={pathname}>{children}</Styled.Container>
+      {isShowRoute && <SideNavigation />}
+      <Styled.Container hasNavigation={isShowRoute}>{children}</Styled.Container>
     </>
   );
 };
