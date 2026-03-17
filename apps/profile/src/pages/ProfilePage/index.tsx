@@ -124,7 +124,6 @@ const ProfilePage = () => {
   const handleUserCodeCopy = () => {
     if (!profile) return;
     shareOrCopy({
-      shareData: { text: profile.userCode },
       copyText: profile.userCode,
       successMessage: 'ID를 복사했어요.',
     });
