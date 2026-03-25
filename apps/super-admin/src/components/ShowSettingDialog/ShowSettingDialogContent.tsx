@@ -1,6 +1,5 @@
 import Styled from './ShowSettingDialog.styles';
 import { useHostList } from '@boolti/api';
-import { IS_SUPER_ADMIN } from '@boolti/api/src/constants';
 import { Button } from '@boolti/ui';
 import { ChevronRightIcon } from '@boolti/icon';
 import HostInputForm from './components/HostInputForm';
@@ -18,7 +17,7 @@ const ShowSettingDialogContent = ({
   onClickHideShow,
   onClickDeleteShow,
 }: ShowSettingDialogContentProps) => {
-  const { data: hosts } = useHostList(showId, { enabled: !IS_SUPER_ADMIN });
+  const { data: hosts } = useHostList(showId);
 
   const [firstHost, ...restHosts] = hosts ?? [];
 
@@ -28,11 +27,9 @@ const ShowSettingDialogContent = ({
         <Styled.SectionHeader>
           <Styled.SectionTitle>관리 그룹</Styled.SectionTitle>
         </Styled.SectionHeader>
-        {!IS_SUPER_ADMIN && (
-          <Styled.HostInputFormContainer>
-            <HostInputForm showId={showId} />
-          </Styled.HostInputFormContainer>
-        )}
+        <Styled.HostInputFormContainer>
+          <HostInputForm showId={showId} />
+        </Styled.HostInputFormContainer>
         <Styled.HostListButton onClick={onClickHostList}>
           {hosts && (
             <>
@@ -53,10 +50,8 @@ const ShowSettingDialogContent = ({
         </Styled.HostListButton>
       </Styled.Section>
       <Styled.SectionDivider />
-      <Styled.Section>
-        <Styled.SectionHeader>
-          <Styled.SectionTitle>공연 관리</Styled.SectionTitle>
-        </Styled.SectionHeader>
+      <Styled.ManageSection>
+        <Styled.SectionTitle>공연 관리</Styled.SectionTitle>
         <Styled.ManageButtonContainer>
           <Button type="button" colorTheme="line" size="x-small" onClick={onClickHideShow}>
             공연 미노출
@@ -65,7 +60,7 @@ const ShowSettingDialogContent = ({
             공연 삭제
           </Button>
         </Styled.ManageButtonContainer>
-      </Styled.Section>
+      </Styled.ManageSection>
     </Styled.Container>
   );
 };
