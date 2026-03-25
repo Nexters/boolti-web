@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAdminShowDetail } from '@boolti/api';
+import { useAdminShowDetail, useAdminTicketSalesInfo } from '@boolti/api';
 import { Button } from '@boolti/ui';
 import { SettingIcon } from '@boolti/icon';
 import PageLayout from '~/components/PageLayout/PageLayout';
@@ -11,7 +11,11 @@ const InfoPage = () => {
   const showId = Number(params!.showId);
 
   const { data: showDetail } = useAdminShowDetail(showId);
+  const { data: ticketSalesInfo } = useAdminTicketSalesInfo(showId);
   const [isSettingDialogOpen, setIsSettingDialogOpen] = useState(false);
+
+  const hasSoldTickets =
+    ticketSalesInfo?.some((ticket) => ticket.salesCount > 0) ?? false;
 
   return (
     <PageLayout
@@ -35,6 +39,7 @@ const InfoPage = () => {
         open={isSettingDialogOpen}
         showId={showId}
         showName={showDetail?.name ?? ''}
+        hasSoldTickets={hasSoldTickets}
         onClose={() => setIsSettingDialogOpen(false)}
       />
     </PageLayout>

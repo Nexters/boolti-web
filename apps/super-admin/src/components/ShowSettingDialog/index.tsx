@@ -1,8 +1,8 @@
 import { StepDialog, useToast } from '@boolti/ui';
-import { useDeleteShow } from '@boolti/api';
+import { useSuperAdminDeleteShow, useHideShow } from '@boolti/api';
 import ShowSettingDialogContent from './ShowSettingDialogContent';
 import HostList from './components/HostList';
-import DeleteShowConfirm from './components/DeleteShowConfirm';
+import ShowNameConfirm from './components/ShowNameConfirm';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
 
@@ -10,6 +10,8 @@ interface ShowSettingDialogProps {
   open: boolean;
   showId: number;
   showName: string;
+  isHidden?: boolean;
+  hasSoldTickets?: boolean;
   onClose: () => void;
 }
 
@@ -17,17 +19,22 @@ const STEP = {
   MAIN: 'main',
   HOST_LIST: 'hostList',
   DELETE_SHOW: 'deleteShow',
+  HIDE_SHOW: 'hideShow',
+  SHOW_SHOW: 'showShow',
 } as const;
 
-const ShowSettingDialog = ({ open, showId, showName, onClose }: ShowSettingDialogProps) => {
+const ShowSettingDialog = ({
+  open,
+  showId,
+  showName,
+  isHidden = false,
+  hasSoldTickets = false,
+  onClose,
+}: ShowSettingDialogProps) => {
   const toast = useToast();
   const navigate = useNavigate();
-  const deleteShowMutation = useDeleteShow();
-
-  const handleHideShow = () => {
-    // TODO: 공연 미노출 API 연동
-    toast.success('공연 미노출 처리되었습니다.');
-  };
+  const deleteShowMutation = useSuperAdminDeleteShow();
+  const hideShowMutation = useHideShow(showId);
 
   const handleDeleteShow = async () => {
     try {
@@ -37,6 +44,26 @@ const ShowSettingDialog = ({ open, showId, showName, onClose }: ShowSettingDialo
       navigate(PATH.INDEX, { replace: true });
     } catch {
       toast.error('공연 삭제에 실패했습니다.');
+    }
+  };
+
+  const handleHideShow = async () => {
+    try {
+      await hideShowMutation.mutateAsync(true);
+      toast.success('공연 미노출 처리되었습니다.');
+      onClose();
+    } catch {
+      toast.error('공연 미노출 처리에 실패했습니다.');
+    }
+  };
+
+  const handleShowShow = async () => {
+    try {
+      await hideShowMutation.mutateAsync(false);
+      toast.success('공연 노출 처리되었습니다.');
+      onClose();
+    } catch {
+      toast.error('공연 노출 처리에 실패했습니다.');
     }
   };
 
@@ -52,8 +79,11 @@ const ShowSettingDialog = ({ open, showId, showName, onClose }: ShowSettingDialo
           children: ({ push }) => (
             <ShowSettingDialogContent
               showId={showId}
+              isHidden={isHidden}
+              hasSoldTickets={hasSoldTickets}
               onClickHostList={() => push(STEP.HOST_LIST)}
-              onClickHideShow={handleHideShow}
+              onClickHideShow={() => push(STEP.HIDE_SHOW)}
+              onClickShowShow={() => push(STEP.SHOW_SHOW)}
               onClickDeleteShow={() => push(STEP.DELETE_SHOW)}
             />
           ),
@@ -65,7 +95,37 @@ const ShowSettingDialog = ({ open, showId, showName, onClose }: ShowSettingDialo
         [STEP.DELETE_SHOW]: {
           title: '공연 삭제',
           children: () => (
-            <DeleteShowConfirm showName={showName} onConfirm={handleDeleteShow} />
+            <ShowNameConfirm
+              showName={showName}
+              description="공연을 삭제하시려면 정확한 공연명을 입력해 주세요."
+              warning="* 삭제 시 작성했던 공연 정보는 전부 사라지며 복구할 수 없어요."
+              confirmText="삭제하기"
+              onConfirm={handleDeleteShow}
+            />
+          ),
+        },
+        [STEP.HIDE_SHOW]: {
+          title: '공연 미노출',
+          children: () => (
+            <ShowNameConfirm
+              showName={showName}
+              description="공연 미노출 처리를 하려면 정확한 공연명을 입력해 주세요."
+              warning="* 미노출 시 앱에 더 이상 공연이 노출되지 않습니다."
+              confirmText="미노출"
+              onConfirm={handleHideShow}
+            />
+          ),
+        },
+        [STEP.SHOW_SHOW]: {
+          title: '공연 노출',
+          children: () => (
+            <ShowNameConfirm
+              showName={showName}
+              description="공연 노출 처리를 하려면 정확한 공연명을 입력해 주세요."
+              warning="* 노출 시 판매가 다시 시작되며 앱에 노출됩니다."
+              confirmText="노출"
+              onConfirm={handleShowShow}
+            />
           ),
         },
       }}
