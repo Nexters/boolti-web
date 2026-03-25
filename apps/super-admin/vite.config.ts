@@ -6,6 +6,9 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '~', replacement: '/src' }],
   },
+  define: {
+    'import.meta.env.VITE_IS_SUPER_ADMIN': JSON.stringify('true'),
+  },
   server: {
     port: 8082,
   },
