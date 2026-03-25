@@ -1,5 +1,6 @@
 import Styled from './ShowSettingDialog.styles';
 import { useHostList } from '@boolti/api';
+import { IS_SUPER_ADMIN } from '@boolti/api/src/constants';
 import { Button } from '@boolti/ui';
 import { ChevronRightIcon } from '@boolti/icon';
 import HostInputForm from './components/HostInputForm';
@@ -23,7 +24,7 @@ const ShowSettingDialogContent = ({
   onClickShowShow,
   onClickDeleteShow,
 }: ShowSettingDialogContentProps) => {
-  const { data: hosts } = useHostList(showId);
+  const { data: hosts } = useHostList(showId, { enabled: !IS_SUPER_ADMIN });
 
   const [firstHost, ...restHosts] = hosts ?? [];
 
@@ -33,9 +34,11 @@ const ShowSettingDialogContent = ({
         <Styled.SectionHeader>
           <Styled.SectionTitle>관리 그룹</Styled.SectionTitle>
         </Styled.SectionHeader>
-        <Styled.HostInputFormContainer>
-          <HostInputForm showId={showId} />
-        </Styled.HostInputFormContainer>
+        {!IS_SUPER_ADMIN && (
+          <Styled.HostInputFormContainer>
+            <HostInputForm showId={showId} />
+          </Styled.HostInputFormContainer>
+        )}
         <Styled.HostListButton onClick={onClickHostList}>
           {hosts && (
             <>
