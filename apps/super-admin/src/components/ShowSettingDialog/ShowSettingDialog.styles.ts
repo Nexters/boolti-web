@@ -76,10 +76,15 @@ const HostName = styled.span`
   display: inline-flex;
 `;
 
+const ManageSection = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const ManageButtonContainer = styled.div`
   display: flex;
   gap: 8px;
-  margin-top: 16px;
 `;
 
 export default {
@@ -95,5 +100,6 @@ export default {
   HostProfileImage,
   HostDefaultProfileImage,
   HostName,
+  ManageSection,
   ManageButtonContainer,
 };

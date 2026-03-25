@@ -48,6 +48,8 @@ import useEditSalesTicketType from './useEditSalesTicketType';
 import usePauseSalesTicket from './usePauseSalesTicket';
 import useResumeSalesTicket from './useResumeSalesTicket';
 import useSuperAdminCreateUser from './useSuperAdminCreateUser';
+import useSuperAdminDeleteShow from './useSuperAdminDeleteShow';
+import useHideShow from './useHideShow';
 
 export {
   usePostCastTeams,
@@ -100,6 +102,8 @@ export {
   usePauseSalesTicket,
   useResumeSalesTicket,
   useSuperAdminCreateUser,
+  useSuperAdminDeleteShow,
+  useHideShow,
 };
 
 export type { ImageFile };

@@ -1,24 +1,29 @@
 import Styled from './ShowSettingDialog.styles';
 import { useHostList } from '@boolti/api';
-import { IS_SUPER_ADMIN } from '@boolti/api/src/constants';
 import { Button } from '@boolti/ui';
 import { ChevronRightIcon } from '@boolti/icon';
 import HostInputForm from './components/HostInputForm';
 
 interface ShowSettingDialogContentProps {
   showId: number;
+  isHidden: boolean;
+  hasSoldTickets: boolean;
   onClickHostList: () => void;
   onClickHideShow: () => void;
+  onClickShowShow: () => void;
   onClickDeleteShow: () => void;
 }
 
 const ShowSettingDialogContent = ({
   showId,
+  isHidden,
+  hasSoldTickets,
   onClickHostList,
   onClickHideShow,
+  onClickShowShow,
   onClickDeleteShow,
 }: ShowSettingDialogContentProps) => {
-  const { data: hosts } = useHostList(showId, { enabled: !IS_SUPER_ADMIN });
+  const { data: hosts } = useHostList(showId);
 
   const [firstHost, ...restHosts] = hosts ?? [];
 
@@ -28,11 +33,9 @@ const ShowSettingDialogContent = ({
         <Styled.SectionHeader>
           <Styled.SectionTitle>관리 그룹</Styled.SectionTitle>
         </Styled.SectionHeader>
-        {!IS_SUPER_ADMIN && (
-          <Styled.HostInputFormContainer>
-            <HostInputForm showId={showId} />
-          </Styled.HostInputFormContainer>
-        )}
+        <Styled.HostInputFormContainer>
+          <HostInputForm showId={showId} />
+        </Styled.HostInputFormContainer>
         <Styled.HostListButton onClick={onClickHostList}>
           {hosts && (
             <>
@@ -53,19 +56,25 @@ const ShowSettingDialogContent = ({
         </Styled.HostListButton>
       </Styled.Section>
       <Styled.SectionDivider />
-      <Styled.Section>
-        <Styled.SectionHeader>
-          <Styled.SectionTitle>공연 관리</Styled.SectionTitle>
-        </Styled.SectionHeader>
+      <Styled.ManageSection>
+        <Styled.SectionTitle>공연 관리</Styled.SectionTitle>
         <Styled.ManageButtonContainer>
-          <Button type="button" colorTheme="line" size="x-small" onClick={onClickHideShow}>
-            공연 미노출
-          </Button>
-          <Button type="button" colorTheme="danger" size="x-small" onClick={onClickDeleteShow}>
-            공연 삭제
-          </Button>
+          {isHidden ? (
+            <Button type="button" colorTheme="line" size="x-small" onClick={onClickShowShow}>
+              공연 노출
+            </Button>
+          ) : (
+            <Button type="button" colorTheme="line" size="x-small" onClick={onClickHideShow}>
+              공연 미노출
+            </Button>
+          )}
+          {!hasSoldTickets && (
+            <Button type="button" colorTheme="danger" size="x-small" onClick={onClickDeleteShow}>
+              공연 삭제
+            </Button>
+          )}
         </Styled.ManageButtonContainer>
-      </Styled.Section>
+      </Styled.ManageSection>
     </Styled.Container>
   );
 };

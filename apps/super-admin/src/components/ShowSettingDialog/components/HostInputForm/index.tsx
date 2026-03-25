@@ -1,19 +1,29 @@
 import { useState } from 'react';
-import { useToast } from '@boolti/ui';
+import { useToast, useDropdown } from '@boolti/ui';
 import { useAddHost } from '@boolti/api';
 import { HostType } from '@boolti/api/src/types/host';
 import { CustomError } from '@boolti/api/src/types/error';
+import { CheckIcon, ChevronDownIcon } from '@boolti/icon';
 import Styled from './HostInputForm.styles';
 
 interface HostInputFormProps {
   showId: number;
 }
 
+const roleOptions = [
+  { type: HostType.MANAGER, label: '관리자' },
+  { type: HostType.SUPPORTER, label: '도우미' },
+] as const;
+
 const HostInputForm = ({ showId }: HostInputFormProps) => {
   const [memberId, setMemberId] = useState<string>('');
+  const [selectedRole, setSelectedRole] = useState<HostType>(HostType.MANAGER);
   const toast = useToast();
+  const { isOpen, dropdownRef, toggleDropdown } = useDropdown();
 
   const { mutateAsync, isLoading } = useAddHost(showId);
+
+  const selectedRoleLabel = roleOptions.find((r) => r.type === selectedRole)?.label ?? '관리자';
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -21,7 +31,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
       await mutateAsync({
         body: {
           userCode: memberId,
-          type: HostType.MANAGER,
+          type: selectedRole,
         },
       });
       toast.success('초대를 완료했습니다.');
@@ -51,6 +61,28 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
           onChange={onChange}
         />
       </Styled.InputWrapper>
+      <Styled.RoleDropdown ref={dropdownRef}>
+        <Styled.RoleButton type="button" onClick={toggleDropdown}>
+          <span>{selectedRoleLabel}</span>
+          <ChevronDownIcon />
+        </Styled.RoleButton>
+        {isOpen && (
+          <Styled.RoleDropdownList>
+            {roleOptions.map((option) => (
+              <Styled.RoleDropdownItem
+                key={option.type}
+                onClick={() => {
+                  setSelectedRole(option.type);
+                  toggleDropdown();
+                }}
+              >
+                {option.label}
+                {selectedRole === option.type && <CheckIcon />}
+              </Styled.RoleDropdownItem>
+            ))}
+          </Styled.RoleDropdownList>
+        )}
+      </Styled.RoleDropdown>
       <Styled.InviteButton disabled={!memberId || isLoading} size="bold" colorTheme="netural">
         초대하기
       </Styled.InviteButton>

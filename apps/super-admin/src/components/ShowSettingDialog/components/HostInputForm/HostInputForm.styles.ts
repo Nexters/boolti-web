@@ -36,6 +36,67 @@ const Input = styled.input<InputProps>`
   }
 `;
 
+const RoleDropdown = styled.div`
+  position: relative;
+  margin-right: 8px;
+`;
+
+const RoleButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 12px;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  cursor: pointer;
+  white-space: nowrap;
+  ${({ theme }) => theme.typo.b3};
+
+  svg {
+    width: 20px;
+    height: 20px;
+    color: ${({ theme }) => theme.palette.grey.g60};
+  }
+`;
+
+const RoleDropdownList = styled.ul`
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  border-radius: 6px;
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  z-index: 1;
+`;
+
+const RoleDropdownItem = styled.li`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 112px;
+  padding: 7px 12px;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
+  background-color: ${({ theme }) => theme.palette.grey.w};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.palette.grey.g10};
+  }
+
+  &:first-of-type {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+  }
+`;
+
 const InviteButton = styled(Button)`
   width: auto;
   height: 48px;
@@ -50,5 +111,9 @@ export default {
   Form,
   InputWrapper,
   Input,
+  RoleDropdown,
+  RoleButton,
+  RoleDropdownList,
+  RoleDropdownItem,
   InviteButton,
 };

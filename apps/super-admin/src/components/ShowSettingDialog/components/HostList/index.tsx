@@ -3,14 +3,13 @@ import { HostListItem as IHostListItem, HostType } from '@boolti/api/src/types/h
 import HostListItem from '../HostListItem';
 import { useConfirm, useToast } from '@boolti/ui';
 import { useDeleteHost, useEditHost, useHostList } from '@boolti/api';
-import { IS_SUPER_ADMIN } from '@boolti/api/src/constants';
 
 interface HostListProps {
   showId: number;
 }
 
 const HostList = ({ showId }: HostListProps) => {
-  const { data: hosts } = useHostList(showId, { enabled: !IS_SUPER_ADMIN });
+  const { data: hosts } = useHostList(showId);
   const editHostMutation = useEditHost(showId);
   const deleteHostMutation = useDeleteHost(showId);
   const confirm = useConfirm();
