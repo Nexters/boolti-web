@@ -4,6 +4,7 @@ import ShowSettingDialogContent from './ShowSettingDialogContent';
 import HostList from './components/HostList';
 import DeleteShowConfirm from './components/DeleteShowConfirm';
 import { useNavigate } from 'react-router-dom';
+import { PATH } from '~/constants/routes';
 
 interface ShowSettingDialogProps {
   open: boolean;
@@ -33,7 +34,7 @@ const ShowSettingDialog = ({ open, showId, showName, onClose }: ShowSettingDialo
       await deleteShowMutation.mutateAsync(showId);
       toast.success('공연이 삭제되었습니다.');
       onClose();
-      navigate('/super-admin', { replace: true });
+      navigate(PATH.INDEX, { replace: true });
     } catch {
       toast.error('공연 삭제에 실패했습니다.');
     }
