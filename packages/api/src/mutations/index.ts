@@ -49,6 +49,9 @@ import usePauseSalesTicket from './usePauseSalesTicket';
 import useResumeSalesTicket from './useResumeSalesTicket';
 import useSuperAdminCreateUser from './useSuperAdminCreateUser';
 import useSuperAdminDeleteShow from './useSuperAdminDeleteShow';
+import useSuperAdminAddHost from './useSuperAdminAddHost';
+import useSuperAdminRemoveHost from './useSuperAdminRemoveHost';
+import useSuperAdminEditHost from './useSuperAdminEditHost';
 import useHideShow from './useHideShow';
 
 export {
@@ -103,6 +106,9 @@ export {
   useResumeSalesTicket,
   useSuperAdminCreateUser,
   useSuperAdminDeleteShow,
+  useSuperAdminAddHost,
+  useSuperAdminRemoveHost,
+  useSuperAdminEditHost,
   useHideShow,
 };
 

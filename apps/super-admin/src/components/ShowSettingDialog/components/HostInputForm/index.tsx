@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useToast, useDropdown } from '@boolti/ui';
-import { useAddHost } from '@boolti/api';
+import { useSuperAdminAddHost } from '@boolti/api';
 import { HostType } from '@boolti/api/src/types/host';
 import { CustomError } from '@boolti/api/src/types/error';
 import { CheckIcon, ChevronDownIcon } from '@boolti/icon';
@@ -21,7 +21,7 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
   const toast = useToast();
   const { isOpen, dropdownRef, toggleDropdown } = useDropdown();
 
-  const { mutateAsync, isLoading } = useAddHost(showId);
+  const { mutateAsync, isLoading } = useSuperAdminAddHost(showId);
 
   const selectedRoleLabel = roleOptions.find((r) => r.type === selectedRole)?.label ?? '관리자';
 
