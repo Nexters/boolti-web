@@ -71,6 +71,7 @@ const ShowSettingDialog = ({
     <StepDialog
       open={open}
       onClose={onClose}
+      width="600px"
       initialHistory={[STEP.MAIN]}
       isBackdropClosable
       content={{
