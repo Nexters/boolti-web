@@ -59,17 +59,18 @@ const RoleButton = styled.button`
   display: flex;
   align-items: center;
   gap: 2px;
-  background: none;
-  border: none;
+  background-color: ${({ theme }) => theme.palette.grey.g10};
+  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
+  border-radius: 100px;
   cursor: pointer;
   white-space: nowrap;
-  padding: 0;
-  ${({ theme }) => theme.typo.b3};
-  color: ${({ theme }) => theme.palette.grey.g90};
+  padding: 4px 8px;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g70};
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     color: ${({ theme }) => theme.palette.grey.g60};
   }
 `;

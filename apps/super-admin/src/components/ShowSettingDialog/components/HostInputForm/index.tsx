@@ -61,28 +61,30 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
           onChange={onChange}
         />
         <Styled.RoleDivider />
-        <Styled.RoleDropdown ref={dropdownRef}>
-          <Styled.RoleButton type="button" onClick={toggleDropdown}>
-            <span>{selectedRoleLabel}</span>
-            <ChevronDownIcon />
-          </Styled.RoleButton>
-          {isOpen && (
-            <Styled.RoleDropdownList>
-              {roleOptions.map((option) => (
-                <Styled.RoleDropdownItem
-                  key={option.type}
-                  onClick={() => {
-                    setSelectedRole(option.type);
-                    toggleDropdown();
-                  }}
-                >
-                  {option.label}
-                  {selectedRole === option.type && <CheckIcon />}
-                </Styled.RoleDropdownItem>
-              ))}
-            </Styled.RoleDropdownList>
-          )}
-        </Styled.RoleDropdown>
+        {memberId.length > 0 && (
+          <Styled.RoleDropdown ref={dropdownRef}>
+            <Styled.RoleButton type="button" onClick={toggleDropdown}>
+              <span>{selectedRoleLabel}</span>
+              <ChevronDownIcon />
+            </Styled.RoleButton>
+            {isOpen && (
+              <Styled.RoleDropdownList>
+                {roleOptions.map((option) => (
+                  <Styled.RoleDropdownItem
+                    key={option.type}
+                    onClick={() => {
+                      setSelectedRole(option.type);
+                      toggleDropdown();
+                    }}
+                  >
+                    {option.label}
+                    {selectedRole === option.type && <CheckIcon />}
+                  </Styled.RoleDropdownItem>
+                ))}
+              </Styled.RoleDropdownList>
+            )}
+          </Styled.RoleDropdown>
+        )}
       </Styled.InputWrapper>
       <Styled.InviteButton disabled={!memberId || isLoading} size="bold" colorTheme="netural">
         초대하기
