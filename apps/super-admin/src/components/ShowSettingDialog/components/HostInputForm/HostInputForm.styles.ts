@@ -12,6 +12,7 @@ interface InputProps {
 const Form = styled.form`
   display: flex;
   align-items: center;
+  gap: 8px;
 `;
 
 const InputWrapper = styled.div<InputWrapperProps>`
@@ -19,39 +20,52 @@ const InputWrapper = styled.div<InputWrapperProps>`
   border: 1px solid ${({ text, theme }) => (text ? theme.palette.grey.g90 : theme.palette.grey.g20)};
   border-radius: 4px;
   background-color: ${({ theme }) => theme.palette.grey.w};
-  padding: 12px;
-  margin-right: 8px;
-  flex: auto;
+  padding: 0 12px;
+  flex: 1;
+  min-width: 0;
   position: relative;
   display: flex;
   align-items: center;
+  height: 48px;
 `;
 
 const Input = styled.input<InputProps>`
-  width: 100%;
+  flex: 1;
+  min-width: 0;
   line-height: 24px;
+  border: none;
+  outline: none;
+  background: none;
 
   &::placeholder {
     color: ${({ theme }) => theme.palette.grey.g30};
   }
 `;
 
+const RoleDivider = styled.div`
+  width: 1px;
+  height: 20px;
+  background-color: ${({ theme }) => theme.palette.grey.g20};
+  margin: 0 8px;
+  flex-shrink: 0;
+`;
+
 const RoleDropdown = styled.div`
   position: relative;
-  margin-right: 8px;
+  flex-shrink: 0;
 `;
 
 const RoleButton = styled.button`
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 12px;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.palette.grey.w};
+  background: none;
+  border: none;
   cursor: pointer;
   white-space: nowrap;
+  padding: 0;
   ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g90};
 
   svg {
     width: 20px;
@@ -62,9 +76,8 @@ const RoleButton = styled.button`
 
 const RoleDropdownList = styled.ul`
   position: absolute;
-  top: 100%;
+  top: calc(100% + 12px);
   right: 0;
-  margin-top: 4px;
   border-radius: 6px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};
@@ -98,7 +111,8 @@ const RoleDropdownItem = styled.li`
 `;
 
 const InviteButton = styled(Button)`
-  width: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
   height: 48px;
   padding: 13px 20px;
 
@@ -111,6 +125,7 @@ export default {
   Form,
   InputWrapper,
   Input,
+  RoleDivider,
   RoleDropdown,
   RoleButton,
   RoleDropdownList,

@@ -60,11 +60,11 @@ const ShowSettingDialogContent = ({
         <Styled.SectionTitle>공연 관리</Styled.SectionTitle>
         <Styled.ManageButtonContainer>
           {isHidden ? (
-            <Button type="button" colorTheme="line" size="x-small" onClick={onClickShowShow}>
+            <Button type="button" colorTheme="netural" size="x-small" onClick={onClickShowShow}>
               공연 노출
             </Button>
           ) : (
-            <Button type="button" colorTheme="line" size="x-small" onClick={onClickHideShow}>
+            <Button type="button" colorTheme="netural" size="x-small" onClick={onClickHideShow}>
               공연 미노출
             </Button>
           )}
