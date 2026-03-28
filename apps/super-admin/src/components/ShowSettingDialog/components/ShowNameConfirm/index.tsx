@@ -47,14 +47,9 @@ const ShowNameConfirm = ({
           onChange={handleInputChange}
           hasError={showError}
         />
-        {showError && <Styled.ErrorText>공연명이 일치하지 않습니다.</Styled.ErrorText>}
+        {showError && <Styled.ErrorText>정확한 공연명을 입력해주세요.</Styled.ErrorText>}
         <Styled.ButtonContainer>
-          <Button
-            type="submit"
-            colorTheme="primary"
-            size="medium"
-            disabled={!isConfirmEnabled}
-          >
+          <Button type="submit" colorTheme="primary" size="medium" disabled={!isConfirmEnabled}>
             {confirmText}
           </Button>
         </Styled.ButtonContainer>

@@ -110,8 +110,8 @@ const ShowSettingDialog = ({
             <ShowNameConfirm
               showName={showName}
               description="공연 미노출 처리를 하려면 정확한 공연명을 입력해 주세요."
-              warning="* 미노출 시 앱에 더 이상 공연이 노출되지 않습니다."
-              confirmText="미노출"
+              warning="* 앱의 공연 목록에는 미노출되지만 웹의 주최자 화면에는 공연 정보가 노출됩니다."
+              confirmText="미노출하기"
               onConfirm={handleHideShow}
             />
           ),
@@ -122,8 +122,8 @@ const ShowSettingDialog = ({
             <ShowNameConfirm
               showName={showName}
               description="공연 노출 처리를 하려면 정확한 공연명을 입력해 주세요."
-              warning="* 노출 시 판매가 다시 시작되며 앱에 노출됩니다."
-              confirmText="노출"
+              warning="* 앱과 웹 모두에서 공연 정보가 노출됩니다."
+              confirmText="노출하기"
               onConfirm={handleShowShow}
             />
           ),
