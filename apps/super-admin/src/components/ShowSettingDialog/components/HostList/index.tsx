@@ -2,17 +2,16 @@ import Styled from './HostList.styles';
 import { HostListItem as IHostListItem, HostType } from '@boolti/api/src/types/host';
 import HostListItem from '../HostListItem';
 import { useConfirm, useToast } from '@boolti/ui';
-import { useDeleteHost, useEditHost, useHostList } from '@boolti/api';
-import { IS_SUPER_ADMIN } from '@boolti/api/src/constants';
+import { useSuperAdminHostList, useSuperAdminRemoveHost, useSuperAdminEditHost } from '@boolti/api';
 
 interface HostListProps {
   showId: number;
 }
 
 const HostList = ({ showId }: HostListProps) => {
-  const { data: hosts } = useHostList(showId, { enabled: !IS_SUPER_ADMIN });
-  const editHostMutation = useEditHost(showId);
-  const deleteHostMutation = useDeleteHost(showId);
+  const { data: hosts } = useSuperAdminHostList(showId);
+  const editHostMutation = useSuperAdminEditHost(showId);
+  const removeHostMutation = useSuperAdminRemoveHost(showId);
   const confirm = useConfirm();
   const toast = useToast();
 
@@ -22,11 +21,7 @@ const HostList = ({ showId }: HostListProps) => {
       confirm: '삭제하기',
     });
     if (!result) return;
-    deleteHostMutation.mutate({
-      hostId,
-      self: false,
-    });
-
+    removeHostMutation.mutate({ hostId });
     toast.success('권한을 삭제했습니다.');
   };
 
@@ -42,9 +37,7 @@ const HostList = ({ showId }: HostListProps) => {
     if (!result) return;
     editHostMutation.mutate({
       hostId,
-      body: {
-        type,
-      },
+      body: { type },
     });
     toast.success('권한을 수정했습니다.');
   };
