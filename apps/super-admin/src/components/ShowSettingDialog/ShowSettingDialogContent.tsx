@@ -25,6 +25,8 @@ const ShowSettingDialogContent = ({
 }: ShowSettingDialogContentProps) => {
   const { data: hosts } = useSuperAdminHostList(showId);
 
+  console.log(hosts);
+
   const [firstHost, ...restHosts] = hosts ?? [];
 
   return (

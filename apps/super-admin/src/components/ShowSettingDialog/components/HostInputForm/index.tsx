@@ -60,7 +60,6 @@ const HostInputForm = ({ showId }: HostInputFormProps) => {
           value={memberId}
           onChange={onChange}
         />
-        <Styled.RoleDivider />
         {memberId.length > 0 && (
           <Styled.RoleDropdown ref={dropdownRef}>
             <Styled.RoleButton type="button" onClick={toggleDropdown}>

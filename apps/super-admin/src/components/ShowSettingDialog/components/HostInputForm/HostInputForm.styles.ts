@@ -61,10 +61,10 @@ const RoleButton = styled.button`
   gap: 2px;
   background-color: ${({ theme }) => theme.palette.grey.g10};
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
-  border-radius: 100px;
+  border-radius: 4px;
   cursor: pointer;
   white-space: nowrap;
-  padding: 4px 8px;
+  padding: 0px 6px;
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g70};
 
@@ -77,8 +77,8 @@ const RoleButton = styled.button`
 
 const RoleDropdownList = styled.ul`
   position: absolute;
-  top: calc(100% + 12px);
-  right: 0;
+  top: calc(100% + 4px);
+  right: -2px;
   border-radius: 6px;
   border: 1px solid ${({ theme }) => theme.palette.grey.g20};
   background-color: ${({ theme }) => theme.palette.grey.w};

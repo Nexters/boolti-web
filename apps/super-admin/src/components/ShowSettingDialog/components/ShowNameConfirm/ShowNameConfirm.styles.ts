@@ -3,17 +3,18 @@ import styled from '@emotion/styled';
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
 `;
 
 const Description = styled.p`
   ${({ theme }) => theme.typo.b3};
+  margin-bottom: 8px;
   color: ${({ theme }) => theme.palette.grey.g70};
 `;
 
 const Warning = styled.p`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g70};
+  margin-bottom: 28px;
 `;
 
 const Input = styled.input<{ hasError?: boolean }>`
