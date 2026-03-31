@@ -40,6 +40,7 @@ const InfoPage = () => {
         showId={showId}
         showName={showDetail?.name ?? ''}
         isEnded={showDetail?.isEnded ?? false}
+        isHidden={showDetail?.isHidden ?? false}
         hasSoldTickets={hasSoldTickets}
         onClose={() => setIsSettingDialogOpen(false)}
       />
