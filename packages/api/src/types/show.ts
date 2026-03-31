@@ -37,6 +37,7 @@ export interface ShowResponse {
   notice: string;
   host: Host;
   isEnded: boolean;
+  isHidden: boolean;
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
   latitude: number;
   longitude: number;

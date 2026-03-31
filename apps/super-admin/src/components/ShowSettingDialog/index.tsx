@@ -10,6 +10,7 @@ interface ShowSettingDialogProps {
   open: boolean;
   showId: number;
   showName: string;
+  isEnded?: boolean;
   isHidden?: boolean;
   hasSoldTickets?: boolean;
   onClose: () => void;
@@ -27,6 +28,7 @@ const ShowSettingDialog = ({
   open,
   showId,
   showName,
+  isEnded = false,
   isHidden = false,
   hasSoldTickets = false,
   onClose,
@@ -80,6 +82,7 @@ const ShowSettingDialog = ({
           children: ({ push }) => (
             <ShowSettingDialogContent
               showId={showId}
+              isEnded={isEnded}
               isHidden={isHidden}
               hasSoldTickets={hasSoldTickets}
               onClickHostList={() => push(STEP.HOST_LIST)}

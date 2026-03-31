@@ -6,6 +6,7 @@ import HostInputForm from './components/HostInputForm';
 
 interface ShowSettingDialogContentProps {
   showId: number;
+  isEnded: boolean;
   isHidden: boolean;
   hasSoldTickets: boolean;
   onClickHostList: () => void;
@@ -16,6 +17,7 @@ interface ShowSettingDialogContentProps {
 
 const ShowSettingDialogContent = ({
   showId,
+  isEnded,
   isHidden,
   hasSoldTickets,
   onClickHostList,
@@ -24,6 +26,8 @@ const ShowSettingDialogContent = ({
   onClickDeleteShow,
 }: ShowSettingDialogContentProps) => {
   const { data: hosts } = useSuperAdminHostList(showId);
+
+  console.log(hosts);
 
   const [firstHost, ...restHosts] = hosts ?? [];
 
@@ -68,7 +72,7 @@ const ShowSettingDialogContent = ({
               공연 미노출
             </Button>
           )}
-          {!hasSoldTickets && (
+          {!isEnded && !hasSoldTickets && (
             <Button type="button" colorTheme="danger" size="x-small" onClick={onClickDeleteShow}>
               공연 삭제
             </Button>
