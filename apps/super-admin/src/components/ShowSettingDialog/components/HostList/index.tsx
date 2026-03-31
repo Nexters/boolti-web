@@ -21,8 +21,12 @@ const HostList = ({ showId }: HostListProps) => {
       confirm: '삭제하기',
     });
     if (!result) return;
-    removeHostMutation.mutate({ hostId });
-    toast.success('권한을 삭제했습니다.');
+    try {
+      await removeHostMutation.mutateAsync({ hostId });
+      toast.success('권한을 삭제했습니다.');
+    } catch {
+      toast.error('권한 삭제에 실패했습니다.');
+    }
   };
 
   const onEdit = async ({ hostName: name, hostId }: IHostListItem, type: HostType) => {
@@ -35,11 +39,15 @@ const HostList = ({ showId }: HostListProps) => {
       confirm: '수정하기',
     });
     if (!result) return;
-    editHostMutation.mutate({
-      hostId,
-      body: { type },
-    });
-    toast.success('권한을 수정했습니다.');
+    try {
+      await editHostMutation.mutateAsync({
+        hostId,
+        body: { type },
+      });
+      toast.success('권한을 수정했습니다.');
+    } catch {
+      toast.error('권한 수정에 실패했습니다.');
+    }
   };
 
   return (

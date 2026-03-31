@@ -15,6 +15,9 @@ const useSuperAdminEditHost = (showId: number) => {
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['superAdminHost', 'list', showId] });
       },
+      onError: () => {
+        queryClient.invalidateQueries({ queryKey: ['superAdminHost', 'list', showId] });
+      },
     },
   );
 };
