@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useToast, useDropdown } from '@boolti/ui';
 import { useSuperAdminAddHost } from '@boolti/api';
 import { HostType } from '@boolti/api/src/types/host';
-import { CustomError } from '@boolti/api/src/types/error';
+import type { CustomError } from '@boolti/api/src/types/error';
 import { CheckIcon, ChevronDownIcon } from '@boolti/icon';
 import Styled from './HostInputForm.styles';
 
