@@ -9,7 +9,7 @@ import {
   BooltiGreyLogo,
 } from '@boolti/icon';
 import { SwiperSlide } from 'swiper/react';
-import { BottomSheet, useDialog } from '@boolti/ui';
+import { BottomSheet, useDialog, useToast } from '@boolti/ui';
 import { Global } from '@emotion/react';
 import Header from '~/components/Header';
 import Styled, { bottomSheetOverrides } from './ProfilePage.styles';
@@ -27,6 +27,7 @@ import { QRCodeSVG } from 'qrcode.react';
 
 const ProfilePage = () => {
   const dialog = useDialog();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const { userCode } = useParams<{ userCode: string }>();
@@ -34,7 +35,7 @@ const ProfilePage = () => {
   const [isShareDropdownOpen, setIsShareDropdownOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const { data: profile } = useUserByUserCodeV2(userCode as string);
+  const { data: profile, isLoading } = useUserByUserCodeV2(userCode as string);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -65,29 +66,44 @@ const ProfilePage = () => {
     }
   };
 
-  const handleShareUrlCopy = async () => {
-    const url = `${window.location.origin}/${userCode}`;
+  const closeShareModals = () => {
+    setIsShareBottomSheetOpen(false);
+    setIsShareDropdownOpen(false);
+  };
 
-    if (navigator.share) {
+  const shareOrCopy = async (options: {
+    shareData?: ShareData;
+    copyText: string;
+    successMessage: string;
+  }) => {
+    const { shareData, copyText, successMessage } = options;
+
+    if (navigator.share && shareData) {
       try {
-        await navigator.share({
-          url,
-        });
-        setIsShareBottomSheetOpen(false);
-        setIsShareDropdownOpen(false);
+        await navigator.share(shareData);
+        closeShareModals();
+        toast.success(successMessage, { offset: { y: -52 } });
       } catch (error) {
         if ((error as Error).name !== 'AbortError') {
           console.error('Share failed:', error);
         }
       }
     } else {
-      navigator.clipboard.writeText(url);
-      setIsShareBottomSheetOpen(false);
-      setIsShareDropdownOpen(false);
+      navigator.clipboard.writeText(copyText);
+      toast.success(successMessage, { offset: { y: -52 } });
+      closeShareModals();
     }
   };
 
-  const handleShareDetailCopy = async () => {
+  const handleShareUrlCopy = () => {
+    const url = `${window.location.origin}/${userCode}`;
+    shareOrCopy({
+      copyText: url,
+      successMessage: 'URL을 복사했어요.',
+    });
+  };
+
+  const handleShareDetailCopy = () => {
     if (!profile) return;
     const shareText = [
       '이 아티스트 어때요?',
@@ -99,23 +115,18 @@ const ProfilePage = () => {
       `${window.location.origin}/${userCode}`,
     ].join('\n');
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          text: shareText,
-        });
-        setIsShareBottomSheetOpen(false);
-        setIsShareDropdownOpen(false);
-      } catch (error) {
-        if ((error as Error).name !== 'AbortError') {
-          console.error('Share failed:', error);
-        }
-      }
-    } else {
-      navigator.clipboard.writeText(shareText);
-      setIsShareBottomSheetOpen(false);
-      setIsShareDropdownOpen(false);
-    }
+    shareOrCopy({
+      copyText: shareText,
+      successMessage: '아티스트 정보를 복사했어요.',
+    });
+  };
+
+  const handleUserCodeCopy = () => {
+    if (!profile) return;
+    shareOrCopy({
+      copyText: profile.userCode,
+      successMessage: 'ID를 복사했어요.',
+    });
   };
 
   const getBridgeLink = () => {
@@ -161,12 +172,16 @@ const ProfilePage = () => {
     });
   };
 
+  if (isLoading) {
+    return null;
+  }
+
   if (!profile) {
     return <NotFound />;
   }
 
-  const instagramAccount = profile.sns.find((sns) => sns.type === 'INSTAGRAM');
-  const youtubeAccount = profile.sns.find((sns) => sns.type === 'YOUTUBE');
+  const instagramAccount = profile.sns?.find((sns) => sns.type === 'INSTAGRAM');
+  const youtubeAccount = profile.sns?.find((sns) => sns.type === 'YOUTUBE');
 
   return (
     <>
@@ -213,7 +228,7 @@ const ProfilePage = () => {
           <Styled.CoverOverlay>
             <Styled.ProfileInfo>
               <Styled.Nickname>{profile.nickname}</Styled.Nickname>
-              <Styled.UserName>@{profile.userCode}</Styled.UserName>
+              <Styled.UserName onClick={handleUserCodeCopy}>{profile.userCode}</Styled.UserName>
             </Styled.ProfileInfo>
           </Styled.CoverOverlay>
         </Styled.CoverSection>

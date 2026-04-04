@@ -89,8 +89,10 @@ const Nickname = styled.h1`
 
 const UserName = styled.h1`
   ${({ theme }) => theme.typo.b1};
+  text-decoration: underline;
   color: ${({ theme }) => theme.palette.grey.g50};
   margin: 0;
+  cursor: pointer;
 `;
 
 const InfoRow = styled.div`

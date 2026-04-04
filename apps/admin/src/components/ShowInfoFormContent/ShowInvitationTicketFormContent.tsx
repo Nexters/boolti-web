@@ -1,18 +1,19 @@
-import { PlusIcon, TrashIcon } from '@boolti/icon';
-import { Badge, Button, TextButton, useDialog } from '@boolti/ui';
+import { PlusIcon } from '@boolti/icon';
+import { Button, TextButton, useDialog } from '@boolti/ui';
 import { SubmitHandler } from 'react-hook-form';
 
 import InvitationTicketForm, {
   InvitationTicketFormInputs,
 } from '../TicketForm/InvitationTicketForm';
 import Styled from './ShowInfoFormContent.styles';
-import ShowInvitationCodeList from './ShowInvitationCodeList';
+import TicketInfoCard from './TicketInfoCard';
 
 export interface InvitationTicket {
   id?: number;
   name: string;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }
 
 interface ShowInvitationTicketFormContentProps {
@@ -20,9 +21,12 @@ interface ShowInvitationTicketFormContentProps {
   description: React.ReactNode;
   fullEditable?: boolean;
   disabled?: boolean;
+  hideStatus?: boolean;
   isShowEnded?: boolean;
   onSubmitTicket: SubmitHandler<InvitationTicketFormInputs>;
   onDeleteTicket: (ticket: InvitationTicket) => void;
+  actionType?: 'delete' | 'setting';
+  onSettingClick?: (ticket: InvitationTicket) => void;
 }
 
 const ShowInvitationTicketFormContent = ({
@@ -30,15 +34,17 @@ const ShowInvitationTicketFormContent = ({
   description,
   fullEditable,
   disabled,
+  hideStatus,
   isShowEnded,
   onSubmitTicket,
   onDeleteTicket,
+  actionType = 'delete',
+  onSettingClick,
 }: ShowInvitationTicketFormContentProps) => {
   const invitationTicketDialog = useDialog();
 
   const handleSubmitTicket: SubmitHandler<InvitationTicketFormInputs> = (data) => {
     invitationTicketDialog.close();
-
     onSubmitTicket(data);
   };
 
@@ -55,6 +61,7 @@ const ShowInvitationTicketFormContent = ({
             colorTheme="netural"
             size="small"
             icon={<PlusIcon />}
+            disabled={disabled}
             onClick={() => {
               invitationTicketDialog.open({
                 title: '초청 티켓 생성하기',
@@ -75,6 +82,7 @@ const ShowInvitationTicketFormContent = ({
               size="small"
               colorTheme="netural"
               icon={<PlusIcon />}
+              disabled={disabled}
               onClick={() => {
                 invitationTicketDialog.open({
                   title: '초청 티켓 생성하기',
@@ -96,58 +104,19 @@ const ShowInvitationTicketFormContent = ({
             const isDeleteDisabled = isSoldTicket;
 
             return (
-              <Styled.Ticket key={ticket.id ?? ticket.name}>
-                <Styled.TicketContent>
-                  <Styled.TicketInfo>
-                    <Styled.TicketTitle>
-                      <Styled.TicketTitleText>{ticket.name}</Styled.TicketTitleText>
-                      <Badge colorTheme={ticket.quantity === 0 ? 'grey' : 'red'}>
-                        재고 {ticket.quantity}/{ticket.totalForSale}
-                      </Badge>
-                    </Styled.TicketTitle>
-                    <Styled.TicketDescription>1인 1매</Styled.TicketDescription>
-                  </Styled.TicketInfo>
-                  <Styled.TicketAction>
-                    <Button
-                      type="button"
-                      colorTheme="line"
-                      size="bold"
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    >
-                      삭제하기
-                    </Button>
-                  </Styled.TicketAction>
-                  <Styled.MobileTicketAction disabled={disabled}>
-                    <TextButton
-                      type="button"
-                      colorTheme="netural"
-                      size="small"
-                      icon={<TrashIcon />}
-                      disabled={(() => {
-                        if (disabled) return disabled;
-                        if (fullEditable) return false;
-
-                        return isDeleteDisabled;
-                      })()}
-                      onClick={() => onDeleteTicket(ticket)}
-                    />
-                  </Styled.MobileTicketAction>
-                </Styled.TicketContent>
-                {ticket.id !== undefined && (
-                  <Styled.TicketCodeListContainer>
-                    <ShowInvitationCodeList
-                      invitationTicketId={ticket.id}
-                      isShowEnded={isShowEnded}
-                    />
-                  </Styled.TicketCodeListContainer>
-                )}
-              </Styled.Ticket>
+              <TicketInfoCard
+                key={ticket.id ?? ticket.name}
+                ticket={ticket}
+                ticketType="invitation"
+                fullEditable={fullEditable}
+                disabled={disabled}
+                hideStatus={hideStatus}
+                onDeleteTicket={onDeleteTicket}
+                isDeleteDisabled={isDeleteDisabled}
+                isShowEnded={isShowEnded}
+                actionType={actionType}
+                onSettingClick={onSettingClick}
+              />
             );
           })}
         </Styled.TicketList>

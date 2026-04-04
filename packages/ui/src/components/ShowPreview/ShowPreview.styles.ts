@@ -377,10 +377,11 @@ const ShowCastList = styled.ul`
   gap: 20px 0;
 `;
 
-const ShowCastListItem = styled.li`
+const ShowCastListItem = styled.li<{ clickable?: boolean }>`
   display: flex;
   width: calc(50% - 8px);
   overflow: hidden;
+  cursor: ${({ clickable }) => (clickable ? 'pointer' : 'default')};
 
   &:nth-of-type(2n + 1) {
     margin-right: 8px;

@@ -46,8 +46,10 @@ export const instance = ky.create({
               accessToken = await refreshAccessToken();
             }
 
-            request.headers.set('Authorization', `Bearer ${accessToken}`);
-            return ky(request, options);
+            if (accessToken) {
+              request.headers.set('Authorization', `Bearer ${accessToken}`);
+              return ky(request, options);
+            }
           } catch (e) {
             if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
               window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
@@ -57,6 +59,7 @@ export const instance = ky.create({
             if (e instanceof Error) {
               console.warn(`[fether.ts] ${e.name} (${e.message})`);
             }
+            throw e;
           } finally {
             tokenRefreshMutex.release();
           }
@@ -76,6 +79,8 @@ export const fetcher = {
   get: <T>(pathname: string, options?: Options) => resultify<T>(instance.get(pathname, options)),
   post: <T>(pathname: string, options?: Options) => resultify<T>(instance.post(pathname, options)),
   put: <T>(pathname: string, options?: Options) => resultify<T>(instance.put(pathname, options)),
+  patch: <T>(pathname: string, options?: Options) =>
+    resultify<T>(instance.patch(pathname, options)),
   delete: <T>(pathname: string, options?: Options) =>
     resultify<T>(instance.delete(pathname, options)),
 };

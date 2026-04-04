@@ -1,18 +1,13 @@
-import { UAParser } from 'ua-parser-js';
-import { OS } from 'ua-parser-js/enums';
 import { LINK } from '~/constants/link';
 
-export const getStoreLink = () => {
-  const { os } = UAParser(window.navigator.userAgent);
+export const getStoreLink = (): string => {
+  const userAgent = window.navigator.userAgent.toLowerCase();
 
-  switch (os.name) {
-    case OS.IOS:
-      return LINK.IOS_STORE;
-    default:
-      return LINK.ANDROID_STORE;
-  }
+  const isIOS = /iphone|ipad|ipod/.test(userAgent);
+
+  return isIOS ? LINK.IOS_STORE : LINK.ANDROID_STORE;
 };
 
-export const openStoreLink = () => {
-  window.open(getStoreLink(), '_blank');
+export const openStoreLink = (): void => {
+  window.location.href = getStoreLink();
 };

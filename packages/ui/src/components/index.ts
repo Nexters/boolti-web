@@ -1,5 +1,6 @@
 import AgreeCheck from './AgreeCheck';
 import Badge from './Badge';
+import NewBadge from './NewBadge';
 import BottomSheet from './BottomSheet';
 import BooltiUIProvider from './BooltiUIProvider';
 import Button from './Button';
@@ -15,12 +16,14 @@ import TextField from './TextField';
 import TimePicker from './TimePicker';
 import StepProgressBar from './StepProgressBar';
 import Checkbox from './Checkbox';
+import RadioButton from './RadioButton';
 import StepDialog from './Dialog/StepDialog';
 import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 
 export {
   AgreeCheck,
   Badge,
+  NewBadge,
   BottomSheet,
   BooltiUIProvider,
   Button,
@@ -36,6 +39,7 @@ export {
   TimePicker,
   StepProgressBar,
   Checkbox,
+  RadioButton,
   StepDialog,
   ShowInfoDetail,
 };

@@ -10,11 +10,13 @@ import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { useState } from 'react';
+import { EXTERNAL_URL, openStoreLink } from '../../constants/external';
+import { navigateToAppScheme } from '../../utils/app';
 
 setDefaultOptions({ locale: ko });
 
-const getDynamicLink = (showId: number) => {
-  return `https://boolti.page.link/?link=https://preview.boolti.in/show/${showId}&apn=com.nexters.boolti&ibi=com.nexters.boolti&isi=6476589322`;
+const getAppScheme = (showId: number) => {
+  return `boolti://show/${showId}`;
 };
 
 const getPreviewLink = (showId: number) => {
@@ -171,8 +173,11 @@ const ShowPreviewPage = () => {
     dialog.close();
   };
 
-  const reservationButtonMobileClickHandler = () => {
-    window.location.href = getDynamicLink(id);
+  const reservationButtonMobileClickHandler = async () => {
+    const success = await navigateToAppScheme(getAppScheme(id));
+    if (!success) {
+      openStoreLink();
+    }
   };
 
   return (
@@ -200,12 +205,16 @@ const ShowPreviewPage = () => {
             }}
             showCastTeams={showCastTeams.map(({ name, members }) => ({
               name,
-              members: members?.map(({ roleName, userNickname, userImgPath }) => ({
+              members: members?.map(({ userCode, roleName, userNickname, userImgPath }) => ({
+                userCode,
                 roleName,
                 userNickname,
                 userImgPath,
               })),
             }))}
+            onClickCastMember={(userCode) => {
+              window.open(EXTERNAL_URL.USER_PROFILE(userCode), '_blank');
+            }}
             shareDropdownOpen={shareDropdownOpen}
             logoLinkHref="https://boolti.in"
             onClickLink={reservationButtonClickHandler}

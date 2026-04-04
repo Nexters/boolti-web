@@ -6,7 +6,7 @@ import {
   useUploadShowImage,
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { Button, Checkbox, StepProgressBar, useToast } from '@boolti/ui';
+import { Button, Checkbox, StepProgressBar, useConfirm, useToast } from '@boolti/ui';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
@@ -16,6 +16,9 @@ import ShowDetailInfoFormContent from '~/components/ShowInfoFormContent/ShowDeta
 import ShowInvitationTicketFormContent, {
   InvitationTicket,
 } from '~/components/ShowInfoFormContent/ShowInvitationTicketFormContent';
+import ShowPreQuestionFormContent, {
+  PreQuestion,
+} from '~/components/ShowInfoFormContent/ShowPreQuestionFormContent';
 import ShowSalesTicketFormContent, {
   SalesTicket,
 } from '~/components/ShowInfoFormContent/ShowSalesTicketFormContent';
@@ -42,12 +45,13 @@ const stepItems = [
   { key: 'basic', title: '기본 정보' },
   { key: 'detail', title: '상세 정보' },
   { key: 'sales', title: '판매 정보' },
+  { key: 'preQuestion', title: '사전 질문' },
 ] as const;
 
-const SHOW_ADD_SUCCESS_MESSAGE = '공연 등록을 완료했습니다';
+const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요.';
 
 interface ShowAddPageProps {
-  step: 'basic' | 'detail' | 'sales';
+  step: 'basic' | 'detail' | 'sales' | 'preQuestion';
 }
 
 const ShowAddPage = ({ step }: ShowAddPageProps) => {
@@ -60,6 +64,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>([]);
   const [salesTicketList, setSalesTicketList] = useState<SalesTicket[]>([]);
   const [invitationTicketList, setInvitationTicketList] = useState<InvitationTicket[]>([]);
+  const [preQuestionList, setPreQuestionList] = useState<PreQuestion[]>([]);
 
   const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
@@ -78,6 +83,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const addNonTicketingShowMutation = useAddNonTicketingShow();
 
   const toast = useToast();
+  const confirm = useConfirm();
 
   const onSuccessAddShow = (showId: number) => {
     if (isWebView && isWebViewBridgeAvailable()) {
@@ -145,8 +151,20 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
+    navigate(`${PATH.SHOW_ADD_PRE_QUESTION}?${searchParams.toString()}`);
+  };
+
+  const onSubmitPreQuestionForm = async () => {
     if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
       return;
+    const hasEmptyPreQuestion = preQuestionList.some((q) => q.questionText.trim().length === 0);
+    const hasOverLimitPreQuestion = preQuestionList.some(
+      (q) => q.questionText.length > 100 || (q.description?.length ?? 0) > 100,
+    );
+
+    if (hasEmptyPreQuestion || hasOverLimitPreQuestion) {
+      return;
+    }
 
     const body = await getBasicBody();
     const ticketBody = {
@@ -162,6 +180,18 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         ticketName: ticket.name,
         totalForSale: ticket.quantity,
       })),
+      ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
+        ? {
+            preQuestions: preQuestionList
+              .filter((q) => q.questionText.trim())
+              .map((preQuestion, index) => ({
+                questionText: preQuestion.questionText,
+                description: preQuestion.description ?? '',
+                isRequired: preQuestion.isRequired,
+                sequence: index + 1,
+              })),
+          }
+        : {}),
     };
     const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
@@ -286,6 +316,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
           <Styled.TicketForm>
             <ShowSalesTicketFormContent
               fullEditable
+              hideStatus
               salesTicketList={salesTicketList}
               onSubmitTicket={(ticket) => {
                 setSalesTicketList((prevList) =>
@@ -294,24 +325,36 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     price: Number(ticket.price),
                     quantity: Number(ticket.totalForSale),
                     totalForSale: Number(ticket.totalForSale),
+                    isPaused: false,
                   })),
                 );
-                toast.success('일반 티켓을 생성했습니다.');
+                toast.success('일반 티켓을 생성했어요.');
               }}
-              onDeleteTicket={(ticket) => {
+              onDeleteTicket={async (ticket) => {
+                const result = await confirm(
+                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
+                  {
+                    cancel: '취소하기',
+                    confirm: '삭제하기',
+                  },
+                );
+
+                if (!result) return;
+
                 setSalesTicketList((prevList) =>
                   prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                 );
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
             />
             <ShowInvitationTicketFormContent
               fullEditable
+              hideStatus
               invitationTicketList={invitationTicketList}
               description={
                 <>
                   초청 티켓 이용을 원하시면 티켓을 생성해주세요.
-                  <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 티켓 관리</strong>
+                  <br />* 초청 코드는 공연 등록 후 <strong>공연 관리 &gt; 판매 정보</strong>
                   에서 확인할 수 있습니다.
                 </>
               }
@@ -321,15 +364,26 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                     name: ticket.name,
                     quantity: Number(ticket.totalForSale),
                     totalForSale: Number(ticket.totalForSale),
+                    isPaused: false,
                   })),
                 );
-                toast.success('초청 티켓을 생성했습니다.');
+                toast.success('초청 티켓을 생성했어요.');
               }}
-              onDeleteTicket={(ticket) => {
+              onDeleteTicket={async (ticket) => {
+                const result = await confirm(
+                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
+                  {
+                    cancel: '취소하기',
+                    confirm: '삭제하기',
+                  },
+                );
+
+                if (!result) return;
+
                 setInvitationTicketList((prevList) =>
                   prevList.filter((prevTicket) => prevTicket.name !== ticket.name),
                 );
-                toast.success('티켓을 삭제했습니다.');
+                toast.success('티켓을 삭제했어요.');
               }}
             />
           </Styled.TicketForm>
@@ -415,6 +469,77 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
               !isTermsAccepted
             }
           >
+            다음으로
+          </Styled.ShowAddFormButton>
+        </Styled.ShowAddFormButtonContainer>
+      </Styled.ShowAddForm>
+    </>
+  );
+
+  const MAX_QUESTION_LENGTH = 100;
+  const hasEmptyPreQuestion = preQuestionList.some((q) => q.questionText.trim().length === 0);
+  const hasOverLimitPreQuestion = preQuestionList.some(
+    (q) =>
+      q.questionText.length > MAX_QUESTION_LENGTH ||
+      (q.description?.length ?? 0) > MAX_QUESTION_LENGTH,
+  );
+  const isPreQuestionFormValid = !hasEmptyPreQuestion && !hasOverLimitPreQuestion;
+
+  const preQuestionStepContent = (
+    <>
+      {(!showBasicInfoForm.formState.isDirty || !showBasicInfoForm.formState.isValid) &&
+        (!showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid) &&
+        (!showSalesInfoForm.formState.isDirty || !showSalesInfoForm.formState.isValid) && (
+          <Navigate to={PATH.SHOW_ADD} replace />
+        )}
+      <Styled.CardDescription>
+        공연 전, 관객에게 미리 물어보고 싶은
+        <span> 내용이 있다면 작성해 주세요.</span>
+        <br />
+        작성된 질문은 예매 단계에서 관객에게 노출돼요.
+      </Styled.CardDescription>
+      <Styled.ShowAddForm>
+        <Styled.TicketFormContainer>
+          <Styled.TicketFormTitle>사전 질문</Styled.TicketFormTitle>
+          <ShowPreQuestionFormContent
+            preQuestionList={preQuestionList}
+            onUpdateQuestion={(index, updatedQuestion) => {
+              setPreQuestionList((prevList) =>
+                prevList.map((q, i) => (i === index ? updatedQuestion : q)),
+              );
+            }}
+            onAddQuestion={() => {
+              setPreQuestionList((prevList) => [
+                ...prevList,
+                { questionText: '', description: '', isRequired: false },
+              ]);
+            }}
+            onDeleteQuestion={(index) => {
+              setPreQuestionList((prevList) => prevList.filter((_, i) => i !== index));
+              toast.success('사전 질문을 삭제했습니다.');
+            }}
+          />
+        </Styled.TicketFormContainer>
+        <Styled.ShowAddFormButtonContainer>
+          <Styled.ShowAddFormButton
+            variant="prev"
+            type="button"
+            colorTheme="line"
+            size="bold"
+            onClick={() => {
+              navigate(-1);
+            }}
+          >
+            이전으로
+          </Styled.ShowAddFormButton>
+          <Styled.ShowAddFormButton
+            variant="next"
+            type="button"
+            colorTheme="primary"
+            size="bold"
+            disabled={!isPreQuestionFormValid}
+            onClick={onSubmitPreQuestionForm}
+          >
             공연 등록 완료하기
           </Styled.ShowAddFormButton>
         </Styled.ShowAddFormButtonContainer>
@@ -427,12 +552,15 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       <Styled.ProcessIndicator>
         <StepProgressBar
           activeKey={step}
-          items={stepItems.filter((item) => (isNonTicketingShow ? item.key !== 'sales' : true))}
+          items={stepItems.filter((item) =>
+            isNonTicketingShow ? item.key !== 'sales' && item.key !== 'preQuestion' : true,
+          )}
         />
       </Styled.ProcessIndicator>
       {step === 'basic' && basicStepContent}
       {step === 'detail' && detailStepContent}
       {step === 'sales' && !isNonTicketingShow && salesStepContent}
+      {step === 'preQuestion' && !isNonTicketingShow && preQuestionStepContent}
     </>
   );
 

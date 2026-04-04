@@ -16,6 +16,7 @@ interface Props {
   updateSelectValues: (selectedValues: string[]) => void;
   selectedValues: string[];
   options: Option[];
+  iconOnly?: boolean;
 }
 
 const TicketFilterOptions = ({
@@ -64,7 +65,7 @@ const TicketFilterOptions = ({
         </TextButton>
         <Button
           colorTheme="primary"
-          size="regular"
+          size="bold"
           disabled={tempSelectedValues.length === 0}
           onClick={() => {
             if (tempSelectedValues.length > 0) {
@@ -80,7 +81,7 @@ const TicketFilterOptions = ({
   );
 };
 
-const TicketNameFilter = (props: Props) => {
+const TicketNameFilter = ({ iconOnly = false, ...props }: Props) => {
   const deviceWidth = useDeviceWidth();
   const theme = useTheme();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
@@ -93,6 +94,7 @@ const TicketNameFilter = (props: Props) => {
     <Styled.Container>
       <Styled.TicketFilterButton
         isActive={props.selectedValues.length > 0}
+        isIconOnly={iconOnly}
         onClick={() => {
           if (!isMobile) {
             toggle();
@@ -104,7 +106,7 @@ const TicketNameFilter = (props: Props) => {
         }}
       >
         <FilterIcon />
-        필터
+        {!iconOnly && '필터'}
       </Styled.TicketFilterButton>
       {isOpen && !isMobile && <TicketFilterOptions {...props} close={() => setIsOpen(false)} />}
     </Styled.Container>

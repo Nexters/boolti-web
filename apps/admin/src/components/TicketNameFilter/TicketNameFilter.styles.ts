@@ -5,19 +5,21 @@ const Container = styled.div`
   position: relative;
 `;
 
-const TicketFilterButton = styled.button<{ isActive?: boolean }>`
+const TicketFilterButton = styled.button<{ isActive?: boolean; isIconOnly?: boolean }>`
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   color: ${({ theme, isActive }) => (isActive ? theme.palette.primary.o1 : theme.palette.grey.g90)};
   border-radius: 4px;
-  ${({ theme }) => theme.typo.b3};
-  padding: 9px 16px;
-  padding-left: 0px;
+  ${({ theme, isActive }) => (isActive ? theme.typo.sh1 : theme.typo.b3)};
+  padding: ${({ isIconOnly }) => (isIconOnly ? '0' : '9px 16px')};
+  padding-left: ${({ isIconOnly }) => (isIconOnly ? '0' : '0px')};
+  width: ${({ isIconOnly }) => (isIconOnly ? '24px' : 'auto')};
+  height: ${({ isIconOnly }) => (isIconOnly ? '24px' : 'auto')};
 
   & > svg {
-    margin-right: 8px;
+    margin-right: ${({ isIconOnly }) => (isIconOnly ? '0' : '8px')};
   }
 
   ${({ isActive, theme }) =>
@@ -31,7 +33,7 @@ const TicketFilterButton = styled.button<{ isActive?: boolean }>`
       : ''}
 
   ${mq_lg} {
-    padding-left: 9px;
+    padding-left: ${({ isIconOnly }) => (isIconOnly ? '0' : '9px')};
   }
 `;
 
@@ -40,6 +42,7 @@ const TicketOptions = styled.div`
   white-space: nowrap;
   border-radius: 6px;
   background-color: ${({ theme }) => theme.palette.grey.w};
+  z-index: 5;
   ${mq_lg} {
     left: 0;
     position: absolute;
@@ -53,7 +56,7 @@ const TicketOptions = styled.div`
 `;
 
 const TicketOptionTitle = styled.div`
-  ${({ theme }) => theme.typo.sh1};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
@@ -65,11 +68,12 @@ const OptionList = styled.div`
 
 const OptionItem = styled.button`
   cursor: pointer;
-  padding: 8px 0;
+  height: 48px;
+  padding: 0;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  ${({ theme }) => theme.typo.b1};
+  ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
 
   & > svg {
@@ -86,13 +90,15 @@ const ButtonWrap = styled.div`
 
   & > button {
     flex: 1 0 auto;
+    height: 48px;
 
     &:first-of-type {
       flex: 0 0 0;
       justify-content: flex-start;
       margin-right: 36px;
       padding-left: 0;
-      ${({ theme }) => theme.typo.b1};
+      ${({ theme }) => theme.typo.b3};
+      color: ${({ theme }) => theme.palette.grey.g70};
     }
   }
 

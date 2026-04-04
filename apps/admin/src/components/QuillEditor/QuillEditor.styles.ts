@@ -228,6 +228,10 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
   .ql-picker.ql-expanded .ql-picker-label {
     border-color: transparent !important;
   }
+
+  .ql-tooltip {
+    display: none !important;
+  }
 `;
 
 export default {

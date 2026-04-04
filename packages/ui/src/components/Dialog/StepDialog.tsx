@@ -1,10 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import DialogBase from './DialogBase';
 import DialogContent from './DialogContent';
 import { StepDialogProps } from './types';
 
 const StepDialog: React.FC<StepDialogProps> = ({ initialHistory, ...props }) => {
   const [history, setHistory] = useState<string[]>(initialHistory);
+
+  useEffect(() => {
+    if (props.open) {
+      setHistory(initialHistory);
+    }
+  }, [props.open]);
   const currentHistory = history.length > 0 ? history[history.length - 1] : null;
 
   const push = useCallback((nextStep: string) => {

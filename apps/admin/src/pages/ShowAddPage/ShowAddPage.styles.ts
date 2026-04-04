@@ -18,6 +18,8 @@ interface FileUploadAreaProps {
 }
 
 const ShowAddPage = styled.div`
+  min-height: 100vh;
+  min-height: 100dvh;
   background-color: ${({ theme }) => theme.palette.grey.w};
 
   ${mq_lg} {
@@ -110,8 +112,18 @@ const CardDescription = styled.p`
   text-align: center;
   margin-bottom: 32px;
 
+  span {
+    display: inline-block;
+    width: 100%;
+  }
+
   ${mq_lg} {
     margin-bottom: 40px;
+
+    span {
+      display: inline;
+      width: auto;
+    }
   }
 `;
 

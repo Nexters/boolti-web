@@ -1,4 +1,5 @@
 import { Apple } from './Apple';
+import { Ascending } from './Ascending';
 import { ArrowLeft } from './ArrowLeft';
 import { ArrowRight } from './ArrowRIght';
 import { BNK } from './BNK';
@@ -30,6 +31,7 @@ import { Close } from './Close';
 import { CU } from './CU';
 import { Deutsche } from './Deutsche';
 import { DGB } from './DGB';
+import { Descending } from './Descending';
 import { Download } from './Download';
 import { Edit } from './Edit';
 import { EPost } from './EPost';
@@ -85,9 +87,11 @@ import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
 import { BooltiGreyLogo } from './BooltiGreyLogo';
+import { BooltiGreyIcon } from './BooltiGreyIcon';
 
 export {
   Apple as AppleIcon,
+  Ascending as AscendingIcon,
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
   Question as QuestionIcon,
@@ -121,6 +125,7 @@ export {
   CU,
   Deutsche,
   DGB,
+  Descending as DescendingIcon,
   Download as DownloadIcon,
   Edit as EditIcon,
   EPost,
@@ -174,4 +179,5 @@ export {
   MapMarker as MapMarkerIcon,
   ClockMobile as ClockMobileIcon,
   CurvedArrowRight as CurvedArrowRightIcon,
+  BooltiGreyIcon,
 };

@@ -1,4 +1,4 @@
-import { DownOutlined, LogoutOutlined } from '@ant-design/icons';
+import { DownOutlined, LogoutOutlined, TeamOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdminLogout, useAdminShowList } from '@boolti/api';
 import { SuperAdminShowStatus } from '@boolti/api/src/types/adminShow';
 import { useTheme } from '@emotion/react';
@@ -25,6 +25,11 @@ import { PATH } from '~/constants/routes';
 const { Content, Header } = Layout;
 
 const headerItems: React.ComponentProps<typeof Menu>['items'] = [
+  {
+    key: 'admin-users',
+    icon: <TeamOutlined />,
+    label: '계정 관리',
+  },
   {
     key: 'logout',
     icon: <LogoutOutlined />,
@@ -99,6 +104,10 @@ const HomePage = () => {
           items={headerItems}
           onClick={async (e) => {
             switch (e.key) {
+              case 'admin-users': {
+                navigate(PATH.ADMIN_USERS);
+                break;
+              }
               case 'logout': {
                 try {
                   await mutateAsync();

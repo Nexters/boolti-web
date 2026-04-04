@@ -1,0 +1,392 @@
+import { useState, useEffect, useCallback } from 'react';
+import {
+  SearchIcon,
+  ChevronRightIcon,
+  ChevronLeftIcon,
+  AscendingIcon,
+  DescendingIcon,
+  CloseIcon,
+  BooltiGreyIcon,
+} from '@boolti/icon';
+import {
+  PreQuestionParticipantItem,
+  PreQuestionParticipantDetailResponse,
+} from '@boolti/api/src/types';
+import Styled from './ResponseTab.styles';
+import { useIsMobile } from '~/hooks/useIsMobile';
+import { highlightText } from '~/utils/highlight';
+import TicketNameFilter from '~/components/TicketNameFilter';
+
+const formatDateTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}.${month}.${day} ${hours}:${minutes}`;
+};
+
+interface ParticipantResponseViewProps {
+  participants: PreQuestionParticipantItem[];
+  selectedParticipant: PreQuestionParticipantDetailResponse | null;
+  currentPage: number;
+  totalPages: number;
+  searchText: string;
+  isFilterApplied: boolean;
+  sortOrder: 'latest' | 'oldest';
+  ticketOptions: { label: string; value: string }[];
+  selectedTicketIds: string[];
+  onSearchChange: (text: string) => void;
+  onResetFilter: () => void;
+  onToggleSort: () => void;
+  onTicketFilterChange: (values: string[]) => void;
+  onSelectParticipant: (reservationId: number) => void;
+  onPageChange: (page: number) => void;
+}
+
+const ParticipantResponseView = ({
+  participants,
+  selectedParticipant,
+  currentPage,
+  totalPages,
+  searchText,
+  isFilterApplied,
+  sortOrder,
+  ticketOptions,
+  selectedTicketIds,
+  onSearchChange,
+  onResetFilter,
+  onToggleSort,
+  onTicketFilterChange,
+  onSelectParticipant,
+  onPageChange,
+}: ParticipantResponseViewProps) => {
+  const [localSearch, setLocalSearch] = useState(searchText);
+  const isMobile = useIsMobile();
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const isFilterEmpty = totalPages === 0 && isFilterApplied;
+  const isSearchEmpty = totalPages === 0 && !isFilterApplied && localSearch.trim() !== '';
+  const isResultEmpty = isFilterEmpty || isSearchEmpty;
+
+  // BottomSheet 열릴 때 body 스크롤 방지
+  useEffect(() => {
+    if (isBottomSheetOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isBottomSheetOpen]);
+
+  const handleSearchReset = () => {
+    setLocalSearch('');
+    onSearchChange('');
+  };
+
+  const handleSelectParticipant = useCallback(
+    (reservationId: number) => {
+      onSelectParticipant(reservationId);
+      if (isMobile) {
+        setIsBottomSheetOpen(true);
+      }
+    },
+    [onSelectParticipant, isMobile],
+  );
+
+  const handleCloseBottomSheet = useCallback(() => {
+    setIsBottomSheetOpen(false);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      onSearchChange(localSearch);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [localSearch, onSearchChange]);
+
+  const renderPagination = () => {
+    const pageCount = Math.max(totalPages, 1);
+    const pages: (number | string)[] = [];
+    const maxVisiblePages = 5;
+
+    if (pageCount <= maxVisiblePages) {
+      for (let i = 1; i <= pageCount; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 3; i++) pages.push(i);
+        pages.push('...');
+        pages.push(pageCount);
+      } else if (currentPage >= pageCount - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = pageCount - 2; i <= pageCount; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        pages.push('...');
+        pages.push(currentPage);
+        pages.push('...');
+        pages.push(pageCount);
+      }
+    }
+
+    return (
+      <Styled.PaginationContainer>
+        <Styled.PaginationButton
+          disabled={currentPage <= 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          <ChevronLeftIcon />
+        </Styled.PaginationButton>
+        {pages.map((page, index) =>
+          typeof page === 'number' ? (
+            <Styled.PaginationButton
+              key={index}
+              isActive={page === currentPage}
+              onClick={() => onPageChange(page)}
+            >
+              {page}
+            </Styled.PaginationButton>
+          ) : (
+            <span key={index}>...</span>
+          ),
+        )}
+        <Styled.PaginationButton
+          disabled={currentPage >= pageCount}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          <ChevronRightIcon />
+        </Styled.PaginationButton>
+      </Styled.PaginationContainer>
+    );
+  };
+
+  return (
+    <Styled.ParticipantContainer>
+      {/* 참여자 목록 */}
+      <Styled.ParticipantListSection>
+        <Styled.ParticipantSearchContainer>
+          {isMobile ? (
+            <Styled.MobileParticipantFilterSearchRow>
+              <Styled.MobileParticipantControlGroup>
+                {ticketOptions.length > 0 && (
+                  <TicketNameFilter
+                    options={ticketOptions}
+                    selectedValues={selectedTicketIds}
+                    updateSelectValues={onTicketFilterChange}
+                    iconOnly
+                  />
+                )}
+                <Styled.MobileParticipantSortButton onClick={onToggleSort}>
+                  {sortOrder === 'latest' ? <DescendingIcon /> : <AscendingIcon />}
+                </Styled.MobileParticipantSortButton>
+              </Styled.MobileParticipantControlGroup>
+              <Styled.MobileParticipantSearchInput>
+                <input
+                  type="text"
+                  placeholder="참여자명 검색"
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
+                />
+
+                <Styled.MobileParticipantSearchIcon>
+                  <SearchIcon />
+                </Styled.MobileParticipantSearchIcon>
+              </Styled.MobileParticipantSearchInput>
+            </Styled.MobileParticipantFilterSearchRow>
+          ) : (
+            <Styled.ParticipantSearchInput>
+              <input
+                type="text"
+                placeholder="참여자명 검색"
+                value={localSearch}
+                onChange={(e) => setLocalSearch(e.target.value)}
+              />
+
+              <Styled.ParticipantSearchInputButtonGroup>
+                {localSearch !== '' && (
+                  <Styled.ResetButton onClick={handleSearchReset}>
+                    <CloseIcon />
+                  </Styled.ResetButton>
+                )}
+                <Styled.SearchButton>
+                  <SearchIcon />
+                </Styled.SearchButton>
+              </Styled.ParticipantSearchInputButtonGroup>
+            </Styled.ParticipantSearchInput>
+          )}
+        </Styled.ParticipantSearchContainer>
+
+        {isResultEmpty ? (
+          <Styled.SearchEmptyContainer>
+            {isMobile && (
+              <Styled.SearchEmptyIcon>
+                <BooltiGreyIcon />
+              </Styled.SearchEmptyIcon>
+            )}
+            <Styled.SearchEmptyText>
+              {isFilterEmpty ? (
+                <>
+                  찾으시는 결과가 없어요.
+                  <br />
+                  조건을 변경해 보세요.
+                </>
+              ) : (
+                <>
+                  검색 결과가 없어요.
+                  <br />
+                  참여자 이름을 변경해보세요.
+                </>
+              )}
+            </Styled.SearchEmptyText>
+            <Styled.SearchResetButton onClick={isFilterEmpty ? onResetFilter : handleSearchReset}>
+              {isFilterEmpty ? '필터 초기화' : '검색 초기화'}
+            </Styled.SearchResetButton>
+          </Styled.SearchEmptyContainer>
+        ) : (
+          <>
+            <Styled.ParticipantList>
+              {participants.map((participant) => {
+                const isSelected =
+                  !isMobile && selectedParticipant?.reservationId === participant.reservationId;
+
+                return (
+                  <Styled.ParticipantItem
+                    key={participant.reservationId}
+                    isSelected={isSelected}
+                    onClick={() => handleSelectParticipant(participant.reservationId)}
+                  >
+                    <Styled.ParticipantInfo>
+                      <Styled.ParticipantName isSelected={isSelected}>
+                        {highlightText(participant.reservationName, localSearch, Styled.Highlight)}
+                      </Styled.ParticipantName>
+                      <Styled.ParticipantMeta>
+                        {formatDateTime(participant.answeredAt)} · {participant.salesTicketTypeName}{' '}
+                        · {participant.ticketCount}매
+                      </Styled.ParticipantMeta>
+                    </Styled.ParticipantInfo>
+                    <Styled.ParticipantArrow>
+                      <ChevronRightIcon />
+                    </Styled.ParticipantArrow>
+                  </Styled.ParticipantItem>
+                );
+              })}
+            </Styled.ParticipantList>
+
+            {renderPagination()}
+          </>
+        )}
+      </Styled.ParticipantListSection>
+
+      {/* 응답 상세 - 데스크톱에서만 표시 */}
+      <Styled.ParticipantDetailSection>
+        {selectedParticipant && !isResultEmpty ? (
+          <>
+            <Styled.ParticipantDetailHeader>
+              <Styled.ParticipantDetailTitle>
+                {selectedParticipant.reservationName} 응답 상세
+              </Styled.ParticipantDetailTitle>
+              <Styled.ParticipantDetailTimeWrapper>
+                <Styled.ParticipantDetailTime>
+                  작성
+                  <span>{formatDateTime(selectedParticipant.createdAt)}</span>
+                </Styled.ParticipantDetailTime>
+                {selectedParticipant.modifiedAt !== selectedParticipant.createdAt && (
+                  <Styled.ParticipantDetailTime>
+                    수정
+                    <span>{formatDateTime(selectedParticipant.modifiedAt)}</span>
+                  </Styled.ParticipantDetailTime>
+                )}
+              </Styled.ParticipantDetailTimeWrapper>
+            </Styled.ParticipantDetailHeader>
+
+            <Styled.ParticipantDetailBody>
+              {selectedParticipant.answers.map((answer) => (
+                <Styled.ParticipantAnswerCard key={answer.preQuestionId}>
+                  <Styled.ParticipantAnswerHeader>
+                    {answer.question}
+                    {answer.isRequired && <Styled.RequiredMark>*</Styled.RequiredMark>}
+                  </Styled.ParticipantAnswerHeader>
+                  <Styled.ParticipantAnswerContent isEmpty={!answer.answer}>
+                    {answer.answer || '작성된 내용이 없어요'}
+                  </Styled.ParticipantAnswerContent>
+                </Styled.ParticipantAnswerCard>
+              ))}
+            </Styled.ParticipantDetailBody>
+          </>
+        ) : isResultEmpty ? (
+          <>
+            <Styled.ParticipantDetailHeader>
+              <Styled.ParticipantDetailTitle>응답 상세</Styled.ParticipantDetailTitle>
+            </Styled.ParticipantDetailHeader>
+            <Styled.ParticipantDetailBody isEmpty>
+              <Styled.SearchEmptyIcon>
+                <BooltiGreyIcon />
+              </Styled.SearchEmptyIcon>
+            </Styled.ParticipantDetailBody>
+          </>
+        ) : (
+          <Styled.NoSelectionMessage>좌측에서 참여자를 선택해 주세요</Styled.NoSelectionMessage>
+        )}
+      </Styled.ParticipantDetailSection>
+
+      {/* 모바일 BottomSheet */}
+      <Styled.MobileBottomSheetOverlay isOpen={isBottomSheetOpen} onClick={handleCloseBottomSheet}>
+        <Styled.MobileBottomSheet onClick={(e) => e.stopPropagation()}>
+          {selectedParticipant && (
+            <>
+              <Styled.MobileBottomSheetHeader>
+                <Styled.MobileBottomSheetHeaderContent>
+                  <Styled.MobileBottomSheetTitle>
+                    {selectedParticipant.reservationName} 응답 상세
+                  </Styled.MobileBottomSheetTitle>
+                  <Styled.MobileBottomSheetTimeWrapper>
+                    <Styled.MobileBottomSheetTime>
+                      작성
+                      <span>{formatDateTime(selectedParticipant.createdAt)}</span>
+                    </Styled.MobileBottomSheetTime>
+                    {selectedParticipant.modifiedAt !== selectedParticipant.createdAt && (
+                      <Styled.MobileBottomSheetTime>
+                        수정
+                        <span>{formatDateTime(selectedParticipant.modifiedAt)}</span>
+                      </Styled.MobileBottomSheetTime>
+                    )}
+                  </Styled.MobileBottomSheetTimeWrapper>
+                </Styled.MobileBottomSheetHeaderContent>
+                <Styled.MobileBottomSheetCloseButton onClick={handleCloseBottomSheet}>
+                  <CloseIcon />
+                </Styled.MobileBottomSheetCloseButton>
+              </Styled.MobileBottomSheetHeader>
+              <Styled.MobileBottomSheetBody>
+                {selectedParticipant.answers.map((answer) => (
+                  <Styled.MobileAnswerCard key={answer.preQuestionId}>
+                    <Styled.MobileAnswerCardHeader>
+                      <Styled.MobileAnswerCardTitle>
+                        {answer.question}
+                        {answer.isRequired && <Styled.RequiredMark>*</Styled.RequiredMark>}
+                      </Styled.MobileAnswerCardTitle>
+                      {answer.description && (
+                        <Styled.MobileAnswerCardDescription>
+                          {answer.description}
+                        </Styled.MobileAnswerCardDescription>
+                      )}
+                    </Styled.MobileAnswerCardHeader>
+                    <Styled.MobileAnswerCardContent isEmpty={!answer.answer}>
+                      {answer.answer || '작성한 내용이 없어요'}
+                    </Styled.MobileAnswerCardContent>
+                  </Styled.MobileAnswerCard>
+                ))}
+              </Styled.MobileBottomSheetBody>
+            </>
+          )}
+        </Styled.MobileBottomSheet>
+      </Styled.MobileBottomSheetOverlay>
+    </Styled.ParticipantContainer>
+  );
+};
+
+export default ParticipantResponseView;

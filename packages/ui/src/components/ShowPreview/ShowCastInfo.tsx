@@ -4,14 +4,22 @@ interface Props {
   showCastTeams: Array<{
     name: string;
     members?: {
+      userCode?: string;
       roleName: string;
       userNickname: string;
       userImgPath: string;
     }[];
   }>;
+  onClickMember?: (userCode: string) => void;
 }
 
-const ShowCastInfo = ({ showCastTeams }: Props) => {
+const ShowCastInfo = ({ showCastTeams, onClickMember }: Props) => {
+  const handleMemberClick = (userCode?: string) => {
+    if (userCode && onClickMember) {
+      onClickMember(userCode);
+    }
+  };
+
   return (
     <Styled.CastInfo>
       {showCastTeams.length > 0 ? (
@@ -23,7 +31,11 @@ const ShowCastInfo = ({ showCastTeams }: Props) => {
             {team.members && team.members.length > 0 && (
               <Styled.ShowCastList>
                 {team.members.map((member, memberIndex) => (
-                  <Styled.ShowCastListItem key={memberIndex}>
+                  <Styled.ShowCastListItem
+                    key={memberIndex}
+                    clickable={!!member.userCode && !!onClickMember}
+                    onClick={() => handleMemberClick(member.userCode)}
+                  >
                     <Styled.UserImage
                       style={
                         {

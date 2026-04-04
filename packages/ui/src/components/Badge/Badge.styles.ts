@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 import { mq_lg } from '../../systems';
 
-type colorTheme = 'purple' | 'blue' | 'green' | 'red' | 'grey';
+type colorTheme = 'purple' | 'blue' | 'green' | 'red' | 'orange' | 'grey';
 
 export interface BadgeProps {
   colorTheme: colorTheme;
@@ -17,6 +17,7 @@ const Container = styled.span<BadgeProps>`
   padding: 3px 6px;
   height: 24px;
   ${({ theme }) => theme.typo.c1};
+  font-weight: 600;
   ${({ colorTheme, theme }) => {
     return `
       color: ${theme.palette[colorTheme].main};
@@ -25,7 +26,8 @@ const Container = styled.span<BadgeProps>`
   }}
 
   ${mq_lg} {
-    ${({ theme }) => theme.typo.b1};
+    ${({ theme }) => theme.typo.b3};
+    font-weight: 600;
     padding: 0 8px;
     height: 28px;
   }

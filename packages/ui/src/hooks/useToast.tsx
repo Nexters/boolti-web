@@ -1,11 +1,13 @@
 import { useTheme } from '@emotion/react';
 import { useMemo } from 'react';
-import { ErrorIcon, toast } from 'react-hot-toast';
+import { ErrorIcon, toast, ToastPosition } from 'react-hot-toast';
 
 import { InfoIcon, SuccessIcon, WarningIcon } from '../components/Toast/icons';
 
 interface ToastOptions {
   duration?: number;
+  position?: ToastPosition;
+  offset?: { x?: number; y?: number };
 }
 
 type ToastFunction = (message: string, options?: ToastOptions) => ReturnType<typeof toast>;
@@ -63,10 +65,18 @@ const useToast = () => {
       ...acc,
       [key]: (message: string, options?: ToastOptions) => {
         const duration = options?.duration ?? DEFAULT_DURATION;
+        const position = options?.position;
+        const offset = options?.offset;
 
         return toast(message, {
           ...variables,
           duration,
+          position,
+          style: {
+            ...variables.style,
+            ...(offset?.x && { marginLeft: `${offset.x}px` }),
+            ...(offset?.y && { marginTop: `${offset.y}px` }),
+          },
         });
       },
     }),

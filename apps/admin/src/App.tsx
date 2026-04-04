@@ -33,6 +33,7 @@ import {
   GiftIntroPage,
   OAuthApplePage,
   ShowTypeSelectpage,
+  AppStoreBridgePage,
 } from './pages';
 import ShowAddPage from './pages/ShowAddPage';
 import { Suspense } from 'react';
@@ -40,6 +41,7 @@ import { domAnimation, LazyMotion } from 'framer-motion';
 import ShowDetailLayout from './components/ShowDetailLayout';
 import ShowInfoPage from './pages/ShowInfoPage';
 import ShowTicketPage from './pages/ShowTicketPage';
+import ShowPreQuestionPage from './pages/ShowPreQuestionPage';
 import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
@@ -75,6 +77,10 @@ const publicRoutes = [
       {
         path: PATH.QR,
         element: <QRPage />,
+      },
+      {
+        path: PATH.APP_STORE_BRIDGE,
+        element: <AppStoreBridgePage />,
       },
       {
         path: PATH.OAUTH_KAKAO,
@@ -137,6 +143,7 @@ const privateRoutes = [
       { path: PATH.SHOW_ADD, element: <ShowAddPage step="basic" /> },
       { path: PATH.SHOW_ADD_DETAIL, element: <ShowAddPage step="detail" /> },
       { path: PATH.SHOW_ADD_SALES, element: <ShowAddPage step="sales" /> },
+      { path: PATH.SHOW_ADD_PRE_QUESTION, element: <ShowAddPage step="preQuestion" /> },
       { path: PATH.SHOW_TYPE_SELECT, element: <ShowTypeSelectpage /> },
       {
         path: '/',
@@ -148,6 +155,7 @@ const privateRoutes = [
         children: [
           { path: PATH.SHOW_INFO, element: <ShowInfoPage /> },
           { path: PATH.SHOW_TICKET, element: <ShowTicketPage /> },
+          { path: PATH.SHOW_PRE_QUESTION, element: <ShowPreQuestionPage /> },
           { path: PATH.SHOW_RESERVATION, element: <ShowReservationPage /> },
           { path: PATH.SHOW_ENTRANCE, element: <ShowEnterancePage /> },
           { path: PATH.SHOW_SETTLEMENT, element: <ShowSettlementPage /> },

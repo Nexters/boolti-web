@@ -37,6 +37,7 @@ export interface ShowResponse {
   notice: string;
   host: Host;
   isEnded: boolean;
+  isHidden: boolean;
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
   latitude: number;
   longitude: number;
@@ -231,6 +232,7 @@ export type ShowSalesTicketResponse = {
   totalForSale: number;
   /** 최소 한번 이상 판매된 티켓이 있는지 여부 */
   soldAtLeastOnce: boolean;
+  isPaused: boolean;
 }[];
 
 export type ShowInvitationTicketResponse = {
@@ -239,6 +241,7 @@ export type ShowInvitationTicketResponse = {
   price: number;
   quantity: number;
   totalForSale: number;
+  isPaused: boolean;
 }[];
 
 export type ShowInvitationCodeListResponse = {
@@ -354,6 +357,17 @@ export interface ShowCreateRequest {
   latitude?: number;
   /** 경도 */
   longitude?: number;
+  /** 사전 질문 목록. optional. 최대 3개 */
+  preQuestions?: {
+    /** 질문 텍스트 (필수, 100자 이내) */
+    questionText: string;
+    /** 질문 설명 (선택, 100자 이내) */
+    description?: string;
+    /** 필수 질문 여부 */
+    isRequired: boolean;
+    /** 질문 순서, 1부터 시작 */
+    sequence: number;
+  }[];
 }
 
 export interface NonTicketingShowCreateRequest {

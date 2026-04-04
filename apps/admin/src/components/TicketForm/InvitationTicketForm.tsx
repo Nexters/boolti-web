@@ -29,13 +29,12 @@ const InvitationTicketForm = ({ onSubmit }: InvitationTicketFormProps) => {
 
   return (
     <Styled.TicketForm onSubmit={handleSubmit(onSubmit)}>
-      <Styled.TicketFormRow>
-        <Styled.Description>
-          만들고 싶은 티켓 정보를 입력해 주세요.
-          <br />
-          입력하신 수량만큼 초청 코드가 발행됩니다.
-        </Styled.Description>
-      </Styled.TicketFormRow>
+      <Styled.TicketFormDescription>
+        <Styled.Description>생성할 티켓의 정보를 입력해 주세요.</Styled.Description>
+        <Styled.SubDescription>
+          * 입력하신 수량만큼 무료로 예매가 가능한 초청 코드가 발행돼요.
+        </Styled.SubDescription>
+      </Styled.TicketFormDescription>
       <Styled.TicketFormRow>
         <Styled.TicketFormContent>
           <Styled.TicketFormLabel>티켓 이름</Styled.TicketFormLabel>
