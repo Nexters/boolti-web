@@ -21,6 +21,7 @@ import { useTheme } from '@emotion/react';
 import { Form, Input, DatePicker } from 'antd';
 import dateFnsGenerateConfig from 'rc-picker/lib/generate/dateFns';
 import { useEffect } from 'react';
+import { format } from 'date-fns';
 
 const MyDatePicker = DatePicker.generatePicker<Date>(dateFnsGenerateConfig);
 const { RangePicker } = MyDatePicker;
@@ -52,15 +53,12 @@ const TicketPage = () => {
   }) => {
     try {
       const { salesRange, ticketNotice } = values;
-      const salesStartTime = salesRange[0];
-      const salesEndTime = salesRange[1];
-      salesEndTime.setHours(23);
-      salesEndTime.setMinutes(59);
-      salesEndTime.setSeconds(59);
+      const salesStartDate = format(salesRange[0], 'yyyy-MM-dd');
+      const salesEndDate = format(salesRange[1], 'yyyy-MM-dd');
       await editSalesInfo.mutateAsync({
         showId,
-        salesStartTime: salesStartTime.toISOString(),
-        salesEndTime: salesEndTime.toISOString(),
+        salesStartTime: `${salesStartDate}T00:00:00.000Z`,
+        salesEndTime: `${salesEndDate}T23:59:59.000Z`,
         ticketNotice,
       });
       await refetchSalesInfo();
