@@ -14,7 +14,7 @@ export const Container = styled(m.div)`
   gap: 8px;
   width: calc(100% - 40px);
   padding: 14px 16px;
-  z-index: 1000;
+  z-index: 998;
   align-items: center;
 
   ${mq_lg} {
