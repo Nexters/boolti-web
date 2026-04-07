@@ -10,6 +10,7 @@ export const useShareBannerVisibility = () => {
 
   const [hasMetDwellTime, setHasMetDwellTime] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isDismissed, setIsDismissed] = useState(false);
 
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -31,7 +32,12 @@ export const useShareBannerVisibility = () => {
   // 하루 미노출 설정
   const dismissForToday = useCallback(() => {
     localStorage.setItem(BANNER_DISMISS_KEY, Date.now().toString());
+    setIsDismissed(true);
   }, []);
+
+  useEffect(() => {
+    setIsDismissed(isDismissedToday());
+  }, [isDismissedToday]);
 
   // 체류 시간 타이머
   useEffect(() => {
@@ -77,7 +83,7 @@ export const useShareBannerVisibility = () => {
   const hasMetCondition = hasMetDwellTime || scrollProgress >= SCROLL_PROGRESS_THRESHOLD;
 
   // 최종 배너 표시 여부
-  const isVisible = hasMetCondition && scrollDirection === 'down' && !isDismissedToday();
+  const isVisible = hasMetCondition && scrollDirection === 'down' && !isDismissed;
 
   return {
     isVisible,

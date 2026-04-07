@@ -191,7 +191,7 @@ const ShowCastInfoFormDialogContent = ({ prevShowCastInfo, onDelete, onSave }: P
                   if (userCode !== '') {
                     try {
                       const { imgPath, nickname } = await queryClient.fetchQuery(
-                        queryKeys.user.userCode(userCode),
+                        queryKeys.user.userCodeV2(userCode),
                       );
                       update(index, {
                         ...controlledFields[index],
