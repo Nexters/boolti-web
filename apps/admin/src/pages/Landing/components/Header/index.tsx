@@ -1,143 +1,68 @@
 import { queryKeys, useLogout, useQueryClient, useUserProfile } from '@boolti/api';
-import { BooltiDark, CloseIcon, MenuIcon } from '@boolti/icon';
+import { BooltiDark } from '@boolti/icon';
 import { useTheme } from '@emotion/react';
-import { useAtomValue } from 'jotai';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import ProfileDropdown from '~/components/ProfileDropdown';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
-import { useScrollDirection } from '~/hooks/useScrollDirection';
-
 import { useAuthAtom } from '~/atoms/useAuthAtom';
 import { openStoreLink } from '~/utils/link';
-import { Tab } from '..';
-import { visibleSectionAtom } from '../../atoms/visibleSectionAtom';
+
 import Styled from './Header.styles';
 
 const Header = () => {
   const { isLogin, removeToken } = useAuthAtom();
-  const currentVisibleSection = useAtomValue(visibleSectionAtom);
-  const scrollDirection = useScrollDirection();
-  const visible = currentVisibleSection === 'key-visal' || scrollDirection === 'up';
-
-  const deviceWidth = useDeviceWidth();
   const theme = useTheme();
+  const deviceWidth = useDeviceWidth();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
 
-  const logoutMutation = useLogout();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-
-  const [isExpanded, setIsExpanded] = useState(false);
+  const logoutMutation = useLogout();
   const { data } = useUserProfile({ enabled: isLogin() });
   const { imgPath } = data ?? {};
 
-  const onClickAuthButton = async () => {
-    if (isLogin()) {
-      await logoutMutation.mutateAsync();
-
-      removeToken();
-      queryClient.removeQueries({ ...queryKeys.user.summary });
-
+  const handleAppExplore = () => {
+    if (isMobile) {
+      openStoreLink();
       return;
     }
+    navigate(PATH.QR);
+  };
 
+  const handleAuth = async () => {
+    if (isLogin()) {
+      await logoutMutation.mutateAsync();
+      removeToken();
+      queryClient.removeQueries({ ...queryKeys.user.summary });
+      return;
+    }
     navigate(PATH.LOGIN);
   };
 
   return (
     <Styled.Header>
-      <Styled.HeaderContaienr
-        initial={false}
-        animate={visible ? 'visible' : 'hidden'}
-        transition={{ duration: 0.4 }}
-        variants={{
-          hidden: {
-            maxHeight: 0,
-            opacity: 0,
-          },
-          visible: {
-            maxHeight: 100,
-            opacity: 1,
-          },
-        }}
-      >
+      <Styled.HeaderContaienr>
         <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
           <BooltiDark />
         </Styled.BooltiIcon>
-
-        <Styled.DesktopMenu>
-          <Styled.InternalLink
-            to="#"
-            onClick={() => {
-              if (isMobile) {
-                openStoreLink();
-                return;
-              }
-              navigate(PATH.QR);
-            }}
-          >
-            앱 바로가기
-          </Styled.InternalLink>
-          <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
+        <Styled.Nav>
+          <Styled.TextButton type="button" onClick={handleAppExplore}>
+            앱 둘러보기
+          </Styled.TextButton>
           {isLogin() ? (
             <Styled.DropDownContainer>
               <ProfileDropdown image={imgPath} />
             </Styled.DropDownContainer>
           ) : (
-            <Styled.AuthButton onClick={onClickAuthButton}>로그인</Styled.AuthButton>
+            <Styled.AuthTextButton type="button" onClick={handleAuth}>
+              로그인
+            </Styled.AuthTextButton>
           )}
-        </Styled.DesktopMenu>
-
-        {/** 모바일용 */}
-        <Styled.MobileButton
-          onClick={() => {
-            setIsExpanded((prev) => !prev);
-          }}
-        >
-          {isExpanded ? <CloseIcon /> : <MenuIcon />}
-        </Styled.MobileButton>
+          <Styled.PrimaryButton to={PATH.HOME}>시작하기</Styled.PrimaryButton>
+        </Styled.Nav>
       </Styled.HeaderContaienr>
-      <Styled.MobileMenu
-        initial={false}
-        animate={isExpanded && visible ? 'visible' : 'invisible'}
-        variants={{
-          invisible: {
-            opacity: 0,
-            height: 0,
-          },
-          visible: {
-            opacity: 1,
-            height: 172,
-          },
-        }}
-      >
-        <Styled.InternalLink
-          to="#"
-          onClick={() => {
-            if (isMobile) {
-              openStoreLink();
-              return;
-            }
-            navigate(PATH.QR);
-          }}
-        >
-          앱 바로가기
-        </Styled.InternalLink>
-        <Styled.InternalLink to={PATH.HOME}>공연 준비하기</Styled.InternalLink>
-        <Styled.MobileAuthButton
-          colorTheme={isLogin() ? 'netural' : 'primary'}
-          size="bold"
-          role="button"
-          onClick={onClickAuthButton}
-        >
-          {isLogin() ? '로그아웃' : '로그인'}
-        </Styled.MobileAuthButton>
-      </Styled.MobileMenu>
-
-      {!isMobile && <Tab />}
     </Styled.Header>
   );
 };

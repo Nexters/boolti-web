@@ -2,9 +2,14 @@ import { atom, useSetAtom } from 'jotai';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 
-type VisibleSection = 'key-visal' | 'organizer' | 'user';
+type VisibleSection =
+  | 'hero'
+  | 'problem'
+  | 'solution-features'
+  | 'solution-highlight'
+  | 'how-to-use';
 
-export const visibleSectionAtom = atom<VisibleSection>('key-visal');
+export const visibleSectionAtom = atom<VisibleSection>('hero');
 
 export const useVisibleSectionAtom = (section: VisibleSection) => {
   const { ref, inView, entry } = useInView({ threshold: 0.2 });
