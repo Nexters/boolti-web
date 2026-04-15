@@ -1,31 +1,36 @@
 import { Footer } from '@boolti/ui';
-
-import { Header, KeyVisual, MoreInformation, OrganizerSection, UserSection } from './components';
-import Styled from './LandingPage.styles';
 import { usePopup } from '@boolti/api';
+
 import usePopupDialog from '~/hooks/usePopupDialog';
+
+import {
+  Header,
+  Hero,
+  HowToUse,
+  Problem,
+  SolutionFeatures,
+  SolutionHighlight,
+} from './components';
+import Styled from './LandingPage.styles';
 
 const LandingPage = () => {
   const { data: popupData } = usePopup('HOME');
   usePopupDialog(popupData);
+
   return (
-    <>
-      <Styled.Container>
-        <Header />
+    <Styled.Container>
+      <Header />
 
-        <KeyVisual />
+      <Hero />
+      <Problem />
+      <SolutionFeatures />
+      <SolutionHighlight />
+      <HowToUse />
 
-        <OrganizerSection />
-
-        <UserSection />
-
-        <MoreInformation />
-
-        <Styled.FooterContainer>
-          <Footer />
-        </Styled.FooterContainer>
-      </Styled.Container>
-    </>
+      <Styled.FooterContainer>
+        <Footer />
+      </Styled.FooterContainer>
+    </Styled.Container>
   );
 };
 

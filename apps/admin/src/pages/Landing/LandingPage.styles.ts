@@ -1,16 +1,12 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
 const Container = styled(m.div)`
   overflow: hidden;
   min-height: 100vh;
-  padding-top: 48px;
+
   &::-webkit-scrollbar {
     display: none;
-  }
-  ${mq_lg} {
-    padding-top: 68px;
   }
 `;
 
