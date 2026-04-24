@@ -1,7 +1,13 @@
 import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
+import { keyframes } from '@emotion/react';
 
 import { LANDING_COLORS, mq_desktop } from '../../constants';
+
+const marquee = keyframes`
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+`;
 
 const Section = styled.section`
   display: flex;
@@ -62,9 +68,9 @@ const Title = styled.h1`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0;
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 28px;
   line-height: 1.45;
   letter-spacing: -0.02em;
@@ -72,6 +78,10 @@ const Title = styled.h1`
   margin: 0;
 
   ${mq_lg} {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
     font-size: 34px;
   }
 
@@ -104,8 +114,8 @@ const ImageRow = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
-  padding: 16px 4px;
-  overflow-x: auto;
+  padding: 32px 8px;
+  overflow-x: hidden;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -116,6 +126,19 @@ const ImageRow = styled.div`
     gap: 16px;
     padding: 24px 8px;
     justify-content: center;
+  }
+`;
+
+const MarqueeTrack = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  animation: ${marquee} 29.6s linear infinite;
+  width: max-content;
+
+  ${mq_desktop} {
+    gap: 16px;
   }
 `;
 
@@ -148,5 +171,6 @@ export default {
   TitleRow,
   LogoMark,
   ImageRow,
+  MarqueeTrack,
   ImageCard,
 };

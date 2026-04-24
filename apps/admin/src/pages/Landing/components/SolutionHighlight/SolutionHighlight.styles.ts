@@ -9,12 +9,12 @@ const Section = styled.section`
   align-items: center;
   align-self: stretch;
   gap: 40px;
-  padding: 80px 0;
+  padding: 64px 0;
   background-color: ${LANDING_COLORS.solutionLightBg};
 
   ${mq_lg} {
-    gap: 56px;
-    padding: 96px 0;
+    gap: 48px;
+    padding: 100px 0;
   }
 
   ${mq_desktop} {
@@ -26,7 +26,7 @@ const Section = styled.section`
 const Title = styled.h2`
   text-align: center;
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 24px;
   line-height: 1.35;
   letter-spacing: -0.02em;
@@ -48,10 +48,10 @@ const Title = styled.h2`
 const ScrollArea = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 16px;
+  gap: 8px;
   overflow-x: auto;
   width: 100%;
-  padding: 0 20px;
+  padding: 0 24px;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -59,19 +59,22 @@ const ScrollArea = styled.div`
   }
 
   ${mq_lg} {
-    gap: 16px;
-    padding: 0 32px;
+    gap: 12px;
+    padding: 0;
     justify-content: center;
   }
 
   ${mq_desktop} {
+    gap: 16px;
     padding: 0 80px;
+    justify-content: flex-start;
   }
 `;
 
 const Card = styled.div<{ variant: 'light' | 'dark' }>`
   flex-shrink: 0;
-  width: 320px;
+  width: 246px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   border-radius: 16px;
@@ -82,14 +85,14 @@ const Card = styled.div<{ variant: 'light' | 'dark' }>`
     variant === 'dark' ? LANDING_COLORS.darkCardBg : '#FFFFFF'};
 
   ${mq_lg} {
-    flex-direction: row;
-    width: 560px;
-    height: 420px;
+    width: 345px;
+    height: 560px;
   }
 
   ${mq_desktop} {
-    width: 620px;
-    height: 480px;
+    flex-direction: row;
+    width: 920px;
+    height: 560px;
   }
 `;
 
@@ -97,47 +100,48 @@ const TextCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 16px;
-  padding: 32px;
+  gap: 18px;
+  padding: 32px 28px;
   background-color: #ffffff;
 
   ${mq_lg} {
-    flex: 0 0 55%;
-    gap: 24px;
+    gap: 18px;
     padding: 48px 40px;
   }
 
   ${mq_desktop} {
-    gap: 28px;
+    flex: 0 0 33.3%;
+    gap: 20px;
     padding: 60px 52px;
   }
 `;
 
 const Chip = styled.span`
   display: inline-flex;
-  padding: 8px 16px;
+  padding: 6px 10px;
   border-radius: 200px;
   background-color: ${LANDING_COLORS.chipBg};
   color: ${LANDING_COLORS.chipText};
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   line-height: 1.3;
 
   ${mq_lg} {
+    padding: 8px 14px;
     font-size: 18px;
   }
 
   ${mq_desktop} {
-    font-size: 24px;
     padding: 10px 16px;
+    font-size: 24px;
   }
 `;
 
 const CardTitle = styled.h3`
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
-  font-size: 24px;
+  font-weight: 500;
+  font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.02em;
   white-space: pre-line;
@@ -145,24 +149,7 @@ const CardTitle = styled.h3`
   margin: 0;
 
   ${mq_lg} {
-    font-size: 28px;
-  }
-
-  ${mq_desktop} {
-    font-size: 32px;
-  }
-`;
-
-const CardDescription = styled.p`
-  font-family: Pretendard, sans-serif;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #a2a5b4;
-  margin: 0;
-
-  ${mq_lg} {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   ${mq_desktop} {
@@ -170,10 +157,27 @@ const CardDescription = styled.p`
   }
 `;
 
+const CardDescription = styled.p`
+  font-family: Pretendard, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #a2a5b4;
+  margin: 0;
+
+  ${mq_lg} {
+    font-size: 18px;
+  }
+
+  ${mq_desktop} {
+    font-size: 18px;
+  }
+`;
+
 const ImgCard = styled.div<{ variant: 'light' | 'dark' }>`
   position: relative;
   flex: 1;
-  min-height: 260px;
+  min-height: 200px;
   overflow: hidden;
   background: ${({ variant }) =>
     variant === 'dark' ? LANDING_COLORS.paymentGradient : LANDING_COLORS.promoGradient};
@@ -187,7 +191,7 @@ const PromoStack = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
-  min-height: 260px;
+  min-height: 200px;
 `;
 
 const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
@@ -227,6 +231,23 @@ const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
       right: -5%;
     `}
   }
+
+  ${mq_desktop} {
+    max-width: 269px;
+
+    ${({ offset }) =>
+      offset === 'back'
+        ? `
+      top: 84px;
+      left: 32px;
+      bottom: auto;
+    `
+        : `
+      top: -91px;
+      right: 0;
+      bottom: auto;
+    `}
+  }
 `;
 
 const PaymentWrap = styled.div`
@@ -235,7 +256,7 @@ const PaymentWrap = styled.div`
   align-items: flex-end;
   width: 100%;
   height: 100%;
-  min-height: 260px;
+  min-height: 200px;
   padding-top: 24px;
 
   ${mq_lg} {
@@ -251,7 +272,8 @@ const PaymentImage = styled.img`
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 
   ${mq_desktop} {
-    max-width: 320px;
+    max-width: 448px;
+    width: 80%;
   }
 `;
 

@@ -1,9 +1,8 @@
 import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
-import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
-import { LANDING_COLORS } from '../../constants';
+import { LANDING_COLORS, mq_desktop } from '../../constants';
 
 const Header = styled.header`
   position: fixed;
@@ -15,20 +14,32 @@ const Header = styled.header`
   background: ${LANDING_COLORS.headerGlass};
   backdrop-filter: blur(80px);
   -webkit-backdrop-filter: blur(80px);
-  padding: 0 20px;
+  padding: 0 24px;
+
+  ${mq_lg} {
+    padding: 0 48px;
+  }
+
+  ${mq_desktop} {
+    padding: 0 80px;
+  }
 `;
 
-const HeaderContaienr = styled(m.div)`
+const HeaderContaienr = styled.div`
   margin: 0 auto;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: ${({ theme }) => theme.breakpoint.desktop};
-  height: 56px;
+  max-width: 375px;
+  height: 72px;
 
   ${mq_lg} {
-    height: 72px;
+    max-width: 672px;
+  }
+
+  ${mq_desktop} {
+    max-width: 1040px;
   }
 `;
 
@@ -50,54 +61,45 @@ const BooltiIcon = styled.button`
 `;
 
 const Nav = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
-  gap: 12px;
+  gap: 24px;
 
   ${mq_lg} {
-    gap: 24px;
+    display: flex;
   }
 `;
 
 const TextButton = styled.button`
-  display: none;
+  display: inline-flex;
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 500;
+  font-size: 18px;
   line-height: 1.3;
   color: #ffffff;
   padding: 8px 12px;
   cursor: pointer;
-
-  ${mq_lg} {
-    display: inline-flex;
-  }
 `;
 
 const PrimaryButton = styled(Link)`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 14px;
+  padding: 10px 18px;
   border-radius: 12px;
   background-color: ${LANDING_COLORS.primaryCta};
   color: #ffffff;
   font-family: Pretendard, sans-serif;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.3;
   text-decoration: none;
   cursor: pointer;
-
-  ${mq_lg} {
-    padding: 10px 18px;
-    font-size: 16px;
-  }
 `;
 
 const AuthTextButton = styled.button`
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   line-height: 1.3;
   color: #ffffff;
@@ -115,6 +117,72 @@ const DropDownContainer = styled.div`
   }
 `;
 
+/* Mobile hamburger menu */
+const MobileMenuButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: #ffffff;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
+const MobileMenuOverlay = styled.div<{ isOpen: boolean }>`
+  display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+  position: fixed;
+  top: 72px;
+  left: 0;
+  width: 100%;
+  flex-direction: column;
+  background: ${LANDING_COLORS.headerGlass};
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(80px);
+  border-bottom: 1px solid ${LANDING_COLORS.headerBorder};
+  z-index: 9;
+  padding: 12px 20px 20px;
+  gap: 10px;
+
+  ${mq_lg} {
+    display: none;
+  }
+`;
+
+const MobileMenuItem = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-family: Pretendard, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #ffffff;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.08);
+`;
+
+const MobileMenuPrimary = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-family: Pretendard, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 1.3;
+  color: #ffffff;
+  cursor: pointer;
+  text-decoration: none;
+  background-color: ${LANDING_COLORS.primaryCta};
+`;
+
 export default {
   Header,
   HeaderContaienr,
@@ -124,4 +192,8 @@ export default {
   PrimaryButton,
   AuthTextButton,
   DropDownContainer,
+  MobileMenuButton,
+  MobileMenuOverlay,
+  MobileMenuItem,
+  MobileMenuPrimary,
 };

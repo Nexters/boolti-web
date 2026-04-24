@@ -6,7 +6,7 @@ import { mq_desktop } from '../../constants';
 const Section = styled.section`
   position: relative;
   width: 100%;
-  min-height: 360px;
+  height: 492px;
   background-color: #020206;
   overflow: hidden;
   display: flex;
@@ -14,7 +14,7 @@ const Section = styled.section`
   justify-content: center;
 
   ${mq_lg} {
-    min-height: 480px;
+    height: 454px;
   }
 
   ${mq_desktop} {
@@ -27,7 +27,7 @@ const Title = styled.h2`
   z-index: 2;
   text-align: center;
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 24px;
   line-height: 1.45;
   letter-spacing: -0.02em;
@@ -37,7 +37,7 @@ const Title = styled.h2`
   margin: 0;
 
   ${mq_lg} {
-    font-size: 32px;
+    font-size: 34px;
   }
 
   ${mq_desktop} {
@@ -46,19 +46,14 @@ const Title = styled.h2`
   }
 `;
 
-const FloatingLayer = styled.div`
+const FloatingLayer = styled.div<{ layerWidth: number }>`
   position: absolute;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 1200px;
+  width: ${({ layerWidth }) => layerWidth}px;
   height: 100%;
-  display: none;
   pointer-events: none;
-
-  ${mq_desktop} {
-    display: block;
-  }
 `;
 
 const FloatingLogo = styled.img<{

@@ -30,9 +30,11 @@ const Hero = () => {
           </Styled.Title>
         </Styled.TextBlock>
         <Styled.ImageRow>
-          {HERO_IMAGES.map((src, index) => (
-            <Styled.ImageCard key={index} src={src} alt="" aria-hidden />
-          ))}
+          <Styled.MarqueeTrack>
+            {[...HERO_IMAGES, ...HERO_IMAGES].map((src, index) => (
+              <Styled.ImageCard key={index} src={src} alt="" aria-hidden />
+            ))}
+          </Styled.MarqueeTrack>
         </Styled.ImageRow>
       </Styled.Container>
     </Styled.Section>
