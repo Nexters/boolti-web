@@ -1,27 +1,35 @@
-import { queryKeys, useLogout, useQueryClient, useUserProfile } from '@boolti/api';
+import { useState } from 'react';
 import { BooltiDark } from '@boolti/icon';
 import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
-import ProfileDropdown from '~/components/ProfileDropdown';
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
-import { useAuthAtom } from '~/atoms/useAuthAtom';
 import { openStoreLink } from '~/utils/link';
 
 import Styled from './Header.styles';
 
+const MenuIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="4" y1="6" x2="20" y2="6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="4" y1="12" x2="20" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="4" y1="18" x2="20" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
+const CloseIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+  </svg>
+);
+
 const Header = () => {
-  const { isLogin, removeToken } = useAuthAtom();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const theme = useTheme();
   const deviceWidth = useDeviceWidth();
   const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
-
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const logoutMutation = useLogout();
-  const { data } = useUserProfile({ enabled: isLogin() });
-  const { imgPath } = data ?? {};
 
   const handleAppExplore = () => {
     if (isMobile) {
@@ -31,39 +39,52 @@ const Header = () => {
     navigate(PATH.QR);
   };
 
-  const handleAuth = async () => {
-    if (isLogin()) {
-      await logoutMutation.mutateAsync();
-      removeToken();
-      queryClient.removeQueries({ ...queryKeys.user.summary });
-      return;
-    }
-    navigate(PATH.LOGIN);
-  };
-
   return (
-    <Styled.Header>
-      <Styled.HeaderContaienr>
-        <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
-          <BooltiDark />
-        </Styled.BooltiIcon>
-        <Styled.Nav>
-          <Styled.TextButton type="button" onClick={handleAppExplore}>
-            앱 둘러보기
-          </Styled.TextButton>
-          {isLogin() ? (
-            <Styled.DropDownContainer>
-              <ProfileDropdown image={imgPath} />
-            </Styled.DropDownContainer>
-          ) : (
-            <Styled.AuthTextButton type="button" onClick={handleAuth}>
-              로그인
-            </Styled.AuthTextButton>
-          )}
-          <Styled.PrimaryButton to={PATH.HOME}>시작하기</Styled.PrimaryButton>
-        </Styled.Nav>
-      </Styled.HeaderContaienr>
-    </Styled.Header>
+    <>
+      <Styled.Header>
+        <Styled.HeaderContaienr>
+          <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
+            <BooltiDark />
+          </Styled.BooltiIcon>
+
+          {/* Desktop / Tablet nav */}
+          <Styled.Nav>
+            <Styled.TextButton type="button" onClick={handleAppExplore}>
+              앱 둘러보기
+            </Styled.TextButton>
+            <Styled.PrimaryButton to={PATH.HOME}>시작하기</Styled.PrimaryButton>
+          </Styled.Nav>
+
+          {/* Mobile hamburger */}
+          <Styled.MobileMenuButton
+            type="button"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-label="메뉴"
+          >
+            {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
+          </Styled.MobileMenuButton>
+        </Styled.HeaderContaienr>
+      </Styled.Header>
+
+      {/* Mobile dropdown */}
+      <Styled.MobileMenuOverlay isOpen={mobileMenuOpen}>
+        <Styled.MobileMenuItem
+          type="button"
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleAppExplore();
+          }}
+        >
+          앱 둘러보기
+        </Styled.MobileMenuItem>
+        <Styled.MobileMenuPrimary
+          to={PATH.HOME}
+          onClick={() => setMobileMenuOpen(false)}
+        >
+          시작하기
+        </Styled.MobileMenuPrimary>
+      </Styled.MobileMenuOverlay>
+    </>
   );
 };
 

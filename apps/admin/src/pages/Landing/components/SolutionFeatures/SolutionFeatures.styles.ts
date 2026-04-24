@@ -8,13 +8,13 @@ const Section = styled.section`
   flex-direction: column;
   align-items: center;
   align-self: stretch;
-  gap: 48px;
+  gap: 40px;
   padding: 80px 20px;
   background-color: #ffffff;
 
   ${mq_lg} {
-    gap: 56px;
-    padding: 96px 32px;
+    gap: 48px;
+    padding: 100px 32px;
   }
 
   ${mq_desktop} {
@@ -54,7 +54,7 @@ const TitleRow = styled.div`
   align-items: center;
   gap: 4px;
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 24px;
   line-height: 1.35;
   letter-spacing: -0.02em;
@@ -74,13 +74,13 @@ const TitleRow = styled.div`
 const CardList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 56px;
+  gap: 48px;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 
   ${mq_lg} {
-    gap: 88px;
+    gap: 72px;
   }
 
   ${mq_desktop} {

@@ -14,7 +14,7 @@ const TextArea = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 18px;
   padding: 0 24px 24px;
 
   ${mq_lg} {
@@ -31,17 +31,18 @@ const TextArea = styled.div`
 const Chip = styled.div`
   display: inline-flex;
   align-items: center;
-  padding: 8px 14px;
+  padding: 6px 10px;
   border-radius: 200px;
   background-color: ${LANDING_COLORS.chipBg};
   color: ${LANDING_COLORS.chipText};
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   line-height: 1.3;
   letter-spacing: -0.02em;
 
   ${mq_lg} {
+    padding: 8px 14px;
     font-size: 18px;
   }
 
@@ -55,13 +56,21 @@ const TitleBlock = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   text-align: center;
+
+  ${mq_lg} {
+    gap: 12px;
+  }
+
+  ${mq_desktop} {
+    gap: 16px;
+  }
 `;
 
 const Title = styled.h3`
   font-family: Pretendard, sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.02em;
@@ -81,8 +90,8 @@ const Title = styled.h3`
 const Description = styled.p`
   font-family: Pretendard, sans-serif;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.4;
   letter-spacing: -0.02em;
   white-space: pre-line;
   color: #a2a5b4;
@@ -100,17 +109,17 @@ const Description = styled.p`
 const Media = styled.div`
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 12px;
   width: 100%;
-  padding: 16px;
+  padding: 0;
   border: 1px solid ${LANDING_COLORS.cardBorder};
   border-radius: 16px;
   background-color: #ffffff;
+  overflow: hidden;
 
-  ${mq_desktop} {
-    padding: 32px;
-    gap: 24px;
+  ${mq_lg} {
+    grid-template-columns: 1fr 1fr;
   }
 `;
 
@@ -118,14 +127,13 @@ const MediaImage = styled.img`
   width: 100%;
   height: auto;
   object-fit: cover;
-  border-radius: 8px;
 `;
 
 const MediaArrow = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) rotate(90deg);
   width: 32px;
   height: 32px;
   display: flex;
@@ -136,6 +144,10 @@ const MediaArrow = styled.div`
   img {
     width: 100%;
     height: 100%;
+  }
+
+  ${mq_lg} {
+    transform: translate(-50%, -50%) rotate(0deg);
   }
 
   ${mq_desktop} {
