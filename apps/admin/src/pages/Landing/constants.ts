@@ -30,8 +30,7 @@ export const LANDING_COPY = {
     titleTrail: '올인원 플랫폼,',
   },
   problem: {
-    title: '공연 준비,\n아직도 수작업으로 하시나요?',
-    titleMobile: '공연 준비,\n아직도 수작업으로\n하시나요?',
+    title: '공연 준비,\n아직도 수작업으로\n하시나요?',
   },
   solutionFeatures: {
     eyebrow: '공연 등록부터 정산까지',
