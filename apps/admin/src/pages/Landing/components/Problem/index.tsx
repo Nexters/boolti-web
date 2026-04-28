@@ -1,5 +1,3 @@
-import { useTheme } from '@emotion/react';
-
 import problem1 from '~/assets/landing-v2/problem-1.png';
 import problem2 from '~/assets/landing-v2/problem-2.png';
 import problem3 from '~/assets/landing-v2/problem-3.png';
@@ -8,7 +6,7 @@ import problem5 from '~/assets/landing-v2/problem-5.png';
 import problem6 from '~/assets/landing-v2/problem-6.png';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
-import { LANDING_COPY } from '../../constants';
+import { LANDING_BREAKPOINT, LANDING_COPY } from '../../constants';
 import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import Styled from './Problem.styles';
 
@@ -44,10 +42,9 @@ const MOBILE_FLOATING_LOGOS = [
 
 const Problem = () => {
   const { ref } = useVisibleSectionAtom('problem');
-  const theme = useTheme();
   const deviceWidth = useDeviceWidth();
-  const isDesktop = deviceWidth >= parseInt(theme.breakpoint.desktop, 10);
-  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+  const isDesktop = deviceWidth >= LANDING_BREAKPOINT.desktop;
+  const isMobile = deviceWidth < LANDING_BREAKPOINT.tablet;
 
   const logos = isDesktop
     ? DESKTOP_FLOATING_LOGOS

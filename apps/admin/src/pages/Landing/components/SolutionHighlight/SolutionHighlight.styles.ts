@@ -1,7 +1,6 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-import { LANDING_COLORS, mq_desktop } from '../../constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const Section = styled.section`
   display: flex;
@@ -105,14 +104,29 @@ const TextCard = styled.div`
   background-color: #ffffff;
 
   ${mq_lg} {
-    gap: 18px;
+    gap: 20px;
     padding: 48px 40px;
   }
 
   ${mq_desktop} {
     flex: 0 0 33.3%;
-    gap: 20px;
+    gap: 28px;
     padding: 60px 52px;
+  }
+`;
+
+const TitleDescriptionGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+
+  ${mq_lg} {
+    gap: 12px;
+  }
+
+  ${mq_desktop} {
+    gap: 16px;
   }
 `;
 
@@ -140,7 +154,7 @@ const Chip = styled.span`
 
 const CardTitle = styled.h3`
   font-family: Pretendard, sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 20px;
   line-height: 1.35;
   letter-spacing: -0.02em;
@@ -153,7 +167,7 @@ const CardTitle = styled.h3`
   }
 
   ${mq_desktop} {
-    font-size: 24px;
+    font-size: 32px;
   }
 `;
 
@@ -162,6 +176,7 @@ const CardDescription = styled.p`
   font-weight: 400;
   font-size: 16px;
   line-height: 1.4;
+  letter-spacing: -0.02em;
   color: #a2a5b4;
   margin: 0;
 
@@ -170,7 +185,7 @@ const CardDescription = styled.p`
   }
 
   ${mq_desktop} {
-    font-size: 18px;
+    font-size: 24px;
   }
 `;
 
@@ -200,80 +215,64 @@ const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
   max-width: 180px;
   height: auto;
   border-radius: 20px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
 
   ${({ offset }) =>
     offset === 'back'
       ? `
-    bottom: -20%;
-    left: 8%;
-    transform: rotate(-10deg);
+    top: 15%;
+    left: 5.2%;
     z-index: 1;
   `
       : `
-    bottom: -32%;
-    right: 0%;
-    transform: rotate(6deg);
+    top: -16.25%;
+    left: 51%;
     z-index: 2;
   `}
 
   ${mq_lg} {
-    max-width: 200px;
-
-    ${({ offset }) =>
-      offset === 'back'
-        ? `
-      bottom: -15%;
-      left: 8%;
-    `
-        : `
-      bottom: -28%;
-      right: -5%;
-    `}
+    width: 43.9%;
+    max-width: 269px;
   }
 
   ${mq_desktop} {
-    max-width: 269px;
+    width: 269px;
+    height: 567px;
+    border-radius: 26px;
 
     ${({ offset }) =>
       offset === 'back'
         ? `
       top: 84px;
       left: 32px;
-      bottom: auto;
     `
         : `
       top: -91px;
-      right: 0;
-      bottom: auto;
+      left: 312.33px;
     `}
   }
 `;
 
 const PaymentWrap = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  position: relative;
   width: 100%;
   height: 100%;
   min-height: 200px;
-  padding-top: 24px;
-
-  ${mq_lg} {
-    padding-top: 40px;
-  }
 `;
 
 const PaymentImage = styled.img`
-  width: 70%;
-  max-width: 260px;
+  position: absolute;
+  top: 11.4%;
+  left: 13.4%;
+  width: 73.1%;
   height: auto;
   border-radius: 28px;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
 
   ${mq_desktop} {
-    max-width: 448px;
-    width: 80%;
+    top: 64px;
+    left: 82.33px;
+    width: 448px;
+    height: 990px;
+    border-radius: 35px;
   }
 `;
 
@@ -283,6 +282,7 @@ export default {
   ScrollArea,
   Card,
   TextCard,
+  TitleDescriptionGroup,
   Chip,
   CardTitle,
   CardDescription,

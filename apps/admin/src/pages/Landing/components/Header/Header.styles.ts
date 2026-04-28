@@ -1,16 +1,16 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
-import { LANDING_COLORS, mq_desktop } from '../../constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
-const Header = styled.header`
+const Header = styled.header<{ hideBorder?: boolean }>`
   position: fixed;
   z-index: 10;
   top: 0;
   left: 0;
   width: 100%;
-  border-bottom: 1px solid ${LANDING_COLORS.headerBorder};
+  border-bottom: 1px solid
+    ${({ hideBorder }) => (hideBorder ? 'transparent' : LANDING_COLORS.headerBorder)};
   background: ${LANDING_COLORS.headerGlass};
   backdrop-filter: blur(80px);
   -webkit-backdrop-filter: blur(80px);
@@ -18,6 +18,7 @@ const Header = styled.header`
 
   ${mq_lg} {
     padding: 0 48px;
+    border-bottom: 1px solid ${LANDING_COLORS.headerBorder};
   }
 
   ${mq_desktop} {
@@ -31,7 +32,6 @@ const HeaderContaienr = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 375px;
   height: 72px;
 
   ${mq_lg} {
@@ -144,8 +144,7 @@ const MobileMenuOverlay = styled.div<{ isOpen: boolean }>`
   -webkit-backdrop-filter: blur(80px);
   border-bottom: 1px solid ${LANDING_COLORS.headerBorder};
   z-index: 9;
-  padding: 12px 20px 20px;
-  gap: 10px;
+  padding: 0 0 20px;
 
   ${mq_lg} {
     display: none;
@@ -157,26 +156,29 @@ const MobileMenuItem = styled.button`
   justify-content: center;
   align-items: center;
   padding: 16px 20px;
-  border-radius: 12px;
   font-family: Pretendard, sans-serif;
   font-weight: 500;
   font-size: 16px;
   line-height: 1.3;
   color: #ffffff;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
+`;
+
+const MobileMenuPrimaryWrap = styled.div`
+  padding: 12px 20px 0;
 `;
 
 const MobileMenuPrimary = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 16px 20px;
-  border-radius: 12px;
+  padding: 13px 20px;
+  border-radius: 8px;
   font-family: Pretendard, sans-serif;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
-  line-height: 1.3;
+  line-height: 22px;
   color: #ffffff;
   cursor: pointer;
   text-decoration: none;
@@ -195,5 +197,6 @@ export default {
   MobileMenuButton,
   MobileMenuOverlay,
   MobileMenuItem,
+  MobileMenuPrimaryWrap,
   MobileMenuPrimary,
 };

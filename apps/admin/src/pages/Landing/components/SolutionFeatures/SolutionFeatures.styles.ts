@@ -1,7 +1,6 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-import { mq_desktop } from '../../constants';
+import { mq_desktop, mq_lg } from '../../constants';
 
 const Section = styled.section`
   display: flex;

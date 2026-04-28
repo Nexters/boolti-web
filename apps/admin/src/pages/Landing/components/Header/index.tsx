@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { BooltiDark } from '@boolti/icon';
-import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { openStoreLink } from '~/utils/link';
 
+import { LANDING_BREAKPOINT } from '../../constants';
 import Styled from './Header.styles';
 
 const MenuIcon = () => (
@@ -26,9 +26,8 @@ const CloseIcon = () => (
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const theme = useTheme();
   const deviceWidth = useDeviceWidth();
-  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+  const isMobile = deviceWidth < LANDING_BREAKPOINT.tablet;
   const navigate = useNavigate();
 
   const handleAppExplore = () => {
@@ -41,7 +40,7 @@ const Header = () => {
 
   return (
     <>
-      <Styled.Header>
+      <Styled.Header hideBorder={mobileMenuOpen}>
         <Styled.HeaderContaienr>
           <Styled.BooltiIcon onClick={() => scrollTo({ top: 0, behavior: 'smooth' })}>
             <BooltiDark />
@@ -77,12 +76,14 @@ const Header = () => {
         >
           앱 둘러보기
         </Styled.MobileMenuItem>
-        <Styled.MobileMenuPrimary
-          to={PATH.HOME}
-          onClick={() => setMobileMenuOpen(false)}
-        >
-          시작하기
-        </Styled.MobileMenuPrimary>
+        <Styled.MobileMenuPrimaryWrap>
+          <Styled.MobileMenuPrimary
+            to={PATH.HOME}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            시작하기
+          </Styled.MobileMenuPrimary>
+        </Styled.MobileMenuPrimaryWrap>
       </Styled.MobileMenuOverlay>
     </>
   );

@@ -1,8 +1,9 @@
 import payment from '~/assets/landing-v2/payment.png';
 import promo1 from '~/assets/landing-v2/promo-1.png';
 import promo2 from '~/assets/landing-v2/promo-2.png';
+import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 
-import { LANDING_COPY } from '../../constants';
+import { LANDING_BREAKPOINT, LANDING_COPY } from '../../constants';
 import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import Styled from './SolutionHighlight.styles';
 
@@ -18,6 +19,9 @@ const HIGHLIGHT_MEDIA = [
 
 const SolutionHighlight = () => {
   const { ref } = useVisibleSectionAtom('solution-highlight');
+  const deviceWidth = useDeviceWidth();
+  const isDesktop = deviceWidth >= LANDING_BREAKPOINT.desktop;
+  const isMobile = deviceWidth < LANDING_BREAKPOINT.tablet;
 
   return (
     <Styled.Section ref={ref} id="solution-highlight">
@@ -27,8 +31,14 @@ const SolutionHighlight = () => {
           <Styled.Card key={item.chip} variant={item.variant}>
             <Styled.TextCard>
               <Styled.Chip>{item.chip}</Styled.Chip>
-              <Styled.CardTitle>{item.title}</Styled.CardTitle>
-              <Styled.CardDescription>{item.description}</Styled.CardDescription>
+              <Styled.TitleDescriptionGroup>
+                <Styled.CardTitle>
+                  {isDesktop ? item.titleDesktop : item.title}
+                </Styled.CardTitle>
+                <Styled.CardDescription>
+                  {isMobile ? item.descriptionMobile : item.description}
+                </Styled.CardDescription>
+              </Styled.TitleDescriptionGroup>
             </Styled.TextCard>
             <Styled.ImgCard variant={item.variant}>{HIGHLIGHT_MEDIA[index]}</Styled.ImgCard>
           </Styled.Card>
