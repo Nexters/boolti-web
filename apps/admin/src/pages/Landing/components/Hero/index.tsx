@@ -19,7 +19,11 @@ const Hero = () => {
       <Styled.Container>
         <Styled.TextBlock>
           <Styled.Eyebrow>{LANDING_COPY.hero.eyebrow}</Styled.Eyebrow>
-          <Styled.Title>
+          <Styled.Title
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', duration: 1.2, bounce: 0.2, delay: 0.12 }}
+          >
             <span>{LANDING_COPY.hero.titleLead}</span>
             <Styled.TitleRow>
               {LANDING_COPY.hero.titleTrail}

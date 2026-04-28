@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
+import { m } from 'framer-motion';
 
 import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
@@ -63,7 +64,7 @@ const Eyebrow = styled.span`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled(m.h1)`
   display: flex;
   flex-direction: column;
   align-items: center;
