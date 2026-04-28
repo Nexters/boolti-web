@@ -60,7 +60,7 @@ const Problem = () => {
           <Styled.FloatingLogo key={index} {...pos} src={src} />
         ))}
       </Styled.FloatingLayer>
-      <Styled.Title>{isDesktop ? LANDING_COPY.problem.title : LANDING_COPY.problem.titleMobile}</Styled.Title>
+      <Styled.Title>{LANDING_COPY.problem.title}</Styled.Title>
     </Styled.Section>
   );
 };
