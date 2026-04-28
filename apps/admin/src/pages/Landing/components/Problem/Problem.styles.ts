@@ -1,7 +1,6 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-import { mq_desktop } from '../../constants';
+import { mq_desktop, mq_lg } from '../../constants';
 
 const Section = styled.section`
   position: relative;
@@ -68,7 +67,6 @@ const FloatingLogo = styled.img<{
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
   object-fit: contain;
-  opacity: 0.55;
   user-select: none;
 `;
 

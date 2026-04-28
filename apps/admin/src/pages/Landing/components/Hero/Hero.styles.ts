@@ -1,8 +1,7 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 
-import { LANDING_COLORS, mq_desktop } from '../../constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const marquee = keyframes`
   0% { transform: translateX(0); }
@@ -144,20 +143,18 @@ const MarqueeTrack = styled.div`
 
 const ImageCard = styled.img`
   flex-shrink: 0;
-  width: 200px;
+  width: auto;
   height: 268px;
   border-radius: 16px;
-  object-fit: cover;
+  object-fit: contain;
   background-color: #2a2a3d;
   user-select: none;
 
   ${mq_lg} {
-    width: 240px;
     height: 322px;
   }
 
   ${mq_desktop} {
-    width: 280px;
     height: 376px;
   }
 `;

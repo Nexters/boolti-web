@@ -1,4 +1,3 @@
-import { useTheme } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 
 import lightSvg from '~/assets/landing-v2/light.svg';
@@ -6,16 +5,15 @@ import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { openStoreLink } from '~/utils/link';
 
-import { LANDING_COPY } from '../../constants';
+import { LANDING_BREAKPOINT, LANDING_COPY } from '../../constants';
 import { useVisibleSectionAtom } from '../../atoms/visibleSectionAtom';
 import Styled from './HowToUse.styles';
 
 const HowToUse = () => {
   const { ref } = useVisibleSectionAtom('how-to-use');
-  const theme = useTheme();
   const deviceWidth = useDeviceWidth();
   const navigate = useNavigate();
-  const isMobile = deviceWidth < parseInt(theme.breakpoint.mobile, 10);
+  const isMobile = deviceWidth < LANDING_BREAKPOINT.tablet;
 
   const handleSecondary = () => {
     if (isMobile) {

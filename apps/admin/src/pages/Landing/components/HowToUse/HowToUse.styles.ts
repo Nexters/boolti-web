@@ -1,8 +1,7 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 import { Link } from 'react-router-dom';
 
-import { LANDING_COLORS, mq_desktop } from '../../constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const Section = styled.section`
   position: relative;
@@ -32,14 +31,14 @@ const Section = styled.section`
 
 const Light = styled.img`
   position: absolute;
-  top: 0;
+  top: -16px;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
   max-width: 1200px;
   height: auto;
   pointer-events: none;
-  opacity: 0.8;
+  opacity: 1;
   z-index: 1;
 `;
 

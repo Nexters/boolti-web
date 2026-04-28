@@ -1,4 +1,10 @@
-export const mq_desktop = '@media (min-width: 1120px)';
+export const LANDING_BREAKPOINT = {
+  tablet: 768,
+  desktop: 1200,
+} as const;
+
+export const mq_lg = `@media (min-width: ${LANDING_BREAKPOINT.tablet}px)`;
+export const mq_desktop = `@media (min-width: ${LANDING_BREAKPOINT.desktop}px)`;
 
 export const LANDING_COLORS = {
   heroGradient: 'linear-gradient(180deg, #131343 0%, #020206 100%)',
@@ -59,14 +65,18 @@ export const LANDING_COPY = {
     items: [
       {
         chip: '공연 홍보',
-        title: '링크 하나로\n홍보 끝!',
+        title: '링크 하나로 홍보 끝!',
+        titleDesktop: '링크 하나로\n홍보 끝!',
         description: '일일이 정보를 첨부할 필요 없이, 링크만 공유하면 공연 홍보 완료',
+        descriptionMobile: '일일이 정보를 첨부할 필요 없이, 링크만 공유하면 홍보 완료',
         variant: 'light' as const,
       },
       {
         chip: '결제/발권',
         title: '다양한 결제 수단 지원',
+        titleDesktop: '다양한 결제 수단 지원',
         description: '번거로운 입금 대조 과정 없이 실시간으로 티켓 발권 가능',
+        descriptionMobile: '번거로운 입금 대조 과정 없이 실시간으로 티켓 발권 가능',
         variant: 'dark' as const,
       },
     ],

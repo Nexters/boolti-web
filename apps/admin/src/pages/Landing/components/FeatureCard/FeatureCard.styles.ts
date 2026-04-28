@@ -1,7 +1,6 @@
-import { mq_lg } from '@boolti/ui';
 import styled from '@emotion/styled';
 
-import { LANDING_COLORS, mq_desktop } from '../../constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const Card = styled.article`
   display: flex;
@@ -131,11 +130,11 @@ const MediaImage = styled.img`
 
 const MediaArrow = styled.div`
   position: absolute;
-  top: 50%;
+  top: 48%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(90deg);
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -147,12 +146,17 @@ const MediaArrow = styled.div`
   }
 
   ${mq_lg} {
+    top: 50%;
+    left: 49%;
     transform: translate(-50%, -50%) rotate(0deg);
+    width: 40px;
+    height: 40px;
   }
 
   ${mq_desktop} {
-    width: 48px;
-    height: 48px;
+    left: 49.4%;
+    width: 64px;
+    height: 64px;
   }
 `;
 
