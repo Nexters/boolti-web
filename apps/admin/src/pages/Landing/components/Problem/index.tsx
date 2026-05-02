@@ -1,3 +1,5 @@
+import { m } from 'framer-motion';
+
 import problem1 from '~/assets/landing-v2/problem-1.png';
 import problem2 from '~/assets/landing-v2/problem-2.png';
 import problem3 from '~/assets/landing-v2/problem-3.png';
@@ -60,7 +62,27 @@ const Problem = () => {
           <Styled.FloatingLogo key={index} {...pos} src={src} />
         ))}
       </Styled.FloatingLayer>
-      <Styled.Title>{LANDING_COPY.problem.title}</Styled.Title>
+      <Styled.Title
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: { transition: { staggerChildren: 0.04 } },
+        }}
+      >
+        {LANDING_COPY.problem.title.split('').map((char, i) => (
+          <m.span
+            key={i}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 },
+            }}
+          >
+            {char === '\n' ? <br /> : char}
+          </m.span>
+        ))}
+      </Styled.Title>
     </Styled.Section>
   );
 };

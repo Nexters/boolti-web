@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { m } from 'framer-motion';
 
 import { mq_desktop, mq_lg } from '../../constants';
 
@@ -47,7 +48,7 @@ const Eyebrow = styled.span`
   }
 `;
 
-const TitleRow = styled.div`
+const TitleRow = styled(m.div)`
   display: flex;
   flex-direction: column;
   align-items: center;

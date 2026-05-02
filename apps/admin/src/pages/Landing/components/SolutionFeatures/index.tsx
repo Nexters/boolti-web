@@ -26,7 +26,12 @@ const SolutionFeatures = () => {
     <Styled.Section ref={ref} id="solution-features">
       <Styled.Heading>
         <Styled.Eyebrow>{LANDING_COPY.solutionFeatures.eyebrow}</Styled.Eyebrow>
-        <Styled.TitleRow>
+        <Styled.TitleRow
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', duration: 1.2, bounce: 0.2, delay: 0.12 }}
+        >
           <span>{LANDING_COPY.solutionFeatures.titleLead}</span>
           <span>{LANDING_COPY.solutionFeatures.titleTrail}</span>
         </Styled.TitleRow>

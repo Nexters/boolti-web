@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { m } from 'framer-motion';
 
 import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
@@ -22,7 +23,7 @@ const Section = styled.section`
   }
 `;
 
-const Title = styled.h2`
+const Title = styled(m.h2)`
   text-align: center;
   font-family: Pretendard, sans-serif;
   font-weight: 500;

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { m } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
@@ -42,7 +43,7 @@ const Light = styled.img`
   z-index: 1;
 `;
 
-const Title = styled.h2`
+const Title = styled(m.h2)`
   position: relative;
   z-index: 2;
   text-align: center;

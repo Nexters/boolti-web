@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { m } from 'framer-motion';
 
 import { mq_desktop, mq_lg } from '../../constants';
 
@@ -21,7 +22,7 @@ const Section = styled.section`
   }
 `;
 
-const Title = styled.h2`
+const Title = styled(m.h2)`
   position: relative;
   z-index: 2;
   text-align: center;
