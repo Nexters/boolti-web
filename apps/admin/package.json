@@ -56,6 +56,8 @@
     "@boolti/eslint-config": "*",
     "@boolti/typescript-config": "*",
     "@emotion/babel-plugin": "^11.11.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.0.1",
     "@types/js-cookie": "^3.0.6",
     "@types/navermaps": "^3.7.9",
     "@types/react": "^18.2.43",
