@@ -1,5 +1,4 @@
 // @vitest-environment jsdom
-import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Popup } from '@boolti/api';
@@ -50,9 +49,9 @@ describe('usePopupDialog', () => {
     mockedUseDialog.mockImplementation(() => {
       callCount += 1;
       if (callCount === 1) {
-        return { open: eventOpen, close: vi.fn() };
+        return { id: 'event-dialog', isOpen: false, open: eventOpen, close: vi.fn() };
       }
-      return { open: noticeOpen, close: vi.fn() };
+      return { id: 'notice-dialog', isOpen: false, open: noticeOpen, close: vi.fn() };
     });
 
     mockedUseCookie.mockReturnValue({
