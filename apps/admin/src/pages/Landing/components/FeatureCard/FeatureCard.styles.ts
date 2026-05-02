@@ -130,7 +130,7 @@ const MediaImage = styled.img`
 
 const MediaArrow = styled.div`
   position: absolute;
-  top: 48%;
+  top: 48.9%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(90deg);
   width: 20px;

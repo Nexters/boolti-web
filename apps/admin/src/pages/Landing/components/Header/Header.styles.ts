@@ -153,7 +153,7 @@ const MobileMenuOverlay = styled.div<{ isOpen: boolean }>`
 
 const MobileMenuItem = styled.button`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 16px 20px;
   font-family: Pretendard, sans-serif;

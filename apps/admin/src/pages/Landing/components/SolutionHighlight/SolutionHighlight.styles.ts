@@ -215,6 +215,7 @@ const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
   max-width: 180px;
   height: auto;
   border-radius: 20px;
+  object-fit: contain;
 
   ${({ offset }) =>
     offset === 'back'
@@ -266,12 +267,13 @@ const PaymentImage = styled.img`
   width: 73.1%;
   height: auto;
   border-radius: 28px;
+  object-fit: contain;
 
   ${mq_desktop} {
     top: 64px;
     left: 82.33px;
     width: 448px;
-    height: 990px;
+    height: auto;
     border-radius: 35px;
   }
 `;

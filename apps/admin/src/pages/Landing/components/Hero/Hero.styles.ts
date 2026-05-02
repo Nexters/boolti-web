@@ -114,7 +114,8 @@ const ImageRow = styled.div`
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
-  padding: 32px 8px;
+  padding: 32px 0;
+  margin: 0 -20px;
   overflow-x: hidden;
   scrollbar-width: none;
 
@@ -122,9 +123,14 @@ const ImageRow = styled.div`
     display: none;
   }
 
+  ${mq_lg} {
+    margin: 0 -24px;
+  }
+
   ${mq_desktop} {
     gap: 16px;
-    padding: 24px 8px;
+    padding: 24px 0;
+    margin: 0 -32px;
     justify-content: center;
   }
 `;
