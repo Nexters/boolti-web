@@ -4,15 +4,13 @@ export default defineConfig({
   testDir: './e2e/functional',
   timeout: 30_000,
   use: {
-    baseURL: 'https://127.0.0.1:4173',
-    ignoreHTTPSErrors: true,
+    baseURL: 'http://127.0.0.1:4173',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },
   webServer: {
-    command: 'VITE_BASE_API_URL=https://127.0.0.1:4173/ yarn workspace admin dev --host 127.0.0.1 --port 4173',
-    url: 'https://127.0.0.1:4173',
-    ignoreHTTPSErrors: true,
+    command: 'VITE_E2E_MSW=true VITE_BASE_API_URL=http://127.0.0.1:4173/ yarn workspace admin dev --host 127.0.0.1 --port 4173',
+    url: 'http://127.0.0.1:4173',
     reuseExistingServer: true,
     timeout: 120_000,
   },
