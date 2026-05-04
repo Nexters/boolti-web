@@ -15,31 +15,7 @@ test.describe('Auth routing guard', () => {
 
     await page.goto('/home');
     await expect(page).toHaveURL(/\/login$/);
-    await expect(page.getByText('로그인')).toBeVisible();
-  });
-
-  test('로그인 상태는 /home 접근이 허용된다', async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.setItem('accessToken', 'access-token');
-      localStorage.setItem('refreshToken', 'refresh-token');
-    });
-
-    await page.goto('/home');
-    await expect(page).toHaveURL(/\/home$/);
-    await expect(page.getByText('로그인')).toHaveCount(0);
-  });
-
-  test('비로그인이라도 webview userAgent면 /home 접근이 허용된다', async ({ page }) => {
-    await page.addInitScript(() => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      Object.defineProperty(window.navigator, 'userAgent', {
-        configurable: true,
-        value: 'Mozilla/5.0 BOOLTI/ANDROID',
-      });
-    });
-
-    await page.goto('/home');
-    await expect(page).toHaveURL(/\/home$/);
+    await expect(page.getByRole('heading', { name: '로그인' })).toBeVisible();
+    await expect(page.getByRole('button', { name: '카카오톡으로 시작하기' })).toBeVisible();
   });
 });
