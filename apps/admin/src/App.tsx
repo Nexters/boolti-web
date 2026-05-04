@@ -19,7 +19,6 @@ import {
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
 import { PATH } from './constants/routes';
-import { useAuthAtom } from './atoms/useAuthAtom';
 import GlobalErrorBoundary from './components/ErrorBoundary/GlobalErrorBoundary';
 import {
   LandingPage,
@@ -46,10 +45,10 @@ import ShowReservationPage from './pages/ShowReservationPage';
 import ShowSettlementPage from './pages/ShowSettlementPage';
 import ShowEnterancePage from './pages/ShowEnterancePage';
 import { initVConsole } from './utils/vConsole';
-import { checkIsWebView } from '@boolti/bridge';
 import { X_NCP_APIGW_API_KEY_ID } from './constants/ncp';
 import { IS_PRODUCTION_PHASE } from './constants/phase';
 import WebView from './pages/WebView';
+import PrivateRoute from './routes/PrivateRoute';
 
 setDefaultOptions({ locale: ko });
 
@@ -109,23 +108,6 @@ const publicRoutes = [
     ],
   },
 ];
-
-const PrivateRoute = () => {
-  const { isLogin } = useAuthAtom();
-
-  if (!isLogin() && !checkIsWebView()) {
-    return <Navigate to={PATH.LOGIN} replace />;
-  }
-
-  return (
-    <>
-      <ScrollRestoration />
-      <Suspense fallback={null}>
-        <Outlet />
-      </Suspense>
-    </>
-  );
-};
 
 const privateRoutes = [
   {
