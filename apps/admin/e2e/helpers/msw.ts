@@ -7,6 +7,6 @@ export const prepareE2EContext = async (page: Page, scenario: string = 'default'
   }, scenario);
 
   await page.goto('/');
-  await page.waitForTimeout(300);
+  await page.waitForFunction(() => window.__E2E_MSW_READY__ === true, null, { timeout: 5000 });
   await page.reload();
 };

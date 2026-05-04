@@ -11,4 +11,5 @@ interface ImportMeta {
 
 interface Window {
   __ENABLE_E2E_MSW__?: boolean;
+  __E2E_MSW_READY__?: boolean;
 }
