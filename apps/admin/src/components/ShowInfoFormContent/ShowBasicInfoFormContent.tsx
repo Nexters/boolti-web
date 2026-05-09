@@ -1,16 +1,13 @@
-import { ImageFile, fetcher } from '@boolti/api';
+import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
-import { Button, TextField, TimePicker, useDialog } from '@boolti/ui';
+import { TextField, TimePicker } from '@boolti/ui';
 import { add, format } from 'date-fns';
-import { useRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
-import { useNavermaps } from 'react-naver-maps';
-import DaumPostcode from 'react-daum-postcode';
 
+import PlaceSearchInput from '~/components/PlaceSearchInput';
 import Styled from './ShowInfoFormContent.styles';
 import { ShowBasicInfoFormInputs } from './types';
-import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 
 const MAX_IMAGE_COUNT = 3;
 const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd');
@@ -32,13 +29,10 @@ const ShowBasicInfoFormContent = ({
   onDropImage,
   onDeleteImage,
 }: ShowBasicInfoFormContentProps) => {
-  const { open, close, isOpen } = useDialog();
-  const naverMaps = useNavermaps();
-  const detailAddressInputRef = useRef<HTMLInputElement>(null);
-
   const {
     control,
     setValue,
+    watch,
     formState: { errors },
     setError,
     clearErrors,
@@ -52,55 +46,6 @@ const ShowBasicInfoFormContent = ({
     maxFiles: MAX_IMAGE_COUNT,
     onDrop: onDropImage,
   });
-
-  const openDaumPostCodeWithDialog: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    open({
-      title: '주소 찾기',
-      content: (
-        <DaumPostcode
-          style={{ maxWidth: 426, height: 470 }}
-          onComplete={async (address) => {
-            try {
-              const response = await fetcher.get<naver.maps.Service.GeocodeResponse['v2']>(
-                'web/v1/naver-maps/geocoding',
-                {
-                  searchParams: {
-                    query: address.address,
-                    filter: `BCODE@${address.bcode};`,
-                  },
-                },
-              );
-
-              if (
-                response.status === naverMaps.Service.GeocodeStatus.OK &&
-                response.meta.totalCount > 0
-              ) {
-                const foundAddress = response.addresses.find(Boolean);
-
-                if (foundAddress) {
-                  setValue('latitude', Number(foundAddress.y));
-                  setValue('longitude', Number(foundAddress.x));
-                }
-              }
-            } catch (e) {
-              console.warn('[ShowBasicInfoFormContent] geocoding failed:', e);
-            }
-
-            setValue('placeStreetAddress', address.roadAddress);
-
-            detailAddressInputRef.current?.focus();
-          }}
-          onClose={() => {
-            close();
-          }}
-        />
-      ),
-      onClose: close,
-    });
-  };
-
-  useBodyScrollLock(isOpen);
 
   return (
     <Styled.ShowInfoFormGroup>
@@ -317,103 +262,33 @@ const ShowBasicInfoFormContent = ({
       </Styled.ShowInfoFormRow>
       <Styled.ShowInfoFormRow>
         <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>공연장명</Styled.ShowInfoFormLabel>
+          <Styled.ShowInfoFormLabel required>공연장</Styled.ShowInfoFormLabel>
           <Styled.TextField>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
+            <PlaceSearchInput
+              initialPlaceName={watch('placeName')}
+              initialAddress={watch('placeStreetAddress')}
+              initialDetailAddress={watch('placeDetailAddress')}
+              disabled={disabled}
+              errorMessage={
+                errors.placeName?.message ??
+                errors.placeStreetAddress?.message
+              }
+              onSelect={(result) => {
+                setValue('placeName', result.placeName || result.streetAddress);
+                setValue('placeStreetAddress', result.streetAddress);
+                setValue('placeDetailAddress', result.detailAddress);
+                setValue('latitude', result.latitude);
+                setValue('longitude', result.longitude);
+                clearErrors('placeName');
+                clearErrors('placeStreetAddress');
+                clearErrors('placeDetailAddress');
               }}
-              render={({ field: { value, onChange, onBlur } }) => (
-                <TextField
-                  inputType="text"
-                  size="big"
-                  placeholder="공연장명을 입력해 주세요"
-                  required
-                  disabled={disabled}
-                  onChange={(event) => {
-                    onChange(event);
-                    clearErrors('placeName');
-                  }}
-                  onBlur={() => {
-                    onBlur();
-
-                    if (!value) {
-                      setError('placeName', { type: 'required', message: '필수 입력사항입니다.' });
-                      return;
-                    }
-                  }}
-                  value={value ?? ''}
-                  errorMessage={errors.placeName?.message}
-                />
-              )}
-              name="placeName"
-            />
-          </Styled.TextField>
-        </Styled.ShowInfoFormContent>
-      </Styled.ShowInfoFormRow>
-      <Styled.ShowInfoFormRow>
-        <Styled.ShowInfoFormContent>
-          <Styled.ShowInfoFormLabel required>공연장 주소</Styled.ShowInfoFormLabel>
-          <Styled.TextField>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
+              onDetailAddressChange={(value) => {
+                setValue('placeDetailAddress', value);
+                if (value) {
+                  clearErrors('placeDetailAddress');
+                }
               }}
-              render={({ field: { value } }) => (
-                <>
-                  <TextField
-                    inputType="text"
-                    size="big"
-                    placeholder="-"
-                    required
-                    disabled
-                    value={value ?? ''}
-                    errorMessage={errors.placeStreetAddress?.message}
-                  />
-                  <Button colorTheme="netural" size="bold" onClick={openDaumPostCodeWithDialog}>
-                    주소 찾기
-                  </Button>
-                </>
-              )}
-              name="placeStreetAddress"
-            />
-          </Styled.TextField>
-          <Styled.TextField>
-            <Controller
-              control={control}
-              rules={{
-                required: true,
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  ref={detailAddressInputRef}
-                  inputType="text"
-                  size="big"
-                  placeholder="상세 주소를 입력해 주세요"
-                  required
-                  disabled={disabled}
-                  onChange={(event) => {
-                    onChange(event);
-                    clearErrors('placeDetailAddress');
-                  }}
-                  onBlur={() => {
-                    onBlur();
-
-                    if (!value) {
-                      setError('placeDetailAddress', {
-                        type: 'required',
-                        message: '필수 입력사항입니다.',
-                      });
-                      return;
-                    }
-                  }}
-                  value={value ?? ''}
-                  errorMessage={errors.placeDetailAddress?.message}
-                />
-              )}
-              name="placeDetailAddress"
             />
           </Styled.TextField>
         </Styled.ShowInfoFormContent>
