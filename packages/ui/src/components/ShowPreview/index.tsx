@@ -1,6 +1,7 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import type { ImgHTMLAttributes } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,6 +12,10 @@ import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
+
+interface ShowImageLoadingProps extends ImgHTMLAttributes<HTMLImageElement> {
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
 
 interface ShowPreviewProps {
   show: {
@@ -49,6 +54,7 @@ interface ShowPreviewProps {
   onShareShowPreviewLink?: () => void;
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
+  prioritizeFirstImage?: boolean;
 }
 
 const ShowPreview = ({
@@ -64,6 +70,7 @@ const ShowPreview = ({
   onShareShowPreviewLink,
   onShareShowInfo,
   onCloseShareDropdown,
+  prioritizeFirstImage = false,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName } = show;
 
@@ -149,11 +156,25 @@ const ShowPreview = ({
           }}
           modules={[Pagination]}
         >
-          {images.map((image) => (
-            <SwiperSlide key={image}>
-              <Styled.ShowImage src={image} alt={name} />
-            </SwiperSlide>
-          ))}
+          {images.map((image, index) => {
+            const imageLoadingProps: ShowImageLoadingProps = prioritizeFirstImage
+              ? {
+                  fetchpriority: index === 0 ? 'high' : 'auto',
+                  loading: index === 0 ? 'eager' : 'lazy',
+                }
+              : {};
+
+            return (
+              <SwiperSlide key={image}>
+                <Styled.ShowImage
+                  src={image}
+                  alt={name}
+                  decoding="async"
+                  {...imageLoadingProps}
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
         <Styled.ShowName>{name}</Styled.ShowName>
         <Styled.ShowHeaderInfoList>

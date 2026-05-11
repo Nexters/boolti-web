@@ -11,6 +11,31 @@ import { fetcher } from '@boolti/api/src/fetcher';
 import NotFound from './components/NotFound';
 import ShowInfoDetailPage from './pages/ShowInfoDetailPage';
 
+const SHOW_IMAGE_PRELOAD_ID = 'show-preview-lcp-image-preload';
+
+const preloadShowImage = (imageUrl?: string) => {
+  if (!imageUrl || typeof document === 'undefined') {
+    return;
+  }
+
+  const existingPreload = document.getElementById(SHOW_IMAGE_PRELOAD_ID) as HTMLLinkElement | null;
+
+  if (existingPreload?.href === imageUrl) {
+    return;
+  }
+
+  existingPreload?.remove();
+
+  const preload = document.createElement('link');
+  preload.id = SHOW_IMAGE_PRELOAD_ID;
+  preload.rel = 'preload';
+  preload.as = 'image';
+  preload.href = imageUrl;
+  preload.setAttribute('fetchpriority', 'high');
+
+  document.head.appendChild(preload);
+};
+
 const showPageLoader = async ({ params }: { params: { showId?: string } }) => {
   const showId = params.showId;
   if (showId) {
@@ -18,6 +43,7 @@ const showPageLoader = async ({ params }: { params: { showId?: string } }) => {
       fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
       fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
     ]);
+    preloadShowImage(response[0].showImg[0]?.path);
     return response;
   }
 };

@@ -223,6 +223,7 @@ const ShowPreviewPage = () => {
             onShareShowPreviewLink={shareShowPreviewLink}
             onShareShowInfo={shareShowInfo}
             onCloseShareDropdown={shareDropdownCloseHandler}
+            prioritizeFirstImage
           />
           <Styled.FooterWrapper>
             <Footer darkMode />
