@@ -17,9 +17,16 @@ interface ShowImageLoadingProps extends ImgHTMLAttributes<HTMLImageElement> {
   fetchpriority?: 'high' | 'low' | 'auto';
 }
 
+type ShowPreviewImage =
+  | string
+  | {
+      src: string;
+      thumbnailSrc?: string;
+    };
+
 interface ShowPreviewProps {
   show: {
-    images: string[];
+    images: ShowPreviewImage[];
     name: string;
     date: string;
     startTime: string;
@@ -159,6 +166,8 @@ const ShowPreview = ({
           modules={[Pagination]}
         >
           {images.map((image, index) => {
+            const imageSrc = typeof image === 'string' ? image : image.src;
+            const imageThumbnailSrc = typeof image === 'string' ? undefined : image.thumbnailSrc;
             const imageLoadingProps: ShowImageLoadingProps = prioritizeFirstImage
               ? {
                   fetchpriority: index === 0 ? 'high' : 'auto',
@@ -167,9 +176,15 @@ const ShowPreview = ({
               : {};
 
             return (
-              <SwiperSlide key={image}>
+              <SwiperSlide key={imageSrc}>
                 <Styled.ShowImage
-                  src={image}
+                  src={imageSrc}
+                  srcSet={
+                    imageThumbnailSrc && imageThumbnailSrc !== imageSrc
+                      ? `${imageThumbnailSrc} 480w, ${imageSrc} 800w`
+                      : undefined
+                  }
+                  sizes="(max-width: 640px) calc(100vw - 76px), 564px"
                   alt={name}
                   decoding="async"
                   {...imageLoadingProps}

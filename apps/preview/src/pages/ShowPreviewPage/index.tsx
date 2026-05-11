@@ -195,7 +195,10 @@ const ShowPreviewPage = () => {
         <Styled.ShowPreviewContainer>
           <ShowPreview
             show={{
-              images: showImg.map((file) => file.path),
+              images: showImg.map((file) => ({
+                src: file.path,
+                thumbnailSrc: file.thumbnailPath,
+              })),
               name: title,
               date: format(new Date(date), 'yyyy.MM.dd (E)'),
               startTime: format(new Date(date), 'HH:mm'),
