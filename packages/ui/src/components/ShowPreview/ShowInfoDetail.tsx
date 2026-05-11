@@ -1,11 +1,12 @@
-import { useRef, useState, useEffect } from 'react';
+import { lazy, Suspense, useRef, useState, useEffect } from 'react';
 import { useSwiper } from 'swiper/react';
 import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
 import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
-import PreviewMap from '../PreviewMap';
 import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
+
+const PreviewMap = lazy(() => import('../PreviewMap'));
 
 interface Props {
   show: {
@@ -145,12 +146,14 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoDescriptionText>
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
-          <PreviewMap
-            latitude={latitude}
-            longitude={longitude}
-            name={placeName}
-            isAppWebview={isAppWebview}
-          />
+          <Suspense fallback={null}>
+            <PreviewMap
+              latitude={latitude}
+              longitude={longitude}
+              name={placeName}
+              isAppWebview={isAppWebview}
+            />
+          </Suspense>
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>

@@ -2,18 +2,23 @@ import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { QRCodeSVG } from 'qrcode.react';
+import { lazy, Suspense, useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
-import { useState } from 'react';
 import { EXTERNAL_URL, openStoreLink } from '../../constants/external';
 import { navigateToAppScheme } from '../../utils/app';
 
 setDefaultOptions({ locale: ko });
+
+const QRCodeSVG = lazy(() =>
+  import('qrcode.react').then((module) => ({
+    default: module.QRCodeSVG,
+  })),
+);
 
 const getAppScheme = (showId: number) => {
   return `boolti://show/${showId}`;
@@ -150,7 +155,9 @@ const ShowPreviewPage = () => {
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={getPreviewLink(id)} size={182} level="H" />
+              <Suspense fallback={null}>
+                <QRCodeSVG value={getPreviewLink(id)} size={182} level="H" />
+              </Suspense>
             </Styled.QRCodeContainer>
             <BooltiGrayLogo />
           </Styled.DialogQRCodeContainer>
