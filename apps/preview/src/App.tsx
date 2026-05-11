@@ -5,7 +5,6 @@ import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
-import { NavermapsProvider } from 'react-naver-maps';
 import ShowPreviewPage from './pages/ShowPreviewPage';
 import { fetcher } from '@boolti/api/src/fetcher';
 import NotFound from './components/NotFound';
@@ -78,17 +77,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
-
 const App = () => {
   return (
-    <NavermapsProvider ncpKeyId={X_NCP_APIGW_API_KEY_ID}>
-      <BooltiUIProvider>
-        <HelmetProvider>
-          <RouterProvider router={router} />
-        </HelmetProvider>
-      </BooltiUIProvider>
-    </NavermapsProvider>
+    <BooltiUIProvider>
+      <HelmetProvider>
+        <RouterProvider router={router} />
+      </HelmetProvider>
+    </BooltiUIProvider>
   );
 };
 

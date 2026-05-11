@@ -10,6 +10,7 @@ import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { EXTERNAL_URL, openStoreLink } from '../../constants/external';
+import { X_NCP_APIGW_API_KEY_ID } from '../../constants/ncp';
 import { navigateToAppScheme } from '../../utils/app';
 
 setDefaultOptions({ locale: ko });
@@ -231,6 +232,7 @@ const ShowPreviewPage = () => {
             onShareShowInfo={shareShowInfo}
             onCloseShareDropdown={shareDropdownCloseHandler}
             prioritizeFirstImage
+            naverMapClientId={X_NCP_APIGW_API_KEY_ID}
           />
           <Styled.FooterWrapper>
             <Footer darkMode />

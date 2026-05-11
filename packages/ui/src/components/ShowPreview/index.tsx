@@ -55,6 +55,7 @@ interface ShowPreviewProps {
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
   prioritizeFirstImage?: boolean;
+  naverMapClientId?: string;
 }
 
 const ShowPreview = ({
@@ -71,6 +72,7 @@ const ShowPreview = ({
   onShareShowInfo,
   onCloseShareDropdown,
   prioritizeFirstImage = false,
+  naverMapClientId,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName } = show;
 
@@ -203,6 +205,7 @@ const ShowPreview = ({
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
+                  naverMapClientId={naverMapClientId}
                 />
               ),
             },
