@@ -95,9 +95,20 @@ const DropdownItem = styled.li`
   }
 `;
 
+const PlaceNameRow = styled.div`
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+`;
+
 const PlaceName = styled.span`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const Category = styled.span`
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g40};
 `;
 
 const AddressName = styled.span`
@@ -123,6 +134,13 @@ const ErrorMessage = styled.span`
   color: ${({ theme }) => theme.palette.status.error1};
 `;
 
+const EmptyState = styled.div`
+  padding: 16px;
+  text-align: center;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+`;
+
 export default {
   Container,
   InputWrapper,
@@ -130,8 +148,11 @@ export default {
   SearchIconWrapper,
   Dropdown,
   DropdownItem,
+  PlaceNameRow,
   PlaceName,
+  Category,
   AddressName,
   SelectedInfo,
   ErrorMessage,
+  EmptyState,
 };

@@ -23,6 +23,7 @@ interface PlaceSearchInputProps {
     latitude: number;
     longitude: number;
   }) => void;
+  onClear?: () => void;
   onDetailAddressChange?: (value: string) => void;
 }
 
@@ -33,21 +34,25 @@ const PlaceSearchInput = ({
   disabled,
   errorMessage,
   onSelect,
+  onClear,
   onDetailAddressChange,
 }: PlaceSearchInputProps) => {
-  const { query, setQuery, results, clearResults } = useKakaoLocalSearch();
+  const { query, setQuery, results, isLoading, clearResults } = useKakaoLocalSearch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedResult, setSelectedResult] = useState<PlaceSearchResult | null>(null);
+  const [streetAddress, setStreetAddress] = useState(initialAddress ?? '');
   const [detailAddress, setDetailAddress] = useState(initialDetailAddress ?? '');
   const containerRef = useRef<HTMLDivElement>(null);
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (initialPlaceName && initialAddress && !selectedResult) {
+    if (!selectedResult && initialAddress) {
+      const isPlace = Boolean(initialPlaceName);
       setSelectedResult({
-        type: 'place',
+        type: isPlace ? 'place' : 'address',
         id: 'initial',
-        placeName: initialPlaceName,
+        placeName: initialPlaceName ?? '',
+        category: '',
         addressName: initialAddress,
         roadAddressName: initialAddress,
         x: '0',
@@ -74,7 +79,9 @@ const PlaceSearchInput = ({
 
     if (selectedResult) {
       setSelectedResult(null);
+      setStreetAddress('');
       setDetailAddress('');
+      onClear?.();
     }
   };
 
@@ -83,23 +90,23 @@ const PlaceSearchInput = ({
     setIsDropdownOpen(false);
     clearResults();
 
+    const address = result.roadAddressName || result.addressName;
+    setStreetAddress(address);
+    setDetailAddress('');
+
     if (result.type === 'place') {
-      const address = result.roadAddressName || result.addressName;
       setQuery(result.placeName);
-      setDetailAddress(address);
 
       onSelect({
         type: 'place',
         placeName: result.placeName,
         streetAddress: address,
-        detailAddress: address,
+        detailAddress: '',
         latitude: Number(result.y),
         longitude: Number(result.x),
       });
     } else {
-      const address = result.roadAddressName || result.addressName;
       setQuery(address);
-      setDetailAddress('');
 
       onSelect({
         type: 'address',
@@ -123,7 +130,7 @@ const PlaceSearchInput = ({
   };
 
   const handleInputFocus = () => {
-    if (results.length > 0 && !selectedResult) {
+    if (!selectedResult && query.trim()) {
       setIsDropdownOpen(true);
     }
   };
@@ -145,20 +152,33 @@ const PlaceSearchInput = ({
           </Styled.SearchIconWrapper>
         </Styled.InputWrapper>
 
-        {isDropdownOpen && results.length > 0 && (
+        {isDropdownOpen && query.trim() && !selectedResult && (
           <Styled.Dropdown>
-            {results.map((result) => (
-              <Styled.DropdownItem key={result.id} onClick={() => handleSelect(result)}>
-                <Styled.PlaceName>
-                  {result.type === 'place' ? result.placeName : result.roadAddressName || result.addressName}
-                </Styled.PlaceName>
-                {result.type === 'place' && (
-                  <Styled.AddressName>
-                    {result.roadAddressName || result.addressName}
-                  </Styled.AddressName>
-                )}
-              </Styled.DropdownItem>
-            ))}
+            {isLoading && results.length === 0 ? (
+              <Styled.EmptyState>검색 중...</Styled.EmptyState>
+            ) : results.length === 0 ? (
+              <Styled.EmptyState>검색 결과가 없어요</Styled.EmptyState>
+            ) : (
+              results.map((result) => (
+                <Styled.DropdownItem key={result.id} onClick={() => handleSelect(result)}>
+                  <Styled.PlaceNameRow>
+                    <Styled.PlaceName>
+                      {result.type === 'place'
+                        ? result.placeName
+                        : result.roadAddressName || result.addressName}
+                    </Styled.PlaceName>
+                    {result.type === 'place' && result.category && (
+                      <Styled.Category>{result.category}</Styled.Category>
+                    )}
+                  </Styled.PlaceNameRow>
+                  {result.type === 'place' && (
+                    <Styled.AddressName>
+                      {result.roadAddressName || result.addressName}
+                    </Styled.AddressName>
+                  )}
+                </Styled.DropdownItem>
+              ))
+            )}
           </Styled.Dropdown>
         )}
       </Styled.Container>
@@ -169,7 +189,7 @@ const PlaceSearchInput = ({
             <TextField
               inputType="text"
               size="big"
-              value={detailAddress}
+              value={streetAddress}
               disabled
               placeholder="-"
             />

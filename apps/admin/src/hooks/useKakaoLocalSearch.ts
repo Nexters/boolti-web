@@ -42,6 +42,7 @@ export interface PlaceSearchResult {
   type: PlaceSearchResultType;
   id: string;
   placeName: string;
+  category: string;
   addressName: string;
   roadAddressName: string;
   x: string;
@@ -64,6 +65,7 @@ const searchKeyword = async (query: string): Promise<PlaceSearchResult[]> => {
     type: 'place' as const,
     id: doc.id,
     placeName: doc.place_name,
+    category: doc.category_group_name,
     addressName: doc.address_name,
     roadAddressName: doc.road_address_name,
     x: doc.x,
@@ -87,6 +89,7 @@ const searchAddress = async (query: string): Promise<PlaceSearchResult[]> => {
     type: 'address' as const,
     id: `addr-${index}-${doc.x}-${doc.y}`,
     placeName: '',
+    category: '',
     addressName: doc.address?.address_name ?? doc.address_name,
     roadAddressName: doc.road_address?.address_name ?? doc.address_name,
     x: doc.x,

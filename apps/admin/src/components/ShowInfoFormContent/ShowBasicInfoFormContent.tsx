@@ -2,12 +2,15 @@ import { ImageFile } from '@boolti/api';
 import { CloseIcon, FileUpIcon } from '@boolti/icon';
 import { TextField, TimePicker } from '@boolti/ui';
 import { add, format } from 'date-fns';
+import { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Controller, UseFormReturn } from 'react-hook-form';
 
 import PlaceSearchInput from '~/components/PlaceSearchInput';
 import Styled from './ShowInfoFormContent.styles';
 import { ShowBasicInfoFormInputs } from './types';
+
+const VENUE_REQUIRED_MESSAGE = '공연장을 선택해 주세요';
 
 const MAX_IMAGE_COUNT = 3;
 const MIN_DATE = format(add(new Date(), { days: 1 }), 'yyyy-MM-dd');
@@ -31,12 +34,20 @@ const ShowBasicInfoFormContent = ({
 }: ShowBasicInfoFormContentProps) => {
   const {
     control,
+    register,
     setValue,
     watch,
     formState: { errors },
     setError,
     clearErrors,
   } = form;
+
+  useEffect(() => {
+    register('placeName', { required: VENUE_REQUIRED_MESSAGE });
+    register('placeStreetAddress', { required: VENUE_REQUIRED_MESSAGE });
+    register('latitude', { required: VENUE_REQUIRED_MESSAGE });
+    register('longitude', { required: VENUE_REQUIRED_MESSAGE });
+  }, [register]);
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -274,20 +285,30 @@ const ShowBasicInfoFormContent = ({
                 errors.placeStreetAddress?.message
               }
               onSelect={(result) => {
-                setValue('placeName', result.placeName || result.streetAddress);
-                setValue('placeStreetAddress', result.streetAddress);
+                setValue('placeName', result.placeName || result.streetAddress, {
+                  shouldValidate: true,
+                });
+                setValue('placeStreetAddress', result.streetAddress, {
+                  shouldValidate: true,
+                });
                 setValue('placeDetailAddress', result.detailAddress);
-                setValue('latitude', result.latitude);
-                setValue('longitude', result.longitude);
-                clearErrors('placeName');
-                clearErrors('placeStreetAddress');
-                clearErrors('placeDetailAddress');
+                setValue('latitude', result.latitude, { shouldValidate: true });
+                setValue('longitude', result.longitude, { shouldValidate: true });
+                clearErrors(['placeName', 'placeStreetAddress', 'placeDetailAddress']);
+              }}
+              onClear={() => {
+                setValue('placeName', '');
+                setValue('placeStreetAddress', '');
+                setValue('placeDetailAddress', '');
+                setValue('latitude', 0);
+                setValue('longitude', 0);
+                setError('placeStreetAddress', {
+                  type: 'required',
+                  message: VENUE_REQUIRED_MESSAGE,
+                });
               }}
               onDetailAddressChange={(value) => {
                 setValue('placeDetailAddress', value);
-                if (value) {
-                  clearErrors('placeDetailAddress');
-                }
               }}
             />
           </Styled.TextField>
