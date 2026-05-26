@@ -33,7 +33,7 @@ const HowToUse = () => {
         viewport={{ once: true }}
         variants={{
           hidden: {},
-          visible: { transition: { staggerChildren: 0.04 } },
+          visible: { transition: { staggerChildren: 0.05, delayChildren: 0.1 } },
         }}
       >
         {LANDING_COPY.howToUse.title.split('').map((char, i) => (
@@ -41,7 +41,7 @@ const HowToUse = () => {
             key={i}
             variants={{
               hidden: { opacity: 0 },
-              visible: { opacity: 1 },
+              visible: { opacity: 1, transition: { duration: 0 } },
             }}
           >
             {char === '\n' ? <br /> : char}

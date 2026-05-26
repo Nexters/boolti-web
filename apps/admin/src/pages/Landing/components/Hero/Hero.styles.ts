@@ -131,7 +131,6 @@ const ImageRow = styled.div`
     gap: 16px;
     padding: 24px 0;
     margin: 0 -32px;
-    justify-content: center;
   }
 `;
 
