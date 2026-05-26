@@ -214,8 +214,8 @@ const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
   position: absolute;
   width: 55%;
   max-width: 180px;
+  /* 라운드가 promo-*.png 이미지에 포함됨. height auto로 원본 비율(16:9) 유지 */
   height: auto;
-  border-radius: 20px;
   object-fit: contain;
 
   ${({ offset }) =>
@@ -238,8 +238,6 @@ const PromoImage = styled.img<{ offset: 'back' | 'front' }>`
 
   ${mq_desktop} {
     width: 269px;
-    height: 567px;
-    border-radius: 26px;
 
     ${({ offset }) =>
       offset === 'back'
@@ -266,8 +264,8 @@ const PaymentImage = styled.img`
   top: 11.4%;
   left: 13.4%;
   width: 73.1%;
+  /* 라운드가 payment.png 이미지에 포함됨. height auto로 원본 비율 유지 */
   height: auto;
-  border-radius: 28px;
   object-fit: contain;
 
   ${mq_desktop} {
@@ -275,7 +273,6 @@ const PaymentImage = styled.img`
     left: 82.33px;
     width: 448px;
     height: auto;
-    border-radius: 35px;
   }
 `;
 
