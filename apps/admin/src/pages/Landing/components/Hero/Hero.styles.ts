@@ -31,7 +31,6 @@ const Container = styled.div`
   align-items: stretch;
   gap: 32px;
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
 
   ${mq_desktop} {
