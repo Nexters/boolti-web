@@ -1,8 +1,9 @@
+import FeatureCard from './FeatureCard';
 import Header from './Header';
-import KeyVisual from './KeyVisual';
-import MoreInformation from './MoreInformation';
-import OrganizerSection from './OrganizerSection';
-import Tab from './Tab';
-import UserSection from './UserSection';
+import Hero from './Hero';
+import HowToUse from './HowToUse';
+import Problem from './Problem';
+import SolutionFeatures from './SolutionFeatures';
+import SolutionHighlight from './SolutionHighlight';
 
-export { Header, KeyVisual, MoreInformation, OrganizerSection, Tab, UserSection };
+export { FeatureCard, Header, Hero, HowToUse, Problem, SolutionFeatures, SolutionHighlight };

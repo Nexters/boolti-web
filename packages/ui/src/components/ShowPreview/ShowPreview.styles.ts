@@ -1,9 +1,14 @@
 import styled from '@emotion/styled';
+import type { ImgHTMLAttributes } from 'react';
 import { mq_lg } from '../../systems';
 
 interface ShowInfoDescriptionProps {
   collapse?: boolean;
   isOverflow?: boolean;
+}
+
+interface ShowImageProps extends ImgHTMLAttributes<HTMLImageElement> {
+  fetchpriority?: 'high' | 'low' | 'auto';
 }
 
 const ShowPreview = styled.div`
@@ -98,7 +103,7 @@ const ShareDropdownItem = styled.button`
   cursor: pointer;
 `;
 
-const ShowImage = styled.img`
+const ShowImage = styled.img<ShowImageProps>`
   width: 100%;
   height: auto;
   aspect-ratio: 299 / 419;
