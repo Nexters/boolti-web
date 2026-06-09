@@ -279,6 +279,7 @@ const ShowBasicInfoFormContent = ({
               initialPlaceName={watch('placeName')}
               initialAddress={watch('placeStreetAddress')}
               initialDetailAddress={watch('placeDetailAddress')}
+              initialConcertHallId={watch('concertHallId')}
               disabled={disabled}
               errorMessage={
                 errors.placeName?.message ??
@@ -294,6 +295,7 @@ const ShowBasicInfoFormContent = ({
                 setValue('placeDetailAddress', result.detailAddress);
                 setValue('latitude', result.latitude, { shouldValidate: true });
                 setValue('longitude', result.longitude, { shouldValidate: true });
+                setValue('concertHallId', result.concertHallId);
                 clearErrors(['placeName', 'placeStreetAddress', 'placeDetailAddress']);
               }}
               onClear={() => {
@@ -302,6 +304,7 @@ const ShowBasicInfoFormContent = ({
                 setValue('placeDetailAddress', '');
                 setValue('latitude', 0);
                 setValue('longitude', 0);
+                setValue('concertHallId', undefined);
                 setError('placeStreetAddress', {
                   type: 'required',
                   message: VENUE_REQUIRED_MESSAGE,

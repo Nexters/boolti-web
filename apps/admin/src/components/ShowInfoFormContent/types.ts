@@ -8,6 +8,7 @@ export interface ShowBasicInfoFormInputs {
   placeDetailAddress: string;
   latitude: number;
   longitude: number;
+  concertHallId?: number;
 }
 
 export interface ShowDetailInfoFormInputs {
