@@ -58,6 +58,7 @@ import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
 import useSuperAdminUserList from './useSuperAdminUserList';
 import useSuperAdminHostList from './useSuperAdminHostList';
 import useConcertHallSearch from './useConcertHallSearch';
+import useConcertHallProfile from './useConcertHallProfile';
 import usePutPreQuestions from '../mutations/usePutPreQuestions';
 
 export {
@@ -122,4 +123,5 @@ export {
   useSuperAdminUserList,
   useSuperAdminHostList,
   useConcertHallSearch,
+  useConcertHallProfile,
 };
