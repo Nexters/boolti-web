@@ -141,6 +141,27 @@ const EmptyState = styled.div`
   color: ${({ theme }) => theme.palette.grey.g50};
 `;
 
+const SectionHeader = styled.li`
+  padding: 8px 16px;
+  ${({ theme }) => theme.typo.b1};
+  color: ${({ theme }) => theme.palette.grey.g50};
+  background: ${({ theme }) => theme.palette.grey.g00};
+  list-style: none;
+`;
+
+const BooltiBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: ${({ theme }) => theme.palette.grey.g90};
+  color: ${({ theme }) => theme.palette.grey.w};
+  ${({ theme }) => theme.typo.b1};
+  font-size: 11px;
+  line-height: 1;
+  margin-left: auto;
+`;
+
 export default {
   Container,
   InputWrapper,
@@ -155,4 +176,6 @@ export default {
   SelectedInfo,
   ErrorMessage,
   EmptyState,
+  SectionHeader,
+  BooltiBadge,
 };
