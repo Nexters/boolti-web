@@ -1,9 +1,9 @@
+import { fetcher, WebHostConcertHallListResponse } from '@boolti/api';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const KAKAO_REST_API_KEY = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const KAKAO_LOCAL_KEYWORD_URL = 'https://dapi.kakao.com/v2/local/search/keyword.json';
 const KAKAO_LOCAL_ADDRESS_URL = 'https://dapi.kakao.com/v2/local/search/address.json';
-const BOOLTI_API_BASE = import.meta.env.VITE_BASE_API_URL ?? '';
 
 const DEBOUNCE_MS = 300;
 const KAKAO_PAGE_SIZE = 5;
@@ -25,17 +25,6 @@ interface KakaoAddressDoc {
   y: string;
   address: { address_name: string } | null;
   road_address: { address_name: string } | null;
-}
-
-interface ConcertHallItem {
-  id: number;
-  name: string;
-  address: string;
-  isVisible: boolean;
-}
-
-interface WebHostConcertHallListResponse {
-  items: ConcertHallItem[];
 }
 
 export type VenueSource = 'boolti' | 'kakao_place' | 'kakao_address';
@@ -64,22 +53,14 @@ export type VenueResult =
       y: string;
     };
 
-// NOTE: We intentionally do NOT pass AbortSignal into fetch. jsdom-based test
-// environments use a different AbortSignal class than node's native fetch
-// implementation, which trips an instanceof check. Stale responses are filtered
-// out via the `controller.signal.aborted` check after Promise.allSettled.
+// fetcher (ky) automatically attaches the access token and refreshes on 401.
+// Note: AbortSignal isn't passed into kakao fetch because jsdom's signal class
+// trips an instanceof check inside node's fetch impl; stale responses are
+// filtered out via the controller.signal.aborted check after allSettled.
 const fetchBoolti = async (keyword: string): Promise<VenueResult[]> => {
-  const url = new URL('web/v1/host/concert-halls', BOOLTI_API_BASE);
-  url.searchParams.set('keyword', keyword);
-  url.searchParams.set('page', '0');
-  url.searchParams.set('size', String(BOOLTI_PAGE_SIZE));
-
-  const token = window.localStorage.getItem('boolti-web@accessToken');
-  const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
-
-  const res = await fetch(url.toString(), { headers });
-  if (!res.ok) throw new Error(`boolti ${res.status}`);
-  const data: WebHostConcertHallListResponse = await res.json();
+  const data = await fetcher.get<WebHostConcertHallListResponse>('web/v1/host/concert-halls', {
+    searchParams: { keyword, page: 0, size: BOOLTI_PAGE_SIZE },
+  });
   return data.items.map((item) => ({
     source: 'boolti' as const,
     concertHallId: item.id,

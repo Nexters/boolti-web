@@ -2,7 +2,29 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
+
+// fetcher (ky) reads VITE_BASE_API_URL at module load, so we mock @boolti/api's
+// fetcher to a thin fetch wrapper. MSW handlers below intercept the requests.
+vi.mock('@boolti/api', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@boolti/api')>();
+  return {
+    ...actual,
+    fetcher: {
+      get: async <T>(path: string, options?: { searchParams?: Record<string, string | number> }) => {
+        const url = new URL(path, 'https://api.test.local/');
+        if (options?.searchParams) {
+          for (const [k, v] of Object.entries(options.searchParams)) {
+            url.searchParams.set(k, String(v));
+          }
+        }
+        const res = await fetch(url.toString());
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return (await res.json()) as T;
+      },
+    },
+  };
+});
 
 import useVenueSearch from './useVenueSearch';
 
