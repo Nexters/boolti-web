@@ -43,6 +43,10 @@ import {
 } from './types/adminShow';
 import { SuperAdminUserResponse } from './types/superAdminUser';
 import {
+  ConcertHallProfileResponse,
+  WebHostConcertHallListResponse,
+} from './types/concertHall';
+import {
   BankAccountListResponse,
   UserProfileResponse,
   UserProfileResponseV2,
@@ -488,6 +492,21 @@ export const popupQueryKeys = createQueryKeys('popup', {
   }),
 });
 
+export const concertHallQueryKeys = createQueryKeys('concertHall', {
+  searchByKeyword: (keyword: string) => ({
+    queryKey: [keyword],
+    queryFn: () =>
+      fetcher.get<WebHostConcertHallListResponse>(`web/v1/host/concert-halls`, {
+        searchParams: { keyword, page: 0, size: 5 },
+      }),
+  }),
+  profile: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () =>
+      fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
+  }),
+});
+
 export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   list: (showId: number) => ({
     queryKey: [showId],
@@ -589,4 +608,5 @@ export const queryKeys = mergeQueryKeys(
   popupQueryKeys,
   preQuestionQueryKeys,
   superAdminUserQueryKeys,
+  concertHallQueryKeys,
 );
