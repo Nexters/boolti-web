@@ -3,7 +3,6 @@ import { ShowInfoDetail } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowInfoDetailPage.styles';
-import { X_NCP_APIGW_API_KEY_ID } from '../../constants/ncp';
 
 const ShowInfoDetailPage: React.FC = () => {
   const [show, { count: soldTicketCount }] = useLoaderData() as [
@@ -53,7 +52,6 @@ const ShowInfoDetailPage: React.FC = () => {
         onClickMessageLink={messageLinkClickHandler}
         onClickCallLinkMobile={callLinkClickHandler}
         onClickMessageLinkMobile={messageLinkClickHandler}
-        naverMapClientId={X_NCP_APIGW_API_KEY_ID}
       />
     </Styled.Container>
   );

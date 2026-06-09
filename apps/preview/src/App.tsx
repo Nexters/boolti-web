@@ -5,35 +5,11 @@ import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { BooltiUIProvider } from '@boolti/ui';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
+import { NavermapsProvider } from 'react-naver-maps';
 import ShowPreviewPage from './pages/ShowPreviewPage';
 import { fetcher } from '@boolti/api/src/fetcher';
 import NotFound from './components/NotFound';
 import ShowInfoDetailPage from './pages/ShowInfoDetailPage';
-
-const SHOW_IMAGE_PRELOAD_ID = 'show-preview-lcp-image-preload';
-
-const preloadShowImage = (imageUrl?: string) => {
-  if (!imageUrl || typeof document === 'undefined') {
-    return;
-  }
-
-  const existingPreload = document.getElementById(SHOW_IMAGE_PRELOAD_ID) as HTMLLinkElement | null;
-
-  if (existingPreload?.href === imageUrl) {
-    return;
-  }
-
-  existingPreload?.remove();
-
-  const preload = document.createElement('link');
-  preload.id = SHOW_IMAGE_PRELOAD_ID;
-  preload.rel = 'preload';
-  preload.as = 'image';
-  preload.href = imageUrl;
-  preload.setAttribute('fetchpriority', 'high');
-
-  document.head.appendChild(preload);
-};
 
 const showPageLoader = async ({ params }: { params: { showId?: string } }) => {
   const showId = params.showId;
@@ -42,7 +18,6 @@ const showPageLoader = async ({ params }: { params: { showId?: string } }) => {
       fetcher.get<ShowPreviewResponse>(`web/papi/v1/shows/${showId}`),
       fetcher.get<ShowCastTeamReadResponse[]>(`web/papi/v1/shows/${showId}/cast-teams`),
     ]);
-    preloadShowImage(response[0].showImg[0]?.path);
     return response;
   }
 };
@@ -77,13 +52,17 @@ const router = createBrowserRouter([
   },
 ]);
 
+const X_NCP_APIGW_API_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
+
 const App = () => {
   return (
-    <BooltiUIProvider>
-      <HelmetProvider>
-        <RouterProvider router={router} />
-      </HelmetProvider>
-    </BooltiUIProvider>
+    <NavermapsProvider ncpKeyId={X_NCP_APIGW_API_KEY_ID}>
+      <BooltiUIProvider>
+        <HelmetProvider>
+          <RouterProvider router={router} />
+        </HelmetProvider>
+      </BooltiUIProvider>
+    </NavermapsProvider>
   );
 };
 
