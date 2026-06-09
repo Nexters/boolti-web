@@ -105,6 +105,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       runningTime: Number(showBasicInfoForm.getValues('runningTime')),
       latitude: showBasicInfoForm.getValues('latitude'),
       longitude: showBasicInfoForm.getValues('longitude'),
+      concertHallId: showBasicInfoForm.getValues('concertHallId'),
       place: {
         name: showBasicInfoForm.getValues('placeName'),
         streetAddress: showBasicInfoForm.getValues('placeStreetAddress'),

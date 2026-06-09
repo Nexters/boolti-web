@@ -41,6 +41,8 @@ export interface ShowResponse {
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
   latitude: number;
   longitude: number;
+  /** 연결된 불티 공연장 ID. 미연결 시 null/undefined */
+  concertHallId?: number;
   createdAt: string;
 }
 

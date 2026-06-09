@@ -127,6 +127,7 @@ const ShowInfoPage = () => {
           })),
           latitude: showBasicInfoForm.getValues('latitude'),
           longitude: showBasicInfoForm.getValues('longitude'),
+          concertHallId: showBasicInfoForm.getValues('concertHallId'),
           date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
           runningTime: +showBasicInfoFormInputs.runningTime,
           place: {
@@ -210,6 +211,7 @@ const ShowInfoPage = () => {
       placeDetailAddress: show.place.detailAddress,
       latitude: show.latitude,
       longitude: show.longitude,
+      concertHallId: show.concertHallId,
     });
 
     showDetailInfoForm.reset({
