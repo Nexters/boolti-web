@@ -18,6 +18,8 @@ interface PutShowInfoRequest {
   };
   latitude?: number;
   longitude?: number;
+  /** 선택한 공연장 ID. 값이 있으면 Show 장소 정보는 유지하고 공연장 연결만 갱신한다. */
+  concertHallId?: number;
   notice: string;
   host: {
     name: string;
