@@ -1,7 +1,6 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 
-import type { ImgHTMLAttributes } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -13,20 +12,9 @@ import ShowCastInfo from './ShowCastInfo';
 import ShowInfoDetail from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
-interface ShowImageLoadingProps extends ImgHTMLAttributes<HTMLImageElement> {
-  fetchpriority?: 'high' | 'low' | 'auto';
-}
-
-type ShowPreviewImage =
-  | string
-  | {
-      src: string;
-      thumbnailSrc?: string;
-    };
-
 interface ShowPreviewProps {
   show: {
-    images: ShowPreviewImage[];
+    images: string[];
     name: string;
     date: string;
     startTime: string;
@@ -61,8 +49,6 @@ interface ShowPreviewProps {
   onShareShowPreviewLink?: () => void;
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
-  prioritizeFirstImage?: boolean;
-  naverMapClientId?: string;
 }
 
 const ShowPreview = ({
@@ -78,8 +64,6 @@ const ShowPreview = ({
   onShareShowPreviewLink,
   onShareShowInfo,
   onCloseShareDropdown,
-  prioritizeFirstImage = false,
-  naverMapClientId,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName } = show;
 
@@ -165,33 +149,11 @@ const ShowPreview = ({
           }}
           modules={[Pagination]}
         >
-          {images.map((image, index) => {
-            const imageSrc = typeof image === 'string' ? image : image.src;
-            const imageThumbnailSrc = typeof image === 'string' ? undefined : image.thumbnailSrc;
-            const imageLoadingProps: ShowImageLoadingProps = prioritizeFirstImage
-              ? {
-                  fetchpriority: index === 0 ? 'high' : 'auto',
-                  loading: index === 0 ? 'eager' : 'lazy',
-                }
-              : {};
-
-            return (
-              <SwiperSlide key={imageSrc}>
-                <Styled.ShowImage
-                  src={imageSrc}
-                  srcSet={
-                    imageThumbnailSrc && imageThumbnailSrc !== imageSrc
-                      ? `${imageThumbnailSrc} 480w, ${imageSrc} 800w`
-                      : undefined
-                  }
-                  sizes="(max-width: 640px) calc(100vw - 76px), 564px"
-                  alt={name}
-                  decoding="async"
-                  {...imageLoadingProps}
-                />
-              </SwiperSlide>
-            );
-          })}
+          {images.map((image) => (
+            <SwiperSlide key={image}>
+              <Styled.ShowImage src={image} alt={name} />
+            </SwiperSlide>
+          ))}
         </Swiper>
         <Styled.ShowName>{name}</Styled.ShowName>
         <Styled.ShowHeaderInfoList>
@@ -220,7 +182,6 @@ const ShowPreview = ({
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
-                  naverMapClientId={naverMapClientId}
                 />
               ),
             },

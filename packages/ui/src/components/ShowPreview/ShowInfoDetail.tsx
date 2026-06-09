@@ -1,13 +1,11 @@
-import { lazy, Suspense, useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { useSwiper } from 'swiper/react';
 import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
 import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
+import PreviewMap from '../PreviewMap';
 import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
-
-const PreviewMap = lazy(() => import('../PreviewMap'));
-const PreviewMapWithProvider = lazy(() => import('../PreviewMap/PreviewMapWithProvider'));
 
 interface Props {
   show: {
@@ -29,7 +27,6 @@ interface Props {
   onClickCallLinkMobile?: () => void;
   onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
-  naverMapClientId?: string;
 }
 
 const ShowInfoDetail = ({
@@ -52,7 +49,6 @@ const ShowInfoDetail = ({
   onClickCallLinkMobile,
   onClickMessageLinkMobile,
   onClickViewNotice,
-  naverMapClientId,
 }: Props) => {
   const showNoticeRef = useRef<HTMLDivElement>(null);
   const swiper = useSwiper();
@@ -149,24 +145,12 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoDescriptionText>
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
-          <Suspense fallback={null}>
-            {naverMapClientId ? (
-              <PreviewMapWithProvider
-                latitude={latitude}
-                longitude={longitude}
-                name={placeName}
-                isAppWebview={isAppWebview}
-                ncpKeyId={naverMapClientId}
-              />
-            ) : (
-              <PreviewMap
-                latitude={latitude}
-                longitude={longitude}
-                name={placeName}
-                isAppWebview={isAppWebview}
-              />
-            )}
-          </Suspense>
+          <PreviewMap
+            latitude={latitude}
+            longitude={longitude}
+            name={placeName}
+            isAppWebview={isAppWebview}
+          />
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>
