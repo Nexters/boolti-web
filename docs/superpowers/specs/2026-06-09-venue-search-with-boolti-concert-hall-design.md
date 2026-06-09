@@ -257,7 +257,7 @@ type UseVenueSearchReturn = {
 | 전부 실패 | "검색 결과가 없어요" 일관 처리 (현재와 동일) |
 | 빈 결과 | 검색어 있는데 모든 소스 0건 → "검색 결과가 없어요" |
 | 첫 응답 전 | "검색 중..." 표시; 부분 결과 도착 시 즉시 표시로 전환 |
-| `getProfile_1` 실패 | lat/lng 없이 폼에 `ConcertHallItem.address`만 채우고 `concertHallId`는 저장. 토스트로 "공연장 상세를 불러오지 못했어요. 다시 시도해주세요" 노출 |
+| `getProfile_1` 실패 | lat/lng 없이(`0, 0`) 폼에 `ConcertHallItem.address`만 채우고 `concertHallId`는 저장. silent fallback + `console.warn`으로 로깅. 사용자가 다시 선택하면 자동 재시도됨 (TanStack Query). 토스트 노출은 후속 개선 안건 |
 | 연속 입력 race | 카카오 호출은 `AbortController`로 이전 요청 취소. 불티는 TanStack Query가 처리 |
 | 공연 수정 진입, 기존 `concertHallId` 보유 | 검색바에 기존 공연장명이 표시되고 상세 주소 인풋은 disabled. 검색바 텍스트를 변경하기 시작하면 기존 동작대로 `selectedResult`가 클리어되고 재검색 모드로 전환 (현재 `PlaceSearchInput/index.tsx:75-86` 동작 그대로) |
 | `isVisible=false` 공연장 | 백엔드가 응답에 포함시키면 그대로 표시. 클라이언트 필터는 추가하지 않음 (host 검색이므로 노출 정책은 백엔드 위임) |
