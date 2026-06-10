@@ -1,8 +1,10 @@
 import { useSubwayStationSearch } from '@boolti/api';
 import { SubwayStationSearchItem } from '@boolti/api/src/types/superAdminConcertHall';
 import { useTheme } from '@emotion/react';
-import { Empty, Flex, Input, Modal, Tag, Typography } from 'antd';
+import { Flex, Input, Modal, Typography } from 'antd';
 import { useEffect, useState } from 'react';
+
+import SubwayLineBadge from './SubwayLineBadge';
 
 const { Search } = Input;
 
@@ -31,6 +33,8 @@ const SubwayStationSearchModal = ({ open, onClose, onSelect }: SubwayStationSear
     onClose();
   };
 
+  const showEmpty = debouncedText.length > 0 && !isFetching && stations.length === 0;
+
   return (
     <Modal title="인근 지하철역 추가하기" open={open} onCancel={close} footer={null} width={490}>
       <Search
@@ -40,9 +44,17 @@ const SubwayStationSearchModal = ({ open, onClose, onSelect }: SubwayStationSear
         onChange={(e) => setSearchText(e.target.value)}
         style={{ margin: '16px 0' }}
       />
-      <div style={{ minHeight: 240, maxHeight: 400, overflowY: 'auto' }}>
-        {debouncedText.length > 0 && !isFetching && stations.length === 0 && (
-          <Empty description="검색 결과가 없어요." style={{ marginTop: 60 }} />
+      <div style={{ minHeight: 320, maxHeight: 440, overflowY: 'auto' }}>
+        {showEmpty && (
+          <Flex
+            vertical
+            align="center"
+            justify="center"
+            style={{ paddingTop: 120, color: theme.palette.grey.g40 }}
+          >
+            <Typography.Text type="secondary">검색 결과가 없어요.</Typography.Text>
+            <Typography.Text type="secondary">역이름을 변경해보세요.</Typography.Text>
+          </Flex>
         )}
         {stations.map((station) => (
           <Flex
@@ -54,22 +66,15 @@ const SubwayStationSearchModal = ({ open, onClose, onSelect }: SubwayStationSear
               close();
             }}
             style={{
-              padding: '12px 8px',
+              padding: '14px 8px',
               cursor: 'pointer',
               borderBottom: `1px solid ${theme.palette.grey.g10}`,
             }}
           >
-            <Flex align="center" gap={8}>
-              <Typography.Text strong>{station.stationName}</Typography.Text>
-              <Typography.Text type="secondary" style={{ fontSize: 12 }}>
-                {station.region}
-              </Typography.Text>
-            </Flex>
-            <Flex gap={4}>
+            <Typography.Text>{station.stationName}</Typography.Text>
+            <Flex gap={4} align="center">
               {station.lines.map((line) => (
-                <Tag key={line.lineId} color={line.colorHex} style={{ marginInlineEnd: 0 }}>
-                  {line.lineName}
-                </Tag>
+                <SubwayLineBadge key={line.lineId} line={line} />
               ))}
             </Flex>
           </Flex>
