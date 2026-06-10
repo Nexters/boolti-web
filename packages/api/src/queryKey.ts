@@ -47,6 +47,15 @@ import {
   WebHostConcertHallListResponse,
 } from './types/concertHall';
 import {
+  SubwayStationSearchItem,
+  SuperAdminConcertHallDetailResponse,
+  SuperAdminConcertHallListResponse,
+  SuperAdminConcertHallShowListResponse,
+  SuperAdminConcertHallShowSortBy,
+  SuperAdminConcertHallShowSortDirection,
+  SuperAdminConcertHallSubwayStation,
+} from './types/superAdminConcertHall';
+import {
   BankAccountListResponse,
   UserProfileResponse,
   UserProfileResponseV2,
@@ -594,6 +603,68 @@ export const superAdminUserQueryKeys = createQueryKeys('superAdminUser', {
   },
 });
 
+export const superAdminConcertHallQueryKeys = createQueryKeys('superAdminConcertHall', {
+  list: (page: number, size?: number, keyword?: string) => ({
+    queryKey: [page, size, keyword],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = { page };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (keyword) {
+        searchParams.keyword = keyword;
+      }
+      return fetcher.get<SuperAdminConcertHallListResponse>(`sa-api/v1/concert-halls`, {
+        searchParams,
+      });
+    },
+  }),
+  detail: (hallId: number) => ({
+    queryKey: [hallId],
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallDetailResponse>(`sa-api/v1/concert-halls/${hallId}`),
+  }),
+  subwayStations: (hallId: number) => ({
+    queryKey: [hallId],
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallSubwayStation[]>(
+        `sa-api/v1/concert-halls/${hallId}/subway-stations`,
+      ),
+  }),
+  shows: (
+    hallId: number,
+    page: number,
+    size?: number,
+    sortBy?: SuperAdminConcertHallShowSortBy,
+    direction?: SuperAdminConcertHallShowSortDirection,
+  ) => ({
+    queryKey: [hallId, page, size, sortBy, direction],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = { page };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (sortBy) {
+        searchParams.sortBy = sortBy;
+      }
+      if (direction) {
+        searchParams.direction = direction;
+      }
+      return fetcher.get<SuperAdminConcertHallShowListResponse>(
+        `sa-api/v1/concert-halls/${hallId}/shows`,
+        { searchParams },
+      );
+    },
+  }),
+  subwayStationSearch: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<SubwayStationSearchItem[]>(`sa-api/v1/subway-stations`, {
+        searchParams: { query },
+      }),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -608,5 +679,6 @@ export const queryKeys = mergeQueryKeys(
   popupQueryKeys,
   preQuestionQueryKeys,
   superAdminUserQueryKeys,
+  superAdminConcertHallQueryKeys,
   concertHallQueryKeys,
 );
