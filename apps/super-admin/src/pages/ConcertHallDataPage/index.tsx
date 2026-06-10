@@ -131,6 +131,8 @@ const ConcertHallDataPage = () => {
           pageSize: PAGE_SIZE,
           total: totalElements,
           showSizeChanger: false,
+          hideOnSinglePage: true,
+          position: ['bottomCenter'],
           onChange: (page) => setCurrentPage(page - 1),
         }}
       />
