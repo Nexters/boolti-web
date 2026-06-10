@@ -1,5 +1,7 @@
-import { CheckCircleFilled, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, DeleteOutlined } from '@ant-design/icons';
 import { useSuperAdminConcertHallShows } from '@boolti/api';
+import { Plus } from '@boolti/icon/src/components/Plus';
+import { Button as BooltiButton } from '@boolti/ui';
 import {
   SuperAdminConcertHallShowItem,
   SuperAdminConcertHallShowSortBy,
@@ -64,7 +66,11 @@ const ConcertHallDataPage = () => {
       width: 100,
       align: 'center',
       render: (isLinked: boolean) =>
-        isLinked ? <CheckCircleFilled style={{ color: theme.palette.primary.o1, fontSize: 18 }} /> : '-',
+        isLinked ? (
+          <CheckCircleFilled style={{ color: theme.palette.primary.o1, fontSize: 18 }} />
+        ) : (
+          '-'
+        ),
     },
     {
       key: 'delete',
@@ -96,14 +102,14 @@ const ConcertHallDataPage = () => {
       title="데이터 연결"
       description="해당 공연장에서 진행된 공연의 데이터를 관리합니다."
       action={
-        <Button
-          type="primary"
-          size="large"
-          icon={<PlusOutlined />}
+        <BooltiButton
+          colorTheme="netural"
+          size="medium"
+          icon={<Plus />}
           onClick={() => setIsAddModalOpen(true)}
         >
           추가하기
-        </Button>
+        </BooltiButton>
       }
     >
       <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
