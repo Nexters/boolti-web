@@ -1,7 +1,7 @@
 import { useSuperAdminDeleteConcertHallShow } from '@boolti/api';
 import { SuperAdminConcertHallShowItem } from '@boolti/api/src/types/superAdminConcertHall';
-import { useToast } from '@boolti/ui';
-import { Button, Flex, Input, Modal, Typography } from 'antd';
+import { Button, useToast } from '@boolti/ui';
+import { Flex, Input, Modal, Typography } from 'antd';
 import { useState } from 'react';
 
 interface DeleteShowConfirmModalProps {
@@ -21,17 +21,22 @@ const DeleteShowConfirmModal = ({
 }: DeleteShowConfirmModalProps) => {
   const toast = useToast();
   const [inputName, setInputName] = useState('');
+  const [hasMismatchError, setHasMismatchError] = useState(false);
   const deleteShow = useSuperAdminDeleteConcertHallShow();
-
-  const isMatched = target !== null && inputName === target.showName;
 
   const close = () => {
     setInputName('');
+    setHasMismatchError(false);
     onClose();
   };
 
+  // 디자인 정책: 입력이 있으면 삭제하기를 활성화하고, 클릭 시점에 공연명 일치를 검사한다.
   const onDelete = async () => {
     if (!target) {
+      return;
+    }
+    if (inputName !== target.showName) {
+      setHasMismatchError(true);
       return;
     }
     try {
@@ -50,9 +55,16 @@ const DeleteShowConfirmModal = ({
       open={open}
       onCancel={close}
       footer={
-        <Button danger type="primary" disabled={!isMatched} loading={deleteShow.isLoading} onClick={onDelete}>
-          삭제하기
-        </Button>
+        <Flex justify="flex-end">
+          <Button
+            colorTheme="primary"
+            size="medium"
+            disabled={inputName.trim().length === 0 || hasMismatchError || deleteShow.isLoading}
+            onClick={onDelete}
+          >
+            삭제하기
+          </Button>
+        </Flex>
       }
     >
       <Typography.Paragraph style={{ marginTop: 16 }}>
@@ -64,11 +76,14 @@ const DeleteShowConfirmModal = ({
           size="large"
           placeholder="공연명을 입력해 주세요"
           value={inputName}
-          status={inputName.length > 0 && !isMatched ? 'error' : undefined}
-          onChange={(e) => setInputName(e.target.value)}
+          status={hasMismatchError ? 'error' : undefined}
+          onChange={(e) => {
+            setInputName(e.target.value);
+            setHasMismatchError(false);
+          }}
         />
-        {inputName.length > 0 && !isMatched && (
-          <Typography.Text type="danger">공연명이 일치하지 않아요.</Typography.Text>
+        {hasMismatchError && (
+          <Typography.Text type="danger">정확한 공연명을 입력해주세요.</Typography.Text>
         )}
       </Flex>
     </Modal>
