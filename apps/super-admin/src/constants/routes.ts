@@ -7,6 +7,9 @@ export const PATH = {
   PAYMENT: '/show/:showId/payment',
   ENTRANCE: '/show/:showId/entrance',
   SETTLEMENT: '/show/:showId/settlement',
+  CONCERT_HALL_INFO: '/concert-hall/:hallId/info',
+  CONCERT_HALL_RENTAL: '/concert-hall/:hallId/rental',
+  CONCERT_HALL_DATA: '/concert-hall/:hallId/data',
 } as const;
 
 export const HREF = {
@@ -15,4 +18,7 @@ export const HREF = {
   PAYMENT: (showId: string | number) => `/show/${showId}/payment`,
   ENTRANCE: (showId: string | number) => `/show/${showId}/entrance`,
   SETTLEMENT: (showId: string | number) => `/show/${showId}/settlement`,
+  CONCERT_HALL_INFO: (hallId: string | number) => `/concert-hall/${hallId}/info`,
+  CONCERT_HALL_RENTAL: (hallId: string | number) => `/concert-hall/${hallId}/rental`,
+  CONCERT_HALL_DATA: (hallId: string | number) => `/concert-hall/${hallId}/data`,
 };
