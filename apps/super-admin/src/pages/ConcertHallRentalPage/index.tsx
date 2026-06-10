@@ -1,6 +1,7 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useSuperAdminConcertHallDetail } from '@boolti/api';
 import { SuperAdminConcertHallVatType } from '@boolti/api/src/types/superAdminConcertHall';
+import { Button as BooltiButton } from '@boolti/ui';
 import {
   Alert,
   Button,
@@ -132,9 +133,12 @@ const ConcertHallRentalPage = () => {
       description="공연장 대관 탭에 노출되는 정보를 관리합니다."
       action={
         <Tooltip title="대관 정보 저장 API가 준비 중이에요.">
-          <Button type="primary" size="large" disabled>
-            저장하기
-          </Button>
+          {/* disabled 버튼은 호버 이벤트가 막혀 span으로 감싸 툴팁을 살린다 */}
+          <span>
+            <BooltiButton colorTheme="primary" size="medium" disabled>
+              저장하기
+            </BooltiButton>
+          </span>
         </Tooltip>
       }
     >
