@@ -43,6 +43,13 @@ const HOURLY_FEE_DAY_OPTIONS = [
   '토~일요일 (주말 전체)',
 ].map((label) => ({ value: label, label }));
 
+// 부가세 포함 여부 (디자인 정책: 옵션 라벨에 사용자 화면 노출 문구 포함, 기본은 알 수 없음)
+const VAT_TYPE_OPTIONS: Array<{ value: SuperAdminConcertHallVatType; label: string }> = [
+  { value: 'NONE', label: '알 수 없음 (문구 미노출)' },
+  { value: 'VAT_INCLUDED', label: "VAT 포함 ('부가세 10%가 포함된 비용입니다.' 문구 노출)" },
+  { value: 'VAT_EXCLUDED', label: "VAT 별도 ('부가세 10%가 포함되지 않은 비용입니다.' 문구 노출)" },
+];
+
 interface FeeRow {
   dayType?: string;
   amount?: number;
@@ -121,11 +128,6 @@ const ConcertHallRentalPage = () => {
     // 대관료/시간당 추가 요금/유료 옵션은 구조화 응답 필드가 아직 없어 빈 행으로 시작한다.
   }, [detail]);
 
-  // VAT 포함/별도는 체크박스 2개가 상호배타로 동작하고, 해제하면 미선택(NONE) 상태가 된다.
-  const toggleVatType = (type: Exclude<SuperAdminConcertHallVatType, 'NONE'>) => {
-    setVatType((prev) => (prev === type ? 'NONE' : type));
-  };
-
   return (
     <PageLayout
       breadscrumb="공연장 관리 / 대관 정보"
@@ -191,27 +193,14 @@ const ConcertHallRentalPage = () => {
 
             <div>
               <FieldLabel>부가세 포함 여부</FieldLabel>
-              <Flex gap={16}>
-                <Checkbox
-                  checked={vatType === 'VAT_INCLUDED'}
-                  onChange={() => toggleVatType('VAT_INCLUDED')}
-                >
-                  VAT 포함
-                </Checkbox>
-                <Checkbox
-                  checked={vatType === 'VAT_EXCLUDED'}
-                  onChange={() => toggleVatType('VAT_EXCLUDED')}
-                >
-                  VAT 별도
-                </Checkbox>
-              </Flex>
-              <Typography.Text type="secondary" style={{ display: 'block', marginTop: 4 }}>
-                {vatType === 'VAT_INCLUDED' &&
-                  '사용자 화면에 ‘부가세 10%가 포함된 비용입니다.’ 문구가 노출돼요.'}
-                {vatType === 'VAT_EXCLUDED' &&
-                  '사용자 화면에 ‘부가세 10%가 포함되지 않은 비용입니다.’ 문구가 노출돼요.'}
-                {vatType === 'NONE' && '미선택 시 사용자 화면에 노출되지 않아요.'}
-              </Typography.Text>
+              {/* 옵션 라벨에 노출 문구를 포함한 단일 드롭다운 (기본: 알 수 없음) */}
+              <Select<SuperAdminConcertHallVatType>
+                size="large"
+                style={{ width: 480, maxWidth: '100%' }}
+                value={vatType}
+                options={VAT_TYPE_OPTIONS}
+                onChange={(value) => setVatType(value)}
+              />
             </div>
 
             <div>
