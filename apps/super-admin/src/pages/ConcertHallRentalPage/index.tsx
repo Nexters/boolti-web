@@ -1,7 +1,10 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { useSuperAdminConcertHallDetail } from '@boolti/api';
-import { SuperAdminConcertHallVatType } from '@boolti/api/src/types/superAdminConcertHall';
-import { Button as BooltiButton } from '@boolti/ui';
+import { useSuperAdminConcertHallDetail, useSuperAdminUpdateConcertHallRental } from '@boolti/api';
+import {
+  SuperAdminConcertHallRentalDayType,
+  SuperAdminConcertHallVatType,
+} from '@boolti/api/src/types/superAdminConcertHall';
+import { Button as BooltiButton, useToast } from '@boolti/ui';
 import {
   Alert,
   Button,
@@ -12,7 +15,6 @@ import {
   InputNumber,
   Radio,
   Select,
-  Tooltip,
   Typography,
 } from 'antd';
 import { useEffect, useState } from 'react';
@@ -22,26 +24,28 @@ import PageLayout from '~/components/PageLayout/PageLayout';
 
 const { TextArea } = Input;
 
-// 대관료 분류 (디자인 정책: 언제나 ~ 공휴일전 평일)
-const RENTAL_FEE_DAY_OPTIONS = [
-  '언제나',
-  '월~목요일',
-  '월~금요일 (평일 전체)',
-  '금요일',
-  '토요일',
-  '일요일',
-  '공휴일 (요일 무관)',
-  '공휴일전 평일 (월~금요일)',
-].map((label) => ({ value: label, label }));
+type DayOption = { value: SuperAdminConcertHallRentalDayType; label: string };
 
-// 시간당 추가 요금 분류 (대관료와 옵션이 다름)
-const HOURLY_FEE_DAY_OPTIONS = [
-  '언제나',
-  '월~목요일',
-  '월~금요일 (평일 전체)',
-  '금~일요일',
-  '토~일요일 (주말 전체)',
-].map((label) => ({ value: label, label }));
+// 대관료 분류 (디자인 정책: 언제나 ~ 공휴일전 평일). value는 API enum.
+const RENTAL_FEE_DAY_OPTIONS: DayOption[] = [
+  { value: 'ANYTIME', label: '언제나' },
+  { value: 'MON_TO_THU', label: '월~목요일' },
+  { value: 'WEEKDAY', label: '월~금요일 (평일 전체)' },
+  { value: 'FRIDAY', label: '금요일' },
+  { value: 'SATURDAY', label: '토요일' },
+  { value: 'SUNDAY', label: '일요일' },
+  { value: 'HOLIDAY', label: '공휴일 (요일 무관)' },
+  { value: 'PRE_HOLIDAY_WEEKDAY', label: '공휴일전 평일 (월~금요일)' },
+];
+
+// 시간당 추가 요금 분류 (대관료와 옵션이 다름). value는 API enum.
+const HOURLY_FEE_DAY_OPTIONS: DayOption[] = [
+  { value: 'ANYTIME', label: '언제나' },
+  { value: 'MON_TO_THU', label: '월~목요일' },
+  { value: 'WEEKDAY', label: '월~금요일 (평일 전체)' },
+  { value: 'FRI_TO_SUN', label: '금~일요일' },
+  { value: 'WEEKEND', label: '토~일요일 (주말 전체)' },
+];
 
 // 부가세 포함 여부 (디자인 정책: 옵션 라벨에 사용자 화면 노출 문구 포함, 기본은 알 수 없음)
 const VAT_TYPE_OPTIONS: Array<{ value: SuperAdminConcertHallVatType; label: string }> = [
@@ -51,7 +55,7 @@ const VAT_TYPE_OPTIONS: Array<{ value: SuperAdminConcertHallVatType; label: stri
 ];
 
 interface FeeRow {
-  dayType?: string;
+  dayType?: SuperAdminConcertHallRentalDayType;
   amount?: number;
 }
 
@@ -91,7 +95,9 @@ const AddRowButton = ({ onClick }: { onClick: () => void }) => (
 const ConcertHallRentalPage = () => {
   const params = useParams<{ hallId: string }>();
   const hallId = Number(params.hallId);
+  const toast = useToast();
   const { data: detail } = useSuperAdminConcertHallDetail(hallId);
+  const updateRental = useSuperAdminUpdateConcertHallRental();
 
   // 대관 방법
   const [rentalMethod, setRentalMethod] = useState('');
@@ -128,26 +134,67 @@ const ConcertHallRentalPage = () => {
     // 대관료/시간당 추가 요금/유료 옵션은 구조화 응답 필드가 아직 없어 빈 행으로 시작한다.
   }, [detail]);
 
+  const onSave = async () => {
+    // dayType과 금액이 모두 있는 행만 전송한다.
+    const validRentalFees = rentalFees
+      .map((row, index) => ({ row, index }))
+      .filter(({ row }) => row.dayType && row.amount !== undefined);
+    // 기본 대관료 행이 비어 제외되면 첫 유효행을 기본으로 (정확히 1개만 true 보장)
+    const defaultExists = validRentalFees.some(({ index }) => index === defaultFeeIndex);
+    const resolvedDefaultIndex = defaultExists ? defaultFeeIndex : validRentalFees[0]?.index;
+    const additionalFees = hourlyFees
+      .filter((row) => row.dayType && row.amount !== undefined)
+      .map((row) => ({ dayType: row.dayType!, fee: row.amount! }));
+    const paidOptionsBody = paidOptions
+      .filter((row) => row.name.trim() && row.amount !== undefined)
+      .map((row) => ({ name: row.name.trim(), price: row.amount! }));
+
+    try {
+      await updateRental.mutateAsync({
+        hallId,
+        body: {
+          rentalMethod: rentalMethod.trim() || undefined,
+          rentalTimeHours,
+          isEngineerBreakIncluded,
+          vatType,
+          capacity: { seatedCapacity, standingCapacity },
+          instrumentsText: instrumentsText.trim() || undefined,
+          rentalFees: validRentalFees.map(({ row, index }) => ({
+            dayType: row.dayType!,
+            fee: row.amount!,
+            isDefault: index === resolvedDefaultIndex,
+          })),
+          additionalFees,
+          paidOptions: paidOptionsBody,
+          specialNotes: specialNotes.map((note) => note.trim()).filter(Boolean),
+        },
+      });
+      toast.success('대관 정보를 저장했어요.');
+    } catch {
+      toast.error('대관 정보 저장 중 문제가 발생했습니다.');
+    }
+  };
+
   return (
     <PageLayout
       breadscrumb="공연장 관리 / 대관 정보"
       title="대관 정보"
       description="공연장 대관 탭에 노출되는 정보를 관리합니다."
       action={
-        <Tooltip title="대관 정보 저장 API가 준비 중이에요.">
-          {/* disabled 버튼은 호버 이벤트가 막혀 span으로 감싸 툴팁을 살린다 */}
-          <span>
-            <BooltiButton colorTheme="primary" size="medium" disabled>
-              저장하기
-            </BooltiButton>
-          </span>
-        </Tooltip>
+        <BooltiButton
+          colorTheme="primary"
+          size="medium"
+          disabled={updateRental.isLoading}
+          onClick={onSave}
+        >
+          저장하기
+        </BooltiButton>
       }
     >
       <Alert
         type="info"
         showIcon
-        message="대관 정보 저장 API가 준비 중이에요. 입력한 내용은 아직 저장되지 않아요."
+        message="대관료·시간당 추가 요금·유료 옵션은 저장은 되지만, 현재 상세 조회 응답에 포함되지 않아 새로고침 시 다시 표시되지 않아요."
         style={{ marginBottom: 20 }}
       />
 

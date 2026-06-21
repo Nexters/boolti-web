@@ -3,6 +3,8 @@ import {
   useSuperAdminConcertHallDetail,
   useSuperAdminConcertHallSubwayStations,
   useSuperAdminSaveConcertHallSubwayStations,
+  useSuperAdminUpdateConcertHall,
+  useSuperAdminUploadConcertHallImage,
 } from '@boolti/api';
 import {
   SubwayStationSearchItem,
@@ -10,16 +12,7 @@ import {
 } from '@boolti/api/src/types/superAdminConcertHall';
 import { Button as BooltiButton, useToast } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
-import {
-  Alert,
-  Button,
-  Card,
-  Checkbox,
-  Flex,
-  Input,
-  InputNumber,
-  Typography,
-} from 'antd';
+import { Button, Card, Checkbox, Flex, Input, InputNumber, Typography } from 'antd';
 import type { InputRef } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -122,6 +115,8 @@ const ConcertHallInfoPage = () => {
   const { data: detail } = useSuperAdminConcertHallDetail(hallId);
   const { data: savedStations } = useSuperAdminConcertHallSubwayStations(hallId);
   const saveSubwayStations = useSuperAdminSaveConcertHallSubwayStations();
+  const updateConcertHall = useSuperAdminUpdateConcertHall();
+  const uploadImage = useSuperAdminUploadConcertHallImage();
 
   // 기본 정보
   const [name, setName] = useState('');
@@ -149,12 +144,13 @@ const ConcertHallInfoPage = () => {
     }
     setName(detail.name ?? '');
     setStreetAddress(detail.location?.streetAddress ?? '');
-    setDetailAddress(detail.floor ?? detail.location?.detailAddress ?? '');
+    setDetailAddress(detail.location?.detailAddress ?? '');
     setRepresentativeImage(detail.representativeImageUrl ?? null);
     setWebsiteUrl(detail.contact?.websiteUrl ?? '');
     setPhoneNumber(detail.contact?.phoneNumber ?? '');
     setEmail(detail.contact?.email ?? '');
     setIntroduction(detail.introduction ?? '');
+    setPhotos((detail.images ?? []).map((image) => image.imageUrl));
     setAmenities({
       hasWaitingRoom: detail.amenities?.hasWaitingRoom ?? false,
       waitingRoomCount: detail.amenities?.waitingRoomCount,
@@ -222,13 +218,58 @@ const ConcertHallInfoPage = () => {
   const hasPhoneNumberError = phoneNumber.length > 0 && !PHONE_NUMBER_REGEX.test(phoneNumber);
   const hasEmailError = email.length > 0 && !EMAIL_REGEX.test(email);
 
+  const isSaving =
+    updateConcertHall.isLoading || uploadImage.isLoading || saveSubwayStations.isLoading;
+
+  // blob: URL(새로 추가한 이미지)이면 업로드하고, http URL(기존 저장본)이면 그대로 둔다.
+  const resolveImage = async (url: string) => {
+    if (url.startsWith('blob:')) {
+      const blob = await fetch(url).then((res) => res.blob());
+      const file = new File([blob], 'image.png', { type: blob.type });
+      return uploadImage.mutateAsync(file);
+    }
+    return { imageUrl: url, thumbnailUrl: url };
+  };
+
   const onSave = async () => {
+    if (hasPhoneNumberError || hasEmailError) {
+      toast.error('전화번호/이메일 형식을 확인해 주세요.');
+      return;
+    }
     try {
+      const representativeImageUrl = representativeImage
+        ? (await resolveImage(representativeImage)).imageUrl
+        : undefined;
+      const images = await Promise.all(photos.map((photo) => resolveImage(photo)));
+
+      await updateConcertHall.mutateAsync({
+        hallId,
+        body: {
+          name: name.trim(),
+          introduction: introduction.trim() || undefined,
+          representativeImageUrl,
+          location: {
+            streetAddress: streetAddress.trim() || undefined,
+            detailAddress: detailAddress.trim() || undefined,
+            // Daum 우편번호는 좌표를 주지 않으므로 기존 좌표를 보존한다.
+            latitude: detail?.location?.latitude,
+            longitude: detail?.location?.longitude,
+          },
+          contact: {
+            websiteUrl: websiteUrl.trim() || undefined,
+            phoneNumber: phoneNumber.trim() || undefined,
+            email: email.trim() || undefined,
+          },
+          amenities,
+          images,
+        },
+      });
+      // 인근 지하철역은 별도 엔드포인트라 함께 저장한다.
       await saveSubwayStations.mutateAsync({
         hallId,
         stationIds: stations.map(({ stationId }) => stationId),
       });
-      toast.success('인근 지하철역 정보를 저장했어요.');
+      toast.success('공연장 정보를 저장했어요.');
     } catch {
       toast.error('저장 중 문제가 발생했습니다.');
     }
@@ -261,23 +302,11 @@ const ConcertHallInfoPage = () => {
       title="공연장 정보"
       description="공연장 프로필에 노출되는 기본 정보를 관리합니다."
       action={
-        <BooltiButton
-          colorTheme="primary"
-          size="medium"
-          disabled={saveSubwayStations.isLoading}
-          onClick={onSave}
-        >
+        <BooltiButton colorTheme="primary" size="medium" disabled={isSaving} onClick={onSave}>
           저장하기
         </BooltiButton>
       }
     >
-      <Alert
-        type="info"
-        showIcon
-        message="공연장 정보 저장 API가 준비 중이에요. 현재는 인근 지하철역만 저장돼요."
-        style={{ marginBottom: 20 }}
-      />
-
       <Flex vertical gap={20}>
         <Card>
           <SectionTitle>기본 정보</SectionTitle>
