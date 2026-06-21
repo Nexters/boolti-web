@@ -2,6 +2,7 @@ import { SwapOutlined } from '@ant-design/icons';
 import {
   useSuperAdminAddConcertHallShowFromBoolti,
   useSuperAdminAddConcertHallShowManual,
+  useSuperAdminUploadShowPoster,
   useSuperAdminValidateConcertHallShow,
 } from '@boolti/api';
 import { SuperAdminConcertHallShowValidateResponse } from '@boolti/api/src/types/superAdminConcertHall';
@@ -64,6 +65,7 @@ const AddShowDataModal = ({ open, hallId, onClose, onAdded }: AddShowDataModalPr
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [mode, setMode] = useState<AddMode>('manual');
   const [posterPreview, setPosterPreview] = useState<string | null>(null);
+  const [posterFile, setPosterFile] = useState<File | null>(null);
   const [booltiShowId, setBooltiShowId] = useState('');
   const [validated, setValidated] = useState<SuperAdminConcertHallShowValidateResponse | null>(
     null,
@@ -73,6 +75,7 @@ const AddShowDataModal = ({ open, hallId, onClose, onAdded }: AddShowDataModalPr
   const validateShow = useSuperAdminValidateConcertHallShow();
   const addManual = useSuperAdminAddConcertHallShowManual();
   const addFromBoolti = useSuperAdminAddConcertHallShowFromBoolti();
+  const uploadPoster = useSuperAdminUploadShowPoster();
 
   // 필수 값(공연명/공연일)이 채워져야 추가하기가 활성화된다 (디자인 Default/Filled 상태)
   const watchedShowName = Form.useWatch('showName', form);
@@ -89,6 +92,7 @@ const AddShowDataModal = ({ open, hallId, onClose, onAdded }: AddShowDataModalPr
       URL.revokeObjectURL(posterPreview);
       setPosterPreview(null);
     }
+    setPosterFile(null);
     onClose();
   };
 
@@ -100,17 +104,31 @@ const AddShowDataModal = ({ open, hallId, onClose, onAdded }: AddShowDataModalPr
     if (posterPreview) {
       URL.revokeObjectURL(posterPreview);
     }
+    setPosterFile(file);
     setPosterPreview(URL.createObjectURL(file));
     event.target.value = '';
   };
 
+  // 포스터는 필수값. 사용자가 선택한 파일이 없으면 기본 포스터 에셋을 File로 변환해 사용한다.
+  const resolvePosterFile = async (): Promise<File> => {
+    if (posterFile) {
+      return posterFile;
+    }
+    const blob = await fetch(defaultPoster).then((res) => res.blob());
+    return new File([blob], 'default-poster.png', { type: blob.type });
+  };
+
   const onSubmitManual = async (values: ManualFormValues) => {
     try {
-      // 포스터/외부 홍보 링크는 직접 입력 API가 아직 받지 않아 전송하지 않는다.
+      const file = await resolvePosterFile();
+      const posterImageUrl = await uploadPoster.mutateAsync(file);
+
       await addManual.mutateAsync({
         hallId,
         showName: values.showName.trim(),
         showDate: format(values.showDate, 'yyyy-MM-dd'),
+        posterImageUrl,
+        externalLink: values.promotionUrl?.trim() || undefined,
       });
       toast.success('공연 데이터를 추가했어요.');
       onAdded();
@@ -247,7 +265,7 @@ const AddShowDataModal = ({ open, hallId, onClose, onAdded }: AddShowDataModalPr
               colorTheme="primary"
               size="medium"
               type="submit"
-              disabled={!isManualFilled || addManual.isLoading}
+              disabled={!isManualFilled || addManual.isLoading || uploadPoster.isLoading}
             >
               추가하기
             </Button>
