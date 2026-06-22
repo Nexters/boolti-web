@@ -2,7 +2,6 @@ import { LoginOutlined } from '@ant-design/icons';
 import { LOCAL_STORAGE, useAdmingLogin } from '@boolti/api';
 import { BooltiLogo } from '@boolti/icon';
 import { App, Button, Form, Input } from 'antd';
-import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
@@ -14,8 +13,7 @@ interface FieldType {
 }
 
 function LoginPage() {
-  const { mutateAsync } = useAdmingLogin();
-  const navigate = useNavigate();
+  const { mutateAsync, isLoading } = useAdmingLogin();
   const { message } = App.useApp();
   return (
     <Styled.Container>
@@ -37,7 +35,9 @@ function LoginPage() {
               window.localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, accessToken);
               window.localStorage.setItem(LOCAL_STORAGE.REFRESH_TOKEN, refreshToken);
 
-              navigate(PATH.INDEX, { replace: true });
+              // 인증 가드가 localStorage를 렌더 시점에만 읽어(비반응형) SPA 네비게이션으로는
+              // 즉시 전환되지 않으므로, 하드 리다이렉트로 앱을 새로 부팅해 새 토큰을 읽게 한다.
+              window.location.replace(PATH.INDEX);
             } catch (e) {
               message.error('로그인에 실패했습니다.');
             }
@@ -66,9 +66,10 @@ function LoginPage() {
               type="primary"
               size="large"
               htmlType="submit"
+              loading={isLoading}
               style={{ width: '100%' }}
             >
-              LOGIN
+              {isLoading ? '로그인 중...' : 'LOGIN'}
             </Button>
           </Form.Item>
         </Form>
