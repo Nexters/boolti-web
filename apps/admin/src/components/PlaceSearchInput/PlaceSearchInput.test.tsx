@@ -14,6 +14,8 @@ vi.mock('@boolti/ui', () => ({
     HTMLInputElement,
     React.InputHTMLAttributes<HTMLInputElement> & { inputType?: string; size?: string }
   >(function StubTextField(props, ref) {
+    // inputType/size는 커스텀 prop이라 DOM input에 넘기지 않도록 rest에서 제외한다.
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { inputType: _inputType, size: _size, ...rest } = props;
     return <input ref={ref} {...rest} />;
   }),

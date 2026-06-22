@@ -19,6 +19,9 @@ import TicketPage from './pages/TicketPage';
 import PaymentPage from './pages/PaymentPage';
 import EntrancePage from './pages/EntrancePage';
 import AdminUserPage from './pages/AdminUserPage';
+import ConcertHallInfoPage from './pages/ConcertHallInfoPage';
+import ConcertHallRentalPage from './pages/ConcertHallRentalPage';
+import ConcertHallDataPage from './pages/ConcertHallDataPage';
 
 setDefaultOptions({ locale: ko });
 
@@ -95,6 +98,18 @@ const privateRoutes = [
       {
         path: PATH.SETTLEMENT,
         element: <SettlementPage />,
+      },
+      {
+        path: PATH.CONCERT_HALL_INFO,
+        element: <ConcertHallInfoPage />,
+      },
+      {
+        path: PATH.CONCERT_HALL_RENTAL,
+        element: <ConcertHallRentalPage />,
+      },
+      {
+        path: PATH.CONCERT_HALL_DATA,
+        element: <ConcertHallDataPage />,
       },
     ],
   },
