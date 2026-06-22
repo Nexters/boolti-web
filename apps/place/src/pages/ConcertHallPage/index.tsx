@@ -1,12 +1,13 @@
 import { useConcertHallProfile } from '@boolti/api';
 import { useToast } from '@boolti/ui';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import ComingSoon from '~/components/ComingSoon';
 import HallHead from '~/components/HallHead';
 import HomeTab from '~/components/HomeTab';
 import Layout from '~/components/Layout';
+import RentalTab from '~/components/RentalTab';
 import { formatUpdatedAt } from '~/utils/format';
 
 import Styled from './ConcertHallPage.styles';
@@ -20,11 +21,9 @@ const TABS: Array<{ key: TabKey; label: string }> = [
 
 const ConcertHallPage = () => {
   const toast = useToast();
-  const [searchParams] = useSearchParams();
-  const idParam = searchParams.get('concertHallId') ?? searchParams.get('id');
+  const { concertHallId: idParam } = useParams<{ concertHallId: string }>();
   const concertHallId = idParam && /^\d+$/.test(idParam) ? Number(idParam) : null;
 
-  console.log('concertHallId', concertHallId);
   const { data: profile } = useConcertHallProfile(concertHallId);
   const [activeTab, setActiveTab] = useState<TabKey>('home');
 
@@ -81,7 +80,8 @@ const ConcertHallPage = () => {
       </Styled.TabBar>
       {activeTab === 'home' &&
         (profile.hasHomeTabData ? <HomeTab profile={profile} /> : <ComingSoon />)}
-      {activeTab === 'rental' && <ComingSoon />}
+      {activeTab === 'rental' &&
+        (profile.hasRentalTabData ? <RentalTab profile={profile} /> : <ComingSoon />)}
       <Styled.Bottom>
         <Styled.BottomText>
           이 페이지의 정보는 불티에서 수집한 것으로, 실제 시설 및 장비와 다를 수 있습니다. 정확한

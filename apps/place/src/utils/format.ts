@@ -49,6 +49,11 @@ export const formatAmenityLabel = ({ type, name, count }: ConcertHallAmenity) =>
   return `${name} ${count.toLocaleString()}개`;
 };
 
+export const formatFee = (fee: number) => `${fee.toLocaleString()}원`;
+
+export const normalizeWebsiteUrl = (url: string) =>
+  /^https?:\/\//i.test(url) ? url : `https://${url}`;
+
 // "2호선" -> "2", "경의중앙선" -> "경의", "분당선" -> "분당"
 export const getSubwayLineShortName = (lineName: string) => {
   const numberLine = lineName.match(/^(\d+)호선$/);
