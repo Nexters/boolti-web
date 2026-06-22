@@ -106,23 +106,6 @@ const SubwayStationRow = styled.div`
   gap: 4px;
 `;
 
-const SubwayLineChip = styled.span<{ backgroundColor: string; isLight: boolean }>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 100px;
-  background-color: ${({ backgroundColor }) => backgroundColor};
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 22px;
-  white-space: nowrap;
-  color: ${({ theme, isLight }) =>
-    isLight ? theme.palette.mobile.grey.g90 : theme.palette.mobile.grey.w};
-`;
-
 const SubwayStationName = styled.span`
   font-size: 15px;
   line-height: 23px;
@@ -173,7 +156,6 @@ export default {
   SummaryValue,
   SubwayStationList,
   SubwayStationRow,
-  SubwayLineChip,
   SubwayStationName,
   ContactButtonArea,
   ContactButton,

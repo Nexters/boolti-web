@@ -1,16 +1,10 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
 import { ShareIcon } from '@boolti/icon';
-import { useToast } from '@boolti/ui';
+import { SubwayLineBadge, useToast } from '@boolti/ui';
 
 import defaultHallImage from '~/assets/images/default-hall.png';
 import { CallIcon, MailIcon, WebsiteIcon } from '~/components/icons';
-import {
-  formatAddress,
-  formatCapacity,
-  getSubwayLineShortName,
-  isLightColor,
-  normalizeWebsiteUrl,
-} from '~/utils/format';
+import { formatAddress, formatCapacity, normalizeWebsiteUrl } from '~/utils/format';
 
 import Styled from './HallHead.styles';
 
@@ -111,13 +105,11 @@ const HallHead = ({ profile, onShare }: Props) => {
                 {subwayStations.map((station) => (
                   <Styled.SubwayStationRow key={station.id}>
                     {station.lines.map((line) => (
-                      <Styled.SubwayLineChip
+                      <SubwayLineBadge
                         key={line.id}
-                        backgroundColor={line.colorHex}
-                        isLight={isLightColor(line.colorHex)}
-                      >
-                        {getSubwayLineShortName(line.lineName)}
-                      </Styled.SubwayLineChip>
+                        lineName={line.lineName}
+                        colorHex={line.colorHex}
+                      />
                     ))}
                     <Styled.SubwayStationName>{station.stationName}</Styled.SubwayStationName>
                   </Styled.SubwayStationRow>
