@@ -81,6 +81,67 @@ export interface ConcertHallShare {
   imageUrl?: string;
 }
 
+export type ConcertHallProfileDayType =
+  | 'ANYTIME'
+  | 'MON_TO_THU'
+  | 'WEEKDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY'
+  | 'FRI_TO_SUN'
+  | 'WEEKEND'
+  | 'HOLIDAY'
+  | 'PRE_HOLIDAY_WEEKDAY';
+
+export interface ConcertHallProfileRentalTime {
+  /** 대관 시간 (시간 단위) */
+  rentalTimeHours?: number;
+  /** 대관 시간 설명 */
+  rentalTimeDescription?: string;
+  isEngineerBreakIncluded?: boolean;
+}
+
+export interface ConcertHallProfileFee {
+  id: number;
+  dayType: ConcertHallProfileDayType;
+  /** 요일 유형 이름 (예: 평일) */
+  dayTypeName: string;
+  /** 금액 (원) */
+  fee: number;
+  /** 노출 순서 (0부터 시작) */
+  sequence: number;
+}
+
+export interface ConcertHallProfileVat {
+  type: 'NONE' | 'VAT_INCLUDED' | 'VAT_EXCLUDED';
+  /** 부가세 설명 (예: 부가세 별도) */
+  description?: string;
+}
+
+export interface ConcertHallProfilePaidOption {
+  id: number;
+  name: string;
+  /** 옵션 가격 (원) */
+  price: number;
+}
+
+export interface ConcertHallProfileRental {
+  /** 대관 방법 */
+  rentalMethod?: string;
+  rentalTime?: ConcertHallProfileRentalTime;
+  /** 기본 대관료 목록 */
+  rentalFees?: ConcertHallProfileFee[];
+  vat?: ConcertHallProfileVat;
+  /** 추가 비용 목록 */
+  additionalFees?: ConcertHallProfileFee[];
+  /** 악기 목록 텍스트 */
+  instrumentsText?: string;
+  /** 유상 옵션 목록 */
+  paidOptions?: ConcertHallProfilePaidOption[];
+  /** 특이사항 목록 */
+  specialNotes?: string[];
+}
+
 export interface ConcertHallProfileResponse {
   id: number;
   name: string;
@@ -91,5 +152,6 @@ export interface ConcertHallProfileResponse {
   hasRentalTabData?: boolean;
   head?: ConcertHallProfileHead;
   home?: ConcertHallProfileHome;
+  rental?: ConcertHallProfileRental;
   informationUpdatedAt?: string;
 }
