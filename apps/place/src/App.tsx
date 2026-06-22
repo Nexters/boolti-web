@@ -11,9 +11,13 @@ import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/:concertHallId',
     element: <ConcertHallPage />,
     errorElement: <ErrorPage />,
+  },
+  {
+    path: '*',
+    element: <ErrorPage />,
   },
 ]);
 
