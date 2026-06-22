@@ -97,7 +97,6 @@ const PlaceSearchInput = ({
     }
 
     if (profileQuery.isError) {
-      // eslint-disable-next-line no-console
       console.warn('[PlaceSearchInput] concert hall profile fetch failed', profileQuery.error);
     }
 
