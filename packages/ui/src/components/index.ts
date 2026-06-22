@@ -20,6 +20,7 @@ import RadioButton from './RadioButton';
 import StepDialog from './Dialog/StepDialog';
 import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 import PreviewMapWithProvider from './PreviewMap/PreviewMapWithProvider';
+import SubwayLineBadge from './SubwayLineBadge';
 
 export {
   AgreeCheck,
@@ -44,4 +45,5 @@ export {
   StepDialog,
   ShowInfoDetail,
   PreviewMapWithProvider,
+  SubwayLineBadge,
 };
