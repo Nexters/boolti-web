@@ -43,6 +43,7 @@ import {
 } from './types/adminShow';
 import { SuperAdminUserResponse } from './types/superAdminUser';
 import {
+  ConcertHallImageListResponse,
   ConcertHallProfileResponse,
   WebHostConcertHallListResponse,
 } from './types/concertHall';
@@ -514,6 +515,13 @@ export const concertHallQueryKeys = createQueryKeys('concertHall', {
     queryKey: [concertHallId],
     queryFn: () =>
       fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
+  }),
+  images: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () =>
+      fetcher.get<ConcertHallImageListResponse>(
+        `web/papi/v1/concert-halls/${concertHallId}/images`,
+      ),
   }),
 });
 

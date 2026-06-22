@@ -67,6 +67,10 @@ export interface ConcertHallAmenity {
   count?: number | null;
 }
 
+export interface ConcertHallImageListResponse {
+  items: ConcertHallImage[];
+}
+
 export interface ConcertHallProfileHome {
   introduction?: string;
   images?: ConcertHallImage[];
