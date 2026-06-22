@@ -1,9 +1,16 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
 import { ShareIcon } from '@boolti/icon';
+import { useToast } from '@boolti/ui';
 
 import defaultHallImage from '~/assets/images/default-hall.png';
 import { CallIcon, MailIcon, WebsiteIcon } from '~/components/icons';
-import { formatAddress, formatCapacity, getSubwayLineShortName, isLightColor } from '~/utils/format';
+import {
+  formatAddress,
+  formatCapacity,
+  getSubwayLineShortName,
+  isLightColor,
+  normalizeWebsiteUrl,
+} from '~/utils/format';
 
 import Styled from './HallHead.styles';
 
@@ -13,6 +20,7 @@ interface Props {
 }
 
 const HallHead = ({ profile, onShare }: Props) => {
+  const toast = useToast();
   const { name, representativeImageUrl, head } = profile;
 
   const capacityText = formatCapacity(head?.capacity);
@@ -26,6 +34,41 @@ const HallHead = ({ profile, onShare }: Props) => {
     Boolean(capacityText) ||
     Boolean(addressText) ||
     subwayStations.length > 0;
+
+  // 문의처는 1개라도 있으면 버튼 3개를 모두 노출하고,
+  // 데이터가 없는 항목은 비활성 스타일 + 클릭 시 준비 중 토스트를 띄운다
+  const contactButtons = [
+    {
+      key: 'website',
+      label: '웹사이트',
+      icon: <WebsiteIcon />,
+      value: contact?.websiteUrl,
+      emptyMessage: '웹사이트를 준비 중이에요.',
+      action: (websiteUrl: string) => {
+        window.open(normalizeWebsiteUrl(websiteUrl), '_blank', 'noopener,noreferrer');
+      },
+    },
+    {
+      key: 'phone',
+      label: '전화',
+      icon: <CallIcon />,
+      value: contact?.phoneNumber,
+      emptyMessage: '전화 정보를 준비 중이에요.',
+      action: (phoneNumber: string) => {
+        window.location.href = `tel:${phoneNumber}`;
+      },
+    },
+    {
+      key: 'email',
+      label: '메일',
+      icon: <MailIcon />,
+      value: contact?.email,
+      emptyMessage: '메일 정보를 준비 중이에요.',
+      action: (email: string) => {
+        window.location.href = `mailto:${email}`;
+      },
+    },
+  ];
 
   return (
     <Styled.Container>
@@ -86,30 +129,23 @@ const HallHead = ({ profile, onShare }: Props) => {
       )}
       {hasContact && (
         <Styled.ContactButtonArea>
-          <Styled.ContactButton
-            type="button"
-            disabled={!contact?.websiteUrl}
-            onClick={() => window.open(contact?.websiteUrl, '_blank', 'noopener,noreferrer')}
-          >
-            <WebsiteIcon />
-            <Styled.ContactButtonLabel>웹사이트</Styled.ContactButtonLabel>
-          </Styled.ContactButton>
-          <Styled.ContactButton
-            type="button"
-            disabled={!contact?.phoneNumber}
-            onClick={() => (window.location.href = `tel:${contact?.phoneNumber}`)}
-          >
-            <CallIcon />
-            <Styled.ContactButtonLabel>전화</Styled.ContactButtonLabel>
-          </Styled.ContactButton>
-          <Styled.ContactButton
-            type="button"
-            disabled={!contact?.email}
-            onClick={() => (window.location.href = `mailto:${contact?.email}`)}
-          >
-            <MailIcon />
-            <Styled.ContactButtonLabel>메일</Styled.ContactButtonLabel>
-          </Styled.ContactButton>
+          {contactButtons.map(({ key, label, icon, value, emptyMessage, action }) => (
+            <Styled.ContactButton
+              key={key}
+              type="button"
+              isActive={Boolean(value)}
+              onClick={() => {
+                if (value) {
+                  action(value);
+                } else {
+                  toast.info(emptyMessage);
+                }
+              }}
+            >
+              {icon}
+              <Styled.ContactButtonLabel>{label}</Styled.ContactButtonLabel>
+            </Styled.ContactButton>
+          ))}
         </Styled.ContactButtonArea>
       )}
     </Styled.Container>

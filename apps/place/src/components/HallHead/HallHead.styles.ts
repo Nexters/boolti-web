@@ -137,7 +137,8 @@ const ContactButtonArea = styled.div`
   padding: 0 20px;
 `;
 
-const ContactButton = styled.button`
+// 데이터가 없어도 버튼은 노출하되 색상만 어둡게 처리한다 (클릭 시 토스트 안내)
+const ContactButton = styled.button<{ isActive: boolean }>`
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -147,13 +148,9 @@ const ContactButton = styled.button`
   padding: 12px 16px;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
-  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  color: ${({ theme, isActive }) =>
+    isActive ? theme.palette.mobile.grey.g30 : theme.palette.mobile.grey.g70};
   cursor: pointer;
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: default;
-  }
 `;
 
 const ContactButtonLabel = styled.span`
