@@ -1,4 +1,9 @@
-import { useQueryClient, useSuperAdminCreateConcertHall, queryKeys } from '@boolti/api';
+import {
+  useQueryClient,
+  useSuperAdminCreateConcertHall,
+  useSuperAdminUpdateConcertHallVisibility,
+  queryKeys,
+} from '@boolti/api';
 import { useToast } from '@boolti/ui';
 import { Button, Input, Modal, Typography } from 'antd';
 import { useState } from 'react';
@@ -17,6 +22,7 @@ const ConcertHallCreateDialog = ({ open, onClose }: ConcertHallCreateDialogProps
   const queryClient = useQueryClient();
   const [name, setName] = useState('');
   const createConcertHall = useSuperAdminCreateConcertHall();
+  const updateVisibility = useSuperAdminUpdateConcertHallVisibility();
 
   const close = () => {
     setName('');
@@ -26,6 +32,8 @@ const ConcertHallCreateDialog = ({ open, onClose }: ConcertHallCreateDialogProps
   const onCreate = async () => {
     try {
       const { id } = await createConcertHall.mutateAsync(name.trim());
+      // 공연장은 무조건 노출 상태여야 하므로 생성 직후 노출 처리한다.
+      await updateVisibility.mutateAsync({ hallId: id, visible: true });
       await queryClient.invalidateQueries(queryKeys.superAdminConcertHall._def);
       toast.success('공연장을 생성했어요.');
       close();
@@ -44,7 +52,7 @@ const ConcertHallCreateDialog = ({ open, onClose }: ConcertHallCreateDialogProps
         <Button
           type="primary"
           disabled={name.trim().length === 0}
-          loading={createConcertHall.isLoading}
+          loading={createConcertHall.isLoading || updateVisibility.isLoading}
           onClick={onCreate}
         >
           생성하기

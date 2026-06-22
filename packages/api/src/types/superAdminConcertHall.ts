@@ -1,5 +1,18 @@
 export type SuperAdminConcertHallVatType = 'NONE' | 'VAT_INCLUDED' | 'VAT_EXCLUDED';
 
+/** 대관료/시간당 추가 요금 요일 분류 */
+export type SuperAdminConcertHallRentalDayType =
+  | 'ANYTIME'
+  | 'MON_TO_THU'
+  | 'WEEKDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY'
+  | 'FRI_TO_SUN'
+  | 'WEEKEND'
+  | 'HOLIDAY'
+  | 'PRE_HOLIDAY_WEEKDAY';
+
 export interface SuperAdminConcertHallItem {
   /** 공연장 ID */
   id: number;
@@ -49,7 +62,6 @@ export interface SuperAdminConcertHallContact {
 
 export interface SuperAdminConcertHallRentalTime {
   rentalTimeHours?: number;
-  rentalTimeDescription?: string;
   isEngineerBreakIncluded?: boolean;
 }
 
@@ -65,29 +77,30 @@ export interface SuperAdminConcertHallAmenities {
   parkingCount?: number;
 }
 
+export interface SuperAdminConcertHallImage {
+  id: number;
+  imageUrl: string;
+  thumbnailUrl: string;
+  /** 노출 순서 */
+  sequence: number;
+}
+
+/** GET /concert-halls/{id} — 공연장 기본 정보 상세 (대관 정보는 별도 엔드포인트로 분리됨) */
 export interface SuperAdminConcertHallDetailResponse {
   id: number;
   name: string;
   shareCode: string;
   isVisible: boolean;
-  /** 상세주소 (지층 등) */
-  floor?: string;
   introduction?: string;
   representativeImageUrl?: string;
+  images?: SuperAdminConcertHallImage[];
   location?: SuperAdminConcertHallLocation;
-  capacity?: SuperAdminConcertHallCapacity;
   contact?: SuperAdminConcertHallContact;
-  rentalMethod?: string;
-  rentalTime?: SuperAdminConcertHallRentalTime;
-  rentalFeeDescription?: string;
-  vatType?: SuperAdminConcertHallVatType;
-  instrumentsText?: string;
-  specialNotes?: string[];
   amenities?: SuperAdminConcertHallAmenities;
   /** ISO8601 */
   informationUpdatedAt?: string;
-  hasHomeTabData: boolean;
-  hasRentalTabData: boolean;
+  hasHomeTabData?: boolean;
+  hasRentalTabData?: boolean;
 }
 
 export interface SuperAdminConcertHallVisibilityUpdateRequest {
@@ -106,6 +119,9 @@ export interface SuperAdminConcertHallShowItem {
   hostName?: string;
   /** 불티 공연 ID로 연결된 경우 true, 직접 입력인 경우 false */
   isLinked: boolean;
+  posterImageUrl?: string;
+  /** 외부 홍보 링크 */
+  externalLink?: string;
 }
 
 export interface SuperAdminConcertHallShowListResponse {
@@ -121,6 +137,10 @@ export interface SuperAdminConcertHallShowManualRequest {
   /** 공연일 (yyyy-MM-dd) */
   showDate: string;
   showName: string;
+  /** 공연 포스터 이미지 URL (필수) */
+  posterImageUrl: string;
+  /** 외부 홍보 링크 */
+  externalLink?: string;
 }
 
 export interface SuperAdminConcertHallShowFromBooltiRequest {
@@ -141,6 +161,8 @@ export interface SuperAdminConcertHallShowCreateResponse {
   showName: string;
   hostName?: string;
   isLinked: boolean;
+  posterImageUrl?: string;
+  externalLink?: string;
 }
 
 export interface SuperAdminSubwayLine {
@@ -172,4 +194,69 @@ export interface SubwayStationSearchItem {
 export interface SuperAdminConcertHallSubwayStationSaveRequest {
   /** 저장할 지하철역 ID 목록 (순서가 노출 순서) */
   stationIds: number[];
+}
+
+/** PUT /concert-halls/{id} 의 images 항목 */
+export interface SuperAdminConcertHallUpdateImage {
+  imageUrl: string;
+  thumbnailUrl: string;
+}
+
+/** PUT /concert-halls/{id} — 공연장 정보 수정 (대관 정보는 별도 엔드포인트) */
+export interface SuperAdminConcertHallUpdateRequest {
+  name: string;
+  introduction?: string;
+  representativeImageUrl?: string;
+  location?: SuperAdminConcertHallLocation;
+  contact?: SuperAdminConcertHallContact;
+  amenities?: SuperAdminConcertHallAmenities;
+  /** 갤러리 사진 (최대 20장) */
+  images?: SuperAdminConcertHallUpdateImage[];
+}
+
+export interface SuperAdminConcertHallRentalFee {
+  dayType: SuperAdminConcertHallRentalDayType;
+  /** 대관료 (원) */
+  fee: number;
+  /** 기본 대관료로 노출 (정확히 1개만 true) */
+  isDefault: boolean;
+}
+
+export interface SuperAdminConcertHallAdditionalFee {
+  dayType: SuperAdminConcertHallRentalDayType;
+  /** 시간당 추가 요금 (원) */
+  fee: number;
+}
+
+export interface SuperAdminConcertHallPaidOption {
+  name: string;
+  /** 옵션 가격 (원) */
+  price: number;
+}
+
+/** PUT /concert-halls/{id}/rental — 대관 정보 수정 */
+export interface SuperAdminConcertHallRentalUpdateRequest {
+  rentalMethod?: string;
+  rentalTimeHours?: number;
+  isEngineerBreakIncluded?: boolean;
+  vatType?: SuperAdminConcertHallVatType;
+  capacity?: SuperAdminConcertHallCapacity;
+  instrumentsText?: string;
+  rentalFees?: SuperAdminConcertHallRentalFee[];
+  additionalFees?: SuperAdminConcertHallAdditionalFee[];
+  paidOptions?: SuperAdminConcertHallPaidOption[];
+  specialNotes?: string[];
+}
+
+/** GET /concert-halls/{id}/rental — 대관 정보 상세 (구조화 배열 포함) */
+export interface SuperAdminConcertHallRentalResponse {
+  rentalMethod?: string;
+  rentalTime?: SuperAdminConcertHallRentalTime;
+  vatType?: SuperAdminConcertHallVatType;
+  capacity?: SuperAdminConcertHallCapacity;
+  instrumentsText?: string;
+  specialNotes?: string[];
+  rentalFees?: SuperAdminConcertHallRentalFee[];
+  additionalFees?: SuperAdminConcertHallAdditionalFee[];
+  paidOptions?: SuperAdminConcertHallPaidOption[];
 }
