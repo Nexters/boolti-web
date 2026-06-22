@@ -1,9 +1,10 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
 import { checkIsWebView } from '@boolti/bridge';
-import { ChevronDownIcon } from '@boolti/icon';
+import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
 import { useLayoutEffect, useRef, useState } from 'react';
 
+import GalleryModal, { type GalleryMode } from '~/components/GalleryModal';
 import {
   AlcoholIcon,
   CabinetIcon,
@@ -19,7 +20,6 @@ import { formatAddress, formatAmenityLabel } from '~/utils/format';
 import Styled from './HomeTab.styles';
 
 const INTRODUCTION_COLLAPSED_HEIGHT = 280;
-const MAX_VISIBLE_PHOTO_COUNT = 6;
 
 const AMENITY_ICONS: Record<string, React.ReactNode> = {
   WAITING_ROOM: <WaitingRoomIcon />,
@@ -55,10 +55,10 @@ const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
           <Styled.IntroductionParagraph>{introduction}</Styled.IntroductionParagraph>
           {isCollapsed && <Styled.IntroductionDim />}
         </Styled.IntroductionText>
-        {isCollapsed && (
-          <Styled.MoreButton type="button" onClick={() => setIsExpanded(true)}>
-            내용 더 보기
-            <ChevronDownIcon />
+        {isOverflowing && (
+          <Styled.MoreButton type="button" onClick={() => setIsExpanded((prev) => !prev)}>
+            {isExpanded ? '내용 접기' : '내용 더 보기'}
+            {isExpanded ? <ChevronUpIcon /> : <ChevronDownIcon />}
           </Styled.MoreButton>
         )}
       </Styled.IntroductionWrapper>
@@ -73,11 +73,12 @@ interface Props {
 const HomeTab = ({ profile }: Props) => {
   const toast = useToast();
   const home = profile.home;
+  const [gallery, setGallery] = useState<{ mode: GalleryMode; index: number } | null>(null);
 
-  const images = home?.images ?? [];
-  const totalImageCount = home?.totalImageCount ?? images.length;
-  const visibleImages = images.slice(0, MAX_VISIBLE_PHOTO_COUNT);
-  const hiddenImageCount = totalImageCount - MAX_VISIBLE_PHOTO_COUNT;
+  // 미리보기 장수는 백엔드가 제어(최대 5장)하고, 전체는 갤러리 모달에서 별도 조회한다.
+  const visibleImages = home?.images ?? [];
+  const totalImageCount = home?.totalImageCount ?? visibleImages.length;
+  const hiddenImageCount = totalImageCount - visibleImages.length;
 
   const amenities = home?.amenities ?? [];
   const location = home?.location;
@@ -99,18 +100,27 @@ const HomeTab = ({ profile }: Props) => {
   };
 
   return (
-    <Styled.Container>
-      {home?.introduction && <IntroductionSection introduction={home.introduction} />}
+    <>
+      <Styled.Container>
+        {home?.introduction && <IntroductionSection introduction={home.introduction} />}
       {visibleImages.length > 0 && (
         <Styled.Section>
           <Styled.SectionTitle>사진</Styled.SectionTitle>
           <Styled.PhotoGrid>
             {visibleImages.map((image, index) => {
-              const isLastVisible = index === MAX_VISIBLE_PHOTO_COUNT - 1;
+              const isLastVisible = index === visibleImages.length - 1;
               const showMoreOverlay = isLastVisible && hiddenImageCount > 0;
 
               return (
-                <Styled.PhotoItem key={image.id}>
+                <Styled.PhotoItem
+                  key={image.id}
+                  type="button"
+                  onClick={() =>
+                    setGallery(
+                      showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index },
+                    )
+                  }
+                >
                   <Styled.PhotoImage
                     src={image.thumbnailUrl || image.imageUrl}
                     alt={`${profile.name} 사진 ${index + 1}`}
@@ -160,7 +170,18 @@ const HomeTab = ({ profile }: Props) => {
           )}
         </Styled.Section>
       )}
-    </Styled.Container>
+      </Styled.Container>
+      {gallery && (
+        <GalleryModal
+          concertHallId={profile.id}
+          hallName={profile.name}
+          open
+          initialMode={gallery.mode}
+          initialIndex={gallery.index}
+          onClose={() => setGallery(null)}
+        />
+      )}
+    </>
   );
 };
 

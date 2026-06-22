@@ -74,12 +74,14 @@ const PhotoGrid = styled.div`
   width: 100%;
 `;
 
-const PhotoItem = styled.div`
+const PhotoItem = styled.button`
   position: relative;
   aspect-ratio: 1 / 1;
   border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 8px;
   overflow: hidden;
+  padding: 0;
+  cursor: pointer;
 `;
 
 const PhotoImage = styled.img`
