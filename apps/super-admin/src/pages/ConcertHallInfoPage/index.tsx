@@ -10,7 +10,7 @@ import {
   SubwayStationSearchItem,
   SuperAdminSubwayLine,
 } from '@boolti/api/src/types/superAdminConcertHall';
-import { Button as BooltiButton, useToast } from '@boolti/ui';
+import { Button as BooltiButton, SubwayLineBadge, useToast } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { Button, Card, Checkbox, Flex, Input, InputNumber, Typography } from 'antd';
 import type { InputRef } from 'antd';
@@ -26,7 +26,6 @@ import secondFloorIcon from '~/assets/amenities/second-floor.svg';
 import waitingRoomIcon from '~/assets/amenities/waiting-room.svg';
 import AddressSearchModal from './AddressSearchModal';
 import ImageUploadBox from './ImageUploadBox';
-import SubwayLineBadge from './SubwayLineBadge';
 import SubwayStationSearchModal from './SubwayStationSearchModal';
 
 const { TextArea } = Input;
@@ -403,7 +402,12 @@ const ConcertHallInfoPage = () => {
                         }}
                       >
                         {station.lines.map((line) => (
-                          <SubwayLineBadge key={line.lineId} line={line} />
+                          <SubwayLineBadge
+                            key={line.lineId}
+                            lineName={line.lineName}
+                            colorHex={line.colorHex}
+                            size="small"
+                          />
                         ))}
                         <Typography.Text>{station.stationName}</Typography.Text>
                         <CloseOutlined

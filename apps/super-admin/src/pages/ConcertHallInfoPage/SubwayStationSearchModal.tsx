@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import { Flex, Input, Modal, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 
-import SubwayLineBadge from './SubwayLineBadge';
+import { SubwayLineBadge } from '@boolti/ui';
 
 const { Search } = Input;
 
@@ -74,7 +74,12 @@ const SubwayStationSearchModal = ({ open, onClose, onSelect }: SubwayStationSear
             <Typography.Text>{station.stationName}</Typography.Text>
             <Flex gap={4} align="center">
               {station.lines.map((line) => (
-                <SubwayLineBadge key={line.lineId} line={line} />
+                <SubwayLineBadge
+                  key={line.lineId}
+                  lineName={line.lineName}
+                  colorHex={line.colorHex}
+                  size="small"
+                />
               ))}
             </Flex>
           </Flex>
