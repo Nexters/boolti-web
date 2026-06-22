@@ -62,7 +62,6 @@ export interface SuperAdminConcertHallContact {
 
 export interface SuperAdminConcertHallRentalTime {
   rentalTimeHours?: number;
-  rentalTimeDescription?: string;
   isEngineerBreakIncluded?: boolean;
 }
 
@@ -86,6 +85,7 @@ export interface SuperAdminConcertHallImage {
   sequence: number;
 }
 
+/** GET /concert-halls/{id} — 공연장 기본 정보 상세 (대관 정보는 별도 엔드포인트로 분리됨) */
 export interface SuperAdminConcertHallDetailResponse {
   id: number;
   name: string;
@@ -95,18 +95,12 @@ export interface SuperAdminConcertHallDetailResponse {
   representativeImageUrl?: string;
   images?: SuperAdminConcertHallImage[];
   location?: SuperAdminConcertHallLocation;
-  capacity?: SuperAdminConcertHallCapacity;
   contact?: SuperAdminConcertHallContact;
-  rentalMethod?: string;
-  rentalTime?: SuperAdminConcertHallRentalTime;
-  vatType?: SuperAdminConcertHallVatType;
-  instrumentsText?: string;
-  specialNotes?: string[];
   amenities?: SuperAdminConcertHallAmenities;
   /** ISO8601 */
   informationUpdatedAt?: string;
-  hasHomeTabData: boolean;
-  hasRentalTabData: boolean;
+  hasHomeTabData?: boolean;
+  hasRentalTabData?: boolean;
 }
 
 export interface SuperAdminConcertHallVisibilityUpdateRequest {
@@ -252,4 +246,17 @@ export interface SuperAdminConcertHallRentalUpdateRequest {
   additionalFees?: SuperAdminConcertHallAdditionalFee[];
   paidOptions?: SuperAdminConcertHallPaidOption[];
   specialNotes?: string[];
+}
+
+/** GET /concert-halls/{id}/rental — 대관 정보 상세 (구조화 배열 포함) */
+export interface SuperAdminConcertHallRentalResponse {
+  rentalMethod?: string;
+  rentalTime?: SuperAdminConcertHallRentalTime;
+  vatType?: SuperAdminConcertHallVatType;
+  capacity?: SuperAdminConcertHallCapacity;
+  instrumentsText?: string;
+  specialNotes?: string[];
+  rentalFees?: SuperAdminConcertHallRentalFee[];
+  additionalFees?: SuperAdminConcertHallAdditionalFee[];
+  paidOptions?: SuperAdminConcertHallPaidOption[];
 }
