@@ -1,12 +1,11 @@
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
-import { useSuperAdminConcertHallDetail, useSuperAdminUpdateConcertHallRental } from '@boolti/api';
+import { useSuperAdminConcertHallRental, useSuperAdminUpdateConcertHallRental } from '@boolti/api';
 import {
   SuperAdminConcertHallRentalDayType,
   SuperAdminConcertHallVatType,
 } from '@boolti/api/src/types/superAdminConcertHall';
 import { Button as BooltiButton, useToast } from '@boolti/ui';
 import {
-  Alert,
   Button,
   Card,
   Checkbox,
@@ -96,7 +95,7 @@ const ConcertHallRentalPage = () => {
   const params = useParams<{ hallId: string }>();
   const hallId = Number(params.hallId);
   const toast = useToast();
-  const { data: detail } = useSuperAdminConcertHallDetail(hallId);
+  const { data: rental } = useSuperAdminConcertHallRental(hallId);
   const updateRental = useSuperAdminUpdateConcertHallRental();
 
   // 대관 방법
@@ -120,19 +119,31 @@ const ConcertHallRentalPage = () => {
   const [specialNotes, setSpecialNotes] = useState<string[]>(['']);
 
   useEffect(() => {
-    if (!detail) {
+    if (!rental) {
       return;
     }
-    setRentalMethod(detail.rentalMethod ?? '');
-    setRentalTimeHours(detail.rentalTime?.rentalTimeHours ?? 0);
-    setIsEngineerBreakIncluded(detail.rentalTime?.isEngineerBreakIncluded ?? false);
-    setVatType(detail.vatType ?? 'NONE');
-    setSeatedCapacity(detail.capacity?.seatedCapacity ?? 0);
-    setStandingCapacity(detail.capacity?.standingCapacity ?? 0);
-    setInstrumentsText(detail.instrumentsText ?? '');
-    setSpecialNotes(detail.specialNotes?.length ? detail.specialNotes : ['']);
-    // 대관료/시간당 추가 요금/유료 옵션은 구조화 응답 필드가 아직 없어 빈 행으로 시작한다.
-  }, [detail]);
+    setRentalMethod(rental.rentalMethod ?? '');
+    setRentalTimeHours(rental.rentalTime?.rentalTimeHours ?? 0);
+    setIsEngineerBreakIncluded(rental.rentalTime?.isEngineerBreakIncluded ?? false);
+    setVatType(rental.vatType ?? 'NONE');
+    setSeatedCapacity(rental.capacity?.seatedCapacity ?? 0);
+    setStandingCapacity(rental.capacity?.standingCapacity ?? 0);
+    setInstrumentsText(rental.instrumentsText ?? '');
+    setSpecialNotes(rental.specialNotes?.length ? rental.specialNotes : ['']);
+
+    // 대관료: 응답값으로 채우고, isDefault 행을 기본 대관료 인덱스로 설정
+    if (rental.rentalFees?.length) {
+      setRentalFees(rental.rentalFees.map(({ dayType, fee }) => ({ dayType, amount: fee })));
+      const defaultIdx = rental.rentalFees.findIndex((row) => row.isDefault);
+      setDefaultFeeIndex(defaultIdx >= 0 ? defaultIdx : 0);
+    }
+    if (rental.additionalFees?.length) {
+      setHourlyFees(rental.additionalFees.map(({ dayType, fee }) => ({ dayType, amount: fee })));
+    }
+    if (rental.paidOptions?.length) {
+      setPaidOptions(rental.paidOptions.map(({ name, price }) => ({ name, amount: price })));
+    }
+  }, [rental]);
 
   const onSave = async () => {
     // dayType과 금액이 모두 있는 행만 전송한다.
@@ -191,13 +202,6 @@ const ConcertHallRentalPage = () => {
         </BooltiButton>
       }
     >
-      <Alert
-        type="info"
-        showIcon
-        message="대관료·시간당 추가 요금·유료 옵션은 저장은 되지만, 현재 상세 조회 응답에 포함되지 않아 새로고침 시 다시 표시되지 않아요."
-        style={{ marginBottom: 20 }}
-      />
-
       <Flex vertical gap={20}>
         <Card>
           <SectionTitle>대관 방법</SectionTitle>
