@@ -1,6 +1,8 @@
 import { Modal } from 'antd';
 import { useEffect, useRef } from 'react';
 
+import { Coordinates, geocodeAddress } from '~/utils/geocode';
+
 const POSTCODE_SCRIPT_URL = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
 interface DaumPostcodeData {
@@ -47,8 +49,8 @@ const loadPostcodeScript = () => {
 interface AddressSearchModalProps {
   open: boolean;
   onClose: () => void;
-  /** 도로명주소 선택 시 호출. 호출 측에서 모달을 닫는다. */
-  onComplete: (roadAddress: string) => void;
+  /** 도로명주소 선택 시 호출. 좌표는 지오코딩 실패 시 null. 호출 측에서 모달을 닫는다. */
+  onComplete: (roadAddress: string, coordinates: Coordinates | null) => void;
   /** 닫힘 애니메이션 완료 후 호출 — 상세주소 포커스는 이 시점에 해야 antd의 포커스 복원에 덮이지 않는다. */
   afterClose?: () => void;
 }
@@ -70,8 +72,11 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
       new window.daum.Postcode({
         width: '100%',
         height: '100%',
-        oncomplete: (data) => {
-          onComplete(data.roadAddress || data.address);
+        oncomplete: async (data) => {
+          const roadAddress = data.roadAddress || data.address;
+          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 카카오로 지오코딩한다.
+          const coordinates = await geocodeAddress(roadAddress);
+          onComplete(roadAddress, coordinates);
         },
       }).embed(containerRef.current);
     });
