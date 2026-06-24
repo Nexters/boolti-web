@@ -1,7 +1,8 @@
+import { NaverGeocodeProvider, useNaverGeocode, type GeocodeCoordinates } from '@boolti/ui';
 import { Modal } from 'antd';
 import { useEffect, useRef } from 'react';
 
-import { Coordinates, geocodeAddress } from '~/utils/geocode';
+const NCP_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
 
 const POSTCODE_SCRIPT_URL = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
@@ -38,7 +39,7 @@ const loadPostcodeScript = () => {
       script.onload = () => resolve();
       script.onerror = () => {
         scriptPromise = null;
-        reject(new Error('카카오 우편번호 스크립트 로드 실패'));
+        reject(new Error('우편번호 스크립트 로드 실패'));
       };
       document.head.appendChild(script);
     });
@@ -46,17 +47,25 @@ const loadPostcodeScript = () => {
   return scriptPromise;
 };
 
+type Geocode = (address: string) => Promise<GeocodeCoordinates | null>;
+
 interface AddressSearchModalProps {
   open: boolean;
   onClose: () => void;
   /** 도로명주소 선택 시 호출. 좌표는 지오코딩 실패 시 null. 호출 측에서 모달을 닫는다. */
-  onComplete: (roadAddress: string, coordinates: Coordinates | null) => void;
+  onComplete: (roadAddress: string, coordinates: GeocodeCoordinates | null) => void;
   /** 닫힘 애니메이션 완료 후 호출 — 상세주소 포커스는 이 시점에 해야 antd의 포커스 복원에 덮이지 않는다. */
   afterClose?: () => void;
 }
 
-// 카카오(다음) 우편번호 서비스를 embed한 주소 찾기 모달
-const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSearchModalProps) => {
+// 우편번호 서비스 embed + 선택 주소를 네이버 geocode로 좌표 변환
+const AddressSearchModalView = ({
+  open,
+  onClose,
+  onComplete,
+  afterClose,
+  geocode,
+}: AddressSearchModalProps & { geocode: Geocode | null }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -74,8 +83,8 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
         height: '100%',
         oncomplete: async (data) => {
           const roadAddress = data.roadAddress || data.address;
-          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 카카오로 지오코딩한다.
-          const coordinates = await geocodeAddress(roadAddress);
+          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 geocode로 변환한다.
+          const coordinates = geocode ? await geocode(roadAddress) : null;
           onComplete(roadAddress, coordinates);
         },
       }).embed(containerRef.current);
@@ -83,7 +92,7 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
     return () => {
       cancelled = true;
     };
-  }, [open, onComplete]);
+  }, [open, onComplete, geocode]);
 
   return (
     <Modal
@@ -98,6 +107,25 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
       <div ref={containerRef} style={{ width: '100%', height: 466, marginTop: 16 }} />
     </Modal>
   );
+};
+
+// NaverGeocodeProvider 컨텍스트 안에서 geocode 함수를 얻어 View에 주입한다.
+const GeocodeEnabledModal = (props: AddressSearchModalProps) => {
+  const geocode = useNaverGeocode();
+  return <AddressSearchModalView {...props} geocode={geocode} />;
+};
+
+// NCP 키가 있으면 네이버 geocode를 붙이고, 없으면 좌표 없이 동작한다.
+// 키 유무는 런타임 고정값이라 트리 구조가 바뀌지 않는다(모달 애니메이션 보존).
+const AddressSearchModal = (props: AddressSearchModalProps) => {
+  if (NCP_KEY_ID) {
+    return (
+      <NaverGeocodeProvider ncpKeyId={NCP_KEY_ID}>
+        <GeocodeEnabledModal {...props} />
+      </NaverGeocodeProvider>
+    );
+  }
+  return <AddressSearchModalView {...props} geocode={null} />;
 };
 
 export default AddressSearchModal;

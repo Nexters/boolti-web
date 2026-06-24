@@ -10,7 +10,12 @@ import {
   SubwayStationSearchItem,
   SuperAdminSubwayLine,
 } from '@boolti/api/src/types/superAdminConcertHall';
-import { Button as BooltiButton, SubwayLineBadge, useToast } from '@boolti/ui';
+import {
+  Button as BooltiButton,
+  SubwayLineBadge,
+  useToast,
+  type GeocodeCoordinates,
+} from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { Button, Card, Checkbox, Flex, Input, InputNumber, Typography } from 'antd';
 import type { InputRef } from 'antd';
@@ -24,7 +29,6 @@ import parkingIcon from '~/assets/amenities/parking.svg';
 import restroomIcon from '~/assets/amenities/restroom.svg';
 import secondFloorIcon from '~/assets/amenities/second-floor.svg';
 import waitingRoomIcon from '~/assets/amenities/waiting-room.svg';
-import { Coordinates } from '~/utils/geocode';
 import AddressSearchModal from './AddressSearchModal';
 import ImageUploadBox from './ImageUploadBox';
 import SubwayStationSearchModal from './SubwayStationSearchModal';
@@ -194,7 +198,7 @@ const ConcertHallInfoPage = () => {
   // 주소 선택으로 닫힌 경우에만 닫힘 애니메이션 완료 후 상세주소에 포커스한다 (디자인 정책)
   const shouldFocusDetailAddressRef = useRef(false);
 
-  const onCompleteAddress = (roadAddress: string, coordinates: Coordinates | null) => {
+  const onCompleteAddress = (roadAddress: string, coordinates: GeocodeCoordinates | null) => {
     setStreetAddress(roadAddress);
     // 지오코딩 성공 시에만 좌표를 갱신한다 (실패 시 기존 좌표 유지)
     if (coordinates) {
