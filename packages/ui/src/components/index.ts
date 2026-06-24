@@ -21,6 +21,7 @@ import StepDialog from './Dialog/StepDialog';
 import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 import PreviewMapWithProvider from './PreviewMap/PreviewMapWithProvider';
 import SubwayLineBadge from './SubwayLineBadge';
+import NaverGeocodeProvider from './NaverGeocodeProvider';
 
 export {
   AgreeCheck,
@@ -46,4 +47,5 @@ export {
   ShowInfoDetail,
   PreviewMapWithProvider,
   SubwayLineBadge,
+  NaverGeocodeProvider,
 };
