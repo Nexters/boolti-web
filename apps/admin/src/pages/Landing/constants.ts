@@ -21,6 +21,16 @@ export const LANDING_COLORS = {
   cardBorder: '#D8DBE5',
   promoGradient: 'linear-gradient(180deg, #FFE6DF 0%, #F3F5F9 100%)',
   paymentGradient: 'linear-gradient(180deg, #E9EBFE 0%, #F3F5F9 100%)',
+  // 공연장 찾기 띠배너 (Figma 디자인 토큰 기준: Primary/O01 #FF6827, Grey/G50 #6F7485)
+  spaceBannerBg: '#E5E7F2',
+  spaceBannerStrongText: '#090D43',
+  spaceBannerSubText: '#6F7485',
+  // top variant: 주황 배경 + 네이비 글자
+  spaceBannerPillTopBg: '#FF6827',
+  spaceBannerPillTopText: '#090D43',
+  // bottom variant: 검정 배경 + 주황 글자
+  spaceBannerPillBottomBg: '#020206',
+  spaceBannerPillBottomText: '#FF6827',
 } as const;
 
 export const LANDING_COPY = {
@@ -84,5 +94,12 @@ export const LANDING_COPY = {
     title: '불티와 함께 온전히,\n공연과 무대에 집중해 보세요',
     primaryCta: '3분만에 끝나는 공연 등록 →',
     secondaryCta: '앱 둘러보기',
+  },
+  spaceBanner: {
+    pill: '공연장',
+    cta: '내 조건에 맞는 공연장 찾기',
+    nav: '공연장 찾기',
+    top: { prefix: '', suffix: '정하셨나요?' },
+    bottom: { prefix: '아직', suffix: '못 정했다면?' },
   },
 } as const;

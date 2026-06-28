@@ -4,12 +4,21 @@ import { m } from 'framer-motion';
 import { mq_desktop, mq_lg } from './constants';
 
 const Container = styled(m.div)`
-  overflow: hidden;
+  overflow-x: clip;
   min-height: 100vh;
 
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+// 헤더 sticky 고정 영역. 상단 띠배너는 이 위에 일반 흐름으로 두어 스크롤 시 함께 밀려 올라가 사라지도록 함
+const TopBar = styled.div`
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
 `;
 
 const FooterContainer = styled.div`
@@ -39,5 +48,6 @@ const FooterContainer = styled.div`
 
 export default {
   Container,
+  TopBar,
   FooterContainer,
 };
