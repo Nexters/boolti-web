@@ -12,16 +12,20 @@ const marquee = keyframes`
 const Section = styled.section`
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-self: stretch;
-  padding: 104px 20px 32px;
+  min-height: 620px;
+  padding: 92px 20px 32px;
   background: ${LANDING_COLORS.heroGradient};
 
   ${mq_lg} {
-    padding: 140px 24px 24px;
+    min-height: 703px;
+    padding: 80px 24px 24px;
   }
 
   ${mq_desktop} {
-    padding: 140px 32px 48px;
+    min-height: 855px;
+    padding: 80px 32px 48px;
   }
 `;
 
