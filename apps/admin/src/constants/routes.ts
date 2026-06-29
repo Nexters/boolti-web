@@ -9,6 +9,8 @@ export const PATH = {
   OAUTH_APPLE: '/oauth/apple',
   SIGNUP_COMPLETE: '/signup/complete',
 
+  CONERT_HALLS: '/concert-halls',
+
   SHOW_ADD: '/show/add',
   SHOW_ADD_DETAIL: '/show/add/detail',
   SHOW_ADD_SALES: '/show/add/sales',
