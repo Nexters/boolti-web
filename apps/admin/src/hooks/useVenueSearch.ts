@@ -24,7 +24,7 @@ const fetchBoolti = async (keyword: string): Promise<VenueResult[]> => {
     source: 'boolti' as const,
     concertHallId: item.id,
     name: item.name,
-    address: item.address,
+    address: [item.streetAddress, item.detailAddress].filter(Boolean).join(' ') || item.address || '',
   }));
 };
 

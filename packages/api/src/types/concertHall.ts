@@ -1,8 +1,10 @@
 export interface ConcertHallItem {
   id: number;
   name: string;
-  address: string;
-  isVisible: boolean;
+  streetAddress?: string;
+  detailAddress?: string;
+  address?: string;
+  isVisible?: boolean;
 }
 
 export interface WebHostConcertHallListResponse {
@@ -158,4 +160,172 @@ export interface ConcertHallProfileResponse {
   home?: ConcertHallProfileHome;
   rental?: ConcertHallProfileRental;
   informationUpdatedAt?: string;
+}
+
+export interface ConcertHallProfileCapacity {
+  seatedCapacity?: number;
+  standingCapacity?: number;
+}
+
+export interface ConcertHallProfileSubwayLine {
+  lineKey: string;
+  lineName: string;
+  colorHex: string;
+}
+
+export interface ConcertHallProfileSubwayStation {
+  id?: number;
+  stationName: string;
+  region?: string;
+  lines: ConcertHallProfileSubwayLine[];
+}
+
+export interface ConcertHallProfileContact {
+  phoneNumber?: string;
+  websiteUrl?: string;
+  email?: string;
+}
+
+export interface ConcertHallProfileShare {
+  shareCode?: string;
+  title?: string;
+  imageUrl?: string;
+}
+
+export interface ConcertHallProfileImage {
+  id: number;
+  imageUrl?: string;
+  thumbnailUrl?: string;
+  sequence?: number;
+}
+
+export interface ConcertHallProfileAmenity {
+  type?: string;
+  name: string;
+  count?: number | null;
+}
+
+export interface ConcertHallProfileHome {
+  introduction?: string;
+  images?: ConcertHallProfileImage[];
+  totalImageCount?: number;
+  amenities?: ConcertHallProfileAmenity[];
+  location?: ConcertHallLocation;
+}
+
+export interface ConcertHallProfileRentalTime {
+  rentalTimeHours?: number;
+  rentalTimeDescription?: string;
+  isEngineerBreakIncluded?: boolean;
+}
+
+export type ConcertHallProfileFeeDayType =
+  | 'ANYTIME'
+  | 'MON_TO_THU'
+  | 'WEEKDAY'
+  | 'FRIDAY'
+  | 'SATURDAY'
+  | 'SUNDAY'
+  | 'FRI_TO_SUN'
+  | 'WEEKEND'
+  | 'HOLIDAY'
+  | 'PRE_HOLIDAY_WEEKDAY';
+
+export interface ConcertHallProfileFee {
+  id: number;
+  dayType?: ConcertHallProfileFeeDayType;
+  dayTypeName?: string;
+  fee?: number;
+  sequence?: number;
+}
+
+export type ConcertHallProfileVatType = 'NONE' | 'VAT_INCLUDED' | 'VAT_EXCLUDED';
+
+export interface ConcertHallProfileVat {
+  type?: ConcertHallProfileVatType;
+  description?: string;
+}
+
+export interface ConcertHallProfilePaidOption {
+  id: number;
+  name?: string;
+  price?: number;
+}
+
+export interface ConcertHallProfileRental {
+  rentalMethod?: string;
+  rentalTime?: ConcertHallProfileRentalTime;
+  rentalFees?: ConcertHallProfileFee[];
+  vat?: ConcertHallProfileVat;
+  additionalFees?: ConcertHallProfileFee[];
+  instrumentsText?: string;
+  paidOptions?: ConcertHallProfilePaidOption[];
+  specialNotes?: string[];
+}
+
+export interface ConcertHallSearchItem {
+  concertHallId: number;
+  name: string;
+  representativeImageUrl?: string | null;
+  defaultFee: number;
+  rentalTimeHours?: number | null;
+  seatedCapacity?: number | null;
+  standingCapacity?: number | null;
+  regionName?: string | null;
+}
+
+export interface ConcertHallSearchListResponse {
+  items: ConcertHallSearchItem[];
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  hasNext: boolean;
+}
+
+export interface ConcertHallImageItem {
+  id: number;
+  imageUrl?: string;
+  thumbnailUrl?: string;
+  sequence?: number;
+}
+
+export interface ConcertHallImageListResponse {
+  items: ConcertHallImageItem[];
+}
+
+export interface ConcertHallSearchListParams {
+  regionId?: number;
+  keyword?: string;
+  minFee?: number;
+  maxFee?: number;
+  minCapacity?: number;
+  maxCapacity?: number;
+  sort?: ConcertHallSearchSort;
+  page?: number;
+  size?: number;
+}
+
+export type ConcertHallSearchSort = 'FEE_ASC' | 'FEE_DESC';
+
+export interface ConcertHallRecommendedRegion {
+  regionId: number;
+  name: string;
+}
+
+export type ConcertHallAutocompleteItemType = 'REGION' | 'CONCERT_HALL';
+
+export interface ConcertHallAutocompleteItem {
+  type: ConcertHallAutocompleteItemType;
+  id: number;
+  name: string;
+  streetAddress: string | null;
+}
+
+export interface ConcertHallAutocompleteResponse {
+  items: ConcertHallAutocompleteItem[];
+}
+
+export interface ConcertHallEntryRequest {
+  name: string;
 }

@@ -1,4 +1,5 @@
 import { Apple } from './Apple';
+import { Area } from './Area';
 import { Ascending } from './Ascending';
 import { ArrowLeft } from './ArrowLeft';
 import { ArrowRight } from './ArrowRIght';
@@ -43,6 +44,7 @@ import { Hana } from './Hana';
 import { HSBC } from './HSBC';
 import { IBK } from './IBK';
 import { ICBC } from './ICBC';
+import { Info } from './Info';
 import { SquareCheckIcon } from './SquareCheckIcon';
 import { Instagram } from './Instagram';
 import { JPMorgan } from './JPMorgan';
@@ -80,12 +82,16 @@ import { Call } from './Call';
 import { Message } from './Message';
 import { Discord } from './Discord';
 import { Question } from './Question';
+import { Refresh } from './Refresh';
 import { YoutubeLink } from './YoutubeLink';
 import { Youtube } from './Youtube';
 import { YoutubeIcon } from './YoutubeIcon';
 import { ChainLink } from './ChainLink';
 import { MapMarker } from './MapMarker';
 import { ClockMobile } from './ClockMobile';
+import { Website } from './Website';
+import { CallOutline } from './CallOutline';
+import { EmailOutline } from './EmailOutline';
 import { BooltiGreyLogo } from './BooltiGreyLogo';
 import { BooltiGreyIcon } from './BooltiGreyIcon';
 
@@ -95,6 +101,7 @@ export {
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
   Question as QuestionIcon,
+  Area as AreaIcon,
   BNK,
   BNP,
   BoA,
@@ -136,6 +143,7 @@ export {
   HSBC,
   IBK,
   ICBC,
+  Info as InfoIcon,
   Instagram as InstagramIcon,
   JPMorgan,
   User as UserIcon,
@@ -172,6 +180,7 @@ export {
   Call as CallIcon,
   Message as MessageIcon,
   Discord as DiscordIcon,
+  Refresh as RefreshIcon,
   Youtube,
   YoutubeLink as YoutubeLinkIcon,
   YoutubeIcon,
@@ -179,5 +188,8 @@ export {
   MapMarker as MapMarkerIcon,
   ClockMobile as ClockMobileIcon,
   CurvedArrowRight as CurvedArrowRightIcon,
+  Website as WebsiteIcon,
+  CallOutline as CallOutlineIcon,
+  EmailOutline as EmailOutlineIcon,
   BooltiGreyIcon,
 };

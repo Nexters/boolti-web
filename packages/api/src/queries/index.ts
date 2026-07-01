@@ -60,6 +60,11 @@ import useSuperAdminHostList from './useSuperAdminHostList';
 import useConcertHallSearch from './useConcertHallSearch';
 import useConcertHallProfile from './useConcertHallProfile';
 import useConcertHallImages from './useConcertHallImages';
+import useConcertHallSearchDetail from './useConcertHallSearchDetail';
+import useConcertHallSearchImages from './useConcertHallSearchImages';
+import useConcertHallSearchList from './useConcertHallSearchList';
+import useConcertHallRecommendedRegions from './useConcertHallRecommendedRegions';
+import useConcertHallAutocomplete from './useConcertHallAutocomplete';
 import useSuperAdminConcertHallList from './useSuperAdminConcertHallList';
 import useSuperAdminConcertHallDetail from './useSuperAdminConcertHallDetail';
 import useSuperAdminConcertHallRental from './useSuperAdminConcertHallRental';
@@ -133,6 +138,11 @@ export {
   useConcertHallSearch,
   useConcertHallProfile,
   useConcertHallImages,
+  useConcertHallSearchDetail,
+  useConcertHallSearchImages,
+  useConcertHallSearchList,
+  useConcertHallRecommendedRegions,
+  useConcertHallAutocomplete,
   useSuperAdminConcertHallList,
   useSuperAdminConcertHallDetail,
   useSuperAdminConcertHallRental,

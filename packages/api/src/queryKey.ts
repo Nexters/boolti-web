@@ -44,8 +44,12 @@ import {
 } from './types/adminShow';
 import { SuperAdminUserResponse } from './types/superAdminUser';
 import {
+  ConcertHallAutocompleteResponse,
   ConcertHallImageListResponse,
   ConcertHallProfileResponse,
+  ConcertHallRecommendedRegion,
+  ConcertHallSearchListParams,
+  ConcertHallSearchListResponse,
   WebHostConcertHallListResponse,
 } from './types/concertHall';
 import {
@@ -527,6 +531,51 @@ export const concertHallQueryKeys = createQueryKeys('concertHall', {
   }),
 });
 
+export const concertHallSearchQueryKeys = createQueryKeys('concertHallSearch', {
+  list: (params: ConcertHallSearchListParams) => ({
+    queryKey: [params],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page: params.page ?? 0,
+        size: params.size ?? 20,
+      };
+      if (params.keyword) {
+        searchParams.keyword = params.keyword;
+      }
+      if (params.regionId != null) searchParams.regionId = params.regionId;
+      if (params.minFee != null) searchParams.minFee = params.minFee;
+      if (params.maxFee != null) searchParams.maxFee = params.maxFee;
+      if (params.minCapacity != null) searchParams.minCapacity = params.minCapacity;
+      if (params.maxCapacity != null) searchParams.maxCapacity = params.maxCapacity;
+      if (params.sort) searchParams.sort = params.sort;
+      return fetcher.get<ConcertHallSearchListResponse>('web/papi/v1/concert-halls/search', {
+        searchParams,
+      });
+    },
+  }),
+  detail: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () => fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
+  }),
+  images: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () =>
+      fetcher.get<ConcertHallImageListResponse>(`web/papi/v1/concert-halls/${concertHallId}/images`),
+  }),
+  recommendedRegions: {
+    queryKey: null,
+    queryFn: () =>
+      fetcher.get<ConcertHallRecommendedRegion[]>('web/papi/v1/concert-halls/recommended-regions'),
+  },
+  autocomplete: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<ConcertHallAutocompleteResponse>('web/papi/v1/concert-halls/autocomplete', {
+        searchParams: { query },
+      }),
+  }),
+});
+
 export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   list: (showId: number) => ({
     queryKey: [showId],
@@ -711,4 +760,5 @@ export const queryKeys = mergeQueryKeys(
   superAdminConcertHallQueryKeys,
   concertHallQueryKeys,
   naverMapsQueryKeys,
+  concertHallSearchQueryKeys,
 );

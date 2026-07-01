@@ -56,8 +56,149 @@ const participantSummary = {
   answeredAt: COMMON_TIME,
 };
 
+const concertHallRecommendedRegions = [
+  { regionId: 1, name: '합정/상수' },
+  { regionId: 2, name: '홍대/연남/연희' },
+];
+
+const concertHallSearchRecords = [
+  {
+    regionId: 1,
+    streetAddress: '서울 마포구 와우산로',
+    subwayStations: [{ stationName: '합정', lines: [{ lineName: '2호선', colorHex: '#00A84D' }] }],
+    item: {
+      concertHallId: 1,
+      name: '얼라이브홀',
+      representativeImageUrl: 'https://picsum.photos/seed/alive/640/360',
+      defaultFee: 800000,
+      rentalTimeHours: 4,
+      seatedCapacity: 80,
+      standingCapacity: 100,
+      regionName: '합정/상수',
+    },
+  },
+  {
+    regionId: 2,
+    streetAddress: '서울 서대문구 연세로',
+    subwayStations: [{ stationName: '신촌', lines: [{ lineName: '2호선', colorHex: '#00A84D' }] }],
+    item: {
+      concertHallId: 2,
+      name: '신촌아리수스트로공연장',
+      representativeImageUrl: 'https://picsum.photos/seed/arisu/640/360',
+      defaultFee: 500000,
+      rentalTimeHours: 3,
+      seatedCapacity: 50,
+      standingCapacity: 90,
+      regionName: '홍대/연남/연희',
+    },
+  },
+];
+
 export const handlers = [
   http.all('*/web/papi/v1/popup/HOME', () => json(popupHome)),
+  http.get('*/web/papi/v1/concert-halls/search', ({ request }) => {
+    const url = new URL(request.url);
+    const keyword = url.searchParams.get('keyword')?.trim();
+    const regionId = Number(url.searchParams.get('regionId')) || undefined;
+    const minFee = Number(url.searchParams.get('minFee') ?? Number.NEGATIVE_INFINITY);
+    const maxFee = Number(url.searchParams.get('maxFee') ?? Number.POSITIVE_INFINITY);
+    const minCapacity = Number(url.searchParams.get('minCapacity') ?? Number.NEGATIVE_INFINITY);
+    const maxCapacity = Number(url.searchParams.get('maxCapacity') ?? Number.POSITIVE_INFINITY);
+    const sort = url.searchParams.get('sort') === 'FEE_DESC' ? 'FEE_DESC' : 'FEE_ASC';
+    const page = Math.max(0, Number(url.searchParams.get('page') ?? 0));
+    const size = Math.max(1, Number(url.searchParams.get('size') ?? 20));
+    const filteredRecords = concertHallSearchRecords.filter((record) => {
+      const { item } = record;
+      const hasCapacityFilter =
+        minCapacity !== Number.NEGATIVE_INFINITY || maxCapacity !== Number.POSITIVE_INFINITY;
+      const matchesCapacity =
+        !hasCapacityFilter ||
+        (item.standingCapacity != null &&
+          item.standingCapacity >= minCapacity &&
+          item.standingCapacity <= maxCapacity);
+      const matchesKeyword = keyword
+        ? item.name.includes(keyword) || item.regionName.includes(keyword) || record.streetAddress.includes(keyword)
+        : true;
+      return (
+        matchesKeyword &&
+        (regionId == null || record.regionId === regionId) &&
+        item.defaultFee >= minFee &&
+        item.defaultFee <= maxFee &&
+        matchesCapacity
+      );
+    });
+    const sortedRecords = [...filteredRecords].sort((left, right) =>
+      sort === 'FEE_DESC'
+        ? right.item.defaultFee - left.item.defaultFee
+        : left.item.defaultFee - right.item.defaultFee,
+    );
+    const pageItems = sortedRecords.slice(page * size, (page + 1) * size).map((record) => record.item);
+    const totalPages = Math.ceil(sortedRecords.length / size);
+
+    return json({
+      items: pageItems,
+      currentPage: page,
+      pageSize: size,
+      totalPages,
+      totalElements: sortedRecords.length,
+      hasNext: page + 1 < totalPages,
+    });
+  }),
+  http.get('*/web/papi/v1/concert-halls/recommended-regions', () => json(concertHallRecommendedRegions)),
+  http.get('*/web/papi/v1/concert-halls/autocomplete', ({ request }) => {
+    const query = new URL(request.url).searchParams.get('query')?.trim().toLocaleLowerCase('ko-KR') ?? '';
+    if (!query) return json({ items: [] });
+
+    const regionItems = concertHallRecommendedRegions
+      .filter((region) => region.name.toLocaleLowerCase('ko-KR').includes(query))
+      .map((region) => ({ type: 'REGION', id: region.regionId, name: region.name, streetAddress: null }));
+    const concertHallItems = concertHallSearchRecords
+      .filter(
+        (record) =>
+          record.item.name.toLocaleLowerCase('ko-KR').includes(query) ||
+          record.streetAddress.toLocaleLowerCase('ko-KR').includes(query),
+      )
+      .map((record) => ({
+        type: 'CONCERT_HALL',
+        id: record.item.concertHallId,
+        name: record.item.name,
+        streetAddress: record.streetAddress,
+      }));
+
+    return json({ items: [...regionItems, ...concertHallItems] });
+  }),
+  http.get('*/web/papi/v1/concert-halls/:concertHallId', ({ params }) => {
+    const record =
+      concertHallSearchRecords.find((item) => String(item.item.concertHallId) === params.concertHallId) ??
+      concertHallSearchRecords[0];
+    const concertHall = record.item;
+
+    return json({
+      ...concertHall,
+      id: concertHall.concertHallId,
+      introduction: `${concertHall.name}은 불티에서 추천하는 공연장입니다.`,
+      images: [
+        { id: 1, imageUrl: concertHall.representativeImageUrl, thumbnailUrl: concertHall.representativeImageUrl },
+        { id: 2, imageUrl: 'https://picsum.photos/seed/stage/320/320', thumbnailUrl: 'https://picsum.photos/seed/stage/320/320' },
+      ],
+      amenities: {
+        hasWaitingRoom: true,
+        hasIndoorRestroom: true,
+        hasParking: concertHall.concertHallId === 1,
+      },
+      location: {
+        streetAddress: record.streetAddress,
+        latitude: 37.55,
+        longitude: 126.92,
+      },
+      contact: {
+        phoneNumber: '02-123-4567',
+        websiteUrl: 'https://example.com',
+      },
+      shareCode: `concertHall-${concertHall.concertHallId}`,
+    });
+  }),
+  http.post('*/web/v1/host/concert-hall-entry-requests', () => json({})),
   http.get('*/web/v1/host/shows/1', () => json(showDetail)),
   http.get('*/web/v1/users/me', () =>
     json({
