@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const Header = styled.header<{ hideBorder?: boolean }>`
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   border-bottom: 1px solid
     ${({ hideBorder }) => (hideBorder ? 'transparent' : LANDING_COLORS.headerBorder)};
@@ -134,8 +131,8 @@ const MobileMenuButton = styled.button`
 
 const MobileMenuOverlay = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-  position: fixed;
-  top: 72px;
+  position: absolute;
+  top: 100%;
   left: 0;
   width: 100%;
   flex-direction: column;

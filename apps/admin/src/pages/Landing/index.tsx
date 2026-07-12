@@ -10,6 +10,7 @@ import {
   Problem,
   SolutionFeatures,
   SolutionHighlight,
+  SpaceBanner,
 } from './components';
 import Styled from './LandingPage.styles';
 
@@ -19,13 +20,18 @@ const LandingPage = () => {
 
   return (
     <Styled.Container>
-      <Header />
+      <SpaceBanner variant="top" />
+      <Styled.TopBar>
+        <Header />
+      </Styled.TopBar>
 
       <Hero />
       <Problem />
       <SolutionFeatures />
       <SolutionHighlight />
       <HowToUse />
+
+      <SpaceBanner variant="bottom" />
 
       <Styled.FooterContainer>
         <Footer />
