@@ -66,6 +66,7 @@ import useSuperAdminConcertHallRental from './useSuperAdminConcertHallRental';
 import useSuperAdminConcertHallSubwayStations from './useSuperAdminConcertHallSubwayStations';
 import useSuperAdminConcertHallShows from './useSuperAdminConcertHallShows';
 import useSubwayStationSearch from './useSubwayStationSearch';
+import useNaverGeocode from './useNaverGeocode';
 import usePutPreQuestions from '../mutations/usePutPreQuestions';
 
 export {
@@ -138,4 +139,5 @@ export {
   useSuperAdminConcertHallSubwayStations,
   useSuperAdminConcertHallShows,
   useSubwayStationSearch,
+  useNaverGeocode,
 };

@@ -1,8 +1,6 @@
-import { NaverGeocodeProvider, useNaverGeocode, type GeocodeCoordinates } from '@boolti/ui';
+import { useNaverGeocode, type GeocodeCoordinates } from '@boolti/api';
 import { Modal } from 'antd';
 import { useEffect, useRef } from 'react';
-
-const NCP_KEY_ID = import.meta.env.VITE_X_NCP_APIGW_API_KEY_ID;
 
 const POSTCODE_SCRIPT_URL = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
@@ -47,8 +45,6 @@ const loadPostcodeScript = () => {
   return scriptPromise;
 };
 
-type Geocode = (address: string) => Promise<GeocodeCoordinates | null>;
-
 interface AddressSearchModalProps {
   open: boolean;
   onClose: () => void;
@@ -58,15 +54,10 @@ interface AddressSearchModalProps {
   afterClose?: () => void;
 }
 
-// 우편번호 서비스 embed + 선택 주소를 네이버 geocode로 좌표 변환
-const AddressSearchModalView = ({
-  open,
-  onClose,
-  onComplete,
-  afterClose,
-  geocode,
-}: AddressSearchModalProps & { geocode: Geocode | null }) => {
+// 우편번호 서비스 embed + 선택 주소를 네이버 지도 지오코딩 프록시로 좌표 변환
+const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSearchModalProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const geocode = useNaverGeocode();
 
   useEffect(() => {
     if (!open) {
@@ -83,8 +74,8 @@ const AddressSearchModalView = ({
         height: '100%',
         oncomplete: async (data) => {
           const roadAddress = data.roadAddress || data.address;
-          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 geocode로 변환한다.
-          const coordinates = geocode ? await geocode(roadAddress) : null;
+          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 지오코딩으로 변환한다.
+          const coordinates = await geocode(roadAddress);
           onComplete(roadAddress, coordinates);
         },
       }).embed(containerRef.current);
@@ -107,25 +98,6 @@ const AddressSearchModalView = ({
       <div ref={containerRef} style={{ width: '100%', height: 466, marginTop: 16 }} />
     </Modal>
   );
-};
-
-// NaverGeocodeProvider 컨텍스트 안에서 geocode 함수를 얻어 View에 주입한다.
-const GeocodeEnabledModal = (props: AddressSearchModalProps) => {
-  const geocode = useNaverGeocode();
-  return <AddressSearchModalView {...props} geocode={geocode} />;
-};
-
-// NCP 키가 있으면 네이버 geocode를 붙이고, 없으면 좌표 없이 동작한다.
-// 키 유무는 런타임 고정값이라 트리 구조가 바뀌지 않는다(모달 애니메이션 보존).
-const AddressSearchModal = (props: AddressSearchModalProps) => {
-  if (NCP_KEY_ID) {
-    return (
-      <NaverGeocodeProvider ncpKeyId={NCP_KEY_ID}>
-        <GeocodeEnabledModal {...props} />
-      </NaverGeocodeProvider>
-    );
-  }
-  return <AddressSearchModalView {...props} geocode={null} />;
 };
 
 export default AddressSearchModal;

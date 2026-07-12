@@ -2,6 +2,7 @@ import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory'
 import type { SearchParamsOption } from 'ky';
 
 import { fetcher, instance } from './fetcher';
+import { IS_SUPER_ADMIN } from './constants';
 import {
   EntranceInfoResponse,
   EntranceSummaryResponse,
@@ -84,6 +85,7 @@ import {
   SuperAdminInvitationTicketListResponse,
   SuperAdminSalesTicketListResponse,
 } from './types/adminTicket';
+import { NaverGeocodingResponse } from './types/naverMaps';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -679,6 +681,19 @@ export const superAdminConcertHallQueryKeys = createQueryKeys('superAdminConcert
   }),
 });
 
+export const naverMapsQueryKeys = createQueryKeys('naverMaps', {
+  // 지오코딩 프록시는 web/app 그룹에만 존재하고 super-admin(sa-api)은 별도 인증 realm이라
+  // refreshAccessToken과 동일하게 IS_SUPER_ADMIN 프리픽스로 분기한다.
+  geocoding: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<NaverGeocodingResponse>(
+        `${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/v1/naver-maps/geocoding`,
+        { searchParams: { query } },
+      ),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -695,4 +710,5 @@ export const queryKeys = mergeQueryKeys(
   superAdminUserQueryKeys,
   superAdminConcertHallQueryKeys,
   concertHallQueryKeys,
+  naverMapsQueryKeys,
 );
