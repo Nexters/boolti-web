@@ -5,12 +5,13 @@ import {
   useSuperAdminSaveConcertHallSubwayStations,
   useSuperAdminUpdateConcertHall,
   useSuperAdminUploadConcertHallImage,
+  type GeocodeCoordinates,
 } from '@boolti/api';
 import {
   SubwayStationSearchItem,
   SuperAdminSubwayLine,
 } from '@boolti/api/src/types/superAdminConcertHall';
-import { Button as BooltiButton, useToast } from '@boolti/ui';
+import { Button as BooltiButton, SubwayLineBadge, useToast } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
 import { Button, Card, Checkbox, Flex, Input, InputNumber, Typography } from 'antd';
 import type { InputRef } from 'antd';
@@ -26,7 +27,6 @@ import secondFloorIcon from '~/assets/amenities/second-floor.svg';
 import waitingRoomIcon from '~/assets/amenities/waiting-room.svg';
 import AddressSearchModal from './AddressSearchModal';
 import ImageUploadBox from './ImageUploadBox';
-import SubwayLineBadge from './SubwayLineBadge';
 import SubwayStationSearchModal from './SubwayStationSearchModal';
 
 const { TextArea } = Input;
@@ -122,6 +122,8 @@ const ConcertHallInfoPage = () => {
   const [name, setName] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
+  const [latitude, setLatitude] = useState<number | undefined>(undefined);
+  const [longitude, setLongitude] = useState<number | undefined>(undefined);
   const [stations, setStations] = useState<SelectedStation[]>([]);
   const [representativeImage, setRepresentativeImage] = useState<string | null>(null);
 
@@ -145,6 +147,8 @@ const ConcertHallInfoPage = () => {
     setName(detail.name ?? '');
     setStreetAddress(detail.location?.streetAddress ?? '');
     setDetailAddress(detail.location?.detailAddress ?? '');
+    setLatitude(detail.location?.latitude);
+    setLongitude(detail.location?.longitude);
     setRepresentativeImage(detail.representativeImageUrl ?? null);
     setWebsiteUrl(detail.contact?.websiteUrl ?? '');
     setPhoneNumber(detail.contact?.phoneNumber ?? '');
@@ -190,8 +194,13 @@ const ConcertHallInfoPage = () => {
   // 주소 선택으로 닫힌 경우에만 닫힘 애니메이션 완료 후 상세주소에 포커스한다 (디자인 정책)
   const shouldFocusDetailAddressRef = useRef(false);
 
-  const onCompleteAddress = (roadAddress: string) => {
+  const onCompleteAddress = (roadAddress: string, coordinates: GeocodeCoordinates | null) => {
     setStreetAddress(roadAddress);
+    // 지오코딩 성공 시에만 좌표를 갱신한다 (실패 시 기존 좌표 유지)
+    if (coordinates) {
+      setLatitude(coordinates.latitude);
+      setLongitude(coordinates.longitude);
+    }
     shouldFocusDetailAddressRef.current = true;
     setIsAddressModalOpen(false);
   };
@@ -251,9 +260,9 @@ const ConcertHallInfoPage = () => {
           location: {
             streetAddress: streetAddress.trim() || undefined,
             detailAddress: detailAddress.trim() || undefined,
-            // Daum 우편번호는 좌표를 주지 않으므로 기존 좌표를 보존한다.
-            latitude: detail?.location?.latitude,
-            longitude: detail?.location?.longitude,
+            // 주소 찾기 시 카카오 지오코딩으로 취합한 좌표 (없으면 기존 값 유지)
+            latitude,
+            longitude,
           },
           contact: {
             websiteUrl: websiteUrl.trim() || undefined,
@@ -403,7 +412,12 @@ const ConcertHallInfoPage = () => {
                         }}
                       >
                         {station.lines.map((line) => (
-                          <SubwayLineBadge key={line.lineId} line={line} />
+                          <SubwayLineBadge
+                            key={line.lineId}
+                            lineName={line.lineName}
+                            colorHex={line.colorHex}
+                            size="small"
+                          />
                         ))}
                         <Typography.Text>{station.stationName}</Typography.Text>
                         <CloseOutlined

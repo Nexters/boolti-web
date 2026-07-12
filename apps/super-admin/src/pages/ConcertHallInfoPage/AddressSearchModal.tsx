@@ -1,3 +1,4 @@
+import { useNaverGeocode, type GeocodeCoordinates } from '@boolti/api';
 import { Modal } from 'antd';
 import { useEffect, useRef } from 'react';
 
@@ -36,7 +37,7 @@ const loadPostcodeScript = () => {
       script.onload = () => resolve();
       script.onerror = () => {
         scriptPromise = null;
-        reject(new Error('카카오 우편번호 스크립트 로드 실패'));
+        reject(new Error('우편번호 스크립트 로드 실패'));
       };
       document.head.appendChild(script);
     });
@@ -47,15 +48,16 @@ const loadPostcodeScript = () => {
 interface AddressSearchModalProps {
   open: boolean;
   onClose: () => void;
-  /** 도로명주소 선택 시 호출. 호출 측에서 모달을 닫는다. */
-  onComplete: (roadAddress: string) => void;
+  /** 도로명주소 선택 시 호출. 좌표는 지오코딩 실패 시 null. 호출 측에서 모달을 닫는다. */
+  onComplete: (roadAddress: string, coordinates: GeocodeCoordinates | null) => void;
   /** 닫힘 애니메이션 완료 후 호출 — 상세주소 포커스는 이 시점에 해야 antd의 포커스 복원에 덮이지 않는다. */
   afterClose?: () => void;
 }
 
-// 카카오(다음) 우편번호 서비스를 embed한 주소 찾기 모달
+// 우편번호 서비스 embed + 선택 주소를 네이버 지도 지오코딩 프록시로 좌표 변환
 const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSearchModalProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const geocode = useNaverGeocode();
 
   useEffect(() => {
     if (!open) {
@@ -70,15 +72,18 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
       new window.daum.Postcode({
         width: '100%',
         height: '100%',
-        oncomplete: (data) => {
-          onComplete(data.roadAddress || data.address);
+        oncomplete: async (data) => {
+          const roadAddress = data.roadAddress || data.address;
+          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 지오코딩으로 변환한다.
+          const coordinates = await geocode(roadAddress);
+          onComplete(roadAddress, coordinates);
         },
       }).embed(containerRef.current);
     });
     return () => {
       cancelled = true;
     };
-  }, [open, onComplete]);
+  }, [open, onComplete, geocode]);
 
   return (
     <Modal
