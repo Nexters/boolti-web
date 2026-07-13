@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import Error from '~/components/Error';
+import NotFound from '~/components/NotFound';
 import Layout from '~/components/Layout';
 
 const Center = styled.div`
@@ -10,12 +10,12 @@ const Center = styled.div`
   min-height: 100dvh;
 `;
 
-const ErrorPage = () => (
+const NotFoundPage = () => (
   <Layout>
     <Center>
-      <Error />
+      <NotFound />
     </Center>
   </Layout>
 );
 
-export default ErrorPage;
+export default NotFoundPage;

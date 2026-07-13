@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import ConcertHallPage from './pages/ConcertHallPage';
 import ErrorPage from './pages/ErrorPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
   },
   {
     path: '*',
-    element: <ErrorPage />,
+    element: <NotFoundPage />,
   },
 ]);
 
