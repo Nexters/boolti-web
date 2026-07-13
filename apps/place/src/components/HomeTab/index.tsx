@@ -2,7 +2,7 @@ import type { ConcertHallProfileResponse } from '@boolti/api';
 import { checkIsWebView } from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import GalleryModal, { type GalleryMode } from '~/components/GalleryModal';
 import {
@@ -86,6 +86,25 @@ const HomeTab = ({ profile }: Props) => {
   const hasMap =
     location?.latitude != null && location?.longitude != null && Boolean(X_NCP_APIGW_API_KEY_ID);
 
+  // 갤러리 모달 open/close 등 HomeTab 리렌더 때 지도까지 리렌더되면
+  // react-naver-maps가 지도를 파괴/재생성하며 크래시한다(KVO.destroy null 등).
+  // 지도 엘리먼트를 메모이즈해 참조를 고정하면 React가 이 서브트리 재조정을 건너뛴다.
+  const mapElement = useMemo(() => {
+    if (!hasMap) {
+      return null;
+    }
+
+    return (
+      <PreviewMapWithProvider
+        ncpKeyId={X_NCP_APIGW_API_KEY_ID}
+        latitude={location.latitude as number}
+        longitude={location.longitude as number}
+        name={profile.name}
+        isAppWebview={checkIsWebView()}
+      />
+    );
+  }, [hasMap, location?.latitude, location?.longitude, profile.name]);
+
   const handleCopyAddress = async () => {
     if (!addressText) {
       return;
@@ -159,15 +178,7 @@ const HomeTab = ({ profile }: Props) => {
               복사
             </Styled.CopyButton>
           </Styled.AddressLine>
-          {hasMap && (
-            <PreviewMapWithProvider
-              ncpKeyId={X_NCP_APIGW_API_KEY_ID}
-              latitude={location.latitude as number}
-              longitude={location.longitude as number}
-              name={profile.name}
-              isAppWebview={checkIsWebView()}
-            />
-          )}
+          {mapElement}
         </Styled.Section>
       )}
       </Styled.Container>
