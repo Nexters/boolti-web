@@ -13,7 +13,10 @@ const defaultOption: Options = {
 const tokenRefreshMutex = new Mutex();
 
 export const instance = ky.create({
-  prefixUrl: API_URL,
+  // API_URL이 빈 문자열이면(dev proxy 설정) ky가 prefixUrl 적용을 생략해서, fetcher가
+  // 받는 경로(예: "web/papi/...")가 origin이 아닌 "현재 페이지 경로" 기준 상대 경로로
+  // resolve된다. 라우트 깊이에 관계없이 항상 origin 기준 절대 경로가 되도록 최소 '/'를 보장한다.
+  prefixUrl: API_URL || '/',
   headers: {
     'content-type': 'application/json',
   },
