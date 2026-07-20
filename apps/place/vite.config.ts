@@ -7,7 +7,7 @@ export default defineConfig({
     alias: [{ find: '~', replacement: '/src' }],
   },
   server: {
-    port: 8083,
+    port: 8080,
     // 로컬 개발 시 dev API의 CORS 제한을 우회하기 위한 프록시.
     // .env.local에서 VITE_BASE_API_URL을 비워두면 요청이 프록시를 타게 된다.
     proxy: {
