@@ -106,11 +106,6 @@ const PlaceName = styled.span`
   color: ${({ theme }) => theme.palette.grey.g90};
 `;
 
-const Category = styled.span`
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g40};
-`;
-
 const AddressName = styled.span`
   ${({ theme }) => theme.typo.b1};
   color: ${({ theme }) => theme.palette.grey.g50};
@@ -171,7 +166,6 @@ export default {
   DropdownItem,
   PlaceNameRow,
   PlaceName,
-  Category,
   AddressName,
   SelectedInfo,
   ErrorMessage,
