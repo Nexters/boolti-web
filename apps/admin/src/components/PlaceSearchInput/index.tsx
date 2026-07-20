@@ -1,13 +1,14 @@
-import { useConcertHallProfile } from '@boolti/api';
+import { useConcertHallProfile, useNaverGeocode } from '@boolti/api';
 import { SearchIcon } from '@boolti/icon';
-import { TextField } from '@boolti/ui';
-import { useEffect, useRef, useState } from 'react';
+import { TextField, useDialog, useToast } from '@boolti/ui';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import useVenueSearch, { VenueResult } from '~/hooks/useVenueSearch';
 
+import AddressSearchDialogContent from './AddressSearchDialogContent';
 import Styled from './PlaceSearchInput.styles';
 
-export type PlaceSelectType = 'boolti' | 'kakao_place' | 'kakao_address';
+export type PlaceSelectType = 'boolti' | 'address';
 
 export interface PlaceSelectResult {
   type: PlaceSelectType;
@@ -37,6 +38,8 @@ interface SelectedSnapshot {
   streetAddress: string;
 }
 
+const GEOCODE_FAILED_MESSAGE = '주소의 위치 정보를 가져오지 못했어요. 다른 주소로 다시 시도해 주세요.';
+
 const PlaceSearchInput = ({
   initialPlaceName,
   initialAddress,
@@ -57,21 +60,21 @@ const PlaceSearchInput = ({
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
 
   const profileQuery = useConcertHallProfile(pendingBooltiId);
+  const geocode = useNaverGeocode();
+  const dialog = useDialog();
+  const toast = useToast();
 
   useEffect(() => {
     if (!selected && initialAddress) {
-      const type: PlaceSelectType = initialConcertHallId
-        ? 'boolti'
-        : initialPlaceName
-          ? 'kakao_place'
-          : 'kakao_address';
+      const type: PlaceSelectType = initialConcertHallId ? 'boolti' : 'address';
       setSelected({
         type,
         placeName: initialPlaceName ?? '',
         streetAddress: initialAddress,
       });
+      setQuery(initialPlaceName || initialAddress);
     }
-  }, [initialAddress, initialPlaceName, initialConcertHallId, selected]);
+  }, [initialAddress, initialPlaceName, initialConcertHallId, selected, setQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -151,43 +154,44 @@ const PlaceSearchInput = ({
     setPendingBooltiId(concertHallId);
   };
 
-  const handleSelectKakaoPlace = (
-    result: Extract<VenueResult, { source: 'kakao_place' }>,
-  ) => {
-    const street = result.roadAddressName || result.addressName;
-    setSelected({ type: 'kakao_place', placeName: result.placeName, streetAddress: street });
-    setDetailAddress('');
-    setQuery(result.placeName);
-    setIsDropdownOpen(false);
-    clearResults();
-    onSelect({
-      type: 'kakao_place',
-      placeName: result.placeName,
-      streetAddress: street,
-      detailAddress: '',
-      latitude: Number(result.y),
-      longitude: Number(result.x),
-    });
-  };
+  // 다음 우편번호 서비스로 선택한 도로명주소를 네이버 지오코딩으로 좌표 변환한다.
+  const handleAddressComplete = useCallback(
+    async (roadAddress: string) => {
+      dialog.close();
 
-  const handleSelectKakaoAddress = (
-    result: Extract<VenueResult, { source: 'kakao_address' }>,
-  ) => {
-    const street = result.roadAddressName || result.addressName;
-    setSelected({ type: 'kakao_address', placeName: '', streetAddress: street });
-    setDetailAddress('');
-    setQuery(street);
+      const coordinates = await geocode(roadAddress);
+      if (!coordinates) {
+        toast.error(GEOCODE_FAILED_MESSAGE);
+        return;
+      }
+
+      setSelected({ type: 'address', placeName: '', streetAddress: roadAddress });
+      setDetailAddress('');
+      setQuery(roadAddress);
+      setIsDropdownOpen(false);
+      clearResults();
+
+      onSelect({
+        type: 'address',
+        placeName: '',
+        streetAddress: roadAddress,
+        detailAddress: '',
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
+
+      setTimeout(() => detailAddressInputRef.current?.focus(), 0);
+    },
+    [dialog, geocode, toast, setQuery, clearResults, onSelect],
+  );
+
+  const openAddressSearch = () => {
     setIsDropdownOpen(false);
-    clearResults();
-    onSelect({
-      type: 'kakao_address',
-      placeName: '',
-      streetAddress: street,
-      detailAddress: '',
-      latitude: Number(result.y),
-      longitude: Number(result.x),
+    dialog.open({
+      title: '주소 찾기',
+      width: '490px',
+      content: <AddressSearchDialogContent onComplete={handleAddressComplete} />,
     });
-    setTimeout(() => detailAddressInputRef.current?.focus(), 0);
   };
 
   const handleDetailAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,12 +206,6 @@ const PlaceSearchInput = ({
 
   const booltiResults = results.filter(
     (r): r is Extract<VenueResult, { source: 'boolti' }> => r.source === 'boolti',
-  );
-  const kakaoPlaceResults = results.filter(
-    (r): r is Extract<VenueResult, { source: 'kakao_place' }> => r.source === 'kakao_place',
-  );
-  const kakaoAddressResults = results.filter(
-    (r): r is Extract<VenueResult, { source: 'kakao_address' }> => r.source === 'kakao_address',
   );
 
   const showDropdown = isDropdownOpen && query.trim() && !selected;
@@ -231,67 +229,42 @@ const PlaceSearchInput = ({
 
         {showDropdown && (
           <Styled.Dropdown>
-            {isLoading && results.length === 0 ? (
-              <Styled.EmptyState>검색 중...</Styled.EmptyState>
-            ) : results.length === 0 ? (
-              <Styled.EmptyState>검색 결과가 없어요</Styled.EmptyState>
-            ) : (
+            {booltiResults.length > 0 && (
               <>
-                {booltiResults.length > 0 && (
-                  <>
-                    <Styled.SectionHeader>불티 등록 공연장</Styled.SectionHeader>
-                    {booltiResults.map((r) => (
-                      <Styled.DropdownItem
-                        key={`boolti-${r.concertHallId}`}
-                        onClick={() => handleSelectBoolti(r.concertHallId)}
-                      >
-                        <Styled.PlaceNameRow>
-                          <Styled.PlaceName>{r.name}</Styled.PlaceName>
-                          <Styled.BooltiBadge>불티 등록</Styled.BooltiBadge>
-                        </Styled.PlaceNameRow>
-                        <Styled.AddressName>{r.address}</Styled.AddressName>
-                      </Styled.DropdownItem>
-                    ))}
-                  </>
-                )}
-                {(kakaoPlaceResults.length > 0 || kakaoAddressResults.length > 0) && (
-                  <>
-                    <Styled.SectionHeader>외부 검색 결과</Styled.SectionHeader>
-                    {kakaoPlaceResults.map((r, i) => (
-                      <Styled.DropdownItem
-                        key={`kp-${i}-${r.x}-${r.y}`}
-                        onClick={() => handleSelectKakaoPlace(r)}
-                      >
-                        <Styled.PlaceNameRow>
-                          <Styled.PlaceName>{r.placeName}</Styled.PlaceName>
-                          {r.category && <Styled.Category>{r.category}</Styled.Category>}
-                        </Styled.PlaceNameRow>
-                        <Styled.AddressName>
-                          {r.roadAddressName || r.addressName}
-                        </Styled.AddressName>
-                      </Styled.DropdownItem>
-                    ))}
-                    {kakaoAddressResults.map((r, i) => (
-                      <Styled.DropdownItem
-                        key={`ka-${i}-${r.x}-${r.y}`}
-                        onClick={() => handleSelectKakaoAddress(r)}
-                      >
-                        <Styled.PlaceNameRow>
-                          <Styled.PlaceName>{r.roadAddressName || r.addressName}</Styled.PlaceName>
-                        </Styled.PlaceNameRow>
-                      </Styled.DropdownItem>
-                    ))}
-                  </>
-                )}
+                <Styled.SectionHeader>불티 등록 공연장</Styled.SectionHeader>
+                {booltiResults.map((r) => (
+                  <Styled.DropdownItem
+                    key={`boolti-${r.concertHallId}`}
+                    onClick={() => handleSelectBoolti(r.concertHallId)}
+                  >
+                    <Styled.PlaceNameRow>
+                      <Styled.PlaceName>{r.name}</Styled.PlaceName>
+                      <Styled.BooltiBadge>불티 등록</Styled.BooltiBadge>
+                    </Styled.PlaceNameRow>
+                    <Styled.AddressName>{r.address}</Styled.AddressName>
+                  </Styled.DropdownItem>
+                ))}
               </>
             )}
+            {isLoading && booltiResults.length === 0 && (
+              <Styled.EmptyState>검색 중...</Styled.EmptyState>
+            )}
+            <Styled.SectionHeader>외부 검색 결과</Styled.SectionHeader>
+            <Styled.DropdownItem onClick={openAddressSearch}>
+              <Styled.PlaceNameRow>
+                <Styled.PlaceName>주소로 직접 검색하기</Styled.PlaceName>
+              </Styled.PlaceNameRow>
+              <Styled.AddressName>
+                등록되지 않은 공연장은 도로명 주소로 검색해 주세요
+              </Styled.AddressName>
+            </Styled.DropdownItem>
           </Styled.Dropdown>
         )}
       </Styled.Container>
 
       {selected && (
         <Styled.SelectedInfo>
-          {selected.type === 'kakao_address' ? (
+          {selected.type === 'address' ? (
             <TextField
               ref={detailAddressInputRef}
               inputType="text"

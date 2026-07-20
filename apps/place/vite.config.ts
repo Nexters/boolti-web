@@ -7,14 +7,16 @@ export default defineConfig({
     alias: [{ find: '~', replacement: '/src' }],
   },
   server: {
-    port: 8080,
-    // 로컬 개발 시 dev API의 CORS 제한을 우회하기 위한 프록시.
-    // .env.local에서 VITE_BASE_API_URL을 비워두면 요청이 프록시를 타게 된다.
-    proxy: {
-      '/web': {
-        target: 'https://dev.api.boolti.in',
-        changeOrigin: true,
-      },
+    // 네이버 지도 등 boolti.in 도메인에 등록된 키/인증을 로컬에서 그대로 쓰기 위해
+    // place.dev.boolti.in 호스트로 띄운다. (/etc/hosts에 127.0.0.1 매핑 필요)
+    // dev API 호출은 .env.local의 VITE_BASE_API_URL(절대 URL)로 직접 나가며,
+    // place.dev.boolti.in origin이 CORS allow-list에 등록되어 있어야 한다.
+    port: 8083,
+    cors: false,
+    host: 'place.dev.boolti.in',
+    https: {
+      key: './place.dev.boolti.in-key.pem',
+      cert: './place.dev.boolti.in.pem',
     },
   },
   plugins: [
