@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ComingSoon from '~/components/ComingSoon';
+import Disclaimer from '~/components/Disclaimer';
 import HallHead from '~/components/HallHead';
 import HomeTab from '~/components/HomeTab';
 import Layout from '~/components/Layout';
@@ -82,18 +83,7 @@ const ConcertHallPage = () => {
         (profile.hasHomeTabData ? <HomeTab profile={profile} /> : <ComingSoon />)}
       {activeTab === 'rental' &&
         (profile.hasRentalTabData ? <RentalTab profile={profile} /> : <ComingSoon />)}
-      <Styled.Bottom>
-        <Styled.BottomText>
-          이 페이지의 정보는 불티에서 수집한 것으로, 실제 시설 및 장비와 다를 수 있습니다. 정확한
-          정보는 대관 시 공연장에 직접 확인해 주세요.
-          {updatedAtText && (
-            <>
-              <br />
-              *정보 업데이트: {updatedAtText}
-            </>
-          )}
-        </Styled.BottomText>
-      </Styled.Bottom>
+      <Disclaimer updatedAtText={updatedAtText} />
     </Layout>
   );
 };
