@@ -19,7 +19,7 @@ const Header = styled.header<{ hideBorder?: boolean }>`
   }
 
   ${mq_desktop} {
-    padding: 0 80px;
+    padding: 0 60px;
   }
 `;
 
