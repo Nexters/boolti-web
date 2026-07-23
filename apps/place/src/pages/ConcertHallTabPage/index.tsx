@@ -28,14 +28,14 @@ const ConcertHallTabPage = ({ tab }: Props) => {
   }, [profile?.name, profile?.share?.title]);
 
   if (!profile) {
-    return <Layout>{null}</Layout>;
+    return <Layout fillViewport={false}>{null}</Layout>;
   }
 
   const hasTabData = tab === 'home' ? profile.hasHomeTabData : profile.hasRentalTabData;
   const updatedAtText = formatUpdatedAt(profile.informationUpdatedAt);
 
   return (
-    <Layout>
+    <Layout fillViewport={false}>
       {hasTabData ? (
         tab === 'home' ? (
           <HomeTab profile={profile} />
