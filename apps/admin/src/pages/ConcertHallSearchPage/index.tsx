@@ -106,7 +106,8 @@ const formatRangeLabel = (min?: number, max?: number, emptyLabel = '설정') => 
 };
 
 const formatPeopleRangeLabel = (min?: number, max?: number, emptyLabel = '설정') => {
-  if (min != null && max != null) return `${min.toLocaleString('ko-KR')}명 - ${max.toLocaleString('ko-KR')}명`;
+  if (min != null && max != null)
+    return `${min.toLocaleString('ko-KR')}명 - ${max.toLocaleString('ko-KR')}명`;
   if (max != null) return `${max.toLocaleString('ko-KR')}명 이하`;
   if (min != null) return `${min.toLocaleString('ko-KR')}명 이상`;
   return emptyLabel;
@@ -123,7 +124,9 @@ const readRecentKeywords = () => {
 
   try {
     const parsed = JSON.parse(window.localStorage.getItem(RECENT_KEYWORDS_STORAGE_KEY) ?? '[]');
-    return Array.isArray(parsed) ? parsed.filter((value): value is string => typeof value === 'string') : [];
+    return Array.isArray(parsed)
+      ? parsed.filter((value): value is string => typeof value === 'string')
+      : [];
   } catch {
     return [];
   }
@@ -224,7 +227,10 @@ const ConcertHallCard = ({
             <Styled.Price>문의</Styled.Price>
           )}
           <Styled.PriceHours>
-            / {concertHall.rentalTimeHours != null ? `${concertHall.rentalTimeHours}시간` : '정보 없음'}
+            /{' '}
+            {concertHall.rentalTimeHours != null
+              ? `${concertHall.rentalTimeHours}시간`
+              : '정보 없음'}
           </Styled.PriceHours>
         </Styled.PriceRow>
         <Styled.CardTitle>{concertHall.name}</Styled.CardTitle>
@@ -291,12 +297,20 @@ const ConcertHallDetailPanel = ({
       : introduction;
   const previewImages = (concertHall.home?.images ?? []).slice().sort(bySequence);
   const fallbackImage = concertHall.representativeImageUrl
-    ? [{ id: 0, imageUrl: concertHall.representativeImageUrl, thumbnailUrl: concertHall.representativeImageUrl }]
+    ? [
+        {
+          id: 0,
+          imageUrl: concertHall.representativeImageUrl,
+          thumbnailUrl: concertHall.representativeImageUrl,
+        },
+      ]
     : [];
   const baseImages = previewImages.length > 0 ? previewImages : fallbackImage;
   const expandedImages = (imagesQuery.data?.items ?? baseImages).slice().sort(bySequence);
   const detailImages = isImageExpanded ? expandedImages : baseImages;
-  const visibleImages = isImageExpanded ? detailImages : detailImages.slice(0, DETAIL_IMAGE_PREVIEW_COUNT);
+  const visibleImages = isImageExpanded
+    ? detailImages
+    : detailImages.slice(0, DETAIL_IMAGE_PREVIEW_COUNT);
   const totalImageCount = concertHall.home?.totalImageCount ?? detailImages.length;
   const hiddenImageCount = isImageExpanded
     ? 0
@@ -335,9 +349,13 @@ const ConcertHallDetailPanel = ({
       </Styled.DetailHero>
       <Styled.DetailMetaList style={{ padding: '16px 20px' }}>
         <Styled.DetailMetaLabel>대관료</Styled.DetailMetaLabel>
-        <Styled.DetailMetaValue>{concertHall.head?.rentalFeeSummary ?? '문의'}</Styled.DetailMetaValue>
+        <Styled.DetailMetaValue>
+          {concertHall.head?.rentalFeeSummary ?? '문의'}
+        </Styled.DetailMetaValue>
         <Styled.DetailMetaLabel>수용 인원</Styled.DetailMetaLabel>
-        <Styled.DetailMetaValue>{formatCapacity(concertHall.head?.capacity)}</Styled.DetailMetaValue>
+        <Styled.DetailMetaValue>
+          {formatCapacity(concertHall.head?.capacity)}
+        </Styled.DetailMetaValue>
         <Styled.DetailMetaLabel>위치</Styled.DetailMetaLabel>
         <Styled.DetailMetaValue>{address}</Styled.DetailMetaValue>
         <Styled.DetailMetaLabel>지하철역</Styled.DetailMetaLabel>
@@ -348,20 +366,22 @@ const ConcertHallDetailPanel = ({
                 return (
                   <Styled.SubwayItem key={station.stationName}>
                     {station.lines.map(({ lineKey, lineName, colorHex }) => {
+                      if (!lineKey) return;
+                      
                       const chipText = SUBWAY_LINES[lineKey]?.chipText ?? lineName;
                       return (
                         <Styled.SubwayChip
                           key={`${lineKey}-${lineName}`}
                           colorHex={colorHex}
                           aria-label={`${station.stationName} ${lineName}`}
-                          >
+                        >
                           {chipText}
                         </Styled.SubwayChip>
                       );
                     })}
                     {station.stationName}
                   </Styled.SubwayItem>
-                )
+                );
               })}
             </Styled.SubwayList>
           )}
@@ -498,7 +518,9 @@ const ConcertHallDetailPanel = ({
         <>
           <Styled.DetailSection>
             <Styled.DetailSectionTitle>대관 방법</Styled.DetailSectionTitle>
-            <Styled.DetailText>{concertHall.rental?.rentalMethod ?? '등록된 대관 방법이 없습니다.'}</Styled.DetailText>
+            <Styled.DetailText>
+              {concertHall.rental?.rentalMethod ?? '등록된 대관 방법이 없습니다.'}
+            </Styled.DetailText>
           </Styled.DetailSection>
           <Styled.DetailSection>
             <Styled.DetailSectionTitle>대관 시간</Styled.DetailSectionTitle>
@@ -617,7 +639,9 @@ const ConcertHallSearchPage = () => {
   const autocompleteQuery = useConcertHallAutocomplete(autocompleteQueryText);
   const trimmedKeywordInput = keywordInput.trim();
   const isAutocompleteWaiting =
-    activeSearchField === 'keyword' && trimmedKeywordInput.length > 0 && debouncedKeyword !== trimmedKeywordInput;
+    activeSearchField === 'keyword' &&
+    trimmedKeywordInput.length > 0 &&
+    debouncedKeyword !== trimmedKeywordInput;
   const shouldKeepPreviousSearchContent =
     trimmedKeywordInput.length > 0 &&
     (isAutocompleteWaiting || autocompleteQuery.isLoading) &&
@@ -647,11 +671,15 @@ const ConcertHallSearchPage = () => {
   useEffect(() => {
     setRentalFeeMinInput(formatPlainNumber(rentalFeeMin));
     setRentalFeeMaxInput(formatPlainNumber(rentalFeeMax));
-    setSelectedRentalFeeOptionId(findRangeOption(rentalFeeOptions, rentalFeeMin, rentalFeeMax)?.id ?? null);
+    setSelectedRentalFeeOptionId(
+      findRangeOption(rentalFeeOptions, rentalFeeMin, rentalFeeMax)?.id ?? null,
+    );
   }, [rentalFeeMax, rentalFeeMin]);
 
   useEffect(() => {
-    setSelectedCapacityOptionId(findRangeOption(capacityOptions, capacityMin, capacityMax)?.id ?? null);
+    setSelectedCapacityOptionId(
+      findRangeOption(capacityOptions, capacityMin, capacityMax)?.id ?? null,
+    );
     setIsCapacityCleared(false);
   }, [capacityMax, capacityMin]);
 
@@ -692,7 +720,8 @@ const ConcertHallSearchPage = () => {
     [capacityMax, capacityMin, keyword, page, regionId, rentalFeeMax, rentalFeeMin, sort],
   );
   const searchConditionsKey = useMemo(
-    () => JSON.stringify({ capacityMax, capacityMin, keyword, regionId, rentalFeeMax, rentalFeeMin }),
+    () =>
+      JSON.stringify({ capacityMax, capacityMin, keyword, regionId, rentalFeeMax, rentalFeeMin }),
     [capacityMax, capacityMin, keyword, regionId, rentalFeeMax, rentalFeeMin],
   );
   const [lastTotalElements, setLastTotalElements] = useState<{
@@ -702,12 +731,20 @@ const ConcertHallSearchPage = () => {
 
   const concertHallListQuery = useConcertHallSearchList(listParams);
   const concertHallDetailQuery = useConcertHallSearchDetail(selectedConcertHallId);
-  const currentPageConcertHalls = useMemo(() => concertHallListQuery.data?.items ?? [], [concertHallListQuery.data?.items]);
-  const currentPageConcertHallIds = currentPageConcertHalls.map((concertHall) => concertHall.concertHallId).join(',');
-  const concertHalls = visibleConcertHalls.length > 0 ? visibleConcertHalls : currentPageConcertHalls;
+  const currentPageConcertHalls = useMemo(
+    () => concertHallListQuery.data?.items ?? [],
+    [concertHallListQuery.data?.items],
+  );
+  const currentPageConcertHallIds = currentPageConcertHalls
+    .map((concertHall) => concertHall.concertHallId)
+    .join(',');
+  const concertHalls =
+    visibleConcertHalls.length > 0 ? visibleConcertHalls : currentPageConcertHalls;
   const totalElements =
     concertHallListQuery.data?.totalElements ??
-    (lastTotalElements?.searchConditionsKey === searchConditionsKey ? lastTotalElements.totalElements : 0);
+    (lastTotalElements?.searchConditionsKey === searchConditionsKey
+      ? lastTotalElements.totalElements
+      : 0);
   const hasDetail = selectedConcertHallId != null;
   const hasSearchConditions =
     keyword.length > 0 ||
@@ -724,7 +761,9 @@ const ConcertHallSearchPage = () => {
     parseNumberInput(rentalFeeMaxInput),
     DEFAULT_RENTAL_FEE_LABEL,
   );
-  const selectedCapacityOption = capacityOptions.find((option) => option.id === selectedCapacityOptionId);
+  const selectedCapacityOption = capacityOptions.find(
+    (option) => option.id === selectedCapacityOptionId,
+  );
   const appliedCapacityOption = findRangeOption(capacityOptions, capacityMin, capacityMax);
   const appliedRegionId = regionId ?? selectedRegionId ?? undefined;
   const selectedRegionName =
@@ -732,7 +771,8 @@ const ConcertHallSearchPage = () => {
     selectedRegionNameInput;
   const stagedCapacityLabel = isCapacityCleared
     ? DEFAULT_CAPACITY_LABEL
-    : selectedCapacityOption?.label ?? formatPeopleRangeLabel(capacityMin, capacityMax, DEFAULT_CAPACITY_LABEL);
+    : selectedCapacityOption?.label ??
+      formatPeopleRangeLabel(capacityMin, capacityMax, DEFAULT_CAPACITY_LABEL);
   const toggleMobileSort = () => {
     updateParams({
       keyword,
@@ -765,7 +805,9 @@ const ConcertHallSearchPage = () => {
     setVisibleConcertHalls((prevConcertHalls) => {
       if (page === 0) return currentPageConcertHalls;
 
-      const prevConcertHallIds = new Set(prevConcertHalls.map((concertHall) => concertHall.concertHallId));
+      const prevConcertHallIds = new Set(
+        prevConcertHalls.map((concertHall) => concertHall.concertHallId),
+      );
       const nextConcertHalls = currentPageConcertHalls.filter(
         (concertHall) => !prevConcertHallIds.has(concertHall.concertHallId),
       );
@@ -776,7 +818,8 @@ const ConcertHallSearchPage = () => {
 
   useEffect(() => {
     const loadMoreTrigger = loadMoreTriggerRef.current;
-    if (!loadMoreTrigger || !concertHallListQuery.data?.hasNext || concertHallListQuery.isLoading) return undefined;
+    if (!loadMoreTrigger || !concertHallListQuery.data?.hasNext || concertHallListQuery.isLoading)
+      return undefined;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -841,10 +884,10 @@ const ConcertHallSearchPage = () => {
   const saveRecentKeyword = (nextKeyword: string) => {
     if (!nextKeyword) return;
 
-    const nextKeywords = [nextKeyword, ...recentKeywords.filter((item) => item !== nextKeyword)].slice(
-      0,
-      MAX_RECENT_KEYWORD_COUNT,
-    );
+    const nextKeywords = [
+      nextKeyword,
+      ...recentKeywords.filter((item) => item !== nextKeyword),
+    ].slice(0, MAX_RECENT_KEYWORD_COUNT);
     setRecentKeywords(nextKeywords);
     writeRecentKeywords(nextKeywords);
   };
@@ -1067,7 +1110,9 @@ const ConcertHallSearchPage = () => {
               if (activeSearchField !== 'keyword') setActiveSearchField('keyword');
             }}
           >
-            <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">장소</Styled.SearchInputLabel>
+            <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
+              장소
+            </Styled.SearchInputLabel>
             <Styled.KeywordInput
               id="concert-hall-search-keyword"
               value={keywordInput}
@@ -1085,7 +1130,9 @@ const ConcertHallSearchPage = () => {
                 {trimmedKeywordInput && !shouldKeepPreviousSearchContent ? (
                   <>
                     {autocompleteQuery.isError ? (
-                      <Styled.AutocompleteState>자동완성 결과를 불러오지 못했어요.</Styled.AutocompleteState>
+                      <Styled.AutocompleteState>
+                        자동완성 결과를 불러오지 못했어요.
+                      </Styled.AutocompleteState>
                     ) : autocompleteQuery.data?.items.length ? (
                       <Styled.RecentList>
                         {autocompleteQuery.data.items.map((item) => (
@@ -1098,10 +1145,15 @@ const ConcertHallSearchPage = () => {
                               {item.type === 'REGION' && <AreaIcon />}
                               <Styled.AutocompleteText>
                                 <span>
-                                  <HighlightedAutocompleteName name={item.name} keyword={trimmedKeywordInput} />
+                                  <HighlightedAutocompleteName
+                                    name={item.name}
+                                    keyword={trimmedKeywordInput}
+                                  />
                                 </span>
                                 {item.streetAddress && (
-                                  <Styled.AutocompleteAddress>{item.streetAddress}</Styled.AutocompleteAddress>
+                                  <Styled.AutocompleteAddress>
+                                    {item.streetAddress}
+                                  </Styled.AutocompleteAddress>
                                 )}
                               </Styled.AutocompleteText>
                             </Styled.RecentKeywordButton>
@@ -1109,14 +1161,19 @@ const ConcertHallSearchPage = () => {
                         ))}
                       </Styled.RecentList>
                     ) : (
-                      <Styled.AutocompleteState>일치하는 지역이나 공연장이 없어요.</Styled.AutocompleteState>
+                      <Styled.AutocompleteState>
+                        일치하는 지역이나 공연장이 없어요.
+                      </Styled.AutocompleteState>
                     )}
                   </>
                 ) : recentKeywords.length > 0 ? (
                   <>
                     <Styled.PopoverHeader>
                       <span>최근 검색어</span>
-                      <Styled.TextButton type="button" onClick={() => setIsRecentClearConfirmOpen(true)}>
+                      <Styled.TextButton
+                        type="button"
+                        onClick={() => setIsRecentClearConfirmOpen(true)}
+                      >
                         전체 삭제
                       </Styled.TextButton>
                     </Styled.PopoverHeader>
@@ -1147,9 +1204,13 @@ const ConcertHallSearchPage = () => {
                       <span>추천 지역</span>
                     </Styled.PopoverHeader>
                     {recommendedRegionsQuery.isLoading ? (
-                      <Styled.AutocompleteState>추천 지역을 불러오는 중입니다.</Styled.AutocompleteState>
+                      <Styled.AutocompleteState>
+                        추천 지역을 불러오는 중입니다.
+                      </Styled.AutocompleteState>
                     ) : recommendedRegionsQuery.isError ? (
-                      <Styled.AutocompleteState>추천 지역을 불러오지 못했어요.</Styled.AutocompleteState>
+                      <Styled.AutocompleteState>
+                        추천 지역을 불러오지 못했어요.
+                      </Styled.AutocompleteState>
                     ) : (
                       <Styled.RecentList>
                         {(recommendedRegionsQuery.data ?? []).map((region) => (
@@ -1176,7 +1237,9 @@ const ConcertHallSearchPage = () => {
               type="button"
               $showDivider
               $hideDivider={activeSearchField === 'rentalFee' || activeSearchField === 'capacity'}
-              active={activeSearchField === 'rentalFee' || rentalFeeMin != null || rentalFeeMax != null}
+              active={
+                activeSearchField === 'rentalFee' || rentalFeeMin != null || rentalFeeMax != null
+              }
               aria-label={`대관료 ${rentalFeeLabel}`}
               aria-expanded={activeSearchField === 'rentalFee'}
               onClick={() => {
@@ -1229,8 +1292,8 @@ const ConcertHallSearchPage = () => {
                       onClick={() => {
                         selectRentalFeeOption(option);
                         setActiveSearchField('capacity');
-                        }}
-                      >
+                      }}
+                    >
                       {option.label}
                     </Styled.FilterOption>
                   ))}
@@ -1239,7 +1302,9 @@ const ConcertHallSearchPage = () => {
                   <Styled.TextButton
                     type="button"
                     aria-label="대관료 초기화"
-                    disabled={!rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId}
+                    disabled={
+                      !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
+                    }
                     onClick={clearRentalFee}
                   >
                     <RefreshIcon />
@@ -1345,7 +1410,9 @@ const ConcertHallSearchPage = () => {
                     <>
                       <Styled.MobileResultHeading>검색 결과</Styled.MobileResultHeading>
                       {autocompleteQuery.isError ? (
-                        <Styled.AutocompleteState>자동완성 결과를 불러오지 못했어요.</Styled.AutocompleteState>
+                        <Styled.AutocompleteState>
+                          자동완성 결과를 불러오지 못했어요.
+                        </Styled.AutocompleteState>
                       ) : autocompleteQuery.data?.items.length ? (
                         <Styled.MobileResultList>
                           {autocompleteQuery.data.items.map((item) => (
@@ -1360,17 +1427,24 @@ const ConcertHallSearchPage = () => {
                               </Styled.MobileResultIcon>
                               <Styled.AutocompleteText>
                                 <span>
-                                  <HighlightedAutocompleteName name={item.name} keyword={trimmedKeywordInput} />
+                                  <HighlightedAutocompleteName
+                                    name={item.name}
+                                    keyword={trimmedKeywordInput}
+                                  />
                                 </span>
                                 {item.streetAddress && (
-                                  <Styled.AutocompleteAddress>{item.streetAddress}</Styled.AutocompleteAddress>
+                                  <Styled.AutocompleteAddress>
+                                    {item.streetAddress}
+                                  </Styled.AutocompleteAddress>
                                 )}
                               </Styled.AutocompleteText>
                             </Styled.MobileResultButton>
                           ))}
                         </Styled.MobileResultList>
                       ) : (
-                        <Styled.AutocompleteState>일치하는 지역이나 공연장이 없어요.</Styled.AutocompleteState>
+                        <Styled.AutocompleteState>
+                          일치하는 지역이나 공연장이 없어요.
+                        </Styled.AutocompleteState>
                       )}
                     </>
                   ) : recentKeywords.length > 0 ? (
@@ -1384,7 +1458,9 @@ const ConcertHallSearchPage = () => {
                             aria-label={`${recentKeyword} 검색`}
                             onClick={() => stageMobileRecentKeyword(recentKeyword)}
                           >
-                            <Styled.MobileResultIcon><SearchIcon /></Styled.MobileResultIcon>
+                            <Styled.MobileResultIcon>
+                              <SearchIcon />
+                            </Styled.MobileResultIcon>
                             {recentKeyword}
                           </Styled.MobileResultButton>
                         ))}
@@ -1394,9 +1470,13 @@ const ConcertHallSearchPage = () => {
                     <>
                       <Styled.MobileResultHeading>추천 지역</Styled.MobileResultHeading>
                       {recommendedRegionsQuery.isLoading ? (
-                        <Styled.AutocompleteState>추천 지역을 불러오는 중입니다.</Styled.AutocompleteState>
+                        <Styled.AutocompleteState>
+                          추천 지역을 불러오는 중입니다.
+                        </Styled.AutocompleteState>
                       ) : recommendedRegionsQuery.isError ? (
-                        <Styled.AutocompleteState>추천 지역을 불러오지 못했어요.</Styled.AutocompleteState>
+                        <Styled.AutocompleteState>
+                          추천 지역을 불러오지 못했어요.
+                        </Styled.AutocompleteState>
                       ) : (
                         <Styled.MobileResultList>
                           {(recommendedRegionsQuery.data ?? []).map((region) => (
@@ -1406,7 +1486,9 @@ const ConcertHallSearchPage = () => {
                               aria-label={`${region.name} 검색`}
                               onClick={() => stageMobileRegion(region.regionId, region.name)}
                             >
-                              <Styled.MobileResultIcon><AreaIcon /></Styled.MobileResultIcon>
+                              <Styled.MobileResultIcon>
+                                <AreaIcon />
+                              </Styled.MobileResultIcon>
                               {region.name}
                             </Styled.MobileResultButton>
                           ))}
@@ -1419,9 +1501,14 @@ const ConcertHallSearchPage = () => {
             ) : (
               <>
                 <Styled.MobileFilterSections>
-                  <Styled.MobileFilterSummary type="button" onClick={() => setActiveSearchField('keyword')}>
+                  <Styled.MobileFilterSummary
+                    type="button"
+                    onClick={() => setActiveSearchField('keyword')}
+                  >
                     <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
-                    <strong>{(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}</strong>
+                    <strong>
+                      {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
+                    </strong>
                   </Styled.MobileFilterSummary>
 
                   {activeSearchField === 'rentalFee' ? (
@@ -1469,7 +1556,10 @@ const ConcertHallSearchPage = () => {
                       </Styled.FilterOptionList>
                     </Styled.MobileExpandedFilter>
                   ) : (
-                    <Styled.MobileFilterSummary type="button" onClick={() => setActiveSearchField('rentalFee')}>
+                    <Styled.MobileFilterSummary
+                      type="button"
+                      onClick={() => setActiveSearchField('rentalFee')}
+                    >
                       <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
                       <strong>{stagedRentalFeeLabel}</strong>
                     </Styled.MobileFilterSummary>
@@ -1496,7 +1586,11 @@ const ConcertHallSearchPage = () => {
                       </Styled.FilterOptionList>
                     </Styled.MobileExpandedFilter>
                   ) : (
-                    <Styled.MobileFilterSummary type="button" isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL} onClick={() => setActiveSearchField('capacity')}>
+                    <Styled.MobileFilterSummary
+                      type="button"
+                      isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}
+                      onClick={() => setActiveSearchField('capacity')}
+                    >
                       <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
                       <strong>{stagedCapacityLabel}</strong>
                     </Styled.MobileFilterSummary>
@@ -1524,7 +1618,8 @@ const ConcertHallSearchPage = () => {
         <Styled.ResultsPane $headerMenuOpen={isHeaderMenuOpen}>
           <Styled.Toolbar>
             <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
-              불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에 있습니다.
+              불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
+              있습니다.
               <Styled.CountInfoPopupCloseButton
                 type="button"
                 aria-label="닫기"
@@ -1590,114 +1685,137 @@ const ConcertHallSearchPage = () => {
                 대관료 높은 순
               </Styled.SortButton>
             </Styled.SortGroup>
-            <Styled.MobileSortButton type="button" aria-label={`정렬 ${mobileSortLabel}`} onClick={toggleMobileSort}>
+            <Styled.MobileSortButton
+              type="button"
+              aria-label={`정렬 ${mobileSortLabel}`}
+              onClick={toggleMobileSort}
+            >
               {sort === 'FEE_ASC' ? <AscendingIcon /> : <DescendingIcon />}
               {mobileSortLabel}
             </Styled.MobileSortButton>
           </Styled.Toolbar>
 
           {hasSearchConditions && (
-          <Styled.ChipRow>
-            {(appliedRegionId != null || selectedRegionNameInput) && (
-              <Styled.Chip
-                type="button"
-                aria-label={`${selectedRegionName ?? '선택한 지역'} 필터 제거`}
-                onClick={() => {
-                  setSelectedRegionId(null);
-                  setSelectedRegionNameInput(undefined);
-                  setKeywordInput('');
-                  updateParams({ keyword, rentalFeeMin, rentalFeeMax, capacityMin, capacityMax, sort });
-                }}
-              >
-                {selectedRegionName ?? '선택한 지역'} <CloseIcon />
-              </Styled.Chip>
-            )}
-            {(rentalFeeMin != null || rentalFeeMax != null) && (
-              <Styled.Chip
-                type="button"
-                onClick={() => {
-                  clearRentalFee();
-                  updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
-                }}
-              >
-                {rentalFeeLabel} <CloseIcon />
-              </Styled.Chip>
-            )}
-            {appliedCapacityOption && (
-              <Styled.Chip
-                type="button"
-                onClick={() => {
-                  clearCapacity();
-                  updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
-                }}
-              >
-                {appliedCapacityOption.label} <CloseIcon />
-              </Styled.Chip>
-            )}
-          </Styled.ChipRow>
-)}
+            <Styled.ChipRow>
+              {(appliedRegionId != null || selectedRegionNameInput) && (
+                <Styled.Chip
+                  type="button"
+                  aria-label={`${selectedRegionName ?? '선택한 지역'} 필터 제거`}
+                  onClick={() => {
+                    setSelectedRegionId(null);
+                    setSelectedRegionNameInput(undefined);
+                    setKeywordInput('');
+                    updateParams({
+                      keyword,
+                      rentalFeeMin,
+                      rentalFeeMax,
+                      capacityMin,
+                      capacityMax,
+                      sort,
+                    });
+                  }}
+                >
+                  {selectedRegionName ?? '선택한 지역'} <CloseIcon />
+                </Styled.Chip>
+              )}
+              {(rentalFeeMin != null || rentalFeeMax != null) && (
+                <Styled.Chip
+                  type="button"
+                  onClick={() => {
+                    clearRentalFee();
+                    updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
+                  }}
+                >
+                  {rentalFeeLabel} <CloseIcon />
+                </Styled.Chip>
+              )}
+              {appliedCapacityOption && (
+                <Styled.Chip
+                  type="button"
+                  onClick={() => {
+                    clearCapacity();
+                    updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
+                  }}
+                >
+                  {appliedCapacityOption.label} <CloseIcon />
+                </Styled.Chip>
+              )}
+            </Styled.ChipRow>
+          )}
 
           {concertHallListQuery.isError && (
             <Styled.Empty>
               <Styled.EmptyTitle>공연장 정보를 불러오지 못했어요.</Styled.EmptyTitle>
-              <Styled.ActionButton type="button" variant="secondary" onClick={() => concertHallListQuery.refetch()}>
+              <Styled.ActionButton
+                type="button"
+                variant="secondary"
+                onClick={() => concertHallListQuery.refetch()}
+              >
                 다시 시도
               </Styled.ActionButton>
             </Styled.Empty>
           )}
-          {!concertHallListQuery.isLoading && !concertHallListQuery.isError && concertHalls.length === 0 && (
-            <Styled.Empty>
-              <Styled.EmptyIcon aria-hidden="true">
-                <BooltiWhiteLogo />
-              </Styled.EmptyIcon>
-              <Styled.EmptyDescription>
-                <span>찾으시는 공연장이 없어요.</span>
-                <span>입점을 요청해 보세요.</span>
-              </Styled.EmptyDescription>
-              <Styled.ButtonRow>
-                <Styled.ActionButton type="button" variant="secondary" onClick={resetSearch}>
-                  필터 초기화
-                </Styled.ActionButton>
-                <Styled.ActionButton
-                  type="button"
-                  variant="primary"
-                  onClick={() => {
-                    setEntryRequestName(keyword);
-                    setEntryRequestTouched(false);
-                    setIsEntryRequestOpen(true);
-                  }}
-                >
-                  입점 요청하기
-                </Styled.ActionButton>
-              </Styled.ButtonRow>
-            </Styled.Empty>
-          )}
+          {!concertHallListQuery.isLoading &&
+            !concertHallListQuery.isError &&
+            concertHalls.length === 0 && (
+              <Styled.Empty>
+                <Styled.EmptyIcon aria-hidden="true">
+                  <BooltiWhiteLogo />
+                </Styled.EmptyIcon>
+                <Styled.EmptyDescription>
+                  <span>찾으시는 공연장이 없어요.</span>
+                  <span>입점을 요청해 보세요.</span>
+                </Styled.EmptyDescription>
+                <Styled.ButtonRow>
+                  <Styled.ActionButton type="button" variant="secondary" onClick={resetSearch}>
+                    필터 초기화
+                  </Styled.ActionButton>
+                  <Styled.ActionButton
+                    type="button"
+                    variant="primary"
+                    onClick={() => {
+                      setEntryRequestName(keyword);
+                      setEntryRequestTouched(false);
+                      setIsEntryRequestOpen(true);
+                    }}
+                  >
+                    입점 요청하기
+                  </Styled.ActionButton>
+                </Styled.ButtonRow>
+              </Styled.Empty>
+            )}
           {(page > 0 || !concertHallListQuery.isLoading) &&
             !concertHallListQuery.isError &&
             concertHalls.length > 0 && (
-            <>
-              <Styled.CardGrid>
-                {concertHalls.map((concertHall) => (
-                  <ConcertHallCard
-                    key={concertHall.concertHallId}
-                    concertHall={concertHall}
-                    isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
-                    isSelected={selectedConcertHallId === concertHall.concertHallId}
-                    onClick={setSelectedConcertHallId}
-                  />
-                ))}
-              </Styled.CardGrid>
-              {concertHallListQuery.data?.hasNext && (
-                <Styled.LoadMoreTrigger ref={loadMoreTriggerRef} aria-hidden="true" />
-              )}
-            </>
+              <>
+                <Styled.CardGrid>
+                  {concertHalls.map((concertHall) => (
+                    <ConcertHallCard
+                      key={concertHall.concertHallId}
+                      concertHall={concertHall}
+                      isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
+                      isSelected={selectedConcertHallId === concertHall.concertHallId}
+                      onClick={setSelectedConcertHallId}
+                    />
+                  ))}
+                </Styled.CardGrid>
+                {concertHallListQuery.data?.hasNext && (
+                  <Styled.LoadMoreTrigger ref={loadMoreTriggerRef} aria-hidden="true" />
+                )}
+              </>
             )}
         </Styled.ResultsPane>
 
         {hasDetail && (
           <>
-            <Styled.DetailBackdrop aria-label="상세 배경" onClick={() => setSelectedConcertHallId(null)} />
-            <ConcertHallDetailPanel query={concertHallDetailQuery} onClose={() => setSelectedConcertHallId(null)} />
+            <Styled.DetailBackdrop
+              aria-label="상세 배경"
+              onClick={() => setSelectedConcertHallId(null)}
+            />
+            <ConcertHallDetailPanel
+              query={concertHallDetailQuery}
+              onClose={() => setSelectedConcertHallId(null)}
+            />
           </>
         )}
       </Styled.Content>

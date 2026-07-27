@@ -1,4 +1,4 @@
-type TextColor = "#000000" | "#FFFFFF";
+type TextColor = '#000000' | '#FFFFFF';
 
 /**
  * 배경색에 대해 대비가 더 높은 글자색을 반환합니다.
@@ -20,7 +20,7 @@ export function getContrastTextColor(backgroundColor: string): TextColor {
   const whiteContrast = getContrastRatio(backgroundLuminance, 1);
   const blackContrast = getContrastRatio(backgroundLuminance, 0);
 
-  return whiteContrast >= blackContrast ? "#FFFFFF" : "#000000";
+  return whiteContrast >= blackContrast ? '#FFFFFF' : '#000000';
 }
 
 function hexToRgb(hex: string): {
@@ -28,14 +28,14 @@ function hexToRgb(hex: string): {
   g: number;
   b: number;
 } {
-  const normalizedHex = hex.trim().replace(/^#/, "");
+  const normalizedHex = hex.trim().replace(/^#/, '');
 
   const expandedHex =
     normalizedHex.length === 3
       ? normalizedHex
-          .split("")
+          .split('')
           .map((character) => character + character)
-          .join("")
+          .join('')
       : normalizedHex;
 
   if (!/^[0-9a-fA-F]{6}$/.test(expandedHex)) {
@@ -49,26 +49,17 @@ function hexToRgb(hex: string): {
   };
 }
 
-function getRelativeLuminance(
-  red: number,
-  green: number,
-  blue: number,
-): number {
+function getRelativeLuminance(red: number, green: number, blue: number): number {
   const [r, g, b] = [red, green, blue].map((channel) => {
     const normalized = channel / 255;
 
-    return normalized <= 0.04045
-      ? normalized / 12.92
-      : ((normalized + 0.055) / 1.055) ** 2.4;
+    return normalized <= 0.04045 ? normalized / 12.92 : ((normalized + 0.055) / 1.055) ** 2.4;
   });
 
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-function getContrastRatio(
-  firstLuminance: number,
-  secondLuminance: number,
-): number {
+function getContrastRatio(firstLuminance: number, secondLuminance: number): number {
   const lighter = Math.max(firstLuminance, secondLuminance);
   const darker = Math.min(firstLuminance, secondLuminance);
 

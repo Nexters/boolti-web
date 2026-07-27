@@ -44,7 +44,9 @@ const Header = styled.header<{ $menuOpen: boolean }>`
     gap: 0;
     min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '156px')};
     padding: 20px 20px 16px;
-    ${({ theme, $menuOpen }) => !$menuOpen && `
+    ${({ theme, $menuOpen }) =>
+      !$menuOpen &&
+      `
       background: linear-gradient(
         to bottom,
         ${theme.palette.grey.main}66 0,
@@ -231,7 +233,11 @@ const fieldFocusStyle = `
   }
 `;
 
-const FieldButton = styled.button<{ active?: boolean; $showDivider?: boolean; $hideDivider?: boolean }>`
+const FieldButton = styled.button<{
+  active?: boolean;
+  $showDivider?: boolean;
+  $hideDivider?: boolean;
+}>`
   position: relative;
   display: flex;
   flex-direction: column;
@@ -351,22 +357,24 @@ const FilterOption = styled.button<{ active?: boolean }>`
     flex: 0 0 auto;
     width: 20px;
     height: 20px;
-    border: 1px solid ${({ active, theme }) => (active ? theme.palette.grey.w : theme.palette.grey.g80)};
+    border: 1px solid
+      ${({ active, theme }) => (active ? theme.palette.grey.w : theme.palette.grey.g80)};
     border-radius: 50%;
     background: ${({ active, theme }) => (active ? theme.palette.grey.w : 'transparent')};
-    box-shadow: ${({ active, theme }) => active && `inset 0 0 0 3px ${theme.palette.mobile.grey.g85}`};
+    box-shadow: ${({ active, theme }) =>
+      active && `inset 0 0 0 3px ${theme.palette.mobile.grey.g85}`};
   }
 
   ${mq_lg} {
     padding: 0 10px;
-      
+
     &:hover,
     &:focus-visible {
       color: ${({ theme }) => theme.palette.grey.w};
       background: ${({ theme }) => theme.palette.grey.g90};
       outline: none;
     }
-  } 
+  }
 `;
 
 const RangeInputRow = styled.div`
@@ -540,7 +548,8 @@ const FieldLabel = styled.span`
 
 const FieldValue = styled.span<{ isPlaceholder?: boolean }>`
   overflow: hidden;
-  color: ${({ theme, isPlaceholder }) => isPlaceholder ? theme.palette.grey.g50 : theme.palette.grey.g10};
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.palette.grey.g50 : theme.palette.grey.g10};
   ${({ theme }) => theme.typo.b3};
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -761,11 +770,11 @@ const CountInfoPopup = styled.div<{ isOpen?: boolean }>`
   border-radius: 12px;
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   color: ${({ theme }) => theme.palette.grey.g10};
-  box-shadow: 0 10px 40px 0 #0000004D;
-  opacity: ${({ isOpen }) => isOpen ? '1' : '0'};
+  box-shadow: 0 10px 40px 0 #0000004d;
+  opacity: ${({ isOpen }) => (isOpen ? '1' : '0')};
   transition: opacity 120ms ease-in-out;
   ${({ theme }) => theme.typo.b3};
-  pointer-events: ${({ isOpen }) => isOpen ? 'default' : 'none'};
+  pointer-events: ${({ isOpen }) => (isOpen ? 'default' : 'none')};
 
   @media (max-width: 640px) {
     width: calc(100% - 40px);
@@ -811,7 +820,7 @@ const SortButton = styled.button<{ active?: boolean }>`
   background: ${({ active, theme }) => (active ? theme.palette.grey.g90 : 'transparent')};
   color: ${({ active, theme }) => (active ? theme.palette.grey.g10 : theme.palette.grey.g60)};
   text-align: center;
-  ${({ active, theme }) => active ? theme.typo.sh1 : theme.typo.b3};
+  ${({ active, theme }) => (active ? theme.typo.sh1 : theme.typo.b3)};
   cursor: pointer;
 
   &:disabled {
@@ -943,13 +952,13 @@ const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
 const CardImage = styled.div<{ imageUrl?: string }>`
   width: 100%;
   height: 200px;
-  background:
-    linear-gradient(
+  background: linear-gradient(
       135deg,
       ${({ theme }) => theme.palette.primary.o1}52,
       ${({ theme }) => theme.palette.grey.g80}61
     ),
-    ${({ imageUrl, theme }) => (imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90)};
+    ${({ imageUrl, theme }) =>
+      imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
 `;
 
 const CardInfo = styled.div`
@@ -963,7 +972,7 @@ const CardInfoHeader = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
-`
+`;
 
 const PriceRow = styled.div`
   display: flex;
@@ -1021,7 +1030,7 @@ const MetaValue = styled.dd`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  text-align: right
+  text-align: right;
 `;
 
 const DetailMetaList = styled.dl`
@@ -1171,9 +1180,13 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
   align-items: flex-end;
   min-height: 331px;
   padding: 20px;
-  background:
-    linear-gradient(180deg, ${({ theme }) => theme.palette.grey.b}0F, ${({ theme }) => theme.palette.grey.b}B8),
-    ${({ imageUrl, theme }) => (imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90)};
+  background: linear-gradient(
+      180deg,
+      ${({ theme }) => theme.palette.grey.b}0F,
+      ${({ theme }) => theme.palette.grey.b}B8
+    ),
+    ${({ imageUrl, theme }) =>
+      imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
 
   @media (max-width: 640px) {
     min-height: 375px;
@@ -1201,7 +1214,7 @@ const DetailCloseButton = styled.button`
   border-radius: 50%;
   cursor: pointer;
 
-  svg { 
+  svg {
     width: 24px;
     height: 24px;
   }
@@ -1332,8 +1345,7 @@ const ImageGrid = styled.div`
 const DetailImage = styled.div<{ imageUrl?: string }>`
   aspect-ratio: 1;
   border-radius: 4px;
-  background:
-    ${({ imageUrl }) => (imageUrl ? `url(${imageUrl}) center/cover` : '')},
+  background: ${({ imageUrl }) => (imageUrl ? `url(${imageUrl}) center/cover` : '')},
     ${({ theme }) => theme.palette.grey.g90};
 `;
 
@@ -1343,9 +1355,12 @@ const MoreImageButton = styled.button<{ imageUrl?: string }>`
   gap: 2px;
   aspect-ratio: 1;
   color: ${({ theme }) => theme.palette.grey.w};
-  background:
-    linear-gradient(${({ theme }) => theme.palette.grey.b}94, ${({ theme }) => theme.palette.grey.b}94),
-    ${({ imageUrl, theme }) => (imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90)};
+  background: linear-gradient(
+      ${({ theme }) => theme.palette.grey.b}94,
+      ${({ theme }) => theme.palette.grey.b}94
+    ),
+    ${({ imageUrl, theme }) =>
+      imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
   border: 0;
   border-radius: 4px;
   font-size: 14px;
@@ -1400,8 +1415,7 @@ const MapBox = styled.div`
   height: 140px;
   margin-top: 12px;
   color: ${({ theme }) => theme.palette.grey.g30};
-  background:
-    linear-gradient(
+  background: linear-gradient(
       135deg,
       ${({ theme }) => theme.palette.primary.o1}29,
       ${({ theme }) => theme.palette.grey.g80}6B
@@ -1616,7 +1630,8 @@ const MobileFilterSummary = styled.button<{ isPlaceholder?: boolean }>`
   strong {
     max-width: 65%;
     overflow: hidden;
-    color: ${({ theme, isPlaceholder }) => isPlaceholder ? theme.palette.grey.g50 : theme.palette.grey.g00};
+    color: ${({ theme, isPlaceholder }) =>
+      isPlaceholder ? theme.palette.grey.g50 : theme.palette.grey.g00};
     ${({ theme }) => theme.typo.b3};
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1684,7 +1699,7 @@ const Modal = styled.form`
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 12px;
-  box-shadow: 0px 10px 40px 0px #0000004D;
+  box-shadow: 0px 10px 40px 0px #0000004d;
 `;
 
 const ConfirmModal = styled.div`
@@ -1713,7 +1728,8 @@ const ModalInput = styled.input<{ hasError?: boolean }>`
   padding: 0 12px;
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.grey.b};
-  border: 1px solid ${({ hasError, theme }) => (hasError ? theme.palette.status.error1 : theme.palette.grey.g30)};
+  border: 1px solid
+    ${({ hasError, theme }) => (hasError ? theme.palette.status.error1 : theme.palette.grey.g30)};
   border-radius: 4px;
   outline: 0;
 `;
