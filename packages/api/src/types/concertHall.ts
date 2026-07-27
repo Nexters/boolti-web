@@ -1,8 +1,10 @@
 export interface ConcertHallItem {
   id: number;
   name: string;
-  address: string;
-  isVisible: boolean;
+  streetAddress?: string;
+  detailAddress?: string;
+  address?: string;
+  isVisible?: boolean;
 }
 
 export interface WebHostConcertHallListResponse {
@@ -158,4 +160,60 @@ export interface ConcertHallProfileResponse {
   home?: ConcertHallProfileHome;
   rental?: ConcertHallProfileRental;
   informationUpdatedAt?: string;
+}
+
+export interface ConcertHallSearchItem {
+  concertHallId: number;
+  name: string;
+  representativeImageUrl?: string | null;
+  defaultFee: number;
+  rentalTimeHours?: number | null;
+  seatedCapacity?: number | null;
+  standingCapacity?: number | null;
+  regionName?: string | null;
+}
+
+export interface ConcertHallSearchListResponse {
+  items: ConcertHallSearchItem[];
+  currentPage: number;
+  pageSize: number;
+  totalPages: number;
+  totalElements: number;
+  hasNext: boolean;
+}
+
+export interface ConcertHallSearchListParams {
+  regionId?: number;
+  keyword?: string;
+  minFee?: number;
+  maxFee?: number;
+  minCapacity?: number;
+  maxCapacity?: number;
+  sort?: ConcertHallSearchSort;
+  page?: number;
+  size?: number;
+}
+
+export type ConcertHallSearchSort = 'FEE_ASC' | 'FEE_DESC';
+
+export interface ConcertHallRecommendedRegion {
+  regionId: number;
+  name: string;
+}
+
+export type ConcertHallAutocompleteItemType = 'REGION' | 'CONCERT_HALL';
+
+export interface ConcertHallAutocompleteItem {
+  type: ConcertHallAutocompleteItemType;
+  id: number;
+  name: string;
+  streetAddress: string | null;
+}
+
+export interface ConcertHallAutocompleteResponse {
+  items: ConcertHallAutocompleteItem[];
+}
+
+export interface ConcertHallEntryRequest {
+  name: string;
 }

@@ -26,6 +26,7 @@ import {
   QRPage,
   OAuthKakaoPage,
   HomePage,
+  ConcertHallSearchPage,
   SignUpCompletePage,
   SitePolicyPage,
   GiftRegisterPage,
@@ -76,6 +77,10 @@ const publicRoutes = [
       {
         path: PATH.QR,
         element: <QRPage />,
+      },
+      {
+        path: PATH.CONCERT_HALLS,
+        element: <ConcertHallSearchPage />
       },
       {
         path: PATH.APP_STORE_BRIDGE,
