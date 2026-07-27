@@ -162,107 +162,6 @@ export interface ConcertHallProfileResponse {
   informationUpdatedAt?: string;
 }
 
-export interface ConcertHallProfileCapacity {
-  seatedCapacity?: number;
-  standingCapacity?: number;
-}
-
-export interface ConcertHallProfileSubwayLine {
-  lineKey: string;
-  lineName: string;
-  colorHex: string;
-}
-
-export interface ConcertHallProfileSubwayStation {
-  id?: number;
-  stationName: string;
-  region?: string;
-  lines: ConcertHallProfileSubwayLine[];
-}
-
-export interface ConcertHallProfileContact {
-  phoneNumber?: string;
-  websiteUrl?: string;
-  email?: string;
-}
-
-export interface ConcertHallProfileShare {
-  shareCode?: string;
-  title?: string;
-  imageUrl?: string;
-}
-
-export interface ConcertHallProfileImage {
-  id: number;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  sequence?: number;
-}
-
-export interface ConcertHallProfileAmenity {
-  type?: string;
-  name: string;
-  count?: number | null;
-}
-
-export interface ConcertHallProfileHome {
-  introduction?: string;
-  images?: ConcertHallProfileImage[];
-  totalImageCount?: number;
-  amenities?: ConcertHallProfileAmenity[];
-  location?: ConcertHallLocation;
-}
-
-export interface ConcertHallProfileRentalTime {
-  rentalTimeHours?: number;
-  rentalTimeDescription?: string;
-  isEngineerBreakIncluded?: boolean;
-}
-
-export type ConcertHallProfileFeeDayType =
-  | 'ANYTIME'
-  | 'MON_TO_THU'
-  | 'WEEKDAY'
-  | 'FRIDAY'
-  | 'SATURDAY'
-  | 'SUNDAY'
-  | 'FRI_TO_SUN'
-  | 'WEEKEND'
-  | 'HOLIDAY'
-  | 'PRE_HOLIDAY_WEEKDAY';
-
-export interface ConcertHallProfileFee {
-  id: number;
-  dayType?: ConcertHallProfileFeeDayType;
-  dayTypeName?: string;
-  fee?: number;
-  sequence?: number;
-}
-
-export type ConcertHallProfileVatType = 'NONE' | 'VAT_INCLUDED' | 'VAT_EXCLUDED';
-
-export interface ConcertHallProfileVat {
-  type?: ConcertHallProfileVatType;
-  description?: string;
-}
-
-export interface ConcertHallProfilePaidOption {
-  id: number;
-  name?: string;
-  price?: number;
-}
-
-export interface ConcertHallProfileRental {
-  rentalMethod?: string;
-  rentalTime?: ConcertHallProfileRentalTime;
-  rentalFees?: ConcertHallProfileFee[];
-  vat?: ConcertHallProfileVat;
-  additionalFees?: ConcertHallProfileFee[];
-  instrumentsText?: string;
-  paidOptions?: ConcertHallProfilePaidOption[];
-  specialNotes?: string[];
-}
-
 export interface ConcertHallSearchItem {
   concertHallId: number;
   name: string;
@@ -281,17 +180,6 @@ export interface ConcertHallSearchListResponse {
   totalPages: number;
   totalElements: number;
   hasNext: boolean;
-}
-
-export interface ConcertHallImageItem {
-  id: number;
-  imageUrl?: string;
-  thumbnailUrl?: string;
-  sequence?: number;
-}
-
-export interface ConcertHallImageListResponse {
-  items: ConcertHallImageItem[];
 }
 
 export interface ConcertHallSearchListParams {

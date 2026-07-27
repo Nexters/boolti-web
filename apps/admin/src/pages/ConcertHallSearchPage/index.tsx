@@ -8,9 +8,9 @@ import {
 } from '@boolti/api';
 import type {
   ConcertHallAutocompleteItem,
-  ConcertHallImageItem,
-  ConcertHallProfileAmenity,
-  ConcertHallProfileCapacity,
+  ConcertHallAmenity,
+  ConcertHallCapacity,
+  ConcertHallImage,
   ConcertHallProfileFee,
   ConcertHallProfilePaidOption,
   ConcertHallSearchItem,
@@ -141,7 +141,7 @@ const formatAddress = (streetAddress?: string, detailAddress?: string) => {
   return address || '위치 정보 없음';
 };
 
-const formatCapacity = (capacity?: ConcertHallProfileCapacity) => {
+const formatCapacity = (capacity?: ConcertHallCapacity) => {
   const values = [];
   if (capacity?.seatedCapacity != null) values.push(`좌석 ${capacity.seatedCapacity}석`);
   if (capacity?.standingCapacity != null) values.push(`스탠딩 ${capacity.standingCapacity}명`);
@@ -165,7 +165,7 @@ const formatPaidOption = (option: ConcertHallProfilePaidOption) => {
   return option.price != null ? `${option.name} ${formatWon(option.price)}` : option.name;
 };
 
-const formatAmenity = (amenity: ConcertHallProfileAmenity) =>
+const formatAmenity = (amenity: ConcertHallAmenity) =>
   amenity.count != null ? `${amenity.name} ${amenity.count}` : amenity.name;
 
 const bySequence = <T extends { sequence?: number }>(left: T, right: T) =>
@@ -458,7 +458,7 @@ const ConcertHallDetailPanel = ({
           <Styled.DetailSection>
             <Styled.DetailSectionTitle>사진</Styled.DetailSectionTitle>
             <Styled.ImageGrid>
-              {visibleImages.map((image: ConcertHallImageItem, index) => (
+              {visibleImages.map((image: ConcertHallImage, index) => (
                 <Styled.DetailImage
                   key={image.id}
                   imageUrl={image.thumbnailUrl ?? image.imageUrl}
