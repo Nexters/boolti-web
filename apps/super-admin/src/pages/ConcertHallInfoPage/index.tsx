@@ -13,7 +13,7 @@ import {
 } from '@boolti/api/src/types/superAdminConcertHall';
 import { Button as BooltiButton, SubwayLineBadge, useToast } from '@boolti/ui';
 import { useTheme } from '@emotion/react';
-import { Button, Card, Checkbox, Flex, Input, InputNumber, Typography } from 'antd';
+import { Button, Card, Checkbox, Flex, Input, InputNumber, Select, Typography } from 'antd';
 import type { InputRef } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -66,6 +66,63 @@ const INITIAL_AMENITIES: AmenitiesState = {
   hasIndoorRestroom: false,
   hasAlcoholSales: false,
 };
+
+// 백엔드 데이터 인터페이스 확정 전이라 UI 작업용 임시 목록. 값은 저장 API에는 포함하지 않는다.
+const BUSINESS_DISTRICT_OPTIONS = [
+  {
+    label: '서북',
+    options: [
+      { value: '홍대/연남/연희', label: '홍대/연남/연희' },
+      { value: '합정/상수/망원', label: '합정/상수/망원' },
+      { value: '신촌/이대/서대문', label: '신촌/이대/서대문' },
+      { value: '공덕/아현/도화', label: '공덕/아현/도화' },
+      { value: '연신내/불광/은평', label: '연신내/불광/은평' },
+    ],
+  },
+  {
+    label: '도심',
+    options: [
+      { value: '을지로/충무로/명동', label: '을지로/충무로/명동' },
+      { value: '종로/삼청/서북/북촌', label: '종로/삼청/서북/북촌' },
+      { value: '혜화/대학로/성북', label: '혜화/대학로/성북' },
+      { value: '이태원/한남/해방촌', label: '이태원/한남/해방촌' },
+      { value: '용산/삼각지', label: '용산/삼각지' },
+    ],
+  },
+  {
+    label: '강남',
+    options: [
+      { value: '강남/논현/역삼', label: '강남/논현/역삼' },
+      { value: '압구정/청담/도산', label: '압구정/청담/도산' },
+      { value: '신사/잠원', label: '신사/잠원' },
+      { value: '서초/교대/방배', label: '서초/교대/방배' },
+      { value: '잠실/방이', label: '잠실/방이' },
+      { value: '천호/강동', label: '천호/강동' },
+    ],
+  },
+  {
+    label: '동북',
+    options: [
+      { value: '성수/서울숲/뚝섬', label: '성수/서울숲/뚝섬' },
+      { value: '구의/건대/자양', label: '구의/건대/자양' },
+      { value: '왕십리/동대문', label: '왕십리/동대문' },
+      { value: '노원/수유', label: '노원/수유' },
+    ],
+  },
+  {
+    label: '서남',
+    options: [
+      { value: '여의도/영등포/문래', label: '여의도/영등포/문래' },
+      { value: '신도림/구로', label: '신도림/구로' },
+      { value: '서울대입구/신림', label: '서울대입구/신림' },
+      { value: '목동/강서/마곡', label: '목동/강서/마곡' },
+    ],
+  },
+  {
+    label: '미분류',
+    options: [{ value: '기타', label: '기타' }],
+  },
+];
 
 const FieldLabel = ({ children }: { children: React.ReactNode }) => (
   <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
@@ -124,6 +181,8 @@ const ConcertHallInfoPage = () => {
   const [detailAddress, setDetailAddress] = useState('');
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
+  // 백엔드 데이터 인터페이스가 아직 없어 UI만 먼저 작업 (저장 API 미연동)
+  const [businessDistrict, setBusinessDistrict] = useState<string | undefined>(undefined);
   const [stations, setStations] = useState<SelectedStation[]>([]);
   const [representativeImage, setRepresentativeImage] = useState<string | null>(null);
 
@@ -394,6 +453,20 @@ const ConcertHallInfoPage = () => {
                   onChange={(e) => setDetailAddress(e.target.value)}
                 />
               </Flex>
+            </div>
+            <div>
+              <FieldLabel>상권/지역</FieldLabel>
+              <Select
+                size="large"
+                style={{ width: '100%', height: 48 }}
+                placeholder="상권/지역을 선택해 주세요"
+                value={businessDistrict}
+                onChange={setBusinessDistrict}
+                options={BUSINESS_DISTRICT_OPTIONS}
+                showSearch
+                optionFilterProp="label"
+                allowClear
+              />
             </div>
             <div>
               <FieldLabel>인근 지하철역</FieldLabel>
