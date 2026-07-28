@@ -34,9 +34,14 @@ vi.mock('@boolti/api', () => ({
   useConcertHallAutocomplete: (...args: unknown[]) => mockUseConcertHallAutocomplete(...args),
 }));
 
-vi.mock('@boolti/ui', () => ({
-  useToast: () => ({ error: mockErrorToast, success: mockSuccessToast }),
-}));
+vi.mock('@boolti/ui', async () => {
+  const { mq_lg } = await import('@boolti/ui/src/systems/breakpoint');
+
+  return {
+    mq_lg,
+    useToast: () => ({ error: mockErrorToast, success: mockSuccessToast }),
+  };
+});
 
 const concertHalls = [
   {
@@ -214,6 +219,34 @@ const renderConcertHallSearchPage = (initialEntry = '/concert-halls') =>
       <LocationProbe />
     </MemoryRouter>,
   );
+
+const getCssTextForElement = (element: Element) => {
+  const classNames = Array.from(element.classList);
+  const cssTexts: string[] = [];
+
+  const visitRules = (rules: CSSRuleList) => {
+    Array.from(rules).forEach((rule) => {
+      if ('cssRules' in rule) {
+        visitRules((rule as CSSMediaRule).cssRules);
+      }
+
+      if (
+        'selectorText' in rule &&
+        classNames.some((className) =>
+          (rule as CSSStyleRule).selectorText.includes(`.${className}`),
+        )
+      ) {
+        cssTexts.push(rule.cssText);
+      }
+    });
+  };
+
+  Array.from(document.styleSheets).forEach((styleSheet) => {
+    visitRules(styleSheet.cssRules);
+  });
+
+  return cssTexts.join('\n');
+};
 
 describe('ConcertHallSearchPage', () => {
   beforeEach(() => {
@@ -941,6 +974,15 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
     expect(await screen.findByText('공연장 상세 정보를 불러오는 중입니다.')).not.toBeNull();
+  });
+
+  it('데스크탑에서 상세 aside가 우측에서 슬라이드되어 나타난다', async () => {
+    renderConcertHallSearchPage();
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    const detailAside = await screen.findByRole('complementary');
+    expect(getCssTextForElement(detailAside)).toContain('animation');
   });
 
   it('상세 정보 조회 실패 상태를 표시한다', async () => {

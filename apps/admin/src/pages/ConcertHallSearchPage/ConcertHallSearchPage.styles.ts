@@ -1,9 +1,20 @@
+import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { getContrastTextColor } from './utils';
 import { mq_lg } from '@boolti/ui';
 
+const slideDetailPaneIn = keyframes`
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+`;
+
 const Page = styled.main`
-  min-height: 100vh;
+  min-height: 100dvh;
   background: ${({ theme }) => theme.palette.grey.b};
   color: ${({ theme }) => theme.palette.grey.g10};
 
@@ -14,14 +25,14 @@ const Page = styled.main`
     left: 0;
     display: block;
     width: 100%;
-    height: 92px;
+    height: 72px;
     background: ${({ theme }) => theme.palette.grey.b};
     z-index: 1;
   }
 
-  @media (max-width: 640px) {
+  ${mq_lg} {
     &::before {
-      height: 72px;
+      height: 92px;
     }
   }
 `;
@@ -32,21 +43,14 @@ const Header = styled.header<{ $menuOpen: boolean }>`
   z-index: 33;
   display: flex;
   align-items: center;
-  gap: 32px;
-  min-height: 92px;
-  padding: 11px 52px;
-  background: ${({ theme }) => theme.palette.grey.main}66;
-  border-bottom: ${({ theme }) => theme.palette.grey.g50}4D;
-
-  @media (max-width: 640px) {
-    flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 0;
-    min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '156px')};
-    padding: 20px 20px 16px;
-    ${({ theme, $menuOpen }) =>
-      !$menuOpen &&
-      `
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0;
+  min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '156px')};
+  padding: 20px 20px 16px;
+  ${({ theme, $menuOpen }) =>
+    !$menuOpen &&
+    `
       background: linear-gradient(
         to bottom,
         ${theme.palette.grey.main}66 0,
@@ -56,23 +60,37 @@ const Header = styled.header<{ $menuOpen: boolean }>`
         ${theme.palette.mobile.grey.b} 72px
       );
     `}
-    backdrop-filter: blur(80px);
-    -webkit-backdrop-filter: blur(80px);
+  border-bottom: ${({ theme }) => theme.palette.grey.g50}4D;
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(80px);
+
+  ${mq_lg} {
+    flex-wrap: nowrap;
+    align-content: normal;
+    gap: 32px;
+    min-height: 92px;
+    padding: 11px 52px;
+    background: ${({ theme }) => theme.palette.grey.main}66;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 `;
 
 const Logo = styled.div`
   order: 0;
   flex: 0 0 auto;
+  height: 52px;
+  margin-left: 4px;
+  transform: translateY(2px);
 
   svg path:not(:first-of-type) {
     fill: ${({ theme }) => theme.palette.grey.w};
   }
 
-  @media (max-width: 640px) {
-    height: 52px;
-    margin-left: 4px;
-    transform: translateY(2px);
+  ${mq_lg} {
+    height: auto;
+    margin-left: 0;
+    transform: none;
   }
 `;
 
@@ -81,62 +99,65 @@ const HeaderMenuContainer = styled.div`
   order: 2;
   flex: 0 0 auto;
   margin-left: auto;
+  height: 52px;
+  margin-right: 4px;
 
-  @media (max-width: 640px) {
-    height: 52px;
-    margin-right: 4px;
+  ${mq_lg} {
+    height: auto;
+    margin-right: 0;
   }
 `;
 
 const MenuButton = styled.button`
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;
+  width: 24px;
+  height: 28px;
   color: ${({ theme }) => theme.palette.grey.w};
   background: none;
   border: 0;
   cursor: pointer;
+  transform: translateY(2px);
 
-  @media (max-width: 640px) {
-    width: 24px;
-    height: 28px;
-    transform: translateY(2px);
+  ${mq_lg} {
+    width: 44px;
+    height: 44px;
+    transform: none;
   }
 `;
 
 const HeaderMenuPopup = styled.div`
   box-sizing: border-box;
-  position: absolute;
-  top: calc(100% + 16px);
+  position: fixed;
+  top: 72px;
   right: 0;
+  left: 0;
   z-index: 40;
-  width: 280px;
-  height: 124px;
+  width: 100%;
+  height: 131px;
   color: ${({ theme }) => theme.palette.grey.g10};
-  background: ${({ theme }) => theme.palette.mobile.grey.g85};
-  border-radius: 12px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
 
-  @media (max-width: 640px) {
-    position: fixed;
-    top: 72px;
-    right: 0;
-    left: 0;
-    width: 100%;
-    height: 131px;
-    background: transparent;
-    border-radius: 0;
-    box-shadow: none;
+  ${mq_lg} {
+    position: absolute;
+    top: calc(100% + 16px);
+    left: auto;
+    width: 280px;
+    height: 124px;
+    background: ${({ theme }) => theme.palette.mobile.grey.g85};
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
   }
 `;
 
 const HeaderMenuLabel = styled.button`
   display: block;
   width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  color: ${({ theme }) => theme.palette.grey.g10};
+  height: 51px;
+  padding: 0 20px;
+  color: ${({ theme }) => theme.palette.mobile.grey.w};
   background: transparent;
   border: 0;
   cursor: pointer;
@@ -144,16 +165,16 @@ const HeaderMenuLabel = styled.button`
   text-align: left;
 
   &:hover {
-    background: ${({ theme }) => theme.palette.grey.g90};
+    background: transparent;
   }
 
-  @media (max-width: 640px) {
-    height: 51px;
-    padding: 0 20px;
-    color: ${({ theme }) => theme.palette.mobile.grey.w};
+  ${mq_lg} {
+    height: 48px;
+    padding: 0 16px;
+    color: ${({ theme }) => theme.palette.grey.g10};
 
     &:hover {
-      background: transparent;
+      background: ${({ theme }) => theme.palette.grey.g90};
     }
   }
 `;
@@ -163,13 +184,13 @@ const HeaderMenuPrimaryButton = styled.button`
   align-items: center;
   justify-content: center;
   gap: 4px;
-  width: calc(100% - 32px);
+  width: calc(100% - 40px);
   height: 48px;
-  color: ${({ theme }) => theme.palette.grey.w};
-  background: ${({ theme }) => theme.palette.primary.o1};
+  color: ${({ theme }) => theme.palette.mobile.grey.w};
+  background: ${({ theme }) => theme.palette.mobile.primary.o1};
   border: 0;
   border-radius: 8px;
-  margin: 12px 16px 16px;
+  margin: 12px 20px 20px;
   cursor: pointer;
   box-sizing: border-box;
   ${({ theme }) => theme.typo.sh1};
@@ -179,49 +200,47 @@ const HeaderMenuPrimaryButton = styled.button`
     height: 20px;
   }
 
-  @media (max-width: 640px) {
-    width: calc(100% - 40px);
-    margin: 12px 20px 20px;
-    color: ${({ theme }) => theme.palette.mobile.grey.w};
-    background: ${({ theme }) => theme.palette.mobile.primary.o1};
+  ${mq_lg} {
+    width: calc(100% - 32px);
+    margin: 12px 16px 16px;
+    color: ${({ theme }) => theme.palette.grey.w};
+    background: ${({ theme }) => theme.palette.primary.o1};
   }
 `;
 
 const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
-  order: 1;
-  display: grid;
-  grid-template-columns: 260px 261px minmax(0, 1fr) 70px;
-  width: min(852px, 100%);
-  min-height: 70px;
-  margin: 0 auto;
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
-  border-radius: 999px;
-  background: ${({ theme }) => theme.palette.grey.b};
+  display: ${({ $hiddenOnMobile }) => ($hiddenOnMobile ? 'none' : 'grid')};
+  order: 3;
+  grid-template-columns: 1fr 52px;
+  width: 100%;
+  height: 48px;
+  min-height: 48px;
+  margin: 20px 0 0;
+  background: ${({ theme }) => theme.palette.mobile.grey.g85};
+  border: 0;
+  border-radius: 4px;
 
-  @media (max-width: 860px) {
-    grid-template-columns: 1fr 52px;
-    min-height: 48px;
-  }
-
-  @media (max-width: 640px) {
-    display: ${({ $hiddenOnMobile }) => ($hiddenOnMobile ? 'none' : 'grid')};
-    order: 3;
-    width: 100%;
-    height: 48px;
-    min-height: 48px;
-    margin-top: 20px;
-    background: ${({ theme }) => theme.palette.mobile.grey.g85};
-    border: 0;
-    border-radius: 4px;
+  ${mq_lg} {
+    display: grid;
+    order: 1;
+    grid-template-columns: 260px 261px minmax(0, 1fr) 70px;
+    width: min(852px, 100%);
+    height: auto;
+    min-height: 70px;
+    margin: 0 auto;
+    background: ${({ theme }) => theme.palette.grey.b};
+    border: 1px solid ${({ theme }) => theme.palette.grey.g90};
+    border-radius: 999px;
   }
 `;
 
 const FilterField = styled.div`
   position: relative;
+  display: none;
   min-width: 0;
 
-  @media (max-width: 860px) {
-    display: none;
+  ${mq_lg} {
+    display: block;
   }
 `;
 
@@ -239,7 +258,7 @@ const FieldButton = styled.button<{
   $hideDivider?: boolean;
 }>`
   position: relative;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   gap: 2px;
@@ -297,8 +316,8 @@ const FieldButton = styled.button<{
     opacity: 0;
   }
 
-  @media (max-width: 860px) {
-    display: none;
+  ${mq_lg} {
+    display: flex;
   }
 `;
 
@@ -317,10 +336,11 @@ const FilterPopover = styled.div`
 `;
 
 const KeywordPopover = styled(FilterPopover)`
+  display: none;
   width: 360px;
 
-  @media (max-width: 640px) {
-    display: none;
+  ${mq_lg} {
+    display: grid;
   }
 `;
 
@@ -556,12 +576,13 @@ const FieldValue = styled.span<{ isPlaceholder?: boolean }>`
 `;
 
 const SearchInputLabel = styled.label`
+  display: none;
   color: ${({ theme }) => theme.palette.grey.g50};
   ${({ theme }) => theme.typo.b1};
   font-weight: 400;
 
-  @media (max-width: 860px) {
-    display: none;
+  ${mq_lg} {
+    display: inline;
   }
 `;
 
@@ -572,10 +593,10 @@ const SearchInputField = styled.div<{ active?: boolean; $hideDivider?: boolean }
   justify-content: center;
   gap: 2px;
   min-width: 0;
-  padding: 10px 24px;
+  padding: 0 12px;
 
   &::before {
-    content: '';
+    content: none;
     position: absolute;
     inset: 0;
     border: 1px solid ${({ theme }) => theme.palette.grey.g30};
@@ -586,7 +607,7 @@ const SearchInputField = styled.div<{ active?: boolean; $hideDivider?: boolean }
   }
 
   &::after {
-    content: ${({ $hideDivider }) => ($hideDivider ? 'none' : "''")};
+    content: none;
     position: absolute;
     top: 20px;
     right: 0;
@@ -606,20 +627,16 @@ const SearchInputField = styled.div<{ active?: boolean; $hideDivider?: boolean }
     opacity: 1;
   }
 
-  @media (max-width: 860px) {
-    padding: 0 16px;
+  ${mq_lg} {
+    padding: 10px 24px;
 
     &::before {
-      content: none;
+      content: '';
     }
 
     &::after {
-      content: none;
+      content: ${({ $hideDivider }) => ($hideDivider ? 'none' : "''")};
     }
-  }
-
-  @media (max-width: 640px) {
-    padding: 0 12px;
   }
 `;
 
@@ -629,29 +646,25 @@ const KeywordInput = styled.input`
   display: block;
   min-width: 0;
   width: 100%;
-  height: 24px;
+  height: 48px;
   padding: 0;
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
   background: transparent;
   border: 0;
   outline: 0;
-  font-size: 16px;
-  line-height: 24px;
+  ${({ theme }) => theme.typo.b3};
 
   &::placeholder {
-    color: ${({ theme }) => theme.palette.grey.g50};
+    color: ${({ theme }) => theme.palette.mobile.grey.g70};
   }
 
-  @media (max-width: 860px) {
-    height: 48px;
-    ${({ theme }) => theme.typo.b1};
-  }
-
-  @media (max-width: 640px) {
-    ${({ theme }) => theme.typo.b3};
+  ${mq_lg} {
+    height: 24px;
+    font-size: 16px;
+    line-height: 24px;
 
     &::placeholder {
-      color: ${({ theme }) => theme.palette.mobile.grey.g70};
+      color: ${({ theme }) => theme.palette.grey.g50};
     }
   }
 `;
@@ -659,66 +672,67 @@ const KeywordInput = styled.input`
 const SearchButton = styled.button`
   display: grid;
   place-items: center;
-  width: 48px;
+  width: 52px;
   height: 48px;
   margin: auto;
-  color: ${({ theme }) => theme.palette.grey.w};
-  background: ${({ theme }) => theme.palette.primary.o1};
+  color: ${({ theme }) => theme.palette.mobile.grey.g60};
+  background: transparent;
   border: 0;
-  border-radius: 50%;
+  border-radius: 0;
   cursor: pointer;
 
-  @media (max-width: 640px) {
-    width: 52px;
-    height: 48px;
-    color: ${({ theme }) => theme.palette.mobile.grey.g60};
-    background: transparent;
-    border-radius: 0;
+  ${mq_lg} {
+    width: 48px;
+    color: ${({ theme }) => theme.palette.grey.w};
+    background: ${({ theme }) => theme.palette.primary.o1};
+    border-radius: 50%;
   }
 `;
 
 const Content = styled.div<{ hasDetail: boolean }>`
-  display: grid;
-  grid-template-columns: ${({ hasDetail }) =>
-    hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
-  min-height: calc(100vh - 92px);
+  display: block;
+  min-height: calc(100vh - 156px);
 
-  @media (max-width: 1024px) {
-    display: block;
-    min-height: calc(100vh - 156px);
+  ${mq_lg} {
+    display: grid;
+    grid-template-columns: ${({ hasDetail }) =>
+      hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
+    min-height: calc(100vh - 92px);
+    overflow-x: clip;
   }
 `;
 
 const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
   min-width: 0;
   overflow-y: auto;
-  height: calc(100vh - 92px);
+  height: ${({ $headerMenuOpen }) =>
+    $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 156px)'};
 
-  @media (max-width: 640px) {
-    height: ${({ $headerMenuOpen }) =>
-      $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 156px)'};
+  ${mq_lg} {
+    height: calc(100vh - 92px);
   }
 `;
 
 const Toolbar = styled.div`
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
   gap: 16px;
-  height: 92px;
+  height: auto;
   width: 100%;
-  padding: 20px 52px;
+  padding: 8px 20px 12px;
   position: sticky;
   top: 0;
   left: 0;
   background: ${({ theme }) => theme.palette.grey.b};
   z-index: 31;
 
-  @media (max-width: 640px) {
-    display: grid;
-    grid-template-columns: 76px minmax(0, 1fr);
-    height: auto;
-    padding: 8px 20px 12px;
+  ${mq_lg} {
+    display: flex;
+    grid-template-columns: none;
+    justify-content: space-between;
+    height: 92px;
+    padding: 20px 52px;
   }
 `;
 
@@ -726,19 +740,19 @@ const Count = styled.div`
   display: flex;
   align-items: center;
   gap: 4px;
+  min-width: 0;
   position: relative;
   color: ${({ theme }) => theme.palette.grey.g40};
-  ${({ theme }) => theme.typo.b3};
+  font-size: 15px;
+  line-height: 22px;
 
-  @media (max-width: 640px) {
-    align-items: flex-start;
-    min-width: 0;
-    font-size: 15px;
-    line-height: 22px;
+  span {
+    white-space: nowrap;
+  }
 
-    span {
-      white-space: nowrap;
-    }
+  ${mq_lg} {
+    align-items: center;
+    ${({ theme }) => theme.typo.b3};
   }
 `;
 
@@ -746,9 +760,10 @@ const CountValue = styled.strong<{ $hasSearchConditions: boolean }>`
   color: ${({ $hasSearchConditions, theme }) =>
     $hasSearchConditions ? theme.palette.primary.o1 : theme.palette.grey.g10};
   ${({ theme }) => theme.typo.sh1};
+  white-space: nowrap;
 
-  @media (max-width: 640px) {
-    white-space: nowrap;
+  ${mq_lg} {
+    white-space: normal;
   }
 `;
 
@@ -762,11 +777,11 @@ const CountInfoPopupButton = styled.button`
 `;
 
 const CountInfoPopup = styled.div<{ isOpen?: boolean }>`
-  width: 280px;
+  width: calc(100% - 40px);
   padding: 16px 40px 16px 20px;
   position: absolute;
-  top: 64px;
-  left: 48px;
+  top: 52px;
+  left: 20px;
   border-radius: 12px;
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   color: ${({ theme }) => theme.palette.grey.g10};
@@ -776,10 +791,10 @@ const CountInfoPopup = styled.div<{ isOpen?: boolean }>`
   ${({ theme }) => theme.typo.b3};
   pointer-events: ${({ isOpen }) => (isOpen ? 'default' : 'none')};
 
-  @media (max-width: 640px) {
-    width: calc(100% - 40px);
-    left: 20px;
-    top: 52px;
+  ${mq_lg} {
+    width: 280px;
+    top: 64px;
+    left: 48px;
   }
 `;
 
@@ -793,34 +808,37 @@ const CountInfoPopupCloseButton = styled.button`
 `;
 
 const SortGroup = styled.div<{ $disabled: boolean }>`
-  display: flex;
+  display: none;
   gap: 4px;
   padding: 4px;
   border-radius: 8px;
   background: ${({ theme }) => theme.palette.grey.g100};
-  opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
+  opacity: 1;
   transition: opacity 120ms ease;
 
-  @media (max-width: 640px) {
-    display: none;
-    opacity: 1;
+  ${mq_lg} {
+    display: flex;
+    opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
   }
 `;
 
 const SortButton = styled.button<{ active?: boolean }>`
   display: inline-flex;
+  flex: 0 1 86px;
   justify-content: center;
   align-items: center;
   gap: 4px;
   width: 160px;
-  height: 44px;
-  padding: 0 10px;
+  height: 40px;
+  padding: 0;
   border: 0;
   border-radius: 8px;
-  background: ${({ active, theme }) => (active ? theme.palette.grey.g90 : 'transparent')};
-  color: ${({ active, theme }) => (active ? theme.palette.grey.g10 : theme.palette.grey.g60)};
+  background: transparent;
+  color: ${({ theme }) => theme.palette.grey.g10};
   text-align: center;
-  ${({ active, theme }) => (active ? theme.typo.sh1 : theme.typo.b3)};
+  font-size: 13px;
+  line-height: 16px;
+  white-space: normal;
   cursor: pointer;
 
   &:disabled {
@@ -828,60 +846,56 @@ const SortButton = styled.button<{ active?: boolean }>`
     color: ${({ theme }) => theme.palette.grey.g60};
   }
 
-  @media (max-width: 640px) {
-    flex: 0 1 86px;
-    justify-content: center;
-    height: 40px;
-    padding: 0;
-    background: transparent;
-    color: ${({ theme }) => theme.palette.grey.g10};
-    font-size: 13px;
-    line-height: 16px;
-    white-space: normal;
+  ${mq_lg} {
+    flex: 0 1 auto;
+    height: 44px;
+    padding: 0 10px;
+    background: ${({ active, theme }) => (active ? theme.palette.grey.g90 : 'transparent')};
+    color: ${({ active, theme }) => (active ? theme.palette.grey.g10 : theme.palette.grey.g60)};
+    ${({ active, theme }) => (active ? theme.typo.sh1 : theme.typo.b3)};
   }
 `;
 
 const MobileSortButton = styled.button`
-  display: none;
+  display: inline-flex;
+  justify-self: end;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  min-width: 128px;
+  height: 40px;
+  padding: 0;
+  color: ${({ theme }) => theme.palette.grey.g10};
+  background: transparent;
+  border: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
 
-  @media (max-width: 640px) {
-    display: inline-flex;
-    justify-self: end;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 4px;
-    min-width: 128px;
-    height: 40px;
-    padding: 0;
-    color: ${({ theme }) => theme.palette.grey.g10};
-    background: transparent;
-    border: 0;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 16px;
-    white-space: nowrap;
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 
-    svg {
-      width: 20px;
-      height: 20px;
-    }
+  &:disabled {
+    cursor: not-allowed;
+    color: ${({ theme }) => theme.palette.grey.g60};
+  }
 
-    &:disabled {
-      cursor: not-allowed;
-      color: ${({ theme }) => theme.palette.grey.g60};
-    }
+  ${mq_lg} {
+    display: none;
   }
 `;
 
 const ChipRow = styled.div`
-  display: none;
+  display: flex;
   gap: 8px;
   padding: 0 20px 16px;
   overflow-x: auto;
 
-  @media (max-width: 640px) {
-    display: flex;
-    padding-bottom: 16px;
+  ${mq_lg} {
+    display: none;
   }
 `;
 
@@ -901,23 +915,24 @@ const Chip = styled.button`
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: 1fr;
+  justify-items: center;
   gap: 16px;
-  padding: 0 52px 24px;
+  padding: 0 20px 24px;
 
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    padding: 0 20px 24px;
+  ${mq_lg} {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    justify-items: stretch;
+    padding: 0 52px 24px;
   }
 `;
 
 const LoadMoreTrigger = styled.div`
   height: 1px;
-  margin-bottom: 64px;
+  margin-bottom: 48px;
 
-  @media (max-width: 640px) {
-    margin-bottom: 48px;
+  ${mq_lg} {
+    margin-bottom: 64px;
   }
 `;
 
@@ -925,27 +940,26 @@ const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-width: 0;
+  width: 100%;
+  min-width: 280px;
+  max-width: 480px;
   height: 421px;
   padding: 0;
   text-align: left;
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 8px;
-  opacity: ${({ $dimmed }) => ($dimmed ? 0.6 : 1)};
+  opacity: 1;
   cursor: pointer;
   transition:
     border-color 120ms ease,
     opacity 120ms ease;
 
-  @media (max-width: 1024px) {
-    opacity: 1;
-  }
-
-  @media (max-width: 640px) {
-    width: 100%;
-    min-width: 280px;
-    max-width: 480px;
+  ${mq_lg} {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    opacity: ${({ $dimmed }) => ($dimmed ? 0.6 : 1)};
   }
 `;
 
@@ -1058,15 +1072,18 @@ const Empty = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  align-content: center;
+  gap: 12px;
+  min-height: 360px;
+  padding: 48px 20px;
   text-align: center;
   color: ${({ theme }) => theme.palette.grey.g30};
 
-  @media (max-width: 640px) {
-    align-content: center;
-    gap: 12px;
-    min-height: 360px;
-    padding: 48px 20px;
+  ${mq_lg} {
+    align-content: normal;
+    gap: 24px;
+    min-height: 0;
+    padding: 0;
   }
 `;
 
@@ -1074,10 +1091,10 @@ const EmptyTitle = styled.p`
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
   font-size: 18px;
   font-weight: 600;
+  line-height: 26px;
 
-  @media (max-width: 640px) {
-    font-size: 18px;
-    line-height: 26px;
+  ${mq_lg} {
+    line-height: normal;
   }
 `;
 
@@ -1101,9 +1118,10 @@ const EmptyIcon = styled.div`
 const ButtonRow = styled.div`
   display: flex;
   gap: 8px;
+  margin-top: 20px;
 
-  @media (max-width: 640px) {
-    margin-top: 20px;
+  ${mq_lg} {
+    margin-top: 0;
   }
 `;
 
@@ -1129,29 +1147,34 @@ const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
 `;
 
 const DetailPane = styled.aside`
-  position: relative;
-  z-index: 21;
-  height: calc(100vh - 92px);
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100%;
+  height: 100dvh;
+  max-height: none;
+  min-height: auto;
   overflow-y: auto;
   background: ${({ theme }) => theme.palette.mobile.grey.g90};
-  border-left: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  border-left: 0;
+  border-radius: 0;
 
-  @media (max-width: 1024px) {
-    position: fixed;
-    inset: auto 0 0;
-    max-height: calc(100vh - 72px);
-    min-height: auto;
-    border-left: 0;
-    border-radius: 18px 18px 0 0;
-  }
-
-  @media (max-width: 640px) {
-    inset: 0;
-    z-index: 50;
-    width: 100%;
-    height: 100dvh;
+  ${mq_lg} {
+    position: relative;
+    inset: auto;
+    z-index: 21;
+    width: auto;
+    height: calc(100vh - 92px);
     max-height: none;
+    min-height: 0;
+    border-left: 1px solid ${({ theme }) => theme.palette.grey.g90};
     border-radius: 0;
+    animation: ${slideDetailPaneIn} 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    will-change: transform;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
   }
 `;
 
@@ -1160,25 +1183,13 @@ const DetailBackdrop = styled.button`
   padding: 0;
   background: transparent;
   border: 0;
-
-  @media (max-width: 1024px) {
-    position: fixed;
-    inset: 0;
-    z-index: 20;
-    display: block;
-    background: ${({ theme }) => theme.palette.grey.b}94;
-  }
-
-  @media (max-width: 640px) {
-    display: none;
-  }
 `;
 
 const DetailHero = styled.div<{ imageUrl?: string }>`
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-height: 331px;
+  min-height: 375px;
   padding: 20px;
   background: linear-gradient(
       180deg,
@@ -1188,8 +1199,8 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
     ${({ imageUrl, theme }) =>
       imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
 
-  @media (max-width: 640px) {
-    min-height: 375px;
+  ${mq_lg} {
+    min-height: 331px;
   }
 `;
 
@@ -1334,11 +1345,11 @@ const DetailTab = styled.button`
 
 const ImageGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 109px));
   gap: 4px;
 
-  @media (max-width: 640px) {
-    grid-template-columns: repeat(2, minmax(0, 109px));
+  ${mq_lg} {
+    grid-template-columns: repeat(3, 1fr);
   }
 `;
 
