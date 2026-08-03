@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { m } from 'framer-motion';
 
-import { mq_desktop, mq_lg } from './constants';
+import { LANDING_COLORS, mq_desktop, mq_lg } from './constants';
 
 const Container = styled(m.div)`
   overflow-x: clip;
@@ -19,6 +19,7 @@ const TopBar = styled.div`
   z-index: 20;
   display: flex;
   flex-direction: column;
+  background-color: ${LANDING_COLORS.topBarBackdrop};
 `;
 
 const FooterContainer = styled.div`

@@ -18,11 +18,14 @@ export const LANDING_COLORS = {
   darkCardBg: '#A2A5B4',
   headerGlass: 'rgba(111, 116, 133, 0.4)',
   headerBorder: 'rgba(136, 141, 157, 0.3)',
+  // sticky 헤더가 얹히는 배경. 최상단에서도 glass 가 히어로(#131343) 위에 합성되도록 하여
+  // 시안(Nav #363858)과 동일한 다크 네이비로 보이게 함
+  topBarBackdrop: '#131343',
   cardBorder: '#D8DBE5',
   promoGradient: 'linear-gradient(180deg, #FFE6DF 0%, #F3F5F9 100%)',
   paymentGradient: 'linear-gradient(180deg, #E9EBFE 0%, #F3F5F9 100%)',
   // 공연장 찾기 띠배너 (Figma 디자인 토큰 기준: Primary/O01 #FF6827, Grey/G50 #6F7485)
-  spaceBannerBg: '#E5E7F2',
+  spaceBannerBg: '#E8E6FB',
   spaceBannerStrongText: '#090D43',
   spaceBannerSubText: '#6F7485',
   // top variant: 주황 배경 + 네이비 글자
