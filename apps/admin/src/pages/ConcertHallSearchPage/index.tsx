@@ -333,7 +333,7 @@ const ConcertHallDetailPanel = ({
 
   return (
     <Styled.DetailPane>
-      <Styled.DetailHero imageUrl={concertHall.representativeImageUrl}>
+      <Styled.DetailNavigation>
         <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
           <ArrowLeftIcon />
         </Styled.DetailCloseButton>
@@ -345,6 +345,13 @@ const ConcertHallDetailPanel = ({
         >
           <ShareIcon />
         </Styled.DetailShareButton>
+      </Styled.DetailNavigation>
+      <Styled.DetailHeader>
+        <Styled.DetailHeaderTitle>
+          {concertHall.name}
+        </Styled.DetailHeaderTitle>
+      </Styled.DetailHeader>
+      <Styled.DetailHero imageUrl={concertHall.representativeImageUrl}>
         <Styled.DetailTitle>{concertHall.name}</Styled.DetailTitle>
       </Styled.DetailHero>
       <Styled.DetailMetaList style={{ padding: '16px 20px' }}>
@@ -1055,7 +1062,10 @@ const ConcertHallSearchPage = () => {
   return (
     <Styled.Page>
       <Styled.Header $menuOpen={isHeaderMenuOpen}>
-        <Styled.Logo>
+        <Styled.Logo onClick={() => {
+          setIsHeaderMenuOpen(false);
+          resetSearch();
+        }}>
           <BooltiLogo />
         </Styled.Logo>
         <Styled.HeaderMenuContainer ref={headerMenuRef}>

@@ -1,7 +1,7 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { getContrastTextColor } from './utils';
-import { mq_lg } from '@boolti/ui';
+import { mq_xl } from '@boolti/ui';
 
 const slideDetailPaneIn = keyframes`
   from {
@@ -30,7 +30,7 @@ const Page = styled.main`
     z-index: 1;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     &::before {
       height: 92px;
     }
@@ -64,7 +64,7 @@ const Header = styled.header<{ $menuOpen: boolean }>`
   backdrop-filter: blur(80px);
   -webkit-backdrop-filter: blur(80px);
 
-  ${mq_lg} {
+  ${mq_xl} {
     flex-wrap: nowrap;
     align-content: normal;
     gap: 32px;
@@ -76,18 +76,23 @@ const Header = styled.header<{ $menuOpen: boolean }>`
   }
 `;
 
-const Logo = styled.div`
+const Logo = styled.button`
   order: 0;
   flex: 0 0 auto;
   height: 52px;
   margin-left: 4px;
   transform: translateY(2px);
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
 
   svg path:not(:first-of-type) {
     fill: ${({ theme }) => theme.palette.grey.w};
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
+    width: 74px;
     height: auto;
     margin-left: 0;
     transform: none;
@@ -102,9 +107,12 @@ const HeaderMenuContainer = styled.div`
   height: 52px;
   margin-right: 4px;
 
-  ${mq_lg} {
+  ${mq_xl} {
+    width: 74px;
     height: auto;
     margin-right: 0;
+    display: flex;
+    justify-content: flex-end;
   }
 `;
 
@@ -119,7 +127,7 @@ const MenuButton = styled.button`
   cursor: pointer;
   transform: translateY(2px);
 
-  ${mq_lg} {
+  ${mq_xl} {
     width: 44px;
     height: 44px;
     transform: none;
@@ -140,11 +148,11 @@ const HeaderMenuPopup = styled.div`
   border-radius: 0;
   box-shadow: none;
 
-  ${mq_lg} {
+  ${mq_xl} {
     position: absolute;
     top: calc(100% + 16px);
     left: auto;
-    width: 280px;
+    width: 300px;
     height: 124px;
     background: ${({ theme }) => theme.palette.mobile.grey.g85};
     border-radius: 12px;
@@ -168,7 +176,7 @@ const HeaderMenuLabel = styled.button`
     background: transparent;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     height: 48px;
     padding: 0 16px;
     color: ${({ theme }) => theme.palette.grey.g10};
@@ -200,7 +208,7 @@ const HeaderMenuPrimaryButton = styled.button`
     height: 20px;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     width: calc(100% - 32px);
     margin: 12px 16px 16px;
     color: ${({ theme }) => theme.palette.grey.w};
@@ -220,11 +228,13 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
   border: 0;
   border-radius: 4px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: grid;
     order: 1;
-    grid-template-columns: 260px 261px minmax(0, 1fr) 70px;
-    width: min(852px, 100%);
+    grid-template-columns: repeat(3, 1fr) 70px;
+    min-width: 672px;
+    max-width: 852px;
+    width: 100%;
     height: auto;
     min-height: 70px;
     margin: 0 auto;
@@ -239,7 +249,7 @@ const FilterField = styled.div`
   display: none;
   min-width: 0;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: block;
   }
 `;
@@ -316,7 +326,7 @@ const FieldButton = styled.button<{
     opacity: 0;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: flex;
   }
 `;
@@ -339,7 +349,7 @@ const KeywordPopover = styled(FilterPopover)`
   display: none;
   width: 360px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: grid;
   }
 `;
@@ -355,7 +365,7 @@ const FilterOptionList = styled.div`
   gap: 4px;
   margin-top: 16px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     margin-top: 0;
   }
 `;
@@ -385,7 +395,7 @@ const FilterOption = styled.button<{ active?: boolean }>`
       active && `inset 0 0 0 3px ${theme.palette.mobile.grey.g85}`};
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     padding: 0 10px;
 
     &:hover,
@@ -581,7 +591,7 @@ const SearchInputLabel = styled.label`
   ${({ theme }) => theme.typo.b1};
   font-weight: 400;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: inline;
   }
 `;
@@ -627,7 +637,7 @@ const SearchInputField = styled.div<{ active?: boolean; $hideDivider?: boolean }
     opacity: 1;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     padding: 10px 24px;
 
     &::before {
@@ -658,7 +668,7 @@ const KeywordInput = styled.input`
     color: ${({ theme }) => theme.palette.mobile.grey.g70};
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     height: 24px;
     font-size: 16px;
     line-height: 24px;
@@ -681,7 +691,7 @@ const SearchButton = styled.button`
   border-radius: 0;
   cursor: pointer;
 
-  ${mq_lg} {
+  ${mq_xl} {
     width: 48px;
     color: ${({ theme }) => theme.palette.grey.w};
     background: ${({ theme }) => theme.palette.primary.o1};
@@ -693,7 +703,7 @@ const Content = styled.div<{ hasDetail: boolean }>`
   display: block;
   min-height: calc(100vh - 156px);
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: grid;
     grid-template-columns: ${({ hasDetail }) =>
       hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
@@ -708,7 +718,7 @@ const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
   height: ${({ $headerMenuOpen }) =>
     $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 156px)'};
 
-  ${mq_lg} {
+  ${mq_xl} {
     height: calc(100vh - 92px);
   }
 `;
@@ -727,7 +737,7 @@ const Toolbar = styled.div`
   background: ${({ theme }) => theme.palette.grey.b};
   z-index: 31;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: flex;
     grid-template-columns: none;
     justify-content: space-between;
@@ -750,7 +760,7 @@ const Count = styled.div`
     white-space: nowrap;
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     align-items: center;
     ${({ theme }) => theme.typo.b3};
   }
@@ -762,7 +772,7 @@ const CountValue = styled.strong<{ $hasSearchConditions: boolean }>`
   ${({ theme }) => theme.typo.sh1};
   white-space: nowrap;
 
-  ${mq_lg} {
+  ${mq_xl} {
     white-space: normal;
   }
 `;
@@ -791,7 +801,7 @@ const CountInfoPopup = styled.div<{ isOpen?: boolean }>`
   ${({ theme }) => theme.typo.b3};
   pointer-events: ${({ isOpen }) => (isOpen ? 'default' : 'none')};
 
-  ${mq_lg} {
+  ${mq_xl} {
     width: 280px;
     top: 64px;
     left: 48px;
@@ -816,7 +826,7 @@ const SortGroup = styled.div<{ $disabled: boolean }>`
   opacity: 1;
   transition: opacity 120ms ease;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: flex;
     opacity: ${({ $disabled }) => ($disabled ? 0.6 : 1)};
   }
@@ -846,7 +856,7 @@ const SortButton = styled.button<{ active?: boolean }>`
     color: ${({ theme }) => theme.palette.grey.g60};
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     flex: 0 1 auto;
     height: 44px;
     padding: 0 10px;
@@ -883,7 +893,7 @@ const MobileSortButton = styled.button`
     color: ${({ theme }) => theme.palette.grey.g60};
   }
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: none;
   }
 `;
@@ -894,7 +904,7 @@ const ChipRow = styled.div`
   padding: 0 20px 16px;
   overflow-x: auto;
 
-  ${mq_lg} {
+  ${mq_xl} {
     display: none;
   }
 `;
@@ -920,7 +930,7 @@ const CardGrid = styled.div`
   gap: 16px;
   padding: 0 20px 24px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     justify-items: stretch;
     padding: 0 52px 24px;
@@ -931,7 +941,7 @@ const LoadMoreTrigger = styled.div`
   height: 1px;
   margin-bottom: 48px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     margin-bottom: 64px;
   }
 `;
@@ -955,11 +965,11 @@ const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
     border-color 120ms ease,
     opacity 120ms ease;
 
-  ${mq_lg} {
+  ${mq_xl} {
     width: auto;
     min-width: 0;
     max-width: none;
-    opacity: ${({ $dimmed }) => ($dimmed ? 0.6 : 1)};
+    opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
   }
 `;
 
@@ -1007,7 +1017,7 @@ const PriceLabel = styled.span`
 const PriceHours = styled.span`
   ${({ theme }) => theme.typo.b2};
   color: ${({ theme }) => theme.palette.grey.g50};
-  margin-left: 2px;
+  margin-left: 4px;
 `;
 
 const CardTitle = styled.h2`
@@ -1079,7 +1089,7 @@ const Empty = styled.div`
   text-align: center;
   color: ${({ theme }) => theme.palette.grey.g30};
 
-  ${mq_lg} {
+  ${mq_xl} {
     align-content: normal;
     gap: 24px;
     min-height: 0;
@@ -1093,7 +1103,7 @@ const EmptyTitle = styled.p`
   font-weight: 600;
   line-height: 26px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     line-height: normal;
   }
 `;
@@ -1120,7 +1130,7 @@ const ButtonRow = styled.div`
   gap: 8px;
   margin-top: 20px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     margin-top: 0;
   }
 `;
@@ -1159,7 +1169,7 @@ const DetailPane = styled.aside`
   border-left: 0;
   border-radius: 0;
 
-  ${mq_lg} {
+  ${mq_xl} {
     position: relative;
     inset: auto;
     z-index: 21;
@@ -1176,6 +1186,12 @@ const DetailPane = styled.aside`
       animation: none;
     }
   }
+`;
+
+const DetailNavigation = styled.nav`
+  position: sticky;
+  top: 0;
+  z-index: 3;
 `;
 
 const DetailBackdrop = styled.button`
@@ -1198,8 +1214,9 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
     ),
     ${({ imageUrl, theme }) =>
       imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
+  z-index: 2;
 
-  ${mq_lg} {
+  ${mq_xl} {
     min-height: 331px;
   }
 `;
@@ -1217,7 +1234,7 @@ const DetailCloseButton = styled.button`
   position: absolute;
   top: 0;
   left: 0;
-  padding: 12px 20px;
+  padding: 10px 20px;
   display: grid;
   place-items: center;
   color: ${({ theme }) => theme.palette.grey.w};
@@ -1235,7 +1252,7 @@ const DetailShareButton = styled.button`
   position: absolute;
   top: 0;
   right: 0;
-  padding: 12px 20px;
+  padding: 10px 20px;
   display: grid;
   place-items: center;
   color: ${({ theme }) => theme.palette.grey.w};
@@ -1253,6 +1270,25 @@ const DetailShareButton = styled.button`
     cursor: default;
   }
 `;
+
+const DetailHeader = styled.div`
+  position: sticky;
+  top: 0;
+  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+  width: 100%;
+  height: 44px;
+  margin-top: -44px;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+`
+
+const DetailHeaderTitle = styled.span`
+  margin-left: 56px;
+  display: inline-flex;
+  align-items: center;
+  ${({ theme }) => theme.typo.sh2};
+`
 
 const DetailTitle = styled.h2`
   color: ${({ theme }) => theme.palette.grey.w};
@@ -1321,10 +1357,14 @@ const DetailAction = styled.button`
 `;
 
 const DetailTabs = styled.div`
+  position: sticky;
+  top: 44px;
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  padding: 20px 20px 0;
+  padding: 0 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  background: ${({ theme }) => theme.palette.mobile.grey.g90};
 `;
 
 const DetailTab = styled.button`
@@ -1348,7 +1388,7 @@ const ImageGrid = styled.div`
   grid-template-columns: repeat(2, minmax(0, 109px));
   gap: 4px;
 
-  ${mq_lg} {
+  ${mq_xl} {
     grid-template-columns: repeat(3, 1fr);
   }
 `;
@@ -1785,6 +1825,8 @@ export default {
   DetailActions,
   DetailBackdrop,
   DetailCloseButton,
+  DetailHeader,
+  DetailHeaderTitle,
   DetailHero,
   DetailImage,
   DetailPane,
@@ -1792,6 +1834,7 @@ export default {
   DetailSectionTitle,
   DetailShareButton,
   DetailState,
+  DetailNavigation,
   DetailTab,
   DetailTabs,
   DetailText,
