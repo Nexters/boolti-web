@@ -35,10 +35,11 @@ vi.mock('@boolti/api', () => ({
 }));
 
 vi.mock('@boolti/ui', async () => {
-  const { mq_lg } = await import('@boolti/ui/src/systems/breakpoint');
+  const { mq_lg, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
 
   return {
     mq_lg,
+    mq_xl,
     useToast: () => ({ error: mockErrorToast, success: mockSuccessToast }),
   };
 });
@@ -318,6 +319,20 @@ describe('ConcertHallSearchPage', () => {
     renderConcertHallSearchPage();
 
     expect(screen.getByPlaceholderText('내 조건에 맞는 공연장 찾기')).not.toBeNull();
+  });
+
+  it('포커스가 없을 때 긴 검색어를 말줄임표로 표시한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    const cssText = getCssTextForElement(keywordInput);
+    fireEvent.change(keywordInput, {
+      target: { value: '서울특별시 마포구 와우산로 94 홍대 인근 공연장' },
+    });
+
+    expect(window.getComputedStyle(keywordInput).textOverflow).toBe('ellipsis');
+    expect(cssText).toContain(':not(:focus)');
+    expect(cssText).toContain('text-overflow: ellipsis');
   });
 
   it('검색 결과 카드를 표시하고 카드 클릭 시 상세 정보를 연다', async () => {

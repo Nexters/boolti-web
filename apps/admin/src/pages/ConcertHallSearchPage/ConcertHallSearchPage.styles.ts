@@ -664,6 +664,11 @@ const KeywordInput = styled.input`
   outline: 0;
   ${({ theme }) => theme.typo.b3};
 
+  &:not(:focus) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   &::placeholder {
     color: ${({ theme }) => theme.palette.mobile.grey.g70};
   }
@@ -1737,7 +1742,7 @@ const MobileApplyButton = styled.button`
 const ModalBackdrop = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 30;
+  z-index: 50;
   display: grid;
   place-items: center;
   padding: 28px;
@@ -1783,9 +1788,15 @@ const ModalInput = styled.input<{ hasError?: boolean }>`
     ${({ hasError, theme }) => (hasError ? theme.palette.status.error1 : theme.palette.grey.g30)};
   border-radius: 4px;
   outline: 0;
+  ${({ theme }) => theme.typo.b3};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.palette.grey.g50};
+  }
 `;
 
 const ErrorText = styled.p`
+  position: absolute;
   margin-top: 6px;
   color: ${({ theme }) => theme.palette.status.error1};
   font-size: 12px;
@@ -1795,7 +1806,7 @@ const ModalButtons = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 50px;
 `;
 
 export default {

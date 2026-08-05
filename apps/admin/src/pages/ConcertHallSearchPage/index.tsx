@@ -35,7 +35,7 @@ import {
   ShareIcon,
   WebsiteIcon,
 } from '@boolti/icon';
-import { useToast } from '@boolti/ui';
+import { Button, useToast } from '@boolti/ui';
 import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -1855,30 +1855,33 @@ const ConcertHallSearchPage = () => {
           <Styled.Modal onSubmit={submitEntryRequest}>
             <Styled.ModalTitle>공연장 이름을 확인한 후 요청 버튼을 눌러주세요!</Styled.ModalTitle>
             <Styled.ModalLabel>
-              <span>공연장명</span>
               <Styled.ModalInput
                 value={entryRequestName}
                 hasError={hasEntryRequestError}
                 onBlur={() => setEntryRequestTouched(true)}
                 onChange={(event) => setEntryRequestName(event.target.value)}
+                placeholder="공연장 명을 입력해 주세요"
               />
             </Styled.ModalLabel>
-            {hasEntryRequestError && <Styled.ErrorText>공연장명을 입력해 주세요.</Styled.ErrorText>}
+            {hasEntryRequestError && <Styled.ErrorText>필수 입력사항입니다.</Styled.ErrorText>}
             <Styled.ModalButtons>
-              <Styled.ActionButton
+              <Button
                 type="button"
-                variant="secondary"
+                colorTheme="netural"
+                size="bold"
                 onClick={() => setIsEntryRequestOpen(false)}
               >
                 취소하기
-              </Styled.ActionButton>
-              <Styled.ActionButton
+              </Button>
+              <Button
                 type="submit"
-                variant="primary"
+                colorTheme="primary"
+                size="bold"
                 disabled={entryRequestName.trim().length === 0 || entryRequestMutation.isLoading}
+                onClick={() => setIsEntryRequestOpen(false)}
               >
                 요청하기
-              </Styled.ActionButton>
+              </Button>
             </Styled.ModalButtons>
           </Styled.Modal>
         </Styled.ModalBackdrop>
