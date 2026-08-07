@@ -36,7 +36,15 @@ import {
   WebsiteIcon,
 } from '@boolti/icon';
 import { Button, useToast } from '@boolti/ui';
-import { FormEvent, KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  FormEvent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
@@ -609,11 +617,20 @@ const ConcertHallSearchPage = () => {
   const sort = isSort(sortParam) ? sortParam : DEFAULT_SORT;
 
   const searchFormRef = useRef<HTMLFormElement>(null);
+  const keywordInputRef = useRef<HTMLInputElement>(null);
+  const mobileKeywordInputRef = useRef<HTMLInputElement>(null);
   const rentalFeeMaxInputRef = useRef<HTMLInputElement>(null);
   const infoPopupRef = useRef<HTMLDivElement>(null);
   const headerMenuRef = useRef<HTMLDivElement>(null);
   const mobileFilterRef = useRef<HTMLDivElement>(null);
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null);
+  const keywordInputSnapshotRef = useRef<{
+    keywordInput: string;
+    selectedRegionId: number | null;
+    selectedRegionNameInput?: string;
+  } | null>(null);
+  const applySearchRef = useRef<(() => void) | null>(null);
+  const skipKeywordBlurRestoreRef = useRef(false);
   const [keywordInput, setKeywordInput] = useState(keyword);
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const [selectedRegionId, setSelectedRegionId] = useState<number | null>(regionId ?? null);
@@ -642,6 +659,9 @@ const ConcertHallSearchPage = () => {
   const toast = useToast();
   const entryRequestMutation = useCreateConcertHallEntryRequest();
   const recommendedRegionsQuery = useConcertHallRecommendedRegions();
+  const recommendedRegionName = recommendedRegionsQuery.data?.find(
+    (region) => region.regionId === regionId,
+  )?.name;
   const autocompleteQueryText = activeSearchField === 'keyword' ? debouncedKeyword : '';
   const autocompleteQuery = useConcertHallAutocomplete(autocompleteQueryText);
   const trimmedKeywordInput = keywordInput.trim();
@@ -654,10 +674,40 @@ const ConcertHallSearchPage = () => {
     (isAutocompleteWaiting || autocompleteQuery.isLoading) &&
     autocompleteQuery.data == null;
 
+  const restoreKeywordInputDraft = useCallback(() => {
+    if (skipKeywordBlurRestoreRef.current) return;
+
+    const snapshot = keywordInputSnapshotRef.current;
+    keywordInputSnapshotRef.current = null;
+    if (!snapshot || keywordInput.trim().length > 0) return;
+
+    setKeywordInput(snapshot.keywordInput);
+    setSelectedRegionId(snapshot.selectedRegionId);
+    setSelectedRegionNameInput(snapshot.selectedRegionNameInput);
+  }, [keywordInput]);
+
+  const handleKeywordInputFocus = () => {
+    if (keywordInputSnapshotRef.current == null) {
+      keywordInputSnapshotRef.current = {
+        keywordInput,
+        selectedRegionId,
+        selectedRegionNameInput,
+      };
+    }
+    setActiveSearchField('keyword');
+  };
+
+  const handleKeywordInputBlur = () => {
+    restoreKeywordInputDraft();
+  };
+
   useEffect(() => {
-    setKeywordInput(keyword);
+    if (keyword || regionId == null) setKeywordInput(keyword);
+    else if (recommendedRegionName) {
+      setKeywordInput((currentKeywordInput) => currentKeywordInput || recommendedRegionName);
+    }
     setEntryRequestName(keyword);
-  }, [keyword]);
+  }, [keyword, regionId, recommendedRegionName]);
 
   useEffect(() => {
     setSelectedRegionId(regionId ?? null);
@@ -689,17 +739,6 @@ const ConcertHallSearchPage = () => {
     );
     setIsCapacityCleared(false);
   }, [capacityMax, capacityMin]);
-
-  useEffect(() => {
-    const closeOnOutsideClick = (event: MouseEvent) => {
-      if (searchFormRef.current?.contains(event.target as Node)) return;
-      if (mobileFilterRef.current?.contains(event.target as Node)) return;
-      setActiveSearchField(null);
-    };
-
-    document.addEventListener('mousedown', closeOnOutsideClick);
-    return () => document.removeEventListener('mousedown', closeOnOutsideClick);
-  }, []);
 
   useEffect(() => {
     if (!isMobile || activeSearchField == null) return undefined;
@@ -760,6 +799,7 @@ const ConcertHallSearchPage = () => {
     rentalFeeMax != null ||
     capacityMin != null ||
     capacityMax != null;
+  const hasKeywordSearch = keyword.trim().length > 0;
   const hasEntryRequestError = entryRequestTouched && entryRequestName.trim().length === 0;
   const mobileSortLabel = sort === 'FEE_ASC' ? '대관료 낮은 순' : '대관료 높은 순';
   const rentalFeeLabel = formatRangeLabel(rentalFeeMin, rentalFeeMax, DEFAULT_RENTAL_FEE_LABEL);
@@ -780,6 +820,9 @@ const ConcertHallSearchPage = () => {
     ? DEFAULT_CAPACITY_LABEL
     : selectedCapacityOption?.label ??
       formatPeopleRangeLabel(capacityMin, capacityMax, DEFAULT_CAPACITY_LABEL);
+  const hasPendingCapacityFilter = isCapacityCleared
+    ? capacityMin != null || capacityMax != null
+    : selectedCapacityOptionId !== (appliedCapacityOption?.id ?? null);
   const toggleMobileSort = () => {
     updateParams({
       keyword,
@@ -922,11 +965,63 @@ const ConcertHallSearchPage = () => {
       nextSelectedConcertHallId,
     );
     setActiveSearchField(null);
+    keywordInputSnapshotRef.current = null;
+    keywordInputRef.current?.blur();
+    mobileKeywordInputRef.current?.blur();
+  };
+  applySearchRef.current = applySearch;
+
+  const submitSearch = (resetEmptyPlace = false) => {
+    skipKeywordBlurRestoreRef.current = true;
+    if (resetEmptyPlace && keywordInput.trim().length === 0) {
+      applySearch('', null);
+    } else {
+      applySearch();
+    }
+    skipKeywordBlurRestoreRef.current = false;
   };
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    applySearch();
+    submitSearch();
+  };
+
+  useEffect(() => {
+    const closeOnOutsideClick = (event: MouseEvent) => {
+      if (searchFormRef.current?.contains(event.target as Node)) return;
+      if (mobileFilterRef.current?.contains(event.target as Node)) return;
+      if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
+        applySearchRef.current?.();
+        return;
+      }
+      if (activeSearchField === 'keyword') restoreKeywordInputDraft();
+      setActiveSearchField(null);
+    };
+
+    document.addEventListener('mousedown', closeOnOutsideClick);
+    return () => document.removeEventListener('mousedown', closeOnOutsideClick);
+  }, [activeSearchField, hasPendingCapacityFilter, restoreKeywordInputDraft]);
+
+  const handleSearchFieldClick = (nextField: SearchField, toggle = true) => {
+    if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
+      applySearch();
+      if (nextField !== 'capacity') setActiveSearchField(nextField);
+      return;
+    }
+
+    if (toggle) {
+      setActiveSearchField((value) => (value === nextField ? null : nextField));
+      return;
+    }
+
+    if (activeSearchField !== nextField) setActiveSearchField(nextField);
+  };
+
+  const handleKeywordInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== 'Enter') return;
+
+    event.preventDefault();
+    submitSearch(true);
   };
 
   const applyRecentKeyword = (nextKeyword: string) => {
@@ -1116,19 +1211,20 @@ const ConcertHallSearchPage = () => {
           <Styled.SearchInputField
             active={activeSearchField === 'keyword'}
             $hideDivider={activeSearchField === 'keyword' || activeSearchField === 'rentalFee'}
-            onClick={() => {
-              if (activeSearchField !== 'keyword') setActiveSearchField('keyword');
-            }}
+            onMouseDown={() => handleSearchFieldClick('keyword', false)}
           >
             <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
               장소
             </Styled.SearchInputLabel>
             <Styled.KeywordInput
+              ref={keywordInputRef}
               id="concert-hall-search-keyword"
               value={keywordInput}
               placeholder={isMobile ? '내 조건에 맞는 공연장 찾기' : '지역, 공연장명 검색'}
               aria-label="지역, 공연장명 검색"
-              onFocus={() => setActiveSearchField('keyword')}
+              onFocus={handleKeywordInputFocus}
+              onBlur={handleKeywordInputBlur}
+              onKeyDown={handleKeywordInputKeyDown}
               onChange={(event) => {
                 setSelectedRegionId(null);
                 setSelectedRegionNameInput(undefined);
@@ -1152,7 +1248,9 @@ const ConcertHallSearchPage = () => {
                               aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
                               onClick={() => applyAutocomplete(item)}
                             >
-                              {item.type === 'REGION' && <AreaIcon />}
+                              <Styled.RecentItemIcon>
+                                <AreaIcon />
+                              </Styled.RecentItemIcon>
                               <Styled.AutocompleteText>
                                 <span>
                                   <HighlightedAutocompleteName
@@ -1176,40 +1274,46 @@ const ConcertHallSearchPage = () => {
                       </Styled.AutocompleteState>
                     )}
                   </>
-                ) : recentKeywords.length > 0 ? (
-                  <>
-                    <Styled.PopoverHeader>
-                      <span>최근 검색어</span>
-                      <Styled.TextButton
-                        type="button"
-                        onClick={() => setIsRecentClearConfirmOpen(true)}
-                      >
-                        전체 삭제
-                      </Styled.TextButton>
-                    </Styled.PopoverHeader>
-                    <Styled.RecentList>
-                      {recentKeywords.map((recentKeyword) => (
-                        <Styled.RecentItem key={recentKeyword}>
-                          <Styled.RecentKeywordButton
-                            type="button"
-                            aria-label={`${recentKeyword} 검색`}
-                            onClick={() => applyRecentKeyword(recentKeyword)}
-                          >
-                            {recentKeyword}
-                          </Styled.RecentKeywordButton>
-                          <Styled.IconButton
-                            type="button"
-                            aria-label={`${recentKeyword} 삭제`}
-                            onClick={() => removeRecentKeyword(recentKeyword)}
-                          >
-                            <CloseIcon />
-                          </Styled.IconButton>
-                        </Styled.RecentItem>
-                      ))}
-                    </Styled.RecentList>
-                  </>
                 ) : (
                   <>
+                    {recentKeywords.length > 0 && (
+                      <>
+                        <Styled.PopoverHeader>
+                          <span>최근 검색어</span>
+                          {recentKeywords.length >= 2 && (
+                            <Styled.TextButton
+                              type="button"
+                              onClick={() => setIsRecentClearConfirmOpen(true)}
+                            >
+                              전체 삭제
+                            </Styled.TextButton>
+                          )}
+                        </Styled.PopoverHeader>
+                        <Styled.RecentList>
+                          {recentKeywords.slice(0, 5).map((recentKeyword) => (
+                            <Styled.RecentItem key={recentKeyword}>
+                              <Styled.RecentKeywordButton
+                                type="button"
+                                aria-label={`${recentKeyword} 검색`}
+                                onClick={() => applyRecentKeyword(recentKeyword)}
+                              >
+                                <Styled.RecentItemIcon>
+                                  <SearchIcon />
+                                </Styled.RecentItemIcon>
+                                {recentKeyword}
+                              </Styled.RecentKeywordButton>
+                              <Styled.IconButton
+                                type="button"
+                                aria-label={`${recentKeyword} 삭제`}
+                                onClick={() => removeRecentKeyword(recentKeyword)}
+                              >
+                                <CloseIcon />
+                              </Styled.IconButton>
+                            </Styled.RecentItem>
+                          ))}
+                        </Styled.RecentList>
+                      </>
+                    )}
                     <Styled.PopoverHeader>
                       <span>추천 지역</span>
                     </Styled.PopoverHeader>
@@ -1230,7 +1334,9 @@ const ConcertHallSearchPage = () => {
                               aria-label={`${region.name} 검색`}
                               onClick={() => applyRegion(region.regionId, region.name)}
                             >
-                              <AreaIcon />
+                              <Styled.RecentItemIcon>
+                                <AreaIcon />
+                              </Styled.RecentItemIcon>
                               {region.name}
                             </Styled.RecentKeywordButton>
                           </Styled.RecentItem>
@@ -1252,9 +1358,7 @@ const ConcertHallSearchPage = () => {
               }
               aria-label={`대관료 ${rentalFeeLabel}`}
               aria-expanded={activeSearchField === 'rentalFee'}
-              onClick={() => {
-                setActiveSearchField((value) => (value === 'rentalFee' ? null : 'rentalFee'));
-              }}
+              onClick={() => handleSearchFieldClick('rentalFee')}
             >
               <Styled.FieldLabel>대관료</Styled.FieldLabel>
               <Styled.FieldValue isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}>
@@ -1269,6 +1373,7 @@ const ConcertHallSearchPage = () => {
                     <Styled.RangeInput
                       aria-label="대관료 최소"
                       inputMode="numeric"
+                      placeholder="1"
                       value={rentalFeeMinInput}
                       onChange={(event) => {
                         setSelectedRentalFeeOptionId(null);
@@ -1284,6 +1389,7 @@ const ConcertHallSearchPage = () => {
                       ref={rentalFeeMaxInputRef}
                       aria-label="대관료 최대"
                       inputMode="numeric"
+                      placeholder="5,000,000"
                       value={rentalFeeMaxInput}
                       onChange={(event) => {
                         setSelectedRentalFeeOptionId(null);
@@ -1330,9 +1436,7 @@ const ConcertHallSearchPage = () => {
               active={activeSearchField === 'capacity' || !!selectedCapacityOptionId}
               aria-label={`수용 인원 ${stagedCapacityLabel}`}
               aria-expanded={activeSearchField === 'capacity'}
-              onClick={() => {
-                setActiveSearchField((value) => (value === 'capacity' ? null : 'capacity'));
-              }}
+              onClick={() => handleSearchFieldClick('capacity')}
             >
               <Styled.FieldLabel>수용 인원</Styled.FieldLabel>
               <Styled.FieldValue isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}>
@@ -1378,8 +1482,13 @@ const ConcertHallSearchPage = () => {
 
       {isMobile && activeSearchField != null && (
         <Styled.MobileFilterOverlay
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setActiveSearchField(null);
+          onClick={(event) => {
+            if (event.target !== event.currentTarget) return;
+            if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
+              applySearch();
+              return;
+            }
+            setActiveSearchField(null);
           }}
         >
           <Styled.MobileFilterSheet
@@ -1403,10 +1512,14 @@ const ConcertHallSearchPage = () => {
                 </Styled.MobileSheetHeader>
                 <Styled.MobileLocationSearch>
                   <Styled.MobileLocationInput
+                    ref={mobileKeywordInputRef}
                     autoFocus
                     value={keywordInput}
                     placeholder="지역, 공연장명 검색"
                     aria-label="모바일 지역, 공연장명 검색"
+                    onFocus={handleKeywordInputFocus}
+                    onBlur={handleKeywordInputBlur}
+                    onKeyDown={handleKeywordInputKeyDown}
                     onChange={(event) => {
                       setSelectedRegionId(null);
                       setSelectedRegionNameInput(undefined);
@@ -1513,7 +1626,7 @@ const ConcertHallSearchPage = () => {
                 <Styled.MobileFilterSections>
                   <Styled.MobileFilterSummary
                     type="button"
-                    onClick={() => setActiveSearchField('keyword')}
+                    onClick={() => handleSearchFieldClick('keyword', false)}
                   >
                     <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
                     <strong>
@@ -1568,7 +1681,7 @@ const ConcertHallSearchPage = () => {
                   ) : (
                     <Styled.MobileFilterSummary
                       type="button"
-                      onClick={() => setActiveSearchField('rentalFee')}
+                      onClick={() => handleSearchFieldClick('rentalFee', false)}
                     >
                       <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
                       <strong>{stagedRentalFeeLabel}</strong>
@@ -1599,7 +1712,7 @@ const ConcertHallSearchPage = () => {
                     <Styled.MobileFilterSummary
                       type="button"
                       isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}
-                      onClick={() => setActiveSearchField('capacity')}
+                      onClick={() => handleSearchFieldClick('capacity', false)}
                     >
                       <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
                       <strong>{stagedCapacityLabel}</strong>
@@ -1613,7 +1726,7 @@ const ConcertHallSearchPage = () => {
                   <Styled.MobileApplyButton
                     type="button"
                     aria-label="모바일 필터 검색하기"
-                    onClick={() => applySearch()}
+                    onClick={() => submitSearch()}
                   >
                     검색
                   </Styled.MobileApplyButton>
@@ -1626,84 +1739,86 @@ const ConcertHallSearchPage = () => {
 
       <Styled.Content hasDetail={hasDetail}>
         <Styled.ResultsPane $headerMenuOpen={isHeaderMenuOpen}>
-          <Styled.Toolbar>
-            <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
-              불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
-              있습니다.
-              <Styled.CountInfoPopupCloseButton
+          {concertHalls.length > 0 && (
+            <Styled.Toolbar>
+              <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
+                불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
+                있습니다.
+                <Styled.CountInfoPopupCloseButton
+                  type="button"
+                  aria-label="닫기"
+                  onClick={() => {
+                    setInfoPopupOpen(false);
+                  }}
+                >
+                  <CloseIcon />
+                </Styled.CountInfoPopupCloseButton>
+              </Styled.CountInfoPopup>
+              <Styled.Count>
+                <span>공연장</span>
+                <Styled.CountValue $hasSearchConditions={hasSearchConditions}>
+                  {totalElements}개
+                </Styled.CountValue>
+                <Styled.CountInfoPopupButton
+                  type="button"
+                  aria-label="공연장 검색 안내"
+                  onClick={() => {
+                    setInfoPopupOpen(true);
+                  }}
+                >
+                  <InfoIcon />
+                </Styled.CountInfoPopupButton>
+              </Styled.Count>
+              <Styled.SortGroup role="group" aria-label="공연장 정렬" $disabled={hasDetail}>
+                <Styled.SortButton
+                  type="button"
+                  aria-pressed={sort === 'FEE_ASC'}
+                  active={sort === 'FEE_ASC'}
+                  disabled={hasDetail}
+                  onClick={() =>
+                    updateParams({
+                      keyword,
+                      regionId,
+                      rentalFeeMin,
+                      rentalFeeMax,
+                      capacityMin,
+                      capacityMax,
+                      sort: 'FEE_ASC',
+                    })
+                  }
+                >
+                  대관료 낮은 순
+                </Styled.SortButton>
+                <Styled.SortButton
+                  type="button"
+                  aria-pressed={sort === 'FEE_DESC'}
+                  active={sort === 'FEE_DESC'}
+                  disabled={hasDetail}
+                  onClick={() =>
+                    updateParams({
+                      keyword,
+                      regionId,
+                      rentalFeeMin,
+                      rentalFeeMax,
+                      capacityMin,
+                      capacityMax,
+                      sort: 'FEE_DESC',
+                    })
+                  }
+                >
+                  대관료 높은 순
+                </Styled.SortButton>
+              </Styled.SortGroup>
+              <Styled.MobileSortButton
                 type="button"
-                aria-label="닫기"
-                onClick={() => {
-                  setInfoPopupOpen(false);
-                }}
+                aria-label={`정렬 ${mobileSortLabel}`}
+                onClick={toggleMobileSort}
               >
-                <CloseIcon />
-              </Styled.CountInfoPopupCloseButton>
-            </Styled.CountInfoPopup>
-            <Styled.Count>
-              <span>공연장</span>
-              <Styled.CountValue $hasSearchConditions={hasSearchConditions}>
-                {totalElements}개
-              </Styled.CountValue>
-              <Styled.CountInfoPopupButton
-                type="button"
-                aria-label="공연장 검색 안내"
-                onClick={() => {
-                  setInfoPopupOpen(true);
-                }}
-              >
-                <InfoIcon />
-              </Styled.CountInfoPopupButton>
-            </Styled.Count>
-            <Styled.SortGroup role="group" aria-label="공연장 정렬" $disabled={hasDetail}>
-              <Styled.SortButton
-                type="button"
-                aria-pressed={sort === 'FEE_ASC'}
-                active={sort === 'FEE_ASC'}
-                disabled={hasDetail}
-                onClick={() =>
-                  updateParams({
-                    keyword,
-                    regionId,
-                    rentalFeeMin,
-                    rentalFeeMax,
-                    capacityMin,
-                    capacityMax,
-                    sort: 'FEE_ASC',
-                  })
-                }
-              >
-                대관료 낮은 순
-              </Styled.SortButton>
-              <Styled.SortButton
-                type="button"
-                aria-pressed={sort === 'FEE_DESC'}
-                active={sort === 'FEE_DESC'}
-                disabled={hasDetail}
-                onClick={() =>
-                  updateParams({
-                    keyword,
-                    regionId,
-                    rentalFeeMin,
-                    rentalFeeMax,
-                    capacityMin,
-                    capacityMax,
-                    sort: 'FEE_DESC',
-                  })
-                }
-              >
-                대관료 높은 순
-              </Styled.SortButton>
-            </Styled.SortGroup>
-            <Styled.MobileSortButton
-              type="button"
-              aria-label={`정렬 ${mobileSortLabel}`}
-              onClick={toggleMobileSort}
-            >
-              {sort === 'FEE_ASC' ? <AscendingIcon /> : <DescendingIcon />}
-              {mobileSortLabel}
-            </Styled.MobileSortButton>
-          </Styled.Toolbar>
+                {sort === 'FEE_ASC' ? <AscendingIcon /> : <DescendingIcon />}
+                {mobileSortLabel}
+              </Styled.MobileSortButton>
+            </Styled.Toolbar>
+          )}
 
           {hasSearchConditions && (
             <Styled.ChipRow>
@@ -1756,13 +1871,14 @@ const ConcertHallSearchPage = () => {
           {concertHallListQuery.isError && (
             <Styled.Empty>
               <Styled.EmptyTitle>공연장 정보를 불러오지 못했어요.</Styled.EmptyTitle>
-              <Styled.ActionButton
+              <Button
                 type="button"
-                variant="secondary"
+                colorTheme="netural"
+                size="bold"
                 onClick={() => concertHallListQuery.refetch()}
               >
                 다시 시도
-              </Styled.ActionButton>
+              </Button>
             </Styled.Empty>
           )}
           {!concertHallListQuery.isLoading &&
@@ -1772,26 +1888,41 @@ const ConcertHallSearchPage = () => {
                 <Styled.EmptyIcon aria-hidden="true">
                   <BooltiWhiteLogo />
                 </Styled.EmptyIcon>
-                <Styled.EmptyDescription>
-                  <span>찾으시는 공연장이 없어요.</span>
-                  <span>입점을 요청해 보세요.</span>
-                </Styled.EmptyDescription>
-                <Styled.ButtonRow>
-                  <Styled.ActionButton type="button" variant="secondary" onClick={resetSearch}>
-                    필터 초기화
-                  </Styled.ActionButton>
-                  <Styled.ActionButton
-                    type="button"
-                    variant="primary"
-                    onClick={() => {
-                      setEntryRequestName(keyword);
-                      setEntryRequestTouched(false);
-                      setIsEntryRequestOpen(true);
-                    }}
-                  >
-                    입점 요청하기
-                  </Styled.ActionButton>
-                </Styled.ButtonRow>
+                {hasKeywordSearch ? (
+                  <>
+                    <Styled.EmptyDescription>
+                      <span>찾으시는 공연장이 없어요.</span>
+                      <span>입점을 요청해 보세요.</span>
+                    </Styled.EmptyDescription>
+                    <Styled.ButtonRow>
+                      <Button type="button" colorTheme="netural" size="bold" onClick={resetSearch}>
+                        필터 초기화
+                      </Button>
+                      <Button
+                        type="button"
+                        colorTheme="primary"
+                        size="bold"
+                        onClick={() => {
+                          setEntryRequestName(keyword);
+                          setEntryRequestTouched(false);
+                          setIsEntryRequestOpen(true);
+                        }}
+                      >
+                        입점 요청하기
+                      </Button>
+                    </Styled.ButtonRow>
+                  </>
+                ) : (
+                  <>
+                    <Styled.EmptyDescription>
+                      <span>찾으시는 결과가 없어요.</span>
+                      <span>조건을 변경해 보세요.</span>
+                    </Styled.EmptyDescription>
+                    <Button type="button" colorTheme="netural" size="bold" onClick={resetSearch}>
+                      필터 초기화
+                    </Button>
+                  </>
+                )}
               </Styled.Empty>
             )}
           {(page > 0 || !concertHallListQuery.isLoading) &&
@@ -1835,16 +1966,17 @@ const ConcertHallSearchPage = () => {
           <Styled.ConfirmModal>
             <Styled.ModalTitle>최근 검색어를 모두 삭제하시겠어요?</Styled.ModalTitle>
             <Styled.ModalButtons>
-              <Styled.ActionButton
+              <Button
                 type="button"
-                variant="secondary"
+                colorTheme="netural"
+                size="bold"
                 onClick={() => setIsRecentClearConfirmOpen(false)}
               >
                 취소하기
-              </Styled.ActionButton>
-              <Styled.ActionButton type="button" variant="primary" onClick={clearRecentKeywords}>
+              </Button>
+              <Button type="button" colorTheme="primary" size="bold" onClick={clearRecentKeywords}>
                 삭제하기
-              </Styled.ActionButton>
+              </Button>
             </Styled.ModalButtons>
           </Styled.ConfirmModal>
         </Styled.ModalBackdrop>

@@ -381,6 +381,7 @@ const FilterOption = styled.button<{ active?: boolean }>`
   border: 0;
   border-radius: 4px;
   ${({ theme }) => theme.typo.b3};
+  cursor: ${({ active }) => active ? 'default' : 'pointer'};
 
   &::before {
     content: '';
@@ -398,12 +399,14 @@ const FilterOption = styled.button<{ active?: boolean }>`
   ${mq_xl} {
     padding: 0 10px;
 
-    &:hover,
-    &:focus-visible {
-      color: ${({ theme }) => theme.palette.grey.w};
-      background: ${({ theme }) => theme.palette.grey.g90};
-      outline: none;
-    }
+    ${({ active, theme }) => !active && `
+      &:hover,
+      &:focus-visible {
+        color: ${theme.palette.grey.w};
+        background: ${theme.palette.grey.g90};
+        outline: none;
+      }
+    `}
   }
 `;
 
@@ -471,7 +474,7 @@ const TextButton = styled.button`
   cursor: pointer;
 
   &:disabled {
-    opacity: 0.6;
+    opacity: 0.5;
     cursor: default;
   }
 
@@ -488,7 +491,7 @@ const RecentList = styled.div`
 
 const RecentItem = styled.div`
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 28px;
+  grid-template-columns: minmax(0, 1fr) 48px;
   align-items: center;
   min-height: 60px;
   border-radius: 6px;
@@ -522,6 +525,13 @@ const RecentKeywordButton = styled.button`
   }
 `;
 
+const RecentItemIcon = styled.div`
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  color: ${({ theme }) => theme.palette.grey.g70};
+`
+
 const AutocompleteText = styled.span`
   display: grid;
   min-width: 0;
@@ -551,17 +561,17 @@ const AutocompleteState = styled.p`
 const IconButton = styled.button`
   display: grid;
   place-items: center;
-  width: 28px;
-  height: 28px;
-  padding: 0;
+  width: 24px;
+  height: 24px;
+  padding: 0 10px;
   color: ${({ theme }) => theme.palette.grey.g60};
   background: transparent;
   border: 0;
   cursor: pointer;
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 24px;
+    height: 24px;
   }
 
   &:hover,
@@ -1099,6 +1109,7 @@ const Empty = styled.div`
     gap: 24px;
     min-height: 0;
     padding: 0;
+    height: 100%;
   }
 `;
 
@@ -1137,27 +1148,6 @@ const ButtonRow = styled.div`
 
   ${mq_xl} {
     margin-top: 0;
-  }
-`;
-
-const ActionButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  height: 48px;
-  padding: 0 20px;
-  color: ${({ variant, theme }) =>
-    variant === 'primary' ? theme.palette.grey.w : theme.palette.mobile.grey.g05};
-  background: ${({ variant, theme }) =>
-    variant === 'primary' ? theme.palette.primary.o1 : theme.palette.mobile.grey.g70};
-  border: none;
-  border-radius: 6px;
-  text-align: center;
-  ${({ theme }) => theme.typo.sh1};
-  cursor: pointer;
-
-  &:disabled {
-    color: ${({ theme }) => theme.palette.grey.g60};
-    background: ${({ theme }) => theme.palette.grey.g90};
-    border-color: ${({ theme }) => theme.palette.grey.g90};
-    cursor: default;
   }
 `;
 
@@ -1810,7 +1800,6 @@ const ModalButtons = styled.div`
 `;
 
 export default {
-  ActionButton,
   AmenityGrid,
   AutocompleteAddress,
   AutocompleteMatch,
@@ -1925,6 +1914,7 @@ export default {
   RangePopover,
   RecentItem,
   RecentKeywordButton,
+  RecentItemIcon,
   RecentList,
   ResultsPane,
   SearchButton,
