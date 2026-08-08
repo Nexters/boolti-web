@@ -381,7 +381,7 @@ const FilterOption = styled.button<{ active?: boolean }>`
   border: 0;
   border-radius: 4px;
   ${({ theme }) => theme.typo.b3};
-  cursor: ${({ active }) => active ? 'default' : 'pointer'};
+  cursor: ${({ active }) => (active ? 'default' : 'pointer')};
 
   &::before {
     content: '';
@@ -399,7 +399,9 @@ const FilterOption = styled.button<{ active?: boolean }>`
   ${mq_xl} {
     padding: 0 10px;
 
-    ${({ active, theme }) => !active && `
+    ${({ active, theme }) =>
+      !active &&
+      `
       &:hover,
       &:focus-visible {
         color: ${theme.palette.grey.w};
@@ -530,7 +532,7 @@ const RecentItemIcon = styled.div`
   justify-content: center;
   align-items: center;
   color: ${({ theme }) => theme.palette.grey.g70};
-`
+`;
 
 const AutocompleteText = styled.span`
   display: grid;
@@ -1204,7 +1206,8 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
   position: relative;
   display: flex;
   align-items: flex-end;
-  min-height: 375px;
+  width: 100%;
+  aspect-ratio: 1;
   padding: 20px;
   background: linear-gradient(
       180deg,
@@ -1215,9 +1218,6 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
       imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
   z-index: 2;
 
-  ${mq_xl} {
-    min-height: 331px;
-  }
 `;
 
 const DetailState = styled.div`
@@ -1280,20 +1280,23 @@ const DetailHeader = styled.div`
   display: flex;
   align-items: center;
   z-index: 1;
-`
+`;
 
 const DetailHeaderTitle = styled.span`
   margin-left: 56px;
   display: inline-flex;
   align-items: center;
   ${({ theme }) => theme.typo.sh2};
-`
+`;
 
 const DetailTitle = styled.h2`
-  color: ${({ theme }) => theme.palette.grey.w};
+  font-family: 'SB Aggro';
+  color: ${({ theme }) => theme.palette.grey.g10};
   font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
   line-height: 34px;
-  font-weight: 700;
+  letter-spacing: -0.72px;
 `;
 
 const DetailSection = styled.section`
@@ -1353,6 +1356,10 @@ const DetailAction = styled.button`
     color: ${({ theme }) => theme.palette.grey.g60};
     cursor: default;
   }
+
+  &[aria-disabled='true'] {
+    color: ${({ theme }) => theme.palette.grey.g60};
+  }
 `;
 
 const DetailTabs = styled.div`
@@ -1364,6 +1371,7 @@ const DetailTabs = styled.div`
   padding: 0 20px;
   border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
   background: ${({ theme }) => theme.palette.mobile.grey.g90};
+  z-index: 1;
 `;
 
 const DetailTab = styled.button`
@@ -1384,12 +1392,8 @@ const DetailTab = styled.button`
 
 const ImageGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 109px));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 4px;
-
-  ${mq_xl} {
-    grid-template-columns: repeat(3, 1fr);
-  }
 `;
 
 const DetailImage = styled.div<{ imageUrl?: string }>`
@@ -1455,6 +1459,17 @@ const AmenityGrid = styled.ul`
   color: ${({ theme }) => theme.palette.grey.g30};
   font-size: 15px;
   line-height: 24px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  svg {
+    flex: 0 0 auto;
+    color: ${({ theme }) => theme.palette.grey.g40};
+  }
 `;
 
 const MapBox = styled.div`
@@ -1506,6 +1521,146 @@ const MapPin = styled.span`
   border: 3px solid ${({ theme }) => theme.palette.grey.w}C2;
   border-radius: 50%;
   box-shadow: 0 0 0 8px ${({ theme }) => theme.palette.primary.o1}29;
+`;
+
+const AddressLine = styled.p`
+  margin-bottom: 12px;
+  color: ${({ theme }) => theme.palette.grey.g30};
+  ${({ theme }) => theme.typo.b1};
+`;
+
+const InlineActionButton = styled.button`
+  padding: 0;
+  color: ${({ theme }) => theme.palette.mobile.primary.o1};
+  background: transparent;
+  border: 0;
+  ${({ theme }) => theme.typo.sh0};
+  cursor: pointer;
+`;
+
+const ComingSoon = styled.div`
+  display: grid;
+  min-height: 300px;
+  place-items: center;
+  color: ${({ theme }) => theme.palette.grey.g50};
+  letter-spacing: 0.12em;
+  ${({ theme }) => theme.typo.sh1};
+`;
+
+const Disclaimer = styled.footer`
+  padding: 28px 20px 40px;
+  color: ${({ theme }) => theme.palette.grey.g60};
+  background: ${({ theme }) => theme.palette.mobile.grey.g85};
+  font-size: 12px;
+  line-height: 18px;
+`;
+
+const GalleryOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow-y: auto;
+  color: ${({ theme }) => theme.palette.mobile.grey.g05};
+  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const GalleryHeader = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 48px 1fr 48px;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 8px;
+  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const GalleryTitle = styled.h2`
+  text-align: center;
+  ${({ theme }) => theme.typo.sh1};
+`;
+
+const GalleryHeaderButton = styled.button`
+  display: grid;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  place-items: center;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+`;
+
+const GalleryGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+`;
+
+const GalleryGridButton = styled.button`
+  padding: 0;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: ${({ theme }) => theme.palette.grey.g80};
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+
+const GalleryViewer = styled.div`
+  display: flex;
+  width: 100%;
+  height: calc(100dvh - 48px);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+`;
+
+const GallerySlide = styled.figure`
+  display: grid;
+  flex: 0 0 100%;
+  margin: 0;
+  place-items: center;
+  scroll-snap-align: center;
+
+  img {
+    width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+`;
+
+const GalleryState = styled.div`
+  display: grid;
+  min-height: calc(100dvh - 48px);
+  padding: 32px 20px;
+  place-items: center;
+  text-align: center;
+`;
+
+const IntroductionText = styled.div<{ $collapsed: boolean }>`
+  position: relative;
+  max-height: ${({ $collapsed }) => ($collapsed ? '280px' : 'none')};
+  overflow: hidden;
+
+  &::after {
+    display: ${({ $collapsed }) => ($collapsed ? 'block' : 'none')};
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 72px;
+    background: linear-gradient(transparent, ${({ theme }) => theme.palette.mobile.grey.g90});
+    content: '';
+    pointer-events: none;
+  }
 `;
 
 const MobileFilterOverlay = styled.div`
@@ -1758,7 +1913,7 @@ const ConfirmModal = styled.div`
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 12px;
-  box-shadow: 0 10px 40px 0 #0000004D;
+  box-shadow: 0 10px 40px 0 #0000004d;
 `;
 
 const ModalTitle = styled.h2`
@@ -1805,6 +1960,7 @@ const ModalButtons = styled.div`
 `;
 
 export default {
+  AddressLine,
   AmenityGrid,
   AutocompleteAddress,
   AutocompleteMatch,
@@ -1866,6 +2022,8 @@ export default {
   HeaderMenuPrimaryButton,
   IconButton,
   ImageGrid,
+  InlineActionButton,
+  IntroductionText,
   KeywordPopover,
   KeywordInput,
   LoadMoreTrigger,
@@ -1936,4 +2094,15 @@ export default {
   Toolbar,
   ConcertHallCard,
   MapPin,
+  ComingSoon,
+  Disclaimer,
+  GalleryGrid,
+  GalleryGridButton,
+  GalleryHeader,
+  GalleryHeaderButton,
+  GalleryOverlay,
+  GallerySlide,
+  GalleryState,
+  GalleryTitle,
+  GalleryViewer,
 };
