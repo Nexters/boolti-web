@@ -345,6 +345,20 @@ describe('ConcertHallSearchPage', () => {
     expect(cssText).toContain('text-overflow: ellipsis');
   });
 
+  it('장소 검색 영역의 입력창 외 부분을 눌러도 검색 입력에 포커스한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    const searchInputField = screen.getByText('장소').parentElement;
+
+    expect(searchInputField).not.toBeNull();
+    fireEvent.mouseDown(searchInputField as HTMLElement);
+    keywordInput.blur();
+    fireEvent.click(searchInputField as HTMLElement);
+
+    expect(document.activeElement).toBe(keywordInput);
+  });
+
   it('검색 결과 카드를 표시하고 카드 클릭 시 상세 정보를 연다', async () => {
     renderConcertHallSearchPage();
 

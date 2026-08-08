@@ -1212,6 +1212,10 @@ const ConcertHallSearchPage = () => {
             active={activeSearchField === 'keyword'}
             $hideDivider={activeSearchField === 'keyword' || activeSearchField === 'rentalFee'}
             onMouseDown={() => handleSearchFieldClick('keyword', false)}
+            onClick={(event) => {
+              if (event.target !== event.currentTarget) return;
+              keywordInputRef.current?.focus();
+            }}
           >
             <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
               장소
