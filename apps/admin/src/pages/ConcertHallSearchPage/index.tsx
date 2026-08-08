@@ -1744,7 +1744,7 @@ const ConcertHallSearchPage = () => {
       <Styled.Content hasDetail={hasDetail}>
         <Styled.ResultsPane $headerMenuOpen={isHeaderMenuOpen}>
           {concertHalls.length > 0 && (
-            <Styled.Toolbar>
+            <Styled.Toolbar $dimmed={activeSearchField != null}>
               <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
                 불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
                 있습니다.
@@ -1933,7 +1933,7 @@ const ConcertHallSearchPage = () => {
             !concertHallListQuery.isError &&
             concertHalls.length > 0 && (
               <>
-                <Styled.CardGrid>
+                <Styled.CardGrid $dimmed={activeSearchField != null}>
                   {concertHalls.map((concertHall) => (
                     <ConcertHallCard
                       key={concertHall.concertHallId}

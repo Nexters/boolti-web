@@ -359,6 +359,40 @@ describe('ConcertHallSearchPage', () => {
     expect(document.activeElement).toBe(keywordInput);
   });
 
+  it.each([
+    [
+      '장소',
+      () => fireEvent.focus(screen.getByRole('textbox', { name: '지역, 공연장명 검색' })),
+    ],
+    [
+      '대관료',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="대관료 "]')!,
+        ),
+    ],
+    [
+      '수용 인원',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="수용 인원 "]')!,
+        ),
+    ],
+  ])('%s 필드가 활성화되면 공연장 개수와 카드 영역을 50%로 표시한다', (_, activate) => {
+    renderConcertHallSearchPage();
+
+    const toolbar = screen.getByText('공연장').parentElement?.parentElement;
+    const cardGrid = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }).parentElement;
+
+    expect(toolbar).not.toBeNull();
+    expect(cardGrid).not.toBeNull();
+
+    activate();
+
+    expect(window.getComputedStyle(toolbar as HTMLElement).opacity).toBe('0.5');
+    expect(window.getComputedStyle(cardGrid as HTMLElement).opacity).toBe('0.5');
+  });
+
   it('검색 결과 카드를 표시하고 카드 클릭 시 상세 정보를 연다', async () => {
     renderConcertHallSearchPage();
 

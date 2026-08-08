@@ -738,7 +738,7 @@ const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
   }
 `;
 
-const Toolbar = styled.div`
+const Toolbar = styled.div<{ $dimmed: boolean }>`
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
@@ -750,6 +750,8 @@ const Toolbar = styled.div`
   top: 0;
   left: 0;
   background: ${({ theme }) => theme.palette.grey.b};
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
+  transition: opacity 120ms ease;
   z-index: 31;
 
   ${mq_xl} {
@@ -938,12 +940,14 @@ const Chip = styled.button`
   font-size: 14px;
 `;
 
-const CardGrid = styled.div`
+const CardGrid = styled.div<{ $dimmed: boolean }>`
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
   gap: 16px;
   padding: 0 20px 24px;
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
+  transition: opacity 120ms ease;
 
   ${mq_xl} {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -1745,15 +1749,16 @@ const Modal = styled.form`
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 12px;
-  box-shadow: 0px 10px 40px 0px #0000004d;
+  box-shadow: 0 10px 40px 0 #0000004d;
 `;
 
 const ConfirmModal = styled.div`
-  width: min(480px, 100%);
+  width: min(450px, 100%);
   padding: 32px;
+  color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
-  border: 1px solid ${({ theme }) => theme.palette.grey.g90};
-  border-radius: 8px;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px 0 #0000004D;
 `;
 
 const ModalTitle = styled.h2`
