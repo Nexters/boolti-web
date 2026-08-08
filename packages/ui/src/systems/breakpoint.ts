@@ -4,6 +4,7 @@ const breakpoint = {
   mobile: '641px',
 } as const;
 
+export const mq_xl = `@media (min-width: ${breakpoint.desktop})`;
 export const mq_lg = `@media (min-width: ${breakpoint.mobile})`;
 export const mq_md = `@media (min-width: ${breakpoint.mobile}) and (max-width: ${breakpoint.desktop})`;
 

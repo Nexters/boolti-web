@@ -20,6 +20,7 @@ import RadioButton from './RadioButton';
 import StepDialog from './Dialog/StepDialog';
 import ShowInfoDetail from './ShowPreview/ShowInfoDetail';
 import PreviewMapWithProvider from './PreviewMap/PreviewMapWithProvider';
+import PreviewMap from './PreviewMap';
 import SubwayLineBadge from './SubwayLineBadge';
 
 export {
@@ -45,5 +46,6 @@ export {
   StepDialog,
   ShowInfoDetail,
   PreviewMapWithProvider,
+  PreviewMap,
   SubwayLineBadge,
 };
