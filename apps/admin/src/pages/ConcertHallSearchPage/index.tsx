@@ -223,6 +223,7 @@ const ConcertHallSearchPage = () => {
   const infoPopupRef = useRef<HTMLDivElement>(null);
   const headerMenuRef = useRef<HTMLDivElement>(null);
   const mobileFilterRef = useRef<HTMLDivElement>(null);
+  const recentClearConfirmRef = useRef<HTMLDivElement>(null);
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null);
   const keywordInputSnapshotRef = useRef<{
     keywordInput: string;
@@ -230,7 +231,6 @@ const ConcertHallSearchPage = () => {
     selectedRegionNameInput?: string;
   } | null>(null);
   const applySearchRef = useRef<(() => void) | null>(null);
-  const skipKeywordBlurRestoreRef = useRef(false);
   const [keywordInput, setKeywordInput] = useState(keyword);
   const [debouncedKeyword, setDebouncedKeyword] = useState('');
   const [selectedRegionId, setSelectedRegionId] = useState<number | null>(regionId ?? null);
@@ -276,8 +276,6 @@ const ConcertHallSearchPage = () => {
     autocompleteQuery.data == null;
 
   const restoreKeywordInputDraft = useCallback(() => {
-    if (skipKeywordBlurRestoreRef.current) return;
-
     const snapshot = keywordInputSnapshotRef.current;
     keywordInputSnapshotRef.current = null;
     if (!snapshot || keywordInput.trim().length > 0) return;
@@ -298,9 +296,10 @@ const ConcertHallSearchPage = () => {
     setActiveSearchField('keyword');
   };
 
-  const handleKeywordInputBlur = () => {
-    restoreKeywordInputDraft();
-  };
+  const closeActiveSearchField = useCallback(() => {
+    if (activeSearchField === 'keyword') restoreKeywordInputDraft();
+    setActiveSearchField(null);
+  }, [activeSearchField, restoreKeywordInputDraft]);
 
   useEffect(() => {
     if (keyword || regionId == null) setKeywordInput(keyword);
@@ -580,13 +579,11 @@ const ConcertHallSearchPage = () => {
   applySearchRef.current = applySearch;
 
   const submitSearch = (resetEmptyPlace = false) => {
-    skipKeywordBlurRestoreRef.current = true;
     if (resetEmptyPlace && keywordInput.trim().length === 0) {
       applySearch('', null);
     } else {
       applySearch();
     }
-    skipKeywordBlurRestoreRef.current = false;
   };
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -598,23 +595,27 @@ const ConcertHallSearchPage = () => {
     const closeOnOutsideClick = (event: MouseEvent) => {
       if (searchFormRef.current?.contains(event.target as Node)) return;
       if (mobileFilterRef.current?.contains(event.target as Node)) return;
+      if (recentClearConfirmRef.current?.contains(event.target as Node)) return;
       if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
         applySearchRef.current?.();
         return;
       }
-      if (activeSearchField === 'keyword') restoreKeywordInputDraft();
-      setActiveSearchField(null);
+      closeActiveSearchField();
     };
 
     document.addEventListener('mousedown', closeOnOutsideClick);
     return () => document.removeEventListener('mousedown', closeOnOutsideClick);
-  }, [activeSearchField, hasPendingCapacityFilter, restoreKeywordInputDraft]);
+  }, [activeSearchField, closeActiveSearchField, hasPendingCapacityFilter]);
 
   const handleSearchFieldClick = (nextField: SearchField, toggle = true) => {
     if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
       applySearch();
       if (nextField !== 'capacity') setActiveSearchField(nextField);
       return;
+    }
+
+    if (activeSearchField === 'keyword' && nextField !== 'keyword') {
+      restoreKeywordInputDraft();
     }
 
     if (toggle) {
@@ -837,7 +838,6 @@ const ConcertHallSearchPage = () => {
               placeholder={isMobile ? '내 조건에 맞는 공연장 찾기' : '지역, 공연장명 검색'}
               aria-label="지역, 공연장명 검색"
               onFocus={handleKeywordInputFocus}
-              onBlur={handleKeywordInputBlur}
               onKeyDown={handleKeywordInputKeyDown}
               onChange={(event) => {
                 setSelectedRegionId(null);
@@ -897,6 +897,10 @@ const ConcertHallSearchPage = () => {
                           {recentKeywords.length >= 2 && (
                             <Styled.TextButton
                               type="button"
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                              }}
                               onClick={() => setIsRecentClearConfirmOpen(true)}
                             >
                               전체 삭제
@@ -1102,7 +1106,7 @@ const ConcertHallSearchPage = () => {
               applySearch();
               return;
             }
-            setActiveSearchField(null);
+            closeActiveSearchField();
           }}
         >
           <Styled.MobileFilterSheet
@@ -1119,7 +1123,7 @@ const ConcertHallSearchPage = () => {
                   <Styled.MobileSheetCloseButton
                     type="button"
                     aria-label="모바일 검색 필터 닫기"
-                    onClick={() => setActiveSearchField(null)}
+                    onClick={closeActiveSearchField}
                   >
                     <CloseIcon />
                   </Styled.MobileSheetCloseButton>
@@ -1132,7 +1136,6 @@ const ConcertHallSearchPage = () => {
                     placeholder="지역, 공연장명 검색"
                     aria-label="모바일 지역, 공연장명 검색"
                     onFocus={handleKeywordInputFocus}
-                    onBlur={handleKeywordInputBlur}
                     onKeyDown={handleKeywordInputKeyDown}
                     onChange={(event) => {
                       setSelectedRegionId(null);
@@ -1571,7 +1574,7 @@ const ConcertHallSearchPage = () => {
 
       {isRecentClearConfirmOpen && (
         <Styled.ModalBackdrop>
-          <Styled.ConfirmModal>
+          <Styled.ConfirmModal ref={recentClearConfirmRef}>
             <Styled.ModalTitle>최근 검색어를 모두 삭제하시겠어요?</Styled.ModalTitle>
             <Styled.ModalButtons>
               <Button

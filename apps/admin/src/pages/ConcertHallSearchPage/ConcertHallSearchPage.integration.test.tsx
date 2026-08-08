@@ -606,6 +606,7 @@ describe('ConcertHallSearchPage', () => {
     renderConcertHallSearchPage('/concert-halls?keyword=홍대');
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.mouseDown(screen.getByText('장소').parentElement as HTMLElement);
     fireEvent.focus(keywordInput);
     fireEvent.change(keywordInput, { target: { value: '' } });
     fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
@@ -626,13 +627,23 @@ describe('ConcertHallSearchPage', () => {
     expect(document.activeElement).not.toBe(keywordInput);
   });
 
-  it('장소 입력을 비우고 Enter 없이 이탈하면 기존 장소 필터를 유지한다', () => {
+  it('장소 입력을 비운 뒤 포커스만 이탈하면 초안을 유지하고 장소 검색을 닫을 때 복원한다', () => {
     renderConcertHallSearchPage('/concert-halls?keyword=홍대');
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.focus(keywordInput);
     fireEvent.change(keywordInput, { target: { value: '' } });
     fireEvent.blur(keywordInput);
+
+    expect((keywordInput as HTMLInputElement).value).toBe('');
+    expect(screen.getByLabelText('장소 검색')).not.toBeNull();
+
+    fireEvent.blur(window);
+    fireEvent.focus(window);
+
+    expect((keywordInput as HTMLInputElement).value).toBe('');
+    expect(screen.getByLabelText('장소 검색')).not.toBeNull();
+
     fireEvent.mouseDown(document.body);
 
     expect(screen.getByTestId('location').textContent).toBe('/concert-halls?keyword=홍대');
@@ -1147,8 +1158,14 @@ describe('ConcertHallSearchPage', () => {
 
   it('최근 검색어를 저장하고 클릭/삭제/전체 삭제할 수 있다', async () => {
     renderConcertHallSearchPage();
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    const keywordSearchField = screen.getByText('장소').parentElement as HTMLElement;
+    const focusKeywordInput = () => {
+      fireEvent.mouseDown(keywordSearchField);
+      fireEvent.focus(keywordInput);
+    };
 
-    fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
+    fireEvent.change(keywordInput, {
       target: { value: '홍대' },
     });
     fireEvent.click(screen.getByRole('button', { name: '검색' }));
@@ -1157,10 +1174,10 @@ describe('ConcertHallSearchPage', () => {
       expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toContain('홍대');
     });
 
-    fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
+    fireEvent.change(keywordInput, {
       target: { value: '' },
     });
-    fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
+    focusKeywordInput();
     fireEvent.click(screen.getByRole('button', { name: '홍대 검색' }));
 
     await waitFor(() => {
@@ -1169,25 +1186,40 @@ describe('ConcertHallSearchPage', () => {
       );
     });
 
-    fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
+    fireEvent.change(keywordInput, {
       target: { value: '' },
     });
-    fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
+    focusKeywordInput();
     fireEvent.click(screen.getByRole('button', { name: '홍대 삭제' }));
     expect(screen.queryByRole('button', { name: '홍대 검색' })).toBeNull();
 
-    fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
+    fireEvent.change(keywordInput, {
       target: { value: '합정' },
     });
     fireEvent.click(screen.getByRole('button', { name: '검색' }));
-    fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
+    fireEvent.change(keywordInput, {
       target: { value: '' },
     });
-    fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
-    fireEvent.click(screen.getByRole('button', { name: '전체 삭제' }));
+    focusKeywordInput();
+    const clearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    expect(fireEvent.mouseDown(clearAllButton)).toBe(false);
+    fireEvent.click(clearAllButton);
     expect(screen.getByText('최근 검색어를 모두 삭제하시겠어요?')).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: '삭제하기' }));
+    const cancelButton = screen.getByRole('button', { name: '취소하기' });
+    fireEvent.mouseDown(cancelButton);
+    fireEvent.click(cancelButton);
 
+    expect(screen.queryByText('최근 검색어를 모두 삭제하시겠어요?')).toBeNull();
+    const reopenedClearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    expect(fireEvent.mouseDown(reopenedClearAllButton)).toBe(false);
+    fireEvent.click(reopenedClearAllButton);
+
+    const confirmButton = screen.getByRole('button', { name: '삭제하기' });
+    fireEvent.mouseDown(confirmButton);
+    fireEvent.click(confirmButton);
+
+    expect((keywordInput as HTMLInputElement).value).toBe('');
+    expect(screen.getByRole('button', { name: '합정/상수 검색' })).not.toBeNull();
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBe('[]');
   });
 
