@@ -41,6 +41,7 @@ import { useOnClickOutside } from '@boolti/ui/src/hooks/useOnClickOutside';
 import { useIsMobile } from '~/hooks/useIsMobile';
 import { BooltiWhiteLogo } from './icons';
 import ConcertHallDetailPanel from './ConcertHallDetailPanel';
+import { Global, css, useTheme } from '@emotion/react';
 
 const DEFAULT_PAGE_SIZE = 12;
 const AUTOCOMPLETE_DEBOUNCE_MS = 300;
@@ -216,6 +217,7 @@ const ConcertHallCard = ({
 const ConcertHallSearchPage = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
+  const theme = useTheme();
   const [searchParams, setSearchParams] = useSearchParams();
   const keyword = searchParams.get('keyword') ?? '';
   const regionId = parseNumberParam(searchParams.get('regionId'));
@@ -836,6 +838,12 @@ const ConcertHallSearchPage = () => {
   };
 
   return (
+    <>
+    <Global styles={css`
+      body {
+        background: ${theme.palette.grey.b};
+      }
+    `} />
     <Styled.Page>
       <Styled.Header $menuOpen={isHeaderMenuOpen}>
         <Styled.Logo
@@ -1482,9 +1490,9 @@ const ConcertHallSearchPage = () => {
       )}
 
       <Styled.Content hasDetail={hasDetail}>
-        <Styled.ResultsPane $headerMenuOpen={isHeaderMenuOpen}>
+        <Styled.ResultsPane $detailPanelOpen={hasDetail}>
           {concertHalls.length > 0 && (
-            <Styled.Toolbar $dimmed={activeSearchField != null}>
+            <Styled.Toolbar $dimmed={activeSearchField != null} $detailPanelOpen={hasDetail}>
               <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
                 불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
                 있습니다.
@@ -1757,6 +1765,7 @@ const ConcertHallSearchPage = () => {
         </Styled.ModalBackdrop>
       )}
     </Styled.Page>
+    </>
   );
 };
 

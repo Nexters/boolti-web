@@ -34,8 +34,6 @@ const slideMobileFilterSheetOut = keyframes`
 `;
 
 const Page = styled.main`
-  min-height: 100dvh;
-  min-height: -webkit-fill-available;
   background: ${({ theme }) => theme.palette.grey.b};
   color: ${({ theme }) => theme.palette.grey.g10};
 
@@ -754,30 +752,25 @@ const SearchButton = styled.button`
 
 const Content = styled.div<{ hasDetail: boolean }>`
   display: block;
-  height: calc(100vh - 148px);
-  height: -webkit-fill-available;
 
   ${mq_xl} {
     display: grid;
     grid-template-columns: ${({ hasDetail }) =>
       hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
-    height: calc(100vh - 92px);
     overflow-x: clip;
   }
 `;
 
-const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
+const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
-  overflow-y: auto;
-  height: ${({ $headerMenuOpen }) =>
-    $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 148px)'};
 
-  ${mq_xl} {
+  ${({ $detailPanelOpen }) => $detailPanelOpen && `
+    overflow-y: auto;
     height: calc(100vh - 92px);
-  }
+  `}
 `;
 
-const Toolbar = styled.div<{ $dimmed: boolean }>`
+const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
@@ -786,7 +779,7 @@ const Toolbar = styled.div<{ $dimmed: boolean }>`
   width: 100%;
   padding: 8px 20px 20px;
   position: sticky;
-  top: 0;
+  top: ${({ $detailPanelOpen }) => $detailPanelOpen ? '0' : '92px'};
   left: 0;
   background: ${({ theme }) => theme.palette.grey.b};
   opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
@@ -1199,7 +1192,6 @@ const DetailPane = styled.aside`
   inset: 0;
   z-index: 50;
   width: 100%;
-  height: 100dvh;
   max-height: none;
   min-height: auto;
   overflow-y: auto;
@@ -1261,7 +1253,6 @@ const DetailState = styled.div`
   position: relative;
   display: grid;
   place-items: center;
-  min-height: calc(100vh - 92px);
   padding: 40px 20px;
   text-align: center;
 `;
@@ -1655,7 +1646,6 @@ const GalleryGridButton = styled.button`
 const GalleryViewer = styled.div`
   display: flex;
   width: 100%;
-  height: calc(100dvh - 48px);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
 `;
@@ -1676,7 +1666,6 @@ const GallerySlide = styled.figure`
 
 const GalleryState = styled.div`
   display: grid;
-  min-height: calc(100dvh - 48px);
   padding: 32px 20px;
   place-items: center;
   text-align: center;

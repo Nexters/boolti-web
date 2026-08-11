@@ -369,6 +369,21 @@ describe('ConcertHallSearchPage', () => {
     cleanup();
   });
 
+  it('페이지가 열려 있는 동안 body 배경을 적용하고 닫으면 기존 값으로 복원한다', () => {
+    const previousBackground = 'rgb(12, 34, 56)';
+    document.body.style.background = previousBackground;
+
+    const { unmount } = renderConcertHallSearchPage();
+    const expectedBackground = document.createElement('div');
+    expectedBackground.style.background = theme.palette.grey.b;
+
+    expect(document.body.style.background).toBe(expectedBackground.style.background);
+
+    unmount();
+
+    expect(document.body.style.background).toBe(previousBackground);
+  });
+
   it('모바일 메인 검색 버튼에 조건 중심 안내 문구를 표시한다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
     renderConcertHallSearchPage();
