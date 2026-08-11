@@ -23,7 +23,16 @@ import {
   SearchIcon,
 } from '@boolti/icon';
 import { Button, useToast } from '@boolti/ui';
-import { FormEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  AnimationEvent as ReactAnimationEvent,
+  FormEvent,
+  KeyboardEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
@@ -42,6 +51,7 @@ const DEFAULT_CAPACITY_LABEL = '인원 설정';
 const DEFAULT_SORT: ConcertHallSearchSort = 'FEE_ASC';
 
 type SearchField = 'keyword' | 'rentalFee' | 'capacity';
+type ActiveSearchField = SearchField | 'overview';
 
 type RangeOption = {
   id: string;
@@ -248,7 +258,8 @@ const ConcertHallSearchPage = () => {
   const [visibleConcertHalls, setVisibleConcertHalls] = useState<ConcertHallSearchItem[]>([]);
   const [selectedConcertHallId, setSelectedConcertHallId] = useState<number | null>(null);
   const detailTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const [activeSearchField, setActiveSearchField] = useState<SearchField | null>(null);
+  const [activeSearchField, setActiveSearchField] = useState<ActiveSearchField | null>(null);
+  const [isMobileFilterClosing, setIsMobileFilterClosing] = useState(false);
   const [recentKeywords, setRecentKeywords] = useState(readRecentKeywords);
   const [isRecentClearConfirmOpen, setIsRecentClearConfirmOpen] = useState(false);
   const [isEntryRequestOpen, setIsEntryRequestOpen] = useState(false);
@@ -296,10 +307,46 @@ const ConcertHallSearchPage = () => {
     setActiveSearchField('keyword');
   };
 
-  const closeActiveSearchField = useCallback(() => {
-    if (activeSearchField === 'keyword') restoreKeywordInputDraft();
+  const closeActiveSearchField = useCallback(
+    (restoreKeywordDraft = true) => {
+      if (restoreKeywordDraft && activeSearchField === 'keyword') restoreKeywordInputDraft();
+      mobileKeywordInputRef.current?.blur();
+
+      if (
+        !isMobile ||
+        activeSearchField == null ||
+        window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+      ) {
+        setIsMobileFilterClosing(false);
+        setActiveSearchField(null);
+        return;
+      }
+
+      setIsMobileFilterClosing(true);
+    },
+    [activeSearchField, isMobile, restoreKeywordInputDraft],
+  );
+
+  const handleMobileFilterAnimationEnd = (event: ReactAnimationEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget || !isMobileFilterClosing) return;
+
+    setIsMobileFilterClosing(false);
     setActiveSearchField(null);
-  }, [activeSearchField, restoreKeywordInputDraft]);
+  };
+
+  const cancelMobileKeywordSearch = () => {
+    const snapshot = keywordInputSnapshotRef.current;
+    keywordInputSnapshotRef.current = null;
+
+    if (snapshot) {
+      setKeywordInput(snapshot.keywordInput);
+      setSelectedRegionId(snapshot.selectedRegionId);
+      setSelectedRegionNameInput(snapshot.selectedRegionNameInput);
+    }
+
+    mobileKeywordInputRef.current?.blur();
+    setActiveSearchField('overview');
+  };
 
   useEffect(() => {
     if (keyword || regionId == null) setKeywordInput(keyword);
@@ -427,6 +474,13 @@ const ConcertHallSearchPage = () => {
     ? DEFAULT_CAPACITY_LABEL
     : selectedCapacityOption?.label ??
       formatPeopleRangeLabel(capacityMin, capacityMax, DEFAULT_CAPACITY_LABEL);
+  const hasStagedMobileFilters =
+    keywordInput.trim().length > 0 ||
+    selectedRegionId != null ||
+    parseNumberInput(rentalFeeMinInput) != null ||
+    parseNumberInput(rentalFeeMaxInput) != null ||
+    selectedCapacityOptionId != null ||
+    (!isCapacityCleared && (capacityMin != null || capacityMax != null));
   const hasPendingCapacityFilter = isCapacityCleared
     ? capacityMin != null || capacityMax != null
     : selectedCapacityOptionId !== (appliedCapacityOption?.id ?? null);
@@ -553,6 +607,7 @@ const ConcertHallSearchPage = () => {
     nextKeyword = keywordInput.trim(),
     nextRegionId: number | null = selectedRegionId,
     nextSelectedConcertHallId: number | null = null,
+    closeSearchField = true,
   ) => {
     const rentalFeeMinValue = parseNumberInput(rentalFeeMinInput);
     const rentalFeeMaxValue = parseNumberInput(rentalFeeMaxInput);
@@ -571,10 +626,10 @@ const ConcertHallSearchPage = () => {
       },
       nextSelectedConcertHallId,
     );
-    setActiveSearchField(null);
     keywordInputSnapshotRef.current = null;
     keywordInputRef.current?.blur();
     mobileKeywordInputRef.current?.blur();
+    if (closeSearchField) closeActiveSearchField(false);
   };
   applySearchRef.current = applySearch;
 
@@ -593,6 +648,7 @@ const ConcertHallSearchPage = () => {
 
   useEffect(() => {
     const closeOnOutsideClick = (event: MouseEvent) => {
+      if (isMobile) return;
       if (searchFormRef.current?.contains(event.target as Node)) return;
       if (mobileFilterRef.current?.contains(event.target as Node)) return;
       if (recentClearConfirmRef.current?.contains(event.target as Node)) return;
@@ -605,11 +661,11 @@ const ConcertHallSearchPage = () => {
 
     document.addEventListener('mousedown', closeOnOutsideClick);
     return () => document.removeEventListener('mousedown', closeOnOutsideClick);
-  }, [activeSearchField, closeActiveSearchField, hasPendingCapacityFilter]);
+  }, [activeSearchField, closeActiveSearchField, hasPendingCapacityFilter, isMobile]);
 
   const handleSearchFieldClick = (nextField: SearchField, toggle = true) => {
     if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
-      applySearch();
+      applySearch(keywordInput.trim(), selectedRegionId, null, false);
       if (nextField !== 'capacity') setActiveSearchField(nextField);
       return;
     }
@@ -709,12 +765,27 @@ const ConcertHallSearchPage = () => {
     setSelectedRentalFeeOptionId(null);
     setSelectedCapacityOptionId(null);
     setIsCapacityCleared(true);
+    keywordInputSnapshotRef.current = null;
+    mobileKeywordInputRef.current?.blur();
+    setIsMobileFilterClosing(false);
+    setActiveSearchField('overview');
+    updateParams({ sort });
+  };
+
+  const closeMobileFilter = () => {
+    if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
+      applySearch();
+      return;
+    }
+
+    closeActiveSearchField();
   };
 
   const stageMobileRegion = (nextRegionId: number, nextRegionName: string) => {
     setSelectedRegionId(nextRegionId);
     setSelectedRegionNameInput(nextRegionName);
     setKeywordInput(nextRegionName);
+    keywordInputSnapshotRef.current = null;
     setActiveSearchField('rentalFee');
   };
 
@@ -731,6 +802,7 @@ const ConcertHallSearchPage = () => {
     setSelectedRegionId(null);
     setSelectedRegionNameInput(undefined);
     setKeywordInput(nextKeyword);
+    keywordInputSnapshotRef.current = null;
     setActiveSearchField('rentalFee');
   };
 
@@ -822,30 +894,48 @@ const ConcertHallSearchPage = () => {
           <Styled.SearchInputField
             active={activeSearchField === 'keyword'}
             $hideDivider={activeSearchField === 'keyword' || activeSearchField === 'rentalFee'}
-            onMouseDown={() => handleSearchFieldClick('keyword', false)}
+            onMouseDown={isMobile ? undefined : () => handleSearchFieldClick('keyword', false)}
             onClick={(event) => {
+              if (isMobile) return;
               if (event.target !== event.currentTarget) return;
               keywordInputRef.current?.focus();
             }}
           >
-            <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
-              장소
-            </Styled.SearchInputLabel>
-            <Styled.KeywordInput
-              ref={keywordInputRef}
-              id="concert-hall-search-keyword"
-              value={keywordInput}
-              placeholder={isMobile ? '내 조건에 맞는 공연장 찾기' : '지역, 공연장명 검색'}
-              aria-label="지역, 공연장명 검색"
-              onFocus={handleKeywordInputFocus}
-              onKeyDown={handleKeywordInputKeyDown}
-              onChange={(event) => {
-                setSelectedRegionId(null);
-                setSelectedRegionNameInput(undefined);
-                setKeywordInput(event.target.value);
-              }}
-            />
-            {activeSearchField === 'keyword' && (
+            {isMobile ? (
+              <Styled.MobileSearchTrigger
+                type="button"
+                aria-label="모바일 공연장 검색 필터 열기"
+                aria-haspopup="dialog"
+                isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
+                onClick={() => {
+                  setIsMobileFilterClosing(false);
+                  setActiveSearchField('overview');
+                }}
+              >
+                {(selectedRegionNameInput ?? keywordInput) || '내 조건에 맞는 공연장 찾기'}
+              </Styled.MobileSearchTrigger>
+            ) : (
+              <>
+                <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
+                  장소
+                </Styled.SearchInputLabel>
+                <Styled.KeywordInput
+                  ref={keywordInputRef}
+                  id="concert-hall-search-keyword"
+                  value={keywordInput}
+                  placeholder="지역, 공연장명 검색"
+                  aria-label="지역, 공연장명 검색"
+                  onFocus={handleKeywordInputFocus}
+                  onKeyDown={handleKeywordInputKeyDown}
+                  onChange={(event) => {
+                    setSelectedRegionId(null);
+                    setSelectedRegionNameInput(undefined);
+                    setKeywordInput(event.target.value);
+                  }}
+                />
+              </>
+            )}
+            {!isMobile && activeSearchField === 'keyword' && (
               <Styled.KeywordPopover aria-label="장소 검색">
                 {trimmedKeywordInput && !shouldKeepPreviousSearchContent ? (
                   <>
@@ -1100,22 +1190,25 @@ const ConcertHallSearchPage = () => {
 
       {isMobile && activeSearchField != null && (
         <Styled.MobileFilterOverlay
+          $isClosing={isMobileFilterClosing}
           onClick={(event) => {
             if (event.target !== event.currentTarget) return;
-            if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
-              applySearch();
-              return;
-            }
-            closeActiveSearchField();
+            closeMobileFilter();
           }}
         >
           <Styled.MobileFilterSheet
+            $isClosing={isMobileFilterClosing}
             ref={mobileFilterRef}
             role="dialog"
             aria-modal="true"
             aria-label="모바일 공연장 검색 필터"
+            onAnimationEnd={handleMobileFilterAnimationEnd}
           >
-            <Styled.MobileSheetHandle aria-hidden="true" />
+            <Styled.MobileSheetHandle
+              type="button"
+              aria-label="모바일 바텀시트 닫기"
+              onClick={closeMobileFilter}
+            />
             {activeSearchField === 'keyword' ? (
               <>
                 <Styled.MobileSheetHeader>
@@ -1123,7 +1216,7 @@ const ConcertHallSearchPage = () => {
                   <Styled.MobileSheetCloseButton
                     type="button"
                     aria-label="모바일 검색 필터 닫기"
-                    onClick={closeActiveSearchField}
+                    onClick={cancelMobileKeywordSearch}
                   >
                     <CloseIcon />
                   </Styled.MobileSheetCloseButton>
@@ -1241,15 +1334,35 @@ const ConcertHallSearchPage = () => {
             ) : (
               <>
                 <Styled.MobileFilterSections>
-                  <Styled.MobileFilterSummary
-                    type="button"
-                    onClick={() => handleSearchFieldClick('keyword', false)}
-                  >
-                    <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
-                    <strong>
-                      {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
-                    </strong>
-                  </Styled.MobileFilterSummary>
+                  {activeSearchField === 'overview' ? (
+                    <Styled.MobileOverviewLocation>
+                      <Styled.MobileSheetHeader>
+                        <Styled.MobileSheetTitle>장소</Styled.MobileSheetTitle>
+                      </Styled.MobileSheetHeader>
+                      <Styled.MobileLocationTrigger
+                        type="button"
+                        autoFocus
+                        aria-label="모바일 장소 검색 열기"
+                        isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
+                        onClick={() => handleSearchFieldClick('keyword', false)}
+                      >
+                        <span>
+                          {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
+                        </span>
+                        <SearchIcon />
+                      </Styled.MobileLocationTrigger>
+                    </Styled.MobileOverviewLocation>
+                  ) : (
+                    <Styled.MobileFilterSummary
+                      type="button"
+                      onClick={() => handleSearchFieldClick('keyword', false)}
+                    >
+                      <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
+                      <strong>
+                        {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
+                      </strong>
+                    </Styled.MobileFilterSummary>
+                  )}
 
                   {activeSearchField === 'rentalFee' ? (
                     <Styled.MobileExpandedFilter>
@@ -1298,10 +1411,20 @@ const ConcertHallSearchPage = () => {
                   ) : (
                     <Styled.MobileFilterSummary
                       type="button"
+                      isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}
+                      aria-label={
+                        stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
+                          ? '대관료 설정'
+                          : `대관료 ${stagedRentalFeeLabel}`
+                      }
                       onClick={() => handleSearchFieldClick('rentalFee', false)}
                     >
                       <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
-                      <strong>{stagedRentalFeeLabel}</strong>
+                      <strong>
+                        {stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
+                          ? '대관료 설정'
+                          : stagedRentalFeeLabel}
+                      </strong>
                     </Styled.MobileFilterSummary>
                   )}
 
@@ -1337,7 +1460,11 @@ const ConcertHallSearchPage = () => {
                   )}
                 </Styled.MobileFilterSections>
                 <Styled.MobileFilterFooter>
-                  <Styled.MobileClearButton type="button" onClick={clearMobileFilters}>
+                  <Styled.MobileClearButton
+                    type="button"
+                    disabled={!hasStagedMobileFilters}
+                    onClick={clearMobileFilters}
+                  >
                     전체 삭제
                   </Styled.MobileClearButton>
                   <Styled.MobileApplyButton
@@ -1345,7 +1472,7 @@ const ConcertHallSearchPage = () => {
                     aria-label="모바일 필터 검색하기"
                     onClick={() => submitSearch()}
                   >
-                    검색
+                    검색하기
                   </Styled.MobileApplyButton>
                 </Styled.MobileFilterFooter>
               </>

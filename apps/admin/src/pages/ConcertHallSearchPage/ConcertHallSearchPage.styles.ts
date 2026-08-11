@@ -13,8 +13,29 @@ const slideDetailPaneIn = keyframes`
   }
 `;
 
+const fadeMobileFilterOverlayIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const fadeMobileFilterOverlayOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+const slideMobileFilterSheetIn = keyframes`
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+`;
+
+const slideMobileFilterSheetOut = keyframes`
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+`;
+
 const Page = styled.main`
   min-height: 100dvh;
+  min-height: -webkit-fill-available;
   background: ${({ theme }) => theme.palette.grey.b};
   color: ${({ theme }) => theme.palette.grey.g10};
 
@@ -45,11 +66,10 @@ const Header = styled.header<{ $menuOpen: boolean }>`
   align-items: center;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 0;
-  min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '156px')};
-  padding: 20px 20px 16px;
-  ${({ theme, $menuOpen }) =>
-    !$menuOpen &&
+  gap: 10px;
+  min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '148px')};
+  padding: 10px 24px 8px;
+  ${({ theme }) =>
     `
       background: linear-gradient(
         to bottom,
@@ -86,6 +106,8 @@ const Logo = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 
   svg path:not(:first-of-type) {
     fill: ${({ theme }) => theme.palette.grey.w};
@@ -93,7 +115,6 @@ const Logo = styled.button`
 
   ${mq_xl} {
     width: 74px;
-    height: auto;
     margin-left: 0;
     transform: none;
   }
@@ -105,27 +126,26 @@ const HeaderMenuContainer = styled.div`
   flex: 0 0 auto;
   margin-left: auto;
   height: 52px;
-  margin-right: 4px;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
 
   ${mq_xl} {
     width: 74px;
     height: auto;
-    margin-right: 0;
     display: flex;
     justify-content: flex-end;
   }
 `;
 
 const MenuButton = styled.button`
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 28px;
   color: ${({ theme }) => theme.palette.grey.w};
   background: none;
   border: 0;
   cursor: pointer;
-  transform: translateY(2px);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 
   ${mq_xl} {
     width: 44px;
@@ -144,7 +164,7 @@ const HeaderMenuPopup = styled.div`
   width: 100%;
   height: 131px;
   color: ${({ theme }) => theme.palette.grey.g10};
-  background: transparent;
+  background: ${({ theme }) => theme.palette.grey.main}66;
   border-radius: 0;
   box-shadow: none;
 
@@ -223,7 +243,7 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
   width: 100%;
   height: 48px;
   min-height: 48px;
-  margin: 20px 0 0;
+  margin-top: 20px;
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border: 0;
   border-radius: 4px;
@@ -696,6 +716,22 @@ const KeywordInput = styled.input`
   }
 `;
 
+const MobileSearchTrigger = styled.button<{ isPlaceholder: boolean }>`
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  overflow: hidden;
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.palette.mobile.grey.g70 : theme.palette.mobile.grey.g05};
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  ${({ theme }) => theme.typo.b3};
+`;
+
 const SearchButton = styled.button`
   display: grid;
   place-items: center;
@@ -718,13 +754,14 @@ const SearchButton = styled.button`
 
 const Content = styled.div<{ hasDetail: boolean }>`
   display: block;
-  min-height: calc(100vh - 156px);
+  height: calc(100vh - 148px);
+  height: -webkit-fill-available;
 
   ${mq_xl} {
     display: grid;
     grid-template-columns: ${({ hasDetail }) =>
       hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
-    min-height: calc(100vh - 92px);
+    height: calc(100vh - 92px);
     overflow-x: clip;
   }
 `;
@@ -733,7 +770,7 @@ const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
   min-width: 0;
   overflow-y: auto;
   height: ${({ $headerMenuOpen }) =>
-    $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 156px)'};
+    $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 148px)'};
 
   ${mq_xl} {
     height: calc(100vh - 92px);
@@ -747,7 +784,7 @@ const Toolbar = styled.div<{ $dimmed: boolean }>`
   gap: 16px;
   height: auto;
   width: 100%;
-  padding: 8px 20px 12px;
+  padding: 8px 20px 20px;
   position: sticky;
   top: 0;
   left: 0;
@@ -1104,7 +1141,7 @@ const Empty = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  gap: 12px;
+  gap: 16px;
   min-height: 360px;
   padding: 48px 20px;
   text-align: center;
@@ -1663,33 +1700,62 @@ const IntroductionText = styled.div<{ $collapsed: boolean }>`
   }
 `;
 
-const MobileFilterOverlay = styled.div`
+const MobileFilterOverlay = styled.div<{ $isClosing: boolean }>`
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
   align-items: flex-end;
   background: rgba(0, 0, 0, 0.5);
+  animation: ${({ $isClosing }) =>
+      $isClosing ? fadeMobileFilterOverlayOut : fadeMobileFilterOverlayIn}
+    ${({ $isClosing }) => ($isClosing ? '240ms' : '280ms')} ease-out both;
+  pointer-events: ${({ $isClosing }) => ($isClosing ? 'none' : 'auto')};
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
-const MobileFilterSheet = styled.div`
+const MobileFilterSheet = styled.div<{ $isClosing: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: min(589px, calc(100dvh - 32px));
+  height: calc(100dvh - 32px);
   overflow: hidden;
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 16px 16px 0 0;
+  animation: ${({ $isClosing }) =>
+      $isClosing ? slideMobileFilterSheetOut : slideMobileFilterSheetIn}
+    ${({ $isClosing }) => ($isClosing ? '240ms' : '280ms')} ease-out both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
-const MobileSheetHandle = styled.div`
+const MobileSheetHandle = styled.button`
+  position: relative;
+  display: block;
   flex: 0 0 auto;
-  width: 45px;
-  height: 4px;
-  margin: 12px auto 8px;
-  background: ${({ theme }) => theme.palette.mobile.grey.g70};
-  border-radius: 999px;
+  width: 100%;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+
+  &::after {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: 45px;
+    height: 4px;
+    background: ${({ theme }) => theme.palette.mobile.grey.g70};
+    border-radius: 999px;
+    content: '';
+    transform: translateX(-50%);
+  }
 `;
 
 const MobileSheetHeader = styled.div`
@@ -1713,7 +1779,7 @@ const MobileSheetCloseButton = styled.button`
   width: 32px;
   height: 32px;
   padding: 0;
-  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  color: ${({ theme }) => theme.palette.mobile.grey.g50};
   background: transparent;
   border: 0;
 
@@ -1728,18 +1794,18 @@ const MobileLocationSearch = styled.label`
   display: flex;
   flex: 0 0 48px;
   align-items: center;
-  margin: 4px 20px 12px;
+  margin: 15px 20px 5px;
   padding: 0 44px 0 16px;
   background: ${({ theme }) => theme.palette.mobile.grey.b};
-  border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g80};
-  border-radius: 999px;
+  border: 0;
+  border-radius: 4px;
 
   > svg {
     position: absolute;
     right: 14px;
     width: 20px;
     height: 20px;
-    color: ${({ theme }) => theme.palette.mobile.grey.g30};
+    color: ${({ theme }) => theme.palette.grey.g70};
   }
 `;
 
@@ -1751,11 +1817,11 @@ const MobileLocationInput = styled.input`
   background: transparent;
   border: 0;
   outline: 0;
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 24px;
 
   &::placeholder {
-    color: ${({ theme }) => theme.palette.mobile.grey.g50};
+    color: ${({ theme }) => theme.palette.grey.g80};
   }
 `;
 
@@ -1764,12 +1830,13 @@ const MobileSheetBody = styled.div`
   min-height: 0;
   padding: 0 20px 20px;
   overflow-y: auto;
+  border-top: 1px solid ${({ theme }) => theme.palette.grey.g90};
 `;
 
 const MobileResultHeading = styled.h3`
   height: 38px;
   padding-top: 8px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  color: ${({ theme }) => theme.palette.grey.g50};
   font-size: 14px;
   font-weight: 400;
   line-height: 22px;
@@ -1804,7 +1871,7 @@ const MobileResultIcon = styled.span`
   place-items: center;
   width: 24px;
   height: 24px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g40};
+  color: ${({ theme }) => theme.palette.grey.g70};
 
   svg {
     width: 20px;
@@ -1818,6 +1885,42 @@ const MobileFilterSections = styled.div`
   overflow-y: auto;
 `;
 
+const MobileOverviewLocation = styled.section`
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
+`;
+
+const MobileLocationTrigger = styled.button<{ isPlaceholder: boolean }>`
+  position: relative;
+  display: flex;
+  width: calc(100% - 40px);
+  height: 48px;
+  align-items: center;
+  margin: 16px 20px;
+  padding: 0 44px 0 16px;
+  overflow: hidden;
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.palette.grey.g80 : theme.palette.mobile.grey.g05};
+  text-align: left;
+  background: ${({ theme }) => theme.palette.mobile.grey.b};
+  border: 0;
+  border-radius: 4px;
+  ${({ theme }) => theme.typo.b3};
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  svg {
+    position: absolute;
+    right: 14px;
+    width: 20px;
+    height: 20px;
+    color: ${({ theme }) => theme.palette.grey.g70};
+  }
+`;
+
 const MobileFilterSummary = styled.button<{ isPlaceholder?: boolean }>`
   display: flex;
   align-items: center;
@@ -1829,7 +1932,7 @@ const MobileFilterSummary = styled.button<{ isPlaceholder?: boolean }>`
   text-align: left;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g80};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.b3};
 
   strong {
@@ -1871,11 +1974,15 @@ const MobileFilterFooter = styled.div`
 const MobileClearButton = styled.button`
   height: 48px;
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+  background: ${({ theme }) => theme.palette.mobile.grey.g80};
   border: 0;
   border-radius: 4px;
   ${({ theme }) => theme.typo.sh1};
   text-align: center;
+
+  &:disabled {
+    color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  }
 `;
 
 const MobileApplyButton = styled.button`
@@ -2051,7 +2158,10 @@ export default {
   MobileFilterSummary,
   MobileLocationInput,
   MobileLocationSearch,
+  MobileLocationTrigger,
+  MobileOverviewLocation,
   MobileResultButton,
+  MobileSearchTrigger,
   MobileResultHeading,
   MobileResultIcon,
   MobileResultList,
