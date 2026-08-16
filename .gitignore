@@ -72,3 +72,4 @@ install-state.gz
 settings.local.json
 
 .omc
+.worktrees/
