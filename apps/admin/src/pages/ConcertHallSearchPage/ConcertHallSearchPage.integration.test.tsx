@@ -4,7 +4,7 @@ import { ThemeProvider } from '@emotion/react';
 import breakpoint from '@boolti/ui/src/systems/breakpoint';
 import palette from '@boolti/ui/src/systems/palette';
 import typo from '@boolti/ui/src/systems/typo';
-import { MemoryRouter, useLocation } from 'react-router-dom';
+import { MemoryRouter, useLocation, useNavigate } from 'react-router-dom';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -228,11 +228,24 @@ const LocationProbe = () => {
   return <output data-testid="location">{`${location.pathname}${location.search}`}</output>;
 };
 
+const BrowserBackProbe = () => {
+  const navigate = useNavigate();
+
+  return (
+    <button
+      type="button"
+      aria-label="브라우저 뒤로가기 시뮬레이션"
+      onClick={() => navigate(-1)}
+    />
+  );
+};
+
 const renderConcertHallSearchPage = (initialEntry = '/concert-halls') =>
   renderWithTheme(
     <MemoryRouter initialEntries={[initialEntry]}>
       <ConcertHallSearchPage />
       <LocationProbe />
+      <BrowserBackProbe />
     </MemoryRouter>,
   );
 
@@ -546,11 +559,29 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('상세 패널을 닫으면 선택했던 카드로 포커스를 돌려준다', async () => {
-    renderConcertHallSearchPage();
+    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
     const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
+    const locationBeforeOpen = screen.getByTestId('location').textContent;
+
     fireEvent.click(selectedCard);
     fireEvent.click(await screen.findByRole('button', { name: '상세 닫기' }));
 
+    await waitFor(() => expect(document.activeElement).toBe(selectedCard));
+    expect(screen.getByTestId('location').textContent).toBe(locationBeforeOpen);
+  });
+
+  it('브라우저 뒤로가기로 상세만 닫고 검색 위치와 포커스를 유지한다', async () => {
+    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
+    const locationBeforeOpen = screen.getByTestId('location').textContent;
+
+    fireEvent.click(selectedCard);
+    expect(await screen.findByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: '브라우저 뒤로가기 시뮬레이션' }));
+
+    await waitFor(() => expect(screen.queryByRole('complementary')).toBeNull());
+    expect(screen.getByTestId('location').textContent).toBe(locationBeforeOpen);
     await waitFor(() => expect(document.activeElement).toBe(selectedCard));
   });
 
