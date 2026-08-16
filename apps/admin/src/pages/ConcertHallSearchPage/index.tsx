@@ -742,6 +742,13 @@ const ConcertHallSearchPage = () => {
     if (event.key !== 'Enter') return;
 
     event.preventDefault();
+    if (isMobile && activeSearchField === 'keyword') {
+      keywordInputSnapshotRef.current = null;
+      mobileKeywordInputRef.current?.blur();
+      setActiveSearchField('rentalFee');
+      return;
+    }
+
     submitSearch(true);
   };
 

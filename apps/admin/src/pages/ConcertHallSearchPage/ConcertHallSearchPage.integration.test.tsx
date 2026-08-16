@@ -832,6 +832,37 @@ describe('ConcertHallSearchPage', () => {
     expect(document.activeElement).toBe(keywordInput);
   });
 
+  it('모바일에서 자동완성을 선택하지 않고 Enter를 누르면 검색 적용 전 대관료 선택으로 이동한다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderConcertHallSearchPage();
+    openMobileKeywordSearch();
+
+    const keywordInput = screen.getByRole('textbox', {
+      name: '모바일 지역, 공연장명 검색',
+    });
+    fireEvent.change(keywordInput, { target: { value: '새 공연장' } });
+    fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
+
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
+    expect(screen.queryByRole('textbox', { name: '모바일 지역, 공연장명 검색' })).toBeNull();
+    expect(screen.getByLabelText('모바일 대관료 최소')).not.toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 검색하기' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/concert-halls?keyword=%EC%83%88+%EA%B3%B5%EC%97%B0%EC%9E%A5',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({ keyword: '새 공연장', regionId: undefined }),
+      );
+    });
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toContain(
+      '새 공연장',
+    );
+  });
+
   it('모바일 장소 검색 닫기는 입력을 취소하고 필터 요약으로 돌아간다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
     renderConcertHallSearchPage('/concert-halls?keyword=홍대');
