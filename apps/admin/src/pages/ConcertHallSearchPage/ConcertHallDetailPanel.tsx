@@ -10,7 +10,7 @@ import {
   WebsiteIcon,
 } from '@boolti/icon';
 import { PreviewMap, SubwayLineBadge, useToast } from '@boolti/ui';
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
@@ -350,12 +350,14 @@ const ConcertHallDetailPanel = ({
             </Styled.AddressLine>
             {hasMap && (
               <div aria-label={`${concertHall.name} 지도`}>
-                <PreviewMap
-                  latitude={location.latitude as number}
-                  longitude={location.longitude as number}
-                  name={concertHall.name}
-                  isAppWebview={false}
-                />
+                <Suspense fallback={<Styled.MapBox aria-label="지도 불러오는 중" />}>
+                  <PreviewMap
+                    latitude={location.latitude as number}
+                    longitude={location.longitude as number}
+                    name={concertHall.name}
+                    isAppWebview={false}
+                  />
+                </Suspense>
               </div>
             )}
           </Styled.DetailSection>

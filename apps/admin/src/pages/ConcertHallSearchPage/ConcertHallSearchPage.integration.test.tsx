@@ -5,6 +5,7 @@ import breakpoint from '@boolti/ui/src/systems/breakpoint';
 import palette from '@boolti/ui/src/systems/palette';
 import typo from '@boolti/ui/src/systems/typo';
 import { MemoryRouter, useLocation, useNavigate } from 'react-router-dom';
+import { Suspense } from 'react';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -26,6 +27,8 @@ const mockImagesRefetch = vi.fn();
 const mockIntersectionObserverObserve = vi.fn();
 const mockIntersectionObserverDisconnect = vi.fn();
 let intersectionObserverCallback: IntersectionObserverCallback;
+let shouldSuspendPreviewMap = false;
+const pendingPreviewMapPromise = new Promise<never>(() => undefined);
 const theme = { palette, typo, breakpoint };
 
 vi.mock('@boolti/api', () => ({
@@ -46,7 +49,10 @@ vi.mock('@boolti/ui', async () => {
     Button,
     mq_lg,
     mq_xl,
-    PreviewMap: () => <button type="button" aria-label="지도 앱에서 보기" />,
+    PreviewMap: () => {
+      if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
+      return <button type="button" aria-label="지도 앱에서 보기" />;
+    },
     SubwayLineBadge: ({ lineName }: { lineName: string }) => <span>{lineName}</span>,
     useToast: () => ({
       error: mockErrorToast,
@@ -243,7 +249,9 @@ const BrowserBackProbe = () => {
 const renderConcertHallSearchPage = (initialEntry = '/concert-halls') =>
   renderWithTheme(
     <MemoryRouter initialEntries={[initialEntry]}>
-      <ConcertHallSearchPage />
+      <Suspense fallback={<div>공연장 검색 페이지를 불러오는 중입니다.</div>}>
+        <ConcertHallSearchPage />
+      </Suspense>
       <LocationProbe />
       <BrowserBackProbe />
     </MemoryRouter>,
@@ -297,6 +305,7 @@ const getCssTextForElement = (element: Element) => {
 describe('ConcertHallSearchPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    shouldSuspendPreviewMap = false;
     Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
       configurable: true,
       get: () => 0,
@@ -1505,6 +1514,18 @@ describe('ConcertHallSearchPage', () => {
 
     const detailAside = await screen.findByRole('complementary');
     expect(getCssTextForElement(detailAside)).toContain('animation');
+  });
+
+  it('지도가 로딩 중이어도 공연장 검색 페이지를 숨기지 않는다', () => {
+    shouldSuspendPreviewMap = true;
+    renderConcertHallSearchPage();
+
+    const page = document.querySelector('main') as HTMLElement;
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    expect(page.style.display).not.toBe('none');
+    expect(screen.queryByText('공연장 검색 페이지를 불러오는 중입니다.')).toBeNull();
+    expect(screen.getByLabelText('지도 불러오는 중')).not.toBeNull();
   });
 
   it('상세 정보 조회 실패 상태를 표시한다', async () => {
