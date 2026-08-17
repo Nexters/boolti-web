@@ -1491,6 +1491,19 @@ const ConcertHallSearchPage = () => {
                           </Styled.FilterOption>
                         ))}
                       </Styled.FilterOptionList>
+                      <Styled.MobileExpandedFilterFooter>
+                        <Styled.TextButton
+                          type="button"
+                          aria-label="대관료 초기화"
+                          disabled={
+                            !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
+                          }
+                          onClick={clearRentalFee}
+                        >
+                          <RefreshIcon />
+                          초기화
+                        </Styled.TextButton>
+                      </Styled.MobileExpandedFilterFooter>
                     </Styled.MobileExpandedFilter>
                   ) : (
                     <Styled.MobileFilterSummary
@@ -1531,6 +1544,17 @@ const ConcertHallSearchPage = () => {
                           </Styled.FilterOption>
                         ))}
                       </Styled.FilterOptionList>
+                      <Styled.MobileExpandedFilterFooter>
+                        <Styled.TextButton
+                          type="button"
+                          aria-label="수용 인원 초기화"
+                          disabled={!selectedCapacityOptionId}
+                          onClick={clearCapacity}
+                        >
+                          <RefreshIcon />
+                          초기화
+                        </Styled.TextButton>
+                      </Styled.MobileExpandedFilterFooter>
                     </Styled.MobileExpandedFilter>
                   ) : (
                     <Styled.MobileFilterSummary

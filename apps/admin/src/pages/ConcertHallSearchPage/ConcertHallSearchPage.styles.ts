@@ -482,8 +482,14 @@ const PopoverFooter = styled.div`
   justify-content: flex-end;
 `;
 
+const MobileExpandedFilterFooter = styled.div`
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
 const TextButton = styled.button`
-  padding: 0 6px;
+  padding: 0;
   color: ${({ theme }) => theme.palette.grey.g50};
   background: transparent;
   border: 0;
@@ -502,6 +508,10 @@ const TextButton = styled.button`
   &:not(:disabled):focus-visible {
     color: ${({ theme }) => theme.palette.grey.w};
     outline: none;
+  }
+
+  ${mq_xl} { 
+    padding: 0 6px;
   }
 `;
 
@@ -2185,6 +2195,7 @@ export default {
   Page,
   PopoverFooter,
   PopoverHeader,
+  MobileExpandedFilterFooter,
   Price,
   PriceLabel,
   PriceHours,
