@@ -13,8 +13,27 @@ const slideDetailPaneIn = keyframes`
   }
 `;
 
+const fadeMobileFilterOverlayIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const fadeMobileFilterOverlayOut = keyframes`
+  from { opacity: 1; }
+  to { opacity: 0; }
+`;
+
+const slideMobileFilterSheetIn = keyframes`
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+`;
+
+const slideMobileFilterSheetOut = keyframes`
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+`;
+
 const Page = styled.main`
-  min-height: 100dvh;
   background: ${({ theme }) => theme.palette.grey.b};
   color: ${({ theme }) => theme.palette.grey.g10};
 
@@ -45,11 +64,10 @@ const Header = styled.header<{ $menuOpen: boolean }>`
   align-items: center;
   flex-wrap: wrap;
   align-content: flex-start;
-  gap: 0;
-  min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '156px')};
-  padding: 20px 20px 16px;
-  ${({ theme, $menuOpen }) =>
-    !$menuOpen &&
+  gap: 10px;
+  min-height: ${({ $menuOpen }) => ($menuOpen ? '203px' : '148px')};
+  padding: 10px 24px 8px;
+  ${({ theme }) =>
     `
       background: linear-gradient(
         to bottom,
@@ -86,6 +104,8 @@ const Logo = styled.button`
   border: none;
   outline: none;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
 
   svg path:not(:first-of-type) {
     fill: ${({ theme }) => theme.palette.grey.w};
@@ -93,7 +113,6 @@ const Logo = styled.button`
 
   ${mq_xl} {
     width: 74px;
-    height: auto;
     margin-left: 0;
     transform: none;
   }
@@ -105,27 +124,26 @@ const HeaderMenuContainer = styled.div`
   flex: 0 0 auto;
   margin-left: auto;
   height: 52px;
-  margin-right: 4px;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
 
   ${mq_xl} {
     width: 74px;
     height: auto;
-    margin-right: 0;
     display: flex;
     justify-content: flex-end;
   }
 `;
 
 const MenuButton = styled.button`
-  display: grid;
-  place-items: center;
-  width: 24px;
-  height: 28px;
   color: ${({ theme }) => theme.palette.grey.w};
   background: none;
   border: 0;
   cursor: pointer;
-  transform: translateY(2px);
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
 
   ${mq_xl} {
     width: 44px;
@@ -144,7 +162,7 @@ const HeaderMenuPopup = styled.div`
   width: 100%;
   height: 131px;
   color: ${({ theme }) => theme.palette.grey.g10};
-  background: transparent;
+  background: ${({ theme }) => theme.palette.grey.main}66;
   border-radius: 0;
   box-shadow: none;
 
@@ -223,7 +241,7 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
   width: 100%;
   height: 48px;
   min-height: 48px;
-  margin: 20px 0 0;
+  margin-top: 20px;
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border: 0;
   border-radius: 4px;
@@ -464,8 +482,14 @@ const PopoverFooter = styled.div`
   justify-content: flex-end;
 `;
 
+const MobileExpandedFilterFooter = styled.div`
+  display: flex;
+  margin-top: 8px;
+  margin-bottom: 8px;
+`;
+
 const TextButton = styled.button`
-  padding: 0 6px;
+  padding: 0;
   color: ${({ theme }) => theme.palette.grey.g50};
   background: transparent;
   border: 0;
@@ -484,6 +508,10 @@ const TextButton = styled.button`
   &:not(:disabled):focus-visible {
     color: ${({ theme }) => theme.palette.grey.w};
     outline: none;
+  }
+
+  ${mq_xl} { 
+    padding: 0 6px;
   }
 `;
 
@@ -696,6 +724,22 @@ const KeywordInput = styled.input`
   }
 `;
 
+const MobileSearchTrigger = styled.button<{ isPlaceholder: boolean }>`
+  width: 100%;
+  min-width: 0;
+  height: 48px;
+  padding: 0;
+  overflow: hidden;
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.palette.mobile.grey.g70 : theme.palette.mobile.grey.g05};
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  ${({ theme }) => theme.typo.b3};
+`;
+
 const SearchButton = styled.button`
   display: grid;
   place-items: center;
@@ -718,38 +762,34 @@ const SearchButton = styled.button`
 
 const Content = styled.div<{ hasDetail: boolean }>`
   display: block;
-  min-height: calc(100vh - 156px);
 
   ${mq_xl} {
     display: grid;
     grid-template-columns: ${({ hasDetail }) =>
       hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
-    min-height: calc(100vh - 92px);
     overflow-x: clip;
   }
 `;
 
-const ResultsPane = styled.section<{ $headerMenuOpen: boolean }>`
+const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
-  overflow-y: auto;
-  height: ${({ $headerMenuOpen }) =>
-    $headerMenuOpen ? 'calc(100dvh - 203px)' : 'calc(100dvh - 156px)'};
 
-  ${mq_xl} {
+  ${({ $detailPanelOpen }) => $detailPanelOpen && `
+    overflow-y: auto;
     height: calc(100vh - 92px);
-  }
+  `}
 `;
 
-const Toolbar = styled.div<{ $dimmed: boolean }>`
+const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   height: auto;
   width: 100%;
-  padding: 8px 20px 12px;
+  padding: 8px 20px 20px;
   position: sticky;
-  top: 0;
+  top: ${({ $detailPanelOpen }) => $detailPanelOpen ? '0' : '92px'};
   left: 0;
   background: ${({ theme }) => theme.palette.grey.b};
   opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
@@ -772,8 +812,7 @@ const Count = styled.div`
   min-width: 0;
   position: relative;
   color: ${({ theme }) => theme.palette.grey.g40};
-  font-size: 15px;
-  line-height: 22px;
+  ${({ theme }) => theme.typo.b3};
 
   span {
     white-space: nowrap;
@@ -781,7 +820,6 @@ const Count = styled.div`
 
   ${mq_xl} {
     align-items: center;
-    ${({ theme }) => theme.typo.b3};
   }
 `;
 
@@ -892,14 +930,11 @@ const MobileSortButton = styled.button`
   justify-content: flex-end;
   gap: 4px;
   min-width: 128px;
-  height: 40px;
   padding: 0;
   color: ${({ theme }) => theme.palette.grey.g10};
   background: transparent;
   border: 0;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 16px;
+  ${({ theme }) => theme.typo.sh0};
   white-space: nowrap;
 
   svg {
@@ -919,8 +954,9 @@ const MobileSortButton = styled.button`
 
 const ChipRow = styled.div`
   display: flex;
-  gap: 8px;
-  padding: 0 20px 16px;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 0 20px;
   overflow-x: auto;
 
   ${mq_xl} {
@@ -935,8 +971,8 @@ const Chip = styled.button`
   height: 36px;
   padding: 0 12px;
   white-space: nowrap;
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  background: ${({ theme }) => theme.palette.grey.g90};
+  color: ${({ theme }) => theme.palette.grey.g10};
+  background: ${({ theme }) => theme.palette.grey.b};
   border: 1px solid ${({ theme }) => theme.palette.grey.g80};
   border-radius: 999px;
   font-size: 14px;
@@ -1104,7 +1140,7 @@ const Empty = styled.div`
   justify-content: center;
   align-items: center;
   align-content: center;
-  gap: 12px;
+  gap: 16px;
   min-height: 360px;
   padding: 48px 20px;
   text-align: center;
@@ -1162,7 +1198,6 @@ const DetailPane = styled.aside`
   inset: 0;
   z-index: 50;
   width: 100%;
-  height: 100dvh;
   max-height: none;
   min-height: auto;
   overflow-y: auto;
@@ -1224,7 +1259,6 @@ const DetailState = styled.div`
   position: relative;
   display: grid;
   place-items: center;
-  min-height: calc(100vh - 92px);
   padding: 40px 20px;
   text-align: center;
 `;
@@ -1618,7 +1652,6 @@ const GalleryGridButton = styled.button`
 const GalleryViewer = styled.div`
   display: flex;
   width: 100%;
-  height: calc(100dvh - 48px);
   overflow-x: auto;
   scroll-snap-type: x mandatory;
 `;
@@ -1639,7 +1672,6 @@ const GallerySlide = styled.figure`
 
 const GalleryState = styled.div`
   display: grid;
-  min-height: calc(100dvh - 48px);
   padding: 32px 20px;
   place-items: center;
   text-align: center;
@@ -1663,38 +1695,67 @@ const IntroductionText = styled.div<{ $collapsed: boolean }>`
   }
 `;
 
-const MobileFilterOverlay = styled.div`
+const MobileFilterOverlay = styled.div<{ $isClosing: boolean }>`
   position: fixed;
   inset: 0;
   z-index: 60;
   display: flex;
   align-items: flex-end;
   background: rgba(0, 0, 0, 0.5);
+  animation: ${({ $isClosing }) =>
+      $isClosing ? fadeMobileFilterOverlayOut : fadeMobileFilterOverlayIn}
+    ${({ $isClosing }) => ($isClosing ? '240ms' : '280ms')} ease-out both;
+  pointer-events: ${({ $isClosing }) => ($isClosing ? 'none' : 'auto')};
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
-const MobileFilterSheet = styled.div`
+const MobileFilterSheet = styled.div<{ $isClosing: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: min(589px, calc(100dvh - 32px));
+  height: calc(100dvh - 32px);
   overflow: hidden;
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 16px 16px 0 0;
+  animation: ${({ $isClosing }) =>
+      $isClosing ? slideMobileFilterSheetOut : slideMobileFilterSheetIn}
+    ${({ $isClosing }) => ($isClosing ? '240ms' : '280ms')} ease-out both;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
 `;
 
-const MobileSheetHandle = styled.div`
+const MobileSheetHandle = styled.button`
+  position: relative;
+  display: block;
   flex: 0 0 auto;
-  width: 45px;
-  height: 4px;
-  margin: 12px auto 8px;
-  background: ${({ theme }) => theme.palette.mobile.grey.g70};
-  border-radius: 999px;
+  width: 100%;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+
+  &::after {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: 45px;
+    height: 4px;
+    background: ${({ theme }) => theme.palette.mobile.grey.g70};
+    border-radius: 999px;
+    content: '';
+    transform: translateX(-50%);
+  }
 `;
 
 const MobileSheetHeader = styled.div`
   display: flex;
-  flex: 0 0 48px;
+  flex: 0 0 58px;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
@@ -1713,7 +1774,7 @@ const MobileSheetCloseButton = styled.button`
   width: 32px;
   height: 32px;
   padding: 0;
-  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  color: ${({ theme }) => theme.palette.mobile.grey.g50};
   background: transparent;
   border: 0;
 
@@ -1728,18 +1789,18 @@ const MobileLocationSearch = styled.label`
   display: flex;
   flex: 0 0 48px;
   align-items: center;
-  margin: 4px 20px 12px;
-  padding: 0 44px 0 16px;
+  margin: 0 20px 20px;
+  padding: 0 44px 0 12px;
   background: ${({ theme }) => theme.palette.mobile.grey.b};
-  border: 1px solid ${({ theme }) => theme.palette.mobile.grey.g80};
-  border-radius: 999px;
+  border: 0;
+  border-radius: 4px;
 
   > svg {
     position: absolute;
     right: 14px;
     width: 20px;
     height: 20px;
-    color: ${({ theme }) => theme.palette.mobile.grey.g30};
+    color: ${({ theme }) => theme.palette.grey.g70};
   }
 `;
 
@@ -1751,11 +1812,11 @@ const MobileLocationInput = styled.input`
   background: transparent;
   border: 0;
   outline: 0;
-  font-size: 15px;
-  line-height: 22px;
+  font-size: 16px;
+  line-height: 24px;
 
   &::placeholder {
-    color: ${({ theme }) => theme.palette.mobile.grey.g50};
+    color: ${({ theme }) => theme.palette.grey.g80};
   }
 `;
 
@@ -1767,12 +1828,16 @@ const MobileSheetBody = styled.div`
 `;
 
 const MobileResultHeading = styled.h3`
-  height: 38px;
-  padding-top: 8px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g50};
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 22px;
+  color: ${({ theme }) => theme.palette.grey.g50};
+  ${({ theme }) => theme.typo.b2};
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+
+  &:first-of-type {
+    margin-top: 0;
+  }
 `;
 
 const MobileResultList = styled.div`
@@ -1785,7 +1850,7 @@ const MobileResultButton = styled.button`
   gap: 12px;
   min-width: 0;
   min-height: 60px;
-  padding: 7px 0;
+  padding: 4px 0;
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
   text-align: left;
   background: transparent;
@@ -1804,7 +1869,7 @@ const MobileResultIcon = styled.span`
   place-items: center;
   width: 24px;
   height: 24px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g40};
+  color: ${({ theme }) => theme.palette.grey.g70};
 
   svg {
     width: 20px;
@@ -1816,6 +1881,47 @@ const MobileFilterSections = styled.div`
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+
+  & *:last-child {
+    border-bottom: 0;
+  }
+`;
+
+const MobileOverviewLocation = styled.section`
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
+  padding-top: 16px;
+`;
+
+const MobileLocationTrigger = styled.button<{ isPlaceholder: boolean }>`
+  position: relative;
+  display: flex;
+  width: calc(100% - 40px);
+  height: 48px;
+  align-items: center;
+  margin: 16px 20px;
+  padding: 0 44px 0 12px;
+  overflow: hidden;
+  color: ${({ theme, isPlaceholder }) =>
+    isPlaceholder ? theme.palette.grey.g80 : theme.palette.mobile.grey.g05};
+  text-align: left;
+  background: ${({ theme }) => theme.palette.mobile.grey.b};
+  border: 0;
+  border-radius: 4px;
+  ${({ theme }) => theme.typo.b3};
+
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  svg {
+    position: absolute;
+    right: 14px;
+    width: 20px;
+    height: 20px;
+    color: ${({ theme }) => theme.palette.grey.g70};
+  }
 `;
 
 const MobileFilterSummary = styled.button<{ isPlaceholder?: boolean }>`
@@ -1829,7 +1935,7 @@ const MobileFilterSummary = styled.button<{ isPlaceholder?: boolean }>`
   text-align: left;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.mobile.grey.g80};
+  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
   ${({ theme }) => theme.typo.b3};
 
   strong {
@@ -1865,17 +1971,20 @@ const MobileFilterFooter = styled.div`
   gap: 9px;
   padding: 16px 20px;
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
-  border-top: 1px solid ${({ theme }) => theme.palette.grey.g90};
 `;
 
 const MobileClearButton = styled.button`
   height: 48px;
   color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+  background: ${({ theme }) => theme.palette.mobile.grey.g80};
   border: 0;
   border-radius: 4px;
   ${({ theme }) => theme.typo.sh1};
   text-align: center;
+
+  &:disabled {
+    color: ${({ theme }) => theme.palette.mobile.grey.g50};
+  }
 `;
 
 const MobileApplyButton = styled.button`
@@ -1900,11 +2009,15 @@ const ModalBackdrop = styled.div`
 
 const Modal = styled.form`
   width: min(450px, 100%);
-  padding: 32px;
+  padding: 20px;
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.mobile.grey.g85};
   border-radius: 12px;
   box-shadow: 0 10px 40px 0 #0000004d;
+
+  ${mq_xl} {
+    padding: 32px;
+  }
 `;
 
 const ConfirmModal = styled.div`
@@ -1954,9 +2067,22 @@ const ErrorText = styled.p`
 
 const ModalButtons = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 8px;
-  margin-top: 50px;
+  margin-top: 24px;
+
+  button {
+    flex: 1;
+  }
+
+  ${mq_xl} {
+    margin-top: 50px;
+    justify-content: flex-end;
+
+    button {
+      flex: initial;
+    }
+  }
 `;
 
 export default {
@@ -2051,7 +2177,10 @@ export default {
   MobileFilterSummary,
   MobileLocationInput,
   MobileLocationSearch,
+  MobileLocationTrigger,
+  MobileOverviewLocation,
   MobileResultButton,
+  MobileSearchTrigger,
   MobileResultHeading,
   MobileResultIcon,
   MobileResultList,
@@ -2066,6 +2195,7 @@ export default {
   Page,
   PopoverFooter,
   PopoverHeader,
+  MobileExpandedFilterFooter,
   Price,
   PriceLabel,
   PriceHours,

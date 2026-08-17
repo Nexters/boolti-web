@@ -202,9 +202,8 @@ const ConcertHallDetailPanel = ({
       <Styled.DetailPane>
         <Styled.DetailState>
           <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
-            <CloseIcon />
+            <ArrowLeftIcon />
           </Styled.DetailCloseButton>
-          <p>공연장 상세 정보를 불러오는 중입니다.</p>
         </Styled.DetailState>
       </Styled.DetailPane>
     );
@@ -215,7 +214,7 @@ const ConcertHallDetailPanel = ({
       <Styled.DetailPane>
         <Styled.DetailState>
           <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
-            <CloseIcon />
+            <ArrowLeftIcon />
           </Styled.DetailCloseButton>
           <div>
             <Styled.EmptyTitle>공연장 상세 정보를 불러오지 못했어요.</Styled.EmptyTitle>
