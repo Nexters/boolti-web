@@ -36,6 +36,8 @@ const MAX_PHOTO_COUNT = 20;
 
 const PHONE_NUMBER_REGEX = /^0\d{1,2}-?\d{3,4}-?\d{4}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** 공연장 ID(공유 코드): 영문 소문자·숫자·하이픈 1~20자 */
+const SHARE_CODE_REGEX = /^[a-z0-9-]{1,20}$/;
 
 const AmenityIcon = ({ src, label }: { src: string; label: string }) => (
   <img src={src} alt={label} style={{ width: 18, height: 18, verticalAlign: 'middle' }} />
@@ -122,6 +124,7 @@ const ConcertHallInfoPage = () => {
 
   // 기본 정보
   const [name, setName] = useState('');
+  const [shareCode, setShareCode] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [detailAddress, setDetailAddress] = useState('');
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
@@ -148,6 +151,7 @@ const ConcertHallInfoPage = () => {
       return;
     }
     setName(detail.name ?? '');
+    setShareCode(detail.shareCode ?? '');
     setStreetAddress(detail.location?.streetAddress ?? '');
     setDetailAddress(detail.location?.detailAddress ?? '');
     setLatitude(detail.location?.latitude);
@@ -228,6 +232,7 @@ const ConcertHallInfoPage = () => {
     });
   };
 
+  const hasShareCodeError = shareCode.length > 0 && !SHARE_CODE_REGEX.test(shareCode);
   const hasPhoneNumberError = phoneNumber.length > 0 && !PHONE_NUMBER_REGEX.test(phoneNumber);
   const hasEmailError = email.length > 0 && !EMAIL_REGEX.test(email);
 
@@ -245,6 +250,10 @@ const ConcertHallInfoPage = () => {
   };
 
   const onSave = async () => {
+    if (!shareCode || hasShareCodeError) {
+      toast.error('공연장 ID를 확인해 주세요.');
+      return;
+    }
     if (hasPhoneNumberError || hasEmailError) {
       toast.error('전화번호/이메일 형식을 확인해 주세요.');
       return;
@@ -259,8 +268,7 @@ const ConcertHallInfoPage = () => {
         hallId,
         body: {
           name: name.trim(),
-          // 공유 코드는 이 화면에서 수정하지 않지만 저장 시 필수라 조회값을 그대로 보낸다
-          shareCode: detail?.shareCode ?? '',
+          shareCode,
           introduction: introduction.trim() || undefined,
           representativeImageUrl,
           location: {
@@ -382,6 +390,24 @@ const ConcertHallInfoPage = () => {
             <div>
               <FieldLabel>공연장명</FieldLabel>
               <Input size="large" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div>
+              <FieldLabel>
+                공연장 ID <Typography.Text type="danger">*</Typography.Text>
+              </FieldLabel>
+              <Input
+                size="large"
+                value={shareCode}
+                maxLength={20}
+                placeholder="영문 소문자, 숫자, 하이픈만 입력해 주세요"
+                status={hasShareCodeError ? 'error' : undefined}
+                onChange={(e) => setShareCode(e.target.value)}
+              />
+              {hasShareCodeError && (
+                <Typography.Text type="danger" style={{ display: 'block', marginTop: 4 }}>
+                  영문 소문자, 숫자, 하이픈만 1~20자로 입력할 수 있어요.
+                </Typography.Text>
+              )}
             </div>
             <div>
               <FieldLabel>공연장 주소</FieldLabel>
