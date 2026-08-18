@@ -1,5 +1,5 @@
-import type { ConcertHallProfileResponse } from '@boolti/api';
-import { checkIsWebView } from '@boolti/bridge';
+import { type ConcertHallProfileResponse, useConcertHallImages } from '@boolti/api';
+import { checkIsWebView, isWebViewBridgeAvailable, viewPlacePhotoDetail } from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -75,6 +75,10 @@ const HomeTab = ({ profile }: Props) => {
   const home = profile.home;
   const [gallery, setGallery] = useState<{ mode: GalleryMode; index: number } | null>(null);
 
+  // 앱 웹뷰에서는 사진 화면을 앱이 띄우므로, 넘겨줄 전체 사진 ID를 미리 조회해 둔다
+  const isAppWebView = isWebViewBridgeAvailable();
+  const { data: allImages } = useConcertHallImages(profile.id, isAppWebView);
+
   // 미리보기 장수는 백엔드가 제어(최대 5장)하고, 전체는 갤러리 모달에서 별도 조회한다.
   const visibleImages = home?.images ?? [];
   const totalImageCount = home?.totalImageCount ?? visibleImages.length;
@@ -105,6 +109,24 @@ const HomeTab = ({ profile }: Props) => {
     );
   }, [hasMap, location?.latitude, location?.longitude, profile.name]);
 
+  // 앱 웹뷰에서는 사진 목록/뷰어를 앱 네이티브 화면이 담당하므로 브릿지로 넘긴다
+  const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
+    if (isAppWebView) {
+      const images = allImages?.items ?? visibleImages;
+
+      viewPlacePhotoDetail({
+        id: profile.id,
+        imageIds: images.map((image) => image.id),
+      }).catch(() => {
+        // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+      });
+
+      return;
+    }
+
+    setGallery(showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index });
+  };
+
   const handleCopyAddress = async () => {
     if (!addressText) {
       return;
@@ -134,11 +156,7 @@ const HomeTab = ({ profile }: Props) => {
                 <Styled.PhotoItem
                   key={image.id}
                   type="button"
-                  onClick={() =>
-                    setGallery(
-                      showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index },
-                    )
-                  }
+                  onClick={() => handlePhotoClick(index, showMoreOverlay)}
                 >
                   <Styled.PhotoImage
                     src={image.thumbnailUrl || image.imageUrl}
