@@ -67,6 +67,7 @@ import useConcertHallRecommendedRegions from './useConcertHallRecommendedRegions
 import useConcertHallAutocomplete from './useConcertHallAutocomplete';
 import useSuperAdminConcertHallList from './useSuperAdminConcertHallList';
 import useSuperAdminConcertHallDetail from './useSuperAdminConcertHallDetail';
+import useSuperAdminConcertHallRegionGroups from './useSuperAdminConcertHallRegionGroups';
 import useSuperAdminConcertHallRental from './useSuperAdminConcertHallRental';
 import useSuperAdminConcertHallSubwayStations from './useSuperAdminConcertHallSubwayStations';
 import useSuperAdminConcertHallShows from './useSuperAdminConcertHallShows';
@@ -145,6 +146,7 @@ export {
   useConcertHallAutocomplete,
   useSuperAdminConcertHallList,
   useSuperAdminConcertHallDetail,
+  useSuperAdminConcertHallRegionGroups,
   useSuperAdminConcertHallRental,
   useSuperAdminConcertHallSubwayStations,
   useSuperAdminConcertHallShows,
