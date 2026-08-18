@@ -2,7 +2,8 @@ export type WebviewCommand =
   | 'NAVIGATE_TO_SHOW_DETAIL'
   | 'NAVIGATE_BACK'
   | 'REQUEST_TOKEN'
-  | 'SHOW_TOAST';
+  | 'SHOW_TOAST'
+  | 'VIEW_PLACE_PHOTO_DETAIL';
 
 export type BaseCommand = {
   id: string;
