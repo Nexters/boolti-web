@@ -1,6 +1,7 @@
 import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   useSuperAdminConcertHallDetail,
+  useSuperAdminConcertHallRegionGroups,
   useSuperAdminConcertHallSubwayStations,
   useSuperAdminSaveConcertHallSubwayStations,
   useSuperAdminUpdateConcertHall,
@@ -67,63 +68,6 @@ const INITIAL_AMENITIES: AmenitiesState = {
   hasAlcoholSales: false,
 };
 
-// 백엔드 데이터 인터페이스 확정 전이라 UI 작업용 임시 목록. 값은 저장 API에는 포함하지 않는다.
-const BUSINESS_DISTRICT_OPTIONS = [
-  {
-    label: '서북',
-    options: [
-      { value: '홍대/연남/연희', label: '홍대/연남/연희' },
-      { value: '합정/상수/망원', label: '합정/상수/망원' },
-      { value: '신촌/이대/서대문', label: '신촌/이대/서대문' },
-      { value: '공덕/아현/도화', label: '공덕/아현/도화' },
-      { value: '연신내/불광/은평', label: '연신내/불광/은평' },
-    ],
-  },
-  {
-    label: '도심',
-    options: [
-      { value: '을지로/충무로/명동', label: '을지로/충무로/명동' },
-      { value: '종로/삼청/서북/북촌', label: '종로/삼청/서북/북촌' },
-      { value: '혜화/대학로/성북', label: '혜화/대학로/성북' },
-      { value: '이태원/한남/해방촌', label: '이태원/한남/해방촌' },
-      { value: '용산/삼각지', label: '용산/삼각지' },
-    ],
-  },
-  {
-    label: '강남',
-    options: [
-      { value: '강남/논현/역삼', label: '강남/논현/역삼' },
-      { value: '압구정/청담/도산', label: '압구정/청담/도산' },
-      { value: '신사/잠원', label: '신사/잠원' },
-      { value: '서초/교대/방배', label: '서초/교대/방배' },
-      { value: '잠실/방이', label: '잠실/방이' },
-      { value: '천호/강동', label: '천호/강동' },
-    ],
-  },
-  {
-    label: '동북',
-    options: [
-      { value: '성수/서울숲/뚝섬', label: '성수/서울숲/뚝섬' },
-      { value: '구의/건대/자양', label: '구의/건대/자양' },
-      { value: '왕십리/동대문', label: '왕십리/동대문' },
-      { value: '노원/수유', label: '노원/수유' },
-    ],
-  },
-  {
-    label: '서남',
-    options: [
-      { value: '여의도/영등포/문래', label: '여의도/영등포/문래' },
-      { value: '신도림/구로', label: '신도림/구로' },
-      { value: '서울대입구/신림', label: '서울대입구/신림' },
-      { value: '목동/강서/마곡', label: '목동/강서/마곡' },
-    ],
-  },
-  {
-    label: '미분류',
-    options: [{ value: '기타', label: '기타' }],
-  },
-];
-
 const FieldLabel = ({ children }: { children: React.ReactNode }) => (
   <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
     {children}
@@ -171,6 +115,7 @@ const ConcertHallInfoPage = () => {
 
   const { data: detail } = useSuperAdminConcertHallDetail(hallId);
   const { data: savedStations } = useSuperAdminConcertHallSubwayStations(hallId);
+  const { data: regionGroups } = useSuperAdminConcertHallRegionGroups();
   const saveSubwayStations = useSuperAdminSaveConcertHallSubwayStations();
   const updateConcertHall = useSuperAdminUpdateConcertHall();
   const uploadImage = useSuperAdminUploadConcertHallImage();
@@ -181,8 +126,7 @@ const ConcertHallInfoPage = () => {
   const [detailAddress, setDetailAddress] = useState('');
   const [latitude, setLatitude] = useState<number | undefined>(undefined);
   const [longitude, setLongitude] = useState<number | undefined>(undefined);
-  // 백엔드 데이터 인터페이스가 아직 없어 UI만 먼저 작업 (저장 API 미연동)
-  const [businessDistrict, setBusinessDistrict] = useState<string | undefined>(undefined);
+  const [regionId, setRegionId] = useState<number | null>(null);
   const [stations, setStations] = useState<SelectedStation[]>([]);
   const [representativeImage, setRepresentativeImage] = useState<string | null>(null);
 
@@ -208,6 +152,7 @@ const ConcertHallInfoPage = () => {
     setDetailAddress(detail.location?.detailAddress ?? '');
     setLatitude(detail.location?.latitude);
     setLongitude(detail.location?.longitude);
+    setRegionId(detail.region?.regionId ?? null);
     setRepresentativeImage(detail.representativeImageUrl ?? null);
     setWebsiteUrl(detail.contact?.websiteUrl ?? '');
     setPhoneNumber(detail.contact?.phoneNumber ?? '');
@@ -314,6 +259,8 @@ const ConcertHallInfoPage = () => {
         hallId,
         body: {
           name: name.trim(),
+          // 공유 코드는 이 화면에서 수정하지 않지만 저장 시 필수라 조회값을 그대로 보낸다
+          shareCode: detail?.shareCode ?? '',
           introduction: introduction.trim() || undefined,
           representativeImageUrl,
           location: {
@@ -323,6 +270,8 @@ const ConcertHallInfoPage = () => {
             latitude,
             longitude,
           },
+          // 선택 해제 시 null을 보내야 서버에서 지역이 해제된다
+          regionId,
           contact: {
             websiteUrl: websiteUrl.trim() || undefined,
             phoneNumber: phoneNumber.trim() || undefined,
@@ -342,6 +291,16 @@ const ConcertHallInfoPage = () => {
       toast.error('저장 중 문제가 발생했습니다.');
     }
   };
+
+  // 상권/지역은 그룹 > 지역 2단계 그룹 옵션으로 노출한다 (둘 다 sequence 오름차순)
+  const regionOptions = [...(regionGroups ?? [])]
+    .sort((a, b) => a.sequence - b.sequence)
+    .map((group) => ({
+      label: group.name,
+      options: [...group.regions]
+        .sort((a, b) => a.sequence - b.sequence)
+        .map((region) => ({ value: region.regionId, label: region.name })),
+    }));
 
   const countAmenityItems: Array<{
     key: 'hasWaitingRoom' | 'hasParking' | 'hasCabinet';
@@ -460,9 +419,9 @@ const ConcertHallInfoPage = () => {
                 size="large"
                 style={{ width: '100%', height: 48 }}
                 placeholder="상권/지역을 선택해 주세요"
-                value={businessDistrict}
-                onChange={setBusinessDistrict}
-                options={BUSINESS_DISTRICT_OPTIONS}
+                value={regionId ?? undefined}
+                onChange={(value?: number) => setRegionId(value ?? null)}
+                options={regionOptions}
                 showSearch
                 optionFilterProp="label"
                 allowClear

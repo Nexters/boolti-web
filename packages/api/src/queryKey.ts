@@ -56,6 +56,7 @@ import {
   SubwayStationSearchItem,
   SuperAdminConcertHallDetailResponse,
   SuperAdminConcertHallListResponse,
+  SuperAdminConcertHallRegionGroup,
   SuperAdminConcertHallRentalResponse,
   SuperAdminConcertHallShowListResponse,
   SuperAdminConcertHallShowSortBy,
@@ -684,6 +685,11 @@ export const superAdminConcertHallQueryKeys = createQueryKeys('superAdminConcert
     queryFn: () =>
       fetcher.get<SuperAdminConcertHallDetailResponse>(`sa-api/v1/concert-halls/${hallId}`),
   }),
+  regionGroups: {
+    queryKey: null,
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallRegionGroup[]>('sa-api/v1/concert-hall-region-groups'),
+  },
   rental: (hallId: number) => ({
     queryKey: [hallId],
     queryFn: () =>

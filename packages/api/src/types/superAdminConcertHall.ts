@@ -86,6 +86,32 @@ export interface SuperAdminConcertHallImage {
 }
 
 /** GET /concert-halls/{id} — 공연장 기본 정보 상세 (대관 정보는 별도 엔드포인트로 분리됨) */
+/** 공연장에 지정된 상권/지역 */
+export interface SuperAdminConcertHallRegion {
+  regionId: number;
+  /** 지역명 (예: 홍대/연남/연희) */
+  name: string;
+  groupId: number;
+  /** 지역 그룹명 (예: 서북) */
+  groupName: string;
+}
+
+export interface SuperAdminConcertHallRegionItem {
+  regionId: number;
+  name: string;
+  /** 그룹 내 노출 순서 */
+  sequence: number;
+}
+
+/** GET /concert-hall-region-groups — 상권/지역 그룹 목록 */
+export interface SuperAdminConcertHallRegionGroup {
+  groupId: number;
+  name: string;
+  /** 그룹 노출 순서 */
+  sequence: number;
+  regions: SuperAdminConcertHallRegionItem[];
+}
+
 export interface SuperAdminConcertHallDetailResponse {
   id: number;
   name: string;
@@ -97,6 +123,8 @@ export interface SuperAdminConcertHallDetailResponse {
   location?: SuperAdminConcertHallLocation;
   contact?: SuperAdminConcertHallContact;
   amenities?: SuperAdminConcertHallAmenities;
+  /** 지정된 상권/지역이 없으면 null */
+  region?: SuperAdminConcertHallRegion | null;
   /** ISO8601 */
   informationUpdatedAt?: string;
   hasHomeTabData?: boolean;
@@ -205,6 +233,10 @@ export interface SuperAdminConcertHallUpdateImage {
 /** PUT /concert-halls/{id} — 공연장 정보 수정 (대관 정보는 별도 엔드포인트) */
 export interface SuperAdminConcertHallUpdateRequest {
   name: string;
+  /** 공유 코드 (소문자·숫자, 최대 20자) */
+  shareCode: string;
+  /** 상권/지역 ID. null이면 지역 선택 해제 */
+  regionId?: number | null;
   introduction?: string;
   representativeImageUrl?: string;
   location?: SuperAdminConcertHallLocation;
