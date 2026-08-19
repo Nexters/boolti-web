@@ -5,6 +5,7 @@ import breakpoint from '@boolti/ui/src/systems/breakpoint';
 import palette from '@boolti/ui/src/systems/palette';
 import typo from '@boolti/ui/src/systems/typo';
 import { MemoryRouter, useLocation, useNavigate } from 'react-router-dom';
+import { Suspense } from 'react';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -26,6 +27,8 @@ const mockImagesRefetch = vi.fn();
 const mockIntersectionObserverObserve = vi.fn();
 const mockIntersectionObserverDisconnect = vi.fn();
 let intersectionObserverCallback: IntersectionObserverCallback;
+let shouldSuspendPreviewMap = false;
+const pendingPreviewMapPromise = new Promise<never>(() => undefined);
 const theme = { palette, typo, breakpoint };
 
 vi.mock('@boolti/api', () => ({
@@ -46,7 +49,10 @@ vi.mock('@boolti/ui', async () => {
     Button,
     mq_lg,
     mq_xl,
-    PreviewMap: () => <button type="button" aria-label="지도 앱에서 보기" />,
+    PreviewMap: () => {
+      if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
+      return <button type="button" aria-label="지도 앱에서 보기" />;
+    },
     SubwayLineBadge: ({ lineName }: { lineName: string }) => <span>{lineName}</span>,
     useToast: () => ({
       error: mockErrorToast,
@@ -243,7 +249,9 @@ const BrowserBackProbe = () => {
 const renderConcertHallSearchPage = (initialEntry = '/concert-halls') =>
   renderWithTheme(
     <MemoryRouter initialEntries={[initialEntry]}>
-      <ConcertHallSearchPage />
+      <Suspense fallback={<div>공연장 검색 페이지를 불러오는 중입니다.</div>}>
+        <ConcertHallSearchPage />
+      </Suspense>
       <LocationProbe />
       <BrowserBackProbe />
     </MemoryRouter>,
@@ -297,6 +305,7 @@ const getCssTextForElement = (element: Element) => {
 describe('ConcertHallSearchPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    shouldSuspendPreviewMap = false;
     Object.defineProperty(HTMLElement.prototype, 'scrollHeight', {
       configurable: true,
       get: () => 0,
@@ -821,6 +830,37 @@ describe('ConcertHallSearchPage', () => {
     );
   });
 
+  it('모바일 필터 요약의 검색하기는 현재 필터를 적용하고 닫힘 애니메이션 뒤 시트를 닫는다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderConcertHallSearchPage();
+    openMobileFilterOverview();
+
+    fireEvent.click(screen.getByRole('button', { name: '대관료 설정' }));
+    fireEvent.click(screen.getByRole('button', { name: '모바일 500,000원 ~ 1,000,000원 선택' }));
+    fireEvent.click(screen.getByRole('button', { name: '장소 지역, 공연장명 검색' }));
+    fireEvent.click(screen.getByRole('button', { name: '모바일 검색 필터 닫기' }));
+
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+
+    const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    const searchButton = screen.getByRole('button', { name: '모바일 필터 검색하기' });
+    expect(searchButton.textContent).toBe('검색하기');
+
+    fireEvent.click(searchButton);
+    expect(screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' })).not.toBeNull();
+    fireEvent.animationEnd(dialog);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({ minFee: 500000, maxFee: 1000000 }),
+      );
+      expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
+    });
+  });
+
   it('모바일 필터 요약의 장소 검색창을 누르면 장소 상세 입력에 포커스한다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
     renderConcertHallSearchPage();
@@ -848,7 +888,9 @@ describe('ConcertHallSearchPage', () => {
     expect(screen.queryByRole('textbox', { name: '모바일 지역, 공연장명 검색' })).toBeNull();
     expect(screen.getByLabelText('모바일 대관료 최소')).not.toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 검색하기' }));
+    const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 다음' }));
+    fireEvent.animationEnd(dialog);
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
@@ -857,6 +899,8 @@ describe('ConcertHallSearchPage', () => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ keyword: '새 공연장', regionId: undefined }),
       );
+      expect(screen.getByRole('button', { name: '모바일 50명 ~ 100명 선택' })).not.toBeNull();
+      expect(screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' })).not.toBeNull();
     });
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toContain(
       '새 공연장',
@@ -985,7 +1029,7 @@ describe('ConcertHallSearchPage', () => {
     );
   });
 
-  it('모바일 바텀시트에서 대관료를 선택하고 검색에 적용한다', async () => {
+  it('모바일 대관료의 다음은 장소와 대관료를 적용하고 수용 인원 선택을 연다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
     renderConcertHallSearchPage();
 
@@ -996,12 +1040,21 @@ describe('ConcertHallSearchPage', () => {
       }),
     );
     fireEvent.click(screen.getByRole('button', { name: '모바일 500,000원 ~ 1,000,000원 선택' }));
-    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 검색하기' }));
+    const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    const nextButton = screen.getByRole('button', { name: '모바일 필터 다음' });
+    expect(nextButton.textContent).toBe('다음');
+    fireEvent.click(nextButton);
+    fireEvent.animationEnd(dialog);
 
     await waitFor(() => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
-        expect.objectContaining({ minFee: 500000, maxFee: 1000000 }),
+        expect.objectContaining({ regionId: 1, minFee: 500000, maxFee: 1000000 }),
       );
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/concert-halls?regionId=1&rentalFeeMin=500000&rentalFeeMax=1000000',
+      );
+      expect(screen.getByRole('button', { name: '모바일 50명 ~ 100명 선택' })).not.toBeNull();
+      expect(screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' })).not.toBeNull();
     });
   });
 
@@ -1052,7 +1105,9 @@ describe('ConcertHallSearchPage', () => {
     selectMobileCapacity();
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
-    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 검색하기' }));
+    const searchButton = screen.getByRole('button', { name: '모바일 필터 검색하기' });
+    expect(searchButton.textContent).toBe('검색하기');
+    fireEvent.click(searchButton);
     fireEvent.animationEnd(dialog);
 
     await waitFor(() => {
@@ -1132,7 +1187,7 @@ describe('ConcertHallSearchPage', () => {
     });
     fireEvent.change(keywordInput, { target: { value: '' } });
     fireEvent.click(within(dialog).getByRole('button', { name: '합정/상수 검색' }));
-    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 검색하기' }));
+    fireEvent.click(screen.getByRole('button', { name: '모바일 필터 다음' }));
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe('/concert-halls?regionId=1');
@@ -1505,6 +1560,18 @@ describe('ConcertHallSearchPage', () => {
 
     const detailAside = await screen.findByRole('complementary');
     expect(getCssTextForElement(detailAside)).toContain('animation');
+  });
+
+  it('지도가 로딩 중이어도 공연장 검색 페이지를 숨기지 않는다', () => {
+    shouldSuspendPreviewMap = true;
+    renderConcertHallSearchPage();
+
+    const page = document.querySelector('main') as HTMLElement;
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    expect(page.style.display).not.toBe('none');
+    expect(screen.queryByText('공연장 검색 페이지를 불러오는 중입니다.')).toBeNull();
+    expect(screen.getByLabelText('지도 불러오는 중')).not.toBeNull();
   });
 
   it('상세 정보 조회 실패 상태를 표시한다', async () => {

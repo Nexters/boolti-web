@@ -279,9 +279,6 @@ const ConcertHallSearchPage = () => {
   const [activeSearchField, setActiveSearchField] = useState<ActiveSearchField | null>(null);
   const [isMobileFilterClosing, setIsMobileFilterClosing] = useState(false);
   const [recentKeywords, setRecentKeywords] = useState(readRecentKeywords);
-  // TODO: 최근 검색어 삭제 모달을 useConfirm 으로 대체
-  // TODO: 처음에 공연장 상세 확인할 떄, 화면 깜빡이는거 수정하기
-  // TODO: 마지막 글자가 한 번 더 추가되어 검색되는 문제 수정
   const [isRecentClearConfirmOpen, setIsRecentClearConfirmOpen] = useState(false);
   const [isEntryRequestOpen, setIsEntryRequestOpen] = useState(false);
   const [isInfoPopupOpen, setInfoPopupOpen] = useState(false);
@@ -695,6 +692,16 @@ const ConcertHallSearchPage = () => {
     } else {
       applySearch();
     }
+  };
+
+  const handleMobilePrimaryAction = () => {
+    if (activeSearchField === 'rentalFee') {
+      applySearch(keywordInput.trim(), selectedRegionId, null, false);
+      setActiveSearchField('capacity');
+      return;
+    }
+
+    submitSearch();
   };
 
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
@@ -1577,10 +1584,12 @@ const ConcertHallSearchPage = () => {
                   </Styled.MobileClearButton>
                   <Styled.MobileApplyButton
                     type="button"
-                    aria-label="모바일 필터 검색하기"
-                    onClick={() => submitSearch()}
+                    aria-label={
+                      activeSearchField === 'rentalFee' ? '모바일 필터 다음' : '모바일 필터 검색하기'
+                    }
+                    onClick={handleMobilePrimaryAction}
                   >
-                    검색하기
+                    {activeSearchField === 'rentalFee' ? '다음' : '검색하기'}
                   </Styled.MobileApplyButton>
                 </Styled.MobileFilterFooter>
               </>
