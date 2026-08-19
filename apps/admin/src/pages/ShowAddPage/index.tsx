@@ -49,6 +49,7 @@ const stepItems = [
 ] as const;
 
 const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요.';
+const SHOW_ADD_FAIL_MESSAGE = '공연을 등록하지 못했어요. 잠시 후 다시 시도해 주세요.';
 
 interface ShowAddPageProps {
   step: 'basic' | 'detail' | 'sales' | 'preQuestion';
@@ -84,6 +85,17 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const toast = useToast();
   const confirm = useConfirm();
+
+  const isSubmittingShow =
+    uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading';
+  const isSubmittingNonTicketingShow =
+    uploadShowImageMutation.status === 'loading' ||
+    addNonTicketingShowMutation.status === 'loading';
+
+  const onFailAddShow = (error: unknown) => {
+    console.error(error);
+    toast.error(SHOW_ADD_FAIL_MESSAGE);
+  };
 
   const onSuccessAddShow = (showId: number) => {
     if (isWebView && isWebViewBridgeAvailable()) {
@@ -138,17 +150,21 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       return;
     }
 
-    if (
-      uploadShowImageMutation.status === 'loading' ||
-      addNonTicketingShowMutation.status === 'loading'
-    ) {
+    if (isSubmittingNonTicketingShow) {
       return;
     }
 
-    const body = await getBasicBody();
-    const showId = await addNonTicketingShowMutation.mutateAsync({ ...body, isNonTicketing: true });
+    try {
+      const body = await getBasicBody();
+      const showId = await addNonTicketingShowMutation.mutateAsync({
+        ...body,
+        isNonTicketing: true,
+      });
 
-    onSuccessAddShow(showId);
+      onSuccessAddShow(showId);
+    } catch (error) {
+      onFailAddShow(error);
+    }
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
@@ -156,8 +172,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitPreQuestionForm = async () => {
-    if (uploadShowImageMutation.status === 'loading' || addShowMutation.status === 'loading')
-      return;
+    if (isSubmittingShow) return;
     const hasEmptyPreQuestion = preQuestionList.some((q) => q.questionText.trim().length === 0);
     const hasOverLimitPreQuestion = preQuestionList.some(
       (q) => q.questionText.length > 100 || (q.description?.length ?? 0) > 100,
@@ -167,36 +182,40 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       return;
     }
 
-    const body = await getBasicBody();
-    const ticketBody = {
-      salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
-      salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
-      ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
-      salesTickets: salesTicketList.map((ticket) => ({
-        ticketName: ticket.name,
-        price: ticket.price,
-        totalForSale: ticket.quantity,
-      })),
-      invitationTickets: invitationTicketList.map((ticket) => ({
-        ticketName: ticket.name,
-        totalForSale: ticket.quantity,
-      })),
-      ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
-        ? {
-            preQuestions: preQuestionList
-              .filter((q) => q.questionText.trim())
-              .map((preQuestion, index) => ({
-                questionText: preQuestion.questionText,
-                description: preQuestion.description ?? '',
-                isRequired: preQuestion.isRequired,
-                sequence: index + 1,
-              })),
-          }
-        : {}),
-    };
-    const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
+    try {
+      const body = await getBasicBody();
+      const ticketBody = {
+        salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
+        salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
+        ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
+        salesTickets: salesTicketList.map((ticket) => ({
+          ticketName: ticket.name,
+          price: ticket.price,
+          totalForSale: ticket.quantity,
+        })),
+        invitationTickets: invitationTicketList.map((ticket) => ({
+          ticketName: ticket.name,
+          totalForSale: ticket.quantity,
+        })),
+        ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
+          ? {
+              preQuestions: preQuestionList
+                .filter((q) => q.questionText.trim())
+                .map((preQuestion, index) => ({
+                  questionText: preQuestion.questionText,
+                  description: preQuestion.description ?? '',
+                  isRequired: preQuestion.isRequired,
+                  sequence: index + 1,
+                })),
+            }
+          : {}),
+      };
+      const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
-    onSuccessAddShow(showId);
+      onSuccessAddShow(showId);
+    } catch (error) {
+      onFailAddShow(error);
+    }
   };
 
   const basicStepContent = (
@@ -284,10 +303,16 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             colorTheme="primary"
             size="bold"
             disabled={
-              !showDetailInfoForm.formState.isDirty || !showDetailInfoForm.formState.isValid
+              !showDetailInfoForm.formState.isDirty ||
+              !showDetailInfoForm.formState.isValid ||
+              isSubmittingNonTicketingShow
             }
           >
-            {isNonTicketingShow ? '공연 등록 완료하기' : '다음으로'}
+            {isNonTicketingShow
+              ? isSubmittingNonTicketingShow
+                ? '등록 중...'
+                : '공연 등록 완료하기'
+              : '다음으로'}
           </Styled.ShowAddFormButton>
         </Styled.ShowAddFormButtonContainer>
       </Styled.ShowAddForm>
@@ -332,13 +357,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                 toast.success('일반 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
-                const result = await confirm(
-                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
-                  {
-                    cancel: '취소하기',
-                    confirm: '삭제하기',
-                  },
-                );
+                const result = await confirm('삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?', {
+                  cancel: '취소하기',
+                  confirm: '삭제하기',
+                });
 
                 if (!result) return;
 
@@ -371,13 +393,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                 toast.success('초청 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
-                const result = await confirm(
-                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
-                  {
-                    cancel: '취소하기',
-                    confirm: '삭제하기',
-                  },
-                );
+                const result = await confirm('삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?', {
+                  cancel: '취소하기',
+                  confirm: '삭제하기',
+                });
 
                 if (!result) return;
 
@@ -538,10 +557,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
             type="button"
             colorTheme="primary"
             size="bold"
-            disabled={!isPreQuestionFormValid}
+            disabled={!isPreQuestionFormValid || isSubmittingShow}
             onClick={onSubmitPreQuestionForm}
           >
-            공연 등록 완료하기
+            {isSubmittingShow ? '등록 중...' : '공연 등록 완료하기'}
           </Styled.ShowAddFormButton>
         </Styled.ShowAddFormButtonContainer>
       </Styled.ShowAddForm>
