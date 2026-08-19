@@ -694,6 +694,16 @@ const ConcertHallSearchPage = () => {
     }
   };
 
+  const handleMobilePrimaryAction = () => {
+    if (activeSearchField === 'rentalFee') {
+      applySearch(keywordInput.trim(), selectedRegionId, null, false);
+      setActiveSearchField('capacity');
+      return;
+    }
+
+    submitSearch();
+  };
+
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     submitSearch();
@@ -1574,10 +1584,12 @@ const ConcertHallSearchPage = () => {
                   </Styled.MobileClearButton>
                   <Styled.MobileApplyButton
                     type="button"
-                    aria-label="모바일 필터 검색하기"
-                    onClick={() => submitSearch()}
+                    aria-label={
+                      activeSearchField === 'rentalFee' ? '모바일 필터 다음' : '모바일 필터 검색하기'
+                    }
+                    onClick={handleMobilePrimaryAction}
                   >
-                    검색하기
+                    {activeSearchField === 'rentalFee' ? '다음' : '검색하기'}
                   </Styled.MobileApplyButton>
                 </Styled.MobileFilterFooter>
               </>
