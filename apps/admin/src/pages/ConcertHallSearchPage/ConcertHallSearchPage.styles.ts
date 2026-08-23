@@ -773,7 +773,6 @@ const Content = styled.div<{ hasDetail: boolean }>`
 
 const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
-  margin-top: 100px;
 
   ${({ $detailPanelOpen }) => $detailPanelOpen && `
     overflow-y: auto;
@@ -860,7 +859,7 @@ const CountInfoPopup = styled.div<{ isOpen?: boolean }>`
   pointer-events: ${({ isOpen }) => (isOpen ? 'default' : 'none')};
 
   ${mq_xl} {
-    width: 280px;
+    width: 300px;
     top: 64px;
     left: 48px;
   }
