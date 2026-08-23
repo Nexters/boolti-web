@@ -773,6 +773,7 @@ const Content = styled.div<{ hasDetail: boolean }>`
 
 const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
+  margin-top: 100px;
 
   ${({ $detailPanelOpen }) => $detailPanelOpen && `
     overflow-y: auto;
@@ -1149,9 +1150,8 @@ const Empty = styled.div`
   ${mq_xl} {
     align-content: normal;
     gap: 24px;
-    min-height: 0;
-    padding: 0;
-    height: 100%;
+    min-height: 360px;
+    padding: 48px 20px;
   }
 `;
 
