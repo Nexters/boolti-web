@@ -2069,7 +2069,7 @@ const ModalButtons = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 50px;
 
   button {
     flex: 1;
