@@ -51,7 +51,7 @@ const DeleteShowConfirmModal = ({
 
   return (
     <Modal
-      title="공연 삭제"
+      title="공연 데이터 삭제"
       open={open}
       onCancel={close}
       footer={
@@ -68,8 +68,9 @@ const DeleteShowConfirmModal = ({
       }
     >
       <Typography.Paragraph style={{ marginTop: 16 }}>
-        공연을 삭제하시려면 정확한 공연명을 입력해 주세요.
-        <br />* 삭제 시 작성했던 공연 정보는 전부 사라지며 복구할 수 없어요.
+        공연장과 연결된 공연 데이터를 삭제하려면 정확한 공연명을 입력해 주세요.
+        <br />* ‘직접 입력’ 방식으로 추가한 공연 데이터와의 연결을 해제하는 경우, 해당 공연에 대한
+        데이터가 모두 사라지며 복구할 수 없어요.
       </Typography.Paragraph>
       <Flex vertical gap={8} style={{ marginBottom: 8 }}>
         <Input
