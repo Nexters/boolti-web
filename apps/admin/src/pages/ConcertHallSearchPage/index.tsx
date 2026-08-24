@@ -1847,7 +1847,11 @@ const ConcertHallSearchPage = () => {
                 value={entryRequestName}
                 hasError={hasEntryRequestError}
                 onBlur={() => setEntryRequestTouched(true)}
-                onChange={(event) => setEntryRequestName(event.target.value)}
+                onChange={(event) => {
+                  const nextName = event.target.value;
+                  setEntryRequestName(nextName);
+                  if (nextName.trim().length === 0) setEntryRequestTouched(true);
+                }}
                 placeholder="공연장 명을 입력해 주세요"
               />
             </Styled.ModalLabel>

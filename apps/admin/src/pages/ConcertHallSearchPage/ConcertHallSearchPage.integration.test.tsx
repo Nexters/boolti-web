@@ -1918,6 +1918,25 @@ describe('ConcertHallSearchPage', () => {
     expect(mockSuccessToast).toHaveBeenCalledWith('입점 요청을 보냈어요.');
   });
 
+  it('입점 요청 공연장명을 모두 지우면 즉시 필수 입력 메시지를 표시한다', () => {
+    mockUseConcertHallSearchList.mockReturnValue({
+      data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    renderConcertHallSearchPage('/concert-halls?keyword=없는공연장');
+
+    fireEvent.click(screen.getByRole('button', { name: '입점 요청하기' }));
+    const input = screen.getByPlaceholderText('공연장 명을 입력해 주세요');
+    input.focus();
+    fireEvent.change(input, { target: { value: '' } });
+
+    expect(document.activeElement).toBe(input);
+    expect(screen.getByText('필수 입력사항입니다.')).not.toBeNull();
+  });
+
   it('입점 요청 실패 시 에러 토스트를 표시하고 모달을 유지한다', async () => {
     mockUseConcertHallSearchList.mockReturnValue({
       data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
