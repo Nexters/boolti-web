@@ -1881,7 +1881,7 @@ const MobileFilterSections = styled.div`
   min-height: 0;
   overflow-y: auto;
 
-  & *:last-child {
+  & > *:last-child {
     border-bottom: 0;
   }
 `;

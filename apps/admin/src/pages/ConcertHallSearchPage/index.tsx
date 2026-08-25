@@ -1464,6 +1464,7 @@ const ConcertHallSearchPage = () => {
                           <Styled.RangeInput
                             aria-label="모바일 대관료 최소"
                             inputMode="numeric"
+                            placeholder="1"
                             value={rentalFeeMinInput}
                             onChange={(event) => {
                               setSelectedRentalFeeOptionId(null);
@@ -1477,6 +1478,7 @@ const ConcertHallSearchPage = () => {
                           <Styled.RangeInput
                             aria-label="모바일 대관료 최대"
                             inputMode="numeric"
+                            placeholder="5,000,000"
                             value={rentalFeeMaxInput}
                             onChange={(event) => {
                               setSelectedRentalFeeOptionId(null);
