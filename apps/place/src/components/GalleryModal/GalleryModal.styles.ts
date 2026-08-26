@@ -48,13 +48,22 @@ const HeaderSpacer = styled.div`
 `;
 
 // 사진 목록 (3열 그리드)
+/*
+  스크롤 컨테이너를 grid와 분리한다.
+  한 엘리먼트에 flex: 1(확정 높이) + overflow-y: auto + display: grid를 함께 걸면
+  아이템의 aspect-ratio가 행 트랙 높이에 반영되지 않아 행이 실제 아이템보다
+  작게 잡히고, 아이템이 다음 행을 침범해 사진 사이 상하 간격이 사라진다.
+*/
+const GridScroll = styled.div`
+  flex: 1;
+  overflow-y: auto;
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
-  flex: 1;
   align-content: start;
-  overflow-y: auto;
   padding-bottom: 20px;
 `;
 
@@ -134,6 +143,7 @@ export default {
   HeaderButton,
   HeaderTitle,
   HeaderSpacer,
+  GridScroll,
   Grid,
   GridItem,
   GridImage,
