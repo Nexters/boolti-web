@@ -69,7 +69,8 @@ const GridItem = styled.button`
 const GridImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* 원본 비율을 유지하고 남는 상하/좌우는 GridItem 배경이 채운다 (크롭 금지) */
+  object-fit: contain;
 `;
 
 // 사진 크게 보기 (가로 스크롤 캐러셀)

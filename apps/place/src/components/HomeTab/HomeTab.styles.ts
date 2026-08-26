@@ -82,12 +82,15 @@ const PhotoItem = styled.button`
   overflow: hidden;
   padding: 0;
   cursor: pointer;
+  /* 정비율이 아닌 사진의 레터박스 영역 */
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
 `;
 
 const PhotoImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* 원본 비율을 유지하고 남는 상하/좌우는 PhotoItem 배경이 채운다 (크롭 금지) */
+  object-fit: contain;
 `;
 
 const PhotoMoreOverlay = styled.div`
