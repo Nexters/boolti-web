@@ -13,7 +13,7 @@ import { format } from 'date-fns';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import PageLayout from '~/components/PageLayout/PageLayout';
+import ConcertHallPageLayout from '~/components/ConcertHallPageLayout';
 import AddShowDataModal from './AddShowDataModal';
 import DeleteShowConfirmModal from './DeleteShowConfirmModal';
 
@@ -97,10 +97,8 @@ const ConcertHallDataPage = () => {
   };
 
   return (
-    <PageLayout
-      breadscrumb="공연장 관리 / 데이터 연결"
+    <ConcertHallPageLayout
       title="데이터 연결"
-      description="해당 공연장에서 진행된 공연의 데이터를 관리합니다."
       action={
         <BooltiButton
           colorTheme="netural"
@@ -156,7 +154,7 @@ const ConcertHallDataPage = () => {
         onClose={() => setDeleteTarget(null)}
         onDeleted={onChanged}
       />
-    </PageLayout>
+    </ConcertHallPageLayout>
   );
 };
 

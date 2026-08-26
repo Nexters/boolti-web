@@ -19,7 +19,7 @@ import type { InputRef } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import PageLayout from '~/components/PageLayout/PageLayout';
+import ConcertHallPageLayout from '~/components/ConcertHallPageLayout';
 import alcoholIcon from '~/assets/amenities/alcohol.svg';
 import cabinetIcon from '~/assets/amenities/cabinet.svg';
 import parkingIcon from '~/assets/amenities/parking.svg';
@@ -332,10 +332,8 @@ const ConcertHallInfoPage = () => {
   ];
 
   return (
-    <PageLayout
-      breadscrumb="공연장 관리 / 공연장 정보"
+    <ConcertHallPageLayout
       title="공연장 정보"
-      description="공연장 프로필에 노출되는 기본 정보를 관리합니다."
       action={
         <BooltiButton colorTheme="primary" size="medium" disabled={isSaving} onClick={onSave}>
           저장하기
@@ -662,7 +660,7 @@ const ConcertHallInfoPage = () => {
         onComplete={onCompleteAddress}
         afterClose={onAddressModalAfterClose}
       />
-    </PageLayout>
+    </ConcertHallPageLayout>
   );
 };
 

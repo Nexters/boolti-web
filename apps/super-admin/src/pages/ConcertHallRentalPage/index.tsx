@@ -19,7 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import PageLayout from '~/components/PageLayout/PageLayout';
+import ConcertHallPageLayout from '~/components/ConcertHallPageLayout';
 
 const { TextArea } = Input;
 
@@ -187,10 +187,8 @@ const ConcertHallRentalPage = () => {
   };
 
   return (
-    <PageLayout
-      breadscrumb="공연장 관리 / 대관 정보"
+    <ConcertHallPageLayout
       title="대관 정보"
-      description="공연장 대관 탭에 노출되는 정보를 관리합니다."
       action={
         <BooltiButton
           colorTheme="primary"
@@ -473,7 +471,7 @@ const ConcertHallRentalPage = () => {
           </Flex>
         </Card>
       </Flex>
-    </PageLayout>
+    </ConcertHallPageLayout>
   );
 };
 

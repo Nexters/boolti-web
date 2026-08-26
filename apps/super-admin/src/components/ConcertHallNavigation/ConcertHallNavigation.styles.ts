@@ -14,7 +14,7 @@ const Container = styled.aside`
 `;
 
 const Header = styled.header`
-  padding: 24px 17px 16px 20px;
+  padding: 24px 20px 20px;
 `;
 
 const HallName = styled.h1`
@@ -28,11 +28,14 @@ const HallName = styled.h1`
 `;
 
 const Navigation = styled.div`
-  margin-top: 12px;
+  padding: 0 20px;
 `;
 
 const MenuItemList = styled.ul`
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 `;
 
 const MenuItem = styled.li``;
@@ -41,19 +44,21 @@ const MenuLink = styled(NavLink)`
   display: flex;
   align-items: center;
   gap: 8px;
-  ${({ theme }) => theme.typo.b1};
-  color: ${({ theme }) => theme.palette.grey.g60};
-  padding: 8px 20px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 8px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.grey.g50};
 
   &:hover {
     color: ${({ theme }) => theme.palette.primary.o1};
   }
 
   &.active {
-    ${({ theme }) => theme.typo.sh0};
+    ${({ theme }) => theme.typo.sh1};
     color: ${({ theme }) => theme.palette.primary.o1};
-    background-color: ${({ theme }) => theme.palette.primary.o0};
-    border-radius: 4px;
+    /* primary.o1 10% — Figma node 9160:9658 */
+    background-color: rgba(255, 90, 20, 0.1);
   }
 `;
 
