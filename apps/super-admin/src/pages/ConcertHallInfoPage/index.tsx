@@ -33,6 +33,8 @@ import SubwayStationSearchModal from './SubwayStationSearchModal';
 const { TextArea } = Input;
 
 const MAX_PHOTO_COUNT = 20;
+/** antd Card body 기본 패딩. 사진 줄을 카드 끝까지 흘리기 위해 음수 마진으로 상쇄한다. */
+const CARD_BODY_PADDING = 24;
 
 const PHONE_NUMBER_REGEX = /^0\d{1,2}-?\d{3,4}-?\d{4}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -84,6 +86,26 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
 );
 
 // 이미지 우상단 모서리에 걸치는 다크 원형 삭제 버튼
+// Figma node 9160:9598 export (색상만 유지, path 원본)
+const CloseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M15 5L5 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 5L15 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const RemoveImageButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
   <button
     type="button"
@@ -91,21 +113,22 @@ const RemoveImageButton = ({ onClick, label }: { onClick: () => void; label: str
     onClick={onClick}
     style={{
       position: 'absolute',
-      top: -8,
-      right: -8,
-      width: 24,
-      height: 24,
+      top: -10,
+      right: -10,
+      width: 28,
+      height: 28,
       borderRadius: '50%',
       border: 'none',
-      backgroundColor: 'rgba(18, 18, 21, 0.7)',
-      color: '#FFFFFF',
+      // grey.g90 80% — Figma node 9160:9597
+      backgroundColor: 'rgba(40, 43, 51, 0.8)',
+      padding: 0,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
     }}
   >
-    <CloseOutlined style={{ fontSize: 12 }} />
+    <CloseIcon />
   </button>
 );
 
@@ -553,8 +576,9 @@ const ConcertHallInfoPage = () => {
 
         <Card>
           <SectionTitle>소개 및 사진</SectionTitle>
-          <Flex vertical gap={20} style={{ maxWidth: 600 }}>
-            <div>
+          <Flex vertical gap={28}>
+            {/* 소개 입력 폭은 600 고정 (Figma node 9160:9580) */}
+            <div style={{ maxWidth: 600 }}>
               <FieldLabel>소개</FieldLabel>
               <TextArea
                 rows={5}
@@ -565,25 +589,38 @@ const ConcertHallInfoPage = () => {
             </div>
             <div>
               <FieldLabel>사진 (최대 {MAX_PHOTO_COUNT}장 등록 가능)</FieldLabel>
-              {/* 최대 너비 초과 시 가로 스크롤. 모서리에 걸친 X 버튼이 잘리지 않도록 상단 여백 확보 */}
-              <Flex gap={12} style={{ overflowX: 'auto', padding: '10px 10px 4px 0' }}>
+              {/*
+                최대 너비 초과 시 가로 스크롤. 모서리에 걸친 X 버튼이 잘리지 않도록 상단 여백 확보.
+                카드 우측 패딩을 음수 마진으로 덮어 사진이 카드 끝까지 이어지도록 한다.
+                (뒤에 사진이 더 있다는 걸 보여주는 의도 — Figma node 9160:9589)
+              */}
+              <Flex
+                gap={20}
+                style={{
+                  overflowX: 'auto',
+                  marginRight: -CARD_BODY_PADDING,
+                  // 끝까지 스크롤했을 때 좌측 패딩과 동일한 여백이 남도록 한다
+                  padding: `10px ${CARD_BODY_PADDING}px 4px 0`,
+                }}
+              >
                 {/* 20장 도달 시 업로드 박스 미노출 (디자인 정책) */}
                 {photos.length < MAX_PHOTO_COUNT && (
-                  <ImageUploadBox width={120} height={120} multiple onSelect={onSelectPhotos} />
+                  <ImageUploadBox width={160} height={160} multiple onSelect={onSelectPhotos} />
                 )}
                 {photos.map((photo, index) => (
                   <div
                     key={photo}
-                    style={{ position: 'relative', width: 120, height: 120, flexShrink: 0 }}
+                    style={{ position: 'relative', width: 160, height: 160, flexShrink: 0 }}
                   >
                     <img
                       src={photo}
                       alt={`공연장 사진 ${index + 1}`}
                       style={{
-                        width: 120,
-                        height: 120,
+                        width: 160,
+                        height: 160,
                         objectFit: 'cover',
-                        borderRadius: 8,
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.grey.g20}`,
                         display: 'block',
                       }}
                     />
