@@ -5,17 +5,7 @@ import {
   SuperAdminConcertHallVatType,
 } from '@boolti/api/src/types/superAdminConcertHall';
 import { Button as BooltiButton, useToast } from '@boolti/ui';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Flex,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Typography,
-} from 'antd';
+import { Button, Card, Checkbox, Flex, Input, InputNumber, Radio, Select, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -75,7 +65,8 @@ const FieldLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 20 }}>
+  // Figma 카드 제목은 H1(20px), 제목↔본문 간격 16
+  <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
     {children}
   </Typography.Title>
 );

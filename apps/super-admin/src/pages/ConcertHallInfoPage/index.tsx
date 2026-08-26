@@ -19,7 +19,7 @@ import type { InputRef } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import ConcertHallPageLayout from '~/components/ConcertHallPageLayout';
+import ConcertHallPageLayout, { CARD_BODY_PADDING } from '~/components/ConcertHallPageLayout';
 import alcoholIcon from '~/assets/amenities/alcohol.svg';
 import cabinetIcon from '~/assets/amenities/cabinet.svg';
 import parkingIcon from '~/assets/amenities/parking.svg';
@@ -33,8 +33,6 @@ import SubwayStationSearchModal from './SubwayStationSearchModal';
 const { TextArea } = Input;
 
 const MAX_PHOTO_COUNT = 20;
-/** antd Card body 기본 패딩. 사진 줄을 카드 끝까지 흘리기 위해 음수 마진으로 상쇄한다. */
-const CARD_BODY_PADDING = 24;
 
 const PHONE_NUMBER_REGEX = /^0\d{1,2}-?\d{3,4}-?\d{4}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -105,7 +103,8 @@ const FieldLabel = ({ children, required }: { children: React.ReactNode; require
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 20 }}>
+  // Figma 카드 제목은 H1(20px), 제목↔본문 간격 16
+  <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
     {children}
   </Typography.Title>
 );
