@@ -45,6 +45,31 @@ const AmenityIcon = ({ src, label }: { src: string; label: string }) => (
   <img src={src} alt={label} style={{ width: 18, height: 18, verticalAlign: 'middle' }} />
 );
 
+// antd Checkbox 래퍼는 align-items: baseline 이라, 자식에 아이콘이 들어가면
+// 체크박스/아이콘/텍스트의 세로 정렬이 틀어진다. center로 덮어준다.
+const AmenityCheckbox = ({
+  checked,
+  onChange,
+  label,
+  icon,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: string;
+  icon: string;
+}) => (
+  <Checkbox
+    checked={checked}
+    onChange={(e) => onChange(e.target.checked)}
+    style={{ alignItems: 'center' }}
+  >
+    <Flex align="center" gap={6} component="span">
+      <AmenityIcon src={icon} label={label} />
+      {label}
+    </Flex>
+  </Checkbox>
+);
+
 interface SelectedStation {
   stationId: number;
   stationName: string;
@@ -644,17 +669,12 @@ const ConcertHallInfoPage = () => {
             <Flex vertical gap={16} style={{ flex: 1 }}>
               {countAmenityItems.map(({ key, countKey, label, icon }) => (
                 <Flex key={key} align="center" justify="space-between" gap={12}>
-                  <Checkbox
+                  <AmenityCheckbox
                     checked={amenities[key]}
-                    onChange={(e) =>
-                      setAmenities((prev) => ({ ...prev, [key]: e.target.checked }))
-                    }
-                  >
-                    <Flex align="center" gap={6} component="span">
-                      <AmenityIcon src={icon} label={label} />
-                      {label}
-                    </Flex>
-                  </Checkbox>
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
                   <InputNumber
                     min={0}
                     placeholder="0"
@@ -671,17 +691,12 @@ const ConcertHallInfoPage = () => {
             <Flex vertical gap={16} style={{ flex: 1 }}>
               {booleanAmenityItems.map(({ key, label, icon }) => (
                 <Flex key={key} align="center" style={{ height: 32 }}>
-                  <Checkbox
+                  <AmenityCheckbox
                     checked={amenities[key]}
-                    onChange={(e) =>
-                      setAmenities((prev) => ({ ...prev, [key]: e.target.checked }))
-                    }
-                  >
-                    <Flex align="center" gap={6} component="span">
-                      <AmenityIcon src={icon} label={label} />
-                      {label}
-                    </Flex>
-                  </Checkbox>
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
                 </Flex>
               ))}
             </Flex>
