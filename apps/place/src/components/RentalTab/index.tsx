@@ -1,5 +1,7 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
 import { ChevronDownIcon } from '@boolti/icon';
+
+import { CheckIcon, RentalMethodIcon } from '~/components/icons';
 import { useLayoutEffect, useRef, useState } from 'react';
 
 import { formatFee } from '~/utils/format';
@@ -75,8 +77,13 @@ const RentalTab = ({ profile }: Props) => {
     <Styled.Container>
       {rentalMethod && (
         <Styled.Section>
-          <Styled.SectionTitle>대관 방법</Styled.SectionTitle>
-          <Styled.MethodBox>{rentalMethod}</Styled.MethodBox>
+          <Styled.MethodCard>
+            <Styled.MethodTitle>
+              대관 방법
+              <RentalMethodIcon />
+            </Styled.MethodTitle>
+            <Styled.MethodText>{rentalMethod}</Styled.MethodText>
+          </Styled.MethodCard>
         </Styled.Section>
       )}
 
@@ -100,6 +107,7 @@ const RentalTab = ({ profile }: Props) => {
             {rentalFees.map((fee) => (
               <Styled.FeeRow key={fee.id}>
                 <Styled.FeeLabel>{fee.dayTypeName}</Styled.FeeLabel>
+                <Styled.FeeLeader />
                 <Styled.FeeValue>{formatFee(fee.fee)}</Styled.FeeValue>
               </Styled.FeeRow>
             ))}
@@ -117,6 +125,7 @@ const RentalTab = ({ profile }: Props) => {
             {additionalFees.map((fee) => (
               <Styled.FeeRow key={fee.id}>
                 <Styled.FeeLabel>{fee.dayTypeName}</Styled.FeeLabel>
+                <Styled.FeeLeader />
                 <Styled.FeeValue>{formatFee(fee.fee)} / 1시간</Styled.FeeValue>
               </Styled.FeeRow>
             ))}
@@ -133,6 +142,7 @@ const RentalTab = ({ profile }: Props) => {
             {paidOptions.map((option) => (
               <Styled.FeeRow key={option.id}>
                 <Styled.FeeLabel>{option.name}</Styled.FeeLabel>
+                <Styled.FeeLeader />
                 <Styled.FeeValue>{formatFee(option.price)}</Styled.FeeValue>
               </Styled.FeeRow>
             ))}
@@ -145,7 +155,12 @@ const RentalTab = ({ profile }: Props) => {
           <Styled.SectionTitle>특이사항</Styled.SectionTitle>
           <Styled.NoteList>
             {specialNotes.map((note, index) => (
-              <Styled.NoteItem key={index}>{note}</Styled.NoteItem>
+              <Styled.NoteItem key={index}>
+                <Styled.NoteIcon>
+                  <CheckIcon />
+                </Styled.NoteIcon>
+                {note}
+              </Styled.NoteItem>
             ))}
           </Styled.NoteList>
         </Styled.Section>
