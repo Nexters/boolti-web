@@ -70,9 +70,10 @@ const INITIAL_AMENITIES: AmenitiesState = {
   hasAlcoholSales: false,
 };
 
-const FieldLabel = ({ children }: { children: React.ReactNode }) => (
+const FieldLabel = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
   <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
     {children}
+    {required && <Typography.Text type="danger"> *</Typography.Text>}
   </Typography.Text>
 );
 
@@ -250,6 +251,10 @@ const ConcertHallInfoPage = () => {
   };
 
   const onSave = async () => {
+    if (!name.trim()) {
+      toast.error('공연장명을 입력해 주세요.');
+      return;
+    }
     if (!shareCode || hasShareCodeError) {
       toast.error('공연장 ID를 확인해 주세요.');
       return;
@@ -386,13 +391,11 @@ const ConcertHallInfoPage = () => {
               )}
             </div>
             <div>
-              <FieldLabel>공연장명</FieldLabel>
+              <FieldLabel required>공연장명</FieldLabel>
               <Input size="large" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div>
-              <FieldLabel>
-                공연장 ID <Typography.Text type="danger">*</Typography.Text>
-              </FieldLabel>
+              <FieldLabel required>공연장 ID</FieldLabel>
               <Input
                 size="large"
                 value={shareCode}
