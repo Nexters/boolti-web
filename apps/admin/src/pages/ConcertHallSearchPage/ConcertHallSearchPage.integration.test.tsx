@@ -971,6 +971,85 @@ describe('ConcertHallSearchPage', () => {
     expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
   });
 
+  it('모바일 검색 조건 칩 본문을 누르면 연결된 필터 시트를 연다', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderConcertHallSearchPage(
+      '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100',
+    );
+
+    fireEvent.click(
+      screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }),
+    );
+
+    const rentalFeeDialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    expect(within(rentalFeeDialog).getByLabelText('모바일 대관료 최소')).not.toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: '모바일 바텀시트 닫기' }));
+    fireEvent.animationEnd(rentalFeeDialog);
+    fireEvent.click(screen.getByRole('button', { name: '수용 인원 50명 ~ 100명 편집' }));
+
+    const capacityDialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    expect(
+      within(capacityDialog).getByRole('button', { name: '모바일 50명 ~ 100명 선택' }),
+    ).not.toBeNull();
+  });
+
+  it('모바일 검색 조건 칩의 대관료 X를 누르면 대관료 필터만 초기화한다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderConcertHallSearchPage(
+      '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '대관료 필터 제거' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/concert-halls?capacityMin=50&capacityMax=100&sort=FEE_DESC',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          minFee: undefined,
+          maxFee: undefined,
+          minCapacity: 50,
+          maxCapacity: 100,
+          sort: 'FEE_DESC',
+        }),
+      );
+    });
+    expect(screen.queryByRole('button', { name: /대관료 .* 편집/ })).toBeNull();
+    expect(screen.getByRole('button', { name: '수용 인원 50명 ~ 100명 편집' })).not.toBeNull();
+    expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
+  });
+
+  it('모바일 검색 조건 칩의 수용 인원 X를 누르면 수용 인원 필터만 초기화한다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderConcertHallSearchPage(
+      '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '수용 인원 필터 제거' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000&sort=FEE_DESC',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          minFee: 500000,
+          maxFee: 1000000,
+          minCapacity: undefined,
+          maxCapacity: undefined,
+          sort: 'FEE_DESC',
+        }),
+      );
+    });
+    expect(
+      screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }),
+    ).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /수용 인원 .* 편집/ })).toBeNull();
+    expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
+  });
+
   it('모바일 전체 삭제는 검색 필터를 즉시 적용해 비우고 요약 화면으로 돌아간다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
     window.localStorage.setItem(

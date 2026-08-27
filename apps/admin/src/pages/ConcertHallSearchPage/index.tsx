@@ -514,10 +514,6 @@ const ConcertHallSearchPage = () => {
     (option) => option.id === selectedCapacityOptionId,
   );
   const appliedCapacityOption = findRangeOption(capacityOptions, capacityMin, capacityMax);
-  const appliedRegionId = regionId ?? selectedRegionId ?? undefined;
-  const selectedRegionName =
-    recommendedRegionsQuery.data?.find((region) => region.regionId === appliedRegionId)?.name ??
-    selectedRegionNameInput;
   const stagedCapacityLabel = isCapacityCleared
     ? DEFAULT_CAPACITY_LABEL
     : selectedCapacityOption?.label ??
@@ -1374,17 +1370,26 @@ const ConcertHallSearchPage = () => {
                       </Styled.MobileResultHeading>
                       <Styled.MobileResultList>
                         {recentKeywords.map((recentKeyword) => (
-                          <Styled.MobileResultButton
-                            key={recentKeyword}
-                            type="button"
-                            aria-label={`${recentKeyword} 검색`}
-                            onClick={() => stageMobileRecentKeyword(recentKeyword)}
-                          >
-                            <Styled.MobileResultIcon>
-                              <SearchIcon />
-                            </Styled.MobileResultIcon>
-                            {recentKeyword}
-                          </Styled.MobileResultButton>
+                          <Styled.MobileResultItem
+                              key={recentKeyword}>
+                            <Styled.MobileResultButton
+                              type="button"
+                              aria-label={`${recentKeyword} 검색`}
+                              onClick={() => stageMobileRecentKeyword(recentKeyword)}
+                            >
+                              <Styled.MobileResultIcon>
+                                <SearchIcon />
+                              </Styled.MobileResultIcon>
+                              {recentKeyword}
+                            </Styled.MobileResultButton>
+                            <Styled.IconButton
+                              type="button"
+                              aria-label={`${recentKeyword} 삭제`}
+                              onClick={() => removeRecentKeyword(recentKeyword)}
+                            >
+                              <CloseIcon />
+                            </Styled.IconButton>
+                          </Styled.MobileResultItem>
                         ))}
                       </Styled.MobileResultList>
                     </>
@@ -1602,50 +1607,55 @@ const ConcertHallSearchPage = () => {
 
       <Styled.Content hasDetail={hasDetail}>
         <Styled.ResultsPane $detailPanelOpen={hasDetail}>
-
+          <Styled.ResultsPaneHeader $detailPanelOpen={hasDetail}>
           {hasSearchConditions && (
             <Styled.ChipRow>
-              {(appliedRegionId != null || selectedRegionNameInput) && (
-                <Styled.Chip
-                  type="button"
-                  aria-label={`${selectedRegionName ?? '선택한 지역'} 필터 제거`}
-                  onClick={() => {
-                    setSelectedRegionId(null);
-                    setSelectedRegionNameInput(undefined);
-                    setKeywordInput('');
-                    updateParams({
-                      keyword,
-                      rentalFeeMin,
-                      rentalFeeMax,
-                      capacityMin,
-                      capacityMax,
-                      sort,
-                    });
-                  }}
-                >
-                  {selectedRegionName ?? '선택한 지역'} <CloseIcon />
-                </Styled.Chip>
-              )}
               {(rentalFeeMin != null || rentalFeeMax != null) && (
-                <Styled.Chip
-                  type="button"
-                  onClick={() => {
-                    clearRentalFee();
-                    updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
-                  }}
-                >
-                  {rentalFeeLabel} <CloseIcon />
+                <Styled.Chip>
+                  <Styled.ChipEditButton
+                    type="button"
+                    aria-label={`대관료 ${rentalFeeLabel} 편집`}
+                    onClick={() => {
+                      setIsMobileFilterClosing(false);
+                      setActiveSearchField('rentalFee');
+                    }}
+                  >
+                    {rentalFeeLabel}
+                  </Styled.ChipEditButton>
+                  <Styled.ChipRemoveButton
+                    type="button"
+                    aria-label="대관료 필터 제거"
+                    onClick={() => {
+                      clearRentalFee();
+                      updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
+                    }}
+                  >
+                    <CloseIcon />
+                  </Styled.ChipRemoveButton>
                 </Styled.Chip>
               )}
               {appliedCapacityOption && (
-                <Styled.Chip
-                  type="button"
-                  onClick={() => {
-                    clearCapacity();
-                    updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
-                  }}
-                >
-                  {appliedCapacityOption.label} <CloseIcon />
+                <Styled.Chip>
+                  <Styled.ChipEditButton
+                    type="button"
+                    aria-label={`수용 인원 ${appliedCapacityOption.label} 편집`}
+                    onClick={() => {
+                      setIsMobileFilterClosing(false);
+                      setActiveSearchField('capacity');
+                    }}
+                  >
+                    {appliedCapacityOption.label}
+                  </Styled.ChipEditButton>
+                  <Styled.ChipRemoveButton
+                    type="button"
+                    aria-label="수용 인원 필터 제거"
+                    onClick={() => {
+                      clearCapacity();
+                      updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
+                    }}
+                  >
+                    <CloseIcon />
+                  </Styled.ChipRemoveButton>
                 </Styled.Chip>
               )}
             </Styled.ChipRow>
@@ -1731,6 +1741,8 @@ const ConcertHallSearchPage = () => {
               </Styled.MobileSortButton>
             </Styled.Toolbar>
           )}
+
+          </Styled.ResultsPaneHeader>
 
           {concertHallListQuery.isError && (
             <Styled.Empty>
