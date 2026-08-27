@@ -238,11 +238,7 @@ const BrowserBackProbe = () => {
   const navigate = useNavigate();
 
   return (
-    <button
-      type="button"
-      aria-label="브라우저 뒤로가기 시뮬레이션"
-      onClick={() => navigate(-1)}
-    />
+    <button type="button" aria-label="브라우저 뒤로가기 시뮬레이션" onClick={() => navigate(-1)} />
   );
 };
 
@@ -977,9 +973,7 @@ describe('ConcertHallSearchPage', () => {
       '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100',
     );
 
-    fireEvent.click(
-      screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }),
-    );
+    fireEvent.click(screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }));
 
     const rentalFeeDialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
     expect(within(rentalFeeDialog).getByLabelText('모바일 대관료 최소')).not.toBeNull();

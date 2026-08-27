@@ -903,403 +903,102 @@ const ConcertHallSearchPage = () => {
 
   return (
     <>
-    <Global styles={css`
-      body {
-        background: ${theme.palette.grey.b};
-      }
-    `} />
-    <Styled.Page>
-      <Styled.Header $menuOpen={isHeaderMenuOpen}>
-        <Styled.Logo
-          onClick={() => {
-            setIsHeaderMenuOpen(false);
-            resetSearch();
-          }}
-        >
-          <BooltiLogo />
-        </Styled.Logo>
-        <Styled.HeaderMenuContainer ref={headerMenuRef}>
-          <Styled.MenuButton
-            type="button"
-            aria-label={isHeaderMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
-            aria-haspopup="menu"
-            aria-expanded={isHeaderMenuOpen}
-            aria-controls="concert-hall-header-menu"
+      <Global
+        styles={css`
+          body {
+            background: ${theme.palette.grey.b};
+          }
+        `}
+      />
+      <Styled.Page>
+        <Styled.Header $menuOpen={isHeaderMenuOpen}>
+          <Styled.Logo
             onClick={() => {
-              setActiveSearchField(null);
-              setIsHeaderMenuOpen((isOpen) => !isOpen);
+              setIsHeaderMenuOpen(false);
+              resetSearch();
             }}
           >
-            <MenuIcon />
-          </Styled.MenuButton>
-          {isHeaderMenuOpen && (
-            <Styled.HeaderMenuPopup id="concert-hall-header-menu" role="menu">
-              <Styled.HeaderMenuLabel
-                type="button"
-                role="menuitem"
-                onClick={() => {
-                  setIsHeaderMenuOpen(false);
-                  navigate(PATH.QR);
-                }}
-              >
-                앱 둘러보기
-              </Styled.HeaderMenuLabel>
-              <Styled.HeaderMenuPrimaryButton
-                type="button"
-                role="menuitem"
-                onClick={() => {
-                  setIsHeaderMenuOpen(false);
-                  navigate(`${PATH.HOME}?target=register`);
-                }}
-              >
-                공연 등록 시작하기
-                <ArrowRightIcon />
-              </Styled.HeaderMenuPrimaryButton>
-            </Styled.HeaderMenuPopup>
-          )}
-        </Styled.HeaderMenuContainer>
-        <Styled.SearchForm
-          ref={searchFormRef}
-          $hiddenOnMobile={isHeaderMenuOpen}
-          onSubmit={handleSearch}
-        >
-          <Styled.SearchInputField
-            active={activeSearchField === 'keyword'}
-            $hideDivider={activeSearchField === 'keyword' || activeSearchField === 'rentalFee'}
-            onMouseDown={isMobile ? undefined : () => handleSearchFieldClick('keyword', false)}
-            onClick={(event) => {
-              if (isMobile) return;
-              if (event.target !== event.currentTarget) return;
-              keywordInputRef.current?.focus();
-            }}
-          >
-            {isMobile ? (
-              <Styled.MobileSearchTrigger
-                type="button"
-                aria-label="모바일 공연장 검색 필터 열기"
-                aria-haspopup="dialog"
-                isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
-                onClick={() => {
-                  setIsMobileFilterClosing(false);
-                  setActiveSearchField('overview');
-                }}
-              >
-                {(selectedRegionNameInput ?? keywordInput) || '내 조건에 맞는 공연장 찾기'}
-              </Styled.MobileSearchTrigger>
-            ) : (
-              <>
-                <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
-                  장소
-                </Styled.SearchInputLabel>
-                <Styled.KeywordInput
-                  ref={keywordInputRef}
-                  id="concert-hall-search-keyword"
-                  value={keywordInput}
-                  placeholder="지역, 공연장명 검색"
-                  aria-label="지역, 공연장명 검색"
-                  onFocus={handleKeywordInputFocus}
-                  onKeyDown={handleKeywordInputKeyDown}
-                  onChange={(event) => {
-                    setSelectedRegionId(null);
-                    setSelectedRegionNameInput(undefined);
-                    setKeywordInput(event.target.value);
+            <BooltiLogo />
+          </Styled.Logo>
+          <Styled.HeaderMenuContainer ref={headerMenuRef}>
+            <Styled.MenuButton
+              type="button"
+              aria-label={isHeaderMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+              aria-haspopup="menu"
+              aria-expanded={isHeaderMenuOpen}
+              aria-controls="concert-hall-header-menu"
+              onClick={() => {
+                setActiveSearchField(null);
+                setIsHeaderMenuOpen((isOpen) => !isOpen);
+              }}
+            >
+              <MenuIcon />
+            </Styled.MenuButton>
+            {isHeaderMenuOpen && (
+              <Styled.HeaderMenuPopup id="concert-hall-header-menu" role="menu">
+                <Styled.HeaderMenuLabel
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setIsHeaderMenuOpen(false);
+                    navigate(PATH.QR);
                   }}
-                />
-              </>
+                >
+                  앱 둘러보기
+                </Styled.HeaderMenuLabel>
+                <Styled.HeaderMenuPrimaryButton
+                  type="button"
+                  role="menuitem"
+                  onClick={() => {
+                    setIsHeaderMenuOpen(false);
+                    navigate(`${PATH.HOME}?target=register`);
+                  }}
+                >
+                  공연 등록 시작하기
+                  <ArrowRightIcon />
+                </Styled.HeaderMenuPrimaryButton>
+              </Styled.HeaderMenuPopup>
             )}
-            {!isMobile && activeSearchField === 'keyword' && (
-              <Styled.KeywordPopover aria-label="장소 검색">
-                {trimmedKeywordInput && !shouldKeepPreviousSearchContent ? (
-                  <>
-                    {autocompleteQuery.isError ? (
-                      <Styled.AutocompleteState>
-                        자동완성 결과를 불러오지 못했어요.
-                      </Styled.AutocompleteState>
-                    ) : autocompleteQuery.data?.items.length ? (
-                      <Styled.RecentList>
-                        {autocompleteQuery.data.items.map((item) => (
-                          <Styled.RecentItem key={`${item.type}-${item.id}`}>
-                            <Styled.RecentKeywordButton
-                              type="button"
-                              aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
-                              onClick={() => applyAutocomplete(item)}
-                            >
-                              <Styled.RecentItemIcon>
-                                <AreaIcon />
-                              </Styled.RecentItemIcon>
-                              <Styled.AutocompleteText>
-                                <span>
-                                  <HighlightedAutocompleteName
-                                    name={item.name}
-                                    keyword={trimmedKeywordInput}
-                                  />
-                                </span>
-                                {item.streetAddress && (
-                                  <Styled.AutocompleteAddress>
-                                    {item.streetAddress}
-                                  </Styled.AutocompleteAddress>
-                                )}
-                              </Styled.AutocompleteText>
-                            </Styled.RecentKeywordButton>
-                          </Styled.RecentItem>
-                        ))}
-                      </Styled.RecentList>
-                    ) : (
-                      <Styled.AutocompleteState>
-                        일치하는 지역이나 공연장이 없어요.
-                      </Styled.AutocompleteState>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    {recentKeywords.length > 0 && (
-                      <>
-                        <Styled.PopoverHeader>
-                          <span>최근 검색어</span>
-                          {recentKeywords.length >= 2 && (
-                            <Styled.TextButton
-                              type="button"
-                              onMouseDown={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                              }}
-                              onClick={() => setIsRecentClearConfirmOpen(true)}
-                            >
-                              전체 삭제
-                            </Styled.TextButton>
-                          )}
-                        </Styled.PopoverHeader>
-                        <Styled.RecentList>
-                          {recentKeywords.slice(0, 5).map((recentKeyword) => (
-                            <Styled.RecentItem key={recentKeyword}>
-                              <Styled.RecentKeywordButton
-                                type="button"
-                                aria-label={`${recentKeyword} 검색`}
-                                onClick={() => applyRecentKeyword(recentKeyword)}
-                              >
-                                <Styled.RecentItemIcon>
-                                  <SearchIcon />
-                                </Styled.RecentItemIcon>
-                                {recentKeyword}
-                              </Styled.RecentKeywordButton>
-                              <Styled.IconButton
-                                type="button"
-                                aria-label={`${recentKeyword} 삭제`}
-                                onClick={() => removeRecentKeyword(recentKeyword)}
-                              >
-                                <CloseIcon />
-                              </Styled.IconButton>
-                            </Styled.RecentItem>
-                          ))}
-                        </Styled.RecentList>
-                      </>
-                    )}
-                    <Styled.PopoverHeader>
-                      <span>추천 지역</span>
-                    </Styled.PopoverHeader>
-                    {recommendedRegionsQuery.isLoading ? (
-                      <Styled.AutocompleteState>
-                        추천 지역을 불러오는 중입니다.
-                      </Styled.AutocompleteState>
-                    ) : recommendedRegionsQuery.isError ? (
-                      <Styled.AutocompleteState>
-                        추천 지역을 불러오지 못했어요.
-                      </Styled.AutocompleteState>
-                    ) : (
-                      <Styled.RecentList>
-                        {(recommendedRegionsQuery.data ?? []).map((region) => (
-                          <Styled.RecentItem key={region.regionId}>
-                            <Styled.RecentKeywordButton
-                              type="button"
-                              aria-label={`${region.name} 검색`}
-                              onClick={() => applyRegion(region.regionId, region.name)}
-                            >
-                              <Styled.RecentItemIcon>
-                                <AreaIcon />
-                              </Styled.RecentItemIcon>
-                              {region.name}
-                            </Styled.RecentKeywordButton>
-                          </Styled.RecentItem>
-                        ))}
-                      </Styled.RecentList>
-                    )}
-                  </>
-                )}
-              </Styled.KeywordPopover>
-            )}
-          </Styled.SearchInputField>
-          <Styled.FilterField>
-            <Styled.FieldButton
-              type="button"
-              $showDivider
-              $hideDivider={activeSearchField === 'rentalFee' || activeSearchField === 'capacity'}
-              active={
-                activeSearchField === 'rentalFee' || rentalFeeMin != null || rentalFeeMax != null
-              }
-              aria-label={`대관료 ${rentalFeeLabel}`}
-              aria-expanded={activeSearchField === 'rentalFee'}
-              onClick={() => handleSearchFieldClick('rentalFee')}
-            >
-              <Styled.FieldLabel>대관료</Styled.FieldLabel>
-              <Styled.FieldValue isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}>
-                {stagedRentalFeeLabel}
-              </Styled.FieldValue>
-            </Styled.FieldButton>
-            {activeSearchField === 'rentalFee' && (
-              <Styled.RangePopover aria-label="대관료 필터">
-                <Styled.RangeInputRow>
-                  <Styled.RangeInputLabel>
-                    최소
-                    <Styled.RangeInput
-                      aria-label="대관료 최소"
-                      inputMode="numeric"
-                      placeholder="1"
-                      value={rentalFeeMinInput}
-                      onChange={(event) => {
-                        setSelectedRentalFeeOptionId(null);
-                        setRentalFeeMinInput(event.target.value.replace(/[^\d]/g, ''));
-                      }}
-                      onKeyDown={handleRentalFeeMinKeyDown}
-                    />
-                  </Styled.RangeInputLabel>
-                  <Styled.RangeDash>~</Styled.RangeDash>
-                  <Styled.RangeInputLabel>
-                    최대
-                    <Styled.RangeInput
-                      ref={rentalFeeMaxInputRef}
-                      aria-label="대관료 최대"
-                      inputMode="numeric"
-                      placeholder="5,000,000"
-                      value={rentalFeeMaxInput}
-                      onChange={(event) => {
-                        setSelectedRentalFeeOptionId(null);
-                        setRentalFeeMaxInput(event.target.value.replace(/[^\d]/g, ''));
-                      }}
-                      onKeyDown={handleRentalFeeMaxKeyDown}
-                    />
-                  </Styled.RangeInputLabel>
-                </Styled.RangeInputRow>
-                <Styled.FilterOptionList>
-                  {rentalFeeOptions.map((option) => (
-                    <Styled.FilterOption
-                      key={option.id}
-                      type="button"
-                      active={selectedRentalFeeOptionId === option.id}
-                      onClick={() => {
-                        selectRentalFeeOption(option);
-                        setActiveSearchField('capacity');
-                      }}
-                    >
-                      {option.label}
-                    </Styled.FilterOption>
-                  ))}
-                </Styled.FilterOptionList>
-                <Styled.PopoverFooter>
-                  <Styled.TextButton
-                    type="button"
-                    aria-label="대관료 초기화"
-                    disabled={
-                      !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
-                    }
-                    onClick={clearRentalFee}
-                  >
-                    <RefreshIcon />
-                    초기화
-                  </Styled.TextButton>
-                </Styled.PopoverFooter>
-              </Styled.RangePopover>
-            )}
-          </Styled.FilterField>
-          <Styled.FilterField>
-            <Styled.FieldButton
-              type="button"
-              active={activeSearchField === 'capacity' || !!selectedCapacityOptionId}
-              aria-label={`수용 인원 ${stagedCapacityLabel}`}
-              aria-expanded={activeSearchField === 'capacity'}
-              onClick={() => handleSearchFieldClick('capacity')}
-            >
-              <Styled.FieldLabel>수용 인원</Styled.FieldLabel>
-              <Styled.FieldValue isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}>
-                {stagedCapacityLabel}
-              </Styled.FieldValue>
-            </Styled.FieldButton>
-            {activeSearchField === 'capacity' && (
-              <Styled.FilterPopover aria-label="수용 인원 필터">
-                <Styled.FilterOptionList>
-                  {capacityOptions.map((option) => (
-                    <Styled.FilterOption
-                      key={option.id}
-                      type="button"
-                      active={selectedCapacityOptionId === option.id}
-                      onClick={() => {
-                        setSelectedCapacityOptionId(option.id);
-                        setIsCapacityCleared(false);
-                      }}
-                    >
-                      {option.label}
-                    </Styled.FilterOption>
-                  ))}
-                </Styled.FilterOptionList>
-                <Styled.PopoverFooter>
-                  <Styled.TextButton
-                    type="button"
-                    aria-label="수용 인원 초기화"
-                    disabled={!selectedCapacityOptionId}
-                    onClick={clearCapacity}
-                  >
-                    <RefreshIcon />
-                    초기화
-                  </Styled.TextButton>
-                </Styled.PopoverFooter>
-              </Styled.FilterPopover>
-            )}
-          </Styled.FilterField>
-          <Styled.SearchButton type="submit" aria-label="검색">
-            <SearchIcon />
-          </Styled.SearchButton>
-        </Styled.SearchForm>
-      </Styled.Header>
-
-      {isMobile && activeSearchField != null && (
-        <Styled.MobileFilterOverlay
-          $isClosing={isMobileFilterClosing}
-          onClick={(event) => {
-            if (event.target !== event.currentTarget) return;
-            closeMobileFilter();
-          }}
-        >
-          <Styled.MobileFilterSheet
-            $isClosing={isMobileFilterClosing}
-            ref={mobileFilterRef}
-            role="dialog"
-            aria-modal="true"
-            aria-label="모바일 공연장 검색 필터"
-            onAnimationEnd={handleMobileFilterAnimationEnd}
+          </Styled.HeaderMenuContainer>
+          <Styled.SearchForm
+            ref={searchFormRef}
+            $hiddenOnMobile={isHeaderMenuOpen}
+            onSubmit={handleSearch}
           >
-            <Styled.MobileSheetHandle
-              type="button"
-              aria-label="모바일 바텀시트 닫기"
-              onClick={closeMobileFilter}
-            />
-            {activeSearchField === 'keyword' ? (
-              <>
-                <Styled.MobileSheetHeader>
-                  <Styled.MobileSheetTitle>장소</Styled.MobileSheetTitle>
-                  <Styled.MobileSheetCloseButton
-                    type="button"
-                    aria-label="모바일 검색 필터 닫기"
-                    onClick={cancelMobileKeywordSearch}
-                  >
-                    <CloseIcon />
-                  </Styled.MobileSheetCloseButton>
-                </Styled.MobileSheetHeader>
-                <Styled.MobileLocationSearch>
-                  <Styled.MobileLocationInput
-                    ref={mobileKeywordInputRef}
-                    autoFocus
+            <Styled.SearchInputField
+              active={activeSearchField === 'keyword'}
+              $hideDivider={activeSearchField === 'keyword' || activeSearchField === 'rentalFee'}
+              onMouseDown={isMobile ? undefined : () => handleSearchFieldClick('keyword', false)}
+              onClick={(event) => {
+                if (isMobile) return;
+                if (event.target !== event.currentTarget) return;
+                keywordInputRef.current?.focus();
+              }}
+            >
+              {isMobile ? (
+                <Styled.MobileSearchTrigger
+                  type="button"
+                  aria-label="모바일 공연장 검색 필터 열기"
+                  aria-haspopup="dialog"
+                  isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
+                  onClick={() => {
+                    setIsMobileFilterClosing(false);
+                    setActiveSearchField('overview');
+                  }}
+                >
+                  {(selectedRegionNameInput ?? keywordInput) || '내 조건에 맞는 공연장 찾기'}
+                </Styled.MobileSearchTrigger>
+              ) : (
+                <>
+                  <Styled.SearchInputLabel htmlFor="concert-hall-search-keyword">
+                    장소
+                  </Styled.SearchInputLabel>
+                  <Styled.KeywordInput
+                    ref={keywordInputRef}
+                    id="concert-hall-search-keyword"
                     value={keywordInput}
                     placeholder="지역, 공연장명 검색"
-                    aria-label="모바일 지역, 공연장명 검색"
+                    aria-label="지역, 공연장명 검색"
                     onFocus={handleKeywordInputFocus}
                     onKeyDown={handleKeywordInputKeyDown}
                     onChange={(event) => {
@@ -1308,9 +1007,10 @@ const ConcertHallSearchPage = () => {
                       setKeywordInput(event.target.value);
                     }}
                   />
-                  <SearchIcon />
-                </Styled.MobileLocationSearch>
-                <Styled.MobileSheetBody>
+                </>
+              )}
+              {!isMobile && activeSearchField === 'keyword' && (
+                <Styled.KeywordPopover aria-label="장소 검색">
                   {trimmedKeywordInput && !shouldKeepPreviousSearchContent ? (
                     <>
                       {autocompleteQuery.isError ? (
@@ -1318,85 +1018,87 @@ const ConcertHallSearchPage = () => {
                           자동완성 결과를 불러오지 못했어요.
                         </Styled.AutocompleteState>
                       ) : autocompleteQuery.data?.items.length ? (
-                        <Styled.MobileResultList>
+                        <Styled.RecentList>
                           {autocompleteQuery.data.items.map((item) => (
-                            <Styled.MobileResultButton
-                              key={`${item.type}-${item.id}`}
-                              type="button"
-                              aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
-                              onClick={() => stageMobileAutocomplete(item)}
-                            >
-                              <Styled.MobileResultIcon>
-                                {item.type === 'REGION' ? <AreaIcon /> : <MapMarkerIcon />}
-                              </Styled.MobileResultIcon>
-                              <Styled.AutocompleteText>
-                                <span>
-                                  <HighlightedAutocompleteName
-                                    name={item.name}
-                                    keyword={trimmedKeywordInput}
-                                  />
-                                </span>
-                                {item.streetAddress && (
-                                  <Styled.AutocompleteAddress>
-                                    {item.streetAddress}
-                                  </Styled.AutocompleteAddress>
-                                )}
-                              </Styled.AutocompleteText>
-                            </Styled.MobileResultButton>
+                            <Styled.RecentItem key={`${item.type}-${item.id}`}>
+                              <Styled.RecentKeywordButton
+                                type="button"
+                                aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
+                                onClick={() => applyAutocomplete(item)}
+                              >
+                                <Styled.RecentItemIcon>
+                                  <AreaIcon />
+                                </Styled.RecentItemIcon>
+                                <Styled.AutocompleteText>
+                                  <span>
+                                    <HighlightedAutocompleteName
+                                      name={item.name}
+                                      keyword={trimmedKeywordInput}
+                                    />
+                                  </span>
+                                  {item.streetAddress && (
+                                    <Styled.AutocompleteAddress>
+                                      {item.streetAddress}
+                                    </Styled.AutocompleteAddress>
+                                  )}
+                                </Styled.AutocompleteText>
+                              </Styled.RecentKeywordButton>
+                            </Styled.RecentItem>
                           ))}
-                        </Styled.MobileResultList>
+                        </Styled.RecentList>
                       ) : (
                         <Styled.AutocompleteState>
                           일치하는 지역이나 공연장이 없어요.
                         </Styled.AutocompleteState>
                       )}
                     </>
-                  ) : recentKeywords.length > 0 ? (
+                  ) : (
                     <>
-                      <Styled.MobileResultHeading>최근 검색어
-
-                          {recentKeywords.length >= 2 && (
-                            <Styled.TextButton
-                              type="button"
-                              onMouseDown={(event) => {
-                                event.preventDefault();
-                                event.stopPropagation();
-                              }}
-                              onClick={() => setIsRecentClearConfirmOpen(true)}
-                            >
-                              전체 삭제
-                            </Styled.TextButton>
-                          )}
-                      </Styled.MobileResultHeading>
-                      <Styled.MobileResultList>
-                        {recentKeywords.map((recentKeyword) => (
-                          <Styled.MobileResultItem
-                              key={recentKeyword}>
-                            <Styled.MobileResultButton
-                              type="button"
-                              aria-label={`${recentKeyword} 검색`}
-                              onClick={() => stageMobileRecentKeyword(recentKeyword)}
-                            >
-                              <Styled.MobileResultIcon>
-                                <SearchIcon />
-                              </Styled.MobileResultIcon>
-                              {recentKeyword}
-                            </Styled.MobileResultButton>
-                            <Styled.IconButton
-                              type="button"
-                              aria-label={`${recentKeyword} 삭제`}
-                              onClick={() => removeRecentKeyword(recentKeyword)}
-                            >
-                              <CloseIcon />
-                            </Styled.IconButton>
-                          </Styled.MobileResultItem>
-                        ))}
-                      </Styled.MobileResultList>
-                    </>
-                  ) : null}
-                  {(!trimmedKeywordInput || shouldKeepPreviousSearchContent) && (
-                    <>
-                      <Styled.MobileResultHeading>추천 지역</Styled.MobileResultHeading>
+                      {recentKeywords.length > 0 && (
+                        <>
+                          <Styled.PopoverHeader>
+                            <span>최근 검색어</span>
+                            {recentKeywords.length >= 2 && (
+                              <Styled.TextButton
+                                type="button"
+                                onMouseDown={(event) => {
+                                  event.preventDefault();
+                                  event.stopPropagation();
+                                }}
+                                onClick={() => setIsRecentClearConfirmOpen(true)}
+                              >
+                                전체 삭제
+                              </Styled.TextButton>
+                            )}
+                          </Styled.PopoverHeader>
+                          <Styled.RecentList>
+                            {recentKeywords.slice(0, 5).map((recentKeyword) => (
+                              <Styled.RecentItem key={recentKeyword}>
+                                <Styled.RecentKeywordButton
+                                  type="button"
+                                  aria-label={`${recentKeyword} 검색`}
+                                  onClick={() => applyRecentKeyword(recentKeyword)}
+                                >
+                                  <Styled.RecentItemIcon>
+                                    <SearchIcon />
+                                  </Styled.RecentItemIcon>
+                                  {recentKeyword}
+                                </Styled.RecentKeywordButton>
+                                <Styled.IconButton
+                                  type="button"
+                                  aria-label={`${recentKeyword} 삭제`}
+                                  onClick={() => removeRecentKeyword(recentKeyword)}
+                                >
+                                  <CloseIcon />
+                                </Styled.IconButton>
+                              </Styled.RecentItem>
+                            ))}
+                          </Styled.RecentList>
+                        </>
+                      )}
+                      <Styled.PopoverHeader>
+                        <span>추천 지역</span>
+                      </Styled.PopoverHeader>
                       {recommendedRegionsQuery.isLoading ? (
                         <Styled.AutocompleteState>
                           추천 지역을 불러오는 중입니다.
@@ -1406,493 +1108,805 @@ const ConcertHallSearchPage = () => {
                           추천 지역을 불러오지 못했어요.
                         </Styled.AutocompleteState>
                       ) : (
-                        <Styled.MobileResultList>
+                        <Styled.RecentList>
                           {(recommendedRegionsQuery.data ?? []).map((region) => (
-                            <Styled.MobileResultButton
-                              key={region.regionId}
-                              type="button"
-                              aria-label={`${region.name} 검색`}
-                              onClick={() => stageMobileRegion(region.regionId, region.name)}
-                            >
-                              <Styled.MobileResultIcon>
-                                <AreaIcon />
-                              </Styled.MobileResultIcon>
-                              {region.name}
-                            </Styled.MobileResultButton>
+                            <Styled.RecentItem key={region.regionId}>
+                              <Styled.RecentKeywordButton
+                                type="button"
+                                aria-label={`${region.name} 검색`}
+                                onClick={() => applyRegion(region.regionId, region.name)}
+                              >
+                                <Styled.RecentItemIcon>
+                                  <AreaIcon />
+                                </Styled.RecentItemIcon>
+                                {region.name}
+                              </Styled.RecentKeywordButton>
+                            </Styled.RecentItem>
                           ))}
-                        </Styled.MobileResultList>
+                        </Styled.RecentList>
                       )}
                     </>
                   )}
-                </Styled.MobileSheetBody>
-              </>
-            ) : (
-              <>
-                <Styled.MobileFilterSections>
-                  {activeSearchField === 'overview' ? (
-                    <Styled.MobileOverviewLocation>
-                      <Styled.MobileSheetHeader>
-                        <Styled.MobileSheetTitle>장소</Styled.MobileSheetTitle>
-                      </Styled.MobileSheetHeader>
-                      <Styled.MobileLocationTrigger
+                </Styled.KeywordPopover>
+              )}
+            </Styled.SearchInputField>
+            <Styled.FilterField>
+              <Styled.FieldButton
+                type="button"
+                $showDivider
+                $hideDivider={activeSearchField === 'rentalFee' || activeSearchField === 'capacity'}
+                active={
+                  activeSearchField === 'rentalFee' || rentalFeeMin != null || rentalFeeMax != null
+                }
+                aria-label={`대관료 ${rentalFeeLabel}`}
+                aria-expanded={activeSearchField === 'rentalFee'}
+                onClick={() => handleSearchFieldClick('rentalFee')}
+              >
+                <Styled.FieldLabel>대관료</Styled.FieldLabel>
+                <Styled.FieldValue
+                  isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}
+                >
+                  {stagedRentalFeeLabel}
+                </Styled.FieldValue>
+              </Styled.FieldButton>
+              {activeSearchField === 'rentalFee' && (
+                <Styled.RangePopover aria-label="대관료 필터">
+                  <Styled.RangeInputRow>
+                    <Styled.RangeInputLabel>
+                      최소
+                      <Styled.RangeInput
+                        aria-label="대관료 최소"
+                        inputMode="numeric"
+                        placeholder="1"
+                        value={rentalFeeMinInput}
+                        onChange={(event) => {
+                          setSelectedRentalFeeOptionId(null);
+                          setRentalFeeMinInput(event.target.value.replace(/[^\d]/g, ''));
+                        }}
+                        onKeyDown={handleRentalFeeMinKeyDown}
+                      />
+                    </Styled.RangeInputLabel>
+                    <Styled.RangeDash>~</Styled.RangeDash>
+                    <Styled.RangeInputLabel>
+                      최대
+                      <Styled.RangeInput
+                        ref={rentalFeeMaxInputRef}
+                        aria-label="대관료 최대"
+                        inputMode="numeric"
+                        placeholder="5,000,000"
+                        value={rentalFeeMaxInput}
+                        onChange={(event) => {
+                          setSelectedRentalFeeOptionId(null);
+                          setRentalFeeMaxInput(event.target.value.replace(/[^\d]/g, ''));
+                        }}
+                        onKeyDown={handleRentalFeeMaxKeyDown}
+                      />
+                    </Styled.RangeInputLabel>
+                  </Styled.RangeInputRow>
+                  <Styled.FilterOptionList>
+                    {rentalFeeOptions.map((option) => (
+                      <Styled.FilterOption
+                        key={option.id}
                         type="button"
-                        autoFocus
-                        aria-label="모바일 장소 검색 열기"
+                        active={selectedRentalFeeOptionId === option.id}
+                        onClick={() => {
+                          selectRentalFeeOption(option);
+                          setActiveSearchField('capacity');
+                        }}
+                      >
+                        {option.label}
+                      </Styled.FilterOption>
+                    ))}
+                  </Styled.FilterOptionList>
+                  <Styled.PopoverFooter>
+                    <Styled.TextButton
+                      type="button"
+                      aria-label="대관료 초기화"
+                      disabled={
+                        !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
+                      }
+                      onClick={clearRentalFee}
+                    >
+                      <RefreshIcon />
+                      초기화
+                    </Styled.TextButton>
+                  </Styled.PopoverFooter>
+                </Styled.RangePopover>
+              )}
+            </Styled.FilterField>
+            <Styled.FilterField>
+              <Styled.FieldButton
+                type="button"
+                active={activeSearchField === 'capacity' || !!selectedCapacityOptionId}
+                aria-label={`수용 인원 ${stagedCapacityLabel}`}
+                aria-expanded={activeSearchField === 'capacity'}
+                onClick={() => handleSearchFieldClick('capacity')}
+              >
+                <Styled.FieldLabel>수용 인원</Styled.FieldLabel>
+                <Styled.FieldValue isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}>
+                  {stagedCapacityLabel}
+                </Styled.FieldValue>
+              </Styled.FieldButton>
+              {activeSearchField === 'capacity' && (
+                <Styled.FilterPopover aria-label="수용 인원 필터">
+                  <Styled.FilterOptionList>
+                    {capacityOptions.map((option) => (
+                      <Styled.FilterOption
+                        key={option.id}
+                        type="button"
+                        active={selectedCapacityOptionId === option.id}
+                        onClick={() => {
+                          setSelectedCapacityOptionId(option.id);
+                          setIsCapacityCleared(false);
+                        }}
+                      >
+                        {option.label}
+                      </Styled.FilterOption>
+                    ))}
+                  </Styled.FilterOptionList>
+                  <Styled.PopoverFooter>
+                    <Styled.TextButton
+                      type="button"
+                      aria-label="수용 인원 초기화"
+                      disabled={!selectedCapacityOptionId}
+                      onClick={clearCapacity}
+                    >
+                      <RefreshIcon />
+                      초기화
+                    </Styled.TextButton>
+                  </Styled.PopoverFooter>
+                </Styled.FilterPopover>
+              )}
+            </Styled.FilterField>
+            <Styled.SearchButton type="submit" aria-label="검색">
+              <SearchIcon />
+            </Styled.SearchButton>
+          </Styled.SearchForm>
+        </Styled.Header>
+
+        {isMobile && activeSearchField != null && (
+          <Styled.MobileFilterOverlay
+            $isClosing={isMobileFilterClosing}
+            onClick={(event) => {
+              if (event.target !== event.currentTarget) return;
+              closeMobileFilter();
+            }}
+          >
+            <Styled.MobileFilterSheet
+              $isClosing={isMobileFilterClosing}
+              ref={mobileFilterRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="모바일 공연장 검색 필터"
+              onAnimationEnd={handleMobileFilterAnimationEnd}
+            >
+              <Styled.MobileSheetHandle
+                type="button"
+                aria-label="모바일 바텀시트 닫기"
+                onClick={closeMobileFilter}
+              />
+              {activeSearchField === 'keyword' ? (
+                <>
+                  <Styled.MobileSheetHeader>
+                    <Styled.MobileSheetTitle>장소</Styled.MobileSheetTitle>
+                    <Styled.MobileSheetCloseButton
+                      type="button"
+                      aria-label="모바일 검색 필터 닫기"
+                      onClick={cancelMobileKeywordSearch}
+                    >
+                      <CloseIcon />
+                    </Styled.MobileSheetCloseButton>
+                  </Styled.MobileSheetHeader>
+                  <Styled.MobileLocationSearch>
+                    <Styled.MobileLocationInput
+                      ref={mobileKeywordInputRef}
+                      autoFocus
+                      value={keywordInput}
+                      placeholder="지역, 공연장명 검색"
+                      aria-label="모바일 지역, 공연장명 검색"
+                      onFocus={handleKeywordInputFocus}
+                      onKeyDown={handleKeywordInputKeyDown}
+                      onChange={(event) => {
+                        setSelectedRegionId(null);
+                        setSelectedRegionNameInput(undefined);
+                        setKeywordInput(event.target.value);
+                      }}
+                    />
+                    <SearchIcon />
+                  </Styled.MobileLocationSearch>
+                  <Styled.MobileSheetBody>
+                    {trimmedKeywordInput && !shouldKeepPreviousSearchContent ? (
+                      <>
+                        {autocompleteQuery.isError ? (
+                          <Styled.AutocompleteState>
+                            자동완성 결과를 불러오지 못했어요.
+                          </Styled.AutocompleteState>
+                        ) : autocompleteQuery.data?.items.length ? (
+                          <Styled.MobileResultList>
+                            {autocompleteQuery.data.items.map((item) => (
+                              <Styled.MobileResultButton
+                                key={`${item.type}-${item.id}`}
+                                type="button"
+                                aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
+                                onClick={() => stageMobileAutocomplete(item)}
+                              >
+                                <Styled.MobileResultIcon>
+                                  {item.type === 'REGION' ? <AreaIcon /> : <MapMarkerIcon />}
+                                </Styled.MobileResultIcon>
+                                <Styled.AutocompleteText>
+                                  <span>
+                                    <HighlightedAutocompleteName
+                                      name={item.name}
+                                      keyword={trimmedKeywordInput}
+                                    />
+                                  </span>
+                                  {item.streetAddress && (
+                                    <Styled.AutocompleteAddress>
+                                      {item.streetAddress}
+                                    </Styled.AutocompleteAddress>
+                                  )}
+                                </Styled.AutocompleteText>
+                              </Styled.MobileResultButton>
+                            ))}
+                          </Styled.MobileResultList>
+                        ) : (
+                          <Styled.AutocompleteState>
+                            일치하는 지역이나 공연장이 없어요.
+                          </Styled.AutocompleteState>
+                        )}
+                      </>
+                    ) : recentKeywords.length > 0 ? (
+                      <>
+                        <Styled.MobileResultHeading>
+                          최근 검색어
+                          {recentKeywords.length >= 2 && (
+                            <Styled.TextButton
+                              type="button"
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                              }}
+                              onClick={() => setIsRecentClearConfirmOpen(true)}
+                            >
+                              전체 삭제
+                            </Styled.TextButton>
+                          )}
+                        </Styled.MobileResultHeading>
+                        <Styled.MobileResultList>
+                          {recentKeywords.map((recentKeyword) => (
+                            <Styled.MobileResultItem key={recentKeyword}>
+                              <Styled.MobileResultButton
+                                type="button"
+                                aria-label={`${recentKeyword} 검색`}
+                                onClick={() => stageMobileRecentKeyword(recentKeyword)}
+                              >
+                                <Styled.MobileResultIcon>
+                                  <SearchIcon />
+                                </Styled.MobileResultIcon>
+                                {recentKeyword}
+                              </Styled.MobileResultButton>
+                              <Styled.IconButton
+                                type="button"
+                                aria-label={`${recentKeyword} 삭제`}
+                                onClick={() => removeRecentKeyword(recentKeyword)}
+                              >
+                                <CloseIcon />
+                              </Styled.IconButton>
+                            </Styled.MobileResultItem>
+                          ))}
+                        </Styled.MobileResultList>
+                      </>
+                    ) : null}
+                    {(!trimmedKeywordInput || shouldKeepPreviousSearchContent) && (
+                      <>
+                        <Styled.MobileResultHeading>추천 지역</Styled.MobileResultHeading>
+                        {recommendedRegionsQuery.isLoading ? (
+                          <Styled.AutocompleteState>
+                            추천 지역을 불러오는 중입니다.
+                          </Styled.AutocompleteState>
+                        ) : recommendedRegionsQuery.isError ? (
+                          <Styled.AutocompleteState>
+                            추천 지역을 불러오지 못했어요.
+                          </Styled.AutocompleteState>
+                        ) : (
+                          <Styled.MobileResultList>
+                            {(recommendedRegionsQuery.data ?? []).map((region) => (
+                              <Styled.MobileResultButton
+                                key={region.regionId}
+                                type="button"
+                                aria-label={`${region.name} 검색`}
+                                onClick={() => stageMobileRegion(region.regionId, region.name)}
+                              >
+                                <Styled.MobileResultIcon>
+                                  <AreaIcon />
+                                </Styled.MobileResultIcon>
+                                {region.name}
+                              </Styled.MobileResultButton>
+                            ))}
+                          </Styled.MobileResultList>
+                        )}
+                      </>
+                    )}
+                  </Styled.MobileSheetBody>
+                </>
+              ) : (
+                <>
+                  <Styled.MobileFilterSections>
+                    {activeSearchField === 'overview' ? (
+                      <Styled.MobileOverviewLocation>
+                        <Styled.MobileSheetHeader>
+                          <Styled.MobileSheetTitle>장소</Styled.MobileSheetTitle>
+                        </Styled.MobileSheetHeader>
+                        <Styled.MobileLocationTrigger
+                          type="button"
+                          autoFocus
+                          aria-label="모바일 장소 검색 열기"
+                          isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
+                          onClick={() => handleSearchFieldClick('keyword', false)}
+                        >
+                          <span>
+                            {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
+                          </span>
+                          <SearchIcon />
+                        </Styled.MobileLocationTrigger>
+                      </Styled.MobileOverviewLocation>
+                    ) : (
+                      <Styled.MobileFilterSummary
+                        type="button"
                         isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
                         onClick={() => handleSearchFieldClick('keyword', false)}
                       >
-                        <span>
+                        <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
+                        <strong>
                           {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
-                        </span>
-                        <SearchIcon />
-                      </Styled.MobileLocationTrigger>
-                    </Styled.MobileOverviewLocation>
-                  ) : (
-                    <Styled.MobileFilterSummary
-                      type="button"
-                      isPlaceholder={!(selectedRegionNameInput ?? keywordInput)}
-                      onClick={() => handleSearchFieldClick('keyword', false)}
-                    >
-                      <Styled.MobileExpandedTitle>장소</Styled.MobileExpandedTitle>
-                      <strong>
-                        {(selectedRegionNameInput ?? keywordInput) || '지역, 공연장명 검색'}
-                      </strong>
-                    </Styled.MobileFilterSummary>
-                  )}
+                        </strong>
+                      </Styled.MobileFilterSummary>
+                    )}
 
-                  {activeSearchField === 'rentalFee' ? (
-                    <Styled.MobileExpandedFilter>
-                      <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
-                      <Styled.RangeInputRow>
-                        <Styled.RangeInputLabel>
-                          최소
-                          <Styled.RangeInput
-                            aria-label="모바일 대관료 최소"
-                            inputMode="numeric"
-                            placeholder="1"
-                            value={rentalFeeMinInput}
-                            onChange={(event) => {
-                              setSelectedRentalFeeOptionId(null);
-                              setRentalFeeMinInput(event.target.value.replace(/[^\d]/g, ''));
-                            }}
-                          />
-                        </Styled.RangeInputLabel>
-                        <Styled.RangeDash>~</Styled.RangeDash>
-                        <Styled.RangeInputLabel>
-                          최대
-                          <Styled.RangeInput
-                            aria-label="모바일 대관료 최대"
-                            inputMode="numeric"
-                            placeholder="5,000,000"
-                            value={rentalFeeMaxInput}
-                            onChange={(event) => {
-                              setSelectedRentalFeeOptionId(null);
-                              setRentalFeeMaxInput(event.target.value.replace(/[^\d]/g, ''));
-                            }}
-                          />
-                        </Styled.RangeInputLabel>
-                      </Styled.RangeInputRow>
-                      <Styled.FilterOptionList>
-                        {rentalFeeOptions.map((option) => (
-                          <Styled.FilterOption
-                            key={option.id}
+                    {activeSearchField === 'rentalFee' ? (
+                      <Styled.MobileExpandedFilter>
+                        <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
+                        <Styled.RangeInputRow>
+                          <Styled.RangeInputLabel>
+                            최소
+                            <Styled.RangeInput
+                              aria-label="모바일 대관료 최소"
+                              inputMode="numeric"
+                              placeholder="1"
+                              value={rentalFeeMinInput}
+                              onChange={(event) => {
+                                setSelectedRentalFeeOptionId(null);
+                                setRentalFeeMinInput(event.target.value.replace(/[^\d]/g, ''));
+                              }}
+                            />
+                          </Styled.RangeInputLabel>
+                          <Styled.RangeDash>~</Styled.RangeDash>
+                          <Styled.RangeInputLabel>
+                            최대
+                            <Styled.RangeInput
+                              aria-label="모바일 대관료 최대"
+                              inputMode="numeric"
+                              placeholder="5,000,000"
+                              value={rentalFeeMaxInput}
+                              onChange={(event) => {
+                                setSelectedRentalFeeOptionId(null);
+                                setRentalFeeMaxInput(event.target.value.replace(/[^\d]/g, ''));
+                              }}
+                            />
+                          </Styled.RangeInputLabel>
+                        </Styled.RangeInputRow>
+                        <Styled.FilterOptionList>
+                          {rentalFeeOptions.map((option) => (
+                            <Styled.FilterOption
+                              key={option.id}
+                              type="button"
+                              active={selectedRentalFeeOptionId === option.id}
+                              aria-label={`모바일 ${option.label} 선택`}
+                              onClick={() => selectRentalFeeOption(option)}
+                            >
+                              {option.label}
+                            </Styled.FilterOption>
+                          ))}
+                        </Styled.FilterOptionList>
+                        <Styled.MobileExpandedFilterFooter>
+                          <Styled.TextButton
                             type="button"
-                            active={selectedRentalFeeOptionId === option.id}
-                            aria-label={`모바일 ${option.label} 선택`}
-                            onClick={() => selectRentalFeeOption(option)}
+                            aria-label="대관료 초기화"
+                            disabled={
+                              !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
+                            }
+                            onClick={clearRentalFee}
                           >
-                            {option.label}
-                          </Styled.FilterOption>
-                        ))}
-                      </Styled.FilterOptionList>
-                      <Styled.MobileExpandedFilterFooter>
-                        <Styled.TextButton
-                          type="button"
-                          aria-label="대관료 초기화"
-                          disabled={
-                            !rentalFeeMinInput && !rentalFeeMaxInput && !selectedRentalFeeOptionId
-                          }
-                          onClick={clearRentalFee}
-                        >
-                          <RefreshIcon />
-                          초기화
-                        </Styled.TextButton>
-                      </Styled.MobileExpandedFilterFooter>
-                    </Styled.MobileExpandedFilter>
-                  ) : (
-                    <Styled.MobileFilterSummary
+                            <RefreshIcon />
+                            초기화
+                          </Styled.TextButton>
+                        </Styled.MobileExpandedFilterFooter>
+                      </Styled.MobileExpandedFilter>
+                    ) : (
+                      <Styled.MobileFilterSummary
+                        type="button"
+                        isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}
+                        aria-label={
+                          stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
+                            ? '대관료 설정'
+                            : `대관료 ${stagedRentalFeeLabel}`
+                        }
+                        onClick={() => handleSearchFieldClick('rentalFee', false)}
+                      >
+                        <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
+                        <strong>
+                          {stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
+                            ? '대관료 설정'
+                            : stagedRentalFeeLabel}
+                        </strong>
+                      </Styled.MobileFilterSummary>
+                    )}
+
+                    {activeSearchField === 'capacity' ? (
+                      <Styled.MobileExpandedFilter>
+                        <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
+                        <Styled.FilterOptionList>
+                          {capacityOptions.map((option) => (
+                            <Styled.FilterOption
+                              key={option.id}
+                              type="button"
+                              active={selectedCapacityOptionId === option.id}
+                              aria-label={`모바일 ${option.label} 선택`}
+                              onClick={() => {
+                                setSelectedCapacityOptionId(option.id);
+                                setIsCapacityCleared(false);
+                              }}
+                            >
+                              {option.label}
+                            </Styled.FilterOption>
+                          ))}
+                        </Styled.FilterOptionList>
+                        <Styled.MobileExpandedFilterFooter>
+                          <Styled.TextButton
+                            type="button"
+                            aria-label="수용 인원 초기화"
+                            disabled={!selectedCapacityOptionId}
+                            onClick={clearCapacity}
+                          >
+                            <RefreshIcon />
+                            초기화
+                          </Styled.TextButton>
+                        </Styled.MobileExpandedFilterFooter>
+                      </Styled.MobileExpandedFilter>
+                    ) : (
+                      <Styled.MobileFilterSummary
+                        type="button"
+                        isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}
+                        onClick={() => handleSearchFieldClick('capacity', false)}
+                      >
+                        <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
+                        <strong>{stagedCapacityLabel}</strong>
+                      </Styled.MobileFilterSummary>
+                    )}
+                  </Styled.MobileFilterSections>
+                  <Styled.MobileFilterFooter>
+                    <Styled.MobileClearButton
                       type="button"
-                      isPlaceholder={stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL}
+                      disabled={!hasStagedMobileFilters}
+                      onClick={clearMobileFilters}
+                    >
+                      전체 삭제
+                    </Styled.MobileClearButton>
+                    <Styled.MobileApplyButton
+                      type="button"
                       aria-label={
-                        stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
-                          ? '대관료 설정'
-                          : `대관료 ${stagedRentalFeeLabel}`
+                        activeSearchField === 'rentalFee'
+                          ? '모바일 필터 다음'
+                          : '모바일 필터 검색하기'
                       }
-                      onClick={() => handleSearchFieldClick('rentalFee', false)}
+                      onClick={handleMobilePrimaryAction}
                     >
-                      <Styled.MobileExpandedTitle>대관료</Styled.MobileExpandedTitle>
-                      <strong>
-                        {stagedRentalFeeLabel === DEFAULT_RENTAL_FEE_LABEL
-                          ? '대관료 설정'
-                          : stagedRentalFeeLabel}
-                      </strong>
-                    </Styled.MobileFilterSummary>
-                  )}
+                      {activeSearchField === 'rentalFee' ? '다음' : '검색하기'}
+                    </Styled.MobileApplyButton>
+                  </Styled.MobileFilterFooter>
+                </>
+              )}
+            </Styled.MobileFilterSheet>
+          </Styled.MobileFilterOverlay>
+        )}
 
-                  {activeSearchField === 'capacity' ? (
-                    <Styled.MobileExpandedFilter>
-                      <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
-                      <Styled.FilterOptionList>
-                        {capacityOptions.map((option) => (
-                          <Styled.FilterOption
-                            key={option.id}
-                            type="button"
-                            active={selectedCapacityOptionId === option.id}
-                            aria-label={`모바일 ${option.label} 선택`}
-                            onClick={() => {
-                              setSelectedCapacityOptionId(option.id);
-                              setIsCapacityCleared(false);
-                            }}
-                          >
-                            {option.label}
-                          </Styled.FilterOption>
-                        ))}
-                      </Styled.FilterOptionList>
-                      <Styled.MobileExpandedFilterFooter>
-                        <Styled.TextButton
-                          type="button"
-                          aria-label="수용 인원 초기화"
-                          disabled={!selectedCapacityOptionId}
-                          onClick={clearCapacity}
-                        >
-                          <RefreshIcon />
-                          초기화
-                        </Styled.TextButton>
-                      </Styled.MobileExpandedFilterFooter>
-                    </Styled.MobileExpandedFilter>
-                  ) : (
-                    <Styled.MobileFilterSummary
+        <Styled.Content hasDetail={hasDetail}>
+          <Styled.ResultsPane $detailPanelOpen={hasDetail}>
+            <Styled.ResultsPaneHeader $detailPanelOpen={hasDetail}>
+              {hasSearchConditions && (
+                <Styled.ChipRow>
+                  {(rentalFeeMin != null || rentalFeeMax != null) && (
+                    <Styled.Chip>
+                      <Styled.ChipEditButton
+                        type="button"
+                        aria-label={`대관료 ${rentalFeeLabel} 편집`}
+                        onClick={() => {
+                          setIsMobileFilterClosing(false);
+                          setActiveSearchField('rentalFee');
+                        }}
+                      >
+                        {rentalFeeLabel}
+                      </Styled.ChipEditButton>
+                      <Styled.ChipRemoveButton
+                        type="button"
+                        aria-label="대관료 필터 제거"
+                        onClick={() => {
+                          clearRentalFee();
+                          updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
+                        }}
+                      >
+                        <CloseIcon />
+                      </Styled.ChipRemoveButton>
+                    </Styled.Chip>
+                  )}
+                  {appliedCapacityOption && (
+                    <Styled.Chip>
+                      <Styled.ChipEditButton
+                        type="button"
+                        aria-label={`수용 인원 ${appliedCapacityOption.label} 편집`}
+                        onClick={() => {
+                          setIsMobileFilterClosing(false);
+                          setActiveSearchField('capacity');
+                        }}
+                      >
+                        {appliedCapacityOption.label}
+                      </Styled.ChipEditButton>
+                      <Styled.ChipRemoveButton
+                        type="button"
+                        aria-label="수용 인원 필터 제거"
+                        onClick={() => {
+                          clearCapacity();
+                          updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
+                        }}
+                      >
+                        <CloseIcon />
+                      </Styled.ChipRemoveButton>
+                    </Styled.Chip>
+                  )}
+                </Styled.ChipRow>
+              )}
+
+              {concertHalls.length > 0 && (
+                <Styled.Toolbar $dimmed={activeSearchField != null} $detailPanelOpen={hasDetail}>
+                  <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
+                    불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자
+                    간에 있습니다.
+                    <Styled.CountInfoPopupCloseButton
                       type="button"
-                      isPlaceholder={stagedCapacityLabel === DEFAULT_CAPACITY_LABEL}
-                      onClick={() => handleSearchFieldClick('capacity', false)}
+                      aria-label="닫기"
+                      onClick={() => {
+                        setInfoPopupOpen(false);
+                      }}
                     >
-                      <Styled.MobileExpandedTitle>수용 인원</Styled.MobileExpandedTitle>
-                      <strong>{stagedCapacityLabel}</strong>
-                    </Styled.MobileFilterSummary>
-                  )}
-                </Styled.MobileFilterSections>
-                <Styled.MobileFilterFooter>
-                  <Styled.MobileClearButton
+                      <CloseIcon />
+                    </Styled.CountInfoPopupCloseButton>
+                  </Styled.CountInfoPopup>
+                  <Styled.Count>
+                    <span>공연장</span>
+                    <Styled.CountValue $hasSearchConditions={hasSearchConditions}>
+                      {totalElements}개
+                    </Styled.CountValue>
+                    <Styled.CountInfoPopupButton
+                      type="button"
+                      aria-label="공연장 검색 안내"
+                      onClick={() => {
+                        setInfoPopupOpen(true);
+                      }}
+                    >
+                      <InfoIcon />
+                    </Styled.CountInfoPopupButton>
+                  </Styled.Count>
+                  <Styled.SortGroup role="group" aria-label="공연장 정렬" $disabled={hasDetail}>
+                    <Styled.SortButton
+                      type="button"
+                      aria-pressed={sort === 'FEE_ASC'}
+                      active={sort === 'FEE_ASC'}
+                      disabled={hasDetail}
+                      onClick={() =>
+                        updateParams({
+                          keyword,
+                          regionId,
+                          rentalFeeMin,
+                          rentalFeeMax,
+                          capacityMin,
+                          capacityMax,
+                          sort: 'FEE_ASC',
+                        })
+                      }
+                    >
+                      대관료 낮은 순
+                    </Styled.SortButton>
+                    <Styled.SortButton
+                      type="button"
+                      aria-pressed={sort === 'FEE_DESC'}
+                      active={sort === 'FEE_DESC'}
+                      disabled={hasDetail}
+                      onClick={() =>
+                        updateParams({
+                          keyword,
+                          regionId,
+                          rentalFeeMin,
+                          rentalFeeMax,
+                          capacityMin,
+                          capacityMax,
+                          sort: 'FEE_DESC',
+                        })
+                      }
+                    >
+                      대관료 높은 순
+                    </Styled.SortButton>
+                  </Styled.SortGroup>
+                  <Styled.MobileSortButton
                     type="button"
-                    disabled={!hasStagedMobileFilters}
-                    onClick={clearMobileFilters}
+                    aria-label={`정렬 ${mobileSortLabel}`}
+                    onClick={toggleMobileSort}
                   >
-                    전체 삭제
-                  </Styled.MobileClearButton>
-                  <Styled.MobileApplyButton
-                    type="button"
-                    aria-label={
-                      activeSearchField === 'rentalFee' ? '모바일 필터 다음' : '모바일 필터 검색하기'
-                    }
-                    onClick={handleMobilePrimaryAction}
-                  >
-                    {activeSearchField === 'rentalFee' ? '다음' : '검색하기'}
-                  </Styled.MobileApplyButton>
-                </Styled.MobileFilterFooter>
-              </>
-            )}
-          </Styled.MobileFilterSheet>
-        </Styled.MobileFilterOverlay>
-      )}
-
-      <Styled.Content hasDetail={hasDetail}>
-        <Styled.ResultsPane $detailPanelOpen={hasDetail}>
-          <Styled.ResultsPaneHeader $detailPanelOpen={hasDetail}>
-          {hasSearchConditions && (
-            <Styled.ChipRow>
-              {(rentalFeeMin != null || rentalFeeMax != null) && (
-                <Styled.Chip>
-                  <Styled.ChipEditButton
-                    type="button"
-                    aria-label={`대관료 ${rentalFeeLabel} 편집`}
-                    onClick={() => {
-                      setIsMobileFilterClosing(false);
-                      setActiveSearchField('rentalFee');
-                    }}
-                  >
-                    {rentalFeeLabel}
-                  </Styled.ChipEditButton>
-                  <Styled.ChipRemoveButton
-                    type="button"
-                    aria-label="대관료 필터 제거"
-                    onClick={() => {
-                      clearRentalFee();
-                      updateParams({ keyword, regionId, capacityMin, capacityMax, sort });
-                    }}
-                  >
-                    <CloseIcon />
-                  </Styled.ChipRemoveButton>
-                </Styled.Chip>
+                    {sort === 'FEE_ASC' ? <AscendingIcon /> : <DescendingIcon />}
+                    {mobileSortLabel}
+                  </Styled.MobileSortButton>
+                </Styled.Toolbar>
               )}
-              {appliedCapacityOption && (
-                <Styled.Chip>
-                  <Styled.ChipEditButton
-                    type="button"
-                    aria-label={`수용 인원 ${appliedCapacityOption.label} 편집`}
-                    onClick={() => {
-                      setIsMobileFilterClosing(false);
-                      setActiveSearchField('capacity');
-                    }}
-                  >
-                    {appliedCapacityOption.label}
-                  </Styled.ChipEditButton>
-                  <Styled.ChipRemoveButton
-                    type="button"
-                    aria-label="수용 인원 필터 제거"
-                    onClick={() => {
-                      clearCapacity();
-                      updateParams({ keyword, regionId, rentalFeeMin, rentalFeeMax, sort });
-                    }}
-                  >
-                    <CloseIcon />
-                  </Styled.ChipRemoveButton>
-                </Styled.Chip>
-              )}
-            </Styled.ChipRow>
-          )}
+            </Styled.ResultsPaneHeader>
 
-          {concertHalls.length > 0 && (
-            <Styled.Toolbar $dimmed={activeSearchField != null} $detailPanelOpen={hasDetail}>
-              <Styled.CountInfoPopup isOpen={isInfoPopupOpen} ref={infoPopupRef}>
-                불티는 공연장 정보 제공 플랫폼으로, 대관 계약 및 예약 확정에 대한 책임은 당사자 간에
-                있습니다.
-                <Styled.CountInfoPopupCloseButton
-                  type="button"
-                  aria-label="닫기"
-                  onClick={() => {
-                    setInfoPopupOpen(false);
-                  }}
-                >
-                  <CloseIcon />
-                </Styled.CountInfoPopupCloseButton>
-              </Styled.CountInfoPopup>
-              <Styled.Count>
-                <span>공연장</span>
-                <Styled.CountValue $hasSearchConditions={hasSearchConditions}>
-                  {totalElements}개
-                </Styled.CountValue>
-                <Styled.CountInfoPopupButton
-                  type="button"
-                  aria-label="공연장 검색 안내"
-                  onClick={() => {
-                    setInfoPopupOpen(true);
-                  }}
-                >
-                  <InfoIcon />
-                </Styled.CountInfoPopupButton>
-              </Styled.Count>
-              <Styled.SortGroup role="group" aria-label="공연장 정렬" $disabled={hasDetail}>
-                <Styled.SortButton
-                  type="button"
-                  aria-pressed={sort === 'FEE_ASC'}
-                  active={sort === 'FEE_ASC'}
-                  disabled={hasDetail}
-                  onClick={() =>
-                    updateParams({
-                      keyword,
-                      regionId,
-                      rentalFeeMin,
-                      rentalFeeMax,
-                      capacityMin,
-                      capacityMax,
-                      sort: 'FEE_ASC',
-                    })
-                  }
-                >
-                  대관료 낮은 순
-                </Styled.SortButton>
-                <Styled.SortButton
-                  type="button"
-                  aria-pressed={sort === 'FEE_DESC'}
-                  active={sort === 'FEE_DESC'}
-                  disabled={hasDetail}
-                  onClick={() =>
-                    updateParams({
-                      keyword,
-                      regionId,
-                      rentalFeeMin,
-                      rentalFeeMax,
-                      capacityMin,
-                      capacityMax,
-                      sort: 'FEE_DESC',
-                    })
-                  }
-                >
-                  대관료 높은 순
-                </Styled.SortButton>
-              </Styled.SortGroup>
-              <Styled.MobileSortButton
-                type="button"
-                aria-label={`정렬 ${mobileSortLabel}`}
-                onClick={toggleMobileSort}
-              >
-                {sort === 'FEE_ASC' ? <AscendingIcon /> : <DescendingIcon />}
-                {mobileSortLabel}
-              </Styled.MobileSortButton>
-            </Styled.Toolbar>
-          )}
-
-          </Styled.ResultsPaneHeader>
-
-          {concertHallListQuery.isError && (
-            <Styled.Empty>
-              <Styled.EmptyTitle>공연장 정보를 불러오지 못했어요.</Styled.EmptyTitle>
-              <Button
-                type="button"
-                colorTheme="netural"
-                size="bold"
-                onClick={() => concertHallListQuery.refetch()}
-              >
-                다시 시도
-              </Button>
-            </Styled.Empty>
-          )}
-          {!concertHallListQuery.isLoading &&
-            !concertHallListQuery.isError &&
-            concertHalls.length === 0 && (
+            {concertHallListQuery.isError && (
               <Styled.Empty>
-                <Styled.EmptyIcon aria-hidden="true">
-                  <BooltiWhiteLogo />
-                </Styled.EmptyIcon>
-                {hasKeywordSearch ? (
-                  <>
-                    <Styled.EmptyDescription>
-                      <span>찾으시는 공연장이 없어요.</span>
-                      <span>입점을 요청해 보세요.</span>
-                    </Styled.EmptyDescription>
-                    <Styled.ButtonRow>
+                <Styled.EmptyTitle>공연장 정보를 불러오지 못했어요.</Styled.EmptyTitle>
+                <Button
+                  type="button"
+                  colorTheme="netural"
+                  size="bold"
+                  onClick={() => concertHallListQuery.refetch()}
+                >
+                  다시 시도
+                </Button>
+              </Styled.Empty>
+            )}
+            {!concertHallListQuery.isLoading &&
+              !concertHallListQuery.isError &&
+              concertHalls.length === 0 && (
+                <Styled.Empty>
+                  <Styled.EmptyIcon aria-hidden="true">
+                    <BooltiWhiteLogo />
+                  </Styled.EmptyIcon>
+                  {hasKeywordSearch ? (
+                    <>
+                      <Styled.EmptyDescription>
+                        <span>찾으시는 공연장이 없어요.</span>
+                        <span>입점을 요청해 보세요.</span>
+                      </Styled.EmptyDescription>
+                      <Styled.ButtonRow>
+                        <Button
+                          type="button"
+                          colorTheme="netural"
+                          size="bold"
+                          onClick={resetSearch}
+                        >
+                          필터 초기화
+                        </Button>
+                        <Button
+                          type="button"
+                          colorTheme="primary"
+                          size="bold"
+                          onClick={() => {
+                            setEntryRequestName(keyword);
+                            setEntryRequestTouched(false);
+                            setIsEntryRequestOpen(true);
+                          }}
+                        >
+                          입점 요청하기
+                        </Button>
+                      </Styled.ButtonRow>
+                    </>
+                  ) : (
+                    <>
+                      <Styled.EmptyDescription>
+                        <span>찾으시는 결과가 없어요.</span>
+                        <span>조건을 변경해 보세요.</span>
+                      </Styled.EmptyDescription>
                       <Button type="button" colorTheme="netural" size="bold" onClick={resetSearch}>
                         필터 초기화
                       </Button>
-                      <Button
-                        type="button"
-                        colorTheme="primary"
-                        size="bold"
-                        onClick={() => {
-                          setEntryRequestName(keyword);
-                          setEntryRequestTouched(false);
-                          setIsEntryRequestOpen(true);
-                        }}
-                      >
-                        입점 요청하기
-                      </Button>
-                    </Styled.ButtonRow>
-                  </>
-                ) : (
-                  <>
-                    <Styled.EmptyDescription>
-                      <span>찾으시는 결과가 없어요.</span>
-                      <span>조건을 변경해 보세요.</span>
-                    </Styled.EmptyDescription>
-                    <Button type="button" colorTheme="netural" size="bold" onClick={resetSearch}>
-                      필터 초기화
-                    </Button>
-                  </>
-                )}
-              </Styled.Empty>
-            )}
-          {(page > 0 || !concertHallListQuery.isLoading) &&
-            !concertHallListQuery.isError &&
-            concertHalls.length > 0 && (
-              <>
-                <Styled.CardGrid $dimmed={activeSearchField != null}>
-                  {concertHalls.map((concertHall) => (
-                    <ConcertHallCard
-                      key={concertHall.concertHallId}
-                      concertHall={concertHall}
-                      isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
-                      isSelected={selectedConcertHallId === concertHall.concertHallId}
-                      onClick={openDetailFromCard}
-                    />
-                  ))}
-                </Styled.CardGrid>
-                {concertHallListQuery.data?.hasNext && (
-                  <Styled.LoadMoreTrigger ref={loadMoreTriggerRef} aria-hidden="true" />
-                )}
-              </>
-            )}
-        </Styled.ResultsPane>
+                    </>
+                  )}
+                </Styled.Empty>
+              )}
+            {(page > 0 || !concertHallListQuery.isLoading) &&
+              !concertHallListQuery.isError &&
+              concertHalls.length > 0 && (
+                <>
+                  <Styled.CardGrid $dimmed={activeSearchField != null}>
+                    {concertHalls.map((concertHall) => (
+                      <ConcertHallCard
+                        key={concertHall.concertHallId}
+                        concertHall={concertHall}
+                        isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
+                        isSelected={selectedConcertHallId === concertHall.concertHallId}
+                        onClick={openDetailFromCard}
+                      />
+                    ))}
+                  </Styled.CardGrid>
+                  {concertHallListQuery.data?.hasNext && (
+                    <Styled.LoadMoreTrigger ref={loadMoreTriggerRef} aria-hidden="true" />
+                  )}
+                </>
+              )}
+          </Styled.ResultsPane>
 
-        {hasDetail && (
-          <>
-            <Styled.DetailBackdrop aria-label="상세 배경" onClick={closeDetail} />
-            <ConcertHallDetailPanel concertHallId={selectedConcertHallId} onClose={closeDetail} />
-          </>
+          {hasDetail && (
+            <>
+              <Styled.DetailBackdrop aria-label="상세 배경" onClick={closeDetail} />
+              <ConcertHallDetailPanel concertHallId={selectedConcertHallId} onClose={closeDetail} />
+            </>
+          )}
+        </Styled.Content>
+
+        {isRecentClearConfirmOpen && (
+          <Styled.ModalBackdrop>
+            <Styled.ConfirmModal ref={recentClearConfirmRef}>
+              <Styled.ModalTitle>최근 검색어를 모두 삭제하시겠어요?</Styled.ModalTitle>
+              <Styled.ModalButtons>
+                <Button
+                  type="button"
+                  colorTheme="netural"
+                  size="bold"
+                  onClick={() => setIsRecentClearConfirmOpen(false)}
+                >
+                  취소하기
+                </Button>
+                <Button
+                  type="button"
+                  colorTheme="primary"
+                  size="bold"
+                  onClick={clearRecentKeywords}
+                >
+                  삭제하기
+                </Button>
+              </Styled.ModalButtons>
+            </Styled.ConfirmModal>
+          </Styled.ModalBackdrop>
         )}
-      </Styled.Content>
 
-      {isRecentClearConfirmOpen && (
-        <Styled.ModalBackdrop>
-          <Styled.ConfirmModal ref={recentClearConfirmRef}>
-            <Styled.ModalTitle>최근 검색어를 모두 삭제하시겠어요?</Styled.ModalTitle>
-            <Styled.ModalButtons>
-              <Button
-                type="button"
-                colorTheme="netural"
-                size="bold"
-                onClick={() => setIsRecentClearConfirmOpen(false)}
-              >
-                취소하기
-              </Button>
-              <Button type="button" colorTheme="primary" size="bold" onClick={clearRecentKeywords}>
-                삭제하기
-              </Button>
-            </Styled.ModalButtons>
-          </Styled.ConfirmModal>
-        </Styled.ModalBackdrop>
-      )}
-
-      {isEntryRequestOpen && (
-        <Styled.ModalBackdrop>
-          <Styled.Modal onSubmit={submitEntryRequest}>
-            <Styled.ModalTitle>공연장 이름을 확인한 후 요청 버튼을 눌러주세요!</Styled.ModalTitle>
-            <Styled.ModalLabel>
-              <Styled.ModalInput
-                value={entryRequestName}
-                hasError={hasEntryRequestError}
-                onBlur={() => setEntryRequestTouched(true)}
-                onChange={(event) => {
-                  const nextName = event.target.value;
-                  setEntryRequestName(nextName);
-                  if (nextName.trim().length === 0) setEntryRequestTouched(true);
-                }}
-                placeholder="공연장 명을 입력해 주세요"
-              />
-            </Styled.ModalLabel>
-            {hasEntryRequestError && <Styled.ErrorText>필수 입력사항입니다.</Styled.ErrorText>}
-            <Styled.ModalButtons>
-              <Button
-                type="button"
-                colorTheme="netural"
-                size="bold"
-                onClick={() => setIsEntryRequestOpen(false)}
-              >
-                취소하기
-              </Button>
-              <Button
-                type="submit"
-                colorTheme="primary"
-                size="bold"
-                disabled={entryRequestName.trim().length === 0 || entryRequestMutation.isLoading}
-                onClick={() => setIsEntryRequestOpen(false)}
-              >
-                요청하기
-              </Button>
-            </Styled.ModalButtons>
-          </Styled.Modal>
-        </Styled.ModalBackdrop>
-      )}
-    </Styled.Page>
+        {isEntryRequestOpen && (
+          <Styled.ModalBackdrop>
+            <Styled.Modal onSubmit={submitEntryRequest}>
+              <Styled.ModalTitle>공연장 이름을 확인한 후 요청 버튼을 눌러주세요!</Styled.ModalTitle>
+              <Styled.ModalLabel>
+                <Styled.ModalInput
+                  value={entryRequestName}
+                  hasError={hasEntryRequestError}
+                  onBlur={() => setEntryRequestTouched(true)}
+                  onChange={(event) => {
+                    const nextName = event.target.value;
+                    setEntryRequestName(nextName);
+                    if (nextName.trim().length === 0) setEntryRequestTouched(true);
+                  }}
+                  placeholder="공연장 명을 입력해 주세요"
+                />
+              </Styled.ModalLabel>
+              {hasEntryRequestError && <Styled.ErrorText>필수 입력사항입니다.</Styled.ErrorText>}
+              <Styled.ModalButtons>
+                <Button
+                  type="button"
+                  colorTheme="netural"
+                  size="bold"
+                  onClick={() => setIsEntryRequestOpen(false)}
+                >
+                  취소하기
+                </Button>
+                <Button
+                  type="submit"
+                  colorTheme="primary"
+                  size="bold"
+                  disabled={entryRequestName.trim().length === 0 || entryRequestMutation.isLoading}
+                  onClick={() => setIsEntryRequestOpen(false)}
+                >
+                  요청하기
+                </Button>
+              </Styled.ModalButtons>
+            </Styled.Modal>
+          </Styled.ModalBackdrop>
+        )}
+      </Styled.Page>
     </>
   );
 };

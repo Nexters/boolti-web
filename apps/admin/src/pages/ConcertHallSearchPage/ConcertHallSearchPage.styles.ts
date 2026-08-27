@@ -510,7 +510,7 @@ const TextButton = styled.button`
     outline: none;
   }
 
-  ${mq_xl} { 
+  ${mq_xl} {
     padding: 0 6px;
   }
 `;
@@ -778,24 +778,26 @@ const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
   background: ${({ theme }) => theme.palette.grey.b};
 
-  ${({ $detailPanelOpen }) => $detailPanelOpen && `
+  ${({ $detailPanelOpen }) =>
+    $detailPanelOpen &&
+    `
     overflow-y: auto;
     height: calc(100vh - 92px);
   `}
 `;
 
-const ResultsPaneHeader = styled.div<{ $detailPanelOpen: boolean; }>`
+const ResultsPaneHeader = styled.div<{ $detailPanelOpen: boolean }>`
   position: sticky;
   top: 148px;
 
   ${mq_xl} {
     position: sticky;
     left: 0;
-    top: ${({ $detailPanelOpen }) => $detailPanelOpen ? '0' : '92px'};
+    top: ${({ $detailPanelOpen }) => ($detailPanelOpen ? '0' : '92px')};
   }
-`
+`;
 
-const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
+const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean }>`
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
@@ -816,7 +818,7 @@ const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
     padding: 20px 52px;
     position: sticky;
     left: 0;
-    top: ${({ $detailPanelOpen }) => $detailPanelOpen ? '0' : '92px'};
+    top: ${({ $detailPanelOpen }) => ($detailPanelOpen ? '0' : '92px')};
   }
 `;
 
@@ -1291,7 +1293,6 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
     ${({ imageUrl, theme }) =>
       imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
   z-index: 2;
-
 `;
 
 const DetailState = styled.div`
