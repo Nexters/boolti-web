@@ -430,13 +430,19 @@ const ConcertHallSearchPage = () => {
 
     const { id } = pendingDetail;
     setPendingDetail(null);
-    navigate('.', {
-      state: {
-        ...getLocationState(location.state),
-        concertHallDetailId: id,
+    navigate(
+      {
+        pathname: location.pathname,
+        search: location.search,
       },
-    });
-  }, [location.search, location.state, navigate, pendingDetail]);
+      {
+        state: {
+          ...getLocationState(location.state),
+          concertHallDetailId: id,
+        },
+      },
+    );
+  }, [location.pathname, location.search, location.state, navigate, pendingDetail]);
 
   const listParams = useMemo(
     () => ({
@@ -481,14 +487,20 @@ const ConcertHallSearchPage = () => {
   const openDetailFromCard = useCallback(
     (concertHallId: number, trigger: HTMLButtonElement) => {
       detailTriggerRef.current = trigger;
-      navigate('.', {
-        state: {
-          ...getLocationState(location.state),
-          concertHallDetailId: concertHallId,
+      navigate(
+        {
+          pathname: location.pathname,
+          search: location.search,
         },
-      });
+        {
+          state: {
+            ...getLocationState(location.state),
+            concertHallDetailId: concertHallId,
+          },
+        },
+      );
     },
-    [location.state, navigate],
+    [location.pathname, location.search, location.state, navigate],
   );
   const closeDetail = useCallback(() => {
     if (selectedConcertHallId == null) return;
@@ -700,8 +712,21 @@ const ConcertHallSearchPage = () => {
     submitSearch();
   };
 
+  const moveKeywordToRentalFee = () => {
+    keywordInputSnapshotRef.current = null;
+    keywordInputRef.current?.blur();
+    mobileKeywordInputRef.current?.blur();
+    setActiveSearchField('rentalFee');
+  };
+
   const handleSearch = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (activeSearchField === 'keyword' && keywordInput.trim()) {
+      moveKeywordToRentalFee();
+      return;
+    }
+
     submitSearch();
   };
 
@@ -742,13 +767,11 @@ const ConcertHallSearchPage = () => {
   };
 
   const handleKeywordInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key !== 'Enter') return;
+    if (event.key !== 'Enter' && event.code !== 'Enter') return;
 
     event.preventDefault();
-    if (isMobile && activeSearchField === 'keyword') {
-      keywordInputSnapshotRef.current = null;
-      mobileKeywordInputRef.current?.blur();
-      setActiveSearchField('rentalFee');
+    if (event.currentTarget.value.trim()) {
+      moveKeywordToRentalFee();
       return;
     }
 
@@ -759,14 +782,14 @@ const ConcertHallSearchPage = () => {
     setSelectedRegionId(null);
     setSelectedRegionNameInput(undefined);
     setKeywordInput(nextKeyword);
-    applySearch(nextKeyword, null);
+    moveKeywordToRentalFee();
   };
 
   const applyRegion = (nextRegionId: number, nextRegionName: string) => {
     setSelectedRegionId(nextRegionId);
     setSelectedRegionNameInput(nextRegionName);
     setKeywordInput(nextRegionName);
-    applySearch(nextRegionName, nextRegionId);
+    moveKeywordToRentalFee();
   };
 
   const applyAutocomplete = (item: ConcertHallAutocompleteItem) => {
@@ -1155,6 +1178,7 @@ const ConcertHallSearchPage = () => {
                     <Styled.RangeInputLabel>
                       최소
                       <Styled.RangeInput
+                        autoFocus={!isMobile}
                         aria-label="대관료 최소"
                         inputMode="numeric"
                         placeholder="1"
@@ -1258,7 +1282,7 @@ const ConcertHallSearchPage = () => {
                 </Styled.FilterPopover>
               )}
             </Styled.FilterField>
-            <Styled.SearchButton type="submit" aria-label="검색">
+            <Styled.SearchButton type="button" aria-label="검색" onClick={() => submitSearch()}>
               <SearchIcon />
             </Styled.SearchButton>
           </Styled.SearchForm>
@@ -1470,6 +1494,7 @@ const ConcertHallSearchPage = () => {
                           <Styled.RangeInputLabel>
                             최소
                             <Styled.RangeInput
+                              autoFocus
                               aria-label="모바일 대관료 최소"
                               inputMode="numeric"
                               placeholder="1"
@@ -1749,7 +1774,7 @@ const ConcertHallSearchPage = () => {
             </Styled.ResultsPaneHeader>
 
             {concertHallListQuery.isError && (
-              <Styled.Empty>
+              <Styled.Empty $dimmed={false}>
                 <Styled.EmptyTitle>공연장 정보를 불러오지 못했어요.</Styled.EmptyTitle>
                 <Button
                   type="button"
@@ -1764,7 +1789,7 @@ const ConcertHallSearchPage = () => {
             {!concertHallListQuery.isLoading &&
               !concertHallListQuery.isError &&
               concertHalls.length === 0 && (
-                <Styled.Empty>
+                <Styled.Empty $dimmed={!isMobile && activeSearchField != null}>
                   <Styled.EmptyIcon aria-hidden="true">
                     <BooltiWhiteLogo />
                   </Styled.EmptyIcon>

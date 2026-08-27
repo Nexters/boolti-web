@@ -1,7 +1,7 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { getContrastTextColor } from './utils';
-import { mq_xl } from '@boolti/ui';
+import { mq_md, mq_xl } from '@boolti/ui';
 
 const slideDetailPaneIn = keyframes`
   from {
@@ -247,6 +247,9 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
   border-radius: 4px;
 
   ${mq_xl} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
     order: 1;
     grid-template-columns: repeat(3, 1fr) 70px;
@@ -256,6 +259,7 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
     height: auto;
     min-height: 70px;
     margin: 0 auto;
+    transform: translate(-50%, -50%);
     background: ${({ theme }) => theme.palette.grey.b};
     border: 1px solid ${({ theme }) => theme.palette.grey.g90};
     border-radius: 999px;
@@ -1029,6 +1033,11 @@ const CardGrid = styled.div<{ $dimmed: boolean }>`
   opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
   transition: opacity 120ms ease;
 
+  ${mq_md} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: stretch;
+  }
+
   ${mq_xl} {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     justify-items: stretch;
@@ -1063,6 +1072,11 @@ const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
   transition:
     border-color 120ms ease,
     opacity 120ms ease;
+
+  ${mq_md} {
+    min-width: 0;
+    max-width: none;
+  }
 
   ${mq_xl} {
     width: auto;
@@ -1176,7 +1190,7 @@ const DetailMetaValue = styled.dd`
   text-align: left;
 `;
 
-const Empty = styled.div`
+const Empty = styled.div<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1187,6 +1201,8 @@ const Empty = styled.div`
   padding: 48px 20px;
   text-align: center;
   color: ${({ theme }) => theme.palette.grey.g30};
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
+  transition: opacity 120ms ease;
 
   ${mq_xl} {
     align-content: normal;

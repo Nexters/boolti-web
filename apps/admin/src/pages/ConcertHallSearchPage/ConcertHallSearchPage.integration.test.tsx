@@ -43,11 +43,12 @@ vi.mock('@boolti/api', () => ({
 
 vi.mock('@boolti/ui', async () => {
   const { default: Button } = await import('@boolti/ui/src/components/Button');
-  const { mq_lg, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
+  const { mq_lg, mq_md, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
 
   return {
     Button,
     mq_lg,
+    mq_md,
     mq_xl,
     PreviewMap: () => {
       if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
@@ -270,18 +271,24 @@ const selectMobileCapacity = () => {
   fireEvent.click(screen.getByRole('button', { name: '모바일 50명 ~ 100명 선택' }));
 };
 
-const getCssTextForElement = (element: Element) => {
+const getCssTextForElement = (element: Element, mediaCondition?: string) => {
   const classNames = Array.from(element.classList);
   const cssTexts: string[] = [];
 
-  const visitRules = (rules: CSSRuleList) => {
+  const visitRules = (rules: CSSRuleList, currentMediaCondition?: string) => {
     Array.from(rules).forEach((rule) => {
       if ('cssRules' in rule) {
-        visitRules((rule as CSSMediaRule).cssRules);
+        visitRules(
+          (rule as CSSMediaRule).cssRules,
+          'conditionText' in rule
+            ? (rule as CSSMediaRule).conditionText
+            : currentMediaCondition,
+        );
       }
 
       if (
         'selectorText' in rule &&
+        (!mediaCondition || currentMediaCondition === mediaCondition) &&
         classNames.some((className) =>
           (rule as CSSStyleRule).selectorText.includes(`.${className}`),
         )
@@ -486,6 +493,42 @@ describe('ConcertHallSearchPage', () => {
     expect(await screen.findByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
   });
 
+  it('641px 이상 1120px 미만에서 공연장 카드를 여백 안의 2열 너비로 채운다', () => {
+    renderConcertHallSearchPage();
+
+    const card = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
+    const cardGrid = card.parentElement;
+    const tabletMediaCondition = '(min-width: 641px) and (max-width: 1120px)';
+
+    expect(cardGrid).not.toBeNull();
+    expect(getCssTextForElement(cardGrid as HTMLElement, tabletMediaCondition)).toContain(
+      'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    );
+    expect(getCssTextForElement(card, tabletMediaCondition)).toContain('min-width: 0');
+    expect(getCssTextForElement(card, tabletMediaCondition)).toContain('max-width: none');
+  });
+
+  it('데스크탑에서 검색 폼을 Nav의 수평 중앙에 배치한다', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1440, writable: true });
+    renderConcertHallSearchPage();
+
+    const searchForm = screen
+      .getByRole('textbox', { name: '지역, 공연장명 검색' })
+      .closest('form');
+    const desktopMediaCondition = '(min-width: 1120px)';
+
+    expect(searchForm).not.toBeNull();
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'position: absolute',
+    );
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'left: 50%',
+    );
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'transform: translate(-50%, -50%)',
+    );
+  });
+
   it('헤더 햄버거 버튼으로 메뉴를 열고 공연 등록 흐름으로 이동한다', () => {
     renderConcertHallSearchPage();
 
@@ -573,6 +616,28 @@ describe('ConcertHallSearchPage', () => {
 
     await waitFor(() => expect(document.activeElement).toBe(selectedCard));
     expect(screen.getByTestId('location').textContent).toBe(locationBeforeOpen);
+  });
+
+  it('검색 조건이 적용된 상태에서 상세를 열어도 조건과 목록 조회를 유지한다', async () => {
+    const searchLocation =
+      '/concert-halls?keyword=홍대&rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC';
+    renderConcertHallSearchPage(searchLocation);
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    expect(await screen.findByRole('complementary')).not.toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe(searchLocation);
+    expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        keyword: '홍대',
+        regionId: undefined,
+        minFee: 500000,
+        maxFee: 1000000,
+        minCapacity: 50,
+        maxCapacity: 100,
+        sort: 'FEE_DESC',
+      }),
+    );
   });
 
   it('브라우저 뒤로가기로 상세만 닫고 검색 위치와 포커스를 유지한다', async () => {
@@ -675,6 +740,61 @@ describe('ConcertHallSearchPage', () => {
         expect.objectContaining({ keyword: '홍대', page: 0, size: 12, sort: 'FEE_ASC' }),
       );
     });
+  });
+
+  it('데스크톱에서 직접 입력한 장소를 Enter로 확정하면 검색 적용 전 대관료 필드로 이동한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '수박 공연장' } });
+    fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
+
+    expect((keywordInput as HTMLInputElement).value).toBe('수박 공연장');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('일반 검색어 Enter는 장소 메뉴 활성 상태와 무관하게 대관료 필드로 이동한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
+
+    expect((keywordInput as HTMLInputElement).value).toBe('분위기 좋은 곳');
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('한글 입력 중 Process Enter도 일반 검색어를 검색하지 않고 대관료 필드로 이동한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.keyDown(keywordInput, {
+      key: 'Process',
+      code: 'Enter',
+      isComposing: true,
+    });
+
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('일반 검색어의 암시적 폼 제출도 검색하지 않고 대관료 필드로 이동한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.submit(keywordInput.closest('form') as HTMLFormElement);
+
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
   });
 
   it('장소 입력값이 비어 있을 때 Enter로 장소 필터를 초기화하고 포커스를 해제한다', () => {
@@ -882,7 +1002,7 @@ describe('ConcertHallSearchPage', () => {
     expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
     expect(screen.queryByRole('textbox', { name: '모바일 지역, 공연장명 검색' })).toBeNull();
-    expect(screen.getByLabelText('모바일 대관료 최소')).not.toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('모바일 대관료 최소'));
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
     fireEvent.click(screen.getByRole('button', { name: '모바일 필터 다음' }));
@@ -1227,13 +1347,14 @@ describe('ConcertHallSearchPage', () => {
     renderConcertHallSearchPage();
 
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
-    fireEvent.click(screen.getByRole('button', { name: '합정/상수 검색' }));
+    fireEvent.click(screen.getByLabelText('합정/상수 검색'));
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
 
     await waitFor(() => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ regionId: 1, keyword: undefined, sort: 'FEE_ASC' }),
       );
-      expect(screen.getByLabelText('합정/상수 필터 제거', { selector: 'button' })).not.toBeNull();
+      expect(screen.getByTestId('location').textContent).toBe('/concert-halls?regionId=1');
     });
 
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
@@ -1247,6 +1368,19 @@ describe('ConcertHallSearchPage', () => {
         expect.objectContaining({ regionId: undefined, keyword: '홍대' }),
       );
     });
+  });
+
+  it('데스크톱에서 추천 지역을 선택하면 검색 적용 전 장소를 채우고 대관료 필드로 이동한다', () => {
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.click(screen.getByLabelText('합정/상수 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('합정/상수');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
   });
 
   it('기존 검색어가 있는 상태에서 추천 지역을 선택하면 입력창에 추천 지역명을 표시한다', async () => {
@@ -1300,12 +1434,50 @@ describe('ConcertHallSearchPage', () => {
     await act(async () => vi.advanceTimersByTimeAsync(1));
     expect(mockUseConcertHallAutocomplete).toHaveBeenLastCalledWith('홍대');
 
-    fireEvent.click(screen.getByRole('button', { name: /\[DEV\] 홍대 볼티 라이브홀.*선택/ }));
+    fireEvent.click(screen.getByLabelText(/\[DEV\] 홍대 볼티 라이브홀.*선택/));
     expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
       expect.objectContaining({ keyword: '[DEV] 홍대 볼티 라이브홀', regionId: undefined }),
     );
     expect(mockUseConcertHallSearchDetail).toHaveBeenLastCalledWith(1);
     vi.useRealTimers();
+  });
+
+  it('데스크톱에서 지역 자동완성 결과를 선택하면 검색 적용 전 대관료 필드로 이동한다', async () => {
+    vi.useFakeTimers();
+    mockUseConcertHallAutocomplete.mockImplementation((query: string) => ({
+      data: { items: query === '홍대' ? autocompleteItems : [] },
+      isLoading: false,
+      isError: false,
+    }));
+
+    renderConcertHallSearchPage();
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '홍대' } });
+    await act(async () => vi.advanceTimersByTimeAsync(300));
+    fireEvent.click(screen.getByLabelText('홍대/연남/연희 선택'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('홍대/연남/연희');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('데스크톱에서 최근 검색어를 선택하면 검색 적용 전 대관료 필드로 이동한다', () => {
+    window.localStorage.setItem(
+      'concert-hall-search-recent-keywords',
+      JSON.stringify(['분위기 좋은 곳']),
+    );
+    renderConcertHallSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.click(screen.getByLabelText('분위기 좋은 곳 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('분위기 좋은 곳');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
   });
 
   it('추천 지역이 표시된 상태에서 검색어를 입력하면 자동완성 응답 전까지 추천 지역을 유지한다', async () => {
@@ -1567,7 +1739,14 @@ describe('ConcertHallSearchPage', () => {
       target: { value: '' },
     });
     focusKeywordInput();
-    fireEvent.click(screen.getByRole('button', { name: '홍대 검색' }));
+    fireEvent.click(screen.getByLabelText('홍대 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('홍대');
+    expect(screen.getByTestId('location').textContent).toBe(
+      '/concert-halls?keyword=%ED%99%8D%EB%8C%80',
+    );
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
 
     await waitFor(() => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
@@ -1579,7 +1758,7 @@ describe('ConcertHallSearchPage', () => {
       target: { value: '' },
     });
     focusKeywordInput();
-    fireEvent.click(screen.getByRole('button', { name: '홍대 삭제' }));
+    fireEvent.click(screen.getByLabelText('홍대 삭제'));
     expect(screen.queryByRole('button', { name: '홍대 검색' })).toBeNull();
 
     fireEvent.change(keywordInput, {
@@ -1587,10 +1766,14 @@ describe('ConcertHallSearchPage', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: '검색' }));
     fireEvent.change(keywordInput, {
+      target: { value: '연남' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
+    fireEvent.change(keywordInput, {
       target: { value: '' },
     });
     focusKeywordInput();
-    const clearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    const clearAllButton = screen.getByText('전체 삭제', { selector: 'button' });
     expect(fireEvent.mouseDown(clearAllButton)).toBe(false);
     fireEvent.click(clearAllButton);
     expect(screen.getByText('최근 검색어를 모두 삭제하시겠어요?')).not.toBeNull();
@@ -1599,7 +1782,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(cancelButton);
 
     expect(screen.queryByText('최근 검색어를 모두 삭제하시겠어요?')).toBeNull();
-    const reopenedClearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    const reopenedClearAllButton = screen.getByText('전체 삭제', { selector: 'button' });
     expect(fireEvent.mouseDown(reopenedClearAllButton)).toBe(false);
     fireEvent.click(reopenedClearAllButton);
 
@@ -1608,7 +1791,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(confirmButton);
 
     expect((keywordInput as HTMLInputElement).value).toBe('');
-    expect(screen.getByRole('button', { name: '합정/상수 검색' })).not.toBeNull();
+    expect(screen.getByLabelText('합정/상수 검색')).not.toBeNull();
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBe('[]');
   });
 
@@ -1966,6 +2149,44 @@ describe('ConcertHallSearchPage', () => {
     expect(screen.getByRole('button', { name: '필터 초기화' })).not.toBeNull();
     expect(screen.queryByRole('button', { name: '입점 요청하기' })).toBeNull();
     expect(screen.queryByText('찾으시는 공연장이 없어요.')).toBeNull();
+  });
+
+  it.each([
+    ['장소', () => fireEvent.focus(screen.getByRole('textbox', { name: '지역, 공연장명 검색' }))],
+    [
+      '대관료',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="대관료 "]')!,
+        ),
+    ],
+    [
+      '수용 인원',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="수용 인원 "]')!,
+        ),
+    ],
+  ])('%s 드롭다운을 열면 빈 결과 영역과 EmptyIcon을 50%로 표시한다', (_, openDropdown) => {
+    mockUseConcertHallSearchList.mockReturnValue({
+      data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    renderConcertHallSearchPage('/concert-halls?regionId=1&rentalFeeMin=0&rentalFeeMax=200000');
+
+    const emptyDescription = screen.getByText('찾으시는 결과가 없어요.');
+    const empty = emptyDescription.parentElement?.parentElement;
+    const emptyIcon = empty?.querySelector('[aria-hidden="true"]');
+
+    expect(empty).not.toBeNull();
+    expect(emptyIcon).not.toBeNull();
+
+    openDropdown();
+
+    expect(window.getComputedStyle(empty as HTMLElement).opacity).toBe('0.5');
   });
 
   it('빈 결과에서 입점 요청을 보낼 수 있다', async () => {
