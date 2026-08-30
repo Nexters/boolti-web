@@ -1054,7 +1054,7 @@ const LoadMoreTrigger = styled.div`
   }
 `;
 
-const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
+const PlaceCard = styled.button<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -2289,7 +2289,7 @@ export default {
   TextButton,
   TextToggleButton,
   Toolbar,
-  ConcertHallCard,
+  PlaceCard,
   MapPin,
   ComingSoon,
   Disclaimer,

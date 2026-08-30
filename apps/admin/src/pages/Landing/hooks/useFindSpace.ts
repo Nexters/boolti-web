@@ -4,7 +4,7 @@ import { PATH } from '~/constants/routes';
 export const useFindSpace = () => {
   const navigate = useNavigate();
   const handleFindSpace = () => {
-    navigate(PATH.CONERT_HALLS);
+    navigate(PATH.PLACE);
   };
 
   return { handleFindSpace };

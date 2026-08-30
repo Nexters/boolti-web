@@ -36,11 +36,11 @@ import {
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
-import Styled from './ConcertHallSearchPage.styles';
+import Styled from './PlaceSearchPage.styles';
 import { useOnClickOutside } from '@boolti/ui/src/hooks/useOnClickOutside';
 import { useIsMobile } from '~/hooks/useIsMobile';
 import { BooltiWhiteLogo } from './icons';
-import ConcertHallDetailPanel from './ConcertHallDetailPanel';
+import PlaceDetailPanel from './PlaceDetailPanel';
 import { Global, css, useTheme } from '@emotion/react';
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -177,7 +177,7 @@ const HighlightedAutocompleteName = ({ name, keyword }: { name: string; keyword:
   return <>{fragments}</>;
 };
 
-const ConcertHallCard = ({
+const PlaceCard = ({
   concertHall,
   isDimmed,
   isSelected,
@@ -188,7 +188,7 @@ const ConcertHallCard = ({
   isSelected: boolean;
   onClick: (concertHallId: number, trigger: HTMLButtonElement) => void;
 }) => (
-  <Styled.ConcertHallCard
+  <Styled.PlaceCard
     type="button"
     aria-label={`${concertHall.name} 상세 보기`}
     aria-pressed={isSelected}
@@ -224,10 +224,10 @@ const ConcertHallCard = ({
         <Styled.MetaValue>{concertHall.regionName ?? '정보 없음'}</Styled.MetaValue>
       </Styled.MetaList>
     </Styled.CardInfo>
-  </Styled.ConcertHallCard>
+  </Styled.PlaceCard>
 );
 
-const ConcertHallSearchPage = () => {
+const PlaceSearchPage = () => {
   const isMobile = useIsMobile();
   const location = useLocation();
   const navigate = useNavigate();
@@ -1841,7 +1841,7 @@ const ConcertHallSearchPage = () => {
                 <>
                   <Styled.CardGrid $dimmed={activeSearchField != null}>
                     {concertHalls.map((concertHall) => (
-                      <ConcertHallCard
+                      <PlaceCard
                         key={concertHall.concertHallId}
                         concertHall={concertHall}
                         isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
@@ -1860,7 +1860,7 @@ const ConcertHallSearchPage = () => {
           {hasDetail && (
             <>
               <Styled.DetailBackdrop aria-label="상세 배경" onClick={closeDetail} />
-              <ConcertHallDetailPanel concertHallId={selectedConcertHallId} onClose={closeDetail} />
+              <PlaceDetailPanel concertHallId={selectedConcertHallId} onClose={closeDetail} />
             </>
           )}
         </Styled.Content>
@@ -1936,4 +1936,4 @@ const ConcertHallSearchPage = () => {
   );
 };
 
-export default ConcertHallSearchPage;
+export default PlaceSearchPage;
