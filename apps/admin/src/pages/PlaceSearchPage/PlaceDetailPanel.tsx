@@ -14,8 +14,8 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 
 import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
-import ConcertHallRentalTab from './ConcertHallRentalTab';
-import Styled from './ConcertHallSearchPage.styles';
+import PlaceRentalTab from './PlaceRentalTab';
+import Styled from './PlaceSearchPage.styles';
 import {
   AlcoholIcon,
   CabinetIcon,
@@ -150,7 +150,7 @@ const Gallery = ({
   );
 };
 
-const ConcertHallDetailPanel = ({
+const PlaceDetailPanel = ({
   concertHallId,
   onClose,
 }: {
@@ -371,7 +371,7 @@ const ConcertHallDetailPanel = ({
       return <Styled.ComingSoon>COMING SOON</Styled.ComingSoon>;
     }
 
-    return <ConcertHallRentalTab rental={concertHall.rental} />;
+    return <PlaceRentalTab rental={concertHall.rental} />;
   };
   return (
     <Styled.DetailPane>
@@ -512,4 +512,4 @@ const ConcertHallDetailPanel = ({
   );
 };
 
-export default ConcertHallDetailPanel;
+export default PlaceDetailPanel;

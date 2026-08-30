@@ -1,7 +1,7 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
 import { getContrastTextColor } from './utils';
-import { mq_xl } from '@boolti/ui';
+import { mq_md, mq_xl } from '@boolti/ui';
 
 const slideDetailPaneIn = keyframes`
   from {
@@ -247,6 +247,9 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
   border-radius: 4px;
 
   ${mq_xl} {
+    position: absolute;
+    top: 50%;
+    left: 50%;
     display: grid;
     order: 1;
     grid-template-columns: repeat(3, 1fr) 70px;
@@ -256,6 +259,7 @@ const SearchForm = styled.form<{ $hiddenOnMobile: boolean }>`
     height: auto;
     min-height: 70px;
     margin: 0 auto;
+    transform: translate(-50%, -50%);
     background: ${({ theme }) => theme.palette.grey.b};
     border: 1px solid ${({ theme }) => theme.palette.grey.g90};
     border-radius: 999px;
@@ -510,7 +514,7 @@ const TextButton = styled.button`
     outline: none;
   }
 
-  ${mq_xl} { 
+  ${mq_xl} {
     padding: 0 6px;
   }
 `;
@@ -593,7 +597,6 @@ const IconButton = styled.button`
   place-items: center;
   width: 24px;
   height: 24px;
-  padding: 0 10px;
   color: ${({ theme }) => theme.palette.grey.g60};
   background: transparent;
   border: 0;
@@ -608,6 +611,10 @@ const IconButton = styled.button`
   &:focus-visible {
     color: ${({ theme }) => theme.palette.grey.w};
     outline: none;
+  }
+
+  ${mq_xl} {
+    padding: 0 10px;
   }
 `;
 
@@ -773,14 +780,28 @@ const Content = styled.div<{ hasDetail: boolean }>`
 
 const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
   min-width: 0;
+  background: ${({ theme }) => theme.palette.grey.b};
 
-  ${({ $detailPanelOpen }) => $detailPanelOpen && `
+  ${({ $detailPanelOpen }) =>
+    $detailPanelOpen &&
+    `
     overflow-y: auto;
     height: calc(100vh - 92px);
   `}
 `;
 
-const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
+const ResultsPaneHeader = styled.div<{ $detailPanelOpen: boolean }>`
+  position: sticky;
+  top: 148px;
+
+  ${mq_xl} {
+    position: sticky;
+    left: 0;
+    top: ${({ $detailPanelOpen }) => ($detailPanelOpen ? '0' : '92px')};
+  }
+`;
+
+const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean }>`
   display: grid;
   grid-template-columns: 76px minmax(0, 1fr);
   align-items: center;
@@ -788,9 +809,6 @@ const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
   height: auto;
   width: 100%;
   padding: 8px 20px 20px;
-  position: sticky;
-  top: ${({ $detailPanelOpen }) => $detailPanelOpen ? '0' : '92px'};
-  left: 0;
   background: ${({ theme }) => theme.palette.grey.b};
   opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
   transition: opacity 120ms ease;
@@ -802,6 +820,9 @@ const Toolbar = styled.div<{ $dimmed: boolean; $detailPanelOpen: boolean; }>`
     justify-content: space-between;
     height: 92px;
     padding: 20px 52px;
+    position: sticky;
+    left: 0;
+    top: ${({ $detailPanelOpen }) => ($detailPanelOpen ? '0' : '92px')};
   }
 `;
 
@@ -955,27 +976,52 @@ const MobileSortButton = styled.button`
 const ChipRow = styled.div`
   display: flex;
   gap: 6px;
-  margin-top: 8px;
-  padding: 0 20px;
+  padding: 8px 20px;
   overflow-x: auto;
+  background: ${({ theme }) => theme.palette.grey.b};
 
   ${mq_xl} {
     display: none;
   }
 `;
 
-const Chip = styled.button`
+const Chip = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   height: 36px;
-  padding: 0 12px;
   white-space: nowrap;
   color: ${({ theme }) => theme.palette.grey.g10};
   background: ${({ theme }) => theme.palette.grey.b};
   border: 1px solid ${({ theme }) => theme.palette.grey.g80};
   border-radius: 999px;
   font-size: 14px;
+  overflow: hidden;
+`;
+
+const ChipEditButton = styled.button`
+  height: 100%;
+  padding: 0 6px 0 12px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  white-space: inherit;
+`;
+
+const ChipRemoveButton = styled.button`
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 100%;
+  padding: 0 8px 0 4px;
+  color: inherit;
+  background: transparent;
+  border: 0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
 `;
 
 const CardGrid = styled.div<{ $dimmed: boolean }>`
@@ -986,6 +1032,11 @@ const CardGrid = styled.div<{ $dimmed: boolean }>`
   padding: 0 20px 24px;
   opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
   transition: opacity 120ms ease;
+
+  ${mq_md} {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    justify-items: stretch;
+  }
 
   ${mq_xl} {
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -1003,7 +1054,7 @@ const LoadMoreTrigger = styled.div`
   }
 `;
 
-const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
+const PlaceCard = styled.button<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1021,6 +1072,11 @@ const ConcertHallCard = styled.button<{ $dimmed: boolean }>`
   transition:
     border-color 120ms ease,
     opacity 120ms ease;
+
+  ${mq_md} {
+    min-width: 0;
+    max-width: none;
+  }
 
   ${mq_xl} {
     width: auto;
@@ -1134,7 +1190,7 @@ const DetailMetaValue = styled.dd`
   text-align: left;
 `;
 
-const Empty = styled.div`
+const Empty = styled.div<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1145,6 +1201,8 @@ const Empty = styled.div`
   padding: 48px 20px;
   text-align: center;
   color: ${({ theme }) => theme.palette.grey.g30};
+  opacity: ${({ $dimmed }) => ($dimmed ? 0.5 : 1)};
+  transition: opacity 120ms ease;
 
   ${mq_xl} {
     align-content: normal;
@@ -1251,7 +1309,6 @@ const DetailHero = styled.div<{ imageUrl?: string }>`
     ${({ imageUrl, theme }) =>
       imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
   z-index: 2;
-
 `;
 
 const DetailState = styled.div`
@@ -1776,10 +1833,11 @@ const MobileSheetCloseButton = styled.button`
   color: ${({ theme }) => theme.palette.mobile.grey.g50};
   background: transparent;
   border: 0;
+  margin-right: -4px;
 
   svg {
-    width: 20px;
-    height: 20px;
+    width: 24px;
+    height: 24px;
   }
 `;
 
@@ -1843,6 +1901,12 @@ const MobileResultList = styled.div`
   display: grid;
 `;
 
+const MobileResultItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
 const MobileResultButton = styled.button`
   display: flex;
   align-items: center;
@@ -1881,7 +1945,7 @@ const MobileFilterSections = styled.div`
   min-height: 0;
   overflow-y: auto;
 
-  & *:last-child {
+  & > *:last-child {
     border-bottom: 0;
   }
 `;
@@ -1999,7 +2063,7 @@ const MobileApplyButton = styled.button`
 const ModalBackdrop = styled.div`
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: 99;
   display: grid;
   place-items: center;
   padding: 28px;
@@ -2068,7 +2132,7 @@ const ModalButtons = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  margin-top: 50px;
+  margin-top: 24px;
 
   button {
     flex: 1;
@@ -2099,6 +2163,8 @@ export default {
   CardTitle,
   CardDivider,
   Chip,
+  ChipEditButton,
+  ChipRemoveButton,
   ChipRow,
   ConfirmModal,
   Content,
@@ -2183,6 +2249,7 @@ export default {
   MobileResultHeading,
   MobileResultIcon,
   MobileResultList,
+  MobileResultItem,
   MobileSheetBody,
   MobileSheetCloseButton,
   MobileSheetHandle,
@@ -2209,6 +2276,7 @@ export default {
   RecentItemIcon,
   RecentList,
   ResultsPane,
+  ResultsPaneHeader,
   SearchButton,
   SearchForm,
   SearchInputField,
@@ -2221,7 +2289,7 @@ export default {
   TextButton,
   TextToggleButton,
   Toolbar,
-  ConcertHallCard,
+  PlaceCard,
   MapPin,
   ComingSoon,
   Disclaimer,

@@ -9,7 +9,7 @@ import { Suspense } from 'react';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import ConcertHallSearchPage from './index';
+import PlaceSearchPage from './index';
 
 const mockUseConcertHallSearchList = vi.fn();
 const mockUseConcertHallSearchDetail = vi.fn();
@@ -43,11 +43,12 @@ vi.mock('@boolti/api', () => ({
 
 vi.mock('@boolti/ui', async () => {
   const { default: Button } = await import('@boolti/ui/src/components/Button');
-  const { mq_lg, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
+  const { mq_lg, mq_md, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
 
   return {
     Button,
     mq_lg,
+    mq_md,
     mq_xl,
     PreviewMap: () => {
       if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
@@ -238,19 +239,15 @@ const BrowserBackProbe = () => {
   const navigate = useNavigate();
 
   return (
-    <button
-      type="button"
-      aria-label="브라우저 뒤로가기 시뮬레이션"
-      onClick={() => navigate(-1)}
-    />
+    <button type="button" aria-label="브라우저 뒤로가기 시뮬레이션" onClick={() => navigate(-1)} />
   );
 };
 
-const renderConcertHallSearchPage = (initialEntry = '/concert-halls') =>
+const renderPlaceSearchPage = (initialEntry = '/place') =>
   renderWithTheme(
     <MemoryRouter initialEntries={[initialEntry]}>
       <Suspense fallback={<div>공연장 검색 페이지를 불러오는 중입니다.</div>}>
-        <ConcertHallSearchPage />
+        <PlaceSearchPage />
       </Suspense>
       <LocationProbe />
       <BrowserBackProbe />
@@ -274,18 +271,24 @@ const selectMobileCapacity = () => {
   fireEvent.click(screen.getByRole('button', { name: '모바일 50명 ~ 100명 선택' }));
 };
 
-const getCssTextForElement = (element: Element) => {
+const getCssTextForElement = (element: Element, mediaCondition?: string) => {
   const classNames = Array.from(element.classList);
   const cssTexts: string[] = [];
 
-  const visitRules = (rules: CSSRuleList) => {
+  const visitRules = (rules: CSSRuleList, currentMediaCondition?: string) => {
     Array.from(rules).forEach((rule) => {
       if ('cssRules' in rule) {
-        visitRules((rule as CSSMediaRule).cssRules);
+        visitRules(
+          (rule as CSSMediaRule).cssRules,
+          'conditionText' in rule
+            ? (rule as CSSMediaRule).conditionText
+            : currentMediaCondition,
+        );
       }
 
       if (
         'selectorText' in rule &&
+        (!mediaCondition || currentMediaCondition === mediaCondition) &&
         classNames.some((className) =>
           (rule as CSSStyleRule).selectorText.includes(`.${className}`),
         )
@@ -302,7 +305,7 @@ const getCssTextForElement = (element: Element) => {
   return cssTexts.join('\n');
 };
 
-describe('ConcertHallSearchPage', () => {
+describe('PlaceSearchPage', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     shouldSuspendPreviewMap = false;
@@ -395,7 +398,7 @@ describe('ConcertHallSearchPage', () => {
     const previousBackground = 'rgb(12, 34, 56)';
     document.body.style.background = previousBackground;
 
-    const { unmount } = renderConcertHallSearchPage();
+    const { unmount } = renderPlaceSearchPage();
     const expectedBackground = document.createElement('div');
     expectedBackground.style.background = theme.palette.grey.b;
 
@@ -408,7 +411,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 메인 검색 버튼에 조건 중심 안내 문구를 표시한다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(
       screen.getByRole('button', { name: '모바일 공연장 검색 필터 열기' }).textContent,
@@ -416,7 +419,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('포커스가 없을 때 긴 검색어를 말줄임표로 표시한다', () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     const cssText = getCssTextForElement(keywordInput);
@@ -430,7 +433,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('장소 검색 영역의 입력창 외 부분을 눌러도 검색 입력에 포커스한다', () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     const searchInputField = screen.getByText('장소').parentElement;
@@ -460,7 +463,7 @@ describe('ConcertHallSearchPage', () => {
         ),
     ],
   ])('%s 필드가 활성화되면 공연장 개수와 카드 영역을 50%로 표시한다', (_, activate) => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const toolbar = screen.getByText('공연장').parentElement?.parentElement;
     const cardGrid = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }).parentElement;
@@ -475,7 +478,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('검색 결과 카드를 표시하고 카드 클릭 시 상세 정보를 연다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.getByText('공연장')).not.toBeNull();
     expect(screen.getByText('얼라이브홀')).not.toBeNull();
@@ -490,8 +493,44 @@ describe('ConcertHallSearchPage', () => {
     expect(await screen.findByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
   });
 
+  it('641px 이상 1120px 미만에서 공연장 카드를 여백 안의 2열 너비로 채운다', () => {
+    renderPlaceSearchPage();
+
+    const card = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
+    const cardGrid = card.parentElement;
+    const tabletMediaCondition = '(min-width: 641px) and (max-width: 1120px)';
+
+    expect(cardGrid).not.toBeNull();
+    expect(getCssTextForElement(cardGrid as HTMLElement, tabletMediaCondition)).toContain(
+      'grid-template-columns: repeat(2, minmax(0, 1fr))',
+    );
+    expect(getCssTextForElement(card, tabletMediaCondition)).toContain('min-width: 0');
+    expect(getCssTextForElement(card, tabletMediaCondition)).toContain('max-width: none');
+  });
+
+  it('데스크탑에서 검색 폼을 Nav의 수평 중앙에 배치한다', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1440, writable: true });
+    renderPlaceSearchPage();
+
+    const searchForm = screen
+      .getByRole('textbox', { name: '지역, 공연장명 검색' })
+      .closest('form');
+    const desktopMediaCondition = '(min-width: 1120px)';
+
+    expect(searchForm).not.toBeNull();
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'position: absolute',
+    );
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'left: 50%',
+    );
+    expect(getCssTextForElement(searchForm as HTMLFormElement, desktopMediaCondition)).toContain(
+      'transform: translate(-50%, -50%)',
+    );
+  });
+
   it('헤더 햄버거 버튼으로 메뉴를 열고 공연 등록 흐름으로 이동한다', () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const menuButton = screen.getByRole('button', { name: '메뉴 열기' });
     expect(menuButton.getAttribute('aria-expanded')).toBe('false');
@@ -518,7 +557,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일에서도 햄버거 버튼으로 전체 폭 메뉴를 열고 닫는다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: '메뉴 열기' }));
 
@@ -545,7 +584,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: vi.fn(),
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
     const unselectedCard = screen.getByRole('button', { name: /웨스트브릿지 상세 보기/ });
@@ -568,7 +607,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('상세 패널을 닫으면 선택했던 카드로 포커스를 돌려준다', async () => {
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
     const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
     const locationBeforeOpen = screen.getByTestId('location').textContent;
 
@@ -579,8 +618,30 @@ describe('ConcertHallSearchPage', () => {
     expect(screen.getByTestId('location').textContent).toBe(locationBeforeOpen);
   });
 
+  it('검색 조건이 적용된 상태에서 상세를 열어도 조건과 목록 조회를 유지한다', async () => {
+    const searchLocation =
+      '/place?keyword=홍대&rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC';
+    renderPlaceSearchPage(searchLocation);
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    expect(await screen.findByRole('complementary')).not.toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe(searchLocation);
+    expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        keyword: '홍대',
+        regionId: undefined,
+        minFee: 500000,
+        maxFee: 1000000,
+        minCapacity: 50,
+        maxCapacity: 100,
+        sort: 'FEE_DESC',
+      }),
+    );
+  });
+
   it('브라우저 뒤로가기로 상세만 닫고 검색 위치와 포커스를 유지한다', async () => {
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
     const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
     const locationBeforeOpen = screen.getByTestId('location').textContent;
 
@@ -595,7 +656,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('상세 패널이 열리면 데스크톱 정렬 그룹을 흐리게 표시하고 정렬 버튼을 비활성화한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const lowFeeSortButton = screen.getByRole('button', { name: '대관료 낮은 순' });
     const highFeeSortButton = screen.getByRole('button', { name: '대관료 높은 순' });
@@ -619,7 +680,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('상세 패널이 열리면 데스크톱 콘텐츠를 3대 1 그리드로 전환한다', () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const content = screen.getByText('공연장').closest('section')?.parentElement;
     expect(content).not.toBeNull();
@@ -657,7 +718,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     });
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.getByText('문의')).not.toBeNull();
     expect(screen.getByText('/ 정보 없음')).not.toBeNull();
@@ -665,7 +726,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('검색어를 URL 파라미터 기반 리스트 쿼리로 전달한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.getByText('장소')).not.toBeNull();
 
@@ -681,8 +742,63 @@ describe('ConcertHallSearchPage', () => {
     });
   });
 
+  it('데스크톱에서 직접 입력한 장소를 Enter로 확정하면 검색 적용 전 대관료 필드로 이동한다', () => {
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '수박 공연장' } });
+    fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
+
+    expect((keywordInput as HTMLInputElement).value).toBe('수박 공연장');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('일반 검색어 Enter는 장소 메뉴 활성 상태와 무관하게 대관료 필드로 이동한다', () => {
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
+
+    expect((keywordInput as HTMLInputElement).value).toBe('분위기 좋은 곳');
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('한글 입력 중 Process Enter도 일반 검색어를 검색하지 않고 대관료 필드로 이동한다', () => {
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.keyDown(keywordInput, {
+      key: 'Process',
+      code: 'Enter',
+      isComposing: true,
+    });
+
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('일반 검색어의 암시적 폼 제출도 검색하지 않고 대관료 필드로 이동한다', () => {
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '분위기 좋은 곳' } });
+    fireEvent.submit(keywordInput.closest('form') as HTMLFormElement);
+
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
   it('장소 입력값이 비어 있을 때 Enter로 장소 필터를 초기화하고 포커스를 해제한다', () => {
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.mouseDown(screen.getByText('장소').parentElement as HTMLElement);
@@ -690,24 +806,24 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.change(keywordInput, { target: { value: '' } });
     fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
 
-    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(screen.getByTestId('location').textContent).toBe('/place');
     expect(document.activeElement).not.toBe(keywordInput);
   });
 
   it('입력창이 처음부터 비어 있어도 Enter로 기존 지역 장소 필터를 초기화한다', () => {
-    renderConcertHallSearchPage('/concert-halls?regionId=1');
+    renderPlaceSearchPage('/place?regionId=1');
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.focus(keywordInput);
     fireEvent.change(keywordInput, { target: { value: '' } });
     fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
 
-    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(screen.getByTestId('location').textContent).toBe('/place');
     expect(document.activeElement).not.toBe(keywordInput);
   });
 
   it('장소 입력을 비운 뒤 포커스만 이탈하면 초안을 유지하고 장소 검색을 닫을 때 복원한다', () => {
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
 
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.focus(keywordInput);
@@ -725,14 +841,14 @@ describe('ConcertHallSearchPage', () => {
 
     fireEvent.mouseDown(document.body);
 
-    expect(screen.getByTestId('location').textContent).toBe('/concert-halls?keyword=홍대');
+    expect(screen.getByTestId('location').textContent).toBe('/place?keyword=홍대');
     expect((keywordInput as HTMLInputElement).value).toBe('홍대');
     expect(screen.queryByRole('group', { name: '장소 검색' })).toBeNull();
   });
 
   it('대관료와 수용 인원 필터를 리스트 쿼리로 전달한다', async () => {
-    renderConcertHallSearchPage(
-      '/concert-halls?rentalFeeMin=500000&capacityMin=50&sort=CAPACITY_DESC',
+    renderPlaceSearchPage(
+      '/place?rentalFeeMin=500000&capacityMin=50&sort=CAPACITY_DESC',
     );
 
     const rentalFeeButton = screen.getByRole('button', { name: '대관료 500,000원 이상' });
@@ -794,7 +910,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 메인 검색창은 장소 상세 대신 필터 요약 화면을 먼저 연다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const mobileSearchTrigger = screen.getByRole('button', {
       name: '모바일 공연장 검색 필터 열기',
@@ -817,12 +933,12 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it.each([
-    '/concert-halls?regionId=1',
-    '/concert-halls?rentalFeeMin=500000',
-    '/concert-halls?capacityMin=50',
+    '/place?regionId=1',
+    '/place?rentalFeeMin=500000',
+    '/place?capacityMin=50',
   ])('모바일 검색 필터가 하나라도 있으면 전체 삭제를 활성화한다: %s', (initialEntry) => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage(initialEntry);
+    renderPlaceSearchPage(initialEntry);
     openMobileFilterOverview();
 
     expect((screen.getByRole('button', { name: '전체 삭제' }) as HTMLButtonElement).disabled).toBe(
@@ -832,7 +948,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 필터 요약의 검색하기는 현재 필터를 적용하고 닫힘 애니메이션 뒤 시트를 닫는다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     openMobileFilterOverview();
 
     fireEvent.click(screen.getByRole('button', { name: '대관료 설정' }));
@@ -840,7 +956,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: '장소 지역, 공연장명 검색' }));
     fireEvent.click(screen.getByRole('button', { name: '모바일 검색 필터 닫기' }));
 
-    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(screen.getByTestId('location').textContent).toBe('/place');
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
     const searchButton = screen.getByRole('button', { name: '모바일 필터 검색하기' });
@@ -852,7 +968,7 @@ describe('ConcertHallSearchPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?rentalFeeMin=500000&rentalFeeMax=1000000',
+        '/place?rentalFeeMin=500000&rentalFeeMax=1000000',
       );
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ minFee: 500000, maxFee: 1000000 }),
@@ -863,7 +979,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 필터 요약의 장소 검색창을 누르면 장소 상세 입력에 포커스한다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     openMobileKeywordSearch();
 
@@ -874,7 +990,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일에서 자동완성을 선택하지 않고 Enter를 누르면 검색 적용 전 대관료 선택으로 이동한다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     openMobileKeywordSearch();
 
     const keywordInput = screen.getByRole('textbox', {
@@ -883,10 +999,10 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.change(keywordInput, { target: { value: '새 공연장' } });
     fireEvent.keyDown(keywordInput, { key: 'Enter', code: 'Enter' });
 
-    expect(screen.getByTestId('location').textContent).toBe('/concert-halls');
+    expect(screen.getByTestId('location').textContent).toBe('/place');
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBeNull();
     expect(screen.queryByRole('textbox', { name: '모바일 지역, 공연장명 검색' })).toBeNull();
-    expect(screen.getByLabelText('모바일 대관료 최소')).not.toBeNull();
+    expect(document.activeElement).toBe(screen.getByLabelText('모바일 대관료 최소'));
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
     fireEvent.click(screen.getByRole('button', { name: '모바일 필터 다음' }));
@@ -894,7 +1010,7 @@ describe('ConcertHallSearchPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?keyword=%EC%83%88+%EA%B3%B5%EC%97%B0%EC%9E%A5',
+        '/place?keyword=%EC%83%88+%EA%B3%B5%EC%97%B0%EC%9E%A5',
       );
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ keyword: '새 공연장', regionId: undefined }),
@@ -909,7 +1025,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 장소 검색 닫기는 입력을 취소하고 필터 요약으로 돌아간다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
 
     openMobileKeywordSearch();
     fireEvent.change(screen.getByRole('textbox', { name: '모바일 지역, 공연장명 검색' }), {
@@ -930,7 +1046,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 필터 요약의 Dim을 누르면 바텀시트를 닫는다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     openMobileFilterOverview();
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -944,7 +1060,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 핸들을 누르면 닫힘 애니메이션 뒤 바텀시트를 닫는다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     openMobileFilterOverview();
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -963,11 +1079,88 @@ describe('ConcertHallSearchPage', () => {
       configurable: true,
       value: vi.fn(() => ({ matches: true })),
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     openMobileFilterOverview();
 
     fireEvent.click(screen.getByRole('button', { name: '모바일 바텀시트 닫기' }));
 
+    expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
+  });
+
+  it('모바일 검색 조건 칩 본문을 누르면 연결된 필터 시트를 연다', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderPlaceSearchPage(
+      '/place?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }));
+
+    const rentalFeeDialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    expect(within(rentalFeeDialog).getByLabelText('모바일 대관료 최소')).not.toBeNull();
+
+    fireEvent.click(screen.getByRole('button', { name: '모바일 바텀시트 닫기' }));
+    fireEvent.animationEnd(rentalFeeDialog);
+    fireEvent.click(screen.getByRole('button', { name: '수용 인원 50명 ~ 100명 편집' }));
+
+    const capacityDialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
+    expect(
+      within(capacityDialog).getByRole('button', { name: '모바일 50명 ~ 100명 선택' }),
+    ).not.toBeNull();
+  });
+
+  it('모바일 검색 조건 칩의 대관료 X를 누르면 대관료 필터만 초기화한다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderPlaceSearchPage(
+      '/place?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '대관료 필터 제거' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/place?capacityMin=50&capacityMax=100&sort=FEE_DESC',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          minFee: undefined,
+          maxFee: undefined,
+          minCapacity: 50,
+          maxCapacity: 100,
+          sort: 'FEE_DESC',
+        }),
+      );
+    });
+    expect(screen.queryByRole('button', { name: /대관료 .* 편집/ })).toBeNull();
+    expect(screen.getByRole('button', { name: '수용 인원 50명 ~ 100명 편집' })).not.toBeNull();
+    expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
+  });
+
+  it('모바일 검색 조건 칩의 수용 인원 X를 누르면 수용 인원 필터만 초기화한다', async () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
+    renderPlaceSearchPage(
+      '/place?rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '수용 인원 필터 제거' }));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('location').textContent).toBe(
+        '/place?rentalFeeMin=500000&rentalFeeMax=1000000&sort=FEE_DESC',
+      );
+      expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          minFee: 500000,
+          maxFee: 1000000,
+          minCapacity: undefined,
+          maxCapacity: undefined,
+          sort: 'FEE_DESC',
+        }),
+      );
+    });
+    expect(
+      screen.getByRole('button', { name: '대관료 500,000원 - 1,000,000원 편집' }),
+    ).not.toBeNull();
+    expect(screen.queryByRole('button', { name: /수용 인원 .* 편집/ })).toBeNull();
     expect(screen.queryByRole('dialog', { name: '모바일 공연장 검색 필터' })).toBeNull();
   });
 
@@ -977,8 +1170,8 @@ describe('ConcertHallSearchPage', () => {
       'concert-hall-search-recent-keywords',
       JSON.stringify(['최근 공연장']),
     );
-    renderConcertHallSearchPage(
-      '/concert-halls?keyword=홍대&rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
+    renderPlaceSearchPage(
+      '/place?keyword=홍대&rentalFeeMin=500000&rentalFeeMax=1000000&capacityMin=50&capacityMax=100&sort=FEE_DESC',
     );
     openMobileFilterOverview();
     fireEvent.click(screen.getByRole('button', { name: '수용 인원 50명 ~ 100명' }));
@@ -986,7 +1179,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: '전체 삭제' }));
 
     await waitFor(() => {
-      expect(screen.getByTestId('location').textContent).toBe('/concert-halls?sort=FEE_DESC');
+      expect(screen.getByTestId('location').textContent).toBe('/place?sort=FEE_DESC');
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({
           regionId: undefined,
@@ -1012,7 +1205,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 바텀시트는 상단 32px을 남기고 입력 확대를 막는 글자 크기를 사용한다', () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     openMobileKeywordSearch();
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -1031,7 +1224,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('모바일 대관료의 다음은 장소와 대관료를 적용하고 수용 인원 선택을 연다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     openMobileKeywordSearch();
     fireEvent.click(
@@ -1051,7 +1244,7 @@ describe('ConcertHallSearchPage', () => {
         expect.objectContaining({ regionId: 1, minFee: 500000, maxFee: 1000000 }),
       );
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?regionId=1&rentalFeeMin=500000&rentalFeeMax=1000000',
+        '/place?regionId=1&rentalFeeMin=500000&rentalFeeMax=1000000',
       );
       expect(screen.getByRole('button', { name: '모바일 50명 ~ 100명 선택' })).not.toBeNull();
       expect(screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' })).not.toBeNull();
@@ -1060,7 +1253,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('수용 인원을 변경한 뒤 모바일 Dim을 클릭하면 필터를 적용하고 검색 창을 닫는다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     selectMobileCapacity();
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -1069,7 +1262,7 @@ describe('ConcertHallSearchPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?regionId=1&capacityMin=50&capacityMax=100',
+        '/place?regionId=1&capacityMin=50&capacityMax=100',
       );
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ minCapacity: 50, maxCapacity: 100 }),
@@ -1080,14 +1273,14 @@ describe('ConcertHallSearchPage', () => {
 
   it('수용 인원을 변경한 뒤 다른 필드로 이동하면 먼저 필터를 적용하고 수용 인원 창을 닫는다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     selectMobileCapacity();
 
     fireEvent.click(screen.getByRole('button', { name: '대관료 설정' }));
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?regionId=1&capacityMin=50&capacityMax=100',
+        '/place?regionId=1&capacityMin=50&capacityMax=100',
       );
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ minCapacity: 50, maxCapacity: 100 }),
@@ -1101,7 +1294,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('수용 인원을 변경한 뒤 검색 버튼을 클릭하면 필터를 적용하고 검색 창을 닫는다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     selectMobileCapacity();
 
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -1112,7 +1305,7 @@ describe('ConcertHallSearchPage', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('location').textContent).toBe(
-        '/concert-halls?regionId=1&capacityMin=50&capacityMax=100',
+        '/place?regionId=1&capacityMin=50&capacityMax=100',
       );
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ minCapacity: 50, maxCapacity: 100 }),
@@ -1122,7 +1315,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('대관료 낮은 순과 높은 순을 리스트 쿼리로 전달한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const lowFeeSortButton = screen.getByRole('button', { name: '대관료 낮은 순', pressed: true });
     const highFeeSortButton = screen.getByRole('button', { name: '대관료 높은 순' });
@@ -1151,16 +1344,17 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('추천 지역을 선택하면 regionId로 검색하고 keyword를 제거한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
-    fireEvent.click(screen.getByRole('button', { name: '합정/상수 검색' }));
+    fireEvent.click(screen.getByLabelText('합정/상수 검색'));
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
 
     await waitFor(() => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
         expect.objectContaining({ regionId: 1, keyword: undefined, sort: 'FEE_ASC' }),
       );
-      expect(screen.getByLabelText('합정/상수 필터 제거', { selector: 'button' })).not.toBeNull();
+      expect(screen.getByTestId('location').textContent).toBe('/place?regionId=1');
     });
 
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
@@ -1176,9 +1370,22 @@ describe('ConcertHallSearchPage', () => {
     });
   });
 
+  it('데스크톱에서 추천 지역을 선택하면 검색 적용 전 장소를 채우고 대관료 필드로 이동한다', () => {
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.click(screen.getByLabelText('합정/상수 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('합정/상수');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
   it('기존 검색어가 있는 상태에서 추천 지역을 선택하면 입력창에 추천 지역명을 표시한다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderConcertHallSearchPage('/concert-halls?keyword=홍대');
+    renderPlaceSearchPage('/place?keyword=홍대');
 
     openMobileKeywordSearch();
     const dialog = screen.getByRole('dialog', { name: '모바일 공연장 검색 필터' });
@@ -1190,7 +1397,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: '모바일 필터 다음' }));
 
     await waitFor(() => {
-      expect(screen.getByTestId('location').textContent).toBe('/concert-halls?regionId=1');
+      expect(screen.getByTestId('location').textContent).toBe('/place?regionId=1');
       expect(
         screen.getByRole('button', { name: '모바일 공연장 검색 필터 열기' }).textContent,
       ).toContain('합정/상수');
@@ -1198,7 +1405,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('regionId URL로 직접 진입하면 해당 추천 지역명을 입력창에 표시한다', async () => {
-    renderConcertHallSearchPage('/concert-halls?regionId=1');
+    renderPlaceSearchPage('/place?regionId=1');
 
     await waitFor(() => {
       expect((screen.getByPlaceholderText('지역, 공연장명 검색') as HTMLInputElement).value).toBe(
@@ -1215,7 +1422,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
       target: { value: '홍대' },
@@ -1227,12 +1434,50 @@ describe('ConcertHallSearchPage', () => {
     await act(async () => vi.advanceTimersByTimeAsync(1));
     expect(mockUseConcertHallAutocomplete).toHaveBeenLastCalledWith('홍대');
 
-    fireEvent.click(screen.getByRole('button', { name: /\[DEV\] 홍대 볼티 라이브홀.*선택/ }));
+    fireEvent.click(screen.getByLabelText(/\[DEV\] 홍대 볼티 라이브홀.*선택/));
     expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
       expect.objectContaining({ keyword: '[DEV] 홍대 볼티 라이브홀', regionId: undefined }),
     );
     expect(mockUseConcertHallSearchDetail).toHaveBeenLastCalledWith(1);
     vi.useRealTimers();
+  });
+
+  it('데스크톱에서 지역 자동완성 결과를 선택하면 검색 적용 전 대관료 필드로 이동한다', async () => {
+    vi.useFakeTimers();
+    mockUseConcertHallAutocomplete.mockImplementation((query: string) => ({
+      data: { items: query === '홍대' ? autocompleteItems : [] },
+      isLoading: false,
+      isError: false,
+    }));
+
+    renderPlaceSearchPage();
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.change(keywordInput, { target: { value: '홍대' } });
+    await act(async () => vi.advanceTimersByTimeAsync(300));
+    fireEvent.click(screen.getByLabelText('홍대/연남/연희 선택'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('홍대/연남/연희');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+  });
+
+  it('데스크톱에서 최근 검색어를 선택하면 검색 적용 전 대관료 필드로 이동한다', () => {
+    window.localStorage.setItem(
+      'concert-hall-search-recent-keywords',
+      JSON.stringify(['분위기 좋은 곳']),
+    );
+    renderPlaceSearchPage();
+
+    const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
+    fireEvent.focus(keywordInput);
+    fireEvent.click(screen.getByLabelText('분위기 좋은 곳 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('분위기 좋은 곳');
+    expect(screen.queryByLabelText('장소 검색')).toBeNull();
+    expect(screen.getByTestId('location').textContent).toBe('/place');
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
   });
 
   it('추천 지역이 표시된 상태에서 검색어를 입력하면 자동완성 응답 전까지 추천 지역을 유지한다', async () => {
@@ -1243,7 +1488,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     expect(screen.getByRole('button', { name: '합정/상수 검색' })).not.toBeNull();
 
@@ -1270,7 +1515,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.focus(keywordInput);
     expect(screen.getByRole('button', { name: '합정 검색' })).not.toBeNull();
@@ -1310,7 +1555,7 @@ describe('ConcertHallSearchPage', () => {
       return { data: undefined, isLoading: false, isError: false };
     });
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
       target: { value: '홍' },
@@ -1355,7 +1600,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     fireEvent.focus(keywordInput);
     fireEvent.change(keywordInput, { target: { value: '합' } });
@@ -1391,7 +1636,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
       target: { value: '블' },
@@ -1432,7 +1677,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
       target: { value: '혜선' },
@@ -1454,7 +1699,7 @@ describe('ConcertHallSearchPage', () => {
       isLoading: false,
       isError: true,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.focus(screen.getByPlaceholderText('지역, 공연장명 검색'));
     fireEvent.change(screen.getByPlaceholderText('지역, 공연장명 검색'), {
@@ -1473,7 +1718,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('최근 검색어를 저장하고 클릭/삭제/전체 삭제할 수 있다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     const keywordInput = screen.getByPlaceholderText('지역, 공연장명 검색');
     const keywordSearchField = screen.getByText('장소').parentElement as HTMLElement;
     const focusKeywordInput = () => {
@@ -1494,7 +1739,14 @@ describe('ConcertHallSearchPage', () => {
       target: { value: '' },
     });
     focusKeywordInput();
-    fireEvent.click(screen.getByRole('button', { name: '홍대 검색' }));
+    fireEvent.click(screen.getByLabelText('홍대 검색'));
+
+    expect((keywordInput as HTMLInputElement).value).toBe('홍대');
+    expect(screen.getByTestId('location').textContent).toBe(
+      '/place?keyword=%ED%99%8D%EB%8C%80',
+    );
+    expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
 
     await waitFor(() => {
       expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
@@ -1506,7 +1758,7 @@ describe('ConcertHallSearchPage', () => {
       target: { value: '' },
     });
     focusKeywordInput();
-    fireEvent.click(screen.getByRole('button', { name: '홍대 삭제' }));
+    fireEvent.click(screen.getByLabelText('홍대 삭제'));
     expect(screen.queryByRole('button', { name: '홍대 검색' })).toBeNull();
 
     fireEvent.change(keywordInput, {
@@ -1514,10 +1766,14 @@ describe('ConcertHallSearchPage', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: '검색' }));
     fireEvent.change(keywordInput, {
+      target: { value: '연남' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: '검색' }));
+    fireEvent.change(keywordInput, {
       target: { value: '' },
     });
     focusKeywordInput();
-    const clearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    const clearAllButton = screen.getByText('전체 삭제', { selector: 'button' });
     expect(fireEvent.mouseDown(clearAllButton)).toBe(false);
     fireEvent.click(clearAllButton);
     expect(screen.getByText('최근 검색어를 모두 삭제하시겠어요?')).not.toBeNull();
@@ -1526,7 +1782,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(cancelButton);
 
     expect(screen.queryByText('최근 검색어를 모두 삭제하시겠어요?')).toBeNull();
-    const reopenedClearAllButton = screen.getByRole('button', { name: '전체 삭제' });
+    const reopenedClearAllButton = screen.getByText('전체 삭제', { selector: 'button' });
     expect(fireEvent.mouseDown(reopenedClearAllButton)).toBe(false);
     fireEvent.click(reopenedClearAllButton);
 
@@ -1535,7 +1791,7 @@ describe('ConcertHallSearchPage', () => {
     fireEvent.click(confirmButton);
 
     expect((keywordInput as HTMLInputElement).value).toBe('');
-    expect(screen.getByRole('button', { name: '합정/상수 검색' })).not.toBeNull();
+    expect(screen.getByLabelText('합정/상수 검색')).not.toBeNull();
     expect(window.localStorage.getItem('concert-hall-search-recent-keywords')).toBe('[]');
   });
 
@@ -1546,7 +1802,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
     });
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
@@ -1554,7 +1810,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('데스크탑에서 상세 aside가 우측에서 슬라이드되어 나타난다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
@@ -1564,7 +1820,7 @@ describe('ConcertHallSearchPage', () => {
 
   it('지도가 로딩 중이어도 공연장 검색 페이지를 숨기지 않는다', () => {
     shouldSuspendPreviewMap = true;
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     const page = document.querySelector('main') as HTMLElement;
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
@@ -1582,7 +1838,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: mockDetailRefetch,
     });
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
@@ -1598,7 +1854,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: mockDetailRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
     expect(await screen.findByText('COMING SOON')).not.toBeNull();
@@ -1620,7 +1876,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: mockDetailRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
     fireEvent.click(await screen.findByRole('button', { name: '복사' }));
@@ -1632,7 +1888,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('공유 버튼으로 공연장 링크를 복사한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('button', { name: '공연장 링크 공유' }));
@@ -1649,7 +1905,7 @@ describe('ConcertHallSearchPage', () => {
       value: mockShare,
     });
     mockShare.mockResolvedValue(undefined);
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('button', { name: '공연장 링크 공유' }));
@@ -1668,7 +1924,7 @@ describe('ConcertHallSearchPage', () => {
       configurable: true,
       get: () => 281,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
@@ -1733,7 +1989,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: mockDetailRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('tab', { name: '대관 정보' }));
 
@@ -1764,7 +2020,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: mockDetailRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('tab', { name: '대관 정보' }));
 
@@ -1777,7 +2033,7 @@ describe('ConcertHallSearchPage', () => {
       configurable: true,
       get: () => 281,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('tab', { name: '대관 정보' }));
 
@@ -1803,7 +2059,7 @@ describe('ConcertHallSearchPage', () => {
       isError: false,
       refetch: mockDetailRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     fireEvent.click(await screen.findByRole('tab', { name: '대관 정보' }));
 
@@ -1821,7 +2077,7 @@ describe('ConcertHallSearchPage', () => {
       isError: true,
       refetch: mockImagesRefetch,
     });
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
     const selectedCard = screen.getByRole('button', { name: /얼라이브홀 상세 보기/ });
     fireEvent.click(selectedCard);
 
@@ -1841,7 +2097,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('알 수 없는 지하철 노선 키가 와도 노선명으로 상세 정보를 표시한다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
@@ -1850,7 +2106,7 @@ describe('ConcertHallSearchPage', () => {
   });
 
   it('상세 배경을 클릭하면 상세 패널을 닫는다', async () => {
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
     expect(await screen.findByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
@@ -1870,7 +2126,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     });
 
-    renderConcertHallSearchPage('/concert-halls?keyword=없는공연장');
+    renderPlaceSearchPage('/place?keyword=없는공연장');
 
     expect(screen.getByText('찾으시는 공연장이 없어요.')).not.toBeNull();
     expect(screen.queryByText('공연장')).toBeNull();
@@ -1886,13 +2142,51 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     });
 
-    renderConcertHallSearchPage('/concert-halls?regionId=1&rentalFeeMin=0&rentalFeeMax=200000');
+    renderPlaceSearchPage('/place?regionId=1&rentalFeeMin=0&rentalFeeMax=200000');
 
     expect(screen.getByText('찾으시는 결과가 없어요.')).not.toBeNull();
     expect(screen.getByText('조건을 변경해 보세요.')).not.toBeNull();
     expect(screen.getByRole('button', { name: '필터 초기화' })).not.toBeNull();
     expect(screen.queryByRole('button', { name: '입점 요청하기' })).toBeNull();
     expect(screen.queryByText('찾으시는 공연장이 없어요.')).toBeNull();
+  });
+
+  it.each([
+    ['장소', () => fireEvent.focus(screen.getByRole('textbox', { name: '지역, 공연장명 검색' }))],
+    [
+      '대관료',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="대관료 "]')!,
+        ),
+    ],
+    [
+      '수용 인원',
+      () =>
+        fireEvent.click(
+          document.querySelector<HTMLButtonElement>('button[aria-label^="수용 인원 "]')!,
+        ),
+    ],
+  ])('%s 드롭다운을 열면 빈 결과 영역과 EmptyIcon을 50%로 표시한다', (_, openDropdown) => {
+    mockUseConcertHallSearchList.mockReturnValue({
+      data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    renderPlaceSearchPage('/place?regionId=1&rentalFeeMin=0&rentalFeeMax=200000');
+
+    const emptyDescription = screen.getByText('찾으시는 결과가 없어요.');
+    const empty = emptyDescription.parentElement?.parentElement;
+    const emptyIcon = empty?.querySelector('[aria-hidden="true"]');
+
+    expect(empty).not.toBeNull();
+    expect(emptyIcon).not.toBeNull();
+
+    openDropdown();
+
+    expect(window.getComputedStyle(empty as HTMLElement).opacity).toBe('0.5');
   });
 
   it('빈 결과에서 입점 요청을 보낼 수 있다', async () => {
@@ -1903,7 +2197,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     });
 
-    renderConcertHallSearchPage('/concert-halls?keyword=없는공연장');
+    renderPlaceSearchPage('/place?keyword=없는공연장');
 
     expect(screen.getByText('찾으시는 공연장이 없어요.')).not.toBeNull();
     expect(screen.getByText('입점을 요청해 보세요.')).not.toBeNull();
@@ -1918,6 +2212,25 @@ describe('ConcertHallSearchPage', () => {
     expect(mockSuccessToast).toHaveBeenCalledWith('입점 요청을 보냈어요.');
   });
 
+  it('입점 요청 공연장명을 모두 지우면 즉시 필수 입력 메시지를 표시한다', () => {
+    mockUseConcertHallSearchList.mockReturnValue({
+      data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    renderPlaceSearchPage('/place?keyword=없는공연장');
+
+    fireEvent.click(screen.getByRole('button', { name: '입점 요청하기' }));
+    const input = screen.getByPlaceholderText('공연장 명을 입력해 주세요');
+    input.focus();
+    fireEvent.change(input, { target: { value: '' } });
+
+    expect(document.activeElement).toBe(input);
+    expect(screen.getByText('필수 입력사항입니다.')).not.toBeNull();
+  });
+
   it('입점 요청 실패 시 에러 토스트를 표시하고 모달을 유지한다', async () => {
     mockUseConcertHallSearchList.mockReturnValue({
       data: { items: [], totalElements: 0, hasNext: false, currentPage: 0, totalPages: 0 },
@@ -1927,7 +2240,7 @@ describe('ConcertHallSearchPage', () => {
     });
     mockMutateAsync.mockRejectedValue(new Error('failed'));
 
-    renderConcertHallSearchPage('/concert-halls?keyword=없는공연장');
+    renderPlaceSearchPage('/place?keyword=없는공연장');
 
     fireEvent.click(screen.getByRole('button', { name: '입점 요청하기' }));
     fireEvent.change(screen.getByLabelText('공연장명'), { target: { value: '없는공연장' } });
@@ -1949,7 +2262,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     });
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.queryByText('공연장을 불러오는 중입니다.')).toBeNull();
   });
@@ -1965,7 +2278,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     act(() => {
       intersectionObserverCallback(
@@ -1993,7 +2306,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.getByText('26개')).not.toBeNull();
     act(() => {
@@ -2028,7 +2341,7 @@ describe('ConcertHallSearchPage', () => {
       refetch: vi.fn(),
     }));
 
-    renderConcertHallSearchPage();
+    renderPlaceSearchPage();
 
     expect(screen.getByText('얼라이브홀')).not.toBeNull();
     expect(screen.queryByRole('button', { name: '더 보기' })).toBeNull();

@@ -12,7 +12,7 @@ export const OAuthApplePage = lazy(() => import('./OAuth/OAuthApplePage'));
 
 export const HomePage = lazy(() => import('./HomePage'));
 
-export const ConcertHallSearchPage = lazy(() => import('./ConcertHallSearchPage'));
+export const PlaceSearchPage = lazy(() => import('./PlaceSearchPage'));
 
 export const ShowEnterancePage = lazy(() => import('./ShowEnterancePage'));
 

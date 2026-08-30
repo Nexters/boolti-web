@@ -2,7 +2,7 @@ import type { ConcertHallProfileRental } from '@boolti/api';
 import { ChevronDownIcon } from '@boolti/icon';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-import Styled from './ConcertHallRentalTab.styles';
+import Styled from './PlaceRentalTab.styles';
 
 const INSTRUMENTS_COLLAPSED_HEIGHT = 280;
 
@@ -42,7 +42,7 @@ const InstrumentsSection = ({ instrumentsText }: { instrumentsText: string }) =>
   );
 };
 
-const ConcertHallRentalTab = ({ rental }: { rental: ConcertHallProfileRental }) => {
+const PlaceRentalTab = ({ rental }: { rental: ConcertHallProfileRental }) => {
   const {
     rentalMethod,
     rentalTime,
@@ -143,4 +143,4 @@ const ConcertHallRentalTab = ({ rental }: { rental: ConcertHallProfileRental }) 
   );
 };
 
-export default ConcertHallRentalTab;
+export default PlaceRentalTab;

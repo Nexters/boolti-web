@@ -3,14 +3,12 @@ export const PATH = {
   QR: '/qr',
   APP_STORE_BRIDGE: '/bridge/store',
   HOME: '/home',
-  CONCERT_HALLS: '/concert-halls',
+  PLACE: '/place',
 
   LOGIN: '/login',
   OAUTH_KAKAO: '/oauth/kakao',
   OAUTH_APPLE: '/oauth/apple',
   SIGNUP_COMPLETE: '/signup/complete',
-
-  CONERT_HALLS: '/concert-halls',
 
   SHOW_ADD: '/show/add',
   SHOW_ADD_DETAIL: '/show/add/detail',
