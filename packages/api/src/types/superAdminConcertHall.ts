@@ -22,6 +22,10 @@ export interface SuperAdminConcertHallItem {
   address?: string;
   /** 노출 여부 */
   isVisible: boolean;
+  /** 목록 썸네일 URL (등록된 이미지가 없으면 없음) */
+  thumbnailUrl?: string;
+  /** 정보 최종 업데이트 일시 (공연장 정보/대관/데이터 연결 중 최신, 수정 이력이 없으면 없음) */
+  informationUpdatedAt?: string;
 }
 
 export interface SuperAdminConcertHallListResponse {

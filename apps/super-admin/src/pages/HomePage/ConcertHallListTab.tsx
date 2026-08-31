@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useSuperAdminConcertHallList } from '@boolti/api';
 import { useTheme } from '@emotion/react';
 import { Button, Card, Empty, Flex, Input, Pagination, Space, Tag, Typography } from 'antd';
+import { format } from 'date-fns';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,10 @@ import { HREF } from '~/constants/routes';
 const { Search } = Input;
 
 const PAGE_SIZE = 20;
+
+// 공개 공연장 페이지는 'MM.DD'로 짧게 찍지만, 어드민은 시각까지 필요해서 포맷을 공유하지 않는다.
+const formatInformationUpdatedAt = (value?: string) =>
+  value ? format(new Date(value), 'yyyy.MM.dd HH:mm') : '-';
 
 const ConcertHallListTab = () => {
   const theme = useTheme();
@@ -60,7 +65,7 @@ const ConcertHallListTab = () => {
           <Empty description="등록된 공연장이 없어요." style={{ marginTop: 80 }} />
         ) : (
           <Flex gap="large" wrap="wrap" style={{ marginBottom: 20 }}>
-            {items.map(({ id, name, address, isVisible }) => (
+            {items.map(({ id, name, address, isVisible, informationUpdatedAt }) => (
               <Card
                 key={id}
                 style={{ width: 'calc(50% - 12px)', cursor: 'pointer' }}
@@ -101,6 +106,14 @@ const ConcertHallListTab = () => {
                         주소
                       </Typography>
                       <Typography.Text ellipsis>{address ?? '-'}</Typography.Text>
+                    </Space>
+                    <Space size="middle" style={{ marginTop: 4 }}>
+                      <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
+                        업데이트
+                      </Typography>
+                      <Typography.Text>
+                        {formatInformationUpdatedAt(informationUpdatedAt)}
+                      </Typography.Text>
                     </Space>
                   </Flex>
                 </Flex>
