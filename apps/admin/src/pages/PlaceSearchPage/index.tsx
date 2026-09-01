@@ -1923,7 +1923,6 @@ const PlaceSearchPage = () => {
                   colorTheme="primary"
                   size="bold"
                   disabled={entryRequestName.trim().length === 0 || entryRequestMutation.isLoading}
-                  onClick={() => setIsEntryRequestOpen(false)}
                 >
                   요청하기
                 </Button>
