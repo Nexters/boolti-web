@@ -2122,7 +2122,7 @@ const ModalInput = styled.input<{ hasError?: boolean }>`
 `;
 
 const ErrorText = styled.p`
-  position: absolute;
+  position: relative;
   margin-top: 6px;
   color: ${({ theme }) => theme.palette.status.error1};
   font-size: 12px;
@@ -2138,8 +2138,15 @@ const ModalButtons = styled.div`
     flex: 1;
   }
 
+  button[type="submit"]:disabled {
+    color: ${({ theme }) => theme.palette.grey.w};
+    background-color: ${({ theme }) => theme.palette.grey.g90};
+    border: none;
+    opacity: 0.5;
+  }
+
   ${mq_xl} {
-    margin-top: 50px;
+    margin-top: 26px;
     justify-content: flex-end;
 
     button {
