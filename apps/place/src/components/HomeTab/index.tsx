@@ -119,12 +119,13 @@ const HomeTab = ({ profile }: Props) => {
   const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
     if (isAppWebView) {
       const images = allImages?.items ?? visibleImages;
+      const selectedImage = visibleImages[index];
 
       viewPlacePhotoDetail({
         id: profile.id,
-        imageIds: images.map((image) => image.id),
-        // 더보기 버튼이면 목록 화면, 개별 사진이면 해당 사진 크게보기
-        selectedImageId: showMoreOverlay ? undefined : visibleImages[index]?.id,
+        // 더보기 버튼이면 전체 목록, 개별 사진이면 그 사진 하나만 넘긴다
+        imageIds:
+          showMoreOverlay || !selectedImage ? images.map((image) => image.id) : [selectedImage.id],
       }).catch(() => {
         // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
       });
@@ -165,58 +166,58 @@ const HomeTab = ({ profile }: Props) => {
     <>
       <Styled.Container>
         {home?.introduction && <IntroductionSection introduction={home.introduction} />}
-      {visibleImages.length > 0 && (
-        <Styled.Section>
-          <Styled.SectionTitle>사진</Styled.SectionTitle>
-          <Styled.PhotoGrid>
-            {visibleImages.map((image, index) => {
-              const isLastVisible = index === visibleImages.length - 1;
-              const showMoreOverlay = isLastVisible && hiddenImageCount > 0;
+        {visibleImages.length > 0 && (
+          <Styled.Section>
+            <Styled.SectionTitle>사진</Styled.SectionTitle>
+            <Styled.PhotoGrid>
+              {visibleImages.map((image, index) => {
+                const isLastVisible = index === visibleImages.length - 1;
+                const showMoreOverlay = isLastVisible && hiddenImageCount > 0;
 
-              return (
-                <Styled.PhotoItem
-                  key={image.id}
-                  type="button"
-                  onClick={() => handlePhotoClick(index, showMoreOverlay)}
-                >
-                  <Styled.PhotoImage
-                    src={image.thumbnailUrl || image.imageUrl}
-                    alt={`${profile.name} 사진 ${index + 1}`}
-                  />
-                  {showMoreOverlay && (
-                    <Styled.PhotoMoreOverlay>
-                      <CameraIcon />
-                      <Styled.PhotoMoreCount>{totalImageCount}</Styled.PhotoMoreCount>
-                    </Styled.PhotoMoreOverlay>
-                  )}
-                </Styled.PhotoItem>
-              );
-            })}
-          </Styled.PhotoGrid>
-        </Styled.Section>
-      )}
-      {amenities.length > 0 && (
-        <Styled.Section>
-          <Styled.SectionTitle>편의 시설 및 서비스</Styled.SectionTitle>
-          <Styled.AmenityGrid>
-            {amenities.map((amenity) => (
-              <Styled.AmenityItem key={amenity.type}>
-                {AMENITY_ICONS[amenity.type]}
-                <Styled.AmenityLabel>{formatAmenityLabel(amenity)}</Styled.AmenityLabel>
-              </Styled.AmenityItem>
-            ))}
-          </Styled.AmenityGrid>
-        </Styled.Section>
-      )}
-      {addressText && (
-        <Styled.Section>
-          <Styled.SectionTitle>위치</Styled.SectionTitle>
-          <Styled.AddressLine type="button" onClick={handleCopyAddress}>
-            {addressText}・<Styled.CopyLabel>복사</Styled.CopyLabel>
-          </Styled.AddressLine>
-          {mapElement}
-        </Styled.Section>
-      )}
+                return (
+                  <Styled.PhotoItem
+                    key={image.id}
+                    type="button"
+                    onClick={() => handlePhotoClick(index, showMoreOverlay)}
+                  >
+                    <Styled.PhotoImage
+                      src={image.thumbnailUrl || image.imageUrl}
+                      alt={`${profile.name} 사진 ${index + 1}`}
+                    />
+                    {showMoreOverlay && (
+                      <Styled.PhotoMoreOverlay>
+                        <CameraIcon />
+                        <Styled.PhotoMoreCount>{totalImageCount}</Styled.PhotoMoreCount>
+                      </Styled.PhotoMoreOverlay>
+                    )}
+                  </Styled.PhotoItem>
+                );
+              })}
+            </Styled.PhotoGrid>
+          </Styled.Section>
+        )}
+        {amenities.length > 0 && (
+          <Styled.Section>
+            <Styled.SectionTitle>편의 시설 및 서비스</Styled.SectionTitle>
+            <Styled.AmenityGrid>
+              {amenities.map((amenity) => (
+                <Styled.AmenityItem key={amenity.type}>
+                  {AMENITY_ICONS[amenity.type]}
+                  <Styled.AmenityLabel>{formatAmenityLabel(amenity)}</Styled.AmenityLabel>
+                </Styled.AmenityItem>
+              ))}
+            </Styled.AmenityGrid>
+          </Styled.Section>
+        )}
+        {addressText && (
+          <Styled.Section>
+            <Styled.SectionTitle>위치</Styled.SectionTitle>
+            <Styled.AddressLine type="button" onClick={handleCopyAddress}>
+              {addressText}・<Styled.CopyLabel>복사</Styled.CopyLabel>
+            </Styled.AddressLine>
+            {mapElement}
+          </Styled.Section>
+        )}
       </Styled.Container>
       {gallery && (
         <GalleryModal
