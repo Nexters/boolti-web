@@ -131,18 +131,28 @@ const AmenityLabel = styled.span`
   word-break: keep-all;
 `;
 
-const AddressLine = styled.p`
+// 터치 영역은 '복사' 글자가 아니라 주소 줄 전체다.
+const AddressLine = styled.button`
+  display: inline-block;
+  /* Section이 flex column이라 stretch로 늘어난다. 터치 영역을 주소 길이에 맞춘다. */
+  align-self: flex-start;
+  max-width: 100%;
   font-size: 16px;
   line-height: 24px;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   word-break: break-word;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;
 
-const CopyButton = styled.button`
-  font-size: 16px;
-  line-height: 24px;
+// AddressLine이 이미 button이라 중첩할 수 없다. 색만 다른 텍스트로 둔다.
+const CopyLabel = styled.span`
   color: ${({ theme }) => theme.palette.mobile.status.link};
-  cursor: pointer;
 `;
 
 export default {
@@ -163,5 +173,5 @@ export default {
   AmenityItem,
   AmenityLabel,
   AddressLine,
-  CopyButton,
+  CopyLabel,
 };

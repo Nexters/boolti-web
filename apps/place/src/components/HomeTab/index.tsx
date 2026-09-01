@@ -1,5 +1,11 @@
 import { type ConcertHallProfileResponse, useConcertHallImages } from '@boolti/api';
-import { checkIsWebView, isWebViewBridgeAvailable, viewPlacePhotoDetail } from '@boolti/bridge';
+import {
+  checkIsWebView,
+  isWebViewBridgeAvailable,
+  showToast,
+  TOAST_DURATIONS,
+  viewPlacePhotoDetail,
+} from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -117,6 +123,8 @@ const HomeTab = ({ profile }: Props) => {
       viewPlacePhotoDetail({
         id: profile.id,
         imageIds: images.map((image) => image.id),
+        // 더보기 버튼이면 목록 화면, 개별 사진이면 해당 사진 크게보기
+        selectedImageId: showMoreOverlay ? undefined : visibleImages[index]?.id,
       }).catch(() => {
         // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
       });
@@ -127,6 +135,19 @@ const HomeTab = ({ profile }: Props) => {
     setGallery(showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index });
   };
 
+  // 인앱 웹뷰에서는 웹 토스트 대신 앱이 네이티브 토스트를 띄우도록 브릿지로 넘긴다.
+  const notify = (message: string, showWebToast: (message: string) => void) => {
+    if (isAppWebView) {
+      showToast({ message, duration: TOAST_DURATIONS.SHORT }).catch(() => {
+        // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+      });
+
+      return;
+    }
+
+    showWebToast(message);
+  };
+
   const handleCopyAddress = async () => {
     if (!addressText) {
       return;
@@ -134,9 +155,9 @@ const HomeTab = ({ profile }: Props) => {
 
     try {
       await navigator.clipboard.writeText(addressText);
-      toast.success('주소를 복사했어요.');
+      notify('주소를 복사했어요.', toast.success);
     } catch {
-      toast.error('주소 복사에 실패했어요.');
+      notify('주소 복사에 실패했어요.', toast.error);
     }
   };
 
@@ -190,11 +211,8 @@ const HomeTab = ({ profile }: Props) => {
       {addressText && (
         <Styled.Section>
           <Styled.SectionTitle>위치</Styled.SectionTitle>
-          <Styled.AddressLine>
-            {addressText}・
-            <Styled.CopyButton type="button" onClick={handleCopyAddress}>
-              복사
-            </Styled.CopyButton>
+          <Styled.AddressLine type="button" onClick={handleCopyAddress}>
+            {addressText}・<Styled.CopyLabel>복사</Styled.CopyLabel>
           </Styled.AddressLine>
           {mapElement}
         </Styled.Section>
