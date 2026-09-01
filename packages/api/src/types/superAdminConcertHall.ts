@@ -18,10 +18,14 @@ export interface SuperAdminConcertHallItem {
   id: number;
   /** 공연장명 */
   name: string;
-  /** 주소 */
+  /** 주소 (미등록 시 빈 문자열) */
   address?: string;
   /** 노출 여부 */
   isVisible: boolean;
+  /** 대표 이미지 썸네일 (미등록 시 null) */
+  thumbnailUrl?: string | null;
+  /** 정보 최종 수정 일시 (ISO8601, 수정 이력 없으면 null) */
+  informationUpdatedAt?: string | null;
 }
 
 export interface SuperAdminConcertHallListResponse {

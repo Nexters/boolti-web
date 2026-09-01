@@ -2,6 +2,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useSuperAdminConcertHallList } from '@boolti/api';
 import { useTheme } from '@emotion/react';
 import { Button, Card, Empty, Flex, Input, Pagination, Space, Tag, Typography } from 'antd';
+import { format } from 'date-fns';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +12,17 @@ import { HREF } from '~/constants/routes';
 const { Search } = Input;
 
 const PAGE_SIZE = 20;
+
+/** informationUpdatedAt은 미수정 공연장이면 null로 내려온다. */
+const formatUpdatedAt = (iso?: string | null) => {
+  if (!iso) {
+    return '-';
+  }
+
+  const date = new Date(iso);
+
+  return Number.isNaN(date.getTime()) ? '-' : format(date, 'yyyy.MM.dd');
+};
 
 const ConcertHallListTab = () => {
   const theme = useTheme();
@@ -60,7 +72,7 @@ const ConcertHallListTab = () => {
           <Empty description="등록된 공연장이 없어요." style={{ marginTop: 80 }} />
         ) : (
           <Flex gap="large" wrap="wrap" style={{ marginBottom: 20 }}>
-            {items.map(({ id, name, address, isVisible }) => (
+            {items.map(({ id, name, address, isVisible, thumbnailUrl, informationUpdatedAt }) => (
               <Card
                 key={id}
                 style={{ width: 'calc(50% - 12px)', cursor: 'pointer' }}
@@ -75,9 +87,18 @@ const ConcertHallListTab = () => {
                       height: 86,
                       flexShrink: 0,
                       borderRadius: 8,
+                      overflow: 'hidden',
                       backgroundColor: theme.palette.grey.g20,
                     }}
-                  />
+                  >
+                    {thumbnailUrl && (
+                      <img
+                        src={thumbnailUrl}
+                        alt={name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    )}
+                  </div>
                   <Flex
                     vertical
                     justify="space-between"
@@ -96,12 +117,20 @@ const ConcertHallListTab = () => {
                       {name}
                       {!isVisible && <Tag>미노출</Tag>}
                     </Typography.Title>
-                    <Space size="middle" style={{ marginTop: 12 }}>
-                      <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
-                        주소
-                      </Typography>
-                      <Typography.Text ellipsis>{address ?? '-'}</Typography.Text>
-                    </Space>
+                    <Flex vertical gap={4} style={{ marginTop: 12 }}>
+                      <Space size="middle">
+                        <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
+                          주소
+                        </Typography>
+                        <Typography.Text ellipsis>{address || '-'}</Typography.Text>
+                      </Space>
+                      <Space size="middle">
+                        <Typography style={{ width: 60, color: theme.palette.grey.g60 }}>
+                          업데이트
+                        </Typography>
+                        <Typography.Text>{formatUpdatedAt(informationUpdatedAt)}</Typography.Text>
+                      </Space>
+                    </Flex>
                   </Flex>
                 </Flex>
               </Card>
