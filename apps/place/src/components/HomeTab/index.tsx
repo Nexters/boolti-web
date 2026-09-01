@@ -5,6 +5,7 @@ import {
   showToast,
   TOAST_DURATIONS,
   viewPlacePhotoDetail,
+  viewPlacePhotoList,
 } from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
@@ -118,17 +119,22 @@ const HomeTab = ({ profile }: Props) => {
   // 앱 웹뷰에서는 사진 목록/뷰어를 앱 네이티브 화면이 담당하므로 브릿지로 넘긴다
   const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
     if (isAppWebView) {
-      const images = allImages?.items ?? visibleImages;
       const selectedImage = visibleImages[index];
+      // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+      const ignoreNoResponse = () => {};
 
-      viewPlacePhotoDetail({
-        id: profile.id,
-        // 더보기 버튼이면 전체 목록, 개별 사진이면 그 사진 하나만 넘긴다
-        imageIds:
-          showMoreOverlay || !selectedImage ? images.map((image) => image.id) : [selectedImage.id],
-      }).catch(() => {
-        // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
-      });
+      if (showMoreOverlay || !selectedImage) {
+        const images = allImages?.items ?? visibleImages;
+
+        viewPlacePhotoList({
+          id: profile.id,
+          imageIds: images.map((image) => image.id),
+        }).catch(ignoreNoResponse);
+
+        return;
+      }
+
+      viewPlacePhotoDetail({ id: profile.id, imageId: selectedImage.id }).catch(ignoreNoResponse);
 
       return;
     }
