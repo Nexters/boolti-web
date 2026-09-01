@@ -97,10 +97,7 @@ const GalleryModal = ({
               <Styled.Carousel ref={carouselRef} onScroll={handleScroll}>
                 {images.map((image, index) => (
                   <Styled.Slide key={image.id}>
-                    <Styled.SlideImage
-                      src={image.imageUrl}
-                      alt={`${hallName} 사진 ${index + 1}`}
-                    />
+                    <Styled.SlideImage src={image.imageUrl} alt={`${hallName} 사진 ${index + 1}`} />
                   </Styled.Slide>
                 ))}
               </Styled.Carousel>
@@ -121,20 +118,22 @@ const GalleryModal = ({
               </Styled.HeaderButton>
               <Styled.HeaderTitle>사진</Styled.HeaderTitle>
             </Styled.Header>
-            <Styled.Grid>
-              {images.map((image, index) => (
-                <Styled.GridItem
-                  key={image.id}
-                  type="button"
-                  onClick={() => setViewerIndex(index)}
-                >
-                  <Styled.GridImage
-                    src={image.thumbnailUrl || image.imageUrl}
-                    alt={`${hallName} 사진 ${index + 1}`}
-                  />
-                </Styled.GridItem>
-              ))}
-            </Styled.Grid>
+            <Styled.GridScroll>
+              <Styled.Grid>
+                {images.map((image, index) => (
+                  <Styled.GridItem
+                    key={image.id}
+                    type="button"
+                    onClick={() => setViewerIndex(index)}
+                  >
+                    <Styled.GridImage
+                      src={image.thumbnailUrl || image.imageUrl}
+                      alt={`${hallName} 사진 ${index + 1}`}
+                    />
+                  </Styled.GridItem>
+                ))}
+              </Styled.Grid>
+            </Styled.GridScroll>
           </>
         )}
       </Styled.Inner>

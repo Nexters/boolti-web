@@ -1,9 +1,9 @@
-import { BankOutlined, LinkOutlined, ScheduleOutlined } from '@ant-design/icons';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { useSuperAdminConcertHallDetail } from '@boolti/api';
 import { useParams } from 'react-router-dom';
 
 import { HREF, PATH } from '~/constants/routes';
+import { ConcertHallDataIcon, ConcertHallInfoIcon, ConcertHallRentalIcon } from './icons';
 import Styled from './ConcertHallNavigation.styles';
 
 const ConcertHallNavigation = () => {
@@ -12,9 +12,9 @@ const ConcertHallNavigation = () => {
   const { data: concertHall } = useSuperAdminConcertHallDetail(hallId);
 
   const navigationItems = [
-    { label: '공연장 정보', icon: <BankOutlined />, link: HREF.CONCERT_HALL_INFO(hallId) },
-    { label: '대관 정보', icon: <ScheduleOutlined />, link: HREF.CONCERT_HALL_RENTAL(hallId) },
-    { label: '데이터 연결', icon: <LinkOutlined />, link: HREF.CONCERT_HALL_DATA(hallId) },
+    { label: '공연장 정보', icon: <ConcertHallInfoIcon />, link: HREF.CONCERT_HALL_INFO(hallId) },
+    { label: '대관 정보', icon: <ConcertHallRentalIcon />, link: HREF.CONCERT_HALL_RENTAL(hallId) },
+    { label: '데이터 연결', icon: <ConcertHallDataIcon />, link: HREF.CONCERT_HALL_DATA(hallId) },
   ];
 
   return (

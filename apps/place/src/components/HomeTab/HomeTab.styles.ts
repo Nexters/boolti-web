@@ -82,12 +82,15 @@ const PhotoItem = styled.button`
   overflow: hidden;
   padding: 0;
   cursor: pointer;
+  /* 정비율이 아닌 사진의 레터박스 영역 */
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
 `;
 
 const PhotoImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* 원본 비율을 유지하고 남는 상하/좌우는 PhotoItem 배경이 채운다 (크롭 금지) */
+  object-fit: contain;
 `;
 
 const PhotoMoreOverlay = styled.div`
@@ -128,18 +131,28 @@ const AmenityLabel = styled.span`
   word-break: keep-all;
 `;
 
-const AddressLine = styled.p`
+// 터치 영역은 '복사' 글자가 아니라 주소 줄 전체다.
+const AddressLine = styled.button`
+  display: inline-block;
+  /* Section이 flex column이라 stretch로 늘어난다. 터치 영역을 주소 길이에 맞춘다. */
+  align-self: flex-start;
+  max-width: 100%;
   font-size: 16px;
   line-height: 24px;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   word-break: break-word;
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
 `;
 
-const CopyButton = styled.button`
-  font-size: 16px;
-  line-height: 24px;
+// AddressLine이 이미 button이라 중첩할 수 없다. 색만 다른 텍스트로 둔다.
+const CopyLabel = styled.span`
   color: ${({ theme }) => theme.palette.mobile.status.link};
-  cursor: pointer;
 `;
 
 export default {
@@ -160,5 +173,5 @@ export default {
   AmenityItem,
   AmenityLabel,
   AddressLine,
-  CopyButton,
+  CopyLabel,
 };

@@ -30,14 +30,30 @@ const SectionDescription = styled.p`
   word-break: keep-all;
 `;
 
-// 대관 방법 — 회색 박스, 줄바꿈 보존
-const MethodBox = styled.div`
+// 대관 방법은 다른 섹션과 달리 라이트 카드로 노출된다 (Figma node 9235:28669)
+const MethodCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   padding: 16px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
-  font-size: 15px;
-  line-height: 23px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g20};
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g05};
+`;
+
+const MethodTitle = styled.h2`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+  color: ${({ theme }) => theme.palette.mobile.grey.g90};
+`;
+
+const MethodText = styled.p`
+  font-size: 14px;
+  line-height: 22px;
+  color: ${({ theme }) => theme.palette.mobile.grey.g70};
   white-space: pre-wrap;
   word-break: break-word;
 `;
@@ -59,31 +75,46 @@ const TimeBox = styled.div`
 const FeeList = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g90};
 `;
 
 const FeeRow = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px 0;
-
-  & + & {
-    border-top: 1px solid ${({ theme }) => theme.palette.mobile.grey.g85};
-  }
+  gap: 8px;
+  height: 32px;
 `;
 
 const FeeLabel = styled.span`
+  flex-shrink: 0;
   font-size: 15px;
   line-height: 23px;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   word-break: keep-all;
 `;
 
+/** 라벨과 값을 잇는 점선 (2px dash / 4px gap, Figma node 9235:28687) */
+const FeeLeader = styled.span`
+  flex: 1;
+  min-width: 0;
+  height: 1px;
+  background-image: linear-gradient(
+    to right,
+    ${({ theme }) => theme.palette.mobile.grey.g70} 0 2px,
+    transparent 2px 6px
+  );
+  background-size: 6px 1px;
+  background-repeat: repeat-x;
+`;
+
 const FeeValue = styled.span`
-  font-size: 15px;
+  flex-shrink: 0;
+  font-size: 16px;
   font-weight: 600;
-  line-height: 23px;
+  line-height: 22px;
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
   text-align: right;
   white-space: nowrap;
@@ -139,23 +170,25 @@ const MoreButton = styled.button`
 const NoteList = styled.ul`
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   width: 100%;
 `;
 
 const NoteItem = styled.li`
   display: flex;
+  align-items: center;
   gap: 8px;
+  padding: 4px 0;
   font-size: 15px;
   line-height: 23px;
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
   word-break: break-word;
+`;
 
-  &::before {
-    content: '•';
-    flex-shrink: 0;
-    color: ${({ theme }) => theme.palette.mobile.grey.g40};
-  }
+const NoteIcon = styled.span`
+  display: flex;
+  flex-shrink: 0;
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
 export default {
@@ -163,11 +196,14 @@ export default {
   Section,
   SectionTitle,
   SectionDescription,
-  MethodBox,
+  MethodCard,
+  MethodTitle,
+  MethodText,
   TimeBox,
   FeeList,
   FeeRow,
   FeeLabel,
+  FeeLeader,
   FeeValue,
   InstrumentsWrapper,
   InstrumentsText,
@@ -176,4 +212,5 @@ export default {
   MoreButton,
   NoteList,
   NoteItem,
+  NoteIcon,
 };

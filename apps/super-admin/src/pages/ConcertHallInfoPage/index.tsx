@@ -19,7 +19,7 @@ import type { InputRef } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import PageLayout from '~/components/PageLayout/PageLayout';
+import ConcertHallPageLayout, { CARD_BODY_PADDING } from '~/components/ConcertHallPageLayout';
 import alcoholIcon from '~/assets/amenities/alcohol.svg';
 import cabinetIcon from '~/assets/amenities/cabinet.svg';
 import parkingIcon from '~/assets/amenities/parking.svg';
@@ -41,6 +41,31 @@ const SHARE_CODE_REGEX = /^[a-z0-9-]{1,20}$/;
 
 const AmenityIcon = ({ src, label }: { src: string; label: string }) => (
   <img src={src} alt={label} style={{ width: 18, height: 18, verticalAlign: 'middle' }} />
+);
+
+// antd Checkbox 래퍼는 align-items: baseline 이라, 자식에 아이콘이 들어가면
+// 체크박스/아이콘/텍스트의 세로 정렬이 틀어진다. center로 덮어준다.
+const AmenityCheckbox = ({
+  checked,
+  onChange,
+  label,
+  icon,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: string;
+  icon: string;
+}) => (
+  <Checkbox
+    checked={checked}
+    onChange={(e) => onChange(e.target.checked)}
+    style={{ alignItems: 'center' }}
+  >
+    <Flex align="center" gap={6} component="span">
+      <AmenityIcon src={icon} label={label} />
+      {label}
+    </Flex>
+  </Checkbox>
 );
 
 interface SelectedStation {
@@ -70,19 +95,41 @@ const INITIAL_AMENITIES: AmenitiesState = {
   hasAlcoholSales: false,
 };
 
-const FieldLabel = ({ children }: { children: React.ReactNode }) => (
+const FieldLabel = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
   <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
     {children}
+    {required && <Typography.Text type="danger"> *</Typography.Text>}
   </Typography.Text>
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 20 }}>
+  // Figma 카드 제목은 H1(20px), 제목↔본문 간격 16
+  <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
     {children}
   </Typography.Title>
 );
 
 // 이미지 우상단 모서리에 걸치는 다크 원형 삭제 버튼
+// Figma node 9160:9598 export (색상만 유지, path 원본)
+const CloseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M15 5L5 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 5L15 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 const RemoveImageButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
   <button
     type="button"
@@ -90,21 +137,22 @@ const RemoveImageButton = ({ onClick, label }: { onClick: () => void; label: str
     onClick={onClick}
     style={{
       position: 'absolute',
-      top: -8,
-      right: -8,
-      width: 24,
-      height: 24,
+      top: -10,
+      right: -10,
+      width: 28,
+      height: 28,
       borderRadius: '50%',
       border: 'none',
-      backgroundColor: 'rgba(18, 18, 21, 0.7)',
-      color: '#FFFFFF',
+      // grey.g90 80% — Figma node 9160:9597
+      backgroundColor: 'rgba(40, 43, 51, 0.8)',
+      padding: 0,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: 'pointer',
     }}
   >
-    <CloseOutlined style={{ fontSize: 12 }} />
+    <CloseIcon />
   </button>
 );
 
@@ -250,6 +298,10 @@ const ConcertHallInfoPage = () => {
   };
 
   const onSave = async () => {
+    if (!name.trim()) {
+      toast.error('공연장명을 입력해 주세요.');
+      return;
+    }
     if (!shareCode || hasShareCodeError) {
       toast.error('공연장 ID를 확인해 주세요.');
       return;
@@ -332,10 +384,8 @@ const ConcertHallInfoPage = () => {
   ];
 
   return (
-    <PageLayout
-      breadscrumb="공연장 관리 / 공연장 정보"
+    <ConcertHallPageLayout
       title="공연장 정보"
-      description="공연장 프로필에 노출되는 기본 정보를 관리합니다."
       action={
         <BooltiButton colorTheme="primary" size="medium" disabled={isSaving} onClick={onSave}>
           저장하기
@@ -388,13 +438,11 @@ const ConcertHallInfoPage = () => {
               )}
             </div>
             <div>
-              <FieldLabel>공연장명</FieldLabel>
+              <FieldLabel required>공연장명</FieldLabel>
               <Input size="large" value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div>
-              <FieldLabel>
-                공연장 ID <Typography.Text type="danger">*</Typography.Text>
-              </FieldLabel>
+              <FieldLabel required>공연장 ID</FieldLabel>
               <Input
                 size="large"
                 value={shareCode}
@@ -552,8 +600,9 @@ const ConcertHallInfoPage = () => {
 
         <Card>
           <SectionTitle>소개 및 사진</SectionTitle>
-          <Flex vertical gap={20} style={{ maxWidth: 600 }}>
-            <div>
+          <Flex vertical gap={28}>
+            {/* 소개 입력 폭은 600 고정 (Figma node 9160:9580) */}
+            <div style={{ maxWidth: 600 }}>
               <FieldLabel>소개</FieldLabel>
               <TextArea
                 rows={5}
@@ -564,25 +613,38 @@ const ConcertHallInfoPage = () => {
             </div>
             <div>
               <FieldLabel>사진 (최대 {MAX_PHOTO_COUNT}장 등록 가능)</FieldLabel>
-              {/* 최대 너비 초과 시 가로 스크롤. 모서리에 걸친 X 버튼이 잘리지 않도록 상단 여백 확보 */}
-              <Flex gap={12} style={{ overflowX: 'auto', padding: '10px 10px 4px 0' }}>
+              {/*
+                최대 너비 초과 시 가로 스크롤. 모서리에 걸친 X 버튼이 잘리지 않도록 상단 여백 확보.
+                카드 우측 패딩을 음수 마진으로 덮어 사진이 카드 끝까지 이어지도록 한다.
+                (뒤에 사진이 더 있다는 걸 보여주는 의도 — Figma node 9160:9589)
+              */}
+              <Flex
+                gap={20}
+                style={{
+                  overflowX: 'auto',
+                  marginRight: -CARD_BODY_PADDING,
+                  // 끝까지 스크롤했을 때 좌측 패딩과 동일한 여백이 남도록 한다
+                  padding: `10px ${CARD_BODY_PADDING}px 4px 0`,
+                }}
+              >
                 {/* 20장 도달 시 업로드 박스 미노출 (디자인 정책) */}
                 {photos.length < MAX_PHOTO_COUNT && (
-                  <ImageUploadBox width={120} height={120} multiple onSelect={onSelectPhotos} />
+                  <ImageUploadBox width={160} height={160} multiple onSelect={onSelectPhotos} />
                 )}
                 {photos.map((photo, index) => (
                   <div
                     key={photo}
-                    style={{ position: 'relative', width: 120, height: 120, flexShrink: 0 }}
+                    style={{ position: 'relative', width: 160, height: 160, flexShrink: 0 }}
                   >
                     <img
                       src={photo}
                       alt={`공연장 사진 ${index + 1}`}
                       style={{
-                        width: 120,
-                        height: 120,
+                        width: 160,
+                        height: 160,
                         objectFit: 'cover',
-                        borderRadius: 8,
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.grey.g20}`,
                         display: 'block',
                       }}
                     />
@@ -606,17 +668,12 @@ const ConcertHallInfoPage = () => {
             <Flex vertical gap={16} style={{ flex: 1 }}>
               {countAmenityItems.map(({ key, countKey, label, icon }) => (
                 <Flex key={key} align="center" justify="space-between" gap={12}>
-                  <Checkbox
+                  <AmenityCheckbox
                     checked={amenities[key]}
-                    onChange={(e) =>
-                      setAmenities((prev) => ({ ...prev, [key]: e.target.checked }))
-                    }
-                  >
-                    <Flex align="center" gap={6} component="span">
-                      <AmenityIcon src={icon} label={label} />
-                      {label}
-                    </Flex>
-                  </Checkbox>
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
                   <InputNumber
                     min={0}
                     placeholder="0"
@@ -633,17 +690,12 @@ const ConcertHallInfoPage = () => {
             <Flex vertical gap={16} style={{ flex: 1 }}>
               {booleanAmenityItems.map(({ key, label, icon }) => (
                 <Flex key={key} align="center" style={{ height: 32 }}>
-                  <Checkbox
+                  <AmenityCheckbox
                     checked={amenities[key]}
-                    onChange={(e) =>
-                      setAmenities((prev) => ({ ...prev, [key]: e.target.checked }))
-                    }
-                  >
-                    <Flex align="center" gap={6} component="span">
-                      <AmenityIcon src={icon} label={label} />
-                      {label}
-                    </Flex>
-                  </Checkbox>
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
                 </Flex>
               ))}
             </Flex>
@@ -662,7 +714,7 @@ const ConcertHallInfoPage = () => {
         onComplete={onCompleteAddress}
         afterClose={onAddressModalAfterClose}
       />
-    </PageLayout>
+    </ConcertHallPageLayout>
   );
 };
 

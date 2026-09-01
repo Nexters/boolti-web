@@ -9,14 +9,22 @@ export default defineConfig({
   server: {
     // 네이버 지도 등 boolti.in 도메인에 등록된 키/인증을 로컬에서 그대로 쓰기 위해
     // place.dev.boolti.in 호스트로 띄운다. (/etc/hosts에 127.0.0.1 매핑 필요)
-    // dev API 호출은 .env.local의 VITE_BASE_API_URL(절대 URL)로 직접 나가며,
-    // place.dev.boolti.in origin이 CORS allow-list에 등록되어 있어야 한다.
     port: 8083,
     cors: false,
     host: 'place.dev.boolti.in',
     https: {
       key: './place.dev.boolti.in-key.pem',
       cert: './place.dev.boolti.in.pem',
+    },
+    // place.dev.boolti.in origin은 dev API의 CORS allow-list에 없어서 직접 호출하면 403이 난다.
+    // dev 서버가 대신 프록시해 같은 오리진으로 나가게 한다.
+    // (.env.local의 VITE_BASE_API_URL을 /dev-api 로 두면 이 프록시를 탄다)
+    proxy: {
+      '/dev-api': {
+        target: 'https://dev.api.boolti.in',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/dev-api/, ''),
+      },
     },
   },
   plugins: [

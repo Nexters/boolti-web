@@ -1,5 +1,12 @@
 import { type ConcertHallProfileResponse, useConcertHallImages } from '@boolti/api';
-import { checkIsWebView, isWebViewBridgeAvailable, viewPlacePhotoDetail } from '@boolti/bridge';
+import {
+  checkIsWebView,
+  isWebViewBridgeAvailable,
+  showToast,
+  TOAST_DURATIONS,
+  viewPlacePhotoDetail,
+  viewPlacePhotoList,
+} from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
 import { PreviewMapWithProvider, useToast } from '@boolti/ui';
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
@@ -112,19 +119,40 @@ const HomeTab = ({ profile }: Props) => {
   // 앱 웹뷰에서는 사진 목록/뷰어를 앱 네이티브 화면이 담당하므로 브릿지로 넘긴다
   const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
     if (isAppWebView) {
-      const images = allImages?.items ?? visibleImages;
+      const selectedImage = visibleImages[index];
+      // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+      const ignoreNoResponse = () => {};
 
-      viewPlacePhotoDetail({
-        id: profile.id,
-        imageIds: images.map((image) => image.id),
-      }).catch(() => {
+      if (showMoreOverlay || !selectedImage) {
+        const images = allImages?.items ?? visibleImages;
+
+        viewPlacePhotoList({
+          id: profile.id,
+          imageIds: images.map((image) => image.id),
+        }).catch(ignoreNoResponse);
+
+        return;
+      }
+
+      viewPlacePhotoDetail({ id: profile.id, imageId: selectedImage.id }).catch(ignoreNoResponse);
+
+      return;
+    }
+
+    setGallery(showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index });
+  };
+
+  // 인앱 웹뷰에서는 웹 토스트 대신 앱이 네이티브 토스트를 띄우도록 브릿지로 넘긴다.
+  const notify = (message: string, showWebToast: (message: string) => void) => {
+    if (isAppWebView) {
+      showToast({ message, duration: TOAST_DURATIONS.SHORT }).catch(() => {
         // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
       });
 
       return;
     }
 
-    setGallery(showMoreOverlay ? { mode: 'list', index: 0 } : { mode: 'viewer', index });
+    showWebToast(message);
   };
 
   const handleCopyAddress = async () => {
@@ -134,9 +162,9 @@ const HomeTab = ({ profile }: Props) => {
 
     try {
       await navigator.clipboard.writeText(addressText);
-      toast.success('주소를 복사했어요.');
+      notify('주소를 복사했어요.', toast.success);
     } catch {
-      toast.error('주소 복사에 실패했어요.');
+      notify('주소 복사에 실패했어요.', toast.error);
     }
   };
 
@@ -144,61 +172,58 @@ const HomeTab = ({ profile }: Props) => {
     <>
       <Styled.Container>
         {home?.introduction && <IntroductionSection introduction={home.introduction} />}
-      {visibleImages.length > 0 && (
-        <Styled.Section>
-          <Styled.SectionTitle>사진</Styled.SectionTitle>
-          <Styled.PhotoGrid>
-            {visibleImages.map((image, index) => {
-              const isLastVisible = index === visibleImages.length - 1;
-              const showMoreOverlay = isLastVisible && hiddenImageCount > 0;
+        {visibleImages.length > 0 && (
+          <Styled.Section>
+            <Styled.SectionTitle>사진</Styled.SectionTitle>
+            <Styled.PhotoGrid>
+              {visibleImages.map((image, index) => {
+                const isLastVisible = index === visibleImages.length - 1;
+                const showMoreOverlay = isLastVisible && hiddenImageCount > 0;
 
-              return (
-                <Styled.PhotoItem
-                  key={image.id}
-                  type="button"
-                  onClick={() => handlePhotoClick(index, showMoreOverlay)}
-                >
-                  <Styled.PhotoImage
-                    src={image.thumbnailUrl || image.imageUrl}
-                    alt={`${profile.name} 사진 ${index + 1}`}
-                  />
-                  {showMoreOverlay && (
-                    <Styled.PhotoMoreOverlay>
-                      <CameraIcon />
-                      <Styled.PhotoMoreCount>{totalImageCount}</Styled.PhotoMoreCount>
-                    </Styled.PhotoMoreOverlay>
-                  )}
-                </Styled.PhotoItem>
-              );
-            })}
-          </Styled.PhotoGrid>
-        </Styled.Section>
-      )}
-      {amenities.length > 0 && (
-        <Styled.Section>
-          <Styled.SectionTitle>편의 시설 및 서비스</Styled.SectionTitle>
-          <Styled.AmenityGrid>
-            {amenities.map((amenity) => (
-              <Styled.AmenityItem key={amenity.type}>
-                {AMENITY_ICONS[amenity.type]}
-                <Styled.AmenityLabel>{formatAmenityLabel(amenity)}</Styled.AmenityLabel>
-              </Styled.AmenityItem>
-            ))}
-          </Styled.AmenityGrid>
-        </Styled.Section>
-      )}
-      {addressText && (
-        <Styled.Section>
-          <Styled.SectionTitle>위치</Styled.SectionTitle>
-          <Styled.AddressLine>
-            {addressText}・
-            <Styled.CopyButton type="button" onClick={handleCopyAddress}>
-              복사
-            </Styled.CopyButton>
-          </Styled.AddressLine>
-          {mapElement}
-        </Styled.Section>
-      )}
+                return (
+                  <Styled.PhotoItem
+                    key={image.id}
+                    type="button"
+                    onClick={() => handlePhotoClick(index, showMoreOverlay)}
+                  >
+                    <Styled.PhotoImage
+                      src={image.thumbnailUrl || image.imageUrl}
+                      alt={`${profile.name} 사진 ${index + 1}`}
+                    />
+                    {showMoreOverlay && (
+                      <Styled.PhotoMoreOverlay>
+                        <CameraIcon />
+                        <Styled.PhotoMoreCount>{totalImageCount}</Styled.PhotoMoreCount>
+                      </Styled.PhotoMoreOverlay>
+                    )}
+                  </Styled.PhotoItem>
+                );
+              })}
+            </Styled.PhotoGrid>
+          </Styled.Section>
+        )}
+        {amenities.length > 0 && (
+          <Styled.Section>
+            <Styled.SectionTitle>편의 시설 및 서비스</Styled.SectionTitle>
+            <Styled.AmenityGrid>
+              {amenities.map((amenity) => (
+                <Styled.AmenityItem key={amenity.type}>
+                  {AMENITY_ICONS[amenity.type]}
+                  <Styled.AmenityLabel>{formatAmenityLabel(amenity)}</Styled.AmenityLabel>
+                </Styled.AmenityItem>
+              ))}
+            </Styled.AmenityGrid>
+          </Styled.Section>
+        )}
+        {addressText && (
+          <Styled.Section>
+            <Styled.SectionTitle>위치</Styled.SectionTitle>
+            <Styled.AddressLine type="button" onClick={handleCopyAddress}>
+              {addressText}・<Styled.CopyLabel>복사</Styled.CopyLabel>
+            </Styled.AddressLine>
+            {mapElement}
+          </Styled.Section>
+        )}
       </Styled.Container>
       {gallery && (
         <GalleryModal

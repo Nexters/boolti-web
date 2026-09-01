@@ -5,21 +5,11 @@ import {
   SuperAdminConcertHallVatType,
 } from '@boolti/api/src/types/superAdminConcertHall';
 import { Button as BooltiButton, useToast } from '@boolti/ui';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Flex,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Typography,
-} from 'antd';
+import { Button, Card, Checkbox, Flex, Input, InputNumber, Radio, Select, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import PageLayout from '~/components/PageLayout/PageLayout';
+import ConcertHallPageLayout from '~/components/ConcertHallPageLayout';
 
 const { TextArea } = Input;
 
@@ -75,7 +65,8 @@ const FieldLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-  <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 20 }}>
+  // Figma 카드 제목은 H1(20px), 제목↔본문 간격 16
+  <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
     {children}
   </Typography.Title>
 );
@@ -187,10 +178,8 @@ const ConcertHallRentalPage = () => {
   };
 
   return (
-    <PageLayout
-      breadscrumb="공연장 관리 / 대관 정보"
+    <ConcertHallPageLayout
       title="대관 정보"
-      description="공연장 대관 탭에 노출되는 정보를 관리합니다."
       action={
         <BooltiButton
           colorTheme="primary"
@@ -473,7 +462,7 @@ const ConcertHallRentalPage = () => {
           </Flex>
         </Card>
       </Flex>
-    </PageLayout>
+    </ConcertHallPageLayout>
   );
 };
 
