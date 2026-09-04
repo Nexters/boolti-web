@@ -215,5 +215,5 @@ export interface ConcertHallAutocompleteResponse {
 }
 
 export interface ConcertHallEntryRequest {
-  name: string;
+  concertHallName: string;
 }
