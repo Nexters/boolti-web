@@ -32,7 +32,7 @@ const pendingPreviewMapPromise = new Promise<never>(() => undefined);
 const theme = { palette, typo, breakpoint };
 
 vi.mock('@boolti/api', () => ({
-  useCreateConcertHallEntryRequest: () => ({ mutateAsync: mockMutateAsync, isLoading: false }),
+  useCreateConcertHallOnboardingRequest: () => ({ mutateAsync: mockMutateAsync, isLoading: false }),
   useConcertHallSearchDetail: (...args: unknown[]) => mockUseConcertHallSearchDetail(...args),
   useConcertHallSearchImages: (...args: unknown[]) => mockUseConcertHallSearchImages(...args),
   useConcertHallSearchList: (...args: unknown[]) => mockUseConcertHallSearchList(...args),

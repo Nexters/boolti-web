@@ -1,5 +1,5 @@
 import {
-  useCreateConcertHallEntryRequest,
+  useCreateConcertHallOnboardingRequest,
   useConcertHallAutocomplete,
   useConcertHallRecommendedRegions,
   useConcertHallSearchList,
@@ -287,7 +287,7 @@ const PlaceSearchPage = () => {
   const [entryRequestTouched, setEntryRequestTouched] = useState(false);
 
   const toast = useToast();
-  const entryRequestMutation = useCreateConcertHallEntryRequest();
+  const entryRequestMutation = useCreateConcertHallOnboardingRequest();
   const recommendedRegionsQuery = useConcertHallRecommendedRegions();
   const recommendedRegionName = recommendedRegionsQuery.data?.find(
     (region) => region.regionId === regionId,
@@ -911,11 +911,11 @@ const PlaceSearchPage = () => {
     event.preventDefault();
     setEntryRequestTouched(true);
 
-    const name = entryRequestName.trim();
-    if (!name) return;
+    const concertHallName = entryRequestName.trim();
+    if (!concertHallName) return;
 
     try {
-      await entryRequestMutation.mutateAsync({ name });
+      await entryRequestMutation.mutateAsync({ concertHallName });
       toast.success('입점 요청을 보냈어요.');
       setIsEntryRequestOpen(false);
       setEntryRequestTouched(false);
