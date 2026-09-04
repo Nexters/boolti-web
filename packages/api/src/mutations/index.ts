@@ -53,7 +53,7 @@ import useSuperAdminAddHost from './useSuperAdminAddHost';
 import useSuperAdminRemoveHost from './useSuperAdminRemoveHost';
 import useSuperAdminEditHost from './useSuperAdminEditHost';
 import useHideShow from './useHideShow';
-import useCreateConcertHallEntryRequest from './useCreateConcertHallEntryRequest';
+import useCreateConcertHallOnboardingRequest from './useCreateConcertHallOnboardingRequest';
 
 import useSuperAdminCreateConcertHall from './useSuperAdminCreateConcertHall';
 import useSuperAdminSaveConcertHallSubwayStations from './useSuperAdminSaveConcertHallSubwayStations';
@@ -124,7 +124,7 @@ export {
   useSuperAdminRemoveHost,
   useSuperAdminEditHost,
   useHideShow,
-  useCreateConcertHallEntryRequest,
+  useCreateConcertHallOnboardingRequest,
   useSuperAdminCreateConcertHall,
   useSuperAdminSaveConcertHallSubwayStations,
   useSuperAdminAddConcertHallShowManual,
