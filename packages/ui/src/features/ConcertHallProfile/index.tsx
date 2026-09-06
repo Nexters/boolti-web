@@ -17,6 +17,7 @@ export interface ConcertHallProfileProps {
   displayMode: ConcertHallProfileDisplayMode;
   shareUrl: string;
   naverMapKey: string;
+  isScrolled?: boolean;
   onBack?: () => void;
 }
 
@@ -33,6 +34,7 @@ const ConcertHallProfile = ({
   shareUrl,
   naverMapKey,
   onBack,
+  isScrolled,
 }: ConcertHallProfileProps) => {
   const toast = useToast();
   const [activeTab, setActiveTab] = useState<TabKey>('home');
@@ -94,7 +96,13 @@ const ConcertHallProfile = ({
 
   return (
     <>
-      <HallHead profile={profile} onShare={handleShare} onBack={onBack} shareDisabled={!shareUrl} />
+      <HallHead
+        profile={profile}
+        onShare={handleShare}
+        onBack={onBack}
+        isScrolled={isScrolled}
+        shareDisabled={!shareUrl}
+      />
       <Styled.TabBar role="tablist" aria-label="공연장 상세 탭">
         {TABS.map((tab) => (
           <Styled.TabItem

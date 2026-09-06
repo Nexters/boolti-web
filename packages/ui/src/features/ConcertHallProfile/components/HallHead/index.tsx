@@ -13,12 +13,20 @@ interface Props {
   profile: ConcertHallProfileResponse;
   onShare: () => void;
   onBack?: () => void;
+  isScrolled?: boolean;
   shareDisabled?: boolean;
 }
 
-const HallHead = ({ profile, onShare, onBack, shareDisabled = false }: Props) => {
+const HallHead = ({
+  profile,
+  onShare,
+  onBack,
+  isScrolled,
+  shareDisabled = false,
+}: Props) => {
   const toast = useToast();
   const { name, representativeImageUrl, head } = profile;
+  const stickyHeaderEnabled = isScrolled !== undefined;
 
   const capacityText = formatCapacity(head?.capacity);
   const addressText = formatAddress(head?.location);
@@ -67,93 +75,110 @@ const HallHead = ({ profile, onShare, onBack, shareDisabled = false }: Props) =>
     },
   ];
 
+  const appBar = (
+    <Styled.AppBar
+      $isSticky={stickyHeaderEnabled}
+      $isScrolled={isScrolled === true}
+      role="banner"
+      aria-label="공연장 상세 헤더"
+    >
+      {onBack && (
+        <Styled.BackButton type="button" aria-label="뒤로" onClick={onBack}>
+          <ArrowLeftIcon />
+        </Styled.BackButton>
+      )}
+      {stickyHeaderEnabled && (
+        <Styled.AppBarTitle $visible={isScrolled === true} aria-hidden={!isScrolled}>
+          {name}
+        </Styled.AppBarTitle>
+      )}
+      <Styled.ShareButton
+        type="button"
+        aria-label="공유하기"
+        disabled={shareDisabled}
+        onClick={onShare}
+      >
+        <ShareIcon />
+      </Styled.ShareButton>
+    </Styled.AppBar>
+  );
+
   return (
-    <Styled.Container>
-      <Styled.ImageArea>
-        <Styled.BackgroundImage src={representativeImageUrl || defaultHallImage} alt={name} />
-        <Styled.BackgroundDim />
-        <Styled.AppBar>
-          {onBack && (
-            <Styled.BackButton type="button" aria-label="뒤로" onClick={onBack}>
-              <ArrowLeftIcon />
-            </Styled.BackButton>
-          )}
-          <Styled.ShareButton
-            type="button"
-            aria-label="공유하기"
-            disabled={shareDisabled}
-            onClick={onShare}
-          >
-            <ShareIcon />
-          </Styled.ShareButton>
-        </Styled.AppBar>
-        <Styled.HallNameArea>
-          <Styled.HallName>{name}</Styled.HallName>
-        </Styled.HallNameArea>
-      </Styled.ImageArea>
-      {hasSummary && (
-        <Styled.SummaryArea>
-          {head?.rentalFeeSummary && (
-            <Styled.SummaryRow>
-              <Styled.SummaryLabel>대관료</Styled.SummaryLabel>
-              <Styled.SummaryValue>{head.rentalFeeSummary}</Styled.SummaryValue>
-            </Styled.SummaryRow>
-          )}
-          {capacityText && (
-            <Styled.SummaryRow>
-              <Styled.SummaryLabel>수용 인원</Styled.SummaryLabel>
-              <Styled.SummaryValue>{capacityText}</Styled.SummaryValue>
-            </Styled.SummaryRow>
-          )}
-          {addressText && (
-            <Styled.SummaryRow>
-              <Styled.SummaryLabel>위치</Styled.SummaryLabel>
-              <Styled.SummaryValue>{addressText}</Styled.SummaryValue>
-            </Styled.SummaryRow>
-          )}
-          {subwayStations.length > 0 && (
-            <Styled.SummaryRow>
-              <Styled.SummaryLabel>지하철역</Styled.SummaryLabel>
-              <Styled.SubwayStationList>
-                {subwayStations.map((station) => (
-                  <Styled.SubwayStationRow key={station.id ?? station.stationName}>
-                    {station.lines.map((line) => (
-                      <SubwayLineBadge
-                        key={line.id ?? line.lineName}
-                        lineName={line.lineName}
-                        colorHex={line.colorHex}
-                      />
-                    ))}
-                    <Styled.SubwayStationName>{station.stationName}</Styled.SubwayStationName>
-                  </Styled.SubwayStationRow>
-                ))}
-              </Styled.SubwayStationList>
-            </Styled.SummaryRow>
-          )}
-        </Styled.SummaryArea>
-      )}
-      {hasContact && (
-        <Styled.ContactButtonArea>
-          {contactButtons.map(({ key, label, icon, value, emptyMessage, action }) => (
-            <Styled.ContactButton
-              key={key}
-              type="button"
-              isActive={Boolean(value)}
-              onClick={() => {
-                if (value) {
-                  action(value);
-                } else {
-                  toast.info(emptyMessage);
-                }
-              }}
-            >
-              {icon}
-              <Styled.ContactButtonLabel>{label}</Styled.ContactButtonLabel>
-            </Styled.ContactButton>
-          ))}
-        </Styled.ContactButtonArea>
-      )}
-    </Styled.Container>
+    <>
+      {stickyHeaderEnabled && appBar}
+      <Styled.Container>
+        <Styled.ImageArea>
+          <Styled.BackgroundImage src={representativeImageUrl || defaultHallImage} alt={name} />
+          <Styled.BackgroundDim />
+          {!stickyHeaderEnabled && appBar}
+          <Styled.HallNameArea>
+            <Styled.HallName>{name}</Styled.HallName>
+          </Styled.HallNameArea>
+        </Styled.ImageArea>
+        {hasSummary && (
+          <Styled.SummaryArea>
+            {head?.rentalFeeSummary && (
+              <Styled.SummaryRow>
+                <Styled.SummaryLabel>대관료</Styled.SummaryLabel>
+                <Styled.SummaryValue>{head.rentalFeeSummary}</Styled.SummaryValue>
+              </Styled.SummaryRow>
+            )}
+            {capacityText && (
+              <Styled.SummaryRow>
+                <Styled.SummaryLabel>수용 인원</Styled.SummaryLabel>
+                <Styled.SummaryValue>{capacityText}</Styled.SummaryValue>
+              </Styled.SummaryRow>
+            )}
+            {addressText && (
+              <Styled.SummaryRow>
+                <Styled.SummaryLabel>위치</Styled.SummaryLabel>
+                <Styled.SummaryValue>{addressText}</Styled.SummaryValue>
+              </Styled.SummaryRow>
+            )}
+            {subwayStations.length > 0 && (
+              <Styled.SummaryRow>
+                <Styled.SummaryLabel>지하철역</Styled.SummaryLabel>
+                <Styled.SubwayStationList>
+                  {subwayStations.map((station) => (
+                    <Styled.SubwayStationRow key={station.id ?? station.stationName}>
+                      {station.lines.map((line) => (
+                        <SubwayLineBadge
+                          key={line.id ?? line.lineName}
+                          lineName={line.lineName}
+                          colorHex={line.colorHex}
+                        />
+                      ))}
+                      <Styled.SubwayStationName>{station.stationName}</Styled.SubwayStationName>
+                    </Styled.SubwayStationRow>
+                  ))}
+                </Styled.SubwayStationList>
+              </Styled.SummaryRow>
+            )}
+          </Styled.SummaryArea>
+        )}
+        {hasContact && (
+          <Styled.ContactButtonArea>
+            {contactButtons.map(({ key, label, icon, value, emptyMessage, action }) => (
+              <Styled.ContactButton
+                key={key}
+                type="button"
+                isActive={Boolean(value)}
+                onClick={() => {
+                  if (value) {
+                    action(value);
+                  } else {
+                    toast.info(emptyMessage);
+                  }
+                }}
+              >
+                {icon}
+                <Styled.ContactButtonLabel>{label}</Styled.ContactButtonLabel>
+              </Styled.ContactButton>
+            ))}
+          </Styled.ContactButtonArea>
+        )}
+      </Styled.Container>
+    </>
   );
 };
 

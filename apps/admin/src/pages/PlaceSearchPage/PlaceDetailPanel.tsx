@@ -1,7 +1,7 @@
 import { useConcertHallProfile } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { ConcertHallProfile, useBodyScrollLock } from '@boolti/ui';
-import { useEffect } from 'react';
+import { type UIEvent, useEffect, useState } from 'react';
 
 import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
 import Styled from './PlaceSearchPage.styles';
@@ -15,6 +15,18 @@ const PlaceDetailPanel = ({
 }) => {
   const query = useConcertHallProfile(concertHallId);
   const concertHall = query.data;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  const handleDetailScroll = (event: UIEvent<HTMLElement>) => {
+    const nextIsScrolled = event.currentTarget.scrollTop > 0;
+    setIsScrolled((currentIsScrolled) =>
+      currentIsScrolled === nextIsScrolled ? currentIsScrolled : nextIsScrolled,
+    );
+  };
+
+  useEffect(() => {
+    setIsScrolled(false);
+  }, [concertHallId]);
 
   useBodyScrollLock(window.innerWidth < 1120);
 
@@ -37,7 +49,7 @@ const PlaceDetailPanel = ({
 
   if (query.isLoading) {
     return (
-      <Styled.DetailPane>
+      <Styled.DetailPane onScroll={handleDetailScroll}>
         <Styled.DetailState>
           <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
             <ArrowLeftIcon />
@@ -50,7 +62,7 @@ const PlaceDetailPanel = ({
 
   if (query.isError || !concertHall) {
     return (
-      <Styled.DetailPane>
+      <Styled.DetailPane onScroll={handleDetailScroll}>
         <Styled.DetailState>
           <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
             <ArrowLeftIcon />
@@ -69,10 +81,11 @@ const PlaceDetailPanel = ({
   const shareCode = concertHall.share?.shareCode ?? concertHall.shareCode;
 
   return (
-    <Styled.DetailPane>
+    <Styled.DetailPane onScroll={handleDetailScroll}>
       <ConcertHallProfile
         profile={concertHall}
         displayMode="full"
+        isScrolled={isScrolled}
         shareUrl={shareCode ? `https://place.boolti.in/${shareCode}` : ''}
         naverMapKey={X_NCP_APIGW_API_KEY_ID}
         onBack={onClose}

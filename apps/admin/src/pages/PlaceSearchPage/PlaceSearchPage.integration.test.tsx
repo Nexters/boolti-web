@@ -1956,6 +1956,90 @@ describe('PlaceSearchPage', () => {
     expect(mockUseConcertHallProfile).toHaveBeenLastCalledWith(1);
   });
 
+  it('검색 상세 패널 외의 공연장 프로필은 sticky 상세 헤더를 활성화하지 않는다', () => {
+    renderWithTheme(
+      <ConcertHallProfile
+        profile={detail}
+        displayMode="full"
+        shareUrl="https://place.boolti.in/alive"
+        naverMapKey="test-ncp-key"
+      />,
+    );
+
+    const appBar = screen.getByRole('banner', { name: '공연장 상세 헤더' });
+
+    expect(getCssTextForElement(appBar)).not.toContain('position: sticky');
+  });
+
+  it.each([
+    { label: '모바일', width: 390 },
+    { label: '데스크톱', width: 1440 },
+  ])('$label 상세 패널은 스크롤 시작 시 상단 헤더를 표시한다', ({ width }) => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: width,
+      writable: true,
+    });
+    renderPlaceSearchPage();
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    const detailPane = screen.getByRole('complementary');
+    const appBar = within(detailPane).getByRole('banner', { name: '공연장 상세 헤더' });
+    const title = within(appBar).getByText('얼라이브홀');
+
+    expect(title.getAttribute('aria-hidden')).toBe('true');
+    expect(getComputedStyle(title).visibility).toBe('hidden');
+    expect(getCssTextForElement(appBar)).toContain('position: sticky');
+
+    detailPane.scrollTop = 1;
+    fireEvent.scroll(detailPane);
+
+    expect(title.getAttribute('aria-hidden')).toBe('false');
+    expect(getComputedStyle(title).visibility).toBe('visible');
+
+    detailPane.scrollTop = 0;
+    fireEvent.scroll(detailPane);
+
+    expect(title.getAttribute('aria-hidden')).toBe('true');
+    expect(getComputedStyle(title).visibility).toBe('hidden');
+  });
+
+  it('다른 공연장을 선택하면 상세 헤더의 스크롤 상태를 초기화한다', () => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: 1440,
+      writable: true,
+    });
+    mockUseConcertHallSearchList.mockReturnValue({
+      data: {
+        items: [concertHalls[0], nextPageConcertHall],
+        totalElements: 2,
+        hasNext: false,
+        currentPage: 0,
+        pageSize: 20,
+        totalPages: 1,
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    renderPlaceSearchPage();
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+    const detailPane = screen.getByRole('complementary');
+    const appBar = within(detailPane).getByRole('banner', { name: '공연장 상세 헤더' });
+    const title = within(appBar).getByText('얼라이브홀');
+
+    detailPane.scrollTop = 1;
+    fireEvent.scroll(detailPane);
+    expect(title.getAttribute('aria-hidden')).toBe('false');
+
+    fireEvent.click(screen.getByRole('button', { name: /웨스트브릿지 상세 보기/ }));
+
+    expect(title.getAttribute('aria-hidden')).toBe('true');
+  });
+
   it('데스크탑에서 상세 aside가 우측에서 슬라이드되어 나타난다', async () => {
     renderPlaceSearchPage();
 
