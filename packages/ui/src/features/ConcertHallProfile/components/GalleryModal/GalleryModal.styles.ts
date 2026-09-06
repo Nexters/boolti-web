@@ -47,6 +47,36 @@ const HeaderSpacer = styled.div`
   flex: 1;
 `;
 
+const State = styled.div`
+  display: grid;
+  flex: 1;
+  place-items: center;
+  padding: 32px 20px;
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  font-size: 15px;
+  line-height: 23px;
+  text-align: center;
+`;
+
+const StateContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StateMessage = styled.p`
+  color: ${({ theme }) => theme.palette.mobile.grey.g20};
+`;
+
+const RetryButton = styled.button`
+  height: 36px;
+  margin-top: 10px;
+  color: ${({ theme }) => theme.palette.mobile.primary.o1};
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+`;
+
 // 사진 목록 (3열 그리드)
 /*
   스크롤 컨테이너를 grid와 분리한다.
@@ -143,6 +173,10 @@ export default {
   HeaderButton,
   HeaderTitle,
   HeaderSpacer,
+  State,
+  StateContent,
+  StateMessage,
+  RetryButton,
   GridScroll,
   Grid,
   GridItem,

@@ -1,6 +1,5 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import { getContrastTextColor } from './utils';
 import { mq_md, mq_xl } from '@boolti/ui';
 
 const slideDetailPaneIn = keyframes`
@@ -793,6 +792,8 @@ const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
 const ResultsPaneHeader = styled.div<{ $detailPanelOpen: boolean }>`
   position: sticky;
   top: 148px;
+  z-index: 31;
+  background: ${({ theme }) => theme.palette.grey.b};
 
   ${mq_xl} {
     position: sticky;
@@ -1170,26 +1171,6 @@ const MetaValue = styled.dd`
   text-align: right;
 `;
 
-const DetailMetaList = styled.dl`
-  display: grid;
-  grid-template-columns: 62px minmax(0, 1fr);
-  gap: 16px;
-  color: ${({ theme }) => theme.palette.grey.g40};
-  ${({ theme }) => theme.typo.b2};
-`;
-
-const DetailMetaLabel = styled.dt`
-  color: ${({ theme }) => theme.palette.grey.g50};
-`;
-
-const DetailMetaValue = styled.dd`
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  text-align: left;
-`;
-
 const Empty = styled.div<{ $dimmed: boolean }>`
   display: flex;
   flex-direction: column;
@@ -1281,34 +1262,11 @@ const DetailPane = styled.aside`
   }
 `;
 
-const DetailNavigation = styled.nav`
-  position: sticky;
-  top: 0;
-  z-index: 3;
-`;
-
 const DetailBackdrop = styled.button`
   display: none;
   padding: 0;
   background: transparent;
   border: 0;
-`;
-
-const DetailHero = styled.div<{ imageUrl?: string }>`
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  width: 100%;
-  aspect-ratio: 1;
-  padding: 20px;
-  background: linear-gradient(
-      180deg,
-      ${({ theme }) => theme.palette.grey.b}0F,
-      ${({ theme }) => theme.palette.grey.b}B8
-    ),
-    ${({ imageUrl, theme }) =>
-      imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
-  z-index: 2;
 `;
 
 const DetailState = styled.div`
@@ -1337,76 +1295,6 @@ const DetailCloseButton = styled.button`
   }
 `;
 
-const DetailShareButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 10px 20px;
-  display: grid;
-  place-items: center;
-  color: ${({ theme }) => theme.palette.grey.w};
-  border: 0;
-  border-radius: 50%;
-  cursor: pointer;
-
-  svg {
-    width: 24px;
-    height: 24px;
-  }
-
-  &:disabled {
-    color: ${({ theme }) => theme.palette.grey.g60};
-    cursor: default;
-  }
-`;
-
-const DetailHeader = styled.div`
-  position: sticky;
-  top: 0;
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
-  width: 100%;
-  height: 44px;
-  margin-top: -44px;
-  display: flex;
-  align-items: center;
-  z-index: 1;
-`;
-
-const DetailHeaderTitle = styled.span`
-  margin-left: 56px;
-  display: inline-flex;
-  align-items: center;
-  ${({ theme }) => theme.typo.sh2};
-`;
-
-const DetailTitle = styled.h2`
-  font-family: 'SB Aggro';
-  color: ${({ theme }) => theme.palette.grey.g10};
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 34px;
-  letter-spacing: -0.72px;
-`;
-
-const DetailSection = styled.section`
-  padding: 28px 20px;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
-`;
-
-const DetailSectionTitle = styled.h3`
-  margin-bottom: 12px;
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  font-size: 18px;
-  font-weight: 600;
-`;
-
-const DetailText = styled.p`
-  color: ${({ theme }) => theme.palette.grey.g30};
-  font-size: 15px;
-  line-height: 24px;
-`;
-
 const TextToggleButton = styled.button`
   height: 36px;
   margin-top: 10px;
@@ -1417,338 +1305,6 @@ const TextToggleButton = styled.button`
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-`;
-
-const DetailActions = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  padding: 16px 20px 28px;
-`;
-
-const DetailAction = styled.button`
-  display: flex;
-  flex-direction: column;
-  place-items: center;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  height: 66px;
-  color: ${({ theme }) => theme.palette.grey.g40};
-  text-decoration: none;
-  background: ${({ theme }) => theme.palette.mobile.grey.g85};
-  border: 0;
-  border-radius: 6px;
-  ${({ theme }) => theme.typo.b1};
-  cursor: pointer;
-
-  &:disabled {
-    color: ${({ theme }) => theme.palette.grey.g60};
-    cursor: default;
-  }
-
-  &[aria-disabled='true'] {
-    color: ${({ theme }) => theme.palette.grey.g60};
-  }
-`;
-
-const DetailTabs = styled.div`
-  position: sticky;
-  top: 44px;
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  padding: 0 20px;
-  border-bottom: 1px solid ${({ theme }) => theme.palette.grey.g90};
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
-  z-index: 1;
-`;
-
-const DetailTab = styled.button`
-  height: 48px;
-  color: ${({ theme }) => theme.palette.grey.g60};
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid transparent;
-  ${({ theme }) => theme.typo.sh1};
-  text-align: center;
-  cursor: pointer;
-
-  &[aria-selected='true'] {
-    color: ${({ theme }) => theme.palette.mobile.grey.g05};
-    border-bottom-color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  }
-`;
-
-const ImageGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 4px;
-`;
-
-const DetailImage = styled.div<{ imageUrl?: string }>`
-  aspect-ratio: 1;
-  border-radius: 4px;
-  background: ${({ imageUrl }) => (imageUrl ? `url(${imageUrl}) center/cover` : '')},
-    ${({ theme }) => theme.palette.grey.g90};
-`;
-
-const MoreImageButton = styled.button<{ imageUrl?: string }>`
-  display: grid;
-  place-items: center;
-  gap: 2px;
-  aspect-ratio: 1;
-  color: ${({ theme }) => theme.palette.grey.w};
-  background: linear-gradient(
-      ${({ theme }) => theme.palette.grey.b}94,
-      ${({ theme }) => theme.palette.grey.b}94
-    ),
-    ${({ imageUrl, theme }) =>
-      imageUrl ? `url(${imageUrl}) center/cover` : theme.palette.grey.g90};
-  border: 0;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 700;
-`;
-
-const MoreImageCount = styled.span`
-  line-height: 18px;
-`;
-
-const SubwayList = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-`;
-
-const SubwayItem = styled.div`
-  ${({ theme }) => theme.typo.b2};
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 400;
-`;
-
-const SubwayChip = styled.span<{ colorHex: string }>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 20px;
-  padding: 0 6px;
-  border-radius: 999px;
-  background: ${({ colorHex }) => colorHex};
-  ${({ theme }) => theme.typo.sh0};
-  color: ${({ colorHex }) => getContrastTextColor(colorHex)};
-`;
-
-const AmenityGrid = styled.ul`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px 16px;
-  color: ${({ theme }) => theme.palette.grey.g30};
-  font-size: 15px;
-  line-height: 24px;
-
-  li {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  svg {
-    flex: 0 0 auto;
-    color: ${({ theme }) => theme.palette.grey.g40};
-  }
-`;
-
-const MapBox = styled.div`
-  position: relative;
-  display: grid;
-  place-items: center;
-  gap: 4px;
-  height: 140px;
-  margin-top: 12px;
-  color: ${({ theme }) => theme.palette.grey.g30};
-  background: linear-gradient(
-      135deg,
-      ${({ theme }) => theme.palette.primary.o1}29,
-      ${({ theme }) => theme.palette.grey.g80}6B
-    ),
-    ${({ theme }) => theme.palette.grey.g90};
-  border-radius: 8px;
-
-  span {
-    color: ${({ theme }) => theme.palette.mobile.grey.g05};
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  small {
-    color: ${({ theme }) => theme.palette.grey.g50};
-    font-size: 12px;
-  }
-`;
-
-const MapOpenButton = styled.button`
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  color: ${({ theme }) => theme.palette.grey.w};
-  background: ${({ theme }) => theme.palette.mobile.grey.g90}B8;
-  border: 0;
-  border-radius: 50%;
-`;
-
-const MapPin = styled.span`
-  width: 16px;
-  height: 16px;
-  background: ${({ theme }) => theme.palette.primary.o1};
-  border: 3px solid ${({ theme }) => theme.palette.grey.w}C2;
-  border-radius: 50%;
-  box-shadow: 0 0 0 8px ${({ theme }) => theme.palette.primary.o1}29;
-`;
-
-const AddressLine = styled.p`
-  margin-bottom: 12px;
-  color: ${({ theme }) => theme.palette.grey.g30};
-  ${({ theme }) => theme.typo.b1};
-`;
-
-const InlineActionButton = styled.button`
-  padding: 0;
-  color: ${({ theme }) => theme.palette.mobile.primary.o1};
-  background: transparent;
-  border: 0;
-  ${({ theme }) => theme.typo.sh0};
-  cursor: pointer;
-`;
-
-const ComingSoon = styled.div`
-  display: grid;
-  min-height: 300px;
-  place-items: center;
-  color: ${({ theme }) => theme.palette.grey.g50};
-  letter-spacing: 0.12em;
-  ${({ theme }) => theme.typo.sh1};
-`;
-
-const Disclaimer = styled.footer`
-  padding: 28px 20px 40px;
-  color: ${({ theme }) => theme.palette.grey.g60};
-  background: ${({ theme }) => theme.palette.mobile.grey.g85};
-  font-size: 12px;
-  line-height: 18px;
-`;
-
-const GalleryOverlay = styled.div`
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  overflow-y: auto;
-  color: ${({ theme }) => theme.palette.mobile.grey.g05};
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
-`;
-
-const GalleryHeader = styled.header`
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 48px 1fr 48px;
-  align-items: center;
-  min-height: 48px;
-  padding: 0 8px;
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
-`;
-
-const GalleryTitle = styled.h2`
-  text-align: center;
-  ${({ theme }) => theme.typo.sh1};
-`;
-
-const GalleryHeaderButton = styled.button`
-  display: grid;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  place-items: center;
-  color: inherit;
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-`;
-
-const GalleryGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 2px;
-`;
-
-const GalleryGridButton = styled.button`
-  padding: 0;
-  aspect-ratio: 1;
-  overflow: hidden;
-  background: ${({ theme }) => theme.palette.grey.g80};
-  border: 0;
-  border-radius: 8px;
-  cursor: pointer;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const GalleryViewer = styled.div`
-  display: flex;
-  width: 100%;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-`;
-
-const GallerySlide = styled.figure`
-  display: grid;
-  flex: 0 0 100%;
-  margin: 0;
-  place-items: center;
-  scroll-snap-align: center;
-
-  img {
-    width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-  }
-`;
-
-const GalleryState = styled.div`
-  display: grid;
-  padding: 32px 20px;
-  place-items: center;
-  text-align: center;
-`;
-
-const IntroductionText = styled.div<{ $collapsed: boolean }>`
-  position: relative;
-  max-height: ${({ $collapsed }) => ($collapsed ? '280px' : 'none')};
-  overflow: hidden;
-
-  &::after {
-    display: ${({ $collapsed }) => ($collapsed ? 'block' : 'none')};
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    height: 72px;
-    background: linear-gradient(transparent, ${({ theme }) => theme.palette.mobile.grey.g90});
-    content: '';
-    pointer-events: none;
-  }
 `;
 
 const MobileFilterOverlay = styled.div<{ $isClosing: boolean }>`
@@ -2138,7 +1694,7 @@ const ModalButtons = styled.div`
     flex: 1;
   }
 
-  button[type="submit"]:disabled {
+  button[type='submit']:disabled {
     color: ${({ theme }) => theme.palette.grey.w};
     background-color: ${({ theme }) => theme.palette.grey.g90};
     border: none;
@@ -2156,8 +1712,6 @@ const ModalButtons = styled.div`
 `;
 
 export default {
-  AddressLine,
-  AmenityGrid,
   AutocompleteAddress,
   AutocompleteMatch,
   AutocompleteState,
@@ -2180,27 +1734,10 @@ export default {
   CountInfoPopupButton,
   CountInfoPopup,
   CountInfoPopupCloseButton,
-  DetailAction,
-  DetailActions,
   DetailBackdrop,
   DetailCloseButton,
-  DetailHeader,
-  DetailHeaderTitle,
-  DetailHero,
-  DetailImage,
   DetailPane,
-  DetailSection,
-  DetailSectionTitle,
-  DetailShareButton,
   DetailState,
-  DetailNavigation,
-  DetailTab,
-  DetailTabs,
-  DetailText,
-  DetailTitle,
-  DetailMetaList,
-  DetailMetaLabel,
-  DetailMetaValue,
   Empty,
   EmptyDescription,
   EmptyIcon,
@@ -2219,15 +1756,10 @@ export default {
   HeaderMenuPopup,
   HeaderMenuPrimaryButton,
   IconButton,
-  ImageGrid,
-  InlineActionButton,
-  IntroductionText,
   KeywordPopover,
   KeywordInput,
   LoadMoreTrigger,
   Logo,
-  MapBox,
-  MapOpenButton,
   MetaLabel,
   MetaList,
   MetaValue,
@@ -2263,8 +1795,6 @@ export default {
   MobileSheetHeader,
   MobileSheetTitle,
   MobileSortButton,
-  MoreImageButton,
-  MoreImageCount,
   Page,
   PopoverFooter,
   PopoverHeader,
@@ -2290,23 +1820,8 @@ export default {
   SearchInputLabel,
   SortButton,
   SortGroup,
-  SubwayChip,
-  SubwayList,
-  SubwayItem,
   TextButton,
   TextToggleButton,
   Toolbar,
   PlaceCard,
-  MapPin,
-  ComingSoon,
-  Disclaimer,
-  GalleryGrid,
-  GalleryGridButton,
-  GalleryHeader,
-  GalleryHeaderButton,
-  GalleryOverlay,
-  GallerySlide,
-  GalleryState,
-  GalleryTitle,
-  GalleryViewer,
 };

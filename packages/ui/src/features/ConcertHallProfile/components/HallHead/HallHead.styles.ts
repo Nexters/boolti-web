@@ -32,19 +32,70 @@ const BackgroundDim = styled.div`
   background: linear-gradient(180deg, rgba(18, 19, 24, 0.2) 0%, #121318 100%);
 `;
 
-const AppBar = styled.div`
-  position: relative;
+const AppBar = styled.header<{ $isSticky: boolean; $isScrolled: boolean }>`
+  position: ${({ $isSticky }) => ($isSticky ? 'sticky' : 'relative')};
+  top: ${({ $isSticky }) => ($isSticky ? 0 : 'auto')};
+  z-index: ${({ $isSticky }) => ($isSticky ? 2 : 'auto')};
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
+  width: ${({ $isSticky }) => ($isSticky ? '100%' : 'auto')};
+  height: ${({ $isSticky }) => ($isSticky ? '44px' : 'auto')};
+  margin-bottom: ${({ $isSticky }) => ($isSticky ? '-44px' : 0)};
+  box-sizing: ${({ $isSticky }) => ($isSticky ? 'border-box' : 'content-box')};
+  background-color: ${({ theme, $isScrolled }) =>
+    $isScrolled ? theme.palette.mobile.grey.g90 : 'transparent'};
+  transition: background-color 160ms ease;
   padding: 10px 20px;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+`;
+
+const AppBarTitle = styled.span<{ $visible: boolean }>`
+  min-width: 0;
+  flex: 1;
+  margin-left: 12px;
+  overflow: hidden;
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  ${({ theme }) => theme.typo.sh2};
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
+  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+  transition: opacity 160ms ease, visibility 160ms ease;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+`;
+
+const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  cursor: pointer;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 `;
 
 const ShareButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
   cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
 `;
 
 const HallNameArea = styled.div`
@@ -147,6 +198,8 @@ export default {
   BackgroundImage,
   BackgroundDim,
   AppBar,
+  AppBarTitle,
+  BackButton,
   ShareButton,
   HallNameArea,
   HallName,

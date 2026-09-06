@@ -1,10 +1,11 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
 import { ChevronDownIcon } from '@boolti/icon';
 
-import { CheckIcon, RentalMethodIcon } from '~/components/icons';
+import { CheckIcon, RentalMethodIcon } from '../icons';
 import { useLayoutEffect, useRef, useState } from 'react';
 
-import { formatFee } from '~/utils/format';
+import { formatFee } from '../../utils/format';
+import sortBySequence from '../../utils/sortBySequence';
 
 import Styled from './RentalTab.styles';
 
@@ -67,6 +68,8 @@ const RentalTab = ({ profile }: Props) => {
     paidOptions = [],
     specialNotes = [],
   } = rental;
+  const sortedRentalFees = sortBySequence(rentalFees);
+  const sortedAdditionalFees = sortBySequence(additionalFees);
 
   // 대관 시간 부가 설명: 백엔드 설명 우선, 없고 휴식 포함이면 안내 문구
   const rentalTimeDescription =
@@ -97,14 +100,14 @@ const RentalTab = ({ profile }: Props) => {
         </Styled.Section>
       )}
 
-      {rentalFees.length > 0 && (
+      {sortedRentalFees.length > 0 && (
         <Styled.Section>
           <Styled.SectionTitle>대관료</Styled.SectionTitle>
           {vat?.description && (
             <Styled.SectionDescription>{vat.description}</Styled.SectionDescription>
           )}
           <Styled.FeeList>
-            {rentalFees.map((fee) => (
+            {sortedRentalFees.map((fee) => (
               <Styled.FeeRow key={fee.id}>
                 <Styled.FeeLabel>{fee.dayTypeName}</Styled.FeeLabel>
                 <Styled.FeeLeader />
@@ -115,14 +118,14 @@ const RentalTab = ({ profile }: Props) => {
         </Styled.Section>
       )}
 
-      {additionalFees.length > 0 && (
+      {sortedAdditionalFees.length > 0 && (
         <Styled.Section>
           <Styled.SectionTitle>시간당 추가 요금</Styled.SectionTitle>
           <Styled.SectionDescription>
             대관 시간 외 별도 시간 추가 시 발생하는 비용입니다.
           </Styled.SectionDescription>
           <Styled.FeeList>
-            {additionalFees.map((fee) => (
+            {sortedAdditionalFees.map((fee) => (
               <Styled.FeeRow key={fee.id}>
                 <Styled.FeeLabel>{fee.dayTypeName}</Styled.FeeLabel>
                 <Styled.FeeLeader />

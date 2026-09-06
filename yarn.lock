@@ -1805,6 +1805,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@boolti/ui@workspace:packages/ui"
   dependencies:
+    "@boolti/api": "npm:*"
     "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
