@@ -8,10 +8,11 @@ import {
   viewPlacePhotoList,
 } from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
-import { PreviewMapWithProvider, useToast } from '@boolti/ui';
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
-import GalleryModal, { type GalleryMode } from '~/components/GalleryModal';
+import PreviewMapWithProvider from '../../../../components/PreviewMap/PreviewMapWithProvider';
+import useToast from '../../../../hooks/useToast';
+import GalleryModal, { type GalleryMode } from '../GalleryModal';
 import {
   AlcoholIcon,
   CabinetIcon,
@@ -20,9 +21,9 @@ import {
   RestroomIcon,
   SecondFloorIcon,
   WaitingRoomIcon,
-} from '~/components/icons';
-import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
-import { formatAddress, formatAmenityLabel } from '~/utils/format';
+} from '../icons';
+import { formatAddress, formatAmenityLabel } from '../../utils/format';
+import sortBySequence from '../../utils/sortBySequence';
 
 import Styled from './HomeTab.styles';
 
@@ -75,9 +76,10 @@ const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
 
 interface Props {
   profile: ConcertHallProfileResponse;
+  naverMapKey: string;
 }
 
-const HomeTab = ({ profile }: Props) => {
+const HomeTab = ({ profile, naverMapKey }: Props) => {
   const toast = useToast();
   const home = profile.home;
   const [gallery, setGallery] = useState<{ mode: GalleryMode; index: number } | null>(null);
@@ -87,15 +89,14 @@ const HomeTab = ({ profile }: Props) => {
   const { data: allImages } = useConcertHallImages(profile.id, isAppWebView);
 
   // 미리보기 장수는 백엔드가 제어(최대 5장)하고, 전체는 갤러리 모달에서 별도 조회한다.
-  const visibleImages = home?.images ?? [];
+  const visibleImages = sortBySequence(home?.images ?? []);
   const totalImageCount = home?.totalImageCount ?? visibleImages.length;
   const hiddenImageCount = totalImageCount - visibleImages.length;
 
   const amenities = home?.amenities ?? [];
   const location = home?.location;
   const addressText = formatAddress(location);
-  const hasMap =
-    location?.latitude != null && location?.longitude != null && Boolean(X_NCP_APIGW_API_KEY_ID);
+  const hasMap = location?.latitude != null && location?.longitude != null && Boolean(naverMapKey);
 
   // 갤러리 모달 open/close 등 HomeTab 리렌더 때 지도까지 리렌더되면
   // react-naver-maps가 지도를 파괴/재생성하며 크래시한다(KVO.destroy null 등).
@@ -106,15 +107,17 @@ const HomeTab = ({ profile }: Props) => {
     }
 
     return (
-      <PreviewMapWithProvider
-        ncpKeyId={X_NCP_APIGW_API_KEY_ID}
-        latitude={location.latitude as number}
-        longitude={location.longitude as number}
-        name={profile.name}
-        isAppWebview={checkIsWebView()}
-      />
+      <Suspense fallback={<Styled.MapFallback aria-label="지도 불러오는 중" />}>
+        <PreviewMapWithProvider
+          ncpKeyId={naverMapKey}
+          latitude={location.latitude as number}
+          longitude={location.longitude as number}
+          name={profile.name}
+          isAppWebview={checkIsWebView()}
+        />
+      </Suspense>
     );
-  }, [hasMap, location?.latitude, location?.longitude, profile.name]);
+  }, [hasMap, location?.latitude, location?.longitude, naverMapKey, profile.name]);
 
   // 앱 웹뷰에서는 사진 목록/뷰어를 앱 네이티브 화면이 담당하므로 브릿지로 넘긴다
   const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
@@ -124,7 +127,7 @@ const HomeTab = ({ profile }: Props) => {
       const ignoreNoResponse = () => {};
 
       if (showMoreOverlay || !selectedImage) {
-        const images = allImages?.items ?? visibleImages;
+        const images = sortBySequence(allImages?.items ?? visibleImages);
 
         viewPlacePhotoList({
           id: profile.id,
@@ -184,6 +187,11 @@ const HomeTab = ({ profile }: Props) => {
                   <Styled.PhotoItem
                     key={image.id}
                     type="button"
+                    aria-label={
+                      showMoreOverlay
+                        ? `사진 ${hiddenImageCount}장 더 보기`
+                        : `사진 ${index + 1} 크게 보기`
+                    }
                     onClick={() => handlePhotoClick(index, showMoreOverlay)}
                   >
                     <Styled.PhotoImage

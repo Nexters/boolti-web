@@ -554,15 +554,6 @@ export const concertHallSearchQueryKeys = createQueryKeys('concertHallSearch', {
       });
     },
   }),
-  detail: (concertHallId: number) => ({
-    queryKey: [concertHallId],
-    queryFn: () => fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
-  }),
-  images: (concertHallId: number) => ({
-    queryKey: [concertHallId],
-    queryFn: () =>
-      fetcher.get<ConcertHallImageListResponse>(`web/papi/v1/concert-halls/${concertHallId}/images`),
-  }),
   recommendedRegions: {
     queryKey: null,
     queryFn: () =>

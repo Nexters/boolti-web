@@ -1,19 +1,22 @@
 import type { ConcertHallProfileResponse } from '@boolti/api';
-import { ShareIcon } from '@boolti/icon';
-import { SubwayLineBadge, useToast } from '@boolti/ui';
+import { ArrowLeftIcon, ShareIcon } from '@boolti/icon';
 
-import defaultHallImage from '~/assets/images/default-hall.png';
-import { CallIcon, MailIcon, WebsiteIcon } from '~/components/icons';
-import { formatAddress, formatCapacity, normalizeWebsiteUrl } from '~/utils/format';
+import SubwayLineBadge from '../../../../components/SubwayLineBadge';
+import useToast from '../../../../hooks/useToast';
+import defaultHallImage from '../../assets/default-hall.png';
+import { formatAddress, formatCapacity, normalizeWebsiteUrl } from '../../utils/format';
+import { CallIcon, MailIcon, WebsiteIcon } from '../icons';
 
 import Styled from './HallHead.styles';
 
 interface Props {
   profile: ConcertHallProfileResponse;
   onShare: () => void;
+  onBack?: () => void;
+  shareDisabled?: boolean;
 }
 
-const HallHead = ({ profile, onShare }: Props) => {
+const HallHead = ({ profile, onShare, onBack, shareDisabled = false }: Props) => {
   const toast = useToast();
   const { name, representativeImageUrl, head } = profile;
 
@@ -70,7 +73,17 @@ const HallHead = ({ profile, onShare }: Props) => {
         <Styled.BackgroundImage src={representativeImageUrl || defaultHallImage} alt={name} />
         <Styled.BackgroundDim />
         <Styled.AppBar>
-          <Styled.ShareButton type="button" aria-label="공유하기" onClick={onShare}>
+          {onBack && (
+            <Styled.BackButton type="button" aria-label="뒤로" onClick={onBack}>
+              <ArrowLeftIcon />
+            </Styled.BackButton>
+          )}
+          <Styled.ShareButton
+            type="button"
+            aria-label="공유하기"
+            disabled={shareDisabled}
+            onClick={onShare}
+          >
             <ShareIcon />
           </Styled.ShareButton>
         </Styled.AppBar>
@@ -103,10 +116,10 @@ const HallHead = ({ profile, onShare }: Props) => {
               <Styled.SummaryLabel>지하철역</Styled.SummaryLabel>
               <Styled.SubwayStationList>
                 {subwayStations.map((station) => (
-                  <Styled.SubwayStationRow key={station.id}>
+                  <Styled.SubwayStationRow key={station.id ?? station.stationName}>
                     {station.lines.map((line) => (
                       <SubwayLineBadge
-                        key={line.id}
+                        key={line.id ?? line.lineName}
                         lineName={line.lineName}
                         colorHex={line.colorHex}
                       />

@@ -35,16 +35,31 @@ const BackgroundDim = styled.div`
 const AppBar = styled.div`
   position: relative;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
+`;
+
+const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  cursor: pointer;
 `;
 
 const ShareButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: auto;
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
   cursor: pointer;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.4;
+  }
 `;
 
 const HallNameArea = styled.div`
@@ -147,6 +162,7 @@ export default {
   BackgroundImage,
   BackgroundDim,
   AppBar,
+  BackButton,
   ShareButton,
   HallNameArea,
   HallName,

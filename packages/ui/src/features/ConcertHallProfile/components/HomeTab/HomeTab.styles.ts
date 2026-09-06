@@ -155,6 +155,13 @@ const CopyLabel = styled.span`
   color: ${({ theme }) => theme.palette.mobile.status.link};
 `;
 
+const MapFallback = styled.div`
+  width: 100%;
+  aspect-ratio: 2 / 1;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.palette.mobile.grey.g85};
+`;
+
 export default {
   Container,
   Section,
@@ -174,4 +181,5 @@ export default {
   AmenityLabel,
   AddressLine,
   CopyLabel,
+  MapFallback,
 };

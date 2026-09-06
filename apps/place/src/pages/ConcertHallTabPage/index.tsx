@@ -1,13 +1,10 @@
 import { useConcertHallProfile } from '@boolti/api';
+import { ConcertHallProfile } from '@boolti/ui';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
-import ComingSoon from '~/components/ComingSoon';
-import Disclaimer from '~/components/Disclaimer';
-import HomeTab from '~/components/HomeTab';
 import Layout from '~/components/Layout';
-import RentalTab from '~/components/RentalTab';
-import { formatUpdatedAt } from '~/utils/format';
+import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
 
 type TabKey = 'home' | 'rental';
 
@@ -18,7 +15,6 @@ interface Props {
 const ConcertHallTabPage = ({ tab }: Props) => {
   const { concertHallId: idParam } = useParams<{ concertHallId: string }>();
   const concertHallId = idParam && /^\d+$/.test(idParam) ? Number(idParam) : null;
-
   const { data: profile } = useConcertHallProfile(concertHallId);
 
   useEffect(() => {
@@ -31,21 +27,14 @@ const ConcertHallTabPage = ({ tab }: Props) => {
     return <Layout fillViewport={false}>{null}</Layout>;
   }
 
-  const hasTabData = tab === 'home' ? profile.hasHomeTabData : profile.hasRentalTabData;
-  const updatedAtText = formatUpdatedAt(profile.informationUpdatedAt);
-
   return (
     <Layout fillViewport={false}>
-      {hasTabData ? (
-        tab === 'home' ? (
-          <HomeTab profile={profile} />
-        ) : (
-          <RentalTab profile={profile} />
-        )
-      ) : (
-        <ComingSoon />
-      )}
-      <Disclaimer updatedAtText={updatedAtText} />
+      <ConcertHallProfile
+        profile={profile}
+        displayMode={tab}
+        shareUrl={window.location.href}
+        naverMapKey={X_NCP_APIGW_API_KEY_ID}
+      />
     </Layout>
   );
 };

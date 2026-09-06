@@ -1,6 +1,8 @@
 // @vitest-environment jsdom
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { ThemeProvider } from '@emotion/react';
+import type { ConcertHallProfileResponse } from '@boolti/api';
+import { ConcertHallProfile } from '@boolti/ui';
 import breakpoint from '@boolti/ui/src/systems/breakpoint';
 import palette from '@boolti/ui/src/systems/palette';
 import typo from '@boolti/ui/src/systems/typo';
@@ -12,8 +14,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import PlaceSearchPage from './index';
 
 const mockUseConcertHallSearchList = vi.fn();
-const mockUseConcertHallSearchDetail = vi.fn();
-const mockUseConcertHallSearchImages = vi.fn();
+const mockUseConcertHallProfile = vi.fn();
+const mockUseConcertHallImages = vi.fn();
 const mockUseConcertHallRecommendedRegions = vi.fn();
 const mockUseConcertHallAutocomplete = vi.fn();
 const mockMutateAsync = vi.fn();
@@ -33,8 +35,8 @@ const theme = { palette, typo, breakpoint };
 
 vi.mock('@boolti/api', () => ({
   useCreateConcertHallOnboardingRequest: () => ({ mutateAsync: mockMutateAsync, isLoading: false }),
-  useConcertHallSearchDetail: (...args: unknown[]) => mockUseConcertHallSearchDetail(...args),
-  useConcertHallSearchImages: (...args: unknown[]) => mockUseConcertHallSearchImages(...args),
+  useConcertHallProfile: (...args: unknown[]) => mockUseConcertHallProfile(...args),
+  useConcertHallImages: (...args: unknown[]) => mockUseConcertHallImages(...args),
   useConcertHallSearchList: (...args: unknown[]) => mockUseConcertHallSearchList(...args),
   useConcertHallRecommendedRegions: (...args: unknown[]) =>
     mockUseConcertHallRecommendedRegions(...args),
@@ -43,10 +45,15 @@ vi.mock('@boolti/api', () => ({
 
 vi.mock('@boolti/ui', async () => {
   const { default: Button } = await import('@boolti/ui/src/components/Button');
+  const { default: ConcertHallProfile, useBodyScrollLock } = await import(
+    '@boolti/ui/src/features/ConcertHallProfile'
+  );
   const { mq_lg, mq_md, mq_xl } = await import('@boolti/ui/src/systems/breakpoint');
 
   return {
     Button,
+    ConcertHallProfile,
+    useBodyScrollLock,
     mq_lg,
     mq_md,
     mq_xl,
@@ -62,6 +69,30 @@ vi.mock('@boolti/ui', async () => {
     }),
   };
 });
+
+vi.mock('@boolti/ui/src/hooks/useToast', () => ({
+  default: () => ({
+    error: mockErrorToast,
+    info: mockInfoToast,
+    success: mockSuccessToast,
+  }),
+}));
+
+vi.mock('@boolti/ui/src/components/PreviewMap/PreviewMapWithProvider', () => ({
+  default: () => {
+    if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
+    return <button type="button" aria-label="지도 앱에서 보기" />;
+  },
+}));
+
+vi.mock('@boolti/bridge', () => ({
+  checkIsWebView: () => false,
+  isWebViewBridgeAvailable: () => false,
+  showToast: vi.fn(),
+  TOAST_DURATIONS: { SHORT: 2000 },
+  viewPlacePhotoDetail: vi.fn(),
+  viewPlacePhotoList: vi.fn(),
+}));
 
 vi.mock('~/constants/ncp', () => ({ X_NCP_APIGW_API_KEY_ID: 'test-ncp-key' }));
 
@@ -129,7 +160,13 @@ const detail = {
       latitude: 37.55,
       longitude: 126.92,
     },
-    subwayStations: [{ stationName: '합정', lines: [{ lineName: '2호선', colorHex: '#00A84D' }] }],
+    subwayStations: [
+      {
+        id: 1,
+        stationName: '합정',
+        lines: [{ id: 2, lineName: '2호선', colorHex: '#00A84D' }],
+      },
+    ],
     contact: {
       phoneNumber: '02-123-4567',
       websiteUrl: 'https://alive.example.com',
@@ -192,7 +229,7 @@ const detail = {
     paidOptions: [{ id: 1, name: '음향 엔지니어', price: 50000 }],
     specialNotes: ['공연 2주 전 예약 확정이 필요합니다.'],
   },
-};
+} satisfies ConcertHallProfileResponse;
 
 const allImages = [
   {
@@ -254,6 +291,16 @@ const renderPlaceSearchPage = (initialEntry = '/place') =>
     </MemoryRouter>,
   );
 
+const renderStandaloneConcertHallProfile = (displayMode: 'home' | 'rental') =>
+  renderWithTheme(
+    <ConcertHallProfile
+      profile={detail}
+      displayMode={displayMode}
+      shareUrl="https://place.boolti.in/alive"
+      naverMapKey="test-ncp-key"
+    />,
+  );
+
 const openMobileFilterOverview = () => {
   fireEvent.click(screen.getByRole('button', { name: '모바일 공연장 검색 필터 열기' }));
 };
@@ -280,9 +327,7 @@ const getCssTextForElement = (element: Element, mediaCondition?: string) => {
       if ('cssRules' in rule) {
         visitRules(
           (rule as CSSMediaRule).cssRules,
-          'conditionText' in rule
-            ? (rule as CSSMediaRule).conditionText
-            : currentMediaCondition,
+          'conditionText' in rule ? (rule as CSSMediaRule).conditionText : currentMediaCondition,
         );
       }
 
@@ -363,13 +408,13 @@ describe('PlaceSearchPage', () => {
       isError: false,
       refetch: vi.fn(),
     });
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: detail,
       isLoading: false,
       isError: false,
       refetch: mockDetailRefetch,
     });
-    mockUseConcertHallSearchImages.mockReturnValue({
+    mockUseConcertHallImages.mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: false,
@@ -489,7 +534,7 @@ describe('PlaceSearchPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
-    expect(mockUseConcertHallSearchDetail).toHaveBeenLastCalledWith(1);
+    expect(mockUseConcertHallProfile).toHaveBeenLastCalledWith(1);
     expect(await screen.findByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
   });
 
@@ -509,12 +554,14 @@ describe('PlaceSearchPage', () => {
   });
 
   it('데스크탑에서 검색 폼을 Nav의 수평 중앙에 배치한다', () => {
-    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1440, writable: true });
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: 1440,
+      writable: true,
+    });
     renderPlaceSearchPage();
 
-    const searchForm = screen
-      .getByRole('textbox', { name: '지역, 공연장명 검색' })
-      .closest('form');
+    const searchForm = screen.getByRole('textbox', { name: '지역, 공연장명 검색' }).closest('form');
     const desktopMediaCondition = '(min-width: 1120px)';
 
     expect(searchForm).not.toBeNull();
@@ -596,7 +643,7 @@ describe('PlaceSearchPage', () => {
     expect(window.getComputedStyle(selectedCard).opacity).toBe('1');
     expect(window.getComputedStyle(unselectedCard).opacity).toBe('0.6');
 
-    fireEvent.click(await screen.findByRole('button', { name: '상세 닫기' }));
+    fireEvent.click(await screen.findByRole('button', { name: '뒤로' }));
 
     await waitFor(() => {
       expect(selectedCard.getAttribute('aria-pressed')).toBe('false');
@@ -612,7 +659,7 @@ describe('PlaceSearchPage', () => {
     const locationBeforeOpen = screen.getByTestId('location').textContent;
 
     fireEvent.click(selectedCard);
-    fireEvent.click(await screen.findByRole('button', { name: '상세 닫기' }));
+    fireEvent.click(await screen.findByRole('button', { name: '뒤로' }));
 
     await waitFor(() => expect(document.activeElement).toBe(selectedCard));
     expect(screen.getByTestId('location').textContent).toBe(locationBeforeOpen);
@@ -670,7 +717,7 @@ describe('PlaceSearchPage', () => {
     expect((highFeeSortButton as HTMLButtonElement).disabled).toBe(true);
     expect((mobileSortButton as HTMLButtonElement).disabled).toBe(false);
 
-    fireEvent.click(await screen.findByRole('button', { name: '상세 닫기' }));
+    fireEvent.click(await screen.findByRole('button', { name: '뒤로' }));
 
     await waitFor(() => {
       expect(window.getComputedStyle(sortGroup).opacity).toBe('1');
@@ -847,9 +894,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('대관료와 수용 인원 필터를 리스트 쿼리로 전달한다', async () => {
-    renderPlaceSearchPage(
-      '/place?rentalFeeMin=500000&capacityMin=50&sort=CAPACITY_DESC',
-    );
+    renderPlaceSearchPage('/place?rentalFeeMin=500000&capacityMin=50&sort=CAPACITY_DESC');
 
     const rentalFeeButton = screen.getByRole('button', { name: '대관료 500,000원 이상' });
     const capacityButton = screen.getByRole('button', { name: '수용 인원 50명 이상' });
@@ -932,19 +977,22 @@ describe('PlaceSearchPage', () => {
     );
   });
 
-  it.each([
-    '/place?regionId=1',
-    '/place?rentalFeeMin=500000',
-    '/place?capacityMin=50',
-  ])('모바일 검색 필터가 하나라도 있으면 전체 삭제를 활성화한다: %s', (initialEntry) => {
-    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
-    renderPlaceSearchPage(initialEntry);
-    openMobileFilterOverview();
+  it.each(['/place?regionId=1', '/place?rentalFeeMin=500000', '/place?capacityMin=50'])(
+    '모바일 검색 필터가 하나라도 있으면 전체 삭제를 활성화한다: %s',
+    (initialEntry) => {
+      Object.defineProperty(window, 'innerWidth', {
+        configurable: true,
+        value: 320,
+        writable: true,
+      });
+      renderPlaceSearchPage(initialEntry);
+      openMobileFilterOverview();
 
-    expect((screen.getByRole('button', { name: '전체 삭제' }) as HTMLButtonElement).disabled).toBe(
-      false,
-    );
-  });
+      expect(
+        (screen.getByRole('button', { name: '전체 삭제' }) as HTMLButtonElement).disabled,
+      ).toBe(false);
+    },
+  );
 
   it('모바일 필터 요약의 검색하기는 현재 필터를 적용하고 닫힘 애니메이션 뒤 시트를 닫는다', async () => {
     Object.defineProperty(window, 'innerWidth', { configurable: true, value: 320, writable: true });
@@ -1438,7 +1486,7 @@ describe('PlaceSearchPage', () => {
     expect(mockUseConcertHallSearchList).toHaveBeenLastCalledWith(
       expect.objectContaining({ keyword: '[DEV] 홍대 볼티 라이브홀', regionId: undefined }),
     );
-    expect(mockUseConcertHallSearchDetail).toHaveBeenLastCalledWith(1);
+    expect(mockUseConcertHallProfile).toHaveBeenLastCalledWith(1);
     vi.useRealTimers();
   });
 
@@ -1742,9 +1790,7 @@ describe('PlaceSearchPage', () => {
     fireEvent.click(screen.getByLabelText('홍대 검색'));
 
     expect((keywordInput as HTMLInputElement).value).toBe('홍대');
-    expect(screen.getByTestId('location').textContent).toBe(
-      '/place?keyword=%ED%99%8D%EB%8C%80',
-    );
+    expect(screen.getByTestId('location').textContent).toBe('/place?keyword=%ED%99%8D%EB%8C%80');
     expect(document.activeElement).toBe(screen.getByLabelText('대관료 최소'));
     fireEvent.click(screen.getByRole('button', { name: '검색' }));
 
@@ -1796,7 +1842,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('상세 정보를 불러오는 동안 로딩 상태를 표시한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: undefined,
       isLoading: true,
       isError: false,
@@ -1807,6 +1853,89 @@ describe('PlaceSearchPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
     expect(await screen.findByText('공연장 상세 정보를 불러오는 중입니다.')).not.toBeNull();
+  });
+
+  it('공유 공연장 프로필의 home 모드는 홈 콘텐츠와 면책 문구만 표시한다', () => {
+    renderStandaloneConcertHallProfile('home');
+
+    expect(screen.getByText(/홍대 인근의 라이브 공연장입니다/)).not.toBeNull();
+    expect(screen.getByRole('img', { name: '얼라이브홀 사진 1' })).not.toBeNull();
+    expect(screen.getByText(/2026\.08\.07/)).not.toBeNull();
+    expect(screen.queryByRole('tablist', { name: '공연장 상세 탭' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '공유하기' })).toBeNull();
+    expect(screen.queryByText('홈페이지 예약')).toBeNull();
+  });
+
+  it('미리보기 사진을 sequence 순으로 표시하고 프로필 배열은 변경하지 않는다', async () => {
+    const previewImages = [
+      {
+        id: 12,
+        imageUrl: 'https://example.com/audience.jpg',
+        thumbnailUrl: 'https://example.com/audience-thumb.jpg',
+        sequence: 2,
+      },
+      {
+        id: 11,
+        imageUrl: 'https://example.com/stage.jpg',
+        thumbnailUrl: 'https://example.com/stage-thumb.jpg',
+        sequence: 0,
+      },
+      {
+        id: 13,
+        imageUrl: 'https://example.com/lobby.jpg',
+        thumbnailUrl: 'https://example.com/lobby-thumb.jpg',
+        sequence: 1,
+      },
+    ];
+    mockUseConcertHallProfile.mockReturnValue({
+      data: {
+        ...detail,
+        home: { ...detail.home, images: previewImages, totalImageCount: previewImages.length },
+      },
+      isLoading: false,
+      isError: false,
+      refetch: mockDetailRefetch,
+    });
+
+    renderPlaceSearchPage();
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    await screen.findByRole('img', { name: '얼라이브홀 사진 1' });
+    expect(
+      screen
+        .getAllByRole('img', { name: /얼라이브홀 사진/ })
+        .map((image) => image.getAttribute('src')),
+    ).toEqual([
+      'https://example.com/stage-thumb.jpg',
+      'https://example.com/lobby-thumb.jpg',
+      'https://example.com/audience-thumb.jpg',
+    ]);
+    expect(previewImages.map((image) => image.id)).toEqual([12, 11, 13]);
+  });
+
+  it('공유 공연장 프로필의 rental 모드는 대관 콘텐츠와 면책 문구만 표시한다', () => {
+    renderStandaloneConcertHallProfile('rental');
+
+    expect(screen.getByText('홈페이지 예약')).not.toBeNull();
+    expect(screen.getByText('4시간')).not.toBeNull();
+    expect(screen.getByText('800,000원')).not.toBeNull();
+    expect(screen.getByText(/2026\.08\.07/)).not.toBeNull();
+    expect(screen.queryByRole('tablist', { name: '공연장 상세 탭' })).toBeNull();
+    expect(screen.queryByRole('button', { name: '공유하기' })).toBeNull();
+    expect(screen.queryByText(/홍대 인근의 라이브 공연장입니다/)).toBeNull();
+  });
+
+  it('공유 공연장 프로필의 헤더와 홈 콘텐츠를 표시하고 canonical hook을 사용한다', async () => {
+    renderPlaceSearchPage();
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    expect(await screen.findByRole('button', { name: '공유하기' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '웹사이트' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '전화' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '메일' })).not.toBeNull();
+    expect(screen.getByRole('img', { name: '얼라이브홀 사진 1' })).not.toBeNull();
+    expect(mockUseConcertHallProfile).toHaveBeenLastCalledWith(1);
   });
 
   it('데스크탑에서 상세 aside가 우측에서 슬라이드되어 나타난다', async () => {
@@ -1831,7 +1960,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('상세 정보 조회 실패 상태를 표시한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: true,
@@ -1848,7 +1977,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('탭 데이터가 없으면 Coming Soon과 정보 갱신일을 표시한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: { ...detail, hasHomeTabData: false, hasRentalTabData: false },
       isLoading: false,
       isError: false,
@@ -1864,7 +1993,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('주소를 복사하고 누락된 연락처를 선택하면 안내한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: {
         ...detail,
         head: {
@@ -1879,24 +2008,24 @@ describe('PlaceSearchPage', () => {
     renderPlaceSearchPage();
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
-    fireEvent.click(await screen.findByRole('button', { name: '복사' }));
+    fireEvent.click(await screen.findByRole('button', { name: /서울 마포구.*복사/ }));
     await waitFor(() => {
       expect(mockWriteText).toHaveBeenCalledWith('서울 마포구 와우산로 지하 1층');
     });
-    fireEvent.click(screen.getByRole('button', { name: '전화 걸기' }));
-    expect(mockInfoToast).toHaveBeenCalledWith('등록된 연락처 정보가 없어요.');
+    fireEvent.click(screen.getByRole('button', { name: '전화' }));
+    expect(mockInfoToast).toHaveBeenCalledWith('전화 정보를 준비 중이에요.');
   });
 
   it('공유 버튼으로 공연장 링크를 복사한다', async () => {
     renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
-    fireEvent.click(await screen.findByRole('button', { name: '공연장 링크 공유' }));
+    fireEvent.click(await screen.findByRole('button', { name: '공유하기' }));
 
     await waitFor(() => {
       expect(mockWriteText).toHaveBeenCalledWith('https://place.boolti.in/alive');
     });
-    expect(mockSuccessToast).toHaveBeenCalledWith('공연장 링크를 복사했어요.');
+    expect(mockSuccessToast).toHaveBeenCalledWith('링크를 복사했어요.');
   });
 
   it('공유 API를 지원하면 공연장 공개 프로필을 네이티브 공유한다', async () => {
@@ -1908,7 +2037,7 @@ describe('PlaceSearchPage', () => {
     renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
-    fireEvent.click(await screen.findByRole('button', { name: '공연장 링크 공유' }));
+    fireEvent.click(await screen.findByRole('button', { name: '공유하기' }));
 
     await waitFor(() => {
       expect(mockShare).toHaveBeenCalledWith({
@@ -1930,14 +2059,14 @@ describe('PlaceSearchPage', () => {
 
     expect(await screen.findByRole('tab', { name: '홈' })).not.toBeNull();
     expect(screen.getByRole('tab', { name: '대관 정보' })).not.toBeNull();
-    expect(screen.getByRole('button', { name: '웹사이트 열기' })).not.toBeNull();
-    expect(screen.getByRole('button', { name: '전화 걸기' })).not.toBeNull();
-    expect(screen.getByRole('button', { name: '메일 보내기' })).not.toBeNull();
-    expect(await screen.findByLabelText('합정 2호선')).not.toBeNull();
-    expect(screen.getByLabelText('얼라이브홀 지도')).not.toBeNull();
+    expect(screen.getByRole('button', { name: '웹사이트' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '전화' })).not.toBeNull();
+    expect(screen.getByRole('button', { name: '메일' })).not.toBeNull();
+    expect(screen.getByText('합정')).not.toBeNull();
+    expect(screen.getByText('2')).not.toBeNull();
     expect(screen.getByRole('button', { name: '지도 앱에서 보기' })).not.toBeNull();
     expect(screen.getByText('평일 800,000원~')).not.toBeNull();
-    expect(screen.getAllByText('좌석 80석 · 스탠딩 100명')).toHaveLength(2);
+    expect(screen.getByText('좌석 80석 / 스탠딩 100명')).not.toBeNull();
 
     const introduction = screen.getByText(/대기실과 관객 동선이 분리/);
     expect(window.getComputedStyle(introduction.parentElement as HTMLElement).maxHeight).toBe(
@@ -1949,18 +2078,18 @@ describe('PlaceSearchPage', () => {
     );
 
     expect(screen.queryByRole('dialog', { name: '얼라이브홀 사진 갤러리' })).toBeNull();
-    mockUseConcertHallSearchImages.mockReturnValue({
+    mockUseConcertHallImages.mockReturnValue({
       data: { items: allImages },
       isLoading: false,
       isError: false,
     });
     fireEvent.click(screen.getByRole('button', { name: '사진 1장 더 보기' }));
     await waitFor(() => {
-      expect(mockUseConcertHallSearchImages).toHaveBeenLastCalledWith(1, true);
+      expect(mockUseConcertHallImages).toHaveBeenLastCalledWith(1, true);
     });
-    expect(screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' })).not.toBeNull();
+    const galleryDialog = screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' });
     expect(screen.getByRole('button', { name: '사진 6 크게 보기' })).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: '갤러리 닫기' }));
+    fireEvent.click(within(galleryDialog).getByRole('button', { name: '뒤로' }));
 
     fireEvent.click(screen.getByRole('tab', { name: '대관 정보' }));
     expect(screen.getByText('홈페이지 예약')).not.toBeNull();
@@ -1972,17 +2101,23 @@ describe('PlaceSearchPage', () => {
     expect(screen.getByText('50,000원')).not.toBeNull();
   });
 
-  it('대관 정보를 박스와 요금 행 구조로 표시한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+  it('대관 정보를 표시 순서에 맞게 렌더링하고 프로필 요금 배열은 변경하지 않는다', async () => {
+    const rentalFees = [
+      { id: 2, dayType: 'WEEKEND', dayTypeName: '주말', fee: 1000000, sequence: 1 },
+      { id: 1, dayType: 'WEEKDAY', dayTypeName: '평일', fee: 800000, sequence: 0 },
+    ] as const;
+    const additionalFees = [
+      { id: 3, dayType: 'HOLIDAY', dayTypeName: '공휴일', fee: 1200000, sequence: 1 },
+      { id: 2, dayType: 'WEEKEND', dayTypeName: '주말', fee: 1000000, sequence: 0 },
+    ] as const;
+    mockUseConcertHallProfile.mockReturnValue({
       data: {
         ...detail,
         rental: {
           ...detail.rental,
           rentalMethod: '홈페이지 예약\n담당자 확인 후 확정',
-          rentalFees: [
-            { id: 2, dayType: 'WEEKEND', dayTypeName: '주말', fee: 1000000, sequence: 1 },
-            { id: 1, dayType: 'WEEKDAY', dayTypeName: '평일', fee: 800000, sequence: 0 },
-          ],
+          rentalFees,
+          additionalFees,
         },
       },
       isLoading: false,
@@ -1998,9 +2133,24 @@ describe('PlaceSearchPage', () => {
     expect(screen.getByText('4시간 기준')).not.toBeNull();
     expect(screen.getByText('4시간')).not.toBeNull();
     expect(screen.getByText('부가세 별도')).not.toBeNull();
-    expect(screen.getByText('평일').compareDocumentPosition(screen.getAllByText('주말')[0])).toBe(
-      Node.DOCUMENT_POSITION_FOLLOWING,
-    );
+    const rentalFeeSection = screen.getByRole('heading', { name: '대관료' }).closest('section');
+    const additionalFeeSection = screen
+      .getByRole('heading', { name: '시간당 추가 요금' })
+      .closest('section');
+    expect(rentalFeeSection).not.toBeNull();
+    expect(additionalFeeSection).not.toBeNull();
+    expect(
+      within(rentalFeeSection as HTMLElement)
+        .getByText('평일')
+        .compareDocumentPosition(within(rentalFeeSection as HTMLElement).getByText('주말')),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(
+      within(additionalFeeSection as HTMLElement)
+        .getByText('주말')
+        .compareDocumentPosition(within(additionalFeeSection as HTMLElement).getByText('공휴일')),
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+    expect(rentalFees.map((fee) => fee.id)).toEqual([2, 1]);
+    expect(additionalFees.map((fee) => fee.id)).toEqual([3, 2]);
     expect(screen.getByText('800,000원')).not.toBeNull();
     expect(screen.getByText('1,000,000원 / 1시간')).not.toBeNull();
     expect(screen.getByText('대관 시간 외 별도 시간 추가 시 발생하는 비용입니다.')).not.toBeNull();
@@ -2009,12 +2159,12 @@ describe('PlaceSearchPage', () => {
     expect(screen.getByText('공연 2주 전 예약 확정이 필요합니다.').closest('li')).not.toBeNull();
   });
 
-  it('대관 데이터가 있으면 플래그가 없어도 대관 정보를 표시한다', async () => {
+  it('대관 데이터가 있으면 탭 플래그가 없어도 대관 정보를 표시한다', async () => {
     const detailWithoutRentalFlag = {
       ...detail,
       hasRentalTabData: undefined,
     };
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: detailWithoutRentalFlag,
       isLoading: false,
       isError: false,
@@ -2048,7 +2198,7 @@ describe('PlaceSearchPage', () => {
   });
 
   it('대관 데이터가 일부만 있으면 값이 있는 섹션만 표시한다', async () => {
-    mockUseConcertHallSearchDetail.mockReturnValue({
+    mockUseConcertHallProfile.mockReturnValue({
       data: {
         ...detail,
         rental: {
@@ -2070,11 +2220,90 @@ describe('PlaceSearchPage', () => {
     expect(screen.queryByRole('heading', { name: '보유 악기' })).toBeNull();
   });
 
-  it('갤러리 실패를 재시도하고 Escape로 갤러리와 상세를 순서대로 닫는다', async () => {
-    mockUseConcertHallSearchImages.mockReturnValue({
+  it('갤러리 사진을 불러오는 동안 로딩 상태를 표시한다', async () => {
+    mockUseConcertHallImages.mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      isError: false,
+      refetch: mockImagesRefetch,
+    });
+    renderPlaceSearchPage();
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    fireEvent.click(await screen.findByRole('button', { name: '사진 1장 더 보기' }));
+    const galleryDialog = screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' });
+
+    expect(within(galleryDialog).getByText('사진을 불러오는 중입니다.')).not.toBeNull();
+  });
+
+  it('갤러리 사진 조회 실패를 안내하고 다시 시도한다', async () => {
+    mockUseConcertHallImages.mockReturnValue({
       data: undefined,
       isLoading: false,
       isError: true,
+      refetch: mockImagesRefetch,
+    });
+    renderPlaceSearchPage();
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    fireEvent.click(await screen.findByRole('button', { name: '사진 1장 더 보기' }));
+    const galleryDialog = screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' });
+
+    expect(within(galleryDialog).getByText('사진을 불러오지 못했어요.')).not.toBeNull();
+    fireEvent.click(within(galleryDialog).getByRole('button', { name: '다시 시도' }));
+    expect(mockImagesRefetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('전체 갤러리 사진을 sequence 순으로 표시하고 쿼리 배열은 변경하지 않는다', async () => {
+    const galleryImages = [
+      {
+        id: 16,
+        imageUrl: 'https://example.com/booth.jpg',
+        thumbnailUrl: 'https://example.com/booth-thumb.jpg',
+        sequence: 2,
+      },
+      {
+        id: 14,
+        imageUrl: 'https://example.com/waiting.jpg',
+        thumbnailUrl: 'https://example.com/waiting-thumb.jpg',
+        sequence: 0,
+      },
+      {
+        id: 15,
+        imageUrl: 'https://example.com/light.jpg',
+        thumbnailUrl: 'https://example.com/light-thumb.jpg',
+        sequence: 1,
+      },
+    ];
+    mockUseConcertHallImages.mockReturnValue({
+      data: { items: galleryImages },
+      isLoading: false,
+      isError: false,
+      refetch: mockImagesRefetch,
+    });
+    renderPlaceSearchPage();
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    fireEvent.click(await screen.findByRole('button', { name: '사진 1장 더 보기' }));
+    const galleryDialog = screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' });
+
+    expect(
+      within(galleryDialog)
+        .getAllByRole('img', { name: /얼라이브홀 사진/ })
+        .map((image) => image.getAttribute('src')),
+    ).toEqual([
+      'https://example.com/waiting-thumb.jpg',
+      'https://example.com/light-thumb.jpg',
+      'https://example.com/booth-thumb.jpg',
+    ]);
+    expect(galleryImages.map((image) => image.id)).toEqual([16, 14, 15]);
+  });
+
+  it('Escape로 갤러리 뷰어와 목록, 상세를 순서대로 닫고 마지막에 스크롤을 복원한다', async () => {
+    mockUseConcertHallImages.mockReturnValue({
+      data: { items: allImages },
+      isLoading: false,
+      isError: false,
       refetch: mockImagesRefetch,
     });
     renderPlaceSearchPage();
@@ -2083,26 +2312,31 @@ describe('PlaceSearchPage', () => {
 
     expect(document.body.style.overflow).toBe('hidden');
     fireEvent.click(await screen.findByRole('button', { name: '사진 1장 더 보기' }));
-    expect(await screen.findByText('사진을 불러오지 못했어요.')).not.toBeNull();
-    fireEvent.click(screen.getByRole('button', { name: '다시 시도' }));
-    expect(mockImagesRefetch).toHaveBeenCalledTimes(1);
+    const galleryDialog = screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' });
+    fireEvent.click(within(galleryDialog).getByRole('button', { name: '사진 1 크게 보기' }));
+    expect(within(galleryDialog).getByRole('button', { name: '닫기' })).not.toBeNull();
 
+    fireEvent.keyDown(window, { key: 'Escape' });
+    expect(screen.getByRole('dialog', { name: '얼라이브홀 사진 갤러리' })).not.toBeNull();
+    expect(within(galleryDialog).queryByRole('button', { name: '닫기' })).toBeNull();
+    expect(document.body.style.overflow).toBe('hidden');
     fireEvent.keyDown(window, { key: 'Escape' });
     expect(screen.queryByRole('dialog', { name: '얼라이브홀 사진 갤러리' })).toBeNull();
     expect(screen.getByRole('complementary')).not.toBeNull();
+    expect(document.body.style.overflow).toBe('hidden');
     fireEvent.keyDown(window, { key: 'Escape' });
     await waitFor(() => expect(screen.queryByRole('complementary')).toBeNull());
     expect(document.body.style.overflow).toBe('');
     await waitFor(() => expect(document.activeElement).toBe(selectedCard));
   });
 
-  it('알 수 없는 지하철 노선 키가 와도 노선명으로 상세 정보를 표시한다', async () => {
+  it('알 수 없는 지하철 노선 키가 와도 노선 배지와 역명을 표시한다', async () => {
     renderPlaceSearchPage();
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
-    expect(await screen.findByLabelText('합정 2호선')).not.toBeNull();
-    expect(screen.getByText('2호선')).not.toBeNull();
+    expect(await screen.findByText('합정')).not.toBeNull();
+    expect(screen.getByText('2')).not.toBeNull();
   });
 
   it('상세 배경을 클릭하면 상세 패널을 닫는다', async () => {
