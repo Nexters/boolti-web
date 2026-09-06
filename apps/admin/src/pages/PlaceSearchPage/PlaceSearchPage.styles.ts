@@ -792,6 +792,8 @@ const ResultsPane = styled.section<{ $detailPanelOpen: boolean }>`
 const ResultsPaneHeader = styled.div<{ $detailPanelOpen: boolean }>`
   position: sticky;
   top: 148px;
+  z-index: 31;
+  background: ${({ theme }) => theme.palette.grey.b};
 
   ${mq_xl} {
     position: sticky;

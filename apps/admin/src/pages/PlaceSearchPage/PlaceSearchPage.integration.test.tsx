@@ -739,6 +739,24 @@ describe('PlaceSearchPage', () => {
     );
   });
 
+  it('상세 패널이 열리면 목록 sticky 헤더가 목록 배경으로 카드를 가린다', () => {
+    Object.defineProperty(window, 'innerWidth', { configurable: true, value: 1440, writable: true });
+    renderPlaceSearchPage();
+
+    fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
+
+    const infoButton = screen.getByRole('button', { name: '공연장 검색 안내' });
+    const resultsPaneHeader = infoButton.parentElement?.parentElement?.parentElement;
+    const expectedBackground = document.createElement('div');
+    expectedBackground.style.background = theme.palette.grey.b;
+
+    expect(resultsPaneHeader).not.toBeNull();
+    expect(window.getComputedStyle(resultsPaneHeader as HTMLElement).backgroundColor).toBe(
+      expectedBackground.style.backgroundColor,
+    );
+    expect(window.getComputedStyle(resultsPaneHeader as HTMLElement).zIndex).toBe('31');
+  });
+
   it('미등록 대관료와 nullable 카드 정보는 정보 없음으로 표시한다', () => {
     mockUseConcertHallSearchList.mockReturnValue({
       data: {
