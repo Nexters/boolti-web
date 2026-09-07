@@ -144,8 +144,9 @@ const HallHead = ({
                       {station.lines.map((line) => (
                         <SubwayLineBadge
                           key={line.id ?? line.lineName}
-                          lineName={line.lineName}
+                          lineLabel={line.lineLabel}
                           colorHex={line.colorHex}
+                          textColorHex={line.textColorHex}
                         />
                       ))}
                       <Styled.SubwayStationName>{station.stationName}</Styled.SubwayStationName>

@@ -76,8 +76,9 @@ const SubwayStationSearchModal = ({ open, onClose, onSelect }: SubwayStationSear
               {station.lines.map((line) => (
                 <SubwayLineBadge
                   key={line.lineId}
-                  lineName={line.lineName}
+                  lineLabel={line.lineLabel}
                   colorHex={line.colorHex}
+                  textColorHex={line.textColorHex}
                   size="small"
                 />
               ))}

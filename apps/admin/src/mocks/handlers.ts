@@ -65,7 +65,7 @@ const concertHallSearchRecords = [
   {
     regionId: 1,
     streetAddress: '서울 마포구 와우산로',
-    subwayStations: [{ stationName: '합정', lines: [{ lineName: '2호선', colorHex: '#00A84D' }] }],
+    subwayStations: [{ stationName: '합정', lines: [{ id: 26, lineKey: 'SEOUL_LINE_2', lineName: '수도권 2호선', lineLabel: '2', colorHex: '#0CA34A', textColorHex: '#FFFFFF' }] }],
     item: {
       concertHallId: 1,
       name: '얼라이브홀',
@@ -80,7 +80,7 @@ const concertHallSearchRecords = [
   {
     regionId: 2,
     streetAddress: '서울 서대문구 연세로',
-    subwayStations: [{ stationName: '신촌', lines: [{ lineName: '2호선', colorHex: '#00A84D' }] }],
+    subwayStations: [{ stationName: '신촌', lines: [{ id: 26, lineKey: 'SEOUL_LINE_2', lineName: '수도권 2호선', lineLabel: '2', colorHex: '#0CA34A', textColorHex: '#FFFFFF' }] }],
     item: {
       concertHallId: 2,
       name: '신촌아리수스트로공연장',
