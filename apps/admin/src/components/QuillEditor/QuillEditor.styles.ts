@@ -32,6 +32,8 @@ const Container = styled.div<{ error?: boolean; readOnly?: boolean }>`
   .ql-editor {
     user-select: text !important;
     -webkit-user-select: text !important;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     
     p,
     ul,
