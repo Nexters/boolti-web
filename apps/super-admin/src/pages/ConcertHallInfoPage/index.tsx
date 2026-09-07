@@ -520,8 +520,9 @@ const ConcertHallInfoPage = () => {
                         {station.lines.map((line) => (
                           <SubwayLineBadge
                             key={line.lineId}
-                            lineName={line.lineName}
+                            lineLabel={line.lineLabel}
                             colorHex={line.colorHex}
+                            textColorHex={line.textColorHex}
                             size="small"
                           />
                         ))}

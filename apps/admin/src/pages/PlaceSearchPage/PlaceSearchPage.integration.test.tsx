@@ -61,7 +61,7 @@ vi.mock('@boolti/ui', async () => {
       if (shouldSuspendPreviewMap) throw pendingPreviewMapPromise;
       return <button type="button" aria-label="지도 앱에서 보기" />;
     },
-    SubwayLineBadge: ({ lineName }: { lineName: string }) => <span>{lineName}</span>,
+    SubwayLineBadge: ({ lineLabel }: { lineLabel: string }) => <span>{lineLabel}</span>,
     useToast: () => ({
       error: mockErrorToast,
       info: mockInfoToast,
@@ -164,7 +164,7 @@ const detail = {
       {
         id: 1,
         stationName: '합정',
-        lines: [{ id: 2, lineName: '2호선', colorHex: '#00A84D' }],
+        lines: [{ id: 2, lineKey: 'SEOUL_LINE_2', lineName: '수도권 2호선', lineLabel: '2', colorHex: '#0CA34A', textColorHex: '#FFFFFF' }],
       },
     ],
     contact: {

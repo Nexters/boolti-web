@@ -30,9 +30,16 @@ export interface ConcertHallCapacity {
 
 export interface ConcertHallSubwayLine {
   id: number;
-  lineKey?: string;
+  /** 노선 키 (예: "SEOUL_LINE_2") */
+  lineKey: string;
+  /** 노선 풀네임 (예: "수도권 2호선") */
   lineName: string;
+  /** 노선 표시명 (예: "2"). 뱃지에 노출한다. */
+  lineLabel: string;
+  /** 노선 배경 색상 (#rrggbb) */
   colorHex: string;
+  /** 노선 라벨 텍스트 색상 (#rrggbb) */
+  textColorHex: string;
 }
 
 export interface ConcertHallSubwayStation {
