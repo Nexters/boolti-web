@@ -31,6 +31,8 @@ import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastIn
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { TempShowCastInfoFormInput } from '~/components/ShowCastInfoFormDialogContent';
 import { ShareBanner } from '~/components/ShareBanner';
+import useShowSubmissionErrorToast from '~/hooks/useShowSubmissionErrorToast';
+import { sanitizeShowNotice } from '~/utils/sanitizeShowNotice';
 
 const ShowInfoPage = () => {
   const params = useParams<{ showId: string }>();
@@ -77,6 +79,7 @@ const ShowInfoPage = () => {
 
   const toast = useToast();
   const confirm = useConfirm();
+  const showSubmissionErrorToast = useShowSubmissionErrorToast('edit');
 
   const setMiddleware = useSetAtom(middlewareAtom);
 
@@ -88,72 +91,76 @@ const ShowInfoPage = () => {
   const submitHandler = useCallback(async () => {
     if (!show) return;
 
-    const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
-    const newShowImages = await (async () => {
-      if (newImageFiles.length === 0) return [];
+    try {
+      const newImageFiles = imageFiles.filter((file) => file.preview.startsWith('blob:'));
+      const newShowImages = await (async () => {
+        if (newImageFiles.length === 0) return [];
 
-      return await uploadShowImageMutation.mutateAsync(newImageFiles);
-    })();
+        return await uploadShowImageMutation.mutateAsync(newImageFiles);
+      })();
 
-    const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
-      showBasicInfoForm.trigger(),
-      showDetailInfoForm.trigger(),
-    ]);
+      const [isValidShowBasicInfoFormInputs, isValidShowDetailInfoFormInputs] = await Promise.all([
+        showBasicInfoForm.trigger(),
+        showDetailInfoForm.trigger(),
+      ]);
 
-    if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
+      if (!isValidShowBasicInfoFormInputs || !isValidShowDetailInfoFormInputs) return;
 
-    const showBasicInfoFormInputs = showBasicInfoForm.getValues();
-    const showDetailInfoFormInputs = showDetailInfoForm.getValues();
-    const castTeams =
-      castTeamListDraft?.map((team) => ({
-        id: team.id >= 0 ? team.id : undefined,
-        name: team.name,
-        members: team.members?.map((member) => ({
-          id: member.id >= 0 ? member.id : undefined,
-          roleName: member.roleName ?? '',
-          userCode: member.userCode ?? '',
-        })),
-      })) ?? [];
-
-    await editShowInfoMutation.mutateAsync(
-      {
-        showId,
-        body: {
-          name: showBasicInfoFormInputs.name,
-          images: [...showImages, ...newShowImages].map((image, index) => ({
-            sequence: index + 1,
-            thumbnailPath: image.thumbnailPath,
-            path: image.path,
+      const showBasicInfoFormInputs = showBasicInfoForm.getValues();
+      const showDetailInfoFormInputs = showDetailInfoForm.getValues();
+      const castTeams =
+        castTeamListDraft?.map((team) => ({
+          id: team.id >= 0 ? team.id : undefined,
+          name: team.name,
+          members: team.members?.map((member) => ({
+            id: member.id >= 0 ? member.id : undefined,
+            roleName: member.roleName ?? '',
+            userCode: member.userCode ?? '',
           })),
-          latitude: showBasicInfoForm.getValues('latitude'),
-          longitude: showBasicInfoForm.getValues('longitude'),
-          concertHallId: showBasicInfoForm.getValues('concertHallId'),
-          date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
-          runningTime: +showBasicInfoFormInputs.runningTime,
-          place: {
-            name: showBasicInfoFormInputs.placeName,
-            streetAddress: showBasicInfoFormInputs.placeStreetAddress,
-            detailAddress: showBasicInfoFormInputs.placeDetailAddress,
-          },
-          notice: showDetailInfoFormInputs.notice,
-          host: {
-            name: showDetailInfoFormInputs.hostName,
-            phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
-          },
-          castTeams,
-        },
-      },
-      {
-        onSuccess: () => {
-          refetchShowDetail();
-          refetchShowSalesInfo();
-          refetchCastTeamList();
+        })) ?? [];
 
-          toast.success('공연 정보를 저장했습니다.');
-          setPreviewDrawerOpen(false);
+      await editShowInfoMutation.mutateAsync(
+        {
+          showId,
+          body: {
+            name: showBasicInfoFormInputs.name,
+            images: [...showImages, ...newShowImages].map((image, index) => ({
+              sequence: index + 1,
+              thumbnailPath: image.thumbnailPath,
+              path: image.path,
+            })),
+            latitude: showBasicInfoForm.getValues('latitude'),
+            longitude: showBasicInfoForm.getValues('longitude'),
+            concertHallId: showBasicInfoForm.getValues('concertHallId'),
+            date: `${showBasicInfoFormInputs.date}T${showBasicInfoFormInputs.startTime}:00.000Z`,
+            runningTime: +showBasicInfoFormInputs.runningTime,
+            place: {
+              name: showBasicInfoFormInputs.placeName,
+              streetAddress: showBasicInfoFormInputs.placeStreetAddress,
+              detailAddress: showBasicInfoFormInputs.placeDetailAddress,
+            },
+            notice: sanitizeShowNotice(showDetailInfoFormInputs.notice),
+            host: {
+              name: showDetailInfoFormInputs.hostName,
+              phoneNumber: showDetailInfoFormInputs.hostPhoneNumber,
+            },
+            castTeams,
+          },
         },
-      },
-    );
+        {
+          onSuccess: () => {
+            refetchShowDetail();
+            refetchShowSalesInfo();
+            refetchCastTeamList();
+
+            toast.success('공연 정보를 저장했습니다.');
+            setPreviewDrawerOpen(false);
+          },
+        },
+      );
+    } catch {
+      showSubmissionErrorToast();
+    }
   }, [
     castTeamListDraft,
     editShowInfoMutation,
@@ -166,6 +173,7 @@ const ShowInfoPage = () => {
     showDetailInfoForm,
     showId,
     showImages,
+    showSubmissionErrorToast,
     toast,
     uploadShowImageMutation,
   ]);

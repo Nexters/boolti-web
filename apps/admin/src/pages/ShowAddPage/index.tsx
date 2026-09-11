@@ -29,6 +29,8 @@ import {
   ShowSalesInfoFormInputs,
 } from '~/components/ShowInfoFormContent/types';
 import { HREF, PATH } from '~/constants/routes';
+import useShowSubmissionErrorToast from '~/hooks/useShowSubmissionErrorToast';
+import { sanitizeShowNotice } from '~/utils/sanitizeShowNotice';
 
 import Styled from './ShowAddPage.styles';
 import ShowCastInfoFormContent from '~/components/ShowInfoFormContent/ShowCastInfoFormContent';
@@ -84,6 +86,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
 
   const toast = useToast();
   const confirm = useConfirm();
+  const showSubmissionErrorToast = useShowSubmissionErrorToast('create');
 
   const onSuccessAddShow = (showId: number) => {
     if (isWebView && isWebViewBridgeAvailable()) {
@@ -111,7 +114,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
         streetAddress: showBasicInfoForm.getValues('placeStreetAddress'),
         detailAddress: showBasicInfoForm.getValues('placeDetailAddress'),
       },
-      notice: showDetailInfoForm.getValues('notice'),
+      notice: sanitizeShowNotice(showDetailInfoForm.getValues('notice')),
       host: {
         name: showDetailInfoForm.getValues('hostName'),
         phoneNumber: showDetailInfoForm.getValues('hostPhoneNumber'),
@@ -145,10 +148,17 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       return;
     }
 
-    const body = await getBasicBody();
-    const showId = await addNonTicketingShowMutation.mutateAsync({ ...body, isNonTicketing: true });
+    try {
+      const body = await getBasicBody();
+      const showId = await addNonTicketingShowMutation.mutateAsync({
+        ...body,
+        isNonTicketing: true,
+      });
 
-    onSuccessAddShow(showId);
+      onSuccessAddShow(showId);
+    } catch {
+      showSubmissionErrorToast();
+    }
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
@@ -167,36 +177,40 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       return;
     }
 
-    const body = await getBasicBody();
-    const ticketBody = {
-      salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
-      salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
-      ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
-      salesTickets: salesTicketList.map((ticket) => ({
-        ticketName: ticket.name,
-        price: ticket.price,
-        totalForSale: ticket.quantity,
-      })),
-      invitationTickets: invitationTicketList.map((ticket) => ({
-        ticketName: ticket.name,
-        totalForSale: ticket.quantity,
-      })),
-      ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
-        ? {
-            preQuestions: preQuestionList
-              .filter((q) => q.questionText.trim())
-              .map((preQuestion, index) => ({
-                questionText: preQuestion.questionText,
-                description: preQuestion.description ?? '',
-                isRequired: preQuestion.isRequired,
-                sequence: index + 1,
-              })),
-          }
-        : {}),
-    };
-    const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
+    try {
+      const body = await getBasicBody();
+      const ticketBody = {
+        salesStartTime: `${showSalesInfoForm.getValues('startDate')}T00:00:00.000Z`,
+        salesEndTime: `${showSalesInfoForm.getValues('endDate')}T23:59:59.000Z`,
+        ticketNotice: `${showSalesInfoForm.getValues('ticketNotice') ?? ''}`,
+        salesTickets: salesTicketList.map((ticket) => ({
+          ticketName: ticket.name,
+          price: ticket.price,
+          totalForSale: ticket.quantity,
+        })),
+        invitationTickets: invitationTicketList.map((ticket) => ({
+          ticketName: ticket.name,
+          totalForSale: ticket.quantity,
+        })),
+        ...(preQuestionList.filter((q) => q.questionText.trim()).length > 0
+          ? {
+              preQuestions: preQuestionList
+                .filter((q) => q.questionText.trim())
+                .map((preQuestion, index) => ({
+                  questionText: preQuestion.questionText,
+                  description: preQuestion.description ?? '',
+                  isRequired: preQuestion.isRequired,
+                  sequence: index + 1,
+                })),
+            }
+          : {}),
+      };
+      const showId = await addShowMutation.mutateAsync({ ...body, ...ticketBody });
 
-    onSuccessAddShow(showId);
+      onSuccessAddShow(showId);
+    } catch {
+      showSubmissionErrorToast();
+    }
   };
 
   const basicStepContent = (
@@ -332,13 +346,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                 toast.success('일반 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
-                const result = await confirm(
-                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
-                  {
-                    cancel: '취소하기',
-                    confirm: '삭제하기',
-                  },
-                );
+                const result = await confirm('삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?', {
+                  cancel: '취소하기',
+                  confirm: '삭제하기',
+                });
 
                 if (!result) return;
 
@@ -371,13 +382,10 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
                 toast.success('초청 티켓을 생성했어요.');
               }}
               onDeleteTicket={async (ticket) => {
-                const result = await confirm(
-                  '삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?',
-                  {
-                    cancel: '취소하기',
-                    confirm: '삭제하기',
-                  },
-                );
+                const result = await confirm('삭제한 티켓은 복구할 수 없어요. 삭제하시겠어요?', {
+                  cancel: '취소하기',
+                  confirm: '삭제하기',
+                });
 
                 if (!result) return;
 
