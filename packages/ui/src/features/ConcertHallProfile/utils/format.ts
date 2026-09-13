@@ -17,14 +17,15 @@ export const formatUpdatedAt = (iso?: string) => {
   return `${date.getFullYear()}.${month}.${day}`;
 };
 
+// 0은 미입력으로 간주해 노출하지 않는다. (어드민도 "1명 이상 입력 시 노출" 기준)
 export const formatCapacity = (capacity?: ConcertHallCapacity) => {
   const parts: string[] = [];
 
-  if (capacity?.seatedCapacity != null) {
+  if (capacity?.seatedCapacity) {
     parts.push(`좌석 ${capacity.seatedCapacity.toLocaleString()}석`);
   }
 
-  if (capacity?.standingCapacity != null) {
+  if (capacity?.standingCapacity) {
     parts.push(`스탠딩 ${capacity.standingCapacity.toLocaleString()}명`);
   }
 

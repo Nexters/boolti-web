@@ -6,7 +6,7 @@ import ConcertHallNavigation from '../ConcertHallNavigation/ConcertHallNavigatio
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { pathname } = useLocation();
   const isShowRoute = pathname.startsWith('/show/');
-  const isConcertHallRoute = pathname.startsWith('/concert-hall/');
+  const isConcertHallRoute = pathname.startsWith('/place/');
 
   return (
     <>

@@ -101,8 +101,9 @@ const ConcertHallRentalPage = () => {
   const [hourlyFees, setHourlyFees] = useState<FeeRow[]>([{}]);
 
   // 공간 스펙
-  const [seatedCapacity, setSeatedCapacity] = useState<number>(0);
-  const [standingCapacity, setStandingCapacity] = useState<number>(0);
+  // 미입력과 0을 구분해야 한다. 0으로 초기화하면 입력하지 않은 공연장도 0명으로 저장된다.
+  const [seatedCapacity, setSeatedCapacity] = useState<number>();
+  const [standingCapacity, setStandingCapacity] = useState<number>();
   const [instrumentsText, setInstrumentsText] = useState('');
 
   // 유료 옵션 / 특이사항
@@ -117,8 +118,8 @@ const ConcertHallRentalPage = () => {
     setRentalTimeHours(rental.rentalTime?.rentalTimeHours ?? 0);
     setIsEngineerBreakIncluded(rental.rentalTime?.isEngineerBreakIncluded ?? false);
     setVatType(rental.vatType ?? 'NONE');
-    setSeatedCapacity(rental.capacity?.seatedCapacity ?? 0);
-    setStandingCapacity(rental.capacity?.standingCapacity ?? 0);
+    setSeatedCapacity(rental.capacity?.seatedCapacity);
+    setStandingCapacity(rental.capacity?.standingCapacity);
     setInstrumentsText(rental.instrumentsText ?? '');
     setSpecialNotes(rental.specialNotes?.length ? rental.specialNotes : ['']);
 
@@ -345,7 +346,7 @@ const ConcertHallRentalPage = () => {
                     min={0}
                     style={{ width: '100%' }}
                     value={seatedCapacity}
-                    onChange={(value) => setSeatedCapacity(value ?? 0)}
+                    onChange={(value) => setSeatedCapacity(value ?? undefined)}
                   />
                   <Typography.Text>명</Typography.Text>
                 </Flex>
@@ -358,7 +359,7 @@ const ConcertHallRentalPage = () => {
                     min={0}
                     style={{ width: '100%' }}
                     value={standingCapacity}
-                    onChange={(value) => setStandingCapacity(value ?? 0)}
+                    onChange={(value) => setStandingCapacity(value ?? undefined)}
                   />
                   <Typography.Text>명</Typography.Text>
                 </Flex>

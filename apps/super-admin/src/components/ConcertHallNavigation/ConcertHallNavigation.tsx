@@ -1,15 +1,19 @@
 import { ArrowLeftIcon } from '@boolti/icon';
 import { useSuperAdminConcertHallDetail } from '@boolti/api';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
-import { HREF, PATH } from '~/constants/routes';
+import { HREF } from '~/constants/routes';
 import { ConcertHallDataIcon, ConcertHallInfoIcon, ConcertHallRentalIcon } from './icons';
 import Styled from './ConcertHallNavigation.styles';
 
 const ConcertHallNavigation = () => {
   const params = useParams<{ hallId: string }>();
+  const location = useLocation();
   const hallId = Number(params.hallId);
   const { data: concertHall } = useSuperAdminConcertHallDetail(hallId);
+
+  // 목록에서 진입했다면 그때의 검색어/페이지를 그대로 살려 돌아간다.
+  const from = (location.state as { from?: string } | null)?.from;
 
   const navigationItems = [
     { label: '공연장 정보', icon: <ConcertHallInfoIcon />, link: HREF.CONCERT_HALL_INFO(hallId) },
@@ -26,7 +30,7 @@ const ConcertHallNavigation = () => {
         <Styled.MenuItemList>
           {navigationItems.map((item) => (
             <Styled.MenuItem key={item.label}>
-              <Styled.MenuLink to={item.link}>
+              <Styled.MenuLink to={item.link} state={location.state}>
                 {item.icon}
                 {item.label}
               </Styled.MenuLink>
@@ -36,8 +40,8 @@ const ConcertHallNavigation = () => {
       </Styled.Navigation>
 
       <Styled.Footer>
-        <Styled.HomeButton to={PATH.INDEX}>
-          <ArrowLeftIcon /> <span style={{ paddingLeft: '8px' }}>슈퍼 어드민 홈</span>
+        <Styled.HomeButton to={from ?? HREF.CONCERT_HALL_LIST()}>
+          <ArrowLeftIcon /> <span style={{ paddingLeft: '8px' }}>공연장 홈</span>
         </Styled.HomeButton>
       </Styled.Footer>
     </Styled.Container>
