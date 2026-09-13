@@ -13163,6 +13163,7 @@ __metadata:
   resolution: "preview@workspace:apps/preview"
   dependencies:
     "@boolti/api": "npm:*"
+    "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
     "@boolti/typescript-config": "npm:*"

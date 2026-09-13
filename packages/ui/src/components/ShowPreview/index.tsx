@@ -5,7 +5,13 @@ import type { ImgHTMLAttributes } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { BooltiDark, ClockMobileIcon, MapMarkerIcon, ShareIcon } from '@boolti/icon';
+import {
+  BooltiDark,
+  ChevronRightIcon,
+  ClockMobileIcon,
+  MapMarkerIcon,
+  ShareIcon,
+} from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 import Tab from '../Tab';
@@ -41,6 +47,8 @@ interface ShowPreviewProps {
     hostPhoneNumber: string;
     latitude?: number;
     longitude?: number;
+    /** 연결된 불티 공연장 ID */
+    concertHallId?: number;
   };
   showCastTeams: Array<{
     name: string;
@@ -62,6 +70,8 @@ interface ShowPreviewProps {
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
   prioritizeFirstImage?: boolean;
+  /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
+  onClickPlaceProfile?: (concertHallId: number) => void;
   naverMapClientId?: string;
 }
 
@@ -79,9 +89,10 @@ const ShowPreview = ({
   onShareShowInfo,
   onCloseShareDropdown,
   prioritizeFirstImage = false,
+  onClickPlaceProfile,
   naverMapClientId,
 }: ShowPreviewProps) => {
-  const { images, name, date, startTime, runningTime, placeName } = show;
+  const { images, name, date, startTime, runningTime, placeName, concertHallId } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const containerScrollTop = useRef<number | null>(null);
@@ -202,10 +213,21 @@ const ShowPreview = ({
             </span>
             <Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
           </Styled.ShowHeaderInfoItem>
-          <Styled.ShowHeaderInfoItem>
-            <MapMarkerIcon />
-            <span>{placeName}</span>
-          </Styled.ShowHeaderInfoItem>
+          {concertHallId && onClickPlaceProfile ? (
+            <Styled.ShowHeaderPlaceButton
+              type="button"
+              onClick={() => onClickPlaceProfile(concertHallId)}
+            >
+              <MapMarkerIcon />
+              <span>{placeName}</span>
+              <ChevronRightIcon />
+            </Styled.ShowHeaderPlaceButton>
+          ) : (
+            <Styled.ShowHeaderInfoItem>
+              <MapMarkerIcon />
+              <span>{placeName}</span>
+            </Styled.ShowHeaderInfoItem>
+          )}
         </Styled.ShowHeaderInfoList>
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
@@ -220,6 +242,7 @@ const ShowPreview = ({
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
+                  onClickPlaceProfile={onClickPlaceProfile}
                   naverMapClientId={naverMapClientId}
                 />
               ),

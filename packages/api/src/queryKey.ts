@@ -523,6 +523,12 @@ export const concertHallQueryKeys = createQueryKeys('concertHall', {
     queryFn: () =>
       fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
   }),
+  /** 공유 코드로 조회. 응답은 id 조회와 동일하며 내부 id도 함께 내려온다. */
+  profileByShareCode: (shareCode: string) => ({
+    queryKey: [shareCode],
+    queryFn: () =>
+      fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/share/${shareCode}`),
+  }),
   images: (concertHallId: number) => ({
     queryKey: [concertHallId],
     queryFn: () =>

@@ -59,6 +59,7 @@ import useSuperAdminUserList from './useSuperAdminUserList';
 import useSuperAdminHostList from './useSuperAdminHostList';
 import useConcertHallSearch from './useConcertHallSearch';
 import useConcertHallProfile from './useConcertHallProfile';
+import useConcertHallProfileByShareCode from './useConcertHallProfileByShareCode';
 import useConcertHallImages from './useConcertHallImages';
 import useConcertHallSearchList from './useConcertHallSearchList';
 import useConcertHallRecommendedRegions from './useConcertHallRecommendedRegions';
@@ -136,6 +137,7 @@ export {
   useSuperAdminHostList,
   useConcertHallSearch,
   useConcertHallProfile,
+  useConcertHallProfileByShareCode,
   useConcertHallImages,
   useConcertHallSearchList,
   useConcertHallRecommendedRegions,

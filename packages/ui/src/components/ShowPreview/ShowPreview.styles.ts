@@ -131,6 +131,26 @@ const ShowHeaderInfoItem = styled.div`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
+/** 공연장 프로필이 연결된 경우의 헤더 공연장명. 아이콘·이름·화살표 전체가 터치 영역이다. */
+const ShowHeaderPlaceButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+`;
+
 const ShowPreviewContent = styled.div`
   padding: 20px 20px 0;
   position: relative;
@@ -248,6 +268,27 @@ const ShowInfoSubtitle = styled.h4`
   ${({ theme }) => theme.typo.b3};
   color: ${({ theme }) => theme.palette.mobile.grey.g10};
   margin-bottom: 4px;
+`;
+
+/** 공연장 프로필이 연결된 경우의 공연장명. 이름과 화살표 전체가 터치 영역이다. */
+const ShowInfoSubtitleButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+  ${({ theme }) => theme.typo.b3};
+  color: ${({ theme }) => theme.palette.mobile.grey.g10};
+  text-align: left;
+  cursor: pointer;
+  transition: opacity 0.2s;
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
 `;
 
 const ShowInfoDescription = styled.div<ShowInfoDescriptionProps>`
@@ -463,6 +504,7 @@ export default {
   ShowName,
   ShowHeaderInfoList,
   ShowHeaderInfoItem,
+  ShowHeaderPlaceButton,
   ShowPreviewContent,
   ShowPreviewTicketPeriod,
   ShowPreviewTicketPeriodInfo,
@@ -475,6 +517,7 @@ export default {
   ShowInfoTitle,
   ShowInfoMoreButton,
   ShowInfoSubtitle,
+  ShowInfoSubtitleButton,
   ShowInfoDescription,
   ShowInfoDescriptionText,
   ShowInfoDescriptionButton,

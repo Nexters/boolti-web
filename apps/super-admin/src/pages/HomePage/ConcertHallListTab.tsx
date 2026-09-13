@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import { Button, Card, Empty, Flex, Input, Pagination, Space, Tag, Typography } from 'antd';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import ConcertHallCreateDialog from '~/components/ConcertHallCreateDialog/ConcertHallCreateDialog';
 import { HREF } from '~/constants/routes';
@@ -27,9 +27,12 @@ const formatUpdatedAt = (iso?: string | null) => {
 const ConcertHallListTab = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState('');
-  const [keyword, setKeyword] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  // 검색어와 페이지를 URL에 두어 공연장 페이지에서 돌아올 때 위치가 유지되도록 한다.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const keyword = searchParams.get('keyword') ?? '';
+  const currentPage = Number(searchParams.get('page')) || 1;
+  const [searchText, setSearchText] = useState(keyword);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const { isLoading, data } = useSuperAdminConcertHallList(
     currentPage - 1,
@@ -38,9 +41,31 @@ const ConcertHallListTab = () => {
   );
   const { items = [], totalElements = 0, totalPages = 0 } = data ?? {};
 
+  const updateSearchParams = (next: { keyword?: string; page?: number }) => {
+    const params = new URLSearchParams(searchParams);
+    params.set('tab', 'concert-halls');
+
+    if (next.keyword !== undefined) {
+      if (next.keyword) {
+        params.set('keyword', next.keyword);
+      } else {
+        params.delete('keyword');
+      }
+    }
+
+    if (next.page !== undefined) {
+      if (next.page > 1) {
+        params.set('page', String(next.page));
+      } else {
+        params.delete('page');
+      }
+    }
+
+    setSearchParams(params);
+  };
+
   const onSearch = (value: string) => {
-    setKeyword(value.trim());
-    setCurrentPage(1);
+    updateSearchParams({ keyword: value.trim(), page: 1 });
   };
 
   if (isLoading) {
@@ -77,7 +102,9 @@ const ConcertHallListTab = () => {
                 key={id}
                 style={{ width: 'calc(50% - 12px)', cursor: 'pointer' }}
                 onClick={() => {
-                  navigate(HREF.CONCERT_HALL_INFO(id));
+                  navigate(HREF.CONCERT_HALL_INFO(id), {
+                    state: { from: `${location.pathname}${location.search}` },
+                  });
                 }}
               >
                 <Flex>
@@ -147,7 +174,7 @@ const ConcertHallListTab = () => {
           total={totalElements}
           showSizeChanger={false}
           onChange={(page) => {
-            setCurrentPage(page);
+            updateSearchParams({ page });
           }}
         />
       )}

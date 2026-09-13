@@ -1,4 +1,5 @@
 export * from './navigateBack';
+export * from './navigateToPlaceDetail';
 export * from './navigateToShowDetail';
 export * from './requestToken';
 export * from './showToast';

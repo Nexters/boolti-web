@@ -145,10 +145,11 @@ const writeRecentKeywords = (keywords: string[]) => {
   window.localStorage.setItem(RECENT_KEYWORDS_STORAGE_KEY, JSON.stringify(keywords));
 };
 
+// 0은 미입력으로 간주해 노출하지 않는다.
 const formatSearchCapacity = (concertHall: ConcertHallSearchItem) => {
   const values = [];
-  if (concertHall.seatedCapacity != null) values.push(`좌석 ${concertHall.seatedCapacity}석`);
-  if (concertHall.standingCapacity != null) values.push(`스탠딩 ${concertHall.standingCapacity}명`);
+  if (concertHall.seatedCapacity) values.push(`좌석 ${concertHall.seatedCapacity}석`);
+  if (concertHall.standingCapacity) values.push(`스탠딩 ${concertHall.standingCapacity}명`);
   return values.length > 0 ? values.join(' · ') : '정보 없음';
 };
 
