@@ -96,7 +96,7 @@ const ShowPreviewPage = () => {
 
   // 공연장 프로필 화면은 앱이 담당하므로 브릿지로 넘긴다.
   const placeProfileClickHandler = (hallId: number) => {
-    navigateToPlaceDetail({ concertHallId: hallId }).catch(() => {
+    navigateToPlaceDetail({ placeId: hallId }).catch(() => {
       // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
     });
   };
