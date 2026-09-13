@@ -1,4 +1,4 @@
-import { useConcertHallProfile } from '@boolti/api';
+import { useConcertHallProfileByShareCode } from '@boolti/api';
 import { ConcertHallProfile } from '@boolti/ui';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -13,9 +13,9 @@ interface Props {
 }
 
 const ConcertHallTabPage = ({ tab }: Props) => {
-  const { concertHallId: idParam } = useParams<{ concertHallId: string }>();
-  const concertHallId = idParam && /^\d+$/.test(idParam) ? Number(idParam) : null;
-  const { data: profile } = useConcertHallProfile(concertHallId);
+  // URL은 내부 ID가 아니라 공유 코드를 쓴다. (예: /boolti)
+  const { shareCode } = useParams<{ shareCode: string }>();
+  const { data: profile } = useConcertHallProfileByShareCode(shareCode ?? null);
 
   useEffect(() => {
     if (profile?.name) {

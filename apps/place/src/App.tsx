@@ -13,17 +13,17 @@ import NotFoundPage from './pages/NotFoundPage';
 
 const router = createBrowserRouter([
   {
-    path: '/:concertHallId',
+    path: '/:shareCode',
     element: <ConcertHallPage />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/:concertHallId/home',
+    path: '/:shareCode/home',
     element: <ConcertHallTabPage tab="home" />,
     errorElement: <ErrorPage />,
   },
   {
-    path: '/:concertHallId/rental',
+    path: '/:shareCode/rental',
     element: <ConcertHallTabPage tab="rental" />,
     errorElement: <ErrorPage />,
   },
