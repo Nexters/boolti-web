@@ -1,4 +1,5 @@
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
+import { navigateToPlaceDetail } from '@boolti/bridge';
 import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -90,7 +91,15 @@ const ShowPreviewPage = () => {
     hostPhoneNumber,
     latitude,
     longitude,
+    concertHallId,
   } = previewData;
+
+  // 공연장 프로필 화면은 앱이 담당하므로 브릿지로 넘긴다.
+  const placeProfileClickHandler = (hallId: number) => {
+    navigateToPlaceDetail({ concertHallId: hallId }).catch(() => {
+      // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+    });
+  };
 
   const shareShowPreviewLink = async () => {
     const text = getPreviewLink(id);
@@ -213,6 +222,7 @@ const ShowPreviewPage = () => {
               notice: text,
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,
+              concertHallId,
             }}
             showCastTeams={showCastTeams.map(({ name, members }) => ({
               name,
@@ -235,6 +245,7 @@ const ShowPreviewPage = () => {
             onShareShowInfo={shareShowInfo}
             onCloseShareDropdown={shareDropdownCloseHandler}
             prioritizeFirstImage
+            onClickPlaceProfile={placeProfileClickHandler}
             naverMapClientId={X_NCP_APIGW_API_KEY_ID}
           />
           <Styled.FooterWrapper>

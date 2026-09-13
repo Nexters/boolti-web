@@ -41,6 +41,8 @@ interface ShowPreviewProps {
     hostPhoneNumber: string;
     latitude?: number;
     longitude?: number;
+    /** 연결된 불티 공연장 ID */
+    concertHallId?: number;
   };
   showCastTeams: Array<{
     name: string;
@@ -62,6 +64,8 @@ interface ShowPreviewProps {
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
   prioritizeFirstImage?: boolean;
+  /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
+  onClickPlaceProfile?: (concertHallId: number) => void;
   naverMapClientId?: string;
 }
 
@@ -79,6 +83,7 @@ const ShowPreview = ({
   onShareShowInfo,
   onCloseShareDropdown,
   prioritizeFirstImage = false,
+  onClickPlaceProfile,
   naverMapClientId,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName } = show;
@@ -220,6 +225,7 @@ const ShowPreview = ({
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
+                  onClickPlaceProfile={onClickPlaceProfile}
                   naverMapClientId={naverMapClientId}
                 />
               ),
