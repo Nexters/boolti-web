@@ -1,7 +1,14 @@
 import { lazy, Suspense, useRef, useState, useEffect } from 'react';
 import { useSwiper } from 'swiper/react';
 import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
-import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } from '@boolti/icon';
+import {
+  CallIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  MessageIcon,
+  TicketIcon,
+} from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
@@ -21,6 +28,8 @@ interface Props {
     detailAddress: string;
     latitude?: number;
     longitude?: number;
+    /** 연결된 불티 공연장 ID. 값이 있고 onClickPlaceProfile이 있을 때만 프로필로 이동할 수 있다. */
+    concertHallId?: number;
   };
   soldTicketCount?: number;
   isAppWebview?: boolean;
@@ -29,6 +38,8 @@ interface Props {
   onClickCallLinkMobile?: () => void;
   onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
+  /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
+  onClickPlaceProfile?: (concertHallId: number) => void;
   naverMapClientId?: string;
 }
 
@@ -44,6 +55,7 @@ const ShowInfoDetail = ({
     placeName,
     streetAddress,
     detailAddress,
+    concertHallId,
   },
   soldTicketCount,
   isAppWebview = false,
@@ -52,6 +64,7 @@ const ShowInfoDetail = ({
   onClickCallLinkMobile,
   onClickMessageLinkMobile,
   onClickViewNotice,
+  onClickPlaceProfile,
   naverMapClientId,
 }: Props) => {
   const showNoticeRef = useRef<HTMLDivElement>(null);
@@ -129,7 +142,17 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>위치</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoSubtitle>{placeName}</Styled.ShowInfoSubtitle>
+        {concertHallId && onClickPlaceProfile ? (
+          <Styled.ShowInfoSubtitleButton
+            type="button"
+            onClick={() => onClickPlaceProfile(concertHallId)}
+          >
+            {placeName}
+            <ChevronRightIcon />
+          </Styled.ShowInfoSubtitleButton>
+        ) : (
+          <Styled.ShowInfoSubtitle>{placeName}</Styled.ShowInfoSubtitle>
+        )}
         <Styled.ShowInfoDescription>
           <Styled.ShowInfoDescriptionText>
             {`${streetAddress} / ${detailAddress} ・ `}

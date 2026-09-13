@@ -257,6 +257,8 @@ export interface ShowPreviewResponse {
   groupId: number;
   name: string;
   placeName: string;
+  /** 연결된 불티 공연장 ID. 미연결 시 null/undefined */
+  concertHallId?: number;
   date: string;
   runningTime: number;
   streetAddress: string;

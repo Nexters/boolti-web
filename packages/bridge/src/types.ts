@@ -1,5 +1,6 @@
 export type WebviewCommand =
   | 'NAVIGATE_TO_SHOW_DETAIL'
+  | 'NAVIGATE_TO_PLACE_DETAIL'
   | 'NAVIGATE_BACK'
   | 'REQUEST_TOKEN'
   | 'SHOW_TOAST'
