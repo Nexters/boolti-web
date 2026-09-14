@@ -18,7 +18,13 @@ const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
 
   useEffect(() => {
     const reset = async () => {
-      if (checkIsAuthError(error)) {
+      // 리프레시 실패는 401이 아니라 400 TOKEN_REFRESH_FAILED로 오므로 URL로 함께 판별한다.
+      // (super-admin의 AuthErrorBoundary와 같은 기준)
+      const isAuthError =
+        checkIsHttpError(error) &&
+        (checkIsAuthError(error) || error.response.url.includes('/login/refresh'));
+
+      if (isAuthError) {
         if (checkIsWebView() && isWebViewBridgeAvailable()) {
           const token = (await requestToken()).data.token;
           localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, token);
