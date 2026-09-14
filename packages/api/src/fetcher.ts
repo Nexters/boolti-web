@@ -1,5 +1,5 @@
 import type { Options, ResponsePromise } from 'ky';
-import ky, { HTTPError } from 'ky';
+import ky from 'ky';
 
 import { API_URL, LOCAL_STORAGE } from './constants';
 import { Mutex } from 'async-mutex';
@@ -51,7 +51,10 @@ export const instance = ky.create({
               return ky(request, options);
             }
           } catch (e) {
-            if (e instanceof HTTPError && e.response.url.includes('/login/refresh')) {
+            // 리프레시가 실패하면 토큰은 죽은 것으로 본다. CORS 차단이나 네트워크 오류는
+            // HTTPError가 아니라 TypeError로 오기 때문에 에러 타입으로 판단하지 않는다.
+            // 오프라인은 토큰 문제가 아니므로 제외한다.
+            if (window.navigator.onLine) {
               window.localStorage.removeItem(LOCAL_STORAGE.ACCESS_TOKEN);
               window.localStorage.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
             }
