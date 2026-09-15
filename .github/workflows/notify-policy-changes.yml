@@ -27,7 +27,8 @@ jobs:
             'packages/api/src/**' \
             'packages/ui/src/**')
           COUNT=$(echo "$FILES" | wc -l | tr -d ' ')
-          LIST=$(echo "$FILES" | head -10 | sed 's/^/- /')
+          LIST=$(echo "$FILES" | head -10 | sed 's/^/- /' | jq -Rs '.')
+          LIST=${LIST:1:-1}  # strip outer quotes from jq output
           echo "count=$COUNT" >> $GITHUB_OUTPUT
           {
             echo "list<<EOF"
