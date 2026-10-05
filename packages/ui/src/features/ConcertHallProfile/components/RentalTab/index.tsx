@@ -2,10 +2,11 @@ import type { ConcertHallProfileResponse } from '@boolti/api';
 import { ChevronDownIcon } from '@boolti/icon';
 
 import { CheckIcon, RentalMethodIcon } from '../icons';
-import { useLayoutEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 
 import { formatFee } from '../../utils/format';
 import sortBySequence from '../../utils/sortBySequence';
+import useIsOverflowing from '../../useIsOverflowing';
 
 import Styled from './RentalTab.styles';
 
@@ -18,13 +19,7 @@ interface InstrumentsSectionProps {
 const InstrumentsSection = ({ instrumentsText }: InstrumentsSectionProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-
-  useLayoutEffect(() => {
-    if (textRef.current) {
-      setIsOverflowing(textRef.current.scrollHeight > INSTRUMENTS_COLLAPSED_HEIGHT);
-    }
-  }, [instrumentsText]);
+  const isOverflowing = useIsOverflowing(textRef, INSTRUMENTS_COLLAPSED_HEIGHT);
 
   const isCollapsed = isOverflowing && !isExpanded;
 

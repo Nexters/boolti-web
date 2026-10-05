@@ -8,7 +8,7 @@ import {
   viewPlacePhotoList,
 } from '@boolti/bridge';
 import { ChevronDownIcon, ChevronUpIcon } from '@boolti/icon';
-import { Suspense, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, useMemo, useRef, useState } from 'react';
 
 import PreviewMapWithProvider from '../../../../components/PreviewMap/PreviewMapWithProvider';
 import useToast from '../../../../hooks/useToast';
@@ -24,6 +24,7 @@ import {
 } from '../icons';
 import { formatAddress, formatAmenityLabel } from '../../utils/format';
 import sortBySequence from '../../utils/sortBySequence';
+import useIsOverflowing from '../../useIsOverflowing';
 
 import Styled from './HomeTab.styles';
 
@@ -45,13 +46,7 @@ interface IntroductionSectionProps {
 const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
   const textRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-
-  useLayoutEffect(() => {
-    if (textRef.current) {
-      setIsOverflowing(textRef.current.scrollHeight > INTRODUCTION_COLLAPSED_HEIGHT);
-    }
-  }, [introduction]);
+  const isOverflowing = useIsOverflowing(textRef, INTRODUCTION_COLLAPSED_HEIGHT);
 
   const isCollapsed = isOverflowing && !isExpanded;
 
