@@ -1623,7 +1623,7 @@ const ModalBackdrop = styled.div`
   display: grid;
   place-items: center;
   padding: 28px;
-  background: ${({ theme }) => theme.palette.grey.g90}80;
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const Modal = styled.form`
