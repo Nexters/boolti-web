@@ -113,9 +113,10 @@ const usePlaceSearchAnalytics = ({
       trackImpression('PlaceSearch', 'Section', 'NoResult', {
         search_keyword: searchKeyword,
         filter_count: filterCount,
-        filter_value: Object.values(currentFilters)
-          .filter((value) => value != null)
-          .join(','),
+        filter_value:
+          Object.values(currentFilters)
+            .filter((value) => value != null)
+            .join(',') || undefined,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
