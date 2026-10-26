@@ -13,6 +13,9 @@ import {
 import Styled from './ShowPreview.styles';
 import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
 
+/** 공연장명을 누른 위치. Summary: 상단 요약, Location: 위치 섹션 */
+export type PlaceProfileEntryPoint = 'Summary' | 'Location';
+
 const PreviewMap = lazy(() => import('../PreviewMap'));
 const PreviewMapWithProvider = lazy(() => import('../PreviewMap/PreviewMapWithProvider'));
 
@@ -39,7 +42,9 @@ interface Props {
   onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
   /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
-  onClickPlaceProfile?: (concertHallId: number) => void;
+  onClickPlaceProfile?: (concertHallId: number, entryPoint: PlaceProfileEntryPoint) => void;
+  /** 지도를 눌러 네이버 지도로 이동할 때 */
+  onClickMap?: () => void;
   naverMapClientId?: string;
 }
 
@@ -65,6 +70,7 @@ const ShowInfoDetail = ({
   onClickMessageLinkMobile,
   onClickViewNotice,
   onClickPlaceProfile,
+  onClickMap,
   naverMapClientId,
 }: Props) => {
   const showNoticeRef = useRef<HTMLDivElement>(null);
@@ -145,7 +151,7 @@ const ShowInfoDetail = ({
         {concertHallId && onClickPlaceProfile ? (
           <Styled.ShowInfoSubtitleButton
             type="button"
-            onClick={() => onClickPlaceProfile(concertHallId)}
+            onClick={() => onClickPlaceProfile(concertHallId, 'Location')}
           >
             {placeName}
             <ChevronRightIcon />
@@ -180,6 +186,7 @@ const ShowInfoDetail = ({
                 name={placeName}
                 isAppWebview={isAppWebview}
                 ncpKeyId={naverMapClientId}
+                onClickMap={onClickMap}
               />
             ) : (
               <PreviewMap
@@ -187,6 +194,7 @@ const ShowInfoDetail = ({
                 longitude={longitude}
                 name={placeName}
                 isAppWebview={isAppWebview}
+                onClickMap={onClickMap}
               />
             )}
           </Suspense>

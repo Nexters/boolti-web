@@ -1,6 +1,7 @@
+import { trackViewScreen } from '@boolti/analytics';
 import { useConcertHallProfile } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
-import { ConcertHallProfile, useBodyScrollLock } from '@boolti/ui';
+import { ConcertHallProfile, trackConcertHallProfileEvent, useBodyScrollLock } from '@boolti/ui';
 import { type UIEvent, useEffect, useState } from 'react';
 
 import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
@@ -27,6 +28,22 @@ const PlaceDetailPanel = ({
   useEffect(() => {
     setIsScrolled(false);
   }, [concertHallId]);
+
+  const loadedConcertHallId = concertHall?.id;
+
+  useEffect(() => {
+    if (!concertHall) return;
+
+    trackViewScreen('PlaceProfile', {
+      place_id: concertHall.id,
+      place_name: concertHall.name,
+      source: 'PlaceSearch',
+      profile_status:
+        concertHall.hasHomeTabData || concertHall.hasRentalTabData ? 'Active' : 'ComingSoon',
+    });
+    // 같은 공연장에서는 한 번만 보낸다
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadedConcertHallId]);
 
   useBodyScrollLock(window.innerWidth < 1120);
 
@@ -89,6 +106,7 @@ const PlaceDetailPanel = ({
         shareUrl={shareCode ? `https://place.boolti.in/${shareCode}` : ''}
         naverMapKey={X_NCP_APIGW_API_KEY_ID}
         onBack={onClose}
+        onAnalyticsEvent={(event) => trackConcertHallProfileEvent(event, concertHall.id)}
       />
     </Styled.DetailPane>
   );

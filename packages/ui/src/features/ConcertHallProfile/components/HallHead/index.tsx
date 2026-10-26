@@ -8,6 +8,7 @@ import { formatAddress, formatCapacity, normalizeWebsiteUrl } from '../../utils/
 import { CallIcon, MailIcon, WebsiteIcon } from '../icons';
 
 import Styled from './HallHead.styles';
+import { useConcertHallProfileAnalytics } from '../../analytics';
 
 interface Props {
   profile: ConcertHallProfileResponse;
@@ -17,14 +18,9 @@ interface Props {
   shareDisabled?: boolean;
 }
 
-const HallHead = ({
-  profile,
-  onShare,
-  onBack,
-  isScrolled,
-  shareDisabled = false,
-}: Props) => {
+const HallHead = ({ profile, onShare, onBack, isScrolled, shareDisabled = false }: Props) => {
   const toast = useToast();
+  const trackEvent = useConcertHallProfileAnalytics();
   const { name, representativeImageUrl, head } = profile;
   const stickyHeaderEnabled = isScrolled !== undefined;
 
@@ -45,6 +41,7 @@ const HallHead = ({
   const contactButtons = [
     {
       key: 'website',
+      analyticsValue: 'Website' as const,
       label: '웹사이트',
       icon: <WebsiteIcon />,
       value: contact?.websiteUrl,
@@ -55,6 +52,7 @@ const HallHead = ({
     },
     {
       key: 'phone',
+      analyticsValue: 'Call' as const,
       label: '전화',
       icon: <CallIcon />,
       value: contact?.phoneNumber,
@@ -65,6 +63,7 @@ const HallHead = ({
     },
     {
       key: 'email',
+      analyticsValue: 'Mail' as const,
       label: '메일',
       icon: <MailIcon />,
       value: contact?.email,
@@ -159,23 +158,26 @@ const HallHead = ({
         )}
         {hasContact && (
           <Styled.ContactButtonArea>
-            {contactButtons.map(({ key, label, icon, value, emptyMessage, action }) => (
-              <Styled.ContactButton
-                key={key}
-                type="button"
-                isActive={Boolean(value)}
-                onClick={() => {
-                  if (value) {
-                    action(value);
-                  } else {
-                    toast.info(emptyMessage);
-                  }
-                }}
-              >
-                {icon}
-                <Styled.ContactButtonLabel>{label}</Styled.ContactButtonLabel>
-              </Styled.ContactButton>
-            ))}
+            {contactButtons.map(
+              ({ key, analyticsValue, label, icon, value, emptyMessage, action }) => (
+                <Styled.ContactButton
+                  key={key}
+                  type="button"
+                  isActive={Boolean(value)}
+                  onClick={() => {
+                    trackEvent({ type: 'contact', method: analyticsValue });
+                    if (value) {
+                      action(value);
+                    } else {
+                      toast.info(emptyMessage);
+                    }
+                  }}
+                >
+                  {icon}
+                  <Styled.ContactButtonLabel>{label}</Styled.ContactButtonLabel>
+                </Styled.ContactButton>
+              ),
+            )}
           </Styled.ContactButtonArea>
         )}
       </Styled.Container>

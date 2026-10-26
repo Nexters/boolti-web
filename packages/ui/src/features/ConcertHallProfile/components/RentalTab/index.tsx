@@ -9,8 +9,21 @@ import sortBySequence from '../../utils/sortBySequence';
 import useIsOverflowing from '../../useIsOverflowing';
 
 import Styled from './RentalTab.styles';
+import { type ConcertHallProfileSection, useSectionImpression } from '../../analytics';
 
 const INSTRUMENTS_COLLAPSED_HEIGHT = 280;
+
+const TrackedSection = ({
+  section,
+  children,
+}: {
+  section: ConcertHallProfileSection;
+  children: React.ReactNode;
+}) => {
+  const ref = useSectionImpression<HTMLElement>(section);
+
+  return <Styled.Section ref={ref}>{children}</Styled.Section>;
+};
 
 interface InstrumentsSectionProps {
   instrumentsText: string;
@@ -24,7 +37,7 @@ const InstrumentsSection = ({ instrumentsText }: InstrumentsSectionProps) => {
   const isCollapsed = isOverflowing && !isExpanded;
 
   return (
-    <Styled.Section>
+    <TrackedSection section="AvailableInstruments">
       <Styled.SectionTitle>보유 악기</Styled.SectionTitle>
       <Styled.InstrumentsWrapper>
         <Styled.InstrumentsText ref={textRef} isCollapsed={isCollapsed}>
@@ -38,7 +51,7 @@ const InstrumentsSection = ({ instrumentsText }: InstrumentsSectionProps) => {
           </Styled.MoreButton>
         )}
       </Styled.InstrumentsWrapper>
-    </Styled.Section>
+    </TrackedSection>
   );
 };
 
@@ -74,7 +87,7 @@ const RentalTab = ({ profile }: Props) => {
   return (
     <Styled.Container>
       {rentalMethod && (
-        <Styled.Section>
+        <TrackedSection section="BookingMethod">
           <Styled.MethodCard>
             <Styled.MethodTitle>
               대관 방법
@@ -82,21 +95,21 @@ const RentalTab = ({ profile }: Props) => {
             </Styled.MethodTitle>
             <Styled.MethodText>{rentalMethod}</Styled.MethodText>
           </Styled.MethodCard>
-        </Styled.Section>
+        </TrackedSection>
       )}
 
       {rentalTime?.rentalTimeHours != null && (
-        <Styled.Section>
+        <TrackedSection section="BookingHours">
           <Styled.SectionTitle>대관 시간</Styled.SectionTitle>
           {rentalTimeDescription && (
             <Styled.SectionDescription>{rentalTimeDescription}</Styled.SectionDescription>
           )}
           <Styled.TimeBox>{rentalTime.rentalTimeHours}시간</Styled.TimeBox>
-        </Styled.Section>
+        </TrackedSection>
       )}
 
       {sortedRentalFees.length > 0 && (
-        <Styled.Section>
+        <TrackedSection section="RentalFee">
           <Styled.SectionTitle>대관료</Styled.SectionTitle>
           {vat?.description && (
             <Styled.SectionDescription>{vat.description}</Styled.SectionDescription>
@@ -110,11 +123,11 @@ const RentalTab = ({ profile }: Props) => {
               </Styled.FeeRow>
             ))}
           </Styled.FeeList>
-        </Styled.Section>
+        </TrackedSection>
       )}
 
       {sortedAdditionalFees.length > 0 && (
-        <Styled.Section>
+        <TrackedSection section="HourlySurcharge">
           <Styled.SectionTitle>시간당 추가 요금</Styled.SectionTitle>
           <Styled.SectionDescription>
             대관 시간 외 별도 시간 추가 시 발생하는 비용입니다.
@@ -128,13 +141,13 @@ const RentalTab = ({ profile }: Props) => {
               </Styled.FeeRow>
             ))}
           </Styled.FeeList>
-        </Styled.Section>
+        </TrackedSection>
       )}
 
       {instrumentsText && <InstrumentsSection instrumentsText={instrumentsText} />}
 
       {paidOptions.length > 0 && (
-        <Styled.Section>
+        <TrackedSection section="PaidOptions">
           <Styled.SectionTitle>유료 옵션</Styled.SectionTitle>
           <Styled.FeeList>
             {paidOptions.map((option) => (
@@ -145,11 +158,11 @@ const RentalTab = ({ profile }: Props) => {
               </Styled.FeeRow>
             ))}
           </Styled.FeeList>
-        </Styled.Section>
+        </TrackedSection>
       )}
 
       {specialNotes.length > 0 && (
-        <Styled.Section>
+        <TrackedSection section="SpecialNotes">
           <Styled.SectionTitle>특이사항</Styled.SectionTitle>
           <Styled.NoteList>
             {specialNotes.map((note, index) => (
@@ -161,7 +174,7 @@ const RentalTab = ({ profile }: Props) => {
               </Styled.NoteItem>
             ))}
           </Styled.NoteList>
-        </Styled.Section>
+        </TrackedSection>
       )}
     </Styled.Container>
   );

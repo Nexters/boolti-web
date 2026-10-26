@@ -1,4 +1,7 @@
+import { useImpression } from '@boolti/analytics';
 import styled from '@emotion/styled';
+
+import { useConcertHallProfileAnalytics } from '../../analytics';
 
 const Container = styled.div`
   display: flex;
@@ -24,11 +27,16 @@ const Description = styled.span`
   color: ${({ theme }) => theme.palette.mobile.grey.g30};
 `;
 
-const ComingSoon = () => (
-  <Container>
-    <Title>COMING SOON</Title>
-    <Description>조금만 기다려주세요!</Description>
-  </Container>
-);
+const ComingSoon = () => {
+  const trackEvent = useConcertHallProfileAnalytics();
+  const ref = useImpression<HTMLDivElement>(() => trackEvent({ type: 'comingSoonImpression' }));
+
+  return (
+    <Container ref={ref}>
+      <Title>COMING SOON</Title>
+      <Description>조금만 기다려주세요!</Description>
+    </Container>
+  );
+};
 
 export default ComingSoon;

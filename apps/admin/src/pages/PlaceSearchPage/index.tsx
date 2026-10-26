@@ -41,6 +41,7 @@ import { useOnClickOutside } from '@boolti/ui/src/hooks/useOnClickOutside';
 import { useIsMobile } from '~/hooks/useIsMobile';
 import { BooltiWhiteLogo } from './icons';
 import PlaceDetailPanel from './PlaceDetailPanel';
+import usePlaceSearchAnalytics, { type FilterType } from './usePlaceSearchAnalytics';
 import { Global, css, useTheme } from '@emotion/react';
 
 const DEFAULT_PAGE_SIZE = 12;
@@ -53,6 +54,12 @@ const DEFAULT_SORT: ConcertHallSearchSort = 'FEE_ASC';
 
 type SearchField = 'keyword' | 'rentalFee' | 'capacity';
 type ActiveSearchField = SearchField | 'overview';
+
+const ANALYTICS_FILTER_TYPE: Record<SearchField, FilterType> = {
+  keyword: 'Region',
+  rentalFee: 'RentalFee',
+  capacity: 'Capacity',
+};
 type ConcertHallSearchLocationState = Record<string, unknown> & {
   concertHallDetailId?: unknown;
 };
@@ -515,6 +522,20 @@ const PlaceSearchPage = () => {
     capacityMin != null ||
     capacityMax != null;
   const hasKeywordSearch = keyword.trim().length > 0;
+  const analytics = usePlaceSearchAnalytics({
+    keyword,
+    regionName: recommendedRegionName,
+    regionId,
+    rentalFeeMin,
+    rentalFeeMax,
+    capacityMin,
+    capacityMax,
+    searchConditionsKey,
+    hasSearchConditions,
+    isFirstPageLoaded:
+      page === 0 && concertHallListQuery.data != null && !concertHallListQuery.isFetching,
+    totalElements,
+  });
   const hasEntryRequestError = entryRequestTouched && entryRequestName.trim().length === 0;
   const mobileSortLabel = sort === 'FEE_ASC' ? '대관료 낮은 순' : '대관료 높은 순';
   const rentalFeeLabel = formatRangeLabel(rentalFeeMin, rentalFeeMax, DEFAULT_RENTAL_FEE_LABEL);
@@ -749,6 +770,9 @@ const PlaceSearchPage = () => {
   }, [activeSearchField, closeActiveSearchField, hasPendingCapacityFilter, isMobile]);
 
   const handleSearchFieldClick = (nextField: SearchField, toggle = true) => {
+    if (activeSearchField !== nextField)
+      analytics.trackFilterChip(ANALYTICS_FILTER_TYPE[nextField]);
+
     if (activeSearchField === 'capacity' && hasPendingCapacityFilter) {
       applySearch(keywordInput.trim(), selectedRegionId, null, false);
       if (nextField !== 'capacity') setActiveSearchField(nextField);
@@ -835,6 +859,7 @@ const PlaceSearchPage = () => {
   };
 
   const resetSearch = () => {
+    analytics.trackResetFilter();
     setSelectedRegionId(null);
     setSelectedRegionNameInput(undefined);
     setKeywordInput('');
@@ -847,6 +872,7 @@ const PlaceSearchPage = () => {
   };
 
   const clearMobileFilters = () => {
+    analytics.trackResetFilter();
     setSelectedRegionId(null);
     setSelectedRegionNameInput(undefined);
     setKeywordInput('');
@@ -1048,7 +1074,10 @@ const PlaceSearchPage = () => {
                               <Styled.RecentKeywordButton
                                 type="button"
                                 aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
-                                onClick={() => applyAutocomplete(item)}
+                                onClick={() => {
+                                  analytics.trackAutoComplete(item.name);
+                                  applyAutocomplete(item);
+                                }}
                               >
                                 <Styled.RecentItemIcon>
                                   <AreaIcon />
@@ -1101,7 +1130,10 @@ const PlaceSearchPage = () => {
                                 <Styled.RecentKeywordButton
                                   type="button"
                                   aria-label={`${recentKeyword} 검색`}
-                                  onClick={() => applyRecentKeyword(recentKeyword)}
+                                  onClick={() => {
+                                    analytics.setSearchSource('Recent');
+                                    applyRecentKeyword(recentKeyword);
+                                  }}
                                 >
                                   <Styled.RecentItemIcon>
                                     <SearchIcon />
@@ -1138,7 +1170,10 @@ const PlaceSearchPage = () => {
                               <Styled.RecentKeywordButton
                                 type="button"
                                 aria-label={`${region.name} 검색`}
-                                onClick={() => applyRegion(region.regionId, region.name)}
+                                onClick={() => {
+                                  analytics.trackRecommendedRegion(region.name);
+                                  applyRegion(region.regionId, region.name);
+                                }}
                               >
                                 <Styled.RecentItemIcon>
                                   <AreaIcon />
@@ -1353,7 +1388,10 @@ const PlaceSearchPage = () => {
                                 key={`${item.type}-${item.id}`}
                                 type="button"
                                 aria-label={`${item.name}${item.streetAddress ? ` ${item.streetAddress}` : ''} 선택`}
-                                onClick={() => stageMobileAutocomplete(item)}
+                                onClick={() => {
+                                  analytics.trackAutoComplete(item.name);
+                                  stageMobileAutocomplete(item);
+                                }}
                               >
                                 <Styled.MobileResultIcon>
                                   {item.type === 'REGION' ? <AreaIcon /> : <MapMarkerIcon />}
@@ -1403,7 +1441,10 @@ const PlaceSearchPage = () => {
                               <Styled.MobileResultButton
                                 type="button"
                                 aria-label={`${recentKeyword} 검색`}
-                                onClick={() => stageMobileRecentKeyword(recentKeyword)}
+                                onClick={() => {
+                                  analytics.setSearchSource('Recent');
+                                  stageMobileRecentKeyword(recentKeyword);
+                                }}
                               >
                                 <Styled.MobileResultIcon>
                                   <SearchIcon />
@@ -1440,7 +1481,10 @@ const PlaceSearchPage = () => {
                                 key={region.regionId}
                                 type="button"
                                 aria-label={`${region.name} 검색`}
-                                onClick={() => stageMobileRegion(region.regionId, region.name)}
+                                onClick={() => {
+                                  analytics.trackRecommendedRegion(region.name);
+                                  stageMobileRegion(region.regionId, region.name);
+                                }}
                               >
                                 <Styled.MobileResultIcon>
                                   <AreaIcon />
@@ -1647,6 +1691,7 @@ const PlaceSearchPage = () => {
                         type="button"
                         aria-label={`대관료 ${rentalFeeLabel} 편집`}
                         onClick={() => {
+                          analytics.trackFilterChip('RentalFee');
                           setIsMobileFilterClosing(false);
                           setActiveSearchField('rentalFee');
                         }}
@@ -1671,6 +1716,7 @@ const PlaceSearchPage = () => {
                         type="button"
                         aria-label={`수용 인원 ${appliedCapacityOption.label} 편집`}
                         onClick={() => {
+                          analytics.trackFilterChip('Capacity');
                           setIsMobileFilterClosing(false);
                           setActiveSearchField('capacity');
                         }}
@@ -1841,13 +1887,16 @@ const PlaceSearchPage = () => {
               concertHalls.length > 0 && (
                 <>
                   <Styled.CardGrid $dimmed={activeSearchField != null}>
-                    {concertHalls.map((concertHall) => (
+                    {concertHalls.map((concertHall, index) => (
                       <PlaceCard
                         key={concertHall.concertHallId}
                         concertHall={concertHall}
                         isDimmed={hasDetail && selectedConcertHallId !== concertHall.concertHallId}
                         isSelected={selectedConcertHallId === concertHall.concertHallId}
-                        onClick={openDetailFromCard}
+                        onClick={(concertHallId, trigger) => {
+                          analytics.trackResultItemClick(concertHallId, index + 1);
+                          openDetailFromCard(concertHallId, trigger);
+                        }}
                       />
                     ))}
                   </Styled.CardGrid>

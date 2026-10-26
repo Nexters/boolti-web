@@ -8,6 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '../../constants/routes';
+import { LOGIN_SOURCE } from '../../constants/analytics';
 
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import { checkIsWebView, isWebViewBridgeAvailable, requestToken } from '@boolti/bridge';
@@ -24,7 +25,7 @@ const AuthErrorFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
           localStorage.setItem(LOCAL_STORAGE.ACCESS_TOKEN, token);
           resetErrorBoundary();
         } else {
-          navigate(PATH.LOGIN, { replace: true });
+          navigate(PATH.LOGIN, { replace: true, state: { source: LOGIN_SOURCE.SESSION_EXPIRED } });
         }
       } else {
         if (checkIsHttpError(error)) {

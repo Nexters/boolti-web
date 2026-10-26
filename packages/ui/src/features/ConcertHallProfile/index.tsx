@@ -9,6 +9,10 @@ import HomeTab from './components/HomeTab';
 import RentalTab from './components/RentalTab';
 import Styled from './ConcertHallProfile.styles';
 import { formatUpdatedAt } from './utils/format';
+import {
+  type ConcertHallProfileAnalyticsHandler,
+  ConcertHallProfileAnalyticsProvider,
+} from './analytics';
 
 export type ConcertHallProfileDisplayMode = 'full' | 'home' | 'rental';
 
@@ -19,13 +23,15 @@ export interface ConcertHallProfileProps {
   naverMapKey: string;
   isScrolled?: boolean;
   onBack?: () => void;
+  /** 분석 이벤트를 받는다. 넘기지 않으면 아무것도 보내지 않는다. */
+  onAnalyticsEvent?: ConcertHallProfileAnalyticsHandler;
 }
 
 type TabKey = Exclude<ConcertHallProfileDisplayMode, 'full'>;
 
-const TABS: Array<{ key: TabKey; label: string }> = [
-  { key: 'home', label: '홈' },
-  { key: 'rental', label: '대관 정보' },
+const TABS: Array<{ key: TabKey; label: string; analyticsValue: 'Home' | 'RentalInfo' }> = [
+  { key: 'home', label: '홈', analyticsValue: 'Home' },
+  { key: 'rental', label: '대관 정보', analyticsValue: 'RentalInfo' },
 ];
 
 const ConcertHallProfile = ({
@@ -35,6 +41,7 @@ const ConcertHallProfile = ({
   naverMapKey,
   onBack,
   isScrolled,
+  onAnalyticsEvent,
 }: ConcertHallProfileProps) => {
   const toast = useToast();
   const [activeTab, setActiveTab] = useState<TabKey>('home');
@@ -44,6 +51,8 @@ const ConcertHallProfile = ({
     if (!shareUrl) {
       return;
     }
+
+    onAnalyticsEvent?.({ type: 'share' });
 
     const shareData = {
       title: profile.share?.title ?? profile.name,
@@ -87,15 +96,15 @@ const ConcertHallProfile = ({
 
   if (displayMode !== 'full') {
     return (
-      <>
+      <ConcertHallProfileAnalyticsProvider value={onAnalyticsEvent ?? null}>
         {renderTab(displayMode)}
         <Disclaimer updatedAtText={updatedAtText} />
-      </>
+      </ConcertHallProfileAnalyticsProvider>
     );
   }
 
   return (
-    <>
+    <ConcertHallProfileAnalyticsProvider value={onAnalyticsEvent ?? null}>
       <HallHead
         profile={profile}
         onShare={handleShare}
@@ -111,7 +120,10 @@ const ConcertHallProfile = ({
             isActive={activeTab === tab.key}
             role="tab"
             aria-selected={activeTab === tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => {
+              onAnalyticsEvent?.({ type: 'tab', tab: tab.analyticsValue });
+              setActiveTab(tab.key);
+            }}
           >
             {tab.label}
           </Styled.TabItem>
@@ -119,9 +131,15 @@ const ConcertHallProfile = ({
       </Styled.TabBar>
       {renderTab(activeTab)}
       <Disclaimer updatedAtText={updatedAtText} />
-    </>
+    </ConcertHallProfileAnalyticsProvider>
   );
 };
 
 export { useBodyScrollLock } from './useBodyScrollLock';
+export { trackConcertHallProfileEvent } from './analytics';
+export type {
+  ConcertHallProfileAnalyticsEvent,
+  ConcertHallProfileAnalyticsHandler,
+  ConcertHallProfileSection,
+} from './analytics';
 export default ConcertHallProfile;

@@ -16,7 +16,7 @@ import {
 import Styled from './ShowPreview.styles';
 import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
-import ShowInfoDetail from './ShowInfoDetail';
+import ShowInfoDetail, { type PlaceProfileEntryPoint } from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
 
 interface ShowImageLoadingProps extends ImgHTMLAttributes<HTMLImageElement> {
@@ -71,7 +71,10 @@ interface ShowPreviewProps {
   onCloseShareDropdown?: () => void;
   prioritizeFirstImage?: boolean;
   /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
-  onClickPlaceProfile?: (concertHallId: number) => void;
+  onClickPlaceProfile?: (concertHallId: number, entryPoint: PlaceProfileEntryPoint) => void;
+  onClickMap?: () => void;
+  /** 탭 버튼을 눌렀을 때. 0: 공연 정보, 1: 출연진 */
+  onClickTab?: (index: number) => void;
   naverMapClientId?: string;
 }
 
@@ -90,6 +93,8 @@ const ShowPreview = ({
   onCloseShareDropdown,
   prioritizeFirstImage = false,
   onClickPlaceProfile,
+  onClickMap,
+  onClickTab,
   naverMapClientId,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName, concertHallId } = show;
@@ -216,7 +221,7 @@ const ShowPreview = ({
           {concertHallId && onClickPlaceProfile ? (
             <Styled.ShowHeaderPlaceButton
               type="button"
-              onClick={() => onClickPlaceProfile(concertHallId)}
+              onClick={() => onClickPlaceProfile(concertHallId, 'Summary')}
             >
               <MapMarkerIcon />
               <span>{placeName}</span>
@@ -232,6 +237,7 @@ const ShowPreview = ({
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
         <Tab
+          onClickTab={onClickTab}
           tabItems={[
             {
               title: '공연 정보',
@@ -243,6 +249,7 @@ const ShowPreview = ({
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
                   onClickPlaceProfile={onClickPlaceProfile}
+                  onClickMap={onClickMap}
                   naverMapClientId={naverMapClientId}
                 />
               ),

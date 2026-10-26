@@ -1,3 +1,4 @@
+import { resetUser } from '@boolti/analytics';
 import { LOCAL_STORAGE } from '@boolti/api';
 import { atom, useAtom } from 'jotai';
 
@@ -37,6 +38,7 @@ export const useAuthAtom = () => {
     storageMethod.removeItem(LOCAL_STORAGE.REFRESH_TOKEN);
     setAccessToken(null);
     setRefreshToken(null);
+    resetUser();
   };
 
   const isLogin = () => !!accessToken && !!refreshToken;

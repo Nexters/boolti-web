@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import Layout from '~/components/Layout';
 import { X_NCP_APIGW_API_KEY_ID } from '~/constants/ncp';
+import { trackPlaceProfileWebViewEvent } from '~/constants/analytics';
 
 type TabKey = 'home' | 'rental';
 
@@ -34,6 +35,7 @@ const ConcertHallTabPage = ({ tab }: Props) => {
         displayMode={tab}
         shareUrl={window.location.href}
         naverMapKey={X_NCP_APIGW_API_KEY_ID}
+        onAnalyticsEvent={(event) => trackPlaceProfileWebViewEvent(event, profile.id)}
       />
     </Layout>
   );

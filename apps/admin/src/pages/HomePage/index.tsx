@@ -15,6 +15,7 @@ import Layout from '~/components/Layout';
 import ShowList from '~/components/ShowList';
 import UserProfile from '~/components/UserProfile';
 import { HREF, PATH } from '~/constants/routes';
+import { SHOW_TYPE_SELECT_SOURCE } from '~/constants/analytics';
 
 import Styled from './HomePage.styles';
 import ProfileDropdown from '~/components/ProfileDropdown';
@@ -62,7 +63,12 @@ const HomePage = () => {
         title: checkIsWebView() ? undefined : '공연 유형 선택',
         mobileType: 'fullPage',
         isAuto: true,
-        content: <ShowTypeSelectDialogContent close={close} />,
+        content: (
+          <ShowTypeSelectDialogContent
+            close={close}
+            source={SHOW_TYPE_SELECT_SOURCE.REGISTER_LINK}
+          />
+        ),
       });
     }
   }, [close, isLoading, open, searchParams]);
