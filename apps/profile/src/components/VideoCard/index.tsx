@@ -1,6 +1,7 @@
 import { useYoutubeVideoDuration } from '@boolti/api';
 import { formatYoutubeDuration, getYoutubeThumbnailUrl, getYoutubeVideoId } from '~/utils';
 import Styled from './VideoCard.styles';
+import { trackProfileVideoClick } from '~/constants/analytics';
 import { BooltiDarkIcon, BooltiDarkLogo } from '@boolti/icon';
 
 interface VideoCardProps {
@@ -16,7 +17,14 @@ const VideoCard = ({ videoUrl }: VideoCardProps) => {
 
   return (
     <Styled.VideoCard
-      {...(data ? { href: videoUrl, target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...(data
+        ? {
+            href: videoUrl,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            onClick: () => trackProfileVideoClick(videoUrl),
+          }
+        : {})}
     >
       <Styled.VideoThumbnailWrapper>
         {thumbnailUrl ? (

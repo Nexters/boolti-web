@@ -8,9 +8,10 @@ interface Props {
     title: string;
     content: React.ReactNode;
   }>;
+  onClickTab?: (index: number) => void;
 }
 
-const Tab = ({ tabItems }: Props) => {
+const Tab = ({ tabItems, onClickTab }: Props) => {
   const swiperRef = useRef<SwiperRef>(null);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -22,6 +23,7 @@ const Tab = ({ tabItems }: Props) => {
             key={index}
             isSelected={tabIndex === index}
             onClick={() => {
+              onClickTab?.(index);
               swiperRef.current?.swiper.slideTo(index);
             }}
           >

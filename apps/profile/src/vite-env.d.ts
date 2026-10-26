@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_BASE_API_URL: string;
   readonly VITE_IS_SUPER_ADMIN?: string;
+  readonly VITE_MIXPANEL_TOKEN?: string;
 }
 
 interface ImportMeta {

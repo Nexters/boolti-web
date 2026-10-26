@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@boolti/analytics": "*",
     "@boolti/api": "*",
     "@boolti/bridge": "*",
     "@boolti/icon": "*",

@@ -8,6 +8,7 @@ interface Props {
   name: string;
   isAppWebview: boolean;
   ncpKeyId: string;
+  onClickMap?: () => void;
 }
 
 const PreviewMapWithProvider = ({ ncpKeyId, ...previewMapProps }: Props) => {

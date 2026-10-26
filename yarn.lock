@@ -1730,6 +1730,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@boolti/analytics@npm:*, @boolti/analytics@workspace:packages/analytics":
+  version: 0.0.0-use.local
+  resolution: "@boolti/analytics@workspace:packages/analytics"
+  dependencies:
+    "@boolti/bridge": "npm:*"
+    "@boolti/eslint-config": "npm:*"
+    "@boolti/typescript-config": "npm:*"
+    "@types/react": "npm:^18.2.43"
+    mixpanel-browser: "npm:^2.84.0"
+    react: "npm:^18.2.0"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "@boolti/api@npm:*, @boolti/api@workspace:packages/api":
   version: 0.0.0-use.local
   resolution: "@boolti/api@workspace:packages/api"
@@ -1805,6 +1819,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@boolti/ui@workspace:packages/ui"
   dependencies:
+    "@boolti/analytics": "npm:*"
     "@boolti/api": "npm:*"
     "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
@@ -3061,6 +3076,64 @@ __metadata:
   peerDependencies:
     react: ">=16"
   checksum: 10c0/6d647115703dbe258f7fe372499fa8c6fe17a053ff0f2a208111c9973a71ae738a0ed376770445d39194d217e00e1a015644b24f32c2f7cb4f57988de0649b15
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrdom@npm:^2.0.0-alpha.18":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrdom@npm:2.0.0-alpha.18.6"
+  dependencies:
+    "@mixpanel/rrweb-snapshot": "npm:^2.0.0-alpha.18"
+  checksum: 10c0/9bfb3444780cc133aa6732ce08d3b4077d50c3f568a8ca0cf30b9d05e2ccfbcc3505ac87eef0da5f1459027ae0df3e7ffeae108d395a1a94ad8c321f08abe286
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrweb-plugin-console-record@npm:2.0.0-alpha.18.6":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrweb-plugin-console-record@npm:2.0.0-alpha.18.6"
+  peerDependencies:
+    "@mixpanel/rrweb": ^2.0.0-alpha.18
+    "@mixpanel/rrweb-utils": ^2.0.0-alpha.18
+  checksum: 10c0/66d763af56aba32f67f301eaa42c85295fa71ead48d93634f0058000f8f5b889b80252ca63494442ea763711a5bd6260cbb83b36ddd5f055def64a9e2dfb406b
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrweb-snapshot@npm:^2.0.0-alpha.18":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrweb-snapshot@npm:2.0.0-alpha.18.6"
+  dependencies:
+    postcss: "npm:^8.4.38"
+  checksum: 10c0/b7cdf9f5443c2c5dcad57a4ec8a6d9cd41e50b9d4bb54ba48a2bf11b9722928331a66a82203b530068ab51f5b5c78d8c9e6a64d54eb6743c7fccd67cfd6ae6db
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrweb-types@npm:^2.0.0-alpha.18":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrweb-types@npm:2.0.0-alpha.18.6"
+  checksum: 10c0/bfd73a7a77f64ebbc85096d99ae99753b5477ceb49bdd9f08ade2ae5450fbe43dabeb906013017f725591eda30d86c0a4226929d8f3e21c19a86b59b0d2846c5
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrweb-utils@npm:2.0.0-alpha.18.6, @mixpanel/rrweb-utils@npm:^2.0.0-alpha.18":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrweb-utils@npm:2.0.0-alpha.18.6"
+  checksum: 10c0/f7be1299a6c4b7008b700c1c015cbdf5a92ea80027535b2234018a28c234cc7244b660b5bd67174515066034a94742eca92e107ce13233231fcdf28af9240557
+  languageName: node
+  linkType: hard
+
+"@mixpanel/rrweb@npm:2.0.0-alpha.18.6":
+  version: 2.0.0-alpha.18.6
+  resolution: "@mixpanel/rrweb@npm:2.0.0-alpha.18.6"
+  dependencies:
+    "@mixpanel/rrdom": "npm:^2.0.0-alpha.18"
+    "@mixpanel/rrweb-snapshot": "npm:^2.0.0-alpha.18"
+    "@mixpanel/rrweb-types": "npm:^2.0.0-alpha.18"
+    "@mixpanel/rrweb-utils": "npm:^2.0.0-alpha.18"
+    "@types/css-font-loading-module": "npm:0.0.7"
+    "@xstate/fsm": "npm:^1.4.0"
+    base64-arraybuffer: "npm:^1.0.1"
+    mitt: "npm:^3.0.0"
+  checksum: 10c0/22a21caacf4dd6f20cb14c9ad187e2fc550b990a2bb9c266efdf9e23544fa09707abe665d64626c0807d33154d2a51a2966fc4a97b1a91ad3ff73e4c4440f9eb
   languageName: node
   linkType: hard
 
@@ -5424,6 +5497,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/css-font-loading-module@npm:0.0.7":
+  version: 0.0.7
+  resolution: "@types/css-font-loading-module@npm:0.0.7"
+  checksum: 10c0/a74759a14bcc7d60a1a1d863b53b7638d4aa7f88f1d97347426262cc6fe8f9335d8fa80c7e0608cd67e33ff0067608e9b5475a1227a684e1dfad3cac87df1405
+  languageName: node
+  linkType: hard
+
 "@types/debug@npm:^4.0.0":
   version: 4.1.12
   resolution: "@types/debug@npm:4.1.12"
@@ -5621,6 +5701,13 @@ __metadata:
   version: 3.0.6
   resolution: "@types/js-cookie@npm:3.0.6"
   checksum: 10c0/173afaf5ea9d86c22395b9d2a00b6adb0006dcfef165d6dcb0395cdc32f5a5dcf9c3c60f97194119963a15849b8f85121e1ae730b03e40bc0c29b84396ba22f9
+  languageName: node
+  linkType: hard
+
+"@types/json-logic-js@npm:2.0.5":
+  version: 2.0.5
+  resolution: "@types/json-logic-js@npm:2.0.5"
+  checksum: 10c0/37074841edee1fb2b6839a3cd5da4e633b58cf8b61a776221680677e34c13784d74a8b85156d844e1be6320ae0a9aa41c82a9581ba7d77759a29e08334309269
   languageName: node
   linkType: hard
 
@@ -6230,6 +6317,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@xstate/fsm@npm:^1.4.0":
+  version: 1.6.5
+  resolution: "@xstate/fsm@npm:1.6.5"
+  checksum: 10c0/472fe625b84b9e7102b8774e80c441b8b7dbc9585e700223d9c7a39c583d38ba50636909a5d749d44b361555daa841862f932a29c52b81c8829a74884e715bf4
+  languageName: node
+  linkType: hard
+
 "@yarnpkg/esbuild-plugin-pnp@npm:^3.0.0-rc.10":
   version: 3.0.0-rc.15
   resolution: "@yarnpkg/esbuild-plugin-pnp@npm:3.0.0-rc.15"
@@ -6346,6 +6440,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "admin@workspace:apps/admin"
   dependencies:
+    "@boolti/analytics": "npm:*"
     "@boolti/api": "npm:*"
     "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
@@ -6910,6 +7005,13 @@ __metadata:
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
   checksum: 10c0/9308baf0a7e4838a82bbfd11e01b1cb0f0cf2893bc1676c27c2a8c0e70cbae1c59120c3268517a8ae7fb6376b4639ef81ca22582611dbee4ed28df945134aaee
+  languageName: node
+  linkType: hard
+
+"base64-arraybuffer@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "base64-arraybuffer@npm:1.0.2"
+  checksum: 10c0/3acac95c70f9406e87a41073558ba85b6be9dbffb013a3d2a710e3f2d534d506c911847d5d9be4de458af6362c676de0a5c4c2d7bdf4def502d00b313368e72f
   languageName: node
   linkType: hard
 
@@ -11055,6 +11157,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"json-logic-js@npm:2.0.5":
+  version: 2.0.5
+  resolution: "json-logic-js@npm:2.0.5"
+  checksum: 10c0/c80d96a9f704dac2f4488c7119d9c94cbf67adbd93cb47eaa5b7eadc4947f18ed6d62fd5555f245cc2f87525f9e8d7bd5f70bd9e7fba2c70366e63bd68010f23
+  languageName: node
+  linkType: hard
+
 "json-parse-even-better-errors@npm:^2.3.0":
   version: 2.3.1
   resolution: "json-parse-even-better-errors@npm:2.3.1"
@@ -12157,6 +12266,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mitt@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "mitt@npm:3.0.1"
+  checksum: 10c0/3ab4fdecf3be8c5255536faa07064d05caa3dd332bd318ff02e04621f7b3069ca1de9106cfe8e7ced675abfc2bec2ce4c4ef321c4a1bb1fb29df8ae090741913
+  languageName: node
+  linkType: hard
+
+"mixpanel-browser@npm:^2.84.0":
+  version: 2.84.0
+  resolution: "mixpanel-browser@npm:2.84.0"
+  dependencies:
+    "@mixpanel/rrweb": "npm:2.0.0-alpha.18.6"
+    "@mixpanel/rrweb-plugin-console-record": "npm:2.0.0-alpha.18.6"
+    "@mixpanel/rrweb-utils": "npm:2.0.0-alpha.18.6"
+    "@types/json-logic-js": "npm:2.0.5"
+    json-logic-js: "npm:2.0.5"
+  checksum: 10c0/d1de67b00d9b3c0404911f9abb9ebee1ee1bc41a665ca8454ca7e345ab0f2bc35fa901f10f82e26a225aa3ea6230840754b1ad3d8b5706b928ea08da6e1f4e04
+  languageName: node
+  linkType: hard
+
 "mkdirp-classic@npm:^0.5.2":
   version: 0.5.3
   resolution: "mkdirp-classic@npm:0.5.3"
@@ -12286,6 +12415,15 @@ __metadata:
   bin:
     nanoid: bin/nanoid.cjs
   checksum: 10c0/ba142b7b39e11e80c16dd74b0365d407880c87c1cf7e1480956981ae940ee36060fa5b6f092cd1e315184dd19244c657bd017d03327bd3c62247d691c5e8edfb
+  languageName: node
+  linkType: hard
+
+"nanoid@npm:^3.3.20":
+  version: 3.3.20
+  resolution: "nanoid@npm:3.3.20"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 10c0/856e8bf3bddb959d65997bd94908be030dbc5e6ed88fb3af2a638e51d1938f4d4f454c7c7231aba340775224f88b8cfd3ce1693c70471bfd05f5b6a2227c0c1e
   languageName: node
   linkType: hard
 
@@ -13010,6 +13148,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "place@workspace:apps/place"
   dependencies:
+    "@boolti/analytics": "npm:*"
     "@boolti/api": "npm:*"
     "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
@@ -13081,6 +13220,17 @@ __metadata:
     picocolors: "npm:^1.0.0"
     source-map-js: "npm:^1.0.2"
   checksum: 10c0/16eda83458fcd8a91bece287b5920c7f57164c3ea293e6c80d0ea71ce7843007bcd8592260a5160b9a7f02693e6ac93e2495b02d8c7596d3f3f72c1447e3ba79
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.38":
+  version: 8.5.31
+  resolution: "postcss@npm:8.5.31"
+  dependencies:
+    nanoid: "npm:^3.3.20"
+    picocolors: "npm:^1.1.1"
+    source-map-js: "npm:^1.2.2"
+  checksum: 10c0/52f94c6655f86f568a803ce9c8eb3c749e109cc711d26644c4cde953b30c1b947a2f25af3b9453de68584ac655572f46ed8e830b8ab2f21dd226b3f640992e00
   languageName: node
   linkType: hard
 
@@ -13162,6 +13312,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "preview@workspace:apps/preview"
   dependencies:
+    "@boolti/analytics": "npm:*"
     "@boolti/api": "npm:*"
     "@boolti/bridge": "npm:*"
     "@boolti/eslint-config": "npm:*"
@@ -13216,6 +13367,7 @@ __metadata:
   resolution: "profile@workspace:apps/profile"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
+    "@boolti/analytics": "npm:*"
     "@boolti/api": "npm:*"
     "@boolti/eslint-config": "npm:*"
     "@boolti/icon": "npm:*"
@@ -15413,6 +15565,13 @@ __metadata:
   version: 1.2.1
   resolution: "source-map-js@npm:1.2.1"
   checksum: 10c0/7bda1fc4c197e3c6ff17de1b8b2c20e60af81b63a52cb32ec5a5d67a20a7d42651e2cb34ebe93833c5a2a084377e17455854fee3e21e7925c64a51b6a52b0faf
+  languageName: node
+  linkType: hard
+
+"source-map-js@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "source-map-js@npm:1.2.2"
+  checksum: 10c0/d5d6dec62266834f83dd4f8a2606a196fb1a006ca5d53b0ef80ee513b7eba2f4e2ae241f4bc129ae7e9b80dea24f6e3d92b446b7e6e96be7653cab8888168a94
   languageName: node
   linkType: hard
 

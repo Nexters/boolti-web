@@ -1,4 +1,12 @@
 import {
+  AnalyticsEvent,
+  type Screen,
+  trackClick,
+  trackComplete,
+  trackViewScreen,
+  updateOrganizerProfile,
+} from '@boolti/analytics';
+import {
   ImageFile,
   ShowCastTeamCreateOrUpdateRequest,
   useAddNonTicketingShow,
@@ -7,7 +15,7 @@ import {
 } from '@boolti/api';
 import { ArrowLeftIcon } from '@boolti/icon';
 import { Button, Checkbox, StepProgressBar, useConfirm, useToast } from '@boolti/ui';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -52,6 +60,13 @@ const stepItems = [
 
 const SHOW_ADD_SUCCESS_MESSAGE = '공연을 등록했어요.';
 
+/** 이벤트 시트에 사전 질문 단계 화면이 없어서 preQuestion 은 보내지 않는다 */
+const ANALYTICS_SCREEN: Partial<Record<ShowAddPageProps['step'], Screen>> = {
+  basic: 'EventCreationBasicInfo',
+  detail: 'EventCreationDetailedInfo',
+  sales: 'EventCreationTicketInfo',
+};
+
 interface ShowAddPageProps {
   step: 'basic' | 'detail' | 'sales' | 'preQuestion';
 }
@@ -61,6 +76,20 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const [searchParams] = useSearchParams();
   const isNonTicketingShow = searchParams.get('type') === 'FREE';
   const isWebView = checkIsWebView();
+  const ticketingType = isNonTicketingShow ? 'None' : 'Paid';
+  const analyticsScreen = ANALYTICS_SCREEN[step];
+
+  useEffect(() => {
+    if (!analyticsScreen) return;
+
+    trackViewScreen(analyticsScreen, { ticketing_type: ticketingType });
+  }, [analyticsScreen, ticketingType]);
+
+  const trackNextStep = () => {
+    if (!analyticsScreen) return;
+
+    trackClick(analyticsScreen, 'Button', 'NextStep', { ticketing_type: ticketingType });
+  };
 
   const [imageFiles, setImageFiles] = useState<ImageFile[]>([]);
   const [castTeamList, setCastTeamList] = useState<TempShowCastInfoFormInput[]>([]);
@@ -89,6 +118,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   const showSubmissionErrorToast = useShowSubmissionErrorToast('create');
 
   const onSuccessAddShow = (showId: number) => {
+    trackComplete(AnalyticsEvent.COMPLETE_EVENT_CREATION, {
+      event_id: showId,
+      ticketing_type: ticketingType,
+      place_id: showBasicInfoForm.getValues('concertHallId'),
+    });
+    updateOrganizerProfile();
+
     if (isWebView && isWebViewBridgeAvailable()) {
       showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });
       navigateToShowDetail({ showId });
@@ -132,11 +168,13 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitBasicInfoForm: SubmitHandler<ShowBasicInfoFormInputs> = async () => {
+    trackNextStep();
     navigate(`${PATH.SHOW_ADD_DETAIL}?${searchParams.toString()}`);
   };
 
   const onSubmitDetailInfoForm: SubmitHandler<ShowDetailInfoFormInputs> = async () => {
     if (!isNonTicketingShow) {
+      trackNextStep();
       navigate(`${PATH.SHOW_ADD_SALES}?${searchParams.toString()}`);
       return;
     }
@@ -162,6 +200,7 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
   };
 
   const onSubmitSalesInfoForm: SubmitHandler<ShowSalesInfoFormInputs> = async () => {
+    trackNextStep();
     navigate(`${PATH.SHOW_ADD_PRE_QUESTION}?${searchParams.toString()}`);
   };
 

@@ -16,6 +16,7 @@
     "test:e2e:ui": "playwright test -c playwright.config.ts --ui"
   },
   "dependencies": {
+    "@boolti/analytics": "*",
     "@boolti/api": "*",
     "@boolti/bridge": "*",
     "@boolti/icon": "*",

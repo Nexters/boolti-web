@@ -1,0 +1,24 @@
+{
+  "name": "@boolti/analytics",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
+    "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@boolti/eslint-config": "*",
+    "@boolti/typescript-config": "*",
+    "@types/react": "^18.2.43",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@boolti/bridge": "*",
+    "mixpanel-browser": "^2.84.0",
+    "react": "^18.2.0"
+  }
+}

@@ -1,15 +1,29 @@
+import { AnalyticsEvent, setSignUpDate, trackComplete, trackImpression } from '@boolti/analytics';
 import { useUserProfile } from '@boolti/api';
-import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { LINK } from '~/constants/link';
 import { PATH } from '~/constants/routes';
+import type { SignUpLocationState } from '~/constants/analytics';
 
 import Styled from './SignUpCompletePage.styles';
 
 const SignUpCompletePage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const loginMethod = (location.state as SignUpLocationState)?.loginMethod;
 
   const { data: userProfile } = useUserProfile();
+
+  const isLoaded = userProfile !== undefined;
+
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    trackImpression('Login', 'BottomSheet', 'TermsAgreement');
+  }, [isLoaded]);
 
   if (userProfile === undefined) return null;
 
@@ -39,6 +53,8 @@ const SignUpCompletePage = () => {
             </Styled.CardContentDescription>
             <Styled.StartButton
               onClick={() => {
+                setSignUpDate(format(new Date(), 'yyyy-MM-dd'));
+                trackComplete(AnalyticsEvent.COMPLETE_SIGN_UP, { login_method: loginMethod });
                 navigate(PATH.HOME, { replace: true });
               }}
             >

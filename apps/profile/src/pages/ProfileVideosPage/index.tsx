@@ -4,6 +4,7 @@ import { BooltiDarkIcon, BooltiDarkLogo } from '@boolti/icon';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import { useUserVideos, useYoutubeVideoDuration } from '@boolti/api';
+import { trackProfileVideoClick } from '~/constants/analytics';
 import { getYoutubeVideoId, getYoutubeThumbnailUrl, formatYoutubeDuration } from '~/utils';
 
 interface VideoItemProps {
@@ -34,7 +35,14 @@ const VideoItem = ({ videoUrl }: VideoItemProps) => {
 
   return (
     <Styled.VideoItem
-      {...(data ? { href: videoUrl, target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...(data
+        ? {
+            href: videoUrl,
+            target: '_blank',
+            rel: 'noopener noreferrer',
+            onClick: () => trackProfileVideoClick(videoUrl),
+          }
+        : {})}
     >
       <Styled.ThumbnailWrapper>
         {thumbnailUrl ? (

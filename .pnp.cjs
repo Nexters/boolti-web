@@ -38,6 +38,10 @@ const RAW_RUNTIME_STATE =
       "reference": "workspace:apps/super-admin"\
     },\
     {\
+      "name": "@boolti/analytics",\
+      "reference": "workspace:packages/analytics"\
+    },\
+    {\
       "name": "@boolti/api",\
       "reference": "workspace:packages/api"\
     },\
@@ -65,6 +69,7 @@ const RAW_RUNTIME_STATE =
   "enableTopLevelFallback": true,\
   "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
   "fallbackExclusionList": [\
+    ["@boolti/analytics", ["workspace:packages/analytics"]],\
     ["@boolti/api", ["workspace:packages/api"]],\
     ["@boolti/bridge", ["workspace:packages/bridge"]],\
     ["@boolti/eslint-config", ["workspace:packages/config-eslint"]],\
@@ -3009,6 +3014,22 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@boolti/analytics", [\
+      ["workspace:packages/analytics", {\
+        "packageLocation": "./packages/analytics/",\
+        "packageDependencies": [\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
+          ["@boolti/bridge", "workspace:packages/bridge"],\
+          ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
+          ["@boolti/typescript-config", "workspace:packages/config-typescript"],\
+          ["@types/react", "npm:18.2.48"],\
+          ["mixpanel-browser", "npm:2.84.0"],\
+          ["react", "npm:18.2.0"],\
+          ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"]\
+        ],\
+        "linkType": "SOFT"\
+      }]\
+    ]],\
     ["@boolti/api", [\
       ["workspace:packages/api", {\
         "packageLocation": "./packages/api/",\
@@ -3096,6 +3117,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/ui/",\
         "packageDependencies": [\
           ["@boolti/ui", "workspace:packages/ui"],\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
@@ -4741,6 +4763,87 @@ const RAW_RUNTIME_STATE =
         "packagePeers": [\
           "@types/react",\
           "react"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrdom", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrdom-npm-2.0.0-alpha.18.6-0a4376c70e-9bfb344478.zip/node_modules/@mixpanel/rrdom/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrdom", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-snapshot", "npm:2.0.0-alpha.18.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrweb", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrweb-npm-2.0.0-alpha.18.6-5d87c550ed-22a21caacf.zip/node_modules/@mixpanel/rrweb/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrdom", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-snapshot", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-types", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-utils", "npm:2.0.0-alpha.18.6"],\
+          ["@types/css-font-loading-module", "npm:0.0.7"],\
+          ["@xstate/fsm", "npm:1.6.5"],\
+          ["base64-arraybuffer", "npm:1.0.2"],\
+          ["mitt", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrweb-plugin-console-record", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrweb-plugin-console-record-npm-2.0.0-alpha.18.6-c3348bba68-66d763af56.zip/node_modules/@mixpanel/rrweb-plugin-console-record/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb-plugin-console-record", "npm:2.0.0-alpha.18.6"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f52d736434dbba2e2ef93873b39b8b7bdab91dd1e1edfd5233e8f540d7d68a4a62efe6c089d9eea4ca0677093261207cd20f3bd77d5479ec6ff368377e87763a#npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/__virtual__/@mixpanel-rrweb-plugin-console-record-virtual-4762ef4e26/0/cache/@mixpanel-rrweb-plugin-console-record-npm-2.0.0-alpha.18.6-c3348bba68-66d763af56.zip/node_modules/@mixpanel/rrweb-plugin-console-record/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb-plugin-console-record", "virtual:f52d736434dbba2e2ef93873b39b8b7bdab91dd1e1edfd5233e8f540d7d68a4a62efe6c089d9eea4ca0677093261207cd20f3bd77d5479ec6ff368377e87763a#npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-utils", "npm:2.0.0-alpha.18.6"],\
+          ["@types/mixpanel__rrweb", null],\
+          ["@types/mixpanel__rrweb-utils", null]\
+        ],\
+        "packagePeers": [\
+          "@mixpanel/rrweb-utils",\
+          "@mixpanel/rrweb",\
+          "@types/mixpanel__rrweb-utils",\
+          "@types/mixpanel__rrweb"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrweb-snapshot", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrweb-snapshot-npm-2.0.0-alpha.18.6-4384083ca9-b7cdf9f544.zip/node_modules/@mixpanel/rrweb-snapshot/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb-snapshot", "npm:2.0.0-alpha.18.6"],\
+          ["postcss", "npm:8.5.31"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrweb-types", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrweb-types-npm-2.0.0-alpha.18.6-4ecfa957be-bfd73a7a77.zip/node_modules/@mixpanel/rrweb-types/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb-types", "npm:2.0.0-alpha.18.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@mixpanel/rrweb-utils", [\
+      ["npm:2.0.0-alpha.18.6", {\
+        "packageLocation": "./.yarn/cache/@mixpanel-rrweb-utils-npm-2.0.0-alpha.18.6-7461bdcdb7-f7be1299a6.zip/node_modules/@mixpanel/rrweb-utils/",\
+        "packageDependencies": [\
+          ["@mixpanel/rrweb-utils", "npm:2.0.0-alpha.18.6"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8510,6 +8613,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/css-font-loading-module", [\
+      ["npm:0.0.7", {\
+        "packageLocation": "./.yarn/cache/@types-css-font-loading-module-npm-0.0.7-e5453ffa7c-a74759a14b.zip/node_modules/@types/css-font-loading-module/",\
+        "packageDependencies": [\
+          ["@types/css-font-loading-module", "npm:0.0.7"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/debug", [\
       ["npm:4.1.12", {\
         "packageLocation": "./.yarn/cache/@types-debug-npm-4.1.12-82a3fc4905-5dcd465edb.zip/node_modules/@types/debug/",\
@@ -8737,6 +8849,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-js-cookie-npm-3.0.6-c9126e5b48-173afaf5ea.zip/node_modules/@types/js-cookie/",\
         "packageDependencies": [\
           ["@types/js-cookie", "npm:3.0.6"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/json-logic-js", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/@types-json-logic-js-npm-2.0.5-5d97543175-37074841ed.zip/node_modules/@types/json-logic-js/",\
+        "packageDependencies": [\
+          ["@types/json-logic-js", "npm:2.0.5"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -9595,6 +9716,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@xstate/fsm", [\
+      ["npm:1.6.5", {\
+        "packageLocation": "./.yarn/cache/@xstate-fsm-npm-1.6.5-ce4efd1c39-472fe625b8.zip/node_modules/@xstate/fsm/",\
+        "packageDependencies": [\
+          ["@xstate/fsm", "npm:1.6.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@yarnpkg/esbuild-plugin-pnp", [\
       ["npm:3.0.0-rc.15", {\
         "packageLocation": "./.yarn/cache/@yarnpkg-esbuild-plugin-pnp-npm-3.0.0-rc.15-b916c218b3-5095bc3168.zip/node_modules/@yarnpkg/esbuild-plugin-pnp/",\
@@ -9757,6 +9887,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./apps/admin/",\
         "packageDependencies": [\
           ["admin", "workspace:apps/admin"],\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
@@ -10433,6 +10564,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/balanced-match-npm-1.0.2-a53c126459-9308baf0a7.zip/node_modules/balanced-match/",\
         "packageDependencies": [\
           ["balanced-match", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["base64-arraybuffer", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "./.yarn/cache/base64-arraybuffer-npm-1.0.2-18f4899892-3acac95c70.zip/node_modules/base64-arraybuffer/",\
+        "packageDependencies": [\
+          ["base64-arraybuffer", "npm:1.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15107,6 +15247,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["json-logic-js", [\
+      ["npm:2.0.5", {\
+        "packageLocation": "./.yarn/cache/json-logic-js-npm-2.0.5-a59305be8b-c80d96a9f7.zip/node_modules/json-logic-js/",\
+        "packageDependencies": [\
+          ["json-logic-js", "npm:2.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["json-parse-even-better-errors", [\
       ["npm:2.3.1", {\
         "packageLocation": "./.yarn/cache/json-parse-even-better-errors-npm-2.3.1-144d62256e-140932564c.zip/node_modules/json-parse-even-better-errors/",\
@@ -16366,6 +16515,29 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["mitt", [\
+      ["npm:3.0.1", {\
+        "packageLocation": "./.yarn/cache/mitt-npm-3.0.1-ce290ffa77-3ab4fdecf3.zip/node_modules/mitt/",\
+        "packageDependencies": [\
+          ["mitt", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["mixpanel-browser", [\
+      ["npm:2.84.0", {\
+        "packageLocation": "./.yarn/cache/mixpanel-browser-npm-2.84.0-f52d736434-d1de67b00d.zip/node_modules/mixpanel-browser/",\
+        "packageDependencies": [\
+          ["mixpanel-browser", "npm:2.84.0"],\
+          ["@mixpanel/rrweb", "npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-plugin-console-record", "virtual:f52d736434dbba2e2ef93873b39b8b7bdab91dd1e1edfd5233e8f540d7d68a4a62efe6c089d9eea4ca0677093261207cd20f3bd77d5479ec6ff368377e87763a#npm:2.0.0-alpha.18.6"],\
+          ["@mixpanel/rrweb-utils", "npm:2.0.0-alpha.18.6"],\
+          ["@types/json-logic-js", "npm:2.0.5"],\
+          ["json-logic-js", "npm:2.0.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["mkdirp", [\
       ["npm:0.5.6", {\
         "packageLocation": "./.yarn/cache/mkdirp-npm-0.5.6-dcd5a6b97b-e2e2be7892.zip/node_modules/mkdirp/",\
@@ -16522,6 +16694,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/nanoid-npm-3.3.12-41f8e0bb94-ba142b7b39.zip/node_modules/nanoid/",\
         "packageDependencies": [\
           ["nanoid", "npm:3.3.12"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:3.3.20", {\
+        "packageLocation": "./.yarn/cache/nanoid-npm-3.3.20-aad4bb378d-856e8bf3bd.zip/node_modules/nanoid/",\
+        "packageDependencies": [\
+          ["nanoid", "npm:3.3.20"]\
         ],\
         "linkType": "HARD"\
       }],\
@@ -17328,6 +17507,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./apps/place/",\
         "packageDependencies": [\
           ["place", "workspace:apps/place"],\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
@@ -17400,6 +17580,16 @@ const RAW_RUNTIME_STATE =
           ["nanoid", "npm:3.3.12"],\
           ["picocolors", "npm:1.1.1"],\
           ["source-map-js", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:8.5.31", {\
+        "packageLocation": "./.yarn/cache/postcss-npm-8.5.31-fb3b85fb1d-52f94c6655.zip/node_modules/postcss/",\
+        "packageDependencies": [\
+          ["postcss", "npm:8.5.31"],\
+          ["nanoid", "npm:3.3.20"],\
+          ["picocolors", "npm:1.1.1"],\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -17484,6 +17674,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./apps/preview/",\
         "packageDependencies": [\
           ["preview", "workspace:apps/preview"],\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/bridge", "workspace:packages/bridge"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
@@ -17546,6 +17737,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["profile", "workspace:apps/profile"],\
           ["@babel/runtime", "npm:7.28.4"],\
+          ["@boolti/analytics", "workspace:packages/analytics"],\
           ["@boolti/api", "workspace:packages/api"],\
           ["@boolti/eslint-config", "workspace:packages/config-eslint"],\
           ["@boolti/icon", "workspace:packages/icon"],\
@@ -20763,6 +20955,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/source-map-js-npm-1.2.1-b9a47d7e1a-7bda1fc4c1.zip/node_modules/source-map-js/",\
         "packageDependencies": [\
           ["source-map-js", "npm:1.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:1.2.2", {\
+        "packageLocation": "./.yarn/cache/source-map-js-npm-1.2.2-d40ce9a415-d5d6dec622.zip/node_modules/source-map-js/",\
+        "packageDependencies": [\
+          ["source-map-js", "npm:1.2.2"]\
         ],\
         "linkType": "HARD"\
       }]\

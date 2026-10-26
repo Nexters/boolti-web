@@ -50,6 +50,7 @@ import { X_NCP_APIGW_API_KEY_ID } from './constants/ncp';
 import { IS_PRODUCTION_PHASE } from './constants/phase';
 import WebView from './pages/WebView';
 import PrivateRoute from './routes/PrivateRoute';
+import AnalyticsUserIdentifier from './components/AnalyticsUserIdentifier';
 
 setDefaultOptions({ locale: ko });
 
@@ -159,6 +160,7 @@ const routes: RouteObject[] = [
         <BooltiUIProvider>
           <LazyMotion features={domAnimation}>
             <NavermapsProvider ncpKeyId={X_NCP_APIGW_API_KEY_ID} submodules={['geocoder']}>
+              <AnalyticsUserIdentifier />
               <Outlet />
             </NavermapsProvider>
           </LazyMotion>

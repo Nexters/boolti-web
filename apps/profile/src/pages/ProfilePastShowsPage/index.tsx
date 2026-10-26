@@ -5,12 +5,14 @@ import Layout from '~/components/Layout';
 import { useUserPreviousShows } from '@boolti/api';
 import { formatDateTimeWithWeekday } from '~/utils';
 import { EXTERNAL_URL } from '~/constants/external';
+import { trackProfileShowClick } from '~/constants/analytics';
 
 export const ProfilePastShowsPage = () => {
   const { userCode } = useParams<{ userCode: string }>();
   const { data } = useUserPreviousShows(userCode as string);
 
   const handleShowClick = (showId: string | number) => {
+    trackProfileShowClick(showId);
     window.location.href = EXTERNAL_URL.SHOW_MANAGER_INFO(showId);
   };
 
@@ -20,10 +22,7 @@ export const ProfilePastShowsPage = () => {
       <Styled.CountText>전체 ({data?.length || 0})</Styled.CountText>
       <Styled.Container>
         {data?.map((show) => (
-          <Styled.ShowCard
-            key={show.id}
-            onClick={() => handleShowClick(show.id)}
-          >
+          <Styled.ShowCard key={show.id} onClick={() => handleShowClick(show.id)}>
             <Styled.Poster src={show.showImg} alt={show.name} />
             <Styled.ShowInfo>
               <Styled.Title>{show.name}</Styled.Title>

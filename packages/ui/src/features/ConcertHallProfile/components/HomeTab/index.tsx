@@ -27,8 +27,25 @@ import sortBySequence from '../../utils/sortBySequence';
 import useIsOverflowing from '../../useIsOverflowing';
 
 import Styled from './HomeTab.styles';
+import {
+  type ConcertHallProfileSection,
+  useConcertHallProfileAnalytics,
+  useSectionImpression,
+} from '../../analytics';
 
 const INTRODUCTION_COLLAPSED_HEIGHT = 280;
+
+const TrackedSection = ({
+  section,
+  children,
+}: {
+  section: ConcertHallProfileSection;
+  children: React.ReactNode;
+}) => {
+  const ref = useSectionImpression<HTMLElement>(section);
+
+  return <Styled.Section ref={ref}>{children}</Styled.Section>;
+};
 
 const AMENITY_ICONS: Record<string, React.ReactNode> = {
   WAITING_ROOM: <WaitingRoomIcon />,
@@ -51,7 +68,7 @@ const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
   const isCollapsed = isOverflowing && !isExpanded;
 
   return (
-    <Styled.Section>
+    <TrackedSection section="Introduction">
       <Styled.SectionTitle>소개</Styled.SectionTitle>
       <Styled.IntroductionWrapper>
         <Styled.IntroductionText ref={textRef} isCollapsed={isCollapsed}>
@@ -65,7 +82,7 @@ const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
           </Styled.MoreButton>
         )}
       </Styled.IntroductionWrapper>
-    </Styled.Section>
+    </TrackedSection>
   );
 };
 
@@ -76,6 +93,7 @@ interface Props {
 
 const HomeTab = ({ profile, naverMapKey }: Props) => {
   const toast = useToast();
+  const trackEvent = useConcertHallProfileAnalytics();
   const home = profile.home;
   const [gallery, setGallery] = useState<{ mode: GalleryMode; index: number } | null>(null);
 
@@ -96,6 +114,10 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
   // 갤러리 모달 open/close 등 HomeTab 리렌더 때 지도까지 리렌더되면
   // react-naver-maps가 지도를 파괴/재생성하며 크래시한다(KVO.destroy null 등).
   // 지도 엘리먼트를 메모이즈해 참조를 고정하면 React가 이 서브트리 재조정을 건너뛴다.
+  // 지도는 메모이즈되어 있으므로 최신 핸들러를 ref 로 넘긴다
+  const trackEventRef = useRef(trackEvent);
+  trackEventRef.current = trackEvent;
+
   const mapElement = useMemo(() => {
     if (!hasMap) {
       return null;
@@ -109,6 +131,7 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
           longitude={location.longitude as number}
           name={profile.name}
           isAppWebview={checkIsWebView()}
+          onClickMap={() => trackEventRef.current({ type: 'map' })}
         />
       </Suspense>
     );
@@ -116,6 +139,8 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
 
   // 앱 웹뷰에서는 사진 목록/뷰어를 앱 네이티브 화면이 담당하므로 브릿지로 넘긴다
   const handlePhotoClick = (index: number, showMoreOverlay: boolean) => {
+    trackEvent({ type: 'photo', photoIndex: index });
+
     if (isAppWebView) {
       const selectedImage = visibleImages[index];
       // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
@@ -171,7 +196,7 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
       <Styled.Container>
         {home?.introduction && <IntroductionSection introduction={home.introduction} />}
         {visibleImages.length > 0 && (
-          <Styled.Section>
+          <TrackedSection section="Photos">
             <Styled.SectionTitle>사진</Styled.SectionTitle>
             <Styled.PhotoGrid>
               {visibleImages.map((image, index) => {
@@ -203,10 +228,10 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
                 );
               })}
             </Styled.PhotoGrid>
-          </Styled.Section>
+          </TrackedSection>
         )}
         {amenities.length > 0 && (
-          <Styled.Section>
+          <TrackedSection section="Amenities">
             <Styled.SectionTitle>편의 시설 및 서비스</Styled.SectionTitle>
             <Styled.AmenityGrid>
               {amenities.map((amenity) => (
@@ -216,16 +241,16 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
                 </Styled.AmenityItem>
               ))}
             </Styled.AmenityGrid>
-          </Styled.Section>
+          </TrackedSection>
         )}
         {addressText && (
-          <Styled.Section>
+          <TrackedSection section="Location">
             <Styled.SectionTitle>위치</Styled.SectionTitle>
             <Styled.AddressLine type="button" onClick={handleCopyAddress}>
               {addressText}・<Styled.CopyLabel>복사</Styled.CopyLabel>
             </Styled.AddressLine>
             {mapElement}
-          </Styled.Section>
+          </TrackedSection>
         )}
       </Styled.Container>
       {gallery && (

@@ -1,9 +1,20 @@
+import { initAnalytics } from '@boolti/analytics';
+import { LOCAL_STORAGE } from '@boolti/api';
 import ReactDOM from 'react-dom/client';
 
 import App from './App';
 
+initAnalytics(import.meta.env.VITE_MIXPANEL_TOKEN, {
+  debug: import.meta.env.DEV,
+  isLoggedIn: Boolean(
+    localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&
+      localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN),
+  ),
+});
+
 const bootstrap = async () => {
-  const enableE2EMSW = (window as Window & { __ENABLE_E2E_MSW__?: boolean }).__ENABLE_E2E_MSW__ === true;
+  const enableE2EMSW =
+    (window as Window & { __ENABLE_E2E_MSW__?: boolean }).__ENABLE_E2E_MSW__ === true;
   if (enableE2EMSW) {
     const { worker } = await import('./mocks/browser');
     void worker
