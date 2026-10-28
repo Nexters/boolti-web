@@ -19,6 +19,7 @@ const installHarness = async (
   context: BrowserContext,
   local = false,
   profiles: Record<string, unknown>[] = [],
+  debug = false,
 ) => {
   const events: Event[] = [];
   // Exercise the real SDK and browser cookies; all collector traffic stays in this test.
@@ -51,7 +52,7 @@ const installHarness = async (
         body: `<!doctype html><html><head></head><body><button id="action">로그인 이벤트 테스트</button><script type="module">
         import { analytics } from '/@fs${clientPath}';
         import { initAnalytics, trackClick, trackViewScreen, identifyUser, resetUser } from '/@fs${clientPath.replace('runtime.ts', 'tracker.ts')}';
-        initAnalytics({ VITE_MIXPANEL_DEV_TOKEN: 'browser-test-dev', VITE_MIXPANEL_PROD_TOKEN: 'browser-test-prod', VITE_MIXPANEL_MODE: '${local ? 'local' : ''}' });
+        initAnalytics({ VITE_MIXPANEL_DEV_TOKEN: 'browser-test-dev', VITE_MIXPANEL_PROD_TOKEN: 'browser-test-prod', VITE_MIXPANEL_MODE: '${local ? 'local' : ''}', VITE_MIXPANEL_DEBUG: '${debug}' });
         window.__analyticsHarness = {
           ...analytics,
           identify: (id, userCode) => identifyUser({ id, userCode }),
@@ -102,7 +103,7 @@ test('shows and persists local click logs without any Mixpanel requests', async 
     if (/https:\/\/[^/]*(?:mixpanel|mxpnl)\.com\//.test(request.url()))
       requests.push(request.url());
   });
-  await installHarness(context, true);
+  await installHarness(context, true, [], true);
   await open(page, 'dev.boolti.in');
   await page.getByRole('button', { name: '로그인 이벤트 테스트' }).click();
   await page.locator('#boolti-analytics-local summary').click();
@@ -124,6 +125,40 @@ test('shows and persists local click logs without any Mixpanel requests', async 
   await expect(page.locator('#boolti-analytics-local summary')).toContainText('0건');
   expect(await page.evaluate(() => localStorage.getItem('boolti_analytics_local_logs'))).toBe('[]');
   expect(requests).toEqual([]);
+});
+
+test('shows live debug logs while the SDK sends events, without duplicate requests', async ({
+  context,
+  page,
+}) => {
+  const events = await installHarness(context, false, [], true);
+  await open(page, 'dev.boolti.in');
+  await page.getByRole('button', { name: '로그인 이벤트 테스트' }).click();
+  await page.locator('#boolti-analytics-local summary').click();
+  await expect(page.locator('#boolti-analytics-local .intro')).toContainText('Mixpanel 전송 모드');
+  await expect(page.locator('#boolti-analytics-local li').filter({ hasText: 'Kakao' })).toHaveCount(
+    1,
+  );
+  await expect
+    .poll(() => events.filter((event) => event.event === 'Click').length, { timeout: 15000 })
+    .toBe(1);
+  const recorded = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem('boolti_analytics_debug_logs')!).find(
+      (entry: { name: string }) => entry.name === 'Click',
+    ),
+  );
+  expect(events.find((event) => event.event === 'Click')!.properties).toMatchObject(
+    recorded.properties,
+  );
+  expect(await page.evaluate(() => localStorage.getItem('boolti_analytics_local_logs'))).toBeNull();
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'JSON 다운로드' }).click();
+  expect((await download).suggestedFilename()).toBe('boolti-debug-events.json');
+  await page.reload();
+  await page.locator('#boolti-analytics-local summary').click();
+  await expect(page.locator('#boolti-analytics-local li').filter({ hasText: 'Kakao' })).toHaveCount(
+    1,
+  );
 });
 
 test('shares anonymous identity, identifies the visitor, and propagates logout across sibling hosts', async ({

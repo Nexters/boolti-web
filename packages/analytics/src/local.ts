@@ -1,5 +1,6 @@
-// A separate destination: no Mixpanel SDK initialization or network transport.
+// This collector records locally only; runtime.ts optionally mirrors SDK calls into it.
 export const LOCAL_LOG_KEY = 'boolti_analytics_local_logs';
+export const DEBUG_LOG_KEY = 'boolti_analytics_debug_logs';
 const LIMIT = 300;
 type Entry = {
   time: string;
@@ -9,13 +10,15 @@ type Entry = {
   properties: Record<string, unknown>;
 };
 
-export const createLocalCollector = () => {
+export const createLocalCollector = (mode: 'local' | 'debug' = 'local') => {
+  const live = mode === 'debug';
+  const logKey = live ? DEBUG_LOG_KEY : LOCAL_LOG_KEY;
   let entries: Entry[] = [];
   let stored = true;
   let userId: string | undefined;
   let refresh = () => {};
   try {
-    const value: unknown = JSON.parse(localStorage.getItem(LOCAL_LOG_KEY) ?? '[]');
+    const value: unknown = JSON.parse(localStorage.getItem(logKey) ?? '[]');
     if (Array.isArray(value))
       entries = value
         .filter((entry): entry is Entry =>
@@ -35,8 +38,8 @@ export const createLocalCollector = () => {
   const persist = () => {
     try {
       const json = JSON.stringify(entries);
-      localStorage.setItem(LOCAL_LOG_KEY, json);
-      stored = localStorage.getItem(LOCAL_LOG_KEY) === json;
+      localStorage.setItem(logKey, json);
+      stored = localStorage.getItem(logKey) === json;
     } catch {
       stored = false;
     }
@@ -100,14 +103,15 @@ export const createLocalCollector = () => {
         section{padding:12px;gap:10px} summary{padding:13px 14px} li{padding:12px} pre{padding:10px}
       }
     </style><details><summary><span class="dot" aria-hidden="true"></span><span id="heading"></span><span class="chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><section>
-      <p class="intro"><strong>로컬 기록 모드 · Mixpanel 전송 없음</strong>현재 사이트의 최근 300건을 브라우저에 저장합니다.</p>
+      <p class="intro"><strong>${live ? 'Mixpanel 전송 모드 · 디버그 로그' : '로컬 기록 모드 · Mixpanel 전송 없음'}</strong>${live ? 'Mixpanel에 전송을 요청한 최근 300건을 브라우저에도 저장합니다. 최종 수신 여부는 Mixpanel에서 확인해주세요.' : '현재 사이트의 최근 300건을 브라우저에 저장합니다.'}</p>
       <p role="status"></p><input aria-label="이벤트 검색" placeholder="이벤트명이나 속성으로 검색">
       <div class="actions"><button type="button" id="export">JSON 다운로드</button><button type="button" id="clear">기록 지우기</button></div>
       <ol aria-label="로컬 이벤트 기록"></ol>
     </section></details>`;
     const input = root.querySelector('input')!;
     refresh = () => {
-      root.querySelector('#heading')!.textContent = `이벤트 로그 · 로컬 ${entries.length}건`;
+      root.querySelector('#heading')!.textContent =
+        `이벤트 로그 · ${live ? '전송' : '로컬'} ${entries.length}건`;
       const status = root.querySelector<HTMLElement>('[role="status"]')!;
       status.dataset.stored = String(stored);
       status.textContent = stored
@@ -148,7 +152,7 @@ export const createLocalCollector = () => {
       );
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'boolti-local-events.json';
+      link.download = `boolti-${live ? 'debug' : 'local'}-events.json`;
       link.click();
       setTimeout(() => URL.revokeObjectURL(url), 1000);
     });

@@ -1,11 +1,26 @@
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
-import { createLocalCollector, LOCAL_LOG_KEY } from '../src/local';
+import { createLocalCollector, LOCAL_LOG_KEY, DEBUG_LOG_KEY } from '../src/local';
 
 beforeEach(() => {
   localStorage.clear();
   document.body.replaceChildren();
 });
 afterEach(() => vi.restoreAllMocks());
+
+it('keeps live debug history separate from events that were never sent', () => {
+  const local = createLocalCollector();
+  local.track('LocalOnly', {});
+  document.body.replaceChildren();
+  const debug = createLocalCollector('debug');
+  debug.track('SentToSDK', {});
+  expect(JSON.parse(localStorage.getItem(LOCAL_LOG_KEY)!)[0].name).toBe('LocalOnly');
+  expect(JSON.parse(localStorage.getItem(DEBUG_LOG_KEY)!)[0].name).toBe('SentToSDK');
+  const root = document.querySelector('#boolti-analytics-local')!.shadowRoot!;
+  expect(root.querySelector('summary')!.textContent).toContain('전송 1건');
+  root.querySelector<HTMLButtonElement>('#clear')!.click();
+  expect(JSON.parse(localStorage.getItem(DEBUG_LOG_KEY)!)).toEqual([]);
+  expect(JSON.parse(localStorage.getItem(LOCAL_LOG_KEY)!)).toHaveLength(1);
+});
 
 it('restores saved records, filters the panel, and clears persistent history', () => {
   localStorage.setItem(

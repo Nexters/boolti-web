@@ -39,7 +39,7 @@ export const getAnalyticsConfig = (origin: string, env: AnalyticsEnv) => {
       env.VITE_MIXPANEL_TOKEN,
     namespace: `boolti_analytics_${production ? 'prod' : 'dev'}${local ? '_local' : ''}`,
     cookieDomain,
-    debug: !production && env.VITE_MIXPANEL_DEBUG === 'true',
+    debug: env.VITE_MIXPANEL_DEBUG === 'true',
   };
 };
 
@@ -161,6 +161,36 @@ const initializeCollector = () => {
     secure_cookie: location.protocol === 'https:',
     debug: config!.debug,
   });
+  if (config!.debug) {
+    safely(() => {
+      const log = createLocalCollector('debug');
+      collector = {
+        track: (event, properties, options) => {
+          mixpanel.track(event, properties, options);
+          safely(() => log.track(event, properties));
+        },
+        identify: (id) => {
+          mixpanel.identify(id);
+          safely(() => log.identify(id));
+        },
+        reset: () => {
+          mixpanel.reset();
+          safely(() => log.reset());
+        },
+        get_property: (key) => mixpanel.get_property(key),
+        people: {
+          set: (properties) => {
+            mixpanel.people.set(properties);
+            safely(() => log.people.set(properties));
+          },
+          set_once: (properties) => {
+            mixpanel.people.set_once(properties);
+            safely(() => log.people.set_once(properties));
+          },
+        },
+      };
+    });
+  }
 };
 
 const sendEvent = (entry: PendingEvent) => {
