@@ -7,11 +7,6 @@ const isE2EMsw = process.env.VITE_E2E_MSW === 'true';
 export default defineConfig({
   test: {
     exclude: ['e2e/**'],
-    // Let jsdom provide browser storage instead of Node's native Web Storage.
-    poolOptions: {
-      forks: { execArgv: ['--no-experimental-webstorage'] },
-      threads: { execArgv: ['--no-experimental-webstorage'] },
-    },
   },
   resolve: {
     alias: [{ find: '~', replacement: '/src' }],
