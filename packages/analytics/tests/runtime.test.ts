@@ -34,6 +34,7 @@ const info = {
 };
 const load = () => import('../src/runtime');
 const logs = () => JSON.parse(localStorage.getItem('boolti_analytics_local_logs') ?? '[]');
+const debugLogs = () => JSON.parse(localStorage.getItem('boolti_analytics_debug_logs') ?? '[]');
 const clearCookies = () => {
   document.cookie.split(';').forEach((cookie) => {
     const name = cookie.split('=')[0].trim();
@@ -135,6 +136,61 @@ describe('develop tracking API compatibility', () => {
 });
 
 describe('collection configuration', () => {
+  it('sends once through the SDK and mirrors events and identity into the debug panel', async () => {
+    const { analytics, initializeAnalytics } = await load();
+    initializeAnalytics(env);
+    analytics.identify('42');
+    trackMap(analytics);
+    const sdkClicks = sdk.track.mock.calls.filter(([event]) => event === 'Click');
+    expect(sdkClicks).toHaveLength(1);
+    const recorded = debugLogs().find((entry: { name: string }) => entry.name === 'Click');
+    expect(recorded).toMatchObject({
+      operation: 'event',
+      userId: '42',
+      properties: sdkClicks[0][1],
+    });
+    expect(sdk.identify).toHaveBeenCalledOnce();
+    expect(sdk.people.set_once).toHaveBeenCalledOnce();
+    expect(debugLogs()).toContainEqual(
+      expect.objectContaining({
+        operation: 'user',
+        properties: { user_id: '42' },
+      }),
+    );
+    const root = document.querySelector('#boolti-analytics-local')!.shadowRoot!;
+    expect(root.querySelector('.intro')!.textContent).toContain('Mixpanel 전송 모드');
+    expect(root.querySelector('.intro')!.textContent).not.toContain('전송 없음');
+    expect(logs()).toEqual([]);
+    analytics.logout();
+    trackMap(analytics);
+    expect(debugLogs().at(-1)).not.toHaveProperty('userId');
+    expect(debugLogs().at(-1).properties).toMatchObject({ is_logged_in: false });
+  });
+
+  it('keeps normal SDK tracking without a panel when debug is false', async () => {
+    const { analytics, initializeAnalytics } = await load();
+    initializeAnalytics({ ...env, VITE_MIXPANEL_DEBUG: 'false' });
+    trackMap(analytics);
+    expect(sdk.track).toHaveBeenCalled();
+    expect(document.querySelector('#boolti-analytics-local')).toBeNull();
+    expect(debugLogs()).toEqual([]);
+  });
+
+  it('continues SDK tracking when debug storage is unavailable', async () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('quota');
+    });
+    const { analytics, initializeAnalytics } = await load();
+    initializeAnalytics(env);
+    trackMap(analytics);
+    expect(sdk.track.mock.calls.filter(([event]) => event === 'Click')).toHaveLength(1);
+    expect(
+      document
+        .querySelector('#boolti-analytics-local')!
+        .shadowRoot!.querySelector('[role="status"]')!.textContent,
+    ).toContain('저장 실패');
+  });
+
   it('records local events and only user_id profile properties without using the SDK', async () => {
     const { analytics, initializeAnalytics } = await load();
     initializeAnalytics({ ...env, VITE_MIXPANEL_MODE: 'local' });
@@ -165,6 +221,7 @@ describe('collection configuration', () => {
       sdk.people.set_once,
     ])
       expect(fn).not.toHaveBeenCalled();
+    expect(debugLogs()).toEqual([]);
   });
 
   it('records locally without a project token', async () => {
@@ -180,7 +237,7 @@ describe('collection configuration', () => {
     for (const host of ['boolti.in', 'place.boolti.in', 'preview.boolti.in', 'profile.boolti.in'])
       expect(getAnalyticsConfig(`https://${host}`, env)).toMatchObject({
         token: 'test-prod',
-        debug: false,
+        debug: true,
         cookieDomain: 'boolti.in',
       });
     for (const origin of [
@@ -193,6 +250,9 @@ describe('collection configuration', () => {
     expect(
       getAnalyticsConfig('https://boolti.in', { VITE_MIXPANEL_DEV_TOKEN: 'test-dev' }).token,
     ).toBeUndefined();
+    expect(
+      getAnalyticsConfig('https://boolti.in', { ...env, VITE_MIXPANEL_DEBUG: 'false' }).debug,
+    ).toBe(false);
   });
 
   it('does not initialize or request client info without a selected token', async () => {
