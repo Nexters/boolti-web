@@ -1,4 +1,4 @@
-import { checkIsWebView } from '@boolti/bridge';
+import { checkIsWebView, isWebViewBridgeAvailable, type ClientInfo } from '@boolti/bridge';
 
 import type { Platform } from './constants';
 
@@ -12,7 +12,10 @@ const OS_VERSION_PATTERNS: RegExp[] = [
 ];
 
 export const getPlatform = (userAgent = window.navigator.userAgent): Platform =>
-  MOBILE_REGEX.test(userAgent) ? 'Web_mobile' : 'Web_desktop';
+  MOBILE_REGEX.test(userAgent) ||
+  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+    ? 'Web_mobile'
+    : 'Web_desktop';
 
 export const getOsVersion = (userAgent = window.navigator.userAgent) => {
   for (const pattern of OS_VERSION_PATTERNS) {
@@ -22,10 +25,13 @@ export const getOsVersion = (userAgent = window.navigator.userAgent) => {
   return undefined;
 };
 
-/** 공통 속성 시트의 값. 웹에서 알 수 없는 app_version, device_model 은 넣지 않는다. */
-export const getCommonProperties = () => ({
-  platform: getPlatform(),
-  os_version: getOsVersion(),
-  screen_resolution: `${window.screen.width}x${window.screen.height}`,
-  is_webview: checkIsWebView(),
+/** 웹뷰에서는 앱이 응답한 OS/기기 정보와 물리 픽셀 해상도를 사용한다. */
+export const getCommonProperties = (clientInfo?: ClientInfo) => ({
+  platform: clientInfo?.platform ?? getPlatform(),
+  os_version: clientInfo?.osVersion ?? getOsVersion(),
+  app_version: clientInfo?.appVersion,
+  device_model: clientInfo?.deviceModel,
+  screen_resolution:
+    clientInfo?.screenResolution ?? `${window.screen.width}x${window.screen.height}`,
+  is_webview: checkIsWebView() || isWebViewBridgeAvailable(),
 });

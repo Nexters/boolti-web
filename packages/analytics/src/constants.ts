@@ -45,7 +45,7 @@ export type TicketingType = 'Paid' | 'None';
 
 export type SearchSource = 'Direct' | 'Recent' | 'Trending' | 'AutoComplete' | 'RecommendedRegion';
 
-export type Platform = 'Web_mobile' | 'Web_desktop';
+export type Platform = 'iOS' | 'Android' | 'Web_mobile' | 'Web_desktop';
 
 export type PropertyValue = string | number | boolean | null | undefined;
 

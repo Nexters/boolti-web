@@ -1,6 +1,5 @@
-import { AnalyticsEvent, setSignUpDate, trackComplete, trackImpression } from '@boolti/analytics';
+import { AnalyticsEvent, trackComplete, trackImpression } from '@boolti/analytics';
 import { useUserProfile } from '@boolti/api';
-import { format } from 'date-fns';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -53,7 +52,6 @@ const SignUpCompletePage = () => {
             </Styled.CardContentDescription>
             <Styled.StartButton
               onClick={() => {
-                setSignUpDate(format(new Date(), 'yyyy-MM-dd'));
                 trackComplete(AnalyticsEvent.COMPLETE_SIGN_UP, { login_method: loginMethod });
                 navigate(PATH.HOME, { replace: true });
               }}
