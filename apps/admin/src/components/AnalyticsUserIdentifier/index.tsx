@@ -1,4 +1,4 @@
-import { identifyUser } from '@boolti/analytics';
+import { identifyUser, isAnalyticsWebView } from '@boolti/analytics';
 import { queryKeys, useQueryClient } from '@boolti/api';
 import { useEffect } from 'react';
 
@@ -11,12 +11,12 @@ const AnalyticsUserIdentifier = () => {
   const isLoggedIn = isLogin();
 
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn || isAnalyticsWebView()) return;
 
     // 분석용 조회가 실패해도 화면에 영향을 주지 않도록 에러 바운더리를 거치지 않는다
     queryClient
       .fetchQuery(queryKeys.user.profile)
-      .then(({ id, nickname, email }) => identifyUser({ id, nickname, email }))
+      .then(({ id, userCode }) => identifyUser({ id, userCode }))
       .catch(() => {});
   }, [isLoggedIn, queryClient]);
 

@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 
-initAnalytics(import.meta.env.VITE_MIXPANEL_TOKEN, {
+initAnalytics(import.meta.env, {
   debug: import.meta.env.DEV,
   isLoggedIn: Boolean(
     localStorage.getItem(LOCAL_STORAGE.ACCESS_TOKEN) &&

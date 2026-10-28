@@ -4,7 +4,6 @@ import {
   trackClick,
   trackComplete,
   trackViewScreen,
-  updateOrganizerProfile,
 } from '@boolti/analytics';
 import {
   ImageFile,
@@ -123,7 +122,6 @@ const ShowAddPage = ({ step }: ShowAddPageProps) => {
       ticketing_type: ticketingType,
       place_id: showBasicInfoForm.getValues('concertHallId'),
     });
-    updateOrganizerProfile();
 
     if (isWebView && isWebViewBridgeAvailable()) {
       showToast({ message: SHOW_ADD_SUCCESS_MESSAGE, duration: TOAST_DURATIONS.SHORT });

@@ -1738,9 +1738,11 @@ __metadata:
     "@boolti/eslint-config": "npm:*"
     "@boolti/typescript-config": "npm:*"
     "@types/react": "npm:^18.2.43"
+    jsdom: "npm:^26.1.0"
     mixpanel-browser: "npm:^2.84.0"
     react: "npm:^18.2.0"
     typescript: "npm:^5.2.2"
+    vitest: "npm:^2.1.9"
   languageName: unknown
   linkType: soft
 

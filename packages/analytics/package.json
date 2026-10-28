@@ -8,13 +8,16 @@
   "scripts": {
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "TIMING=1 eslint . --ext ts,tsx --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@boolti/eslint-config": "*",
     "@boolti/typescript-config": "*",
     "@types/react": "^18.2.43",
-    "typescript": "^5.2.2"
+    "jsdom": "^26.1.0",
+    "typescript": "^5.2.2",
+    "vitest": "^2.1.9"
   },
   "dependencies": {
     "@boolti/bridge": "*",
