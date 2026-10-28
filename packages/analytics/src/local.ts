@@ -62,8 +62,10 @@ export const createLocalCollector = () => {
         padding:15px 18px;background:#172033;color:#fff;font-size:16px;font-weight:700;user-select:none}
       summary::-webkit-details-marker{display:none}
       .dot{width:9px;height:9px;border-radius:50%;background:#6ee7b7;box-shadow:0 0 0 4px #6ee7b71a;flex-shrink:0}
-      .chevron{margin-left:auto;padding-left:20px;color:#cbd5e1;font-size:18px;transition:transform .15s}
-      details[open] .chevron{transform:rotate(180deg);padding-left:0;padding-right:20px}
+      .chevron{display:flex;align-items:center;justify-content:center;flex-shrink:0;
+        width:24px;height:24px;margin-left:auto;color:#cbd5e1;transition:transform .15s}
+      .chevron svg{display:block}
+      details[open] .chevron{transform:rotate(180deg)}
       section{display:flex;flex-direction:column;width:min(560px,calc(100vw - 24px));
         max-height:calc(100dvh - 90px);padding:18px;gap:12px}
       p{margin:0;color:#475569;font-size:14px;line-height:1.65}
@@ -97,7 +99,7 @@ export const createLocalCollector = () => {
         :host{top:12px!important;bottom:auto!important}
         section{padding:12px;gap:10px} summary{padding:13px 14px} li{padding:12px} pre{padding:10px}
       }
-    </style><details><summary><span class="dot" aria-hidden="true"></span><span id="heading"></span><span class="chevron" aria-hidden="true">⌄</span></summary><section>
+    </style><details><summary><span class="dot" aria-hidden="true"></span><span id="heading"></span><span class="chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="m4 6 4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></summary><section>
       <p class="intro"><strong>로컬 기록 모드 · Mixpanel 전송 없음</strong>현재 사이트의 최근 300건을 브라우저에 저장합니다.</p>
       <p role="status"></p><input aria-label="이벤트 검색" placeholder="이벤트명이나 속성으로 검색">
       <div class="actions"><button type="button" id="export">JSON 다운로드</button><button type="button" id="clear">기록 지우기</button></div>
