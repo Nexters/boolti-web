@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## 위치와 범위
 
-이 디렉터리(`apps/super-admin`)는 **불티 팀원이 사용하는 슈퍼 어드민 페이지**입니다. `boolti-web` Turborepo 모노레포의 한 앱이며, `@boolti/api`, `@boolti/ui`, `@boolti/icon` 워크스페이스 패키지에 의존합니다. (Node 20.11.0, Yarn 4 PnP)
+이 디렉터리(`apps/super-admin`)는 **불티 팀원이 사용하는 슈퍼 어드민 페이지**입니다. `boolti-web` Turborepo 모노레포의 한 앱이며, `@boolti/api`, `@boolti/ui`, `@boolti/icon` 워크스페이스 패키지에 의존합니다. (Node 버전은 루트 `.nvmrc` 참고, Yarn 4 PnP)
 
 ## 명령어
 
