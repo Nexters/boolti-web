@@ -1,6 +1,5 @@
 import { trackClick } from '@boolti/analytics';
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
-import { navigateToPlaceDetail } from '@boolti/bridge';
 import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -13,6 +12,7 @@ import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
 import { EXTERNAL_URL, openStoreLink } from '../../constants/external';
 import { X_NCP_APIGW_API_KEY_ID } from '../../constants/ncp';
+import { navigateToPlaceProfile } from '../../utils/navigateToPlaceProfile';
 import { navigateToAppScheme } from '../../utils/app';
 
 setDefaultOptions({ locale: ko });
@@ -97,15 +97,14 @@ const ShowPreviewPage = () => {
     concertHallId,
   } = previewData;
 
-  // 공연장 프로필 화면은 앱이 담당하므로 브릿지로 넘긴다.
   const placeProfileClickHandler = (hallId: number, entryPoint: 'Summary' | 'Location') => {
     trackClick('ShowDetail', 'Item', 'PlaceProfile', {
       show_id: id,
       place_id: hallId,
       entry_point: entryPoint,
     });
-    navigateToPlaceDetail({ placeId: hallId }).catch(() => {
-      // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+    navigateToPlaceProfile(hallId).catch(() => {
+      alert('공연장 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
     });
   };
 
