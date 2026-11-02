@@ -1,10 +1,12 @@
 import { IS_PRODUCTION_PHASE } from './phase';
 
 export const EXTERNAL_DOMAIN = {
+  PLACE: `https://${IS_PRODUCTION_PHASE ? '' : 'dev.'}place.boolti.in`,
   PROFILE: `https://${IS_PRODUCTION_PHASE ? '' : 'dev.'}profile.boolti.in`,
 } as const;
 
 export const EXTERNAL_URL = {
+  PLACE_PROFILE: (shareCode: string) => `${EXTERNAL_DOMAIN.PLACE}/${encodeURIComponent(shareCode)}`,
   USER_PROFILE: (userCode: string) => `${EXTERNAL_DOMAIN.PROFILE}/${userCode}`,
 } as const;
 

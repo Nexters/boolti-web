@@ -1,11 +1,12 @@
 import { trackClick } from '@boolti/analytics';
 import { ShowPreviewResponse } from '@boolti/api';
-import { checkIsAndroid, navigateToPlaceDetail } from '@boolti/bridge';
+import { checkIsAndroid } from '@boolti/bridge';
 import { ShowInfoDetail } from '@boolti/ui';
 import { format } from 'date-fns';
 import { useLoaderData } from 'react-router-dom';
 import Styled from './ShowInfoDetailPage.styles';
 import { X_NCP_APIGW_API_KEY_ID } from '../../constants/ncp';
+import { navigateToPlaceProfile } from '../../utils/navigateToPlaceProfile';
 
 const ShowInfoDetailPage: React.FC = () => {
   const [show, { count: soldTicketCount }] = useLoaderData() as [
@@ -35,7 +36,6 @@ const ShowInfoDetailPage: React.FC = () => {
     location.href = `sms:${show.hostPhoneNumber}`;
   };
 
-  // 공연장 프로필 화면은 앱이 담당하므로 브릿지로 넘긴다.
   // iOS 는 브릿지를 받을 때 클릭을 기록하고 Android 는 기록하지 않아서 Android 일 때만 웹이 보낸다.
   const placeProfileClickHandler = (hallId: number) => {
     if (checkIsAndroid()) {
@@ -46,8 +46,8 @@ const ShowInfoDetailPage: React.FC = () => {
       });
     }
 
-    navigateToPlaceDetail({ placeId: hallId }).catch(() => {
-      // 앱이 응답하지 않아도 웹에서 할 수 있는 처리는 없다
+    navigateToPlaceProfile(hallId).catch(() => {
+      alert('공연장 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
     });
   };
 
