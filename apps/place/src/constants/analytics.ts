@@ -8,6 +8,7 @@ export const trackPlaceProfileView = (profile: ConcertHallProfileResponse) => {
   trackViewScreen('PlaceProfile', {
     place_id: profile.id,
     place_name: profile.name,
+    region: profile.region?.name,
     source: new URLSearchParams(window.location.search).get('source') ?? 'Direct',
     profile_status: profile.hasHomeTabData || profile.hasRentalTabData ? 'Active' : 'ComingSoon',
   });
