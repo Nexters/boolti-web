@@ -155,11 +155,20 @@ export interface ConcertHallProfileRental {
   specialNotes?: string[];
 }
 
+export interface ConcertHallProfileRegion {
+  regionId: number;
+  /** 지역명 (예: 홍대/연남/연희) */
+  name: string;
+  groupId: number;
+  groupName: string;
+}
+
 export interface ConcertHallProfileResponse {
   id: number;
   name: string;
   shareCode?: string;
   representativeImageUrl?: string;
+  region?: ConcertHallProfileRegion | null;
   share?: ConcertHallShare;
   hasHomeTabData?: boolean;
   hasRentalTabData?: boolean;

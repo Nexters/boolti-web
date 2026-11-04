@@ -75,6 +75,8 @@ interface ShowPreviewProps {
   onClickMap?: () => void;
   /** 탭 버튼을 눌렀을 때. 0: 공연 정보, 1: 출연진 */
   onClickTab?: (index: number) => void;
+  /** 클릭 또는 스와이프로 탭이 바뀌었을 때. 0: 공연 정보, 1: 출연진 */
+  onChangeTab?: (index: number) => void;
   naverMapClientId?: string;
 }
 
@@ -95,6 +97,7 @@ const ShowPreview = ({
   onClickPlaceProfile,
   onClickMap,
   onClickTab,
+  onChangeTab,
   naverMapClientId,
 }: ShowPreviewProps) => {
   const { images, name, date, startTime, runningTime, placeName, concertHallId } = show;
@@ -238,6 +241,7 @@ const ShowPreview = ({
       <Styled.ShowPreviewContent>
         <Tab
           onClickTab={onClickTab}
+          onChangeTab={onChangeTab}
           tabItems={[
             {
               title: '공연 정보',

@@ -51,8 +51,6 @@ const getShareText = (show: {
   );
 };
 
-const CAST_TAB_INDEX = 1;
-
 const ShowPreviewPage = () => {
   const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
   const [shareDropdownOpen, setShareDropdownOpen] = useState<boolean>(false);
@@ -112,8 +110,8 @@ const ShowPreviewPage = () => {
     trackClick('ShowDetail', 'Item', 'Map', { map_provider: 'NaverMap' });
   };
 
-  const tabClickHandler = (index: number) => {
-    if (index === CAST_TAB_INDEX) trackClick('ShowDetail', 'Tab', 'CastList');
+  const tabChangeHandler = (index: number) => {
+    trackClick('ShowDetail', 'Tab', index === 0 ? 'Showinfo' : 'CastList');
   };
 
   const shareShowPreviewLink = async () => {
@@ -264,7 +262,7 @@ const ShowPreviewPage = () => {
             prioritizeFirstImage
             onClickPlaceProfile={placeProfileClickHandler}
             onClickMap={mapClickHandler}
-            onClickTab={tabClickHandler}
+            onChangeTab={tabChangeHandler}
             naverMapClientId={X_NCP_APIGW_API_KEY_ID}
           />
           <Styled.FooterWrapper>
