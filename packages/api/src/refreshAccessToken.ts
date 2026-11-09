@@ -11,9 +11,12 @@ const postRefreshToken = async () => {
   const refreshToken = window.localStorage.getItem(LOCAL_STORAGE.REFRESH_TOKEN);
 
   if (refreshToken) {
+    // prefixUrl로 넘겨야 API_URL의 끝 슬래시 유무와 무관하게 경로가 정규화된다.
+    // 직접 이어붙이면 API_URL이 '/'로 끝날 때 '//web/...'이 되어 서버가 라우팅하지 못한다.
     const response = await ky.post(
-      `${API_URL}/${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/papi/v1/login/refresh`,
+      `${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/papi/v1/login/refresh`,
       {
+        prefixUrl: API_URL,
         json: {
           refreshToken,
         },

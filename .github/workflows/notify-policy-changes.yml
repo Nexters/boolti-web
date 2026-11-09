@@ -1,0 +1,50 @@
+name: Notify Policy Changes
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/admin/src/**'
+      - 'apps/super-admin/src/**'
+      - 'packages/api/src/**'
+      - 'packages/ui/src/**'
+
+jobs:
+  dispatch:
+    name: Dispatch to boolti-docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Collect changed files
+        id: changes
+        run: |
+          FILES=$(git diff --name-only HEAD~1 HEAD -- \
+            'apps/admin/src/**' \
+            'apps/super-admin/src/**' \
+            'packages/api/src/**' \
+            'packages/ui/src/**')
+          COUNT=$(echo "$FILES" | wc -l | tr -d ' ')
+          LIST=$(echo "$FILES" | head -10 | sed 's/^/- /')
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+          {
+            echo "list<<EOF"
+            echo "$LIST"
+            echo "EOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Dispatch to boolti-docs
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DOCS_DISPATCH_TOKEN }}
+          repository: ryanproback/boolti-docs
+          event-type: policy-changed
+          client-payload: |
+            {
+              "source_repo": "Nexters/boolti-web",
+              "commit_sha": "${{ github.sha }}",
+              "file_count": "${{ steps.changes.outputs.count }}",
+              "changed_files": "${{ steps.changes.outputs.list }}"
+            }
