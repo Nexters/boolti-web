@@ -1,19 +1,27 @@
+import { trackClick } from '@boolti/analytics';
 import { ShowCastTeamReadResponse, ShowPreviewResponse } from '@boolti/api';
 import { Footer, ShowPreview, useDeviceByWidth, useDialog } from '@boolti/ui';
 import { format, setDefaultOptions } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { QRCodeSVG } from 'qrcode.react';
+import { lazy, Suspense, useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
 import Styled from './ShowPreviewPage.styles';
 import { Meta } from '../../components/Meta';
 import BooltiGrayLogo from '../../components/BooltiGrayLogo';
 import useBodyScrollLock from '../../hooks/useBodyScrollLock';
-import { useState } from 'react';
 import { EXTERNAL_URL, openStoreLink } from '../../constants/external';
+import { X_NCP_APIGW_API_KEY_ID } from '../../constants/ncp';
+import { navigateToPlaceProfile } from '../../utils/navigateToPlaceProfile';
 import { navigateToAppScheme } from '../../utils/app';
 
 setDefaultOptions({ locale: ko });
+
+const QRCodeSVG = lazy(() =>
+  import('qrcode.react').then((module) => ({
+    default: module.QRCodeSVG,
+  })),
+);
 
 const getAppScheme = (showId: number) => {
   return `boolti://show/${showId}`;
@@ -84,9 +92,30 @@ const ShowPreviewPage = () => {
     hostPhoneNumber,
     latitude,
     longitude,
+    concertHallId,
   } = previewData;
 
+  const placeProfileClickHandler = (hallId: number, entryPoint: 'Summary' | 'Location') => {
+    trackClick('ShowDetail', 'Item', 'PlaceProfile', {
+      show_id: id,
+      place_id: hallId,
+      entry_point: entryPoint,
+    });
+    navigateToPlaceProfile(hallId).catch(() => {
+      alert('공연장 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.');
+    });
+  };
+
+  const mapClickHandler = () => {
+    trackClick('ShowDetail', 'Item', 'Map', { map_provider: 'NaverMap' });
+  };
+
+  const tabChangeHandler = (index: number) => {
+    trackClick('ShowDetail', 'Tab', index === 0 ? 'Showinfo' : 'CastList');
+  };
+
   const shareShowPreviewLink = async () => {
+    trackClick('ShowDetail', 'Button', 'Share', { share_method: 'LinkCopy' });
     const text = getPreviewLink(id);
 
     if (navigator.share) {
@@ -98,6 +127,7 @@ const ShowPreviewPage = () => {
   };
 
   const shareShowInfo = async () => {
+    trackClick('ShowDetail', 'Button', 'Share', { share_method: 'WithInfo' });
     const text = getShareText({
       id,
       title,
@@ -150,7 +180,9 @@ const ShowPreviewPage = () => {
         <Styled.DialogContainer>
           <Styled.DialogQRCodeContainer>
             <Styled.QRCodeContainer>
-              <QRCodeSVG value={getPreviewLink(id)} size={182} level="H" />
+              <Suspense fallback={null}>
+                <QRCodeSVG value={getPreviewLink(id)} size={182} level="H" />
+              </Suspense>
             </Styled.QRCodeContainer>
             <BooltiGrayLogo />
           </Styled.DialogQRCodeContainer>
@@ -187,7 +219,10 @@ const ShowPreviewPage = () => {
         <Styled.ShowPreviewContainer>
           <ShowPreview
             show={{
-              images: showImg.map((file) => file.path),
+              images: showImg.map((file) => ({
+                src: file.path,
+                thumbnailSrc: file.thumbnailPath,
+              })),
               name: title,
               date: format(new Date(date), 'yyyy.MM.dd (E)'),
               startTime: format(new Date(date), 'HH:mm'),
@@ -202,6 +237,7 @@ const ShowPreviewPage = () => {
               notice: text,
               hostName: hostName,
               hostPhoneNumber: hostPhoneNumber,
+              concertHallId,
             }}
             showCastTeams={showCastTeams.map(({ name, members }) => ({
               name,
@@ -223,6 +259,11 @@ const ShowPreviewPage = () => {
             onShareShowPreviewLink={shareShowPreviewLink}
             onShareShowInfo={shareShowInfo}
             onCloseShareDropdown={shareDropdownCloseHandler}
+            prioritizeFirstImage
+            onClickPlaceProfile={placeProfileClickHandler}
+            onClickMap={mapClickHandler}
+            onChangeTab={tabChangeHandler}
+            naverMapClientId={X_NCP_APIGW_API_KEY_ID}
           />
           <Styled.FooterWrapper>
             <Footer darkMode />

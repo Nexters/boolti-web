@@ -41,6 +41,8 @@ export interface ShowResponse {
   settlementStatus: 'SETTLEMENT_REQUIRED' | 'SETTLEMENT_REQUEST' | 'SETTLEMENT_DONE' | null;
   latitude: number;
   longitude: number;
+  /** 연결된 불티 공연장 ID. 미연결 시 null/undefined */
+  concertHallId?: number;
   createdAt: string;
 }
 
@@ -255,6 +257,8 @@ export interface ShowPreviewResponse {
   groupId: number;
   name: string;
   placeName: string;
+  /** 연결된 불티 공연장 ID. 미연결 시 null/undefined */
+  concertHallId?: number;
   date: string;
   runningTime: number;
   streetAddress: string;
@@ -357,6 +361,8 @@ export interface ShowCreateRequest {
   latitude?: number;
   /** 경도 */
   longitude?: number;
+  /** 선택한 공연장 ID. 값이 있으면 Show 장소 정보는 유지하고 공연장 연결만 생성한다. */
+  concertHallId?: number;
   /** 사전 질문 목록. optional. 최대 3개 */
   preQuestions?: {
     /** 질문 텍스트 (필수, 100자 이내) */
@@ -391,6 +397,8 @@ export interface NonTicketingShowCreateRequest {
   latitude?: number;
   /** 경도 */
   longitude?: number;
+  /** 선택한 공연장 ID. 값이 있으면 Show 장소 정보는 유지하고 공연장 연결만 생성한다. */
+  concertHallId?: number;
   /** 티켓 미진행 공연 여부 */
   isNonTicketing: boolean;
 }

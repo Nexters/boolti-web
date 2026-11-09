@@ -11,6 +11,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@boolti/analytics": "*",
+    "@boolti/api": "*",
     "@boolti/bridge": "*",
     "@boolti/icon": "*",
     "@emotion/react": "^11.11.3",

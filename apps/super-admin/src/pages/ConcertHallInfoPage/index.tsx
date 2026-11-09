@@ -1,0 +1,722 @@
+import { CloseOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  useSuperAdminConcertHallDetail,
+  useSuperAdminConcertHallRegionGroups,
+  useSuperAdminConcertHallSubwayStations,
+  useSuperAdminSaveConcertHallSubwayStations,
+  useSuperAdminUpdateConcertHall,
+  useSuperAdminUploadConcertHallImage,
+  type GeocodeCoordinates,
+} from '@boolti/api';
+import {
+  SubwayStationSearchItem,
+  SuperAdminSubwayLine,
+} from '@boolti/api/src/types/superAdminConcertHall';
+import { Button as BooltiButton, SubwayLineBadge, useToast } from '@boolti/ui';
+import { useTheme } from '@emotion/react';
+import { Button, Card, Checkbox, Flex, Input, InputNumber, Select, Typography } from 'antd';
+import type { InputRef } from 'antd';
+import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import ConcertHallPageLayout, { CARD_BODY_PADDING } from '~/components/ConcertHallPageLayout';
+import alcoholIcon from '~/assets/amenities/alcohol.svg';
+import cabinetIcon from '~/assets/amenities/cabinet.svg';
+import parkingIcon from '~/assets/amenities/parking.svg';
+import restroomIcon from '~/assets/amenities/restroom.svg';
+import secondFloorIcon from '~/assets/amenities/second-floor.svg';
+import waitingRoomIcon from '~/assets/amenities/waiting-room.svg';
+import AddressSearchModal from './AddressSearchModal';
+import ImageUploadBox from './ImageUploadBox';
+import SubwayStationSearchModal from './SubwayStationSearchModal';
+
+const { TextArea } = Input;
+
+const MAX_PHOTO_COUNT = 20;
+
+const PHONE_NUMBER_REGEX = /^0\d{1,2}-?\d{3,4}-?\d{4}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+/** 공연장 ID(공유 코드): 영문 소문자·숫자·하이픈 1~20자 */
+const SHARE_CODE_REGEX = /^[a-z0-9-]{1,20}$/;
+
+const AmenityIcon = ({ src, label }: { src: string; label: string }) => (
+  <img src={src} alt={label} style={{ width: 18, height: 18, verticalAlign: 'middle' }} />
+);
+
+// antd Checkbox 래퍼는 align-items: baseline 이라, 자식에 아이콘이 들어가면
+// 체크박스/아이콘/텍스트의 세로 정렬이 틀어진다. center로 덮어준다.
+const AmenityCheckbox = ({
+  checked,
+  onChange,
+  label,
+  icon,
+}: {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  label: string;
+  icon: string;
+}) => (
+  <Checkbox
+    checked={checked}
+    onChange={(e) => onChange(e.target.checked)}
+    style={{ alignItems: 'center' }}
+  >
+    <Flex align="center" gap={6} component="span">
+      <AmenityIcon src={icon} label={label} />
+      {label}
+    </Flex>
+  </Checkbox>
+);
+
+interface SelectedStation {
+  stationId: number;
+  stationName: string;
+  lines: SuperAdminSubwayLine[];
+}
+
+interface AmenitiesState {
+  hasWaitingRoom: boolean;
+  waitingRoomCount?: number;
+  hasParking: boolean;
+  parkingCount?: number;
+  hasCabinet: boolean;
+  cabinetCount?: number;
+  hasSecondFloorSeating: boolean;
+  hasIndoorRestroom: boolean;
+  hasAlcoholSales: boolean;
+}
+
+const INITIAL_AMENITIES: AmenitiesState = {
+  hasWaitingRoom: false,
+  hasParking: false,
+  hasCabinet: false,
+  hasSecondFloorSeating: false,
+  hasIndoorRestroom: false,
+  hasAlcoholSales: false,
+};
+
+const FieldLabel = ({ children, required }: { children: React.ReactNode; required?: boolean }) => (
+  <Typography.Text strong style={{ display: 'block', marginBottom: 8 }}>
+    {children}
+    {required && <Typography.Text type="danger"> *</Typography.Text>}
+  </Typography.Text>
+);
+
+const SectionTitle = ({ children }: { children: React.ReactNode }) => (
+  // Figma 카드 제목은 H1(20px), 제목↔본문 간격 16
+  <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 16 }}>
+    {children}
+  </Typography.Title>
+);
+
+// 이미지 우상단 모서리에 걸치는 다크 원형 삭제 버튼
+// Figma node 9160:9598 export (색상만 유지, path 원본)
+const CloseIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M15 5L5 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M5 5L15 15"
+      stroke="white"
+      strokeWidth="1.46"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const RemoveImageButton = ({ onClick, label }: { onClick: () => void; label: string }) => (
+  <button
+    type="button"
+    aria-label={label}
+    onClick={onClick}
+    style={{
+      position: 'absolute',
+      top: -10,
+      right: -10,
+      width: 28,
+      height: 28,
+      borderRadius: '50%',
+      border: 'none',
+      // grey.g90 80% — Figma node 9160:9597
+      backgroundColor: 'rgba(40, 43, 51, 0.8)',
+      padding: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer',
+    }}
+  >
+    <CloseIcon />
+  </button>
+);
+
+const ConcertHallInfoPage = () => {
+  const params = useParams<{ hallId: string }>();
+  const hallId = Number(params.hallId);
+  const theme = useTheme();
+  const toast = useToast();
+  const detailAddressRef = useRef<InputRef>(null);
+
+  const { data: detail } = useSuperAdminConcertHallDetail(hallId);
+  const { data: savedStations } = useSuperAdminConcertHallSubwayStations(hallId);
+  const { data: regionGroups } = useSuperAdminConcertHallRegionGroups();
+  const saveSubwayStations = useSuperAdminSaveConcertHallSubwayStations();
+  const updateConcertHall = useSuperAdminUpdateConcertHall();
+  const uploadImage = useSuperAdminUploadConcertHallImage();
+
+  // 기본 정보
+  const [name, setName] = useState('');
+  const [shareCode, setShareCode] = useState('');
+  const [streetAddress, setStreetAddress] = useState('');
+  const [detailAddress, setDetailAddress] = useState('');
+  const [latitude, setLatitude] = useState<number | undefined>(undefined);
+  const [longitude, setLongitude] = useState<number | undefined>(undefined);
+  const [regionId, setRegionId] = useState<number | null>(null);
+  const [stations, setStations] = useState<SelectedStation[]>([]);
+  const [representativeImage, setRepresentativeImage] = useState<string | null>(null);
+
+  // 문의처 / 소개 및 사진
+  const [websiteUrl, setWebsiteUrl] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
+  const [introduction, setIntroduction] = useState('');
+  const [photos, setPhotos] = useState<string[]>([]);
+
+  // 편의시설 및 서비스
+  const [amenities, setAmenities] = useState<AmenitiesState>(INITIAL_AMENITIES);
+
+  const [isStationModalOpen, setIsStationModalOpen] = useState(false);
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!detail) {
+      return;
+    }
+    setName(detail.name ?? '');
+    setShareCode(detail.shareCode ?? '');
+    setStreetAddress(detail.location?.streetAddress ?? '');
+    setDetailAddress(detail.location?.detailAddress ?? '');
+    setLatitude(detail.location?.latitude);
+    setLongitude(detail.location?.longitude);
+    setRegionId(detail.region?.regionId ?? null);
+    setRepresentativeImage(detail.representativeImageUrl ?? null);
+    setWebsiteUrl(detail.contact?.websiteUrl ?? '');
+    setPhoneNumber(detail.contact?.phoneNumber ?? '');
+    setEmail(detail.contact?.email ?? '');
+    setIntroduction(detail.introduction ?? '');
+    setPhotos((detail.images ?? []).map((image) => image.imageUrl));
+    setAmenities({
+      hasWaitingRoom: detail.amenities?.hasWaitingRoom ?? false,
+      waitingRoomCount: detail.amenities?.waitingRoomCount,
+      hasParking: detail.amenities?.hasParking ?? false,
+      parkingCount: detail.amenities?.parkingCount,
+      hasCabinet: detail.amenities?.hasCabinet ?? false,
+      cabinetCount: detail.amenities?.cabinetCount,
+      hasSecondFloorSeating: detail.amenities?.hasSecondFloorSeating ?? false,
+      hasIndoorRestroom: detail.amenities?.hasIndoorRestroom ?? false,
+      hasAlcoholSales: detail.amenities?.hasAlcoholSales ?? false,
+    });
+  }, [detail]);
+
+  useEffect(() => {
+    if (savedStations) {
+      setStations(
+        [...savedStations]
+          .sort((a, b) => a.sequence - b.sequence)
+          .map(({ stationId, stationName, lines }) => ({ stationId, stationName, lines })),
+      );
+    }
+  }, [savedStations]);
+
+  // 디자인 정책: 최신 등록역이 맨 왼쪽에 노출 (prepend)
+  const onAddStation = (station: SubwayStationSearchItem) => {
+    setStations((prev) => {
+      if (prev.some(({ stationId }) => stationId === station.stationId)) {
+        return prev;
+      }
+      return [
+        { stationId: station.stationId, stationName: station.stationName, lines: station.lines },
+        ...prev,
+      ];
+    });
+  };
+
+  // 주소 선택으로 닫힌 경우에만 닫힘 애니메이션 완료 후 상세주소에 포커스한다 (디자인 정책)
+  const shouldFocusDetailAddressRef = useRef(false);
+
+  const onCompleteAddress = (roadAddress: string, coordinates: GeocodeCoordinates | null) => {
+    setStreetAddress(roadAddress);
+    // 지오코딩 성공 시에만 좌표를 갱신한다 (실패 시 기존 좌표 유지)
+    if (coordinates) {
+      setLatitude(coordinates.latitude);
+      setLongitude(coordinates.longitude);
+    }
+    shouldFocusDetailAddressRef.current = true;
+    setIsAddressModalOpen(false);
+  };
+
+  const onAddressModalAfterClose = () => {
+    if (shouldFocusDetailAddressRef.current) {
+      shouldFocusDetailAddressRef.current = false;
+      detailAddressRef.current?.focus();
+    }
+  };
+
+  const onSelectPhotos = (files: File[]) => {
+    setPhotos((prev) => {
+      const remaining = MAX_PHOTO_COUNT - prev.length;
+      if (remaining <= 0) {
+        return prev;
+      }
+      // 디자인 정책: 최신 등록이 맨 왼쪽(업로드 박스 다음)에 노출
+      const newPhotos = files.slice(0, remaining).map((file) => URL.createObjectURL(file));
+      return [...newPhotos, ...prev];
+    });
+  };
+
+  const hasShareCodeError = shareCode.length > 0 && !SHARE_CODE_REGEX.test(shareCode);
+  const hasPhoneNumberError = phoneNumber.length > 0 && !PHONE_NUMBER_REGEX.test(phoneNumber);
+  const hasEmailError = email.length > 0 && !EMAIL_REGEX.test(email);
+
+  const isSaving =
+    updateConcertHall.isLoading || uploadImage.isLoading || saveSubwayStations.isLoading;
+
+  // blob: URL(새로 추가한 이미지)이면 업로드하고, http URL(기존 저장본)이면 그대로 둔다.
+  const resolveImage = async (url: string) => {
+    if (url.startsWith('blob:')) {
+      const blob = await fetch(url).then((res) => res.blob());
+      const file = new File([blob], 'image.png', { type: blob.type });
+      return uploadImage.mutateAsync(file);
+    }
+    return { imageUrl: url, thumbnailUrl: url };
+  };
+
+  const onSave = async () => {
+    if (!name.trim()) {
+      toast.error('공연장명을 입력해 주세요.');
+      return;
+    }
+    if (!shareCode || hasShareCodeError) {
+      toast.error('공연장 ID를 확인해 주세요.');
+      return;
+    }
+    if (hasPhoneNumberError || hasEmailError) {
+      toast.error('전화번호/이메일 형식을 확인해 주세요.');
+      return;
+    }
+    try {
+      const representativeImageUrl = representativeImage
+        ? (await resolveImage(representativeImage)).imageUrl
+        : undefined;
+      const images = await Promise.all(photos.map((photo) => resolveImage(photo)));
+
+      await updateConcertHall.mutateAsync({
+        hallId,
+        body: {
+          name: name.trim(),
+          shareCode,
+          introduction: introduction.trim() || undefined,
+          representativeImageUrl,
+          location: {
+            streetAddress: streetAddress.trim() || undefined,
+            detailAddress: detailAddress.trim() || undefined,
+            // 주소 찾기 시 카카오 지오코딩으로 취합한 좌표 (없으면 기존 값 유지)
+            latitude,
+            longitude,
+          },
+          // 선택 해제 시 null을 보내야 서버에서 지역이 해제된다
+          regionId,
+          contact: {
+            websiteUrl: websiteUrl.trim() || undefined,
+            phoneNumber: phoneNumber.trim() || undefined,
+            email: email.trim() || undefined,
+          },
+          amenities,
+          images,
+        },
+      });
+      // 인근 지하철역은 별도 엔드포인트라 함께 저장한다.
+      await saveSubwayStations.mutateAsync({
+        hallId,
+        stationIds: stations.map(({ stationId }) => stationId),
+      });
+      toast.success('공연장 정보를 저장했어요.');
+    } catch {
+      toast.error('저장 중 문제가 발생했습니다.');
+    }
+  };
+
+  // 상권/지역은 그룹 > 지역 2단계 그룹 옵션으로 노출한다 (둘 다 sequence 오름차순)
+  const regionOptions = [...(regionGroups ?? [])]
+    .sort((a, b) => a.sequence - b.sequence)
+    .map((group) => ({
+      label: group.name,
+      options: [...group.regions]
+        .sort((a, b) => a.sequence - b.sequence)
+        .map((region) => ({ value: region.regionId, label: region.name })),
+    }));
+
+  const countAmenityItems: Array<{
+    key: 'hasWaitingRoom' | 'hasParking' | 'hasCabinet';
+    countKey: 'waitingRoomCount' | 'parkingCount' | 'cabinetCount';
+    label: string;
+    icon: string;
+  }> = [
+    { key: 'hasWaitingRoom', countKey: 'waitingRoomCount', label: '대기실', icon: waitingRoomIcon },
+    { key: 'hasParking', countKey: 'parkingCount', label: '주차', icon: parkingIcon },
+    { key: 'hasCabinet', countKey: 'cabinetCount', label: '캐비넷', icon: cabinetIcon },
+  ];
+
+  const booleanAmenityItems: Array<{
+    key: 'hasSecondFloorSeating' | 'hasIndoorRestroom' | 'hasAlcoholSales';
+    label: string;
+    icon: string;
+  }> = [
+    { key: 'hasSecondFloorSeating', label: '2층 관객석', icon: secondFloorIcon },
+    { key: 'hasIndoorRestroom', label: '내부 화장실', icon: restroomIcon },
+    { key: 'hasAlcoholSales', label: '주류 판매', icon: alcoholIcon },
+  ];
+
+  return (
+    <ConcertHallPageLayout
+      title="공연장 정보"
+      action={
+        <BooltiButton colorTheme="primary" size="medium" disabled={isSaving} onClick={onSave}>
+          저장하기
+        </BooltiButton>
+      }
+    >
+      <Flex vertical gap={20}>
+        <Card>
+          <SectionTitle>기본 정보</SectionTitle>
+          <Flex vertical gap={20} style={{ maxWidth: 600 }}>
+            <div>
+              <FieldLabel>대표 이미지</FieldLabel>
+              {representativeImage ? (
+                <div style={{ position: 'relative', width: 160 }}>
+                  <img
+                    src={representativeImage}
+                    alt="대표 이미지"
+                    style={{
+                      width: 160,
+                      height: 160,
+                      objectFit: 'cover',
+                      borderRadius: '8px 8px 0 0',
+                      display: 'block',
+                    }}
+                  />
+                  <div
+                    style={{
+                      backgroundColor: theme.palette.primary.o1,
+                      color: theme.palette.grey.w,
+                      textAlign: 'center',
+                      fontSize: 12,
+                      fontWeight: 600,
+                      padding: '4px 0',
+                      borderRadius: '0 0 8px 8px',
+                    }}
+                  >
+                    대표 사진
+                  </div>
+                  <RemoveImageButton
+                    label="대표 이미지 삭제"
+                    onClick={() => setRepresentativeImage(null)}
+                  />
+                </div>
+              ) : (
+                <ImageUploadBox
+                  width={160}
+                  height={160}
+                  onSelect={(files) => setRepresentativeImage(URL.createObjectURL(files[0]))}
+                />
+              )}
+            </div>
+            <div>
+              <FieldLabel required>공연장명</FieldLabel>
+              <Input size="large" value={name} onChange={(e) => setName(e.target.value)} />
+            </div>
+            <div>
+              <FieldLabel required>공연장 ID</FieldLabel>
+              <Input
+                size="large"
+                value={shareCode}
+                maxLength={20}
+                placeholder="영문 소문자, 숫자, 하이픈만 입력해 주세요"
+                status={hasShareCodeError ? 'error' : undefined}
+                onChange={(e) => setShareCode(e.target.value)}
+              />
+              {hasShareCodeError && (
+                <Typography.Text type="danger" style={{ display: 'block', marginTop: 4 }}>
+                  영문 소문자, 숫자, 하이픈만 1~20자로 입력할 수 있어요.
+                </Typography.Text>
+              )}
+            </div>
+            <div>
+              <FieldLabel>공연장 주소</FieldLabel>
+              <Flex vertical gap={8}>
+                <Flex gap={8} align="center">
+                  {/* 도로명주소는 주소 찾기로만 입력 가능 (직접 입력 불가) */}
+                  <Input
+                    size="large"
+                    style={{ flex: 1, height: 44 }}
+                    value={streetAddress}
+                    placeholder="주소 찾기로 도로명주소를 입력해 주세요"
+                    readOnly
+                  />
+                  <BooltiButton
+                    colorTheme="netural"
+                    size="medium"
+                    style={{ flexShrink: 0, whiteSpace: 'nowrap' }}
+                    onClick={() => setIsAddressModalOpen(true)}
+                  >
+                    주소 찾기
+                  </BooltiButton>
+                </Flex>
+                <Input
+                  ref={detailAddressRef}
+                  size="large"
+                  value={detailAddress}
+                  placeholder="상세주소를 입력해 주세요 (필수)"
+                  onChange={(e) => setDetailAddress(e.target.value)}
+                />
+              </Flex>
+            </div>
+            <div>
+              <FieldLabel>상권/지역</FieldLabel>
+              <Select
+                size="large"
+                style={{ width: '100%', height: 48 }}
+                placeholder="상권/지역을 선택해 주세요"
+                value={regionId ?? undefined}
+                onChange={(value?: number) => setRegionId(value ?? null)}
+                options={regionOptions}
+                showSearch
+                optionFilterProp="label"
+                allowClear
+              />
+            </div>
+            <div>
+              <FieldLabel>인근 지하철역</FieldLabel>
+              <Flex vertical gap={8} align="flex-start">
+                {stations.length > 0 && (
+                  <Flex gap={8} wrap="wrap" align="center">
+                    {stations.map((station) => (
+                      <Flex
+                        key={station.stationId}
+                        align="center"
+                        gap={6}
+                        style={{
+                          padding: '6px 10px',
+                          borderRadius: 20,
+                          backgroundColor: theme.palette.grey.g00,
+                        }}
+                      >
+                        {station.lines.map((line) => (
+                          <SubwayLineBadge
+                            key={line.lineId}
+                            lineLabel={line.lineLabel}
+                            colorHex={line.colorHex}
+                            textColorHex={line.textColorHex}
+                            size="small"
+                          />
+                        ))}
+                        <Typography.Text>{station.stationName}</Typography.Text>
+                        <CloseOutlined
+                          style={{ fontSize: 11, color: theme.palette.grey.g50, cursor: 'pointer' }}
+                          onClick={() => {
+                            setStations((prev) =>
+                              prev.filter(({ stationId }) => stationId !== station.stationId),
+                            );
+                          }}
+                        />
+                      </Flex>
+                    ))}
+                  </Flex>
+                )}
+                <Button
+                  type="link"
+                  icon={<PlusOutlined />}
+                  style={{ paddingLeft: 0 }}
+                  onClick={() => setIsStationModalOpen(true)}
+                >
+                  추가하기
+                </Button>
+              </Flex>
+            </div>
+          </Flex>
+        </Card>
+
+        <Card>
+          <SectionTitle>문의처</SectionTitle>
+          <Flex vertical gap={20} style={{ maxWidth: 600 }}>
+            <div>
+              <FieldLabel>웹사이트 URL</FieldLabel>
+              <Input
+                size="large"
+                value={websiteUrl}
+                placeholder="URL을 입력해 주세요"
+                onChange={(e) => setWebsiteUrl(e.target.value)}
+              />
+            </div>
+            <Flex gap={16}>
+              <div style={{ flex: 1 }}>
+                <FieldLabel>전화번호</FieldLabel>
+                <Input
+                  size="large"
+                  value={phoneNumber}
+                  placeholder="전화번호를 입력해 주세요"
+                  status={hasPhoneNumberError ? 'error' : undefined}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                {hasPhoneNumberError && (
+                  <Typography.Text type="danger" style={{ display: 'block', marginTop: 4 }}>
+                    올바른 전화번호 형식이 아니에요.
+                  </Typography.Text>
+                )}
+              </div>
+              <div style={{ flex: 1 }}>
+                <FieldLabel>이메일</FieldLabel>
+                <Input
+                  size="large"
+                  value={email}
+                  placeholder="이메일을 입력해 주세요"
+                  status={hasEmailError ? 'error' : undefined}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                {hasEmailError && (
+                  <Typography.Text type="danger" style={{ display: 'block', marginTop: 4 }}>
+                    올바른 이메일 형식이 아니에요.
+                  </Typography.Text>
+                )}
+              </div>
+            </Flex>
+          </Flex>
+        </Card>
+
+        <Card>
+          <SectionTitle>소개 및 사진</SectionTitle>
+          <Flex vertical gap={28}>
+            {/* 소개 입력 폭은 600 고정 (Figma node 9160:9580) */}
+            <div style={{ maxWidth: 600 }}>
+              <FieldLabel>소개</FieldLabel>
+              <TextArea
+                rows={5}
+                value={introduction}
+                placeholder="공연장 소개를 입력해 주세요"
+                onChange={(e) => setIntroduction(e.target.value)}
+              />
+            </div>
+            <div>
+              <FieldLabel>사진 (최대 {MAX_PHOTO_COUNT}장 등록 가능)</FieldLabel>
+              {/*
+                최대 너비 초과 시 가로 스크롤. 모서리에 걸친 X 버튼이 잘리지 않도록 상단 여백 확보.
+                카드 우측 패딩을 음수 마진으로 덮어 사진이 카드 끝까지 이어지도록 한다.
+                (뒤에 사진이 더 있다는 걸 보여주는 의도 — Figma node 9160:9589)
+              */}
+              <Flex
+                gap={20}
+                style={{
+                  overflowX: 'auto',
+                  marginRight: -CARD_BODY_PADDING,
+                  // 끝까지 스크롤했을 때 좌측 패딩과 동일한 여백이 남도록 한다
+                  padding: `10px ${CARD_BODY_PADDING}px 4px 0`,
+                }}
+              >
+                {/* 20장 도달 시 업로드 박스 미노출 (디자인 정책) */}
+                {photos.length < MAX_PHOTO_COUNT && (
+                  <ImageUploadBox width={160} height={160} multiple onSelect={onSelectPhotos} />
+                )}
+                {photos.map((photo, index) => (
+                  <div
+                    key={photo}
+                    style={{ position: 'relative', width: 160, height: 160, flexShrink: 0 }}
+                  >
+                    <img
+                      src={photo}
+                      alt={`공연장 사진 ${index + 1}`}
+                      style={{
+                        width: 160,
+                        height: 160,
+                        objectFit: 'cover',
+                        borderRadius: 4,
+                        border: `1px solid ${theme.palette.grey.g20}`,
+                        display: 'block',
+                      }}
+                    />
+                    <RemoveImageButton
+                      label="사진 삭제"
+                      onClick={() => {
+                        URL.revokeObjectURL(photo);
+                        setPhotos((prev) => prev.filter((p) => p !== photo));
+                      }}
+                    />
+                  </div>
+                ))}
+              </Flex>
+            </div>
+          </Flex>
+        </Card>
+
+        <Card>
+          <SectionTitle>편의시설 및 서비스</SectionTitle>
+          <Flex gap={48} style={{ maxWidth: 720 }}>
+            <Flex vertical gap={16} style={{ flex: 1 }}>
+              {countAmenityItems.map(({ key, countKey, label, icon }) => (
+                <Flex key={key} align="center" justify="space-between" gap={12}>
+                  <AmenityCheckbox
+                    checked={amenities[key]}
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
+                  <InputNumber
+                    min={0}
+                    placeholder="0"
+                    style={{ width: 100 }}
+                    disabled={!amenities[key]}
+                    value={amenities[countKey]}
+                    onChange={(value) =>
+                      setAmenities((prev) => ({ ...prev, [countKey]: value ?? undefined }))
+                    }
+                  />
+                </Flex>
+              ))}
+            </Flex>
+            <Flex vertical gap={16} style={{ flex: 1 }}>
+              {booleanAmenityItems.map(({ key, label, icon }) => (
+                <Flex key={key} align="center" style={{ height: 32 }}>
+                  <AmenityCheckbox
+                    checked={amenities[key]}
+                    onChange={(checked) => setAmenities((prev) => ({ ...prev, [key]: checked }))}
+                    label={label}
+                    icon={icon}
+                  />
+                </Flex>
+              ))}
+            </Flex>
+          </Flex>
+        </Card>
+      </Flex>
+
+      <SubwayStationSearchModal
+        open={isStationModalOpen}
+        onClose={() => setIsStationModalOpen(false)}
+        onSelect={onAddStation}
+      />
+      <AddressSearchModal
+        open={isAddressModalOpen}
+        onClose={() => setIsAddressModalOpen(false)}
+        onComplete={onCompleteAddress}
+        afterClose={onAddressModalAfterClose}
+      />
+    </ConcertHallPageLayout>
+  );
+};
+
+export default ConcertHallInfoPage;

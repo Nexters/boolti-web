@@ -1,9 +1,16 @@
+import { trackClick, trackViewScreen } from '@boolti/analytics';
 import { useAppleLogin, useSignUp } from '@boolti/api';
 import { AppleIcon, BooltiSmallLogo, KakaotalkIcon } from '@boolti/icon';
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import { LINK } from '~/constants/link';
+import {
+  LOGIN_SOURCE,
+  type LoginLocationState,
+  type SignUpLocationState,
+} from '~/constants/analytics';
 import { PATH } from '~/constants/routes';
 
 import Styled from './LoginPage.styles';
@@ -51,6 +58,13 @@ const kakaoRedirectUri = `${window.location.origin}${PATH.OAUTH_KAKAO}`;
 const LoginPage = () => {
   const { setToken } = useAuthAtom();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const source = (location.state as LoginLocationState)?.source ?? LOGIN_SOURCE.DIRECT;
+    trackViewScreen('Login', { source });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const appleLoginMutation = useAppleLogin();
   const signUpMutation = useSignUp();
@@ -72,7 +86,10 @@ const LoginPage = () => {
     });
 
     setToken(accessToken, refreshToken);
-    navigate(PATH.SIGNUP_COMPLETE, { replace: true });
+    navigate(PATH.SIGNUP_COMPLETE, {
+      replace: true,
+      state: { loginMethod: 'Apple' } satisfies SignUpLocationState,
+    });
   };
 
   const appleLogin = async () => {
@@ -105,6 +122,7 @@ const LoginPage = () => {
   };
 
   const handleClickAppleLogin = () => {
+    trackClick('Login', 'Button', 'Login', { login_method: 'Apple' });
     appleLogin();
   };
 
@@ -126,6 +144,13 @@ const LoginPage = () => {
             <Styled.LoginButtonContainer>
               <Styled.KakaoLoginButton
                 onClick={() => {
+                  trackClick(
+                    'Login',
+                    'Button',
+                    'Login',
+                    { login_method: 'Kakao' },
+                    { beforeNavigation: true },
+                  );
                   window.Kakao?.Auth.authorize({ redirectUri: kakaoRedirectUri });
                 }}
               >

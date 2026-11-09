@@ -4,6 +4,7 @@ import { ChainLink } from '@boolti/icon';
 import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import { useUserLinks } from '@boolti/api';
+import { trackProfileLinkClick } from '~/constants/analytics';
 
 export const ProfileLinkPage = () => {
   const { userCode } = useParams<{ userCode: string }>();
@@ -18,6 +19,7 @@ export const ProfileLinkPage = () => {
           <Styled.LinkItem
             key={`${link.link}-${index}`}
             href={link.link}
+            onClick={() => trackProfileLinkClick('Custom', link.link)}
             target="_blank"
             rel="noopener noreferrer"
           >

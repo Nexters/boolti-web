@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.4",
+    "@boolti/analytics": "*",
     "@boolti/api": "*",
     "@boolti/icon": "*",
     "@boolti/ui": "*",

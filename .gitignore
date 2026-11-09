@@ -70,3 +70,6 @@ install-state.gz
 
 .mcp.json
 settings.local.json
+
+.omc
+.worktrees/

@@ -1,6 +1,5 @@
 import {
   TOAST_DURATIONS,
-  navigateBack,
   navigateToShowDetail,
   requestToken,
   showToast,
@@ -24,21 +23,6 @@ const WebView = () => {
         }}
       >
         requestToken
-      </Styled.Button>
-
-      <Styled.Button
-        size="medium"
-        colorTheme="primary"
-        onClick={async () => {
-          try {
-            const response = await navigateBack();
-            alert('SUCCESS: ' + JSON.stringify(response));
-          } catch (e) {
-            alert('ERROR: ' + JSON.stringify(e));
-          }
-        }}
-      >
-        navigateBack
       </Styled.Button>
 
       <Styled.Button

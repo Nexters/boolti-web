@@ -2,32 +2,51 @@ name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches: ['develop', 'main']
   pull_request:
-    types: [opened, synchronize]
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
-    name: Build and Test
+    name: Build and Check
     timeout-minutes: 15
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           fetch-depth: 2
+          persist-credentials: false
 
       - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v7
         with:
-          node-version: 20
-          cache: 'yarn'
+          node-version-file: '.nvmrc'
+
+      - name: Check toolchain versions
+        run: |
+          node --version
+          node .yarn/releases/yarn-4.1.0.cjs --version
 
       - name: Install dependencies
-        run: yarn
+        run: node .yarn/releases/yarn-4.1.0.cjs install --immutable
 
       - name: Check eslint rule
-        run: yarn lint
+        run: node .yarn/releases/yarn-4.1.0.cjs lint
 
       - name: Check typescript type
-        run: yarn type-check
+        run: node .yarn/releases/yarn-4.1.0.cjs type-check
+
+      - name: Build applications
+        run: node .yarn/releases/yarn-4.1.0.cjs build --force
+
+      - name: Build Storybook
+        run: node .yarn/releases/yarn-4.1.0.cjs workspace stroybook build:storybook

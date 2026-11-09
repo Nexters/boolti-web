@@ -1,11 +1,23 @@
-import { useRef, useState, useEffect } from 'react';
+import { lazy, Suspense, useRef, useState, useEffect } from 'react';
 import { useSwiper } from 'swiper/react';
 import { showToast, checkIsWebView, TOAST_DURATIONS } from '@boolti/bridge';
-import { CallIcon, ChevronDownIcon, ChevronUpIcon, MessageIcon, TicketIcon } from '@boolti/icon';
+import {
+  CallIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  ChevronUpIcon,
+  MessageIcon,
+  TicketIcon,
+} from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
-import PreviewMap from '../PreviewMap';
 import ShowNoticeHtmlContent from './ShowNoticeHtmlContent';
+
+/** 공연장명을 누른 위치. Summary: 상단 요약, Location: 위치 섹션 */
+export type PlaceProfileEntryPoint = 'Summary' | 'Location';
+
+const PreviewMap = lazy(() => import('../PreviewMap'));
+const PreviewMapWithProvider = lazy(() => import('../PreviewMap/PreviewMapWithProvider'));
 
 interface Props {
   show: {
@@ -19,6 +31,8 @@ interface Props {
     detailAddress: string;
     latitude?: number;
     longitude?: number;
+    /** 연결된 불티 공연장 ID. 값이 있고 onClickPlaceProfile이 있을 때만 프로필로 이동할 수 있다. */
+    concertHallId?: number;
   };
   soldTicketCount?: number;
   isAppWebview?: boolean;
@@ -27,6 +41,11 @@ interface Props {
   onClickCallLinkMobile?: () => void;
   onClickMessageLinkMobile?: () => void;
   onClickViewNotice?: () => void;
+  /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
+  onClickPlaceProfile?: (concertHallId: number, entryPoint: PlaceProfileEntryPoint) => void;
+  /** 지도를 눌러 네이버 지도로 이동할 때 */
+  onClickMap?: () => void;
+  naverMapClientId?: string;
 }
 
 const ShowInfoDetail = ({
@@ -41,6 +60,7 @@ const ShowInfoDetail = ({
     placeName,
     streetAddress,
     detailAddress,
+    concertHallId,
   },
   soldTicketCount,
   isAppWebview = false,
@@ -49,6 +69,9 @@ const ShowInfoDetail = ({
   onClickCallLinkMobile,
   onClickMessageLinkMobile,
   onClickViewNotice,
+  onClickPlaceProfile,
+  onClickMap,
+  naverMapClientId,
 }: Props) => {
   const showNoticeRef = useRef<HTMLDivElement>(null);
   const swiper = useSwiper();
@@ -125,7 +148,17 @@ const ShowInfoDetail = ({
         <Styled.ShowInfoTitleContainer>
           <Styled.ShowInfoTitle>위치</Styled.ShowInfoTitle>
         </Styled.ShowInfoTitleContainer>
-        <Styled.ShowInfoSubtitle>{placeName}</Styled.ShowInfoSubtitle>
+        {concertHallId && onClickPlaceProfile ? (
+          <Styled.ShowInfoSubtitleButton
+            type="button"
+            onClick={() => onClickPlaceProfile(concertHallId, 'Location')}
+          >
+            {placeName}
+            <ChevronRightIcon />
+          </Styled.ShowInfoSubtitleButton>
+        ) : (
+          <Styled.ShowInfoSubtitle>{placeName}</Styled.ShowInfoSubtitle>
+        )}
         <Styled.ShowInfoDescription>
           <Styled.ShowInfoDescriptionText>
             {`${streetAddress} / ${detailAddress} ・ `}
@@ -145,12 +178,26 @@ const ShowInfoDetail = ({
           </Styled.ShowInfoDescriptionText>
         </Styled.ShowInfoDescription>
         {latitude && longitude && (
-          <PreviewMap
-            latitude={latitude}
-            longitude={longitude}
-            name={placeName}
-            isAppWebview={isAppWebview}
-          />
+          <Suspense fallback={null}>
+            {naverMapClientId ? (
+              <PreviewMapWithProvider
+                latitude={latitude}
+                longitude={longitude}
+                name={placeName}
+                isAppWebview={isAppWebview}
+                ncpKeyId={naverMapClientId}
+                onClickMap={onClickMap}
+              />
+            ) : (
+              <PreviewMap
+                latitude={latitude}
+                longitude={longitude}
+                name={placeName}
+                isAppWebview={isAppWebview}
+                onClickMap={onClickMap}
+              />
+            )}
+          </Suspense>
         )}
       </Styled.ShowInfoGroup>
       <Styled.ShowInfoGroup>

@@ -1,12 +1,24 @@
+import { trackClick, trackImpression } from '@boolti/analytics';
 import { DollarTicketIcon, FreeTicketIcon } from '@boolti/icon';
 import Styled from './ShowTypeSelectPage.styles';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
+import { useEffect } from 'react';
+import { SHOW_TYPE_SELECT_SOURCE } from '~/constants/analytics';
 
 const ShowTypeSelectPage = () => {
   const naviate = useNavigate();
 
+  useEffect(() => {
+    trackImpression('Home', 'BottomSheet', 'ShowTypeSelect', {
+      source: SHOW_TYPE_SELECT_SOURCE.TYPE_SELECT_PAGE,
+    });
+  }, []);
+
   const onClickButton = (isSalesTicket: boolean) => {
+    trackClick('EventCreationType', 'Button', 'SelectTicketingType', {
+      ticketing_type: isSalesTicket ? 'Paid' : 'None',
+    });
     const to = `${PATH.SHOW_ADD}?type=${isSalesTicket ? 'SALES' : 'FREE'}`;
     naviate(to);
   };

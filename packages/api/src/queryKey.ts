@@ -2,6 +2,7 @@ import { createQueryKeys, mergeQueryKeys } from '@lukemorales/query-key-factory'
 import type { SearchParamsOption } from 'ky';
 
 import { fetcher, instance } from './fetcher';
+import { IS_SUPER_ADMIN } from './constants';
 import {
   EntranceInfoResponse,
   EntranceSummaryResponse,
@@ -43,6 +44,26 @@ import {
 } from './types/adminShow';
 import { SuperAdminUserResponse } from './types/superAdminUser';
 import {
+  ConcertHallAutocompleteResponse,
+  ConcertHallImageListResponse,
+  ConcertHallProfileResponse,
+  ConcertHallRecommendedRegion,
+  ConcertHallSearchListParams,
+  ConcertHallSearchListResponse,
+  WebHostConcertHallListResponse,
+} from './types/concertHall';
+import {
+  SubwayStationSearchItem,
+  SuperAdminConcertHallDetailResponse,
+  SuperAdminConcertHallListResponse,
+  SuperAdminConcertHallRegionGroup,
+  SuperAdminConcertHallRentalResponse,
+  SuperAdminConcertHallShowListResponse,
+  SuperAdminConcertHallShowSortBy,
+  SuperAdminConcertHallShowSortDirection,
+  SuperAdminConcertHallSubwayStation,
+} from './types/superAdminConcertHall';
+import {
   BankAccountListResponse,
   UserProfileResponse,
   UserProfileResponseV2,
@@ -69,6 +90,7 @@ import {
   SuperAdminInvitationTicketListResponse,
   SuperAdminSalesTicketListResponse,
 } from './types/adminTicket';
+import { NaverGeocodingResponse } from './types/naverMaps';
 
 export const entranceQueryKeys = createQueryKeys('enterance', {
   list: (
@@ -488,6 +510,70 @@ export const popupQueryKeys = createQueryKeys('popup', {
   }),
 });
 
+export const concertHallQueryKeys = createQueryKeys('concertHall', {
+  searchByKeyword: (keyword: string) => ({
+    queryKey: [keyword],
+    queryFn: () =>
+      fetcher.get<WebHostConcertHallListResponse>(`web/v1/host/concert-halls`, {
+        searchParams: { keyword, page: 0, size: 5 },
+      }),
+  }),
+  profile: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () =>
+      fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/${concertHallId}`),
+  }),
+  /** 공유 코드로 조회. 응답은 id 조회와 동일하며 내부 id도 함께 내려온다. */
+  profileByShareCode: (shareCode: string) => ({
+    queryKey: [shareCode],
+    queryFn: () =>
+      fetcher.get<ConcertHallProfileResponse>(`web/papi/v1/concert-halls/share/${shareCode}`),
+  }),
+  images: (concertHallId: number) => ({
+    queryKey: [concertHallId],
+    queryFn: () =>
+      fetcher.get<ConcertHallImageListResponse>(
+        `web/papi/v1/concert-halls/${concertHallId}/images`,
+      ),
+  }),
+});
+
+export const concertHallSearchQueryKeys = createQueryKeys('concertHallSearch', {
+  list: (params: ConcertHallSearchListParams) => ({
+    queryKey: [params],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = {
+        page: params.page ?? 0,
+        size: params.size ?? 20,
+      };
+      if (params.keyword) {
+        searchParams.keyword = params.keyword;
+      }
+      if (params.regionId != null) searchParams.regionId = params.regionId;
+      if (params.minFee != null) searchParams.minFee = params.minFee;
+      if (params.maxFee != null) searchParams.maxFee = params.maxFee;
+      if (params.minCapacity != null) searchParams.minCapacity = params.minCapacity;
+      if (params.maxCapacity != null) searchParams.maxCapacity = params.maxCapacity;
+      if (params.sort) searchParams.sort = params.sort;
+      return fetcher.get<ConcertHallSearchListResponse>('web/papi/v1/concert-halls/search', {
+        searchParams,
+      });
+    },
+  }),
+  recommendedRegions: {
+    queryKey: null,
+    queryFn: () =>
+      fetcher.get<ConcertHallRecommendedRegion[]>('web/papi/v1/concert-halls/recommended-regions'),
+  },
+  autocomplete: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<ConcertHallAutocompleteResponse>('web/papi/v1/concert-halls/autocomplete', {
+        searchParams: { query },
+      }),
+  }),
+});
+
 export const preQuestionQueryKeys = createQueryKeys('preQuestion', {
   list: (showId: number) => ({
     queryKey: [showId],
@@ -575,6 +661,91 @@ export const superAdminUserQueryKeys = createQueryKeys('superAdminUser', {
   },
 });
 
+export const superAdminConcertHallQueryKeys = createQueryKeys('superAdminConcertHall', {
+  list: (page: number, size?: number, keyword?: string) => ({
+    queryKey: [page, size, keyword],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = { page };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (keyword) {
+        searchParams.keyword = keyword;
+      }
+      return fetcher.get<SuperAdminConcertHallListResponse>(`sa-api/v1/concert-halls`, {
+        searchParams,
+      });
+    },
+  }),
+  detail: (hallId: number) => ({
+    queryKey: [hallId],
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallDetailResponse>(`sa-api/v1/concert-halls/${hallId}`),
+  }),
+  regionGroups: {
+    queryKey: null,
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallRegionGroup[]>('sa-api/v1/concert-hall-region-groups'),
+  },
+  rental: (hallId: number) => ({
+    queryKey: [hallId],
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallRentalResponse>(`sa-api/v1/concert-halls/${hallId}/rental`),
+  }),
+  subwayStations: (hallId: number) => ({
+    queryKey: [hallId],
+    queryFn: () =>
+      fetcher.get<SuperAdminConcertHallSubwayStation[]>(
+        `sa-api/v1/concert-halls/${hallId}/subway-stations`,
+      ),
+  }),
+  shows: (
+    hallId: number,
+    page: number,
+    size?: number,
+    sortBy?: SuperAdminConcertHallShowSortBy,
+    direction?: SuperAdminConcertHallShowSortDirection,
+  ) => ({
+    queryKey: [hallId, page, size, sortBy, direction],
+    queryFn: () => {
+      const searchParams: SearchParamsOption = { page };
+      if (size !== undefined) {
+        searchParams.size = size;
+      }
+      if (sortBy) {
+        searchParams.sortBy = sortBy;
+      }
+      if (direction) {
+        searchParams.direction = direction;
+      }
+      return fetcher.get<SuperAdminConcertHallShowListResponse>(
+        `sa-api/v1/concert-halls/${hallId}/shows`,
+        { searchParams },
+      );
+    },
+  }),
+  subwayStationSearch: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<SubwayStationSearchItem[]>(`sa-api/v1/subway-stations`, {
+        searchParams: { query },
+      }),
+  }),
+});
+
+export const naverMapsQueryKeys = createQueryKeys('naverMaps', {
+  // 지오코딩 프록시는 web/app 그룹에만 존재하고 super-admin(sa-api)은 별도 인증 realm이라
+  // refreshAccessToken과 동일하게 IS_SUPER_ADMIN 프리픽스로 분기한다.
+  geocoding: (query: string) => ({
+    queryKey: [query],
+    queryFn: () =>
+      fetcher.get<NaverGeocodingResponse>(
+        `${IS_SUPER_ADMIN ? 'sa-api' : 'web'}/v1/naver-maps/geocoding`,
+        { searchParams: { query } },
+      ),
+  }),
+});
+
 export const queryKeys = mergeQueryKeys(
   adminShowQueryKeys,
   adminEntranceQueryKeys,
@@ -589,4 +760,8 @@ export const queryKeys = mergeQueryKeys(
   popupQueryKeys,
   preQuestionQueryKeys,
   superAdminUserQueryKeys,
+  superAdminConcertHallQueryKeys,
+  concertHallQueryKeys,
+  naverMapsQueryKeys,
+  concertHallSearchQueryKeys,
 );

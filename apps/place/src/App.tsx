@@ -1,0 +1,46 @@
+import 'the-new-css-reset/css/reset.css';
+import './index.css';
+
+import { QueryClientProvider } from '@boolti/api';
+import { BooltiUIProvider } from '@boolti/ui';
+import { Suspense } from 'react';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import ConcertHallPage from './pages/ConcertHallPage';
+import ConcertHallTabPage from './pages/ConcertHallTabPage';
+import ErrorPage from './pages/ErrorPage';
+import NotFoundPage from './pages/NotFoundPage';
+
+const router = createBrowserRouter([
+  {
+    path: '/:shareCode',
+    element: <ConcertHallPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/:shareCode/home',
+    element: <ConcertHallTabPage tab="home" />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/:shareCode/rental',
+    element: <ConcertHallTabPage tab="rental" />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+  },
+]);
+
+const App = () => (
+  <QueryClientProvider>
+    <BooltiUIProvider>
+      <Suspense fallback={null}>
+        <RouterProvider router={router} />
+      </Suspense>
+    </BooltiUIProvider>
+  </QueryClientProvider>
+);
+
+export default App;

@@ -39,44 +39,52 @@ export const sendCommand = <RequestData = undefined, ResponseData = undefined>(
     return Promise.reject(command);
   }
 
-  setTimeout(() => {
-    postMessage(message);
-  }, 0);
-
   return new Promise((resolve, reject) => {
+    let responseTimer: ReturnType<typeof setTimeout> | undefined;
+    const cleanup = () => {
+      clearTimeout(responseTimer);
+      unsubscribe(id);
+    };
     const listener: ResponseListener<ResponseData> = (response) => {
-      if (response.id === command.id) {
+      if (response.id === command.id && response.command === command.command) {
+        cleanup();
         resolve(response);
-        unsubscribe(id);
       }
     };
 
     subscribe(id, listener);
 
     if (timeout) {
-      setTimeout(() => {
+      responseTimer = setTimeout(() => {
         console.warn('[sendCommand.ts] TIMEOUT:', command);
-        unsubscribe(id);
+        cleanup();
         reject(command);
       }, timeout);
     }
+
+    setTimeout(() => {
+      try {
+        postMessage(message);
+      } catch (error) {
+        cleanup();
+        reject(error);
+      }
+    }, 0);
   });
 };
 
 window[BRIDGE] = window[BRIDGE] || {
-  postMessage: (command: Command) => {
-    const message = JSON.stringify(command);
-
-    console.log('[sendCommand.ts] RCVD:', message);
-
+  postMessage: (input: Command | Command<unknown> | string) => {
     try {
+      const command: Command = typeof input === 'string' ? JSON.parse(input) : input;
+      if (!command || typeof command.id !== 'string') return;
+      // Do not print native auth tokens or client identifiers in browser logs.
       const messageListener = messageListeners.get(command.id);
 
       if (messageListener) {
         messageListener(command);
       }
     } catch (error) {
-      console.warn(`[sendCommand.ts] NOT RCVD: ${message}`);
       if (error instanceof Error) {
         console.warn(
           `[sendCommand.ts] NOT RCVD: ${JSON.stringify({ name: error.name, message: error.message })}`,

@@ -3,6 +3,7 @@ export const PATH = {
   QR: '/qr',
   APP_STORE_BRIDGE: '/bridge/store',
   HOME: '/home',
+  PLACE: '/place',
 
   LOGIN: '/login',
   OAUTH_KAKAO: '/oauth/kakao',

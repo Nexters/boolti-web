@@ -1,17 +1,29 @@
+import { trackClick, trackImpression } from '@boolti/analytics';
 import { DollarTicketIcon, FreeTicketIcon } from '@boolti/icon';
 import Styled from './ShowTypeSelectDialogContent.styles';
 import { useBodyScrollLock } from '~/hooks/useBodyScrollLock';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '~/constants/routes';
+import { useEffect } from 'react';
+import { type ShowTypeSelectSource } from '~/constants/analytics';
 
 interface Props {
   close: VoidFunction;
+  source: ShowTypeSelectSource;
 }
 
-const ShowTypeSelectDialogContent = ({ close }: Props) => {
+const ShowTypeSelectDialogContent = ({ close, source }: Props) => {
   const naviate = useNavigate();
 
+  useEffect(() => {
+    trackImpression('Home', 'BottomSheet', 'ShowTypeSelect', { source });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const onClickButton = (isSalesTicket: boolean) => {
+    trackClick('EventCreationType', 'Button', 'SelectTicketingType', {
+      ticketing_type: isSalesTicket ? 'Paid' : 'None',
+    });
     close();
     const to = `${PATH.SHOW_ADD}?type=${isSalesTicket ? 'SALES' : 'FREE'}`;
     naviate(to);

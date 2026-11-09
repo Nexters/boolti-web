@@ -1,20 +1,38 @@
 import 'swiper/css';
 import 'swiper/css/pagination';
 
+import type { ImgHTMLAttributes } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { BooltiDark, ClockMobileIcon, MapMarkerIcon, ShareIcon } from '@boolti/icon';
+import {
+  BooltiDark,
+  ChevronRightIcon,
+  ClockMobileIcon,
+  MapMarkerIcon,
+  ShareIcon,
+} from '@boolti/icon';
 
 import Styled from './ShowPreview.styles';
 import Tab from '../Tab';
 import ShowCastInfo from './ShowCastInfo';
-import ShowInfoDetail from './ShowInfoDetail';
+import ShowInfoDetail, { type PlaceProfileEntryPoint } from './ShowInfoDetail';
 import ShowPreviewNotice from './ShowPreviewNotice';
+
+interface ShowImageLoadingProps extends ImgHTMLAttributes<HTMLImageElement> {
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+type ShowPreviewImage =
+  | string
+  | {
+      src: string;
+      thumbnailSrc?: string;
+    };
 
 interface ShowPreviewProps {
   show: {
-    images: string[];
+    images: ShowPreviewImage[];
     name: string;
     date: string;
     startTime: string;
@@ -29,6 +47,8 @@ interface ShowPreviewProps {
     hostPhoneNumber: string;
     latitude?: number;
     longitude?: number;
+    /** 연결된 불티 공연장 ID */
+    concertHallId?: number;
   };
   showCastTeams: Array<{
     name: string;
@@ -49,6 +69,15 @@ interface ShowPreviewProps {
   onShareShowPreviewLink?: () => void;
   onShareShowInfo?: () => void;
   onCloseShareDropdown?: () => void;
+  prioritizeFirstImage?: boolean;
+  /** 공연장 프로필로 이동. 넘기지 않으면 공연장명은 텍스트로만 노출된다. */
+  onClickPlaceProfile?: (concertHallId: number, entryPoint: PlaceProfileEntryPoint) => void;
+  onClickMap?: () => void;
+  /** 탭 버튼을 눌렀을 때. 0: 공연 정보, 1: 출연진 */
+  onClickTab?: (index: number) => void;
+  /** 클릭 또는 스와이프로 탭이 바뀌었을 때. 0: 공연 정보, 1: 출연진 */
+  onChangeTab?: (index: number) => void;
+  naverMapClientId?: string;
 }
 
 const ShowPreview = ({
@@ -64,8 +93,14 @@ const ShowPreview = ({
   onShareShowPreviewLink,
   onShareShowInfo,
   onCloseShareDropdown,
+  prioritizeFirstImage = false,
+  onClickPlaceProfile,
+  onClickMap,
+  onClickTab,
+  onChangeTab,
+  naverMapClientId,
 }: ShowPreviewProps) => {
-  const { images, name, date, startTime, runningTime, placeName } = show;
+  const { images, name, date, startTime, runningTime, placeName, concertHallId } = show;
 
   const [noticeOpen, setNoticeOpen] = useState<boolean>(false);
   const containerScrollTop = useRef<number | null>(null);
@@ -149,11 +184,33 @@ const ShowPreview = ({
           }}
           modules={[Pagination]}
         >
-          {images.map((image) => (
-            <SwiperSlide key={image}>
-              <Styled.ShowImage src={image} alt={name} />
-            </SwiperSlide>
-          ))}
+          {images.map((image, index) => {
+            const imageSrc = typeof image === 'string' ? image : image.src;
+            const imageThumbnailSrc = typeof image === 'string' ? undefined : image.thumbnailSrc;
+            const imageLoadingProps: ShowImageLoadingProps = prioritizeFirstImage
+              ? {
+                  fetchpriority: index === 0 ? 'high' : 'auto',
+                  loading: index === 0 ? 'eager' : 'lazy',
+                }
+              : {};
+
+            return (
+              <SwiperSlide key={imageSrc}>
+                <Styled.ShowImage
+                  src={imageSrc}
+                  srcSet={
+                    imageThumbnailSrc && imageThumbnailSrc !== imageSrc
+                      ? `${imageThumbnailSrc} 480w, ${imageSrc} 800w`
+                      : undefined
+                  }
+                  sizes="(max-width: 640px) calc(100vw - 76px), 564px"
+                  alt={name}
+                  decoding="async"
+                  {...imageLoadingProps}
+                />
+              </SwiperSlide>
+            );
+          })}
         </Swiper>
         <Styled.ShowName>{name}</Styled.ShowName>
         <Styled.ShowHeaderInfoList>
@@ -164,14 +221,27 @@ const ShowPreview = ({
             </span>
             <Styled.ShowInfoDescriptionBadge>{runningTime}분</Styled.ShowInfoDescriptionBadge>
           </Styled.ShowHeaderInfoItem>
-          <Styled.ShowHeaderInfoItem>
-            <MapMarkerIcon />
-            <span>{placeName}</span>
-          </Styled.ShowHeaderInfoItem>
+          {concertHallId && onClickPlaceProfile ? (
+            <Styled.ShowHeaderPlaceButton
+              type="button"
+              onClick={() => onClickPlaceProfile(concertHallId, 'Summary')}
+            >
+              <MapMarkerIcon />
+              <span>{placeName}</span>
+              <ChevronRightIcon />
+            </Styled.ShowHeaderPlaceButton>
+          ) : (
+            <Styled.ShowHeaderInfoItem>
+              <MapMarkerIcon />
+              <span>{placeName}</span>
+            </Styled.ShowHeaderInfoItem>
+          )}
         </Styled.ShowHeaderInfoList>
       </Styled.ShowPreviewHeader>
       <Styled.ShowPreviewContent>
         <Tab
+          onClickTab={onClickTab}
+          onChangeTab={onChangeTab}
           tabItems={[
             {
               title: '공연 정보',
@@ -182,6 +252,9 @@ const ShowPreview = ({
                   onClickMessageLink={onClickLink}
                   onClickCallLinkMobile={onClickLinkMobile}
                   onClickMessageLinkMobile={onClickLinkMobile}
+                  onClickPlaceProfile={onClickPlaceProfile}
+                  onClickMap={onClickMap}
+                  naverMapClientId={naverMapClientId}
                 />
               ),
             },

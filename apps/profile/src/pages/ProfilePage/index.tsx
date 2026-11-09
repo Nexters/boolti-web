@@ -1,3 +1,4 @@
+import { trackViewScreen } from '@boolti/analytics';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -21,6 +22,7 @@ import { openStoreLink } from '~/utils/link';
 import { Meta } from '~/components/Meta';
 import { EXTERNAL_URL } from '~/constants/external';
 import { SCHEMES } from '~/constants/schemes';
+import { trackProfileLinkClick, trackProfileShowClick } from '~/constants/analytics';
 import VideoCard from '~/components/VideoCard';
 import NotFound from '~/components/Notfound';
 import { QRCodeSVG } from 'qrcode.react';
@@ -36,6 +38,17 @@ const ProfilePage = () => {
   const [isDesktop, setIsDesktop] = useState(false);
 
   const { data: profile, isLoading } = useUserByUserCodeV2(userCode as string);
+  const profileUserCode = profile?.userCode;
+
+  useEffect(() => {
+    if (!profileUserCode) return;
+
+    // 웹 프로필은 로그인하지 않고 보므로 is_own_profile 은 알 수 없어 보내지 않는다
+    trackViewScreen('Profile', {
+      artist_id: profileUserCode,
+      source: new URLSearchParams(window.location.search).get('source') ?? 'Direct',
+    });
+  }, [profileUserCode]);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(min-width: 1024px)');
@@ -135,6 +148,7 @@ const ProfilePage = () => {
   };
 
   const handleShowClick = (showId: string | number) => {
+    trackProfileShowClick(showId);
     window.location.href = EXTERNAL_URL.SHOW_MANAGER_INFO(showId);
   };
 
@@ -239,6 +253,12 @@ const ProfilePage = () => {
             {instagramAccount?.username && (
               <Styled.IconButton
                 href={`https://instagram.com/${instagramAccount.username}`}
+                onClick={() =>
+                  trackProfileLinkClick(
+                    'Instagram',
+                    `https://instagram.com/${instagramAccount.username}`,
+                  )
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -248,6 +268,12 @@ const ProfilePage = () => {
             {youtubeAccount?.username && (
               <Styled.IconButton
                 href={`https://youtube.com/@${youtubeAccount.username}`}
+                onClick={() =>
+                  trackProfileLinkClick(
+                    'Youtube',
+                    `https://youtube.com/@${youtubeAccount.username}`,
+                  )
+                }
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -349,6 +375,7 @@ const ProfilePage = () => {
                   <Styled.LinkItem
                     key={`${link.link}-${index}`}
                     href={link.link}
+                    onClick={() => trackProfileLinkClick('Custom', link.link)}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

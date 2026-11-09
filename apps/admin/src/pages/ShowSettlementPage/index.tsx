@@ -64,7 +64,7 @@ const ShowSettlementPage = () => {
   const deleteIDCardPhotoFileMutation = useDeleteIDCardPhotoFile(showId);
   const deleteBankAccountCopyPhotoMutation = useDeleteBankAccountCopyPhoto(showId);
   const requestSettlementMutation = useRequestSettlement(showId);
-  const readSettlementBanner = useReadSettlementBanner();
+  const { mutate: readSettlementBanner } = useReadSettlementBanner();
   const hasActualSettlementSummary = !!settlementSummary?.actual;
 
   const settlementStatementFile = useMemo(() => {
@@ -82,7 +82,7 @@ const ShowSettlementPage = () => {
 
     if (!targetSettlementBanner) return;
 
-    readSettlementBanner.mutate({
+    readSettlementBanner({
       showId: targetSettlementBanner.showId,
       bannerType: targetSettlementBanner.bannerType,
     });

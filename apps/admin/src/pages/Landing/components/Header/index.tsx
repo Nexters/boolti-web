@@ -6,7 +6,8 @@ import { PATH } from '~/constants/routes';
 import { useDeviceWidth } from '~/hooks/useDeviceWidth';
 import { openStoreLink } from '~/utils/link';
 
-import { LANDING_BREAKPOINT } from '../../constants';
+import { LANDING_BREAKPOINT, LANDING_COPY } from '../../constants';
+import { useFindSpace } from '../../hooks/useFindSpace';
 import Styled from './Header.styles';
 
 const MenuIcon = () => (
@@ -29,6 +30,7 @@ const Header = () => {
   const deviceWidth = useDeviceWidth();
   const isMobile = deviceWidth < LANDING_BREAKPOINT.tablet;
   const navigate = useNavigate();
+  const { handleFindSpace } = useFindSpace();
 
   const handleAppExplore = () => {
     if (isMobile) {
@@ -48,6 +50,9 @@ const Header = () => {
 
           {/* Desktop / Tablet nav */}
           <Styled.Nav>
+            <Styled.TextButton type="button" onClick={handleFindSpace}>
+              {LANDING_COPY.spaceBanner.nav}
+            </Styled.TextButton>
             <Styled.TextButton type="button" onClick={handleAppExplore}>
               앱 둘러보기
             </Styled.TextButton>
@@ -67,6 +72,15 @@ const Header = () => {
 
       {/* Mobile dropdown */}
       <Styled.MobileMenuOverlay isOpen={mobileMenuOpen}>
+        <Styled.MobileMenuItem
+          type="button"
+          onClick={() => {
+            setMobileMenuOpen(false);
+            handleFindSpace();
+          }}
+        >
+          {LANDING_COPY.spaceBanner.nav}
+        </Styled.MobileMenuItem>
         <Styled.MobileMenuItem
           type="button"
           onClick={() => {

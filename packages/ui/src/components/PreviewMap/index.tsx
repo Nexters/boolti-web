@@ -12,16 +12,19 @@ interface Props {
   longitude: number;
   name: string;
   isAppWebview: boolean;
+  onClickMap?: () => void;
 }
 
 const CONFIRM_LOCAL_STORAGE_KEY = 'BOOLTI_PREVIEW_MAP_OPEN_NAVER_MAP';
 const DEFAULT_CENTER_LATITUDE_OFFSET = 0.00005;
 
-const PreviewMap = ({ latitude, longitude, name, isAppWebview }: Props) => {
+const PreviewMap = ({ latitude, longitude, name, isAppWebview, onClickMap }: Props) => {
   const confirm = useConfirm();
   const navermaps = useNavermaps();
 
   const openNaverMaps = async () => {
+    onClickMap?.();
+
     if (!localStorage.getItem(CONFIRM_LOCAL_STORAGE_KEY)) {
       if (!isAppWebview) {
         const isConfirm = await confirm(

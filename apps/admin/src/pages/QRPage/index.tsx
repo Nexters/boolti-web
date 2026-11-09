@@ -9,6 +9,7 @@ import Header from '~/components/Header';
 import Layout from '~/components/Layout';
 import ProfileDropdown from '~/components/ProfileDropdown';
 import { PATH } from '~/constants/routes';
+import { LOGIN_SOURCE } from '~/constants/analytics';
 
 import Styled from './QRPage.styles';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
@@ -46,7 +47,7 @@ const QRPage = () => {
                 <TextButton
                   colorTheme="netural"
                   size="regular"
-                  onClick={() => navigate(PATH.LOGIN)}
+                  onClick={() => navigate(PATH.LOGIN, { state: { source: LOGIN_SOURCE.QR } })}
                 >
                   로그인
                 </TextButton>

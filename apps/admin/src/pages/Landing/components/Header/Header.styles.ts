@@ -4,10 +4,7 @@ import { Link } from 'react-router-dom';
 import { LANDING_COLORS, mq_desktop, mq_lg } from '../../constants';
 
 const Header = styled.header<{ hideBorder?: boolean }>`
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  left: 0;
+  position: relative;
   width: 100%;
   border-bottom: 1px solid
     ${({ hideBorder }) => (hideBorder ? 'transparent' : LANDING_COLORS.headerBorder)};
@@ -22,7 +19,7 @@ const Header = styled.header<{ hideBorder?: boolean }>`
   }
 
   ${mq_desktop} {
-    padding: 0 80px;
+    padding: 0 60px;
   }
 `;
 
@@ -44,16 +41,12 @@ const HeaderContaienr = styled.div`
 `;
 
 const BooltiIcon = styled.button`
-  width: 55.5px;
-  height: 21px;
+  width: 74px;
+  height: 28px;
   cursor: pointer;
   display: flex;
   align-items: center;
 
-  ${mq_lg} {
-    width: 74px;
-    height: 28px;
-  }
   & > svg {
     width: 100%;
     height: 100%;
@@ -134,8 +127,8 @@ const MobileMenuButton = styled.button`
 
 const MobileMenuOverlay = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
-  position: fixed;
-  top: 72px;
+  position: absolute;
+  top: 100%;
   left: 0;
   width: 100%;
   flex-direction: column;

@@ -1,12 +1,15 @@
 export type WebviewCommand =
   | 'NAVIGATE_TO_SHOW_DETAIL'
-  | 'NAVIGATE_BACK'
+  | 'NAVIGATE_TO_PLACE_DETAIL'
   | 'REQUEST_TOKEN'
-  | 'SHOW_TOAST';
+  | 'REQUEST_CLIENT_INFO'
+  | 'SHOW_TOAST'
+  | 'VIEW_PLACE_PHOTO_DETAIL'
+  | 'VIEW_PLACE_PHOTO_LIST';
 
 export type BaseCommand = {
   id: string;
-  timestamp: string;
+  timestamp: string | number;
 };
 
 export type Command<Data = undefined> = Data extends undefined
@@ -32,7 +35,7 @@ declare global {
     };
 
     __boolti__webview__bridge__: {
-      postMessage: PostMessageFn;
+      postMessage: (message: Command | Command<unknown> | string) => void;
     };
   }
 }

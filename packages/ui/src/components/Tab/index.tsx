@@ -8,9 +8,11 @@ interface Props {
     title: string;
     content: React.ReactNode;
   }>;
+  onClickTab?: (index: number) => void;
+  onChangeTab?: (index: number) => void;
 }
 
-const Tab = ({ tabItems }: Props) => {
+const Tab = ({ tabItems, onClickTab, onChangeTab }: Props) => {
   const swiperRef = useRef<SwiperRef>(null);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -22,6 +24,7 @@ const Tab = ({ tabItems }: Props) => {
             key={index}
             isSelected={tabIndex === index}
             onClick={() => {
+              onClickTab?.(index);
               swiperRef.current?.swiper.slideTo(index);
             }}
           >
@@ -37,7 +40,9 @@ const Tab = ({ tabItems }: Props) => {
         slidesPerView={1}
         onSlideChange={(swiper: SwiperClass) => {
           const activeIndex = swiper.activeIndex;
+          if (activeIndex === tabIndex) return;
           setTabIndex(activeIndex);
+          onChangeTab?.(activeIndex);
         }}
       >
         {tabItems.map(({ content }, index) => (

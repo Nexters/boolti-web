@@ -23,5 +23,12 @@
     },
     "type-check": {},
     "storybook": {}
-  }
+  },
+  "globalEnv": [
+    "VITE_MIXPANEL_TOKEN",
+    "VITE_MIXPANEL_DEV_TOKEN",
+    "VITE_MIXPANEL_PROD_TOKEN",
+    "VITE_MIXPANEL_DEBUG",
+    "VITE_MIXPANEL_MODE"
+  ]
 }

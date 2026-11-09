@@ -14,6 +14,25 @@
 - Turborepo
 - Vite
 
+## Node 환경 설정
+
+Node 버전은 루트 `.nvmrc`를 기준으로 사용합니다. asdf 설정(`.tool-versions`)도 같은 버전으로 유지합니다.
+CI는 `.nvmrc`를 읽으며, 저장소에 포함된 Yarn 4.1.0을 직접 실행합니다.
+
+```sh
+nvm install
+nvm use
+node .yarn/releases/yarn-4.1.0.cjs install --immutable
+node .yarn/releases/yarn-4.1.0.cjs lint
+node .yarn/releases/yarn-4.1.0.cjs type-check
+node .yarn/releases/yarn-4.1.0.cjs build --force
+node .yarn/releases/yarn-4.1.0.cjs workspace admin test
+node .yarn/releases/yarn-4.1.0.cjs workspace stroybook build:storybook
+```
+
+외부 배포 서비스의 빌드 환경도 `.nvmrc`와 같은 Node 버전으로 설정하고 재빌드합니다.
+Node 업그레이드 검증 결과와 남은 확인 사항은 [검증 기록](docs/node-upgrade-2026-10-28.md)을 참고하세요.
+
 ## 패키지 설명
 
 - `apps/admin`: 불티에서 공연을 생성하고 관리하는 사용자들을 위한 서비스입니다.

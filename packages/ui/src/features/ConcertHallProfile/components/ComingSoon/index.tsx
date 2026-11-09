@@ -1,0 +1,42 @@
+import { useImpression } from '@boolti/analytics';
+import styled from '@emotion/styled';
+
+import { useConcertHallProfileAnalytics } from '../../analytics';
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  height: 290px;
+  width: 100%;
+`;
+
+const Title = styled.span`
+  font-family: 'SB Aggro';
+  font-size: 20px;
+  line-height: 30px;
+  letter-spacing: -0.6px;
+  color: ${({ theme }) => theme.palette.mobile.grey.g20};
+`;
+
+const Description = styled.span`
+  font-size: 16px;
+  line-height: 24px;
+  color: ${({ theme }) => theme.palette.mobile.grey.g30};
+`;
+
+const ComingSoon = () => {
+  const trackEvent = useConcertHallProfileAnalytics();
+  const ref = useImpression<HTMLDivElement>(() => trackEvent({ type: 'comingSoonImpression' }));
+
+  return (
+    <Container ref={ref}>
+      <Title>COMING SOON</Title>
+      <Description>조금만 기다려주세요!</Description>
+    </Container>
+  );
+};
+
+export default ComingSoon;

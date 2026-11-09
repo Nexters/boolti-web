@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthAtom } from '~/atoms/useAuthAtom';
 
 import { PATH } from '~/constants/routes';
+import type { SignUpLocationState } from '~/constants/analytics';
 
 const OAuthKakaoPage = () => {
   const { setToken } = useAuthAtom();
@@ -39,7 +40,10 @@ const OAuthKakaoPage = () => {
     });
 
     setToken(accessToken, refreshToken);
-    navigate(PATH.SIGNUP_COMPLETE, { replace: true });
+    navigate(PATH.SIGNUP_COMPLETE, {
+      replace: true,
+      state: { loginMethod: 'Kakao' } satisfies SignUpLocationState,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
