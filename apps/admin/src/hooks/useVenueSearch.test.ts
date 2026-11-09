@@ -101,4 +101,42 @@ describe('useVenueSearch', () => {
 
     expect(result.current.results).toEqual([]);
   });
+
+  it('clearResults는 결과만 비우고 입력값(query)은 유지한다', async () => {
+    const { result } = renderHook(() => useVenueSearch());
+
+    act(() => {
+      result.current.setQuery('롤링홀');
+    });
+    await waitFor(() => expect(result.current.results.length).toBeGreaterThan(0), {
+      timeout: 3000,
+    });
+
+    act(() => {
+      result.current.clearResults();
+    });
+
+    expect(result.current.query).toBe('롤링홀');
+    expect(result.current.results).toEqual([]);
+  });
+
+  it('enabled가 false면 검색 요청을 보내지 않는다', async () => {
+    let requestCount = 0;
+    server.use(
+      http.get('*/web/v1/host/concert-halls', () => {
+        requestCount += 1;
+        return HttpResponse.json({ items: [] });
+      }),
+    );
+
+    const { result } = renderHook(() => useVenueSearch({ enabled: false }));
+
+    act(() => {
+      result.current.setQuery('롤링홀');
+    });
+    await new Promise((resolve) => setTimeout(resolve, 600));
+
+    expect(requestCount).toBe(0);
+    expect(result.current.results).toEqual([]);
+  });
 });

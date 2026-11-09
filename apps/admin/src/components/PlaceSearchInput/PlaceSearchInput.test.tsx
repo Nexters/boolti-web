@@ -7,12 +7,15 @@ import typo from '@boolti/ui/src/systems/typo';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import React from 'react';
 
-const { dialogOpenMock, dialogCloseMock, toastErrorMock, geocodeMock } = vi.hoisted(() => ({
-  dialogOpenMock: vi.fn(),
-  dialogCloseMock: vi.fn(),
-  toastErrorMock: vi.fn(),
-  geocodeMock: vi.fn(),
-}));
+const { dialogOpenMock, dialogCloseMock, toastErrorMock, geocodeMock, fetchQueryMock } = vi.hoisted(
+  () => ({
+    dialogOpenMock: vi.fn(),
+    dialogCloseMock: vi.fn(),
+    toastErrorMock: vi.fn(),
+    geocodeMock: vi.fn(),
+    fetchQueryMock: vi.fn(),
+  }),
+);
 
 // @boolti/ui transitively imports swiper, which Yarn PnP can't resolve in tests.
 // Stub the pieces PlaceSearchInput uses from @boolti/ui.
@@ -46,30 +49,25 @@ vi.mock('@boolti/api', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@boolti/api')>();
   return {
     ...actual,
-    useConcertHallProfile: vi.fn(),
+    useQueryClient: () => ({ fetchQuery: fetchQueryMock }),
     useNaverGeocode: () => geocodeMock,
   };
 });
 
 import PlaceSearchInput from './index';
 import * as useVenueSearchModule from '~/hooks/useVenueSearch';
-import * as apiModule from '@boolti/api';
 
 const theme = { palette, typo, breakpoint };
 
 const renderWith = (ui: React.ReactElement) =>
   render(<ThemeProvider theme={theme}>{ui}</ThemeProvider>);
 
-const mockConcertHallProfile = (
-  data: unknown = undefined,
-  overrides: Partial<{ isLoading: boolean; isError: boolean }> = {},
-) => {
-  vi.mocked(apiModule.useConcertHallProfile).mockReturnValue({
-    data,
-    isLoading: false,
-    isError: false,
-    ...overrides,
-  } as unknown as ReturnType<typeof apiModule.useConcertHallProfile>);
+const mockConcertHallProfile = (data: unknown = undefined) => {
+  if (data === undefined) {
+    fetchQueryMock.mockRejectedValue(new Error('not mocked'));
+    return;
+  }
+  fetchQueryMock.mockResolvedValue(data);
 };
 
 describe('PlaceSearchInput', () => {
@@ -238,5 +236,120 @@ describe('PlaceSearchInput', () => {
 
     expect(toastErrorMock).toHaveBeenCalled();
     expect(handleSelect).not.toHaveBeenCalled();
+  });
+
+  // 실제 훅처럼 query를 상태로 들고 있는 가짜 useVenueSearch. 입력창 표시값 검증용.
+  const mockStatefulVenueSearch = (results: Array<Record<string, unknown>>) => {
+    vi.spyOn(useVenueSearchModule, 'default').mockImplementation(() => {
+      const [query, setQuery] = React.useState('');
+      return {
+        query,
+        setQuery,
+        clearResults: vi.fn(),
+        results,
+        isLoading: false,
+        errors: {},
+      } as unknown as ReturnType<typeof useVenueSearchModule.default>;
+    });
+  };
+
+  it('불티 공연장 선택 후 상단에는 공연장명, 하단에는 도로명+상세 주소(수정 불가)가 보이고 드롭다운이 닫힌다', async () => {
+    mockStatefulVenueSearch([
+      { source: 'boolti', concertHallId: 7, name: '감마홀', address: '서울 마포구 와우산로 21길 19-11 지하 2층' },
+    ]);
+    mockConcertHallProfile({
+      id: 7,
+      name: '감마홀',
+      head: {
+        location: {
+          streetAddress: '서울 마포구 와우산로 21길 19-11',
+          detailAddress: '지하 2층',
+          latitude: 37.55,
+          longitude: 126.92,
+        },
+      },
+    });
+
+    const handleSelect = vi.fn();
+    renderWith(<PlaceSearchInput onSelect={handleSelect} />);
+    const input = screen.getByPlaceholderText(/공연장명 또는 도로명 주소/) as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '감마홀' } });
+    fireEvent.click(screen.getByText('감마홀'));
+
+    await waitFor(() => expect(handleSelect).toHaveBeenCalledTimes(1));
+    expect(input.value).toBe('감마홀');
+    const addressField = screen.getByDisplayValue('서울 마포구 와우산로 21길 19-11 지하 2층') as HTMLInputElement;
+    expect(addressField.disabled).toBe(true);
+    expect(screen.queryByText('불티 등록 공연장')).toBeNull();
+  });
+
+  it('프로필 조회와 주소 좌표 변환이 모두 실패하면 토스트를 띄우고 선택하지 않는다(에러 바운더리로 던지지 않음)', async () => {
+    mockStatefulVenueSearch([
+      { source: 'boolti', concertHallId: 7, name: '감마홀', address: '서울 마포구 와우산로 21길 19-11' },
+    ]);
+    fetchQueryMock.mockRejectedValue(new Error('500'));
+    geocodeMock.mockResolvedValue(null);
+
+    const handleSelect = vi.fn();
+    renderWith(<PlaceSearchInput onSelect={handleSelect} />);
+    fireEvent.change(screen.getByPlaceholderText(/공연장명 또는 도로명 주소/), {
+      target: { value: '감마홀' },
+    });
+    fireEvent.click(screen.getByText('감마홀'));
+
+    await waitFor(() => expect(toastErrorMock).toHaveBeenCalled());
+    expect(handleSelect).not.toHaveBeenCalled();
+  });
+
+  it('수정 화면: 불티 공연장으로 등록된 공연은 상단 공연장명, 하단 도로명+상세 주소로 보인다', async () => {
+    mockStatefulVenueSearch([]);
+    mockConcertHallProfile();
+
+    const { rerender } = renderWith(<PlaceSearchInput onSelect={vi.fn()} />);
+    // 폼 값이 마운트 뒤에 채워지는 경우(reset)를 흉내낸다.
+    rerender(
+      <ThemeProvider theme={theme}>
+        <PlaceSearchInput
+          initialPlaceName="감마홀"
+          initialAddress="서울 마포구 와우산로 21길 19-11"
+          initialDetailAddress="지하 2층"
+          initialConcertHallId={7}
+          onSelect={vi.fn()}
+        />
+      </ThemeProvider>,
+    );
+
+    const input = screen.getByPlaceholderText(/공연장명 또는 도로명 주소/) as HTMLInputElement;
+    await waitFor(() => expect(input.value).toBe('감마홀'));
+    const addressField = screen.getByDisplayValue('서울 마포구 와우산로 21길 19-11 지하 2층') as HTMLInputElement;
+    expect(addressField.disabled).toBe(true);
+  });
+
+  it('프로필 조회가 실패해도 검색 결과 주소를 좌표로 바꿔 선택을 마친다', async () => {
+    mockStatefulVenueSearch([
+      { source: 'boolti', concertHallId: 7, name: '감마홀', address: '서울 마포구 와우산로 21길 19-11 지하 2층' },
+    ]);
+    fetchQueryMock.mockRejectedValue(new Error('500'));
+    geocodeMock.mockResolvedValue({ latitude: 37.5, longitude: 126.9 });
+
+    const handleSelect = vi.fn();
+    renderWith(<PlaceSearchInput onSelect={handleSelect} />);
+    fireEvent.change(screen.getByPlaceholderText(/공연장명 또는 도로명 주소/), {
+      target: { value: '감마홀' },
+    });
+    fireEvent.click(screen.getByText('감마홀'));
+
+    await waitFor(() =>
+      expect(handleSelect).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'boolti',
+          concertHallId: 7,
+          streetAddress: '서울 마포구 와우산로 21길 19-11 지하 2층',
+          latitude: 37.5,
+          longitude: 126.9,
+        }),
+      ),
+    );
+    expect(toastErrorMock).not.toHaveBeenCalled();
   });
 });
