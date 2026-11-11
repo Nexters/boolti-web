@@ -1,5 +1,12 @@
-import { LogoutOutlined, TeamOutlined, HomeOutlined } from '@ant-design/icons';
-import { LOCAL_STORAGE, useAdminLogout, useSuperAdminUserList, useSuperAdminCreateUser } from '@boolti/api';
+import { HomeOutlined, LockOutlined, LogoutOutlined, TeamOutlined } from '@ant-design/icons';
+import {
+  LOCAL_STORAGE,
+  SuperAdminUserResponse,
+  useAdminLogout,
+  useSuperAdminCreateUser,
+  useSuperAdminMe,
+  useSuperAdminUserList,
+} from '@boolti/api';
 import { useTheme } from '@emotion/react';
 import {
   App,
@@ -9,6 +16,7 @@ import {
   Layout,
   Menu,
   Modal,
+  Space,
   Table,
   Tag,
   Typography,
@@ -20,6 +28,8 @@ import { useNavigate } from 'react-router-dom';
 
 import { PATH } from '~/constants/routes';
 
+import OperatorConfirmModal, { OperatorTarget } from './OperatorConfirmModal';
+
 const { Content, Header } = Layout;
 
 const AdminUserPage = () => {
@@ -29,7 +39,12 @@ const AdminUserPage = () => {
   const { mutateAsync: logout } = useAdminLogout();
   const { isLoading, data: users = [] } = useSuperAdminUserList();
   const { mutateAsync: createUser, isLoading: isCreating } = useSuperAdminCreateUser();
+  const { data: me } = useSuperAdminMe();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [operatorTarget, setOperatorTarget] = useState<OperatorTarget | null>(null);
+
+  // 화이트리스트 계정만 다른 계정을 관리할 수 있다. 최종 권한 검사는 서버가 한다.
+  const canManageAccounts = me?.canManageAccounts === true && !me.passwordChangeRequired;
   const [form] = Form.useForm();
 
   const headerItems: React.ComponentProps<typeof Menu>['items'] = [
@@ -39,10 +54,15 @@ const AdminUserPage = () => {
       label: '홈',
     },
     {
+      key: 'password-change',
+      icon: <LockOutlined />,
+      label: '비밀번호 변경',
+      style: { marginLeft: 'auto' },
+    },
+    {
       key: 'logout',
       icon: <LogoutOutlined />,
       label: '로그아웃',
-      style: { marginLeft: 'auto' },
     },
   ];
 
@@ -57,14 +77,23 @@ const AdminUserPage = () => {
       title: '아이디',
       dataIndex: 'identity',
       key: 'identity',
+      render: (identity: string, user: SuperAdminUserResponse) => (
+        <Space size={6}>
+          {identity}
+          {user.id === me?.id && <Tag color="blue">나</Tag>}
+        </Space>
+      ),
     },
     {
       title: '상태',
       dataIndex: 'active',
       key: 'active',
-      width: 100,
-      render: (active: boolean) => (
-        <Tag color={active ? 'green' : 'default'}>{active ? '활성' : '비활성'}</Tag>
+      width: 180,
+      render: (active: boolean, user: SuperAdminUserResponse) => (
+        <Space size={4}>
+          <Tag color={active ? 'green' : 'default'}>{active ? '활성' : '비활성'}</Tag>
+          {user.passwordChangeRequired && <Tag color="orange">비밀번호 변경 필요</Tag>}
+        </Space>
       ),
     },
     {
@@ -75,6 +104,53 @@ const AdminUserPage = () => {
       render: (createdAt: string) =>
         format(new Date(createdAt), 'yyyy.MM.dd HH:mm', { locale: ko }),
     },
+    ...(canManageAccounts
+      ? [
+          {
+            title: '관리',
+            key: 'actions',
+            width: 260,
+            render: (_: unknown, user: SuperAdminUserResponse) => {
+              if (user.id === me?.id) {
+                return (
+                  <Button size="small" onClick={() => navigate(PATH.PASSWORD_CHANGE)}>
+                    비밀번호 변경
+                  </Button>
+                );
+              }
+
+              if (!user.active) {
+                return (
+                  <Button
+                    size="small"
+                    onClick={() => setOperatorTarget({ user, action: 'activate' })}
+                  >
+                    재활성화
+                  </Button>
+                );
+              }
+
+              return (
+                <Space size={8}>
+                  <Button
+                    size="small"
+                    onClick={() => setOperatorTarget({ user, action: 'password-reset' })}
+                  >
+                    비밀번호 초기화
+                  </Button>
+                  <Button
+                    size="small"
+                    danger
+                    onClick={() => setOperatorTarget({ user, action: 'deactivate' })}
+                  >
+                    비활성화
+                  </Button>
+                </Space>
+              );
+            },
+          },
+        ]
+      : []),
   ];
 
   const handleCreate = async () => {
@@ -108,6 +184,10 @@ const AdminUserPage = () => {
             switch (e.key) {
               case 'home': {
                 navigate(PATH.INDEX);
+                break;
+              }
+              case 'password-change': {
+                navigate(PATH.PASSWORD_CHANGE);
                 break;
               }
               case 'logout': {
@@ -156,6 +236,8 @@ const AdminUserPage = () => {
             loading={isLoading}
             pagination={false}
           />
+
+          <OperatorConfirmModal target={operatorTarget} onClose={() => setOperatorTarget(null)} />
 
           <Modal
             title="슈퍼관리자 계정 추가"

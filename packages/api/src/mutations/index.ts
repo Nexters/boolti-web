@@ -48,6 +48,8 @@ import useEditSalesTicketType from './useEditSalesTicketType';
 import usePauseSalesTicket from './usePauseSalesTicket';
 import useResumeSalesTicket from './useResumeSalesTicket';
 import useSuperAdminCreateUser from './useSuperAdminCreateUser';
+import useSuperAdminChangePassword from './useSuperAdminChangePassword';
+import useSuperAdminManageUser from './useSuperAdminManageUser';
 import useSuperAdminDeleteShow from './useSuperAdminDeleteShow';
 import useSuperAdminAddHost from './useSuperAdminAddHost';
 import useSuperAdminRemoveHost from './useSuperAdminRemoveHost';
@@ -119,6 +121,8 @@ export {
   usePauseSalesTicket,
   useResumeSalesTicket,
   useSuperAdminCreateUser,
+  useSuperAdminChangePassword,
+  useSuperAdminManageUser,
   useSuperAdminDeleteShow,
   useSuperAdminAddHost,
   useSuperAdminRemoveHost,
@@ -140,3 +144,4 @@ export {
 };
 
 export type { ImageFile };
+export type { SuperAdminManageAction } from './useSuperAdminManageUser';
