@@ -1,4 +1,4 @@
-import { useConcertHallProfile, useNaverGeocode } from '@boolti/api';
+import { queryKeys, useNaverGeocode, useQueryClient } from '@boolti/api';
 import { SearchIcon } from '@boolti/icon';
 import { TextField, useDialog, useToast } from '@boolti/ui';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -38,7 +38,14 @@ interface SelectedSnapshot {
   streetAddress: string;
 }
 
+type BooltiVenueResult = Extract<VenueResult, { source: 'boolti' }>;
+
 const GEOCODE_FAILED_MESSAGE = '주소의 위치 정보를 가져오지 못했어요. 다른 주소로 다시 시도해 주세요.';
+const PROFILE_FAILED_MESSAGE = '공연장 정보를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.';
+const PROFILE_STALE_TIME_MS = 60_000;
+
+const joinAddress = (streetAddress: string, detailAddress: string) =>
+  [streetAddress, detailAddress].filter(Boolean).join(' ');
 
 const PlaceSearchInput = ({
   initialPlaceName,
@@ -51,30 +58,38 @@ const PlaceSearchInput = ({
   onClear,
   onDetailAddressChange,
 }: PlaceSearchInputProps) => {
-  const { query, setQuery, results, isLoading, clearResults } = useVenueSearch();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selected, setSelected] = useState<SelectedSnapshot | null>(null);
+  const [isResolvingBoolti, setIsResolvingBoolti] = useState(false);
+  // 공연장이 선택돼 있거나 프로필을 불러오는 중이면 입력창 값으로 다시 검색하지 않는다.
+  const { query, setQuery, results, isLoading, clearResults } = useVenueSearch({
+    enabled: !selected && !isResolvingBoolti,
+  });
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [detailAddress, setDetailAddress] = useState(initialDetailAddress ?? '');
-  const [pendingBooltiId, setPendingBooltiId] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const detailAddressInputRef = useRef<HTMLInputElement>(null);
+  // 불티 공연장 선택은 비동기라, 그 사이 다른 선택이나 입력이 생기면 늦게 온 응답을 버린다.
+  const selectRequestIdRef = useRef(0);
+  // 부모가 매 렌더마다 새 콜백을 넘겨도 비동기 흐름이 최신 콜백을 쓰게 한다.
+  const onSelectRef = useRef(onSelect);
+  onSelectRef.current = onSelect;
 
-  const profileQuery = useConcertHallProfile(pendingBooltiId);
+  const queryClient = useQueryClient();
   const geocode = useNaverGeocode();
   const dialog = useDialog();
   const toast = useToast();
 
+  // 수정 화면처럼 폼 값이 나중에 채워지는 경우, 선택 상태를 폼 값으로 맞춘다.
   useEffect(() => {
-    if (!selected && initialAddress) {
-      const type: PlaceSelectType = initialConcertHallId ? 'boolti' : 'address';
-      setSelected({
-        type,
-        placeName: initialPlaceName ?? '',
-        streetAddress: initialAddress,
-      });
-      setQuery(initialPlaceName || initialAddress);
-    }
-  }, [initialAddress, initialPlaceName, initialConcertHallId, selected, setQuery]);
+    if (selected || !initialAddress) return;
+    setSelected({
+      type: initialConcertHallId ? 'boolti' : 'address',
+      placeName: initialPlaceName ?? '',
+      streetAddress: initialAddress,
+    });
+    setDetailAddress(initialDetailAddress ?? '');
+    setQuery(initialPlaceName || initialAddress);
+  }, [initialAddress, initialPlaceName, initialDetailAddress, initialConcertHallId, selected, setQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -86,61 +101,9 @@ const PlaceSearchInput = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    if (pendingBooltiId == null) return;
-    if (profileQuery.isLoading) return;
-
-    const booltiResult = results.find(
-      (r): r is Extract<VenueResult, { source: 'boolti' }> =>
-        r.source === 'boolti' && r.concertHallId === pendingBooltiId,
-    );
-    if (!booltiResult) {
-      setPendingBooltiId(null);
-      return;
-    }
-
-    if (profileQuery.isError) {
-      console.warn('[PlaceSearchInput] concert hall profile fetch failed', profileQuery.error);
-    }
-
-    const location = profileQuery.data?.head?.location;
-    const streetAddress = location?.streetAddress || booltiResult.address;
-    const detailAddr = location?.detailAddress ?? '';
-
-    setSelected({
-      type: 'boolti',
-      placeName: booltiResult.name,
-      streetAddress,
-    });
-    setDetailAddress(detailAddr);
-    setQuery(booltiResult.name);
-    setIsDropdownOpen(false);
-    clearResults();
-
-    onSelect({
-      type: 'boolti',
-      concertHallId: booltiResult.concertHallId,
-      placeName: booltiResult.name,
-      streetAddress,
-      detailAddress: detailAddr,
-      latitude: location?.latitude ?? 0,
-      longitude: location?.longitude ?? 0,
-    });
-
-    setPendingBooltiId(null);
-  }, [
-    pendingBooltiId,
-    profileQuery.isLoading,
-    profileQuery.isError,
-    profileQuery.error,
-    profileQuery.data,
-    results,
-    onSelect,
-    setQuery,
-    clearResults,
-  ]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    selectRequestIdRef.current += 1;
+    setIsResolvingBoolti(false);
     setQuery(e.target.value);
     setIsDropdownOpen(true);
     if (selected) {
@@ -150,16 +113,71 @@ const PlaceSearchInput = ({
     }
   };
 
-  const handleSelectBoolti = (concertHallId: number) => {
-    setPendingBooltiId(concertHallId);
+  // 불티 공연장 선택. 프로필(좌표, 도로명/상세 주소)은 클릭 시점에 한 번만 조회한다.
+  // useQuery 대신 fetchQuery를 쓰는 이유: 조회 실패가 전역 에러 바운더리로 던져지지 않게 하고,
+  // 검색 결과(results) 변화에 반응하는 effect 없이 클릭 한 번에 선택이 끝나게 하기 위해서다.
+  const handleSelectBoolti = async (venue: BooltiVenueResult) => {
+    const requestId = ++selectRequestIdRef.current;
+    setIsDropdownOpen(false);
+    setIsResolvingBoolti(true);
+    setQuery(venue.name);
+    clearResults();
+
+    let location: { streetAddress?: string; detailAddress?: string; latitude?: number; longitude?: number } | undefined;
+    try {
+      const profile = await queryClient.fetchQuery({
+        ...queryKeys.concertHall.profile(venue.concertHallId),
+        staleTime: PROFILE_STALE_TIME_MS,
+      });
+      location = profile.head?.location;
+    } catch (error) {
+      console.warn('[PlaceSearchInput] concert hall profile fetch failed', error);
+    }
+
+    if (requestId !== selectRequestIdRef.current) return;
+
+    const streetAddress = location?.streetAddress || venue.address;
+    const detailAddr = location?.streetAddress ? location.detailAddress ?? '' : '';
+
+    // 프로필에 좌표가 없거나 조회에 실패하면 주소로 좌표를 구한다.
+    let latitude = location?.latitude;
+    let longitude = location?.longitude;
+    if (latitude == null || longitude == null) {
+      const coordinates = streetAddress ? await geocode(streetAddress) : null;
+      if (requestId !== selectRequestIdRef.current) return;
+      latitude = coordinates?.latitude;
+      longitude = coordinates?.longitude;
+    }
+
+    setIsResolvingBoolti(false);
+
+    if (latitude == null || longitude == null) {
+      toast.error(PROFILE_FAILED_MESSAGE);
+      return;
+    }
+
+    setSelected({ type: 'boolti', placeName: venue.name, streetAddress });
+    setDetailAddress(detailAddr);
+
+    onSelectRef.current({
+      type: 'boolti',
+      concertHallId: venue.concertHallId,
+      placeName: venue.name,
+      streetAddress,
+      detailAddress: detailAddr,
+      latitude,
+      longitude,
+    });
   };
 
   // 다음 우편번호 서비스로 선택한 도로명주소를 네이버 지오코딩으로 좌표 변환한다.
   const handleAddressComplete = useCallback(
     async (roadAddress: string) => {
       dialog.close();
+      const requestId = ++selectRequestIdRef.current;
 
       const coordinates = await geocode(roadAddress);
+      if (requestId !== selectRequestIdRef.current) return;
       if (!coordinates) {
         toast.error(GEOCODE_FAILED_MESSAGE);
         return;
@@ -171,7 +189,7 @@ const PlaceSearchInput = ({
       setIsDropdownOpen(false);
       clearResults();
 
-      onSelect({
+      onSelectRef.current({
         type: 'address',
         placeName: '',
         streetAddress: roadAddress,
@@ -182,7 +200,7 @@ const PlaceSearchInput = ({
 
       setTimeout(() => detailAddressInputRef.current?.focus(), 0);
     },
-    [dialog, geocode, toast, setQuery, clearResults, onSelect],
+    [dialog, geocode, toast, setQuery, clearResults],
   );
 
   const openAddressSearch = () => {
@@ -204,11 +222,9 @@ const PlaceSearchInput = ({
     if (!selected && query.trim()) setIsDropdownOpen(true);
   };
 
-  const booltiResults = results.filter(
-    (r): r is Extract<VenueResult, { source: 'boolti' }> => r.source === 'boolti',
-  );
+  const booltiResults = results.filter((r): r is BooltiVenueResult => r.source === 'boolti');
 
-  const showDropdown = isDropdownOpen && query.trim() && !selected;
+  const showDropdown = isDropdownOpen && query.trim() && !selected && !isResolvingBoolti;
 
   return (
     <div>
@@ -235,7 +251,7 @@ const PlaceSearchInput = ({
                 {booltiResults.map((r) => (
                   <Styled.DropdownItem
                     key={`boolti-${r.concertHallId}`}
-                    onClick={() => handleSelectBoolti(r.concertHallId)}
+                    onClick={() => void handleSelectBoolti(r)}
                   >
                     <Styled.PlaceNameRow>
                       <Styled.PlaceName>{r.name}</Styled.PlaceName>
@@ -278,11 +294,7 @@ const PlaceSearchInput = ({
             <TextField
               inputType="text"
               size="big"
-              value={
-                selected.type === 'boolti' && detailAddress
-                  ? `${selected.streetAddress} ${detailAddress}`
-                  : selected.streetAddress
-              }
+              value={joinAddress(selected.streetAddress, detailAddress)}
               disabled
               placeholder="-"
             />
