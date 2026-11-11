@@ -42,7 +42,7 @@ import {
   SuperAdminShowStatus,
   TicketSalesInfoResponse,
 } from './types/adminShow';
-import { SuperAdminUserResponse } from './types/superAdminUser';
+import { SuperAdminMeResponse, SuperAdminUserResponse } from './types/superAdminUser';
 import {
   ConcertHallAutocompleteResponse,
   ConcertHallImageListResponse,
@@ -658,6 +658,10 @@ export const superAdminUserQueryKeys = createQueryKeys('superAdminUser', {
   list: {
     queryKey: null,
     queryFn: () => fetcher.get<SuperAdminUserResponse[]>('sa-api/v1/super-admin-users'),
+  },
+  me: {
+    queryKey: null,
+    queryFn: () => fetcher.get<SuperAdminMeResponse>('sa-api/v1/super-admin-users/me'),
   },
 });
 

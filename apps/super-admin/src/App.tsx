@@ -9,6 +9,7 @@ import { ko } from 'date-fns/locale';
 import { createBrowserRouter, Navigate, Outlet, RouterProvider } from 'react-router-dom';
 
 import AuthErrorBoundary from './components/ErrorBoundary/AuthErrorBoundary';
+import PasswordChangeGate from './components/PasswordChangeGate';
 import { PATH } from './constants/routes';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -19,6 +20,7 @@ import TicketPage from './pages/TicketPage';
 import PaymentPage from './pages/PaymentPage';
 import EntrancePage from './pages/EntrancePage';
 import AdminUserPage from './pages/AdminUserPage';
+import PasswordChangePage from './pages/PasswordChangePage';
 import ConcertHallInfoPage from './pages/ConcertHallInfoPage';
 import ConcertHallRentalPage from './pages/ConcertHallRentalPage';
 import ConcertHallDataPage from './pages/ConcertHallDataPage';
@@ -58,7 +60,11 @@ const PrivateRoute = () => {
     return <Navigate to={PATH.LOGIN} replace />;
   }
 
-  return <Outlet />;
+  return (
+    <PasswordChangeGate>
+      <Outlet />
+    </PasswordChangeGate>
+  );
 };
 
 const privateRoutes = [
@@ -78,6 +84,10 @@ const privateRoutes = [
       {
         path: PATH.ADMIN_USERS,
         element: <AdminUserPage />,
+      },
+      {
+        path: PATH.PASSWORD_CHANGE,
+        element: <PasswordChangePage />,
       },
       {
         path: PATH.INFO,
