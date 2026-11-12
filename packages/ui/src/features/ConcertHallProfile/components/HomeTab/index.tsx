@@ -89,9 +89,10 @@ const IntroductionSection = ({ introduction }: IntroductionSectionProps) => {
 interface Props {
   profile: ConcertHallProfileResponse;
   naverMapKey: string;
+  galleryContainer?: HTMLElement | null;
 }
 
-const HomeTab = ({ profile, naverMapKey }: Props) => {
+const HomeTab = ({ profile, naverMapKey, galleryContainer }: Props) => {
   const toast = useToast();
   const trackEvent = useConcertHallProfileAnalytics();
   const home = profile.home;
@@ -260,6 +261,7 @@ const HomeTab = ({ profile, naverMapKey }: Props) => {
           open
           initialMode={gallery.mode}
           initialIndex={gallery.index}
+          galleryContainer={galleryContainer}
           onClose={() => setGallery(null)}
         />
       )}

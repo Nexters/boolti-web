@@ -17,6 +17,7 @@ const PlaceDetailPanel = ({
   const query = useConcertHallProfile(concertHallId);
   const concertHall = query.data;
   const [isScrolled, setIsScrolled] = useState(false);
+  const [galleryContainer, setGalleryContainer] = useState<HTMLElement | null>(null);
 
   const handleDetailScroll = (event: UIEvent<HTMLElement>) => {
     const nextIsScrolled = event.currentTarget.scrollTop > 0;
@@ -66,31 +67,35 @@ const PlaceDetailPanel = ({
 
   if (query.isLoading) {
     return (
-      <Styled.DetailPane onScroll={handleDetailScroll}>
-        <Styled.DetailState>
-          <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
-            <ArrowLeftIcon />
-          </Styled.DetailCloseButton>
-          <p>공연장 상세 정보를 불러오는 중입니다.</p>
-        </Styled.DetailState>
+      <Styled.DetailPane>
+        <Styled.DetailScroll onScroll={handleDetailScroll}>
+          <Styled.DetailState>
+            <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
+              <ArrowLeftIcon />
+            </Styled.DetailCloseButton>
+            <p>공연장 상세 정보를 불러오는 중입니다.</p>
+          </Styled.DetailState>
+        </Styled.DetailScroll>
       </Styled.DetailPane>
     );
   }
 
   if (query.isError || !concertHall) {
     return (
-      <Styled.DetailPane onScroll={handleDetailScroll}>
-        <Styled.DetailState>
-          <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
-            <ArrowLeftIcon />
-          </Styled.DetailCloseButton>
-          <div>
-            <Styled.EmptyTitle>공연장 상세 정보를 불러오지 못했어요.</Styled.EmptyTitle>
-            <Styled.TextToggleButton type="button" onClick={() => query.refetch()}>
-              다시 시도
-            </Styled.TextToggleButton>
-          </div>
-        </Styled.DetailState>
+      <Styled.DetailPane>
+        <Styled.DetailScroll onScroll={handleDetailScroll}>
+          <Styled.DetailState>
+            <Styled.DetailCloseButton type="button" aria-label="상세 닫기" onClick={onClose}>
+              <ArrowLeftIcon />
+            </Styled.DetailCloseButton>
+            <div>
+              <Styled.EmptyTitle>공연장 상세 정보를 불러오지 못했어요.</Styled.EmptyTitle>
+              <Styled.TextToggleButton type="button" onClick={() => query.refetch()}>
+                다시 시도
+              </Styled.TextToggleButton>
+            </div>
+          </Styled.DetailState>
+        </Styled.DetailScroll>
       </Styled.DetailPane>
     );
   }
@@ -98,16 +103,19 @@ const PlaceDetailPanel = ({
   const shareCode = concertHall.share?.shareCode ?? concertHall.shareCode;
 
   return (
-    <Styled.DetailPane onScroll={handleDetailScroll}>
-      <ConcertHallProfile
-        profile={concertHall}
-        displayMode="full"
-        isScrolled={isScrolled}
-        shareUrl={shareCode ? `https://place.boolti.in/${shareCode}` : ''}
-        naverMapKey={X_NCP_APIGW_API_KEY_ID}
-        onBack={onClose}
-        onAnalyticsEvent={(event) => trackConcertHallProfileEvent(event, concertHall.id)}
-      />
+    <Styled.DetailPane ref={setGalleryContainer}>
+      <Styled.DetailScroll onScroll={handleDetailScroll}>
+        <ConcertHallProfile
+          profile={concertHall}
+          displayMode="full"
+          isScrolled={isScrolled}
+          galleryContainer={galleryContainer}
+          shareUrl={shareCode ? `https://place.boolti.in/${shareCode}` : ''}
+          naverMapKey={X_NCP_APIGW_API_KEY_ID}
+          onBack={onClose}
+          onAnalyticsEvent={(event) => trackConcertHallProfileEvent(event, concertHall.id)}
+        />
+      </Styled.DetailScroll>
     </Styled.DetailPane>
   );
 };

@@ -1,27 +1,30 @@
 import styled from '@emotion/styled';
 
-const Overlay = styled.div`
-  position: fixed;
+const Overlay = styled.div<{ $embedded: boolean }>`
+  position: ${({ $embedded }) => ($embedded ? 'absolute' : 'fixed')};
   inset: 0;
   z-index: 1000;
   display: flex;
   justify-content: center;
+  overflow: hidden;
+  overscroll-behavior: contain;
   background-color: ${({ theme }) => theme.palette.mobile.grey.g95};
 `;
 
-const Inner = styled.div`
+const Inner = styled.div<{ $embedded: boolean }>`
   display: flex;
   flex-direction: column;
   width: 100%;
   max-width: 680px;
-  height: 100dvh;
+  height: ${({ $embedded }) => ($embedded ? '100%' : '100dvh')};
+  min-height: 0;
 `;
 
-const Header = styled.header`
+const Header = styled.header<{ $embedded: boolean }>`
   display: flex;
   align-items: center;
-  height: 56px;
-  padding: 0 8px;
+  height: ${({ $embedded }) => ($embedded ? '44px' : '56px')};
+  padding: ${({ $embedded }) => ($embedded ? '0 10px' : '0 8px')};
   flex-shrink: 0;
 `;
 
@@ -86,7 +89,9 @@ const RetryButton = styled.button`
 */
 const GridScroll = styled.div`
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
 `;
 
 const Grid = styled.div`
@@ -133,13 +138,13 @@ const Carousel = styled.div`
   }
 `;
 
-const Slide = styled.div`
+const Slide = styled.div<{ $embedded: boolean }>`
   flex: 0 0 100%;
   scroll-snap-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 16px;
+  padding: ${({ $embedded }) => ($embedded ? '0' : '0 16px')};
 `;
 
 const SlideImage = styled.img`
