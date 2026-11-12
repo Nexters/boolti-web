@@ -54,6 +54,7 @@ vi.mock('@boolti/ui', async () => {
     Button,
     ConcertHallProfile,
     useBodyScrollLock,
+    trackConcertHallProfileEvent: vi.fn(),
     mq_lg,
     mq_md,
     mq_xl,
@@ -395,6 +396,10 @@ describe('PlaceSearchPage', () => {
         };
       }),
     });
+    Object.defineProperty(window, 'ResizeObserver', {
+      configurable: true,
+      value: vi.fn(() => ({ observe: vi.fn(), disconnect: vi.fn() })),
+    });
     mockUseConcertHallSearchList.mockReturnValue({
       data: {
         items: concertHalls,
@@ -726,7 +731,7 @@ describe('PlaceSearchPage', () => {
     });
   });
 
-  it('상세 패널이 열리면 데스크톱 콘텐츠를 3대 1 그리드로 전환한다', () => {
+  it('상세 패널이 열리면 데스크톱 프로필 열을 480px로 고정한다', () => {
     renderPlaceSearchPage();
 
     const content = screen.getByText('공연장').closest('section')?.parentElement;
@@ -734,8 +739,8 @@ describe('PlaceSearchPage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /얼라이브홀 상세 보기/ }));
 
-    expect(window.getComputedStyle(content as HTMLElement).gridTemplateColumns).toBe(
-      'minmax(0, 3fr) minmax(0, 1fr)',
+    expect(getCssTextForElement(content as HTMLElement, '(min-width: 1120px)')).toContain(
+      'grid-template-columns: minmax(0, 1fr) 480px',
     );
   });
 
@@ -1992,14 +1997,16 @@ describe('PlaceSearchPage', () => {
     expect(getComputedStyle(title).visibility).toBe('hidden');
     expect(getCssTextForElement(appBar)).toContain('position: sticky');
 
-    detailPane.scrollTop = 1;
-    fireEvent.scroll(detailPane);
+    const detailScroll = appBar.parentElement;
+    if (!detailScroll) throw new Error('상세 스크롤 영역이 없습니다.');
+    detailScroll.scrollTop = 1;
+    fireEvent.scroll(detailScroll);
 
     expect(title.getAttribute('aria-hidden')).toBe('false');
     expect(getComputedStyle(title).visibility).toBe('visible');
 
-    detailPane.scrollTop = 0;
-    fireEvent.scroll(detailPane);
+    detailScroll.scrollTop = 0;
+    fireEvent.scroll(detailScroll);
 
     expect(title.getAttribute('aria-hidden')).toBe('true');
     expect(getComputedStyle(title).visibility).toBe('hidden');
@@ -2031,8 +2038,10 @@ describe('PlaceSearchPage', () => {
     const appBar = within(detailPane).getByRole('banner', { name: '공연장 상세 헤더' });
     const title = within(appBar).getByText('얼라이브홀');
 
-    detailPane.scrollTop = 1;
-    fireEvent.scroll(detailPane);
+    const detailScroll = appBar.parentElement;
+    if (!detailScroll) throw new Error('상세 스크롤 영역이 없습니다.');
+    detailScroll.scrollTop = 1;
+    fireEvent.scroll(detailScroll);
     expect(title.getAttribute('aria-hidden')).toBe('false');
 
     fireEvent.click(screen.getByRole('button', { name: /웨스트브릿지 상세 보기/ }));

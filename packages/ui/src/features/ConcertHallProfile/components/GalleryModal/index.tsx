@@ -1,6 +1,7 @@
 import { useConcertHallImages } from '@boolti/api';
 import { ArrowLeftIcon, CloseIcon } from '@boolti/icon';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 import { useBodyScrollLock } from '../../useBodyScrollLock';
 import sortBySequence from '../../utils/sortBySequence';
@@ -15,6 +16,7 @@ interface Props {
   /** 'viewer'면 바로 크게 보기, 'list'면 사진 목록부터 */
   initialMode: GalleryMode;
   initialIndex?: number;
+  galleryContainer?: HTMLElement | null;
   onClose: () => void;
 }
 
@@ -24,6 +26,7 @@ const GalleryModal = ({
   open,
   initialMode,
   initialIndex = 0,
+  galleryContainer,
   onClose,
 }: Props) => {
   const { data, isLoading, isError, refetch } = useConcertHallImages(concertHallId, open);
@@ -43,14 +46,13 @@ const GalleryModal = ({
     }
   }, [open, initialMode, initialIndex]);
 
-  // 뷰어 진입 시 해당 인덱스로 스크롤 위치 이동
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (viewerIndex != null && carouselRef.current) {
       const el = carouselRef.current;
       el.scrollLeft = el.clientWidth * viewerIndex;
       setActiveIndex(viewerIndex);
     }
-  }, [viewerIndex]);
+  }, [viewerIndex, isLoading, isError, images.length]);
 
   useEffect(() => {
     if (!open) {
@@ -98,18 +100,24 @@ const GalleryModal = ({
     }
   };
 
-  return (
-    <Styled.Overlay role="dialog" aria-modal="true" aria-label={`${hallName} 사진 갤러리`}>
-      <Styled.Inner>
+  const embedded = Boolean(galleryContainer);
+  const modal = (
+    <Styled.Overlay
+      $embedded={embedded}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${hallName} 사진 갤러리`}
+    >
+      <Styled.Inner $embedded={embedded}>
         {isViewer ? (
-          <Styled.Header>
+          <Styled.Header $embedded={embedded}>
             <Styled.HeaderSpacer />
             <Styled.HeaderButton type="button" aria-label="닫기" onClick={handleCloseViewer}>
               <CloseIcon />
             </Styled.HeaderButton>
           </Styled.Header>
         ) : (
-          <Styled.Header>
+          <Styled.Header $embedded={embedded}>
             <Styled.HeaderButton type="button" aria-label="뒤로" onClick={onClose}>
               <ArrowLeftIcon />
             </Styled.HeaderButton>
@@ -131,7 +139,7 @@ const GalleryModal = ({
           <Styled.ViewerBody>
             <Styled.Carousel ref={carouselRef} onScroll={handleScroll}>
               {images.map((image, index) => (
-                <Styled.Slide key={image.id}>
+                <Styled.Slide key={image.id} $embedded={embedded}>
                   <Styled.SlideImage src={image.imageUrl} alt={`${hallName} 사진 ${index + 1}`} />
                 </Styled.Slide>
               ))}
@@ -166,6 +174,8 @@ const GalleryModal = ({
       </Styled.Inner>
     </Styled.Overlay>
   );
+
+  return galleryContainer ? createPortal(modal, galleryContainer) : modal;
 };
 
 export default GalleryModal;
