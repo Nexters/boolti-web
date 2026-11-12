@@ -772,7 +772,7 @@ const Content = styled.div<{ hasDetail: boolean }>`
   ${mq_xl} {
     display: grid;
     grid-template-columns: ${({ hasDetail }) =>
-      hasDetail ? 'minmax(0, 3fr) minmax(0, 1fr)' : 'minmax(0, 1fr)'};
+      hasDetail ? 'minmax(0, 1fr) 480px' : 'minmax(0, 1fr)'};
     overflow-x: clip;
   }
 `;
@@ -1231,27 +1231,39 @@ const ButtonRow = styled.div`
   }
 `;
 
+const DetailScroll = styled.div`
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+`;
+
 const DetailPane = styled.aside`
   position: fixed;
   inset: 0;
   z-index: 50;
   width: 100%;
+  height: 100dvh;
   max-height: none;
   min-height: auto;
-  overflow-y: auto;
-  background: ${({ theme }) => theme.palette.mobile.grey.g90};
+  overflow: hidden;
+  background: ${({ theme }) => theme.palette.mobile.grey.g95};
   border-left: 0;
   border-radius: 0;
+
+  &:has(> [role='dialog']) > ${DetailScroll} {
+    overflow: hidden;
+  }
 
   ${mq_xl} {
     position: relative;
     inset: auto;
     z-index: 21;
     width: auto;
-    height: calc(100vh - 92px);
+    height: calc(100dvh - 92px);
     max-height: none;
     min-height: 0;
-    border-left: 1px solid ${({ theme }) => theme.palette.grey.g90};
+    box-shadow: inset 1px 0 0 ${({ theme }) => theme.palette.grey.g90};
     border-radius: 0;
     animation: ${slideDetailPaneIn} 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
     will-change: transform;
@@ -1737,6 +1749,7 @@ export default {
   DetailBackdrop,
   DetailCloseButton,
   DetailPane,
+  DetailScroll,
   DetailState,
   Empty,
   EmptyDescription,

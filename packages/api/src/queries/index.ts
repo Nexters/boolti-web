@@ -56,6 +56,7 @@ import usePreQuestionParticipants from './usePreQuestionParticipants';
 import usePreQuestionParticipantDetail from './usePreQuestionParticipantDetail';
 import useSalesTicketTypesSummary from './useSalesTicketTypesSummary';
 import useSuperAdminUserList from './useSuperAdminUserList';
+import useSuperAdminMe from './useSuperAdminMe';
 import useSuperAdminHostList from './useSuperAdminHostList';
 import useConcertHallSearch from './useConcertHallSearch';
 import useConcertHallProfile from './useConcertHallProfile';
@@ -134,6 +135,7 @@ export {
   usePreQuestionParticipantDetail,
   useSalesTicketTypesSummary,
   useSuperAdminUserList,
+  useSuperAdminMe,
   useSuperAdminHostList,
   useConcertHallSearch,
   useConcertHallProfile,

@@ -34,10 +34,12 @@ const jsonResponse = (body: unknown, status = 200) =>
 
 describe('401 이후 토큰 리프레시', () => {
   let requestedUrls: string[];
+  let requestedAuthHeaders: Array<string | null>;
   let localStorage: ReturnType<typeof createLocalStorage>;
 
   beforeEach(() => {
     requestedUrls = [];
+    requestedAuthHeaders = [];
     localStorage = createLocalStorage();
     localStorage.setItem('accessToken', 'stale-access-token');
     localStorage.setItem('refreshToken', 'stale-refresh-token');
@@ -59,6 +61,9 @@ describe('401 이후 토큰 리프레시', () => {
       vi.fn(async (input: Request | string) => {
         const url = typeof input === 'string' ? input : input.url;
         requestedUrls.push(url);
+        requestedAuthHeaders.push(
+          typeof input === 'string' ? null : input.headers.get('authorization'),
+        );
         return respond(url);
       }),
     );
@@ -80,6 +85,8 @@ describe('401 이후 토큰 리프레시', () => {
 
     expect(requestedUrls[1]).toBe('https://api.example.com/web/papi/v1/login/refresh');
     expect(localStorage.getItem('accessToken')).toBe('new-access');
+    // 재시도 요청은 새로 받은 토큰을 싣는다.
+    expect(requestedAuthHeaders[2]).toBe('Bearer new-access');
   });
 
   it('리프레시가 네트워크/CORS 오류로 막히면 죽은 토큰을 지운다', async () => {
@@ -96,5 +103,71 @@ describe('401 이후 토큰 리프레시', () => {
 
     expect(localStorage.getItem('accessToken')).toBeNull();
     expect(localStorage.getItem('refreshToken')).toBeNull();
+  });
+
+  it('새 토큰으로 재시도한 요청도 401이면 한 번에 끝낸다(갱신과 재요청을 반복하지 않는다)', async () => {
+    let refreshCount = 0;
+    stubFetch((url) => {
+      if (url.includes('/login/refresh')) {
+        refreshCount += 1;
+        // 안전장치. 루프가 생겨도 테스트가 끝나도록 일정 횟수 뒤에는 성공시킨다.
+        if (refreshCount > 10) return jsonResponse({}, 400);
+        return jsonResponse({ accessToken: `new-${refreshCount}`, refreshToken: 'r' });
+      }
+      return jsonResponse({}, 401);
+    });
+
+    const fetcher = await loadFetcher('https://api.example.com');
+    await expect(fetcher.get('web/papi/v1/concert-halls/7')).rejects.toThrow();
+
+    // 원래 요청 1번, 리프레시 1번, 재시도 1번.
+    expect(refreshCount).toBe(1);
+    expect(requestedUrls).toHaveLength(3);
+    // 재시도 실패는 리프레시 실패가 아니므로 새로 받은 토큰을 지우지 않는다.
+    expect(localStorage.getItem('accessToken')).toBe('new-1');
+  });
+
+  it('재시도 중에 요청을 취소해도 새로 받은 토큰을 지우지 않는다', async () => {
+    const controller = new AbortController();
+    stubFetch((url) => {
+      if (url.includes('/login/refresh')) {
+        return jsonResponse({ accessToken: 'new-access', refreshToken: 'new-refresh' });
+      }
+      if (requestedUrls.length === 1) return jsonResponse({}, 401);
+      // 재시도 요청이 나가는 순간 취소한다(검색어를 바꿔 이전 검색을 끊는 상황).
+      controller.abort();
+      throw new DOMException('aborted', 'AbortError');
+    });
+
+    const fetcher = await loadFetcher('https://api.example.com');
+    await expect(
+      fetcher.get('web/v1/host/concert-halls', { signal: controller.signal }),
+    ).rejects.toThrow();
+
+    expect(localStorage.getItem('accessToken')).toBe('new-access');
+    expect(localStorage.getItem('refreshToken')).toBe('new-refresh');
+  });
+
+  it('동시에 401이 나도 리프레시는 한 번만 한다', async () => {
+    let refreshCount = 0;
+    stubFetch((url) => {
+      if (url.includes('/login/refresh')) {
+        refreshCount += 1;
+        return jsonResponse({ accessToken: `new-${refreshCount}`, refreshToken: 'r' });
+      }
+      return localStorage.getItem('accessToken') === 'stale-access-token' &&
+        !requestedUrls.some((u) => u.includes('/login/refresh'))
+        ? jsonResponse({}, 401)
+        : jsonResponse({ ok: true });
+    });
+
+    const fetcher = await loadFetcher('https://api.example.com');
+    await Promise.all([
+      fetcher.get('web/v1/host/shows'),
+      fetcher.get('web/v1/host/concert-halls'),
+      fetcher.get('web/papi/v1/concert-halls/7'),
+    ]);
+
+    expect(refreshCount).toBe(1);
   });
 });

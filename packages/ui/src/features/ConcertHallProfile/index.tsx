@@ -22,6 +22,7 @@ export interface ConcertHallProfileProps {
   shareUrl: string;
   naverMapKey: string;
   isScrolled?: boolean;
+  galleryContainer?: HTMLElement | null;
   onBack?: () => void;
   /** 분석 이벤트를 받는다. 넘기지 않으면 아무것도 보내지 않는다. */
   onAnalyticsEvent?: ConcertHallProfileAnalyticsHandler;
@@ -41,6 +42,7 @@ const ConcertHallProfile = ({
   naverMapKey,
   onBack,
   isScrolled,
+  galleryContainer,
   onAnalyticsEvent,
 }: ConcertHallProfileProps) => {
   const toast = useToast();
@@ -88,7 +90,7 @@ const ConcertHallProfile = ({
     }
 
     return tab === 'home' ? (
-      <HomeTab profile={profile} naverMapKey={naverMapKey} />
+      <HomeTab profile={profile} naverMapKey={naverMapKey} galleryContainer={galleryContainer} />
     ) : (
       <RentalTab profile={profile} />
     );

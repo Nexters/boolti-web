@@ -139,7 +139,8 @@ describe('ShowInfoPage submission', () => {
     await waitFor(() => expect(showSubmissionErrorToastMock).toHaveBeenCalledTimes(1));
     expect(editShowInfoMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        body: expect.objectContaining({ notice: '<p>안내</p>' }),
+        // 불티 공연장 연결(concertHallId)이 폼 초기값으로 복원돼 그대로 저장돼야 한다.
+        body: expect.objectContaining({ notice: '<p>안내</p>', concertHallId: 1 }),
       }),
       expect.any(Object),
     );
