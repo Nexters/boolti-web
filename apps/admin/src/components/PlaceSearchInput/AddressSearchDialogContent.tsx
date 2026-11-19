@@ -1,16 +1,16 @@
 import { useEffect, useRef } from 'react';
 
-const POSTCODE_SCRIPT_URL = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+const POSTCODE_SCRIPT_URL = '//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
-interface DaumPostcodeData {
+interface KakaoPostcodeData {
   roadAddress: string;
   address: string;
   zonecode: string;
 }
 
-interface DaumPostcodeConstructor {
+interface KakaoPostcodeConstructor {
   new (options: {
-    oncomplete: (data: DaumPostcodeData) => void;
+    oncomplete: (data: KakaoPostcodeData) => void;
     width: string | number;
     height: string | number;
   }): { embed: (element: HTMLElement) => void };
@@ -18,14 +18,14 @@ interface DaumPostcodeConstructor {
 
 declare global {
   interface Window {
-    daum?: { Postcode: DaumPostcodeConstructor };
+    kakao?: { Postcode: KakaoPostcodeConstructor };
   }
 }
 
 let scriptPromise: Promise<void> | null = null;
 
 const loadPostcodeScript = () => {
-  if (window.daum?.Postcode) {
+  if (window.kakao?.Postcode) {
     return Promise.resolve();
   }
   if (!scriptPromise) {
@@ -48,7 +48,7 @@ interface AddressSearchDialogContentProps {
   onComplete: (roadAddress: string) => void;
 }
 
-// 다음 우편번호 서비스를 다이얼로그 안에 embed 하고, 선택한 도로명주소를 상위로 전달한다.
+// 카카오 우편번호 서비스를 다이얼로그 안에 embed 하고, 선택한 도로명주소를 상위로 전달한다.
 const AddressSearchDialogContent = ({ onComplete }: AddressSearchDialogContentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -56,11 +56,11 @@ const AddressSearchDialogContent = ({ onComplete }: AddressSearchDialogContentPr
     let cancelled = false;
     loadPostcodeScript()
       .then(() => {
-        if (cancelled || !containerRef.current || !window.daum?.Postcode) {
+        if (cancelled || !containerRef.current || !window.kakao?.Postcode) {
           return;
         }
         containerRef.current.innerHTML = '';
-        new window.daum.Postcode({
+        new window.kakao.Postcode({
           width: '100%',
           height: '100%',
           oncomplete: (data) => onComplete(data.roadAddress || data.address),
