@@ -7,7 +7,7 @@ const BOOLTI_PAGE_SIZE = 5;
 export type VenueSource = 'boolti';
 
 // 불티에 등록된 공연장 검색 결과. 등록되지 않은 공연장은 PlaceSearchInput의
-// 다음 우편번호 서비스 + 네이버 지오코딩(주소 직접 검색)으로 처리한다.
+// 카카오 우편번호 서비스 + 네이버 지오코딩(주소 직접 검색)으로 처리한다.
 export type VenueResult = {
   source: 'boolti';
   concertHallId: number;
