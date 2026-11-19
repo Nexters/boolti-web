@@ -2,17 +2,17 @@ import { useNaverGeocode, type GeocodeCoordinates } from '@boolti/api';
 import { Modal } from 'antd';
 import { useEffect, useRef } from 'react';
 
-const POSTCODE_SCRIPT_URL = '//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
+const POSTCODE_SCRIPT_URL = '//t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js';
 
-interface DaumPostcodeData {
+interface KakaoPostcodeData {
   roadAddress: string;
   address: string;
   zonecode: string;
 }
 
-interface DaumPostcodeConstructor {
+interface KakaoPostcodeConstructor {
   new (options: {
-    oncomplete: (data: DaumPostcodeData) => void;
+    oncomplete: (data: KakaoPostcodeData) => void;
     width: string | number;
     height: string | number;
   }): { embed: (element: HTMLElement) => void };
@@ -20,14 +20,14 @@ interface DaumPostcodeConstructor {
 
 declare global {
   interface Window {
-    daum?: { Postcode: DaumPostcodeConstructor };
+    kakao?: { Postcode: KakaoPostcodeConstructor };
   }
 }
 
 let scriptPromise: Promise<void> | null = null;
 
 const loadPostcodeScript = () => {
-  if (window.daum?.Postcode) {
+  if (window.kakao?.Postcode) {
     return Promise.resolve();
   }
   if (!scriptPromise) {
@@ -64,22 +64,27 @@ const AddressSearchModal = ({ open, onClose, onComplete, afterClose }: AddressSe
       return;
     }
     let cancelled = false;
-    loadPostcodeScript().then(() => {
-      if (cancelled || !containerRef.current || !window.daum?.Postcode) {
-        return;
-      }
-      containerRef.current.innerHTML = '';
-      new window.daum.Postcode({
-        width: '100%',
-        height: '100%',
-        oncomplete: async (data) => {
-          const roadAddress = data.roadAddress || data.address;
-          // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 지오코딩으로 변환한다.
-          const coordinates = await geocode(roadAddress);
-          onComplete(roadAddress, coordinates);
-        },
-      }).embed(containerRef.current);
-    });
+    loadPostcodeScript()
+      .then(() => {
+        if (cancelled || !containerRef.current || !window.kakao?.Postcode) {
+          return;
+        }
+        containerRef.current.innerHTML = '';
+        new window.kakao.Postcode({
+          width: '100%',
+          height: '100%',
+          oncomplete: async (data) => {
+            const roadAddress = data.roadAddress || data.address;
+            // 우편번호 서비스는 좌표를 주지 않으므로 선택 주소를 네이버 지오코딩으로 변환한다.
+            const coordinates = await geocode(roadAddress);
+            onComplete(roadAddress, coordinates);
+          },
+        }).embed(containerRef.current);
+      })
+      .catch((error) => {
+        // 스크립트 로드 실패 시 모달은 빈 채로 남는다. 처리되지 않은 Promise 거부만 막는다.
+        console.warn('[AddressSearchModal] postcode script load failed', error);
+      });
     return () => {
       cancelled = true;
     };

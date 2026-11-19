@@ -170,7 +170,7 @@ const PlaceSearchInput = ({
     });
   };
 
-  // 다음 우편번호 서비스로 선택한 도로명주소를 네이버 지오코딩으로 좌표 변환한다.
+  // 카카오 우편번호 서비스로 선택한 도로명주소를 네이버 지오코딩으로 좌표 변환한다.
   const handleAddressComplete = useCallback(
     async (roadAddress: string) => {
       dialog.close();
