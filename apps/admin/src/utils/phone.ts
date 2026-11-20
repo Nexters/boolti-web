@@ -5,6 +5,7 @@ export type PhoneType =
   | 'special'
   | 'voip'
   | 'legacyMobile'
+  | 'safe'
   | 'unknown';
 
 const SPECIAL_PREFIXES = ['15', '16', '18']; // 15xx, 16xx, 18xx
@@ -34,6 +35,8 @@ export function detectPhoneType(digits: string): PhoneType {
   if (digits.startsWith('02')) return 'seoul';
   if (digits.startsWith('010')) return 'mobile';
   if (digits.startsWith('070')) return 'voip';
+  // 안심번호(평생번호): 050 으로 시작, 11~12자리
+  if (digits.startsWith('050')) return 'safe';
   if (REGION_PREFIXES.some((p) => digits.startsWith(p))) return 'region';
   if (LEGACY_MOBILE_PREFIXES.some((p) => digits.startsWith(p))) return 'legacyMobile';
   // 대표/특수번호: 15xx/16xx/18xx 로 시작, 총 8자리
@@ -54,6 +57,8 @@ export function getMaxLengthByType(type: PhoneType): number {
       return 11; // 3-3/4-4
     case 'special':
       return 8; // 4-4
+    case 'safe':
+      return 12; // 4-4-4 (11자리면 4-3-4)
     default:
       return 11; // 보수적 기본값
   }
@@ -72,6 +77,8 @@ export function getLengthRangeByType(type: PhoneType): { min: number; max: numbe
       return { min: 11, max: 11 };
     case 'special':
       return { min: 8, max: 8 };
+    case 'safe':
+      return { min: 11, max: 12 };
     default:
       return { min: 11, max: 11 };
   }
@@ -105,8 +112,10 @@ export function formatPhoneDynamic(input: string): {
     return { formatted: `${area}-${mid}-${tail}`.replace(/-+$/, ''), type, maxLength };
   }
 
-  // 휴대폰/인터넷전화/지역/구형휴대폰 공통: prefix - mid - tail
+  // 휴대폰/인터넷전화/지역/구형휴대폰/안심번호 공통: prefix - mid - tail
   const prefixLength = (() => {
+    // 안심번호: 0504-123-4567(11자리), 0504-1234-5678(12자리)
+    if (type === 'safe') return 4;
     if (type === 'mobile' || type === 'voip' || type === 'legacyMobile') return 3;
     if (type === 'region') return 3;
     // unknown 포함: 선행 3자리 기준으로 가정
