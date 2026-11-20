@@ -15,7 +15,11 @@ interface ShowDetailInfoFormContentProps {
 const getVisibleMaxLengthByType = (type: string) => {
   if (type === 'special') return 9; // 4-4
   if (type === 'seoul') return 12; // 2-4-4
-  return 13; // 3-4-4 (region/mobile/voip/legacyMobile/unknown 상한)
+  if (type === 'mobile' || type === 'voip' || type === 'region' || type === 'legacyMobile') {
+    return 13; // 3-4-4
+  }
+  // safe(4-4-4) 와 unknown. 빈 칸에 하이픈 포함 안심번호를 붙여넣어도 잘리지 않게 14 로 둔다.
+  return 14;
 };
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
