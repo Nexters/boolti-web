@@ -11,16 +11,10 @@ interface ShowDetailInfoFormContentProps {
   disabled?: boolean;
 }
 
-// 화면 표기 기준 최대 길이 (하이픈 포함)
-const getVisibleMaxLengthByType = (type: string) => {
-  if (type === 'special') return 9; // 4-4
-  if (type === 'seoul') return 12; // 2-4-4
-  if (type === 'mobile' || type === 'voip' || type === 'region' || type === 'legacyMobile') {
-    return 13; // 3-4-4
-  }
-  // safe(4-4-4) 와 unknown. 빈 칸에 하이픈 포함 안심번호를 붙여넣어도 잘리지 않게 14 로 둔다.
-  return 14;
-};
+// 화면 표기 기준 최대 길이 (하이픈 포함). 가장 긴 0504-1234-5678 에 맞춘다.
+// 현재 값의 타입으로 정하면 010 번호를 전체 선택하고 안심번호를 붙여넣을 때 브라우저가 끝자리를 자른다.
+// 타입별 숫자 자릿수 제한은 formatPhoneDynamic 이 맡는다.
+const PHONE_INPUT_MAX_LENGTH = 14;
 
 const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContentProps) => {
   const {
@@ -138,7 +132,7 @@ const ShowDetailInfoFormContent = ({ form, disabled }: ShowDetailInfoFormContent
                   placeholder="주최자 연락처를 입력해 주세요"
                   required
                   disabled={disabled}
-                  maxLength={getVisibleMaxLengthByType(formatPhoneDynamic(value ?? '').type)}
+                  maxLength={PHONE_INPUT_MAX_LENGTH}
                   onChange={(event) => {
                     const { formatted } = formatPhoneDynamic(event.target.value);
                     event.target.value = formatted;

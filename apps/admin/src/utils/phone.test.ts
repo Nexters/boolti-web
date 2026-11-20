@@ -95,8 +95,15 @@ describe('formatPhoneDynamic', () => {
     expect(formatPhoneDynamic('0504-1234-5678').formatted).toBe('0504-1234-5678');
   });
 
-  it('11자리 안심번호는 3-4-4 로 포맷한다', () => {
-    expect(formatPhoneDynamic('05012345678').formatted).toBe('050-1234-5678');
+  it('11자리 안심번호는 4-3-4 로 포맷한다', () => {
+    expect(formatPhoneDynamic('05051234567').formatted).toBe('0505-123-4567');
+  });
+
+  it('안심번호를 한 자리씩 칠 때 앞 4자리를 유지한다', () => {
+    expect(formatPhoneDynamic('0504').formatted).toBe('0504');
+    expect(formatPhoneDynamic('05041').formatted).toBe('0504-1');
+    expect(formatPhoneDynamic('050412345').formatted).toBe('0504-1-2345');
+    expect(formatPhoneDynamic('05041234567').formatted).toBe('0504-123-4567');
   });
 
   it('안심번호는 12자리를 넘는 입력을 자른다', () => {
@@ -131,7 +138,7 @@ describe('validatePhoneOnBlur', () => {
 
   it('안심번호는 11~12자리를 허용한다', () => {
     expect(validatePhoneOnBlur('0504-1234-5678')).toBe(true);
-    expect(validatePhoneOnBlur('050-1234-5678')).toBe(true);
+    expect(validatePhoneOnBlur('0505-123-4567')).toBe(true);
     expect(validatePhoneOnBlur('0504123456')).toBe(false);
   });
 

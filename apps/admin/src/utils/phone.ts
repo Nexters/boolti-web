@@ -58,7 +58,7 @@ export function getMaxLengthByType(type: PhoneType): number {
     case 'special':
       return 8; // 4-4
     case 'safe':
-      return 12; // 4-4-4 (11자리면 3-4-4)
+      return 12; // 4-4-4 (11자리면 4-3-4)
     default:
       return 11; // 보수적 기본값
   }
@@ -112,17 +112,10 @@ export function formatPhoneDynamic(input: string): {
     return { formatted: `${area}-${mid}-${tail}`.replace(/-+$/, ''), type, maxLength };
   }
 
-  // 안심번호 12자리: 4-4-4
-  if (type === 'safe' && clipped.length === 12) {
-    return {
-      formatted: `${clipped.slice(0, 4)}-${clipped.slice(4, 8)}-${clipped.slice(8)}`,
-      type,
-      maxLength,
-    };
-  }
-
-  // 휴대폰/인터넷전화/지역/구형휴대폰/안심번호(11자리 이하) 공통: prefix - mid - tail
+  // 휴대폰/인터넷전화/지역/구형휴대폰/안심번호 공통: prefix - mid - tail
   const prefixLength = (() => {
+    // 안심번호: 0504-123-4567(11자리), 0504-1234-5678(12자리)
+    if (type === 'safe') return 4;
     if (type === 'mobile' || type === 'voip' || type === 'legacyMobile') return 3;
     if (type === 'region') return 3;
     // unknown 포함: 선행 3자리 기준으로 가정
