@@ -26,6 +26,7 @@ describe('detectPhoneType', () => {
     expect(detectPhoneType('0311234567')).toBe('region');
     expect(detectPhoneType('0161234567')).toBe('legacyMobile');
     expect(detectPhoneType('15881234')).toBe('special');
+    expect(detectPhoneType('050412345678')).toBe('safe');
   });
 
   it('지원하지 않는 접두사면 unknown을 반환한다', () => {
@@ -82,6 +83,33 @@ describe('formatPhoneDynamic', () => {
     });
   });
 
+  it('12자리 안심번호를 4-4-4 로 포맷한다', () => {
+    expect(formatPhoneDynamic('050412345678')).toEqual({
+      formatted: '0504-1234-5678',
+      type: 'safe',
+      maxLength: 12,
+    });
+  });
+
+  it('하이픈이 섞인 안심번호를 붙여넣어도 4-4-4 로 포맷한다', () => {
+    expect(formatPhoneDynamic('0504-1234-5678').formatted).toBe('0504-1234-5678');
+  });
+
+  it('11자리 안심번호는 4-3-4 로 포맷한다', () => {
+    expect(formatPhoneDynamic('05051234567').formatted).toBe('0505-123-4567');
+  });
+
+  it('안심번호를 한 자리씩 칠 때 앞 4자리를 유지한다', () => {
+    expect(formatPhoneDynamic('0504').formatted).toBe('0504');
+    expect(formatPhoneDynamic('05041').formatted).toBe('0504-1');
+    expect(formatPhoneDynamic('050412345').formatted).toBe('0504-1-2345');
+    expect(formatPhoneDynamic('05041234567').formatted).toBe('0504-123-4567');
+  });
+
+  it('안심번호는 12자리를 넘는 입력을 자른다', () => {
+    expect(formatPhoneDynamic('0504123456789').formatted).toBe('0504-1234-5678');
+  });
+
   it('지원하지 않는 번호는 unknown 타입으로 3-중간-4 형식에 맞춰 포맷한다', () => {
     expect(formatPhoneDynamic('12345678901')).toEqual({
       formatted: '123-4567-8901',
@@ -106,6 +134,12 @@ describe('validatePhoneOnBlur', () => {
   it('서울 번호 길이 경계(9자리/10자리)를 허용한다', () => {
     expect(validatePhoneOnBlur('021234567')).toBe(true);
     expect(validatePhoneOnBlur('0212345678')).toBe(true);
+  });
+
+  it('안심번호는 11~12자리를 허용한다', () => {
+    expect(validatePhoneOnBlur('0504-1234-5678')).toBe(true);
+    expect(validatePhoneOnBlur('0505-123-4567')).toBe(true);
+    expect(validatePhoneOnBlur('0504123456')).toBe(false);
   });
 
   it('대표번호는 8자리만 허용한다', () => {
